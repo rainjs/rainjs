@@ -40,5 +40,5 @@ exports.doLogging = function(intentCtx, session) {
     
     console.log(msg);
     
-    return msg;
+    return {"data": msg};
 }

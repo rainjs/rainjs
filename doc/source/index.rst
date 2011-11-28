@@ -28,3 +28,4 @@ Server side modules
     :maxdepth: 2
     
     server/messaging_intents
+    server/websockets
