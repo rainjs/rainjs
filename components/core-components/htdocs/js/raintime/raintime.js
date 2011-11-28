@@ -123,6 +123,12 @@ define(['core-components/client_util',
                             component.state = component.STATE_INIT;
                             $(component).trigger('changeState');
                         }
+                        
+                        if (controller.start) {
+                            controller.start();
+                            component.state = component.STATE_START;
+                            $(component).trigger('changeState');
+                        }
                     });
 
                     return component;
