@@ -24,4 +24,8 @@ Client side modules
 Server side modules
 -------------------
 
-Foo
+.. toctree::
+    :maxdepth: 2
+    
+    server/messaging_intents
+    server/websockets
