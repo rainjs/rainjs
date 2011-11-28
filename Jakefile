@@ -1,4 +1,5 @@
 var child = require('child_process');
+var fs = require('fs');
 
 desc('Print the help message');
 task('default', function (params) {
@@ -34,47 +35,43 @@ namespace('doc', function () {
 		});
 	});
 
-	namespace('server', function () {
-		desc('Generate the server documentation');
-		task('generate', function () {
-			console.log('Generating RST documntation');
-			var args = [
-				'-jar',
-				'./tools/jsdoc-toolkit/jsrun.jar',
-				'./tools/jsdoc-toolkit/app/run.js',
-				'-c=./tools/jsdoc-toolkit/server.conf',
-			];
-	
-			var jsdoc = child.spawn('java', args);
+	desc('Generate the documentation');
+	task('generate', function () {
+		var children = [],
+            args,
+			conf,
+			buffer;
 
-			jsdoc.stdout.on('data', function (data) {
-				var buffer = new Buffer(data);
-				console.log(buffer.toString());
-			});
+		args = [
+			'-jar',
+			'./tools/jsdoc-toolkit/jsrun.jar',
+			'./tools/jsdoc-toolkit/app/run.js',
+			'-c=./tools/jsdoc-toolkit/rain.conf'
+		];
 
-			jsdoc.stderr.on('data', function (data) {
-				console.log('Error: ' + data);
-			});
-			
-			jsdoc.on('exit', function () {
-				console.log('Done ...');
-			});
-		});
-	});
+		buffer = new Buffer(fs.readFileSync('./doc/config.json'));
+		conf = JSON.parse(buffer.toString());
 
-	desc('Build the client documentation');
-	task('build', function () {
-		console.log('Building documentation');
-		child.exec('make clean', {cwd: './doc', env: process.env}, function (error, stdout, stderr) {
-			console.log(stdout);
-		});
-		var sphinx = child.spawn('make', ['html'], {cwd: './doc', env: process.env});
-		sphinx.stdout.on('data', function (data) {
-			var buffer = new Buffer(data);
-			console.log(buffer.toString());
-		});
-		sphinx.stderr.on('data', function (data) {
-			console.log('Error: ' + data);
-		});
+        console.log('Generating client RST documntation');
+
+        for (var i in conf.client.files) {
+            var file = conf.client.files[i];
+
+            child.spawn('java', Array.prototype.concat.call(args, [
+                '-d=' + conf.client.buildPath,
+                conf.client.srcPath + '/' + file
+            ]));
+        }
+
+        console.log('Generating server RST documntation');
+
+        for (var i in conf.server.files) {
+            var file = conf.server.files[i];
+
+            child.spawn('java', Array.prototype.concat.call(args, [
+                '-d=' + conf.server.buildPath,
+                conf.server.srcPath + '/' + file
+            ]));
+        }
 	});
 });
