@@ -1,0 +1,199 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>RAIN Installation &mdash; Rain 0.4.1 documentation</title>
+    
+    <link rel="stylesheet" href="../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/underscore.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <link rel="top" title="Rain 0.4.1 documentation" href="../index.html" />
+    <link rel="next" title="Raintime" href="../client/raintime.html" />
+    <link rel="prev" title="Rain 0.4.1 Documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../client/raintime.html" title="Raintime"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Rain 0.4.1 Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain 0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="rain-installation">
+<h1>RAIN Installation<a class="headerlink" href="#rain-installation" title="Permalink to this headline">¶</a></h1>
+<p>In this document you will find all the information required for configuring RAIN
+development machine.</p>
+<div class="section" id="redis-server">
+<h2>Redis Server<a class="headerlink" href="#redis-server" title="Permalink to this headline">¶</a></h2>
+<p>For both RAIN SDK or RAIN from source code you need redis server.</p>
+<div class="section" id="ubuntu-setup">
+<h3>Ubuntu Setup<a class="headerlink" href="#ubuntu-setup" title="Permalink to this headline">¶</a></h3>
+<p>On Ubuntu is really simple:</p>
+<div class="highlight-python"><pre>sudo apt-get install redis-server</pre>
+</div>
+</div>
+<div class="section" id="mac-os">
+<h3>Mac OS<a class="headerlink" href="#mac-os" title="Permalink to this headline">¶</a></h3>
+<p>On Mac OS operating systems you need to execute the following commands:</p>
+<div class="highlight-python"><pre>wget http://redis.googlecode.com/files/redis-0.900_2.tar.gz
+tar xzvf redis-0.900_2.tar.gz
+cd redis-0.900
+make</pre>
+</div>
+<p>I recommend you do not install this globally. It is better if you simply run the following
+command from redis-0.900 folder:</p>
+<div class="highlight-python"><pre>./src/redis-server</pre>
+</div>
+</div>
+</div>
+<div class="section" id="rain-sdk">
+<h2>RAIN SDK<a class="headerlink" href="#rain-sdk" title="Permalink to this headline">¶</a></h2>
+<p>The easiest way to configure your development machine is to use RAIN SDK. The SDK was currently
+tested on Ubuntu Linux and on Mac OS X. Below you can find the commands to get the sdk running on
+Unix / Linux operating systems:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>wget <a class="reference external" href="https://github.com/joyent/node/zipball/v0.4.12">https://github.com/joyent/node/zipball/v0.4.12</a> -O node-v0.4.12.zip</li>
+<li>jar -xf node-v0.4.12.zip</li>
+<li>cd joyent-node-41e5762</li>
+<li>chmod u+x configure</li>
+<li>chmod u+x tools/waf-light</li>
+<li>./configure &amp;&amp; make &amp;&amp; make install</li>
+<li>make sure /usr/local/bin is added to your PATH environment variable.</li>
+<li>node - to make sure node can be run</li>
+<li>curl <a class="reference external" href="http://npmjs.org/install.sh">http://npmjs.org/install.sh</a> | sudo sh</li>
+<li>Execute npm -version to make sure npm is correctly installed.</li>
+<li>sudo npm install rain -g</li>
+</ol>
+</div></blockquote>
+<p>If everything went well you should be able to run rain sdk from command line. For more information
+about RAIN sdk creating first project read: <a class="reference internal" href="rain_sdk_tutorial.html"><em>RAIN SDK Tutorial</em></a></p>
+</div>
+<div class="section" id="rain-from-source-code">
+<h2>RAIN from source code<a class="headerlink" href="#rain-from-source-code" title="Permalink to this headline">¶</a></h2>
+<p>This is the way to go if you want to contribute to this project. To get started with this
+you need to execute the following commands:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#. wget https://github.com/joyent/node/zipball/v0.4.12 -O node-v0.4.12.zip</span>
+<span class="c">#. jar -xf node-v0.4.12.zip</span>
+<span class="c">#. cd joyent-node-41e5762</span>
+<span class="c">#. chmod u+x configure</span>
+<span class="c">#. chmod u+x tools/waf-light</span>
+<span class="c">#. ./configure &amp;&amp; make &amp;&amp; make install</span>
+<span class="c">#. make sure /usr/local/bin is added to your PATH environment variable.</span>
+<span class="c">#. node - to make sure node can be run</span>
+<span class="c">#. curl http://npmjs.org/install.sh | sudo sh</span>
+<span class="c">#. git clone git@github.com:rainjs/rainjs.git rain</span>
+<span class="c">#. cd rain</span>
+<span class="c">#. npm install -d</span>
+<span class="c">#. node node_modules/rain-mothership/run.js</span>
+<span class="c">#. node run.js</span>
+</pre></div>
+</div>
+<p>This should give you a running instance of RAIN server and mothership. For testing your
+installation try to access: <a class="reference external" href="http://localhost:1337/components/cockpit/htdocs/main.html">http://localhost:1337/components/cockpit/htdocs/main.html</a></p>
+<p>If you see the following image it means your RAIN server is configured correctly.</p>
+<img alt="../images/cockpit_v1.0.png" src="../images/cockpit_v1.0.png" />
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">RAIN Installation</a><ul>
+<li><a class="reference internal" href="#redis-server">Redis Server</a><ul>
+<li><a class="reference internal" href="#ubuntu-setup">Ubuntu Setup</a></li>
+<li><a class="reference internal" href="#mac-os">Mac OS</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#rain-sdk">RAIN SDK</a></li>
+<li><a class="reference internal" href="#rain-from-source-code">RAIN from source code</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../index.html"
+                        title="previous chapter">Rain 0.4.1 Documentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../client/raintime.html"
+                        title="next chapter">Raintime</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../sources/getting_started/installation.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../client/raintime.html" title="Raintime"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Rain 0.4.1 Documentation"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain 0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Rain Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>
