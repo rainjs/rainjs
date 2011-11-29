@@ -26,12 +26,19 @@ Client side modules
 .. toctree::
     :maxdepth: 2
 
-    client/raintime
-    client/view_context
-    client/client_storage
     client/client_messaging
     client/intents
     client/websockets
+
+....
+APIs
+....
+
+.. toctree::
+    :maxdepth: 2
+    :glob:
+
+    client/api/*
 
 -------------------
 Server side modules
