@@ -9,11 +9,9 @@ define(['core-components/client_util',
     }
     
     /**
-     * @name Raintime
-     * @class The client runtime
+     * @namespace
      */
     var Raintime = (function () {
-
         /**
          * Component class
          *
@@ -85,10 +83,6 @@ define(['core-components/client_util',
             return new Component(ids);
         }
 
-        /**
-         * @class The component controller
-         * @memberOf Raintime
-         */
         var ComponentController = (function () {
             var _instance;
 
@@ -113,18 +107,42 @@ define(['core-components/client_util',
                 };
             }
 
-            return _instance || (_instance = init());
+            /** @lends ComponentController */
+            return {
+                get:function () {
+                    return _instance || (_instance = init());
+                }
+            };
         })();
 
+        /**
+         * @name ComponentRegistry
+         * @class Represents a version of the component
+         *
+         * @memberOf Raintime
+         */
         var ComponentRegistry = (function () {
             var _instance;
 
             function init () {
+                /**
+                 * An array of the registered components
+                 *
+                 * @type {Component[]}
+                 *
+                 * @name components
+                 * @public
+                 * @memberOf Raintime.ComponentRegistry#
+                 */
                 var components = {};
 
                 /**
-                 * @param props Properties of the component: renderer_id, domId,
-                 * instanceId, domselector, clientcontroller
+                 * Registers a component to the registry
+                 *
+                 * @param {Object} props Properties of the component: renderer_id, domId, instanceId, domselector, clientcontroller
+                 * @returns {Component}
+                 * @public
+                 * @memberOf Raintime.ComponentRegistry#
                  */
                 function register (props) {
                     var id = props.domId
@@ -170,11 +188,26 @@ define(['core-components/client_util',
 
                     return component;
                 }
-                
+
+                /**
+                 * Deregisters a component from the registry
+                 *
+                 * @param {Mixed} id the id of the component to remove
+                 * @public
+                 * @memberOf Raintime.ComponentRegistry#
+                 */
                 function deregister (id) {
                     delete components[id];
                 }
-                
+
+                /**
+                 * Get a component by its static Id
+                 *
+                 * @param {Mixed} staticId
+                 * @returns {Component|undefined}
+                 * @public
+                 * @memberOf Raintime.ComponentRegistry#
+                 */
                 function getComponent (staticId){
                     for(var key in components){
                         if(components[key].staticId == staticId){
@@ -182,22 +215,37 @@ define(['core-components/client_util',
                         }
                     }
                 }
-                
+
                 return {
-                    components:components,
-                    register:register,
-                    deregister:deregister,
-                    getComponent:getComponent
+                    components: components,
+                    register: register,
+                    deregister: deregister,
+                    getComponent: getComponent
                 };
             }
 
-            return _instance || (_instance = init());
+            return {
+                /**
+                 * Get an instance of the ComponentRegistry
+                 *
+                 * @return {ComponentRegistry}
+                 *
+                 * @name get
+                 * @function
+                 * @static
+                 * @memberOf Raintime.ComponentRegistry
+                 */
+                get: function () {
+                    return _instance || (_instance = init());
+                }
+            };
         })();
 
+        /** @lends Raintime */
         return {
-            createComponent:createComponent,
-            ComponentRegistry:ComponentRegistry,
-            ComponentController:ComponentController
+            createComponent: createComponent,
+            ComponentRegistry: ComponentRegistry.get(),
+            ComponentController: ComponentController.get()
         };
     })();
 
