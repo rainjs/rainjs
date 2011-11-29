@@ -32,7 +32,10 @@ namespace('doc', function () {
             child.spawn('java', Array.prototype.concat.call(args, [
                 '-d=' + conf.client.buildPath,
                 conf.client.srcPath + '/' + file
-            ]));
+            ])).on('data', function (data) {
+                    var buffer = new Buffer(data);
+                    console.log(buffer.toString());
+            });
         }
 
         console.log('Generating server RST documntation');
@@ -43,7 +46,10 @@ namespace('doc', function () {
             child.spawn('java', Array.prototype.concat.call(args, [
                 '-d=' + conf.server.buildPath,
                 conf.server.srcPath + '/' + file
-            ]));
+            ])).on('data', function (data) {
+                var buffer = new Buffer(data);
+                console.log(buffer.toString());
+            });
         }
 	});
 
@@ -82,6 +88,7 @@ namespace('doc', function () {
                 console.log(buffer.toString());
             });
         }
+
         files = fs.readdirSync('../rain_docs');
         console.log('Cleaning up the public doc directory');
         for (var i in files) {
