@@ -72,3 +72,6 @@ Below you can find a bunch of useful commands to use::
    description
    version
    platform
+   
+You need to be sure that redis server is started prior to starting the Rain SDK. Otherwise
+mothership and rain server will not work.
