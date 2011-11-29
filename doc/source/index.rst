@@ -8,6 +8,15 @@ Rain 0.4.1 Documentation
 
 Welcome! This is the documentation for Rain 0.4.1
 
+---------------
+Getting started
+---------------
+
+.. toctree::
+    :maxdepth: 2
+   
+    getting_started/installation
+
 -------------------
 Client side modules
 -------------------
