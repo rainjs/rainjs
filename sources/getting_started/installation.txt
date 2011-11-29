@@ -80,4 +80,4 @@ installation try to access: http://localhost:1337/components/cockpit/htdocs/main
 
 If you see the following image it means your RAIN server is configured correctly.
 
-.. image:: /getting_started/images/cockpit_v1.0.png
+.. image:: /getting_started/images/cockpit.png
