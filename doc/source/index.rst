@@ -16,6 +16,8 @@ Getting started
     :maxdepth: 2
    
     getting_started/installation
+    getting_started/rain_sdk_tutorial
+    server/component_descriptor
 
 -------------------
 Client side modules
@@ -40,3 +42,4 @@ Server side modules
     
     server/messaging_intents
     server/websockets
+    server/component_descriptor
