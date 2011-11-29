@@ -31,7 +31,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * @since 22.11.2011
  * @description Module used to provide a simple controller for showcasing how to use intents and auto discovered sockets.. 
  */
-define(function(SocketIO) {
+define(function() {
     function init() {
         this._socket = this.viewContext.getWebSocket("chat/dummy socket");
                 

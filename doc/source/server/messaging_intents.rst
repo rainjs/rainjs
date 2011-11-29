@@ -87,3 +87,32 @@ Below you can find a complete server side intent handler code::
        
        return {"data": msg};
    }
+   
+Intents mapped on views
+-----------------------
+
+This intent will return a json object that contains all information related to a view (css, 
+javascript, markup). The returned object can be easily displayed on the client using view manager
+layer. Below you can find an example of how to define such an intent (example taken from intents_example
+sample)::
+
+   {
+      ...
+       "views": [
+           {"viewid": "missing_intent",
+            "view": "/htdocs/missing_intent_example.html",
+            "controller": "/htdocs/scripts/missing_intent_example.js"}
+       ],
+       "intents": [{
+           "action": "com.rain.test.general.SHOW_CHAT",
+           "category": "com.rain.test.general",
+           "type": "view",
+           "provider": "missing_intent"
+       }
+       ...
+       ]
+   }
+
+In this case provider identifies a declared view within the component. The intents registry simply
+publish the intent to a global intents registry. The only constraint here is not to have 
+two intents with the same category and intent.

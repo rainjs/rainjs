@@ -19,6 +19,7 @@ Client side modules
     client/view_context
     client/client_storage
     client/client_messaging
+    client/intents
 
 -------------------
 Server side modules
