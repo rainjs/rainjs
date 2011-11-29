@@ -20,6 +20,7 @@ Client side modules
     client/client_storage
     client/client_messaging
     client/intents
+    client/websockets
 
 -------------------
 Server side modules
