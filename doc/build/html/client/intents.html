@@ -1,0 +1,174 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Intents Client API &mdash; Rain 0.4.1 documentation</title>
+    
+    <link rel="stylesheet" href="../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/underscore.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <link rel="top" title="Rain 0.4.1 documentation" href="../index.html" />
+    <link rel="next" title="Intents" href="../server/messaging_intents.html" />
+    <link rel="prev" title="Messaging API" href="client_messaging.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../server/messaging_intents.html" title="Intents"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="client_messaging.html" title="Messaging API"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain 0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="intents-client-api">
+<h1>Intents Client API<a class="headerlink" href="#intents-client-api" title="Permalink to this headline">¶</a></h1>
+<p>On client side intents are really easy to use. Before explaining the details please read
+the following example (extracted from intents_example sample):</p>
+<div class="highlight-python"><pre>function start() {
+   ....
+
+   var messaging = this.clientRuntime.messaging;
+
+   btnMissing.click(function() {
+         var request = {
+             "viewContext": self.viewContext,
+             "category": "local_test_intent",
+             "action": "local_action"
+         };
+
+         var intent = messaging.sendIntent(request);
+
+         intent.then(function(data) {
+             console.log("Cool stuff: " + data);
+         },
+         function(data) {
+             alert("ERROR: " + data);
+         });
+     });
+
+   ....
+}</pre>
+</div>
+<p>As you can see in the above example there is one single method to use for intents:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Raintime</span><span class="o">.</span><span class="n">messaging</span><span class="o">.</span><span class="n">sendIntent</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Request argument is a dictionary that must contain at least:</p>
+<blockquote>
+<div><ul class="simple">
+<li>viewContext</li>
+<li>category</li>
+<li>action</li>
+</ul>
+</div></blockquote>
+<p>Optionally you might send an intent context where additional parameters are passed to
+the intent handler.</p>
+<p>The sendIntent method returns a promise that you can use to register callback methods for
+success and error scenarios. For this you can use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">then</span><span class="p">(</span><span class="n">successHandler</span><span class="p">,</span> <span class="n">errorHandler</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="section" id="intents-technical-details">
+<h2>Intents technical details<a class="headerlink" href="#intents-technical-details" title="Permalink to this headline">¶</a></h2>
+<p>Intents Client API is implemented using web sockets. This mean that we have a special
+handler on the server side that receives intents request. This is an optimization done
+from communication perspective because no handshake needs to be done for each request.
+Moreover, on the server side intents automatically get access to the user session even if
+the request is not http based.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Intents Client API</a><ul>
+<li><a class="reference internal" href="#intents-technical-details">Intents technical details</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="client_messaging.html"
+                        title="previous chapter">Messaging API</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../server/messaging_intents.html"
+                        title="next chapter">Intents</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../sources/client/intents.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../server/messaging_intents.html" title="Intents"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="client_messaging.html" title="Messaging API"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain 0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Rain Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

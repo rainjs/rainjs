@@ -1,0 +1,171 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>RAIN SDK Tutorial &mdash; Rain 0.4.1 documentation</title>
+    
+    <link rel="stylesheet" href="../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/underscore.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <link rel="top" title="Rain 0.4.1 documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../index.html">Rain 0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="rain-sdk-tutorial">
+<h1>RAIN SDK Tutorial<a class="headerlink" href="#rain-sdk-tutorial" title="Permalink to this headline">¶</a></h1>
+<p>In this section you can find the tutorial for creating projects with RAIN SDK. Previous this
+step please read <a class="reference internal" href="installation.html"><em>RAIN Installation</em></a></p>
+<div class="section" id="rain-sdk-basic-usage">
+<h2>RAIN SDK Basic usage<a class="headerlink" href="#rain-sdk-basic-usage" title="Permalink to this headline">¶</a></h2>
+<p>Below you can find a bunch of useful commands to use:</p>
+<div class="highlight-python"><pre>rain --help
+
+Usage:
+
+$ rain
+
+Commands:
+
+$ create-project &lt;path&gt; &lt;project-name&gt;
+create a project
+
+$ create-component &lt;component-name&gt;
+create a component
+
+$ start [#pid]
+1. on project root the command starts the server and creates an pid file
+
+$ stop [#pid]
+1. on project root the command stops the associated server
+2. with [#pid] stops the server with the associated process id
+
+$ restart [#pid]
+1. on project root the command restarts the associated server
+2. with [#pid] restarts the server with the associated process id
+
+$ list [server|mothership]
+lists all running server/motherships, with [type] only 1 of both will be displayed
+
+$ stopall
+shutting down all server and motherships
+Options:
+
+-h, --help output usage information
+-d, --debug debugging
+-c, --conf &lt;path_to_conf&gt; start server with custom configuration
+-m, --mothership-conf &lt;path_to_conf&gt; start server with custom mothership configuration
+-p, --platform &lt;platform&gt; choose the platform for the application Available platforms: nodejs
+Examples:
+
+$ rain create-project /home/username/workspace newProject
+$ rain start
+$ rain start -c /home/username/workspace/custom_confs/server.conf
+$ rain start -m /home/username/workspace/custom_confs/mothership.conf $ rain stop $ rain stop 5361
+Rain creates following structure on first start of a server
+
+/home/user/.rain
+A server pid file contains "PID /path/to/server-conf" and looks like this "rain.server.5734" -&gt; rain.server.PID
+
+A mothership file contains the complete mothership configuration and looks like this "rain.ms.31337.11324" -&gt; rain.ms.PORT.PID
+
+Creating an Application
+2 modes will be available: quick mode and configuration mode (default)
+
+"Quick mode" creates the project with the nodejs skeleton and standard meta.json
+
+"Configuration mode" asks the user about different settings
+
+name
+author
+description
+version
+platform</pre>
+</div>
+<p>You need to be sure that redis server is started prior to starting the Rain SDK. Otherwise
+mothership and rain server will not work.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">RAIN SDK Tutorial</a><ul>
+<li><a class="reference internal" href="#rain-sdk-basic-usage">RAIN SDK Basic usage</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../sources/getting_started/rain_sdk_tutorial.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../index.html">Rain 0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Rain Team.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

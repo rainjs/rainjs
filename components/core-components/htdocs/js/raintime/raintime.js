@@ -3,7 +3,11 @@ define(['core-components/client_util',
         'core-components/raintime/viewcontext',
         "core-components/raintime/messaging"], function (ClientUtil, RaintimeConfig) {
     var modules = Array.prototype.splice.call(arguments, 1);
-
+    
+    if(window.MozWebSocket) {
+        window.WebSocket = window.MozWebSocket;
+    }
+    
     /**
      * @namespace
      */
