@@ -28,6 +28,7 @@ Client side modules
 
     client/client_messaging
     client/intents
+    client/client_storage
     client/websockets
 
 ....
@@ -35,7 +36,7 @@ APIs
 ....
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
     :glob:
 
     client/api/*
