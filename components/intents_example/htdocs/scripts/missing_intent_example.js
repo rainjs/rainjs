@@ -36,7 +36,6 @@ define(function() {
         this._socket = this.viewContext.getWebSocket("chat/dummy socket");
                 
         this.configureSocketDummy();
-        this.start();
     }
     
     function start() {
@@ -74,6 +73,8 @@ define(function() {
                 "action": "com.rain.test.general.SHOW_CHAT"
             };
             
+            console.log("bla");
+                                    
             var intent = messaging.sendIntent(request);
             
             intent.then(function(data) { alert(JSON.stringify(data)); },
