@@ -9,3 +9,4 @@ conf/mothership.conf.default.*
 conf/server.conf.default.*
 modules/*
 .processes/
+doc/build
