@@ -5,3 +5,4 @@
 /.externalToolBuilders
 /test/mothership/conf/server.conf.*
 /.idea
+/doc/build
