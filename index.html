@@ -23,7 +23,7 @@
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="top" title="Rain v0.4.1 documentation" href="#" />
-    <link rel="next" title="Messaging API" href="client/client_messaging.html" /> 
+    <link rel="next" title="RAIN Installation" href="getting_started/installation.html" /> 
   </head>
   <body>
     <div class="related">
@@ -33,7 +33,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="client/client_messaging.html" title="Messaging API"
+          <a href="getting_started/installation.html" title="RAIN Installation"
              accesskey="N">next</a> |</li>
         <li><a href="#">Rain v0.4.1 documentation</a> &raquo;</li> 
       </ul>
@@ -47,6 +47,31 @@
   <div class="section" id="rain-0-4-1-documentation">
 <h1>Rain 0.4.1 Documentation<a class="headerlink" href="#rain-0-4-1-documentation" title="Permalink to this headline">¶</a></h1>
 <p>Welcome! This is the documentation for Rain 0.4.1</p>
+<div class="section" id="getting-started">
+<h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started/installation.html">RAIN Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/installation.html#redis-server">Redis Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/installation.html#rain-sdk">RAIN SDK</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/installation.html#rain-from-source-code">RAIN from source code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started/rain_sdk_tutorial.html">RAIN SDK Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/rain_sdk_tutorial.html#rain-sdk-basic-usage">RAIN SDK Basic usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="server/component_descriptor.html">RAIN component descriptor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server/component_descriptor.html#complete-descriptor-example">Complete descriptor example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/component_descriptor.html#module-definition">Module definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/component_descriptor.html#module-views-definition">Module views definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/component_descriptor.html#module-intents-definition">Module intents definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/component_descriptor.html#module-cross-referencing-views">Module cross referencing views</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
 <div class="section" id="client-side-modules">
 <h2>Client side modules<a class="headerlink" href="#client-side-modules" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
@@ -56,33 +81,27 @@
 <li class="toctree-l2"><a class="reference internal" href="client/client_messaging.html#publish-subscriber">Publish / Subscriber</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="client/intents.html">Intents Client API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="client/intents.html#intents-technical-details">Intents technical details</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="client/client_storage.html">Client storage API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client/websockets.html">Client side websockets API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="client/websockets.html#websockets-within-the-same-component">Websockets within the same component</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client/websockets.html#websockets-from-other-components">Websockets from other components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client/websockets.html#websockets-example">Websockets example</a></li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="section" id="apis">
 <h3>APIs<a class="headerlink" href="#apis" title="Permalink to this headline">¶</a></h3>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="client/api/ClientStorage.html">Class ClientStorage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="client/api/ClientStorage.html#constructor">Constructor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="client/api/ClientStorage.html#methods">Methods</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="client/api/Component.html">Class Component</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="client/api/Component.html#constructor">Constructor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="client/api/Component.html#methods">Methods</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="client/api/Raintime.ComponentRegistry.html">Class Raintime.ComponentRegistry</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="client/api/Raintime.ComponentRegistry.html#constructor">Constructor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="client/api/Raintime.ComponentRegistry.html#methods">Methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="client/api/Raintime.ComponentRegistry.html#attributes">Attributes</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="client/api/ViewContext.html">Class ViewContext</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="client/api/ViewContext.html#constructor">Constructor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="client/api/ViewContext.html#methods">Methods</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="client/api/ClientStorage.html">Class ClientStorage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client/api/Component.html">Class Component</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client/api/Raintime.ComponentRegistry.html">Class Raintime.ComponentRegistry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client/api/ViewContext.html">Class ViewContext</a></li>
 </ul>
 </div>
 </div>
@@ -99,6 +118,14 @@
 <li class="toctree-l2"><a class="reference internal" href="server/websockets.html#rain-websockets-interface">RAIN Websockets Interface</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="server/component_descriptor.html">RAIN component descriptor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server/component_descriptor.html#complete-descriptor-example">Complete descriptor example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/component_descriptor.html#module-definition">Module definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/component_descriptor.html#module-views-definition">Module views definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/component_descriptor.html#module-intents-definition">Module intents definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/component_descriptor.html#module-cross-referencing-views">Module cross referencing views</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -113,6 +140,9 @@
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Rain 0.4.1 Documentation</a><ul>
+<li><a class="reference internal" href="#getting-started">Getting started</a><ul>
+</ul>
+</li>
 <li><a class="reference internal" href="#client-side-modules">Client side modules</a><ul>
 <li><a class="reference internal" href="#apis">APIs</a><ul>
 </ul>
@@ -127,13 +157,8 @@
 </ul>
 
   <h4>Next topic</h4>
-  <p class="topless"><a href="client/client_messaging.html"
-                        title="next chapter">Messaging API</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="sources/index.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
+  <p class="topless"><a href="getting_started/installation.html"
+                        title="next chapter">RAIN Installation</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
@@ -158,13 +183,12 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="client/client_messaging.html" title="Messaging API"
+          <a href="getting_started/installation.html" title="RAIN Installation"
              >next</a> |</li>
         <li><a href="#">Rain v0.4.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Rain Team.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
