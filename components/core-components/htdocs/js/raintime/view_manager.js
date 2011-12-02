@@ -10,7 +10,8 @@ define(["require", "core-components/client_util"],
 
     ViewManager.prototype._handleViewRequest = function (event) {
         var url = $(event.target).attr("href"),
-            localRequest = /^\.{0,2}\//;
+            localRequest = /^\.{0,2}\//,
+            self = this;
 
         if (localRequest.test(url)) {
             $.ajax({
@@ -19,7 +20,7 @@ define(["require", "core-components/client_util"],
                 },
                 dataType:   "json",
                 url:        url
-            }).done(ClientUtil.bind(this.displayView, this));
+            }).done(function (data) { self.displayView(data, true); });
         } else {
             window.open(url, "_blank");
         }
@@ -27,10 +28,11 @@ define(["require", "core-components/client_util"],
         event.preventDefault();
     }
 
-    ViewManager.prototype.displayView = function (component) {
+    ViewManager.prototype.displayView = function (component, detach) {
         var Registry = require("core-components/raintime/raintime").ComponentRegistry,
             domId = this.viewContext.moduleId,
             componentParts,
+            componentContent,
             componentRoot,
             dependencies,
             head = $("head"),
@@ -44,14 +46,14 @@ define(["require", "core-components/client_util"],
         if (componentParts && componentParts.length === 2) {
             /*
                 We have controller initialization scripts in the body.
-                JQuery strips these out of the normal DOM structure and appends
+                jQuery strips these out of the normal DOM structure and appends
                 them one by one at the end of the JQuery object set.
                 
                 We ignore them when inserting the incoming component's content
                 in the DOM and evaluate them later.
             */
-            componentRoot = $(componentParts[1]);
-            this.root.replaceWith(componentRoot.not("script"));
+            componentContent = $(componentParts[1]);
+            componentRoot = componentContent.not("script");
 
             /*
                 DomIds from the incoming component need to be rewritten since they
@@ -77,7 +79,7 @@ define(["require", "core-components/client_util"],
                 Step 2 of domId update: update domIds inside controller scripts
                 and finally evaluate these.
             */
-            componentRoot.filter("script").each(function () {
+            componentContent.filter("script").each(function () {
                 var scriptText = $(this).text();
 
                 scriptText = scriptText.replace(/^var domId = (\d+);$/m,
@@ -102,6 +104,14 @@ define(["require", "core-components/client_util"],
         if (dependencies.length) {
             head.append('<link rel="stylesheet" type="text/css" href="/resources?files='
                     + encodeURIComponent(dependencies.join(";")) + '">');
+        }
+
+        // Insert the component
+        if (detach) {
+            this.root.remove();
+            componentRoot.dialog({ closeOnEscape: false });
+        } else {
+            this.root.replaceWith(componentRoot);
         }
     }
 
