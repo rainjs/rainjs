@@ -6,7 +6,7 @@
         {
             "viewId":       "main",
             "view":         "/htdocs/main.html",
-            "controller":   "/htdocs/controller/main.js"
+            "controller":   "/htdocs/js/controller/main.js"
         }
     ]
 }
