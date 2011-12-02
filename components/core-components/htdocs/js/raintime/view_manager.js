@@ -70,7 +70,6 @@ define(["core-components/client_util"],
             head = $("head"),
             domIdOffset = 0;
 
-
         // Extract the content of the incoming component
         componentParts = component.content.match(/<body>\s*(<div[^>]*>[\s\S]*<\/div>)\s*<\/body>/);
         if (!componentParts || componentParts.length !== 2) {

@@ -9,6 +9,7 @@ define(function () {
            controller.viewContext.storage.set('name', name, true);
            controller.viewContext.storage.set('age', age, true);
        });
+
    }
 
    return {
