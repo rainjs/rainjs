@@ -6,15 +6,15 @@ define(["core-components/jquery-cookie"], function () {
         /**
          * A reusable empty function for inheritance.
          */
-        function __empty() {};
+        function _empty() {};
 
         /**
          * Returns a new object that links to a given prototype object.
          * @param {Object} proto The prototype object to inherit from
          * @returns {Object} The object instance
          */ 
-        function __create(proto) {
-            var F = __empty;
+        function _create(proto) {
+            var F = _empty;
             F.prototype = proto;
             return new F();
         }
@@ -24,8 +24,8 @@ define(["core-components/jquery-cookie"], function () {
          * @memberOf ClientUtil#
          */
         function inherits(ctor, superCtor) {
-            ctor.__super__ = superCtor.prototype;
-            ctor.prototype = __create(superCtor.prototype);
+            ctor._super_ = superCtor.prototype;
+            ctor.prototype = _create(superCtor.prototype);
             ctor.prototype.constructor = ctor;
         }
 
