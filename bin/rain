@@ -16,7 +16,7 @@ process.title = "rain";
 
 program
     .usage("<options> <command>")
-    .option("-d, --debug", "debugging")
+    .option("-d, --debug", "start the server with the node debugger")
     .option("-c, --conf <path_to_conf>", "start server with custom configuration")
     .option("-m, --mothership-conf <path_to_conf>", "start server with custom mothership configuration")
     .option("-p, --platform <platform>", [
