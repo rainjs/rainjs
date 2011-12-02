@@ -92,7 +92,7 @@ coupled approach. Lets see a usage example:
     }, this.viewContext);
 
     // publish an event
-    messaging.subscribe('sliderReady', {success: true}, this.viewContext);
+    messaging.publish('sliderReady', {success: true}, this.viewContext);
 
 Now, what this does it that it subscribes to the sliderReady event, and then publishes it. 
 The arguments are pretty obvious, the first one is the event name, the second one is the callback 
