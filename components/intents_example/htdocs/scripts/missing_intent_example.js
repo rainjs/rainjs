@@ -77,7 +77,7 @@ define(function() {
                                     
             var intent = messaging.sendIntent(request);
             
-            intent.then(function(data) { alert(JSON.stringify(data)); },
+            intent.then(function(data) { /* self.viewContext.viewManager.displayView(data, true); */ },
                         function(data) { alert("Intent message: " + err); });
         });
         

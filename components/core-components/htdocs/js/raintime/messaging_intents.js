@@ -155,6 +155,10 @@ define(["core-components/client_util",
         
         this._intentsSocket.on("intent_loaded", function(intentResponse) {
             if(request.requestId == intentResponse.requestId) {
+                if (intentResponse.data.intentType === "view") {
+                    request.viewContext.viewManager.displayView(intentResponse.data, true);
+                }
+
                 defer.resolve(intentResponse.data);
             }
         });
