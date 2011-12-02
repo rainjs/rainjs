@@ -1,14 +1,15 @@
 define(["core-components/client_util",
         "core-components/raintime/client_storage",
         "core-components/raintime/messaging_observer",
-        "core-components/raintime/subsequent_views"], function (ClientUtil, ClientStorage, Observer, SubsequentViewHandler) {
+        "core-components/raintime/view_manager"],
+        function (ClientUtil, ClientStorage, Observer, ViewManager) {
     /**
      * A view context reflects a components client-side state.
      * @constructor
      * @property moduleId The component's module id
      * @property instanceId The component's instance id
      * @property {ClientStorage} storage The local storage manager
-     * @property {SubsequentViewHandler} viewHandler The handler for subsequent view requests
+     * @property {ViewManager} viewManager The view manager that handles subsequent view requests
      * @param component
      * @param component.id
      * @param component.parent
@@ -18,7 +19,7 @@ define(["core-components/client_util",
         this.instanceId = component.id;
         this.parent = component.parent;
         this.storage = new ClientStorage(this);
-        this.viewHandler = new SubsequentViewHandler(this);
+        this.viewManager = new ViewManager(this);
     }
 
     /**
