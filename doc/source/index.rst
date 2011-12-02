@@ -29,6 +29,7 @@ Client side modules
     client/client_messaging
     client/intents
     client/client_storage
+    client/requirejs
     client/websockets
 
 ....
