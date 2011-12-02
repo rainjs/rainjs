@@ -1,26 +1,46 @@
 define(["require", "core-components/client_util"],
         function (require, ClientUtil) {
 
+    /**
+     * Handles subsequent view requests.
+     * 
+     * @constructor
+     * @param {ViewContext} viewContext The view context associated with the manager
+     */
     function ViewManager(viewContext) {
         this.viewContext = viewContext;
         this.root = viewContext.getRoot();
 
-        this.root.on("click", "a", ClientUtil.bind(this._handleViewRequest, this));
+        /*
+            Delegate all click events on A tags through the view manager's handler.
+            Requests for other components take special care of correctly initializing
+            the incoming component and it's dependecies.
+        */
+        this.root.on("click", "a", ClientUtil.bind(_handleViewRequest, this));
     }
 
-    ViewManager.prototype._handleViewRequest = function (event) {
+    /**
+     * Handles view requests.
+     * 
+     * @param event jQuery event object
+     */
+    function _handleViewRequest(event) {
         var url = $(event.target).attr("href"),
             localRequest = /^\.{0,2}\//,
             self = this;
 
         if (localRequest.test(url)) {
+            /*
+                For local requests, fetch the component and pass it
+                to {@link ViewManager#displayView}.
+            */
             $.ajax({
                 headers:    {
                     Accept: "text/json"
                 },
                 dataType:   "json",
                 url:        url
-            }).done(function (data) { self.displayView(data, true); });
+            }).done(function (data) { self.displayView(data); });
         } else {
             window.open(url, "_blank");
         }
@@ -28,6 +48,17 @@ define(["require", "core-components/client_util"],
         event.preventDefault();
     }
 
+    /**
+     * Displays a component's view received as a JSON descriptor.
+     * 
+     * @param component The incoming component's JSON description
+     * @param component.dependencies
+     * @param component.dependencies.css
+     * @param component.dependencies.scripts
+     * @param component.content The complete HTML rendered view
+     * @param {Boolean} detach Whether to display the component in a modeless 
+     * draggable dialog
+     */
     ViewManager.prototype.displayView = function (component, detach) {
         var Registry = require("core-components/raintime/raintime").ComponentRegistry,
             domId = this.viewContext.instanceId,
