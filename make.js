@@ -7,16 +7,28 @@ var fs          = require('fs')
     ,content    = ''
     ,root       = mod_path.resolve(mod_path.join(__dirname));
 
-
+                                                                                                                                                                                                                                                                                                                                    
 console.log('patching modules...');
 
-var content = fs.readFileSync(mod_path.resolve(__dirname+'/patches/gettext/lib/gettext.js'), 'utf8');
-fs.writeFileSync(mod_path.resolve(__dirname+'/node_modules/gettext/lib/gettext.js'), content, 'utf8');
+var patch1 = fs.readFileSync(mod_path.resolve(__dirname+'/patches/gettext/lib/gettext.js'), 'utf8'),
+    patch2 = fs.readFileSync(mod_path.resolve(__dirname+'/patches/node-xml/lib/node-xml.js')),
+    patch3 = fs.readFileSync(mod_path.resolve(__dirname+'/patches/mu/lib/mu/renderer.js'));
+
+var basePath = __dirname,
+    windows = !mod_path.existsSync(basePath+'/node_modules/gettext/lib/gettext.js');
+
+if(windows){
+    basePath = "../../";
+    if(fs.symlinkSync(__dirname + '/../../node_modules', __dirname + '/node_modules')){
+        console.log('created symlink of node_modules for windows');
+    }
+}
+
+fs.writeFileSync(mod_path.resolve(basePath+'/node_modules/gettext/lib/gettext.js'), patch1, 'utf8');
 console.log('patched gettext');
-  content = fs.readFileSync(mod_path.resolve(__dirname+'/patches/node-xml/lib/node-xml.js'));
-fs.writeFileSync(mod_path.resolve(__dirname+'/node_modules/node-xml/lib/node-xml.js'), content, 'utf8');
+fs.writeFileSync(mod_path.resolve(basePath+'/node_modules/node-xml/lib/node-xml.js'), patch2, 'utf8');
 console.log('patched node-xml');
-  content = fs.readFileSync(mod_path.resolve(__dirname+'/patches/mu/lib/mu/renderer.js'));
-fs.writeFileSync(mod_path.resolve(__dirname+'/node_modules/mu/lib/mu/renderer.js'), content, 'utf8');
+    
+fs.writeFileSync(mod_path.resolve(basePath+'/node_modules/mu/lib/mu/renderer.js'), patch3, 'utf8');
 console.log('patched mu');
 console.log("3/3 modules patched");

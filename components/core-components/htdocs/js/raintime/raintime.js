@@ -2,6 +2,7 @@ define(['core-components/client_util',
         'core-components/raintime/raintime_config', 
         'core-components/raintime/viewcontext',
         "core-components/raintime/messaging"], function (ClientUtil, RaintimeConfig) {
+
     var modules = Array.prototype.splice.call(arguments, 1);
     
     if(window.MozWebSocket) {
@@ -12,15 +13,15 @@ define(['core-components/client_util',
      * @namespace
      */
     var Raintime = (function () {
+
         /**
          * Component class
          *
          * @param ids
-         *
          * @name Component
          * @constructor
          */
-        function Component (ids) {
+        function Component(ids) {
             this.id = ids.domId;
             this.instanceId = ids.instanceId;
             this.staticId = ids.staticId;
@@ -29,30 +30,29 @@ define(['core-components/client_util',
             this.state = this.STATE_LOAD;
             this.parent = null;
             this.children = [];
+
             $(this).trigger('changeState');
         }
 
-
         /**
-         * Sets the components parent
+         * Sets the components parent.
          *
          * @param o
          */
         Component.prototype.addParent = function (o) {
             this.parent = o;
-        };
+        }
 
         /**
-         * Adds a child to the component
+         * Adds a child to the component.
          *
          * @param o
          */
         Component.prototype.addChild = function (o) {
             this.children.push(o);
-        };
+        }
 
         /**
-         *
          * @param state
          * @param callback
          */
@@ -62,7 +62,7 @@ define(['core-components/client_util',
                     callback.call(this);
                 }
             });
-        };
+        }
 
         Component.prototype.STATE_INIT    = 'initialized';
         Component.prototype.STATE_LOAD    = 'loaded';
@@ -87,15 +87,15 @@ define(['core-components/client_util',
             var _instance;
 
             function init () {
-                function preRender (id) {
+                function preRender(id) {
                     console.log("preRender " + id);
                 }
 
-                function postRender (id) {
+                function postRender(id) {
                     console.log("postRender " + id);
                 }
 
-                function init (id) {
+                function init(id) {
                     console.log("init component " + id);
                 }
 
@@ -109,7 +109,7 @@ define(['core-components/client_util',
 
             /** @lends ComponentController */
             return {
-                get:function () {
+                get: function() {
                     return _instance || (_instance = init());
                 }
             };
@@ -144,25 +144,25 @@ define(['core-components/client_util',
                  * @public
                  * @memberOf Raintime.ComponentRegistry#
                  */
-                function register (props) {
-                    var id = props.domId
-                        , moduleId = props.moduleId
-                        , domselector = props.domselector
-                        , controllerpath = props.clientcontroller
-                        , instanceId = props.instanceId
-                        , staticId = props.staticId;
+                function register(props) {
+                    var id = props.domId,
+                        moduleId = props.moduleId,
+                        domselector = props.domselector,
+                        controllerpath = props.clientcontroller,
+                        instanceId = props.instanceId,
+                        staticId = props.staticId;
 
                     console.log("register component " + id);
 
                     if (components[id]) {
                         return;
                     }
-                                        
+
                     var component = components[id] = createComponent({
-                          domId      : id
-                        , instanceId : instanceId
-                        , staticId   : staticId
-                        , moduleId   : moduleId
+                          domId      : id,
+                          instanceId : instanceId,
+                          staticId   : staticId,
+                          moduleId   : moduleId
                     });
                     
                     require([controllerpath], function (controller) {
@@ -201,16 +201,16 @@ define(['core-components/client_util',
                 }
 
                 /**
-                 * Get a component by its static Id
+                 * Looks up and returns a component by it's static id.
                  *
-                 * @param {Mixed} staticId
-                 * @returns {Component|undefined}
                  * @public
                  * @memberOf Raintime.ComponentRegistry#
+                 * @param staticId
+                 * @returns {Component|undefined}
                  */
-                function getComponent (staticId){
-                    for(var key in components){
-                        if(components[key].staticId == staticId){
+                function getComponent(staticId) {
+                    for (var key in components) {
+                        if (components[key].staticId === staticId) {
                             return components[key];
                         }
                     }
@@ -243,20 +243,14 @@ define(['core-components/client_util',
 
         /** @lends Raintime */
         return {
-            createComponent: createComponent,
-            ComponentRegistry: ComponentRegistry.get(),
-            ComponentController: ComponentController.get()
+            createComponent:        createComponent,
+            ComponentRegistry:      ComponentRegistry.get(),
+            ComponentController:    ComponentController.get()
         };
     })();
 
-    if (typeof exports != 'undefined') {
-        var c = Raintime.createComponent();
-        c.addParent('foo');
-        console.log(c);
-    }
-
-    for (var i in modules) {
-        var module = modules[i];
+    for (var m in modules) {
+        var module = modules[m];
 
         ClientUtil.inject(Raintime, module);
     }
