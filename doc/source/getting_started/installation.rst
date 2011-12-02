@@ -106,8 +106,21 @@ about RAIN sdk creating first project read: :doc:`/getting_started/rain_sdk_tuto
 Windows Comments
 ~~~~~~~~~~~~~~~~
 
-For RAIN SDK to run on Windows please run all the commands above under cygwin. Everything
-should work smoothly.
+For RAIN SDK to run on Windows please run the following commands:
+
+   #. cd /home/<your user folder>
+   #. mkdir node_kit
+   #. cd node_kit
+   #. Copy content from :doc:`/getting_started/install` under install.sh and run it into node_kit folder
+   #. npm install rain@0.4.0
+   #. export PATH=$PATH:/home/<your user folder>/node_kit/node_modules/rain
+   
+Now everything is ready for you. You can execute rain on command line. To improve the 
+experience for later use edit your .profile file and add as last line the following command::
+
+   export PATH=$PATH:/home/<your user folder>/node_kit/node_modules/rain
+
+Like this you don't have to execute export command each time you launch cygwin.
    
 RAIN from source code
 ---------------------
@@ -115,10 +128,9 @@ RAIN from source code
 This is the way to go if you want to contribute to this project. To get started with this
 you need to execute the following commands:
 
-Linux / Unix / Mac OS
-~~~~~~~~~~~~~~~~~~~~~
+Linux / Unix / Mac OS / Windows
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-   #. curl http://npmjs.org/install.sh | sudo sh
    #. git clone https://github.com/rainjs/rainjs.git
    #. cd rain
    #. npm install -d
@@ -126,11 +138,6 @@ Linux / Unix / Mac OS
    #. node node_modules/rain-mothership/run.js
    #. node run.js
    
-Windows
-~~~~~~~
-
-pass ...
-
 Test installation
 ~~~~~~~~~~~~~~~~~
 

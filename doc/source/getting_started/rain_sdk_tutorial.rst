@@ -73,5 +73,22 @@ Below you can find a bunch of useful commands to use::
    version
    platform
    
-You need to be sure that redis server is started prior to starting the Rain SDK. Otherwise
-mothership and rain server will not work.
+You need to be sure that redis server is started prior to starting the Rain SDK. It is strongly 
+recommended to start redis server prior to use rain sdk.
+
+RAIN SDK Create project
+~~~~~~~~~~~~~~~~~~~~~~~
+
+You can easily used rain sdk to create projects and components. To create a new project 
+execute the following commands:
+
+   #. Go to you workspace folder
+   #. rain create-project . <project-name>
+   #. Just answer the question you are prompted and everything is ready.
+   #. cd <project-name>
+   #. rain start
+   
+Now you have your first RAIN project. Try the following url in your browser: http://localhost:1337/components/<project-name>/htdocs/index.html.
+
+RAIN SDK Debug mode
+~~~~~~~~~~~~~~~~~~~
