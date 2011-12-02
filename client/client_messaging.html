@@ -83,22 +83,37 @@ mail application with all fields completed.</p>
 <h3>Intents Usage<a class="headerlink" href="#intents-usage" title="Permalink to this headline">¶</a></h3>
 <p>Messaging layer is bind to client runtime. Each client side controller has access to client
 runtime in all its methods. Below you can find an usage example:</p>
-<div class="highlight-python"><pre>var messaging = this.clientRuntime.messaging;
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15</pre></div></td><td class="code"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">messaging</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">clientRuntime</span><span class="p">.</span><span class="nx">messaging</span><span class="p">;</span>
 
-var request = {
-    "viewContext": self.viewContext,
-    "category": "local_test_intent",
-    "action": "local_action",
-    "intentContext: {"message": "This will not work."}
-};
+<span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">viewContext</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">viewContext</span><span class="p">,</span>
+    <span class="nx">category</span><span class="o">:</span> <span class="s2">&quot;local_test_intent&quot;</span><span class="p">,</span>
+    <span class="nx">action</span><span class="o">:</span> <span class="s2">&quot;local_action&quot;</span><span class="p">,</span>
+    <span class="nx">intentContext</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="o">:</span> <span class="s2">&quot;This will not work.&quot;</span><span class="p">}</span>
+<span class="p">};</span>
 
-var intent = messaging.sendIntent(request);
+<span class="kd">var</span> <span class="nx">intent</span> <span class="o">=</span> <span class="nx">messaging</span><span class="p">.</span><span class="nx">sendIntent</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
 
-var fnSuccess = function(data) { alert(JSON.stringify(data)); };
-var fnError = function(ex) { alert(ex.message); };
+<span class="kd">var</span> <span class="nx">fnSuccess</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span> <span class="nx">alert</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">));</span> <span class="p">};</span>
+<span class="kd">var</span> <span class="nx">fnError</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">ex</span><span class="p">)</span> <span class="p">{</span> <span class="nx">alert</span><span class="p">(</span><span class="nx">ex</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span> <span class="p">};</span>
 
-intent.then(fnSuccess, fnError);</pre>
-</div>
+<span class="nx">intent</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">fnSuccess</span><span class="p">,</span> <span class="nx">fnError</span><span class="p">);</span>
+</pre></div>
+</td></tr></table></div>
 <p>The above example is extracted from the samples provided by RAIN (intents_example). The
 method used to accessing intents mechanism is sendIntent method. This method accept a
 Dictionary as a parameter. Each intent request must contain the following information:</p>
@@ -117,6 +132,61 @@ you do not specify a callback for error case then the error is automatically thr
 </div>
 <div class="section" id="publish-subscriber">
 <h2>Publish / Subscriber<a class="headerlink" href="#publish-subscriber" title="Permalink to this headline">¶</a></h2>
+<p>The publish/subscribe mechanism is an implementation of the observer pattern, and it can be found
+in the messaging object. The way pub/sub works is that you can subscribe to an event, without
+needing to know if the publisher exists or is even initialised, and this gives you a very loosly
+coupled approach. Lets see a usage example:</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">messaging</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">clientRuntime</span><span class="p">.</span><span class="nx">messaging</span><span class="p">;</span>
+
+<span class="c1">// subscribe to an event</span>
+<span class="nx">messaging</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s1">&#39;sliderReady&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">},</span> <span class="k">this</span><span class="p">.</span><span class="nx">viewContext</span><span class="p">);</span>
+
+<span class="c1">// publish an event</span>
+<span class="nx">messaging</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s1">&#39;sliderReady&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">success</span><span class="o">:</span> <span class="kc">true</span><span class="p">},</span> <span class="k">this</span><span class="p">.</span><span class="nx">viewContext</span><span class="p">);</span>
+</pre></div>
+</td></tr></table></div>
+<p>Now, what this does it that it subscribes to the sliderReady event, and then publishes it.
+The arguments are pretty obvious, the first one is the event name, the second one is the callback
+(for the subscriber) or the data (for the publisher) and the viewContext (used internally for scoping).
+We also provided some aliases to these methods on the viewContext object which do not require the last argument.</p>
+<p>We also provide the possibility of namespacing your events, by separating them with the _::_ operator.
+This allows you to scope your events, or if you want to, to subscribe to global events by prefixing your
+event with the :: operator. But enough talk, lets see some code:</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span class="c1">// subscribe to a local event</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">viewContext</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s1">&#39;localEvent&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;local event triggered&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// subscribe to a global event</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">viewContext</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s1">&#39;::globalEvent&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;global event triggered&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// publish the global event</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">viewContext</span><span class="p">.</span><span class="nx">publish</span><span class="p">(</span><span class="s1">&#39;::globalEvent&#39;</span><span class="p">);</span>
+</pre></div>
+</td></tr></table></div>
 </div>
 </div>
 
@@ -145,11 +215,6 @@ you do not specify a callback for error case then the error is automatically thr
   <h4>Next topic</h4>
   <p class="topless"><a href="intents.html"
                         title="next chapter">Intents Client API</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../sources/client/client_messaging.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -183,7 +248,6 @@ you do not specify a callback for error case then the error is automatically thr
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Rain Team.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
     </div>
   </body>

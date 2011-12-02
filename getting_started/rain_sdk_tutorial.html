@@ -121,8 +121,26 @@ description
 version
 platform</pre>
 </div>
-<p>You need to be sure that redis server is started prior to starting the Rain SDK. Otherwise
-mothership and rain server will not work.</p>
+<p>You need to be sure that redis server is started prior to starting the Rain SDK. It is strongly
+recommended to start redis server prior to use rain sdk.</p>
+<div class="section" id="rain-sdk-create-project">
+<h3>RAIN SDK Create project<a class="headerlink" href="#rain-sdk-create-project" title="Permalink to this headline">¶</a></h3>
+<p>You can easily used rain sdk to create projects and components. To create a new project
+execute the following commands:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Go to you workspace folder</li>
+<li>rain create-project . &lt;project-name&gt;</li>
+<li>Just answer the question you are prompted and everything is ready.</li>
+<li>cd &lt;project-name&gt;</li>
+<li>rain start</li>
+</ol>
+</div></blockquote>
+<p>Now you have your first RAIN project. Try the following url in your browser: <a class="reference external" href="http://localhost:1337/components">http://localhost:1337/components</a>/&lt;project-name&gt;/htdocs/index.html.</p>
+</div>
+<div class="section" id="rain-sdk-debug-mode">
+<h3>RAIN SDK Debug mode<a class="headerlink" href="#rain-sdk-debug-mode" title="Permalink to this headline">¶</a></h3>
+</div>
 </div>
 </div>
 
@@ -135,7 +153,11 @@ mothership and rain server will not work.</p>
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">RAIN SDK Tutorial</a><ul>
-<li><a class="reference internal" href="#rain-sdk-basic-usage">RAIN SDK Basic usage</a></li>
+<li><a class="reference internal" href="#rain-sdk-basic-usage">RAIN SDK Basic usage</a><ul>
+<li><a class="reference internal" href="#rain-sdk-create-project">RAIN SDK Create project</a></li>
+<li><a class="reference internal" href="#rain-sdk-debug-mode">RAIN SDK Debug mode</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -146,11 +168,6 @@ mothership and rain server will not work.</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="../server/component_descriptor.html"
                         title="next chapter">RAIN component descriptor</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../sources/getting_started/rain_sdk_tutorial.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -184,7 +201,6 @@ mothership and rain server will not work.</p>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Rain Team.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
     </div>
   </body>
