@@ -14,7 +14,7 @@ Class ViewContext
    class-title
 
 
-The view context attached to this controller
+A view context reflects a components client-side state.
 
 
 
@@ -37,6 +37,15 @@ Constructor
     :param  component: 
          
     
+    :param  component.id: 
+         
+    
+    :param  component.parent: 
+         
+    
+    :param  component.moduleId: 
+         
+    
 
 
 
@@ -54,19 +63,14 @@ Methods
 getRoot
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: ViewContext#getRoot(dom)
+.. js:function:: ViewContext#getRoot()
 
-
-    
-    :param Boolean dom: 
-        True to return the DOM element 
-    
 
 
 
     
-    :returns HtmlElement:
-        The component's container element 
+    :returns :
+        The component's container jQuery element 
     
 
 
@@ -215,6 +219,109 @@ Unsubscribe from an event
 
 
     
+
+Attributes
+----------
+
+..
+   class-attributes
+
+
+instanceId
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:attribute:: instanceId   
+
+
+The component's instance id
+
+
+
+
+
+
+
+
+    
+
+
+
+moduleId
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:attribute:: moduleId   
+
+
+The component's module id
+
+
+
+
+
+
+
+
+    
+
+
+
+parent
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:attribute:: parent   
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+storage
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:attribute:: storage   
+
+
+The local storage manager
+
+
+
+
+
+
+
+
+    
+
+
+
+viewManager
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:attribute:: viewManager   
+
+
+The view manager that handles subsequent view requests
+
+
+
+
+
+
+
+
+    
+
+
+
 
 
 

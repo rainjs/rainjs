@@ -12,6 +12,7 @@ define(["core-components/client_util",
     /**
      * A view context reflects a components client-side state.
      *
+     * @name ViewContext
      * @constructor
      * @property moduleId The component's module id
      * @property instanceId The component's instance id

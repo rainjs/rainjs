@@ -72,9 +72,13 @@ define(["core-components/client_util",
     /**
      * Method used to send an intent request.
      *
-     * @param {Dictionary} request: This is the request object for this intent.
-     * @return A promise that provide then method. You can use it for react to success and error situations.
-     * @throws Error: if request object is incomplete then sendIntent raises an error.
+     * @name sendIntent
+     * @function
+     * @param {Dictionary} request This is the request object for this intent.
+     * @param {Promise} defer
+     * @return {Promise} A promise that provide then method. You can use it for react to success and error situations.
+     * @throws {Error} if request object is incomplete then sendIntent raises an error.
+     * @memberOf Raintime.messaging
      *
      * @example:
      * var request = {"viewContext": <viewcontext instance>,
