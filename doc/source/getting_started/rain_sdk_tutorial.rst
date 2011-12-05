@@ -88,8 +88,8 @@ execute the following commands:
    #. cd <project-name>
    #. rain start
    
-Now you have your first RAIN project. Try the following url in your browser: http://localhost:1337/components/<component-name>/htdocs/index.html.
-
+Now you have your first RAIN project. Try the following url in your browser: http://localhost:1337/components/<component-name>/htdocs/index.html.Now you have your first RAIN project. Try the following url in your browser: http://localhost:1337/components/<component-name>/htdocs/index.html.
+                                                                                                                                               
 RAIN SDK Debug mode
 ~~~~~~~~~~~~~~~~~~~
 
@@ -99,10 +99,10 @@ It automatically connect the nodejs native debugger with the port 8585.
 If you want to use a graphical debugger than you can install "node-inspector". It's a node package manager module.
 
 For Linux::
-   sudo npm install node-inspector -g
-   
+  sudo npm install node-inspector -g
+  
 For Windows::
-   npm install node-inspector
-   export PATH=$PATH:/home/<your user folder>/node_kit/node_modules/node-inspector
-   
+  npm install node-inspector
+  export PATH=$PATH:/home/<your user folder>/node_kit/node_modules/node-inspector
+  
 Now start the node-inspector on the command line with node-inspector and you can access the debugger with http://localhost:8080
