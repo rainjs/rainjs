@@ -16,7 +16,7 @@ define(["core-components/client_util"],
             Requests for other components take special care of correctly initializing
             the incoming component and it's dependecies.
         */
-        this.root.on("click", "a", ClientUtil.bind(_handleViewRequest, this));
+        this.root.on("click", "a", this, _handleViewRequest);
     }
 
     /**
@@ -27,7 +27,16 @@ define(["core-components/client_util"],
     function _handleViewRequest(event) {
         var url = $(event.target).attr("href"),
             localRequest = /^\.{0,2}\//,
-            self = this;
+            self = event.data,
+            belongsToSubcomponent;
+
+        event.preventDefault();
+
+        // Do not handle clicks on A tags that belong to subcomponents
+        belongsToSubcomponent = !!$(event.currentTarget).parentsUntil(self.root, "[data-instanceid]").length;
+        if (belongsToSubcomponent) {
+            return false;
+        }
 
         if (localRequest.test(url)) {
             /*
@@ -44,8 +53,6 @@ define(["core-components/client_util"],
         } else {
             window.open(url, "_blank");
         }
-
-        event.preventDefault();
     }
 
     /**
@@ -124,7 +131,7 @@ define(["core-components/client_util"],
             We do this before evaluating the scripts so we have a ready DOM.
         */
         if (detach) {
-            componentRoot.dialog({ closeOnEscape: false });
+            componentRoot.dialog({ closeOnEscape: false, width: 500, height: 400 });
         } else {
             this.root.replaceWith(componentRoot);
         }
