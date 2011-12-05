@@ -154,9 +154,9 @@ define(['core-components/client_util',
 
                     console.log("register component " + id);
 
-                    if (components[id]) {
+                    /*if (components[id]) {
                         return;
-                    }
+                    }*/
 
                     var component = components[id] = createComponent({
                           domId      : id,

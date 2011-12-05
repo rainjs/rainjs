@@ -25,7 +25,7 @@ define(["core-components/client_util"],
      * @param event jQuery event object
      */
     function _handleViewRequest(event) {
-        var url = $(event.target).attr("href"),
+        var url = $(event.currentTarget).attr("href"),
             localRequest = /^\.{0,2}\//,
             self = event.data,
             belongsToSubcomponent;
