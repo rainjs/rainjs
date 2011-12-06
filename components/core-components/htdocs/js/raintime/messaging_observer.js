@@ -54,7 +54,7 @@ define(['core-components/client_util'], function(ClientUtil) {
         }
 		
 		for(i = 0; i < parent.callbacks.length; i++) {
-            ClientUtil.defer(parent.callbacks[i], data);
+            ClientUtil.defer(ClientUtil.bind(parent.callbacks[i], parent, data));
 		}
 	}
 	
