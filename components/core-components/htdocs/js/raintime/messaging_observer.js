@@ -20,6 +20,7 @@ define(['core-components/client_util'], function(ClientUtil) {
 	 * @param eventName
 	 * @param data
      * @param viewContext the ViewContext of the component publishing the event
+     * @memberOf Raintime.messaging
 	 */
 	function publish(eventName, data, viewContext) {
         var hierarchy = eventName.split('::');
@@ -66,6 +67,7 @@ define(['core-components/client_util'], function(ClientUtil) {
 	 * 					a single parameter called data. 
 	 * 			Ex: function(data)
      * @param viewContext the ViewContext of the component publishing the event
+     * @memberOf Raintime.messaging
 	 */
 	function subscribe(eventName, callback, viewContext) {
         var hierarchy = eventName.split('::');
@@ -109,6 +111,7 @@ define(['core-components/client_util'], function(ClientUtil) {
      *                     a single parameter called data.
      *             Ex: function(data)
      * @param viewContext the ViewContext of the component publishing the event
+     * @memberOf Raintime.messaging
      */
 	function unsubscribe(eventName, callback, viewContext) {
         var hierarchy = eventName.split('::');
@@ -132,7 +135,7 @@ define(['core-components/client_util'], function(ClientUtil) {
 
 		var foundIndex = parent.callbacks.indexOf(callback);
 		
-		if(foundIndex > -1) {			
+		if (foundIndex > -1) {			
 			parent.callbacks.splice(foundIndex, 1);
 		}
 	}

@@ -6,3 +6,4 @@
 /test/mothership/conf/server.conf.*
 /.idea
 /doc/build
+*_global_.rst
