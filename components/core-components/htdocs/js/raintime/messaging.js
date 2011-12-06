@@ -32,12 +32,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * @description This is the messaging layer of Raintime. It contains useful methods for working
  * with intents and pub / sub mechanism.
  */
+
 define(["core-components/raintime/raintime_config",
         "core-components/raintime/messaging_intents",
         "core-components/raintime/messaging_observer",
         "core-components/socket.io/socket.io"], function(RaintimeConfig, Intents, Observer, SocketIO) {
     /**
      * Class used to build the messaging layer.
+     *
+     * @name messaging
+     * @class a messaging instance
+     * @memberOf Raintime
      */
     function Messaging(config) {
         this._config = config;
