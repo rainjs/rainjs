@@ -6,6 +6,29 @@ task('default', function (params) {
 	jake.showAllTaskDescriptions();
 });
 
+desc('Publishes to npm');
+task('publish', function(params) {
+    var pkg = JSON.parse(new Buffer(fs.readFileSync('./package.json'))),
+        version = pkg.version,
+        npm = require('npm/lib/npm');
+
+    version = version.split('.');
+    version[2]++;
+    pkg.version = version.join('.');
+    fs.writeFileSync('./package.json', JSON.stringify(pkg), encoding='utf8');
+    npm.load({}, function(err, npm) {
+        npm.commands.publish([], function (error, data) {
+            if (error) {
+                return error;
+            }
+        });
+
+        npm.on('log', function (message) {
+            //console.log(message);
+        });
+    });
+});
+
 namespace('doc', function () {
 	desc('Generate the documentation');
 	task('generate', function () {
