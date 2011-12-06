@@ -93,6 +93,25 @@ define(['core-components/client_util',
 
                 function postRender(id) {
                     console.log("postRender " + id);
+                    var component = Raintime.ComponentRegistry.components[id];
+                    if(component.STATE_LOAD == component.state){
+                        component.bindState('initialized', function(){
+                            var controller = this.controller;
+                            console.log(controller);
+                            if (controller.start) {
+                                controller.start();
+                            }
+                            this.state = this.STATE_START;
+                            $(this).trigger('changeState');
+                        });
+                    } else {
+                        var controller = component.controller;
+                        if (controller.start) {
+                            controller.start();
+                        }
+                        component.state = component.STATE_START;
+                        $(component).trigger('changeState');
+                    }
                 }
 
                 function init(id) {
@@ -154,9 +173,9 @@ define(['core-components/client_util',
 
                     console.log("register component " + id);
 
-                    /*if (components[id]) {
+                    if (components[id]) {
                         return;
-                    }*/
+                    }
 
                     var component = components[id] = createComponent({
                           domId      : id,
@@ -166,6 +185,9 @@ define(['core-components/client_util',
                     });
                     
                     require([controllerpath], function (controller) {
+                        if (typeof controller === "function") {
+                            controller = new controller;
+                        }
                         component.controller = controller;
                         component.controller.viewContext = Raintime.addViewContext(component);
                         component.controller.viewContext.getSession = ClientUtil.getSession;
@@ -175,15 +197,9 @@ define(['core-components/client_util',
 
                         if (controller.init) {
                             controller.init();
-                            component.state = component.STATE_INIT;
-                            $(component).trigger('changeState');
                         }
-                        
-                        if (controller.start) {
-                            controller.start();
-                            component.state = component.STATE_START;
-                            $(component).trigger('changeState');
-                        }
+                        component.state = component.STATE_INIT;
+                        $(component).trigger('changeState');
                     });
 
                     return component;
