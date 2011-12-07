@@ -63,10 +63,10 @@ define(['core-components/client_util',
                 
                 callback.call(this);
             } else {
-                $(this).bind("changeState", { self : this, state : state }, function(ev){
-                    var self = ev.data.self,
-                        state = ev.data.state;
-                    if(state == self.state){
+                $(this).one("changeState"+state, { state : state, callback : callback }, function(ev){
+                    var state = ev.data.state,
+                        callback = ev.data.callback;
+                    if(state == this.state){
                         callback.call(this);
                     }
                 });
@@ -102,16 +102,18 @@ define(['core-components/client_util',
                             if (controller.start) {
                                 controller.start();
                             }
+                            
                             this.state = Raintime.ComponentStates.START;
-                            $(this).trigger('changeState');
+                            $(this).trigger('changeState'+Raintime.ComponentStates.START);
                         });
                     } else {
                         var controller = component.controller;
                         if (controller.start) {
                             controller.start();
                         }
+                        
                         component.state = Raintime.ComponentStates.START;
-                        $(component).trigger('changeState');
+                        $(component).trigger('changeState'+Raintime.ComponentStates.START);
                     }
                 }
 
@@ -214,8 +216,9 @@ define(['core-components/client_util',
                         if (controller.init) {
                             controller.init();
                         }
+
                         component.state = Raintime.ComponentStates.INIT;
-                        $(component).trigger('changeState');
+                        $(component).trigger('changeState'+Raintime.ComponentStates.INIT);
                     });
 
                     return component;
