@@ -27,7 +27,7 @@ define(['core-components/client_util',
             this.staticId = ids.staticId;
             this.moduleId = ids.moduleId;
             this.controller = null;
-            this.state = this.STATE_LOAD;
+            this.state = Raintime.ComponentStates.LOAD;
             this.parent = null;
             this.children = [];
 
@@ -57,19 +57,21 @@ define(['core-components/client_util',
          * @param callback
          */
         Component.prototype.bindState = function(state, callback){
-            $(this).bind("changeState", this, function(){
-                if(state == this.state){
-                    callback.call(this);
-                }
-            });
+            if((state <= Raintime.ComponentStates.START && state <= this.state)
+               ||
+               (state >= Raintime.ComponentStates.PAUSE && state == this.state)){
+                
+                callback.call(this);
+            } else {
+                $(this).bind("changeState", { self : this, state : state }, function(ev){
+                    var self = ev.data.self,
+                        state = ev.data.state;
+                    if(state == self.state){
+                        callback.call(this);
+                    }
+                });
+            }
         }
-
-        Component.prototype.STATE_INIT    = 'initialized';
-        Component.prototype.STATE_LOAD    = 'loaded';
-        Component.prototype.STATE_START   = 'started';
-        Component.prototype.STATE_PAUSE   = 'paused';
-        Component.prototype.STATE_STOP    = 'stopped';
-        Component.prototype.STATE_DISPOSE = 'disposed';
 
         var _id = 0;
 
@@ -94,14 +96,13 @@ define(['core-components/client_util',
                 function postRender(id) {
                     console.log("postRender " + id);
                     var component = Raintime.ComponentRegistry.components[id];
-                    if(component.STATE_LOAD == component.state){
-                        component.bindState('initialized', function(){
+                    if(Raintime.ComponentStates.LOAD == component.state){
+                        component.bindState(Raintime.ComponentStates.INIT, function(){
                             var controller = this.controller;
-                            console.log(controller);
                             if (controller.start) {
                                 controller.start();
                             }
-                            this.state = this.STATE_START;
+                            this.state = Raintime.ComponentStates.START;
                             $(this).trigger('changeState');
                         });
                     } else {
@@ -109,7 +110,7 @@ define(['core-components/client_util',
                         if (controller.start) {
                             controller.start();
                         }
-                        component.state = component.STATE_START;
+                        component.state = Raintime.ComponentStates.START;
                         $(component).trigger('changeState');
                     }
                 }
@@ -133,6 +134,21 @@ define(['core-components/client_util',
                 }
             };
         })();
+        
+        /**
+         * @name ComponentStates
+         * @class Is static and represents the states as name  
+         * 
+         * @memberOf Raintime
+         */
+        var ComponentStates = {
+            LOAD    : 1,
+            INIT    : 2,
+            START   : 4,
+            PAUSE   : 8,
+            STOP    : 16,
+            DISPOSE : 32
+        };
 
         /**
          * @name ComponentRegistry
@@ -173,9 +189,9 @@ define(['core-components/client_util',
 
                     console.log("register component " + id);
 
-                    if (components[id]) {
+                    /*if (components[id]) {
                         return;
-                    }
+                    }*/
 
                     var component = components[id] = createComponent({
                           domId      : id,
@@ -198,7 +214,7 @@ define(['core-components/client_util',
                         if (controller.init) {
                             controller.init();
                         }
-                        component.state = component.STATE_INIT;
+                        component.state = Raintime.ComponentStates.INIT;
                         $(component).trigger('changeState');
                     });
 
@@ -261,7 +277,8 @@ define(['core-components/client_util',
         return {
             createComponent:        createComponent,
             ComponentRegistry:      ComponentRegistry.get(),
-            ComponentController:    ComponentController.get()
+            ComponentController:    ComponentController.get(),
+            ComponentStates :       ComponentStates
         };
     })();
 
