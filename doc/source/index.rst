@@ -52,3 +52,38 @@ Server side modules
     server/messaging_intents
     server/websockets
     server/component_descriptor
+
+--------
+Planning
+--------
+
+.. toctree::
+    :maxdepth: 1
+    
+    proposals/Features-proposal
+
+.................
+Features Concepts
+.................
+
+.. toctree::
+    :maxdepth: 1
+
+    proposals/Features-proposal-feature-template
+    proposals/Features-proposal-client-storage
+    proposals/Features-proposal-client-runtime-a
+    proposals/Features-proposal-client-contexts
+    proposals/Features-proposal-client-messaging-a
+    proposals/Features-proposal-client-language-a
+    proposals/Features-proposal-client-language-inline-editing
+    proposals/Features-proposal-fragments-configuration
+    proposals/Features-proposal-hijax-strategy
+    proposals/Features-proposal-instances
+    proposals/Features-proposal-remote-aggregation
+    proposals/Features-proposal-rain-authorization
+    proposals/Features-proposal-view-authorization
+    proposals/Features-proposal-view-modes
+    proposals/Features-proposal-css-transformation
+    proposals/Features-proposal-error-handling
+    proposals/Features-proposal-elastic-architecture
+    proposals/Features-proposal-rain-cloud-action
