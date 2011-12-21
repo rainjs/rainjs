@@ -1,0 +1,371 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Client Language Runtime &mdash; Rain v0.4.1 documentation</title>
+    <link rel="stylesheet" href="../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/underscore.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <link rel="top" title="Rain v0.4.1 documentation" href="../index.html" />
+    <link rel="next" title="Client Language Inline Editing" href="Features-proposal-client-language-inline-editing.html" />
+    <link rel="prev" title="Client Runtime: Messaging API (Proposal A)" href="Features-proposal-client-messaging-a.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Features-proposal-client-language-inline-editing.html" title="Client Language Inline Editing"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Features-proposal-client-messaging-a.html" title="Client Runtime: Messaging API (Proposal A)"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="client-language-runtime">
+<h1>Client Language Runtime<a class="headerlink" href="#client-language-runtime" title="Permalink to this headline">¶</a></h1>
+<p>This document describe all features offered by RAIN client runtime for interacting with localization.</p>
+<div class="section" id="functional-requirements">
+<h2>Functional requirements<a class="headerlink" href="#functional-requirements" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<ol class="arabic simple">
+<li>Language runtime must provide translations access from client side controllers.</li>
+<li>Language runtime must provide support for changing translations (if authorized).</li>
+<li>Language runtime must provide support for accessing preferences.</li>
+<li>Language runtime must provide support for formating texts (numbers, dates, time zones and others).</li>
+<li>Language runtime must provide support for obtaining supported languages.</li>
+<li>Language runtime must provide support for changing the language of the application.</li>
+<li>Language runtime must provide support for obtaining the current language of the application.</li>
+<li>Language runtime must provide support for the following categories or requirements:<ol class="arabic">
+<li>Language requirements<ol class="arabic">
+<li>Language service must provide support for obtaining the character encoding.</li>
+<li>Language service must provide support for obtaining the writing direction.</li>
+<li>Language service must provide support for obtaining plural of words.</li>
+</ol>
+</li>
+<li>Culture requirements<ol class="arabic">
+<li>Culture service must provide support for formatting telephone numbers.</li>
+<li>Culture service must provide support for formatting addresses.</li>
+<li>Culture service must provide support for formatting currency.</li>
+<li>Culture service must provide support for paper settings.</li>
+</ol>
+</li>
+<li>Writing requirements<ol class="arabic">
+<li>Writing service must provide support for formatting date / time.</li>
+<li>Writing service must provide support for formatting numbers.</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</blockquote>
+</div>
+<div class="section" id="non-functional-requirements">
+<h2>Non functional requirements<a class="headerlink" href="#non-functional-requirements" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<ol class="arabic simple">
+<li>RAIN language runtime must support properties files.</li>
+<li>RAIN language runtime must support po files.</li>
+</ol>
+</blockquote>
+</div>
+<div class="section" id="design">
+<h2>Design<a class="headerlink" href="#design" title="Permalink to this headline">¶</a></h2>
+<img alt="../images/client_language_runtime.png" src="../images/client_language_runtime.png" />
+<p>Client Language Runtime methods work only with the current selected language. This is why we do not need to specify the language anywhere in this API.</p>
+</div>
+<div class="section" id="use-cases">
+<h2>Use cases<a class="headerlink" href="#use-cases" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="displaying-localized-error-messages">
+<h2>Displaying localized error messages<a class="headerlink" href="#displaying-localized-error-messages" title="Permalink to this headline">¶</a></h2>
+<p>Imagine we do an ajax request and based on some conditions when we receive an http error status code we want to display a friendly localized message.</p>
+</div>
+<div class="section" id="language-change-action">
+<h2>Language change action<a class="headerlink" href="#language-change-action" title="Permalink to this headline">¶</a></h2>
+<p>Imagine a fragment that is displayed within an aggregator. The aggregator contains a dropdown that allows users to change the language. In this case each fragment from the aggregator should reload the translations.
+Moreover, when moving to the next aggregator, the selected language should be the one changed in the previous aggregator.</p>
+</div>
+<div class="section" id="inline-editing">
+<h2>Inline editing<a class="headerlink" href="#inline-editing" title="Permalink to this headline">¶</a></h2>
+<p>Imagine we create an application which contains multiple views. From a developer perspective, we add some text which might be changed over time. Without inline editing, developer become responsible for changing text. The way this might be done in RAIN is using inline editing and client language runtime. Client Language Runtime will simply submit the changes to RAIN server which will change the specified keys.</p>
+</div>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="data-structure">
+<h2>Data structure<a class="headerlink" href="#data-structure" title="Permalink to this headline">¶</a></h2>
+<p>After RAIN parser finish parsing the document and markup is completed rendered the following data structure is used for holding translations (available on client side):</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span class="p">{</span><span class="s2">&quot;translations&quot;</span> <span class="o">:</span> <span class="p">{</span>
+  <span class="s2">&quot;id1&quot;</span> <span class="o">:</span> <span class="p">{</span>
+    <span class="s2">&quot;ro_RO&quot;</span> <span class="o">:</span> <span class="p">{</span>
+      <span class="c1">// ..... entries for all html tag attributes in ro</span>
+      <span class="s2">&quot;innerText&quot;</span> <span class="o">:</span> <span class="s1">&#39;localized text - ro version&#39;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;de_DE&quot;</span> <span class="o">:</span> <span class="p">{</span>
+      <span class="c1">// ..... entries for all html tag attributes in de</span>
+      <span class="s2">&quot;innerText&quot;</span> <span class="o">:</span> <span class="s1">&#39;localized text - de version&#39;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}}</span>
+</pre></div>
+</td></tr></table></div>
+<p>The client side controller holds a reference to this structure in viewContext object.</p>
+</div>
+<div class="section" id="markup">
+<h2>Markup<a class="headerlink" href="#markup" title="Permalink to this headline">¶</a></h2>
+<p>There is only one addition to standard html tag attributes specific to RAIN: data-gettext. Each tag data-gettext atttribute will point to an entry from the above mentioned data structure. This is also how client runtime will be able to solve dynamic translations.</p>
+</div>
+<div class="section" id="usage-examples">
+<h2>Usage examples<a class="headerlink" href="#usage-examples" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="simple-usage">
+<h2>Simple usage<a class="headerlink" href="#simple-usage" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="generated-markup">
+<h3>Generated markup<a class="headerlink" href="#generated-markup" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-html"><pre>&lt;html&gt;
+&lt;head&gt;
+   &lt;link rel="stylesheet" href="rain specific url for consolidated css" /&gt;
+   &lt;script type="text/javascript" src="js/require-jquery.js'&gt;&lt;/script&gt;
+   &lt;script type="text/javascript"&gt;
+     require(["js/test_controller.js"], function(module) {
+         ..... contexts specific code come here
+         module.init(viewContext);
+     });
+   &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;div id="module5" class="module1"&gt;
+   &lt;div class="fragment1" id="fragment1"&gt;
+      &lt;img data-gettext="fragment1_1" alt="Default de_DE" src="img_de_de.jpg" /&gt;
+
+      &lt;!-- initial empty text --&gt;
+      &lt;p id="p1" data-gettext="id1" alt=""&gt;&lt;/p&gt;
+   &lt;/div&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+</div>
+</div>
+<div class="section" id="client-side-controller">
+<h3>Client side controller<a class="headerlink" href="#client-side-controller" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="highlight"><pre><span class="nx">define</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+   <span class="kd">function</span> <span class="nx">init</span><span class="p">(</span><span class="nx">viewContext</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">languageRuntime</span> <span class="o">=</span> <span class="nx">viewContext</span><span class="p">.</span><span class="nx">getClientRuntime</span><span class="p">().</span><span class="nx">getClientLanguageRuntime</span><span class="p">();</span>
+      <span class="kd">var</span> <span class="nx">parentDiv</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="nx">viewContext</span><span class="p">.</span><span class="nx">getInstanceId</span><span class="p">());</span>
+
+      <span class="c1">// obtain paragraph innerText using client runtime.</span>
+      <span class="kd">var</span> <span class="nx">pText</span> <span class="o">=</span> <span class="nx">languageRuntime</span><span class="p">.</span><span class="nx">getText</span><span class="p">(</span><span class="nx">viewContext</span><span class="p">,</span> <span class="s2">&quot;id1&quot;</span><span class="p">);</span>
+      <span class="nx">parentDiv</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;#p1&quot;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">pText</span><span class="p">.</span><span class="nx">innerText</span><span class="p">);</span>
+      <span class="nx">parentDiv</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;#p1&quot;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;alt&quot;</span><span class="p">,</span> <span class="nx">pText</span><span class="p">.</span><span class="nx">alt</span><span class="p">);</span>
+   <span class="p">}</span>
+
+   <span class="k">return</span> <span class="p">{</span><span class="nx">init</span> <span class="o">:</span> <span class="nx">init</span><span class="p">};</span>
+<span class="p">});</span>
+</pre></div>
+</td></tr></table></div>
+<p>The code above requires some explanation. The basic idea is that we don&#8217;t want to access a single translation key. Actually we want to obtain the dictionary that holds all translation information for a specified element.</p>
+</div>
+</div>
+<div class="section" id="change-language-event">
+<h2>Change language event<a class="headerlink" href="#change-language-event" title="Permalink to this headline">¶</a></h2>
+<p>Change language operation publish an event at page level that can be handled by each module individually.</p>
+<div class="section" id="id1">
+<h3>Generated markup<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-javascript"><pre>&lt;html&gt;
+&lt;head&gt;
+   &lt;link rel="stylesheet" href="rain specific url for consolidated css" /&gt;
+   &lt;script type="text/javascript" src="js/require-jquery.js"&gt;&lt;/script&gt;
+   &lt;script type="text/javascript"&gt;
+     require(["js/test_controller.js"], function(module) {
+         ..... contexts specific code come here
+         module.init(viewContext);
+     });
+   &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;div id="module5" class="module1"&gt;
+   &lt;div class="fragment1" id="fragment1"&gt;
+      &lt;img data-gettext="fragment1_1" alt="Default de_DE" src="img_de_de.jpg" /&gt;
+
+      &lt;!-- initial empty text --&gt;
+      &lt;p id="p1" data-gettext="id1" alt=""&gt;&lt;/p&gt;
+   &lt;/div&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+</div>
+</div>
+<div class="section" id="id2">
+<h3>Client side controller<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16</pre></div></td><td class="code"><div class="highlight"><pre><span class="nx">define</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+   <span class="kd">function</span> <span class="nx">init</span><span class="p">(</span><span class="nx">viewContext</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">languageRuntime</span> <span class="o">=</span> <span class="nx">viewContext</span><span class="p">.</span><span class="nx">getClientRuntime</span><span class="p">().</span><span class="nx">getClientLanguageRuntime</span><span class="p">();</span>
+      <span class="kd">var</span> <span class="nx">messagingRuntime</span> <span class="o">=</span> <span class="nx">viewContenxt</span><span class="p">.</span><span class="nx">getClientRuntime</span><span class="p">().</span><span class="nx">getMessaging</span><span class="p">().</span><span class="nx">getClientMessaging</span><span class="p">();</span>
+      <span class="kd">var</span> <span class="nx">parentDiv</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="nx">viewContext</span><span class="p">.</span><span class="nx">getInstanceId</span><span class="p">());</span>
+
+      <span class="c1">// obtain paragraph innerText using client runtime.</span>
+      <span class="nx">messagingRuntime</span><span class="p">.</span><span class="nx">subcribe</span><span class="p">(</span><span class="s2">&quot;languageChanged&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+          <span class="kd">var</span> <span class="nx">pText</span> <span class="o">=</span> <span class="nx">languageRuntime</span><span class="p">.</span><span class="nx">getText</span><span class="p">(</span><span class="nx">viewContext</span><span class="p">,</span> <span class="s2">&quot;id1&quot;</span><span class="p">);</span>
+          <span class="nx">parentDiv</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;#p1&quot;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">pText</span><span class="p">.</span><span class="nx">innerText</span><span class="p">);</span>
+          <span class="nx">parentDiv</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;#p1&quot;</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s2">&quot;alt&quot;</span><span class="p">,</span> <span class="nx">pText</span><span class="p">.</span><span class="nx">alt</span><span class="p">);</span>
+      <span class="p">});</span>
+   <span class="p">}</span>
+
+   <span class="k">return</span> <span class="p">{</span><span class="nx">init</span> <span class="o">:</span> <span class="nx">init</span><span class="p">};</span>
+<span class="p">});</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="default-change-language-behavior">
+<h2>Default change language behavior<a class="headerlink" href="#default-change-language-behavior" title="Permalink to this headline">¶</a></h2>
+<p>It would be nice that RAIN provides a default behavior for handling changeLanguaged event. For this to work we need to have access to all client side controllers from page. Then each view might override this behavior by subscribing to languageChanged event.</p>
+<p>TBD</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Client Language Runtime</a><ul>
+<li><a class="reference internal" href="#functional-requirements">Functional requirements</a></li>
+<li><a class="reference internal" href="#non-functional-requirements">Non functional requirements</a></li>
+<li><a class="reference internal" href="#design">Design</a></li>
+<li><a class="reference internal" href="#use-cases">Use cases</a></li>
+<li><a class="reference internal" href="#displaying-localized-error-messages">Displaying localized error messages</a></li>
+<li><a class="reference internal" href="#language-change-action">Language change action</a></li>
+<li><a class="reference internal" href="#inline-editing">Inline editing</a></li>
+<li><a class="reference internal" href="#implementation">Implementation</a></li>
+<li><a class="reference internal" href="#data-structure">Data structure</a></li>
+<li><a class="reference internal" href="#markup">Markup</a></li>
+<li><a class="reference internal" href="#usage-examples">Usage examples</a></li>
+<li><a class="reference internal" href="#simple-usage">Simple usage</a><ul>
+<li><a class="reference internal" href="#generated-markup">Generated markup</a></li>
+<li><a class="reference internal" href="#client-side-controller">Client side controller</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#change-language-event">Change language event</a><ul>
+<li><a class="reference internal" href="#id1">Generated markup</a></li>
+<li><a class="reference internal" href="#id2">Client side controller</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#default-change-language-behavior">Default change language behavior</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Features-proposal-client-messaging-a.html"
+                        title="previous chapter">Client Runtime: Messaging API (Proposal A)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Features-proposal-client-language-inline-editing.html"
+                        title="next chapter">Client Language Inline Editing</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Features-proposal-client-language-inline-editing.html" title="Client Language Inline Editing"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Features-proposal-client-messaging-a.html" title="Client Runtime: Messaging API (Proposal A)"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

@@ -3,16 +3,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>RAIN component descriptor &mdash; Rain 0.4.1 documentation</title>
-    
+    <title>RAIN component descriptor &mdash; Rain v0.4.1 documentation</title>
     <link rel="stylesheet" href="../static/default.css" type="text/css" />
     <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -25,7 +22,8 @@
     <script type="text/javascript" src="../static/jquery.js"></script>
     <script type="text/javascript" src="../static/underscore.js"></script>
     <script type="text/javascript" src="../static/doctools.js"></script>
-    <link rel="top" title="Rain 0.4.1 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.4.1 documentation" href="../index.html" />
+    <link rel="next" title="Features Proposal" href="../proposals/Features-proposal.html" />
     <link rel="prev" title="RAIN Websockets" href="websockets.html" /> 
   </head>
   <body>
@@ -36,9 +34,12 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="../proposals/Features-proposal.html" title="Features Proposal"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
           <a href="websockets.html" title="RAIN Websockets"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain 0.4.1 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -53,9 +54,9 @@
 going into details of what sections are currently available in RAIN we must define
 what a RAIN component is:</p>
 <blockquote>
-<div>&#8220;A RAIN component is a set of views and constraints defined in the meta.json descriptor
+&#8220;A RAIN component is a set of views and constraints defined in the meta.json descriptor
 file. Each view can be individually accessed using a unique url. RAIN automatically apply
-defined constraints based on the request.&#8221;</div></blockquote>
+defined constraints based on the request.&#8221;</blockquote>
 <div class="section" id="complete-descriptor-example">
 <h2>Complete descriptor example<a class="headerlink" href="#complete-descriptor-example" title="Permalink to this headline">¶</a></h2>
 <p>The following descriptor example shows you a complete descriptor (with all sections currently
@@ -95,24 +96,24 @@ supported by RAIN):</p>
 <h2>Module definition<a class="headerlink" href="#module-definition" title="Permalink to this headline">¶</a></h2>
 <p>Here you define the module attributes:</p>
 <blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li>id - this is the module identifier</li>
 <li>version - this is the current module version</li>
 <li>url - the base url of the components. All views are relative to this path.</li>
 </ul>
-</div></blockquote>
+</blockquote>
 </div>
 <div class="section" id="module-views-definition">
 <h2>Module views definition<a class="headerlink" href="#module-views-definition" title="Permalink to this headline">¶</a></h2>
 <p>Here you define your module views. Each view you need accesible outside your component
 or if you want to apply constraints on it must appear in this section:</p>
 <blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li>viewid - This is a unique identifier for this view</li>
 <li>view - the view path relative to module url</li>
 <li>controller - this is the client side controller path relative to module url.</li>
 </ul>
-</div></blockquote>
+</blockquote>
 </div>
 <div class="section" id="module-intents-definition">
 <h2>Module intents definition<a class="headerlink" href="#module-intents-definition" title="Permalink to this headline">¶</a></h2>
@@ -123,13 +124,13 @@ or if you want to apply constraints on it must appear in this section:</p>
 <p>In this section tags are mapped on foreign views that are going to be used in this module.
 Each tag definition must contain the following attributes:</p>
 <blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li>namespace - A namespace for the tag. Currently this is not used.</li>
 <li>selector - This is the selector that is going to be used in markup: Ex &lt;toolbar /&gt;</li>
 <li>module - This is the module identifier from which we extract the tag: [&lt;module-id&gt;-&lt;version&gt;]</li>
 <li>view - The relative path of the view. This will gonna be changed to viewid.</li>
 </ul>
-</div></blockquote>
+</blockquote>
 </div>
 </div>
 
@@ -154,10 +155,13 @@ Each tag definition must contain the following attributes:</p>
   <h4>Previous topic</h4>
   <p class="topless"><a href="websockets.html"
                         title="previous chapter">RAIN Websockets</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../proposals/Features-proposal.html"
+                        title="next chapter">Features Proposal</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" size="18" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -178,13 +182,16 @@ Each tag definition must contain the following attributes:</p>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
+          <a href="../proposals/Features-proposal.html" title="Features Proposal"
+             >next</a> |</li>
+        <li class="right" >
           <a href="websockets.html" title="RAIN Websockets"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain 0.4.1 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

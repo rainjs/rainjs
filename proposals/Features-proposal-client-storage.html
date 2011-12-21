@@ -1,0 +1,336 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Client Runtime Storage &mdash; Rain v0.4.1 documentation</title>
+    <link rel="stylesheet" href="../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/underscore.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <link rel="top" title="Rain v0.4.1 documentation" href="../index.html" />
+    <link rel="next" title="Client Runtime (Proposal A)" href="Features-proposal-client-runtime-a.html" />
+    <link rel="prev" title="Features proposal template" href="Features-proposal-feature-template.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Features-proposal-client-runtime-a.html" title="Client Runtime (Proposal A)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Features-proposal-feature-template.html" title="Features proposal template"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="client-runtime-storage">
+<h1>Client Runtime Storage<a class="headerlink" href="#client-runtime-storage" title="Permalink to this headline">¶</a></h1>
+<p>In this document client storage approach is described in detail.</p>
+<div class="section" id="functional-requirements">
+<h2>Functional requirements<a class="headerlink" href="#functional-requirements" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<ol class="arabic simple">
+<li>Application developers must be able to store information on browser level.</li>
+<li>Application developers must be able to store sensitive data in a secure way.</li>
+<li>Application developers must be able to share data across multiple pages.</li>
+<li>Application developers must be able to clear the storage on demand.</li>
+<li>Application developers must be able to persist the storage on demand.</li>
+<li>Application developers must be able to intercept the storage events.</li>
+<li>ClientStorage must guarantee that private storage is isolated and can not be overriden by other components.</li>
+</ol>
+</blockquote>
+</div>
+<div class="section" id="use-cases">
+<h2>Use cases<a class="headerlink" href="#use-cases" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="linked-pages">
+<h2>Linked pages<a class="headerlink" href="#linked-pages" title="Permalink to this headline">¶</a></h2>
+<p>Two or more pages might need to change data between them. Imagine a wizard or a checkout process. Many frameworks achieve this goal using a server side storage (usually session). Of course it&#8217;s also possible to pass the parameters between pages using GET / POST requests. This becomes annoying when you manually change the url (in GET case) or you do a refresh (POST).</p>
+<p>In RAIN we want to provide a lightweight solution to this problem (HTML5 storage / dojo storage).</p>
+<div class="section" id="solution">
+<h3>Solution<a class="headerlink" href="#solution" title="Permalink to this headline">¶</a></h3>
+<img alt="../images/client_storage_pages_shared_session.jpeg" src="../images/client_storage_pages_shared_session.jpeg" />
+<p>One solution for this is that a set of pages to share a region of session. The reason for this is that in the end we expect the shared region to be cleared.</p>
+</div>
+</div>
+<div class="section" id="wizard">
+<h2>Wizard<a class="headerlink" href="#wizard" title="Permalink to this headline">¶</a></h2>
+<p>Same problem as linked pages.</p>
+</div>
+<div class="section" id="offline-mode">
+<h2>Offline mode<a class="headerlink" href="#offline-mode" title="Permalink to this headline">¶</a></h2>
+<p>Imagine the &#8220;Compose email&#8221; page from gmail. You might spend a lot of time on that page. While you type and create a very nice email your internet connection fails. If the content was not previously saved in a storage and you get temporary unavailable you would have lost your work.</p>
+<div class="section" id="id1">
+<h3>Solution<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>In RAIN we&#8217;ll provide a local storage mechanism that allows you to save the state of your application. In addition we can provide helper methods that provide auto save mechanism for instance.</p>
+<img alt="../images/client_page_persistence_storage.jpeg" src="../images/client_page_persistence_storage.jpeg" />
+</div>
+</div>
+<div class="section" id="multiple-fragments-communication">
+<h2>Multiple fragments communication<a class="headerlink" href="#multiple-fragments-communication" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="within-the-same-page">
+<h3>Within the same page<a class="headerlink" href="#within-the-same-page" title="Permalink to this headline">¶</a></h3>
+<p>Imagine you have a page in which you display user information (into a div). Next to it you display the shopping cart content (in another div with title attribute = to user name). In addition you also have another section in which you display ordering history (in a separate div where you also display user name). In this scenario in the first div you can change user name.</p>
+<p>We must be able to propagate user name change in all places where it appears in the page.</p>
+</div>
+<div class="section" id="across-multiple-pages">
+<h3>Across multiple pages<a class="headerlink" href="#across-multiple-pages" title="Permalink to this headline">¶</a></h3>
+<p>Imagine the scenario presented above except shopping cart is presented into a new window.</p>
+<p>We want user name changed within a window to be propagated to other windows as well.
+amplify.request</p>
+</div>
+<div class="section" id="id2">
+<h3>Solution<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>The storage that keep the user name value should provide a notification mechanism. It will use listeners for this goal.</p>
+</div>
+</div>
+<div class="section" id="design">
+<h2>Design<a class="headerlink" href="#design" title="Permalink to this headline">¶</a></h2>
+<p>From the use cases presented above result two major storage mechanism:</p>
+<blockquote>
+<ul class="simple">
+<li>a persistent storage</li>
+<li>a transient storage</li>
+</ul>
+</blockquote>
+<p>Each storage must provide the following partitions:</p>
+<blockquote>
+<ul class="simple">
+<li>a private / dedicated partition - a shared scope for a limited number of pages / objects.</li>
+<li>a global partition - a global scope accessible by everyone.</li>
+</ul>
+</blockquote>
+</div>
+<div class="section" id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<img alt="../images/client_storage_api.jpeg" src="../images/client_storage_api.jpeg" />
+<p>As you can see in the above diagram the concepts described in this document are abstracted into an API. Our goal is that underline this API HTML 5 localStorage and sessionStorage objects are used transparently.</p>
+<p>For having access to a private storage or to be able to create a new private storage a client side controller must provide the view context under which is running.</p>
+<div class="section" id="private-storage-example">
+<h3>Private storage example<a class="headerlink" href="#private-storage-example" title="Permalink to this headline">¶</a></h3>
+<img alt="../images/client_storage_partitions_example.jpeg" src="../images/client_storage_partitions_example.jpeg" />
+<p>As you can see in the above diagram the global storage from ClientRuntime is designed to be hierarchical. Most of the time applications will use dedicated storage on which they operate. Of course they can also use global storage if they want.</p>
+</div>
+<div class="section" id="api-doc">
+<h3>API doc<a class="headerlink" href="#api-doc" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="code-examples-proposal-1">
+<h2>Code examples (Proposal 1)<a class="headerlink" href="#code-examples-proposal-1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="transient-storage-referencing">
+<h3>Transient storage referencing<a class="headerlink" href="#transient-storage-referencing" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span><span class="o">&gt;</span>
+<span class="cm">/**</span>
+<span class="cm">Wizard create user - page1.html</span>
+<span class="cm">**/</span>
+<span class="kd">var</span> <span class="nx">clientRuntime</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ClientRuntime</span><span class="p">();</span>
+
+<span class="kd">var</span> <span class="nx">clientStorage</span> <span class="o">=</span> <span class="nx">clientRuntime</span><span class="p">.</span><span class="nx">storage</span><span class="p">.</span><span class="nx">createPrivateStorage</span><span class="p">(</span><span class="s2">&quot;wizardUser&quot;</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+<span class="nx">clientStorage</span><span class="p">.</span><span class="nx">setValue</span><span class="p">(</span><span class="s2">&quot;username&quot;</span><span class="p">,</span> <span class="s2">&quot;radu&quot;</span><span class="p">);</span>
+<span class="nx">clientStorage</span><span class="p">.</span><span class="nx">setValue</span><span class="p">(</span><span class="s2">&quot;password&quot;</span><span class="p">,</span> <span class="s2">&quot;mydummypassword&quot;</span><span class="p">);</span>
+</pre></div>
+</td></tr></table></div>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="highlight"><pre><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span><span class="o">&gt;</span>
+<span class="cm">/**</span>
+<span class="cm">Wizard create user - page2.html</span>
+<span class="cm">**/</span>
+<span class="kd">var</span> <span class="nx">clientRuntime</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ClientRuntime</span><span class="p">();</span>
+
+<span class="kd">var</span> <span class="nx">clientStorage</span> <span class="o">=</span> <span class="nx">clientRuntime</span><span class="p">.</span><span class="nx">storage</span><span class="p">.</span><span class="nx">getPrivateStorage</span><span class="p">(</span><span class="s2">&quot;wizardUser&quot;</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+<span class="nx">alert</span><span class="p">(</span><span class="nx">clientStorage</span><span class="p">.</span><span class="nx">getValue</span><span class="p">(</span><span class="s2">&quot;username&quot;</span><span class="p">));</span>
+</pre></div>
+</td></tr></table></div>
+<p>This code will work perfectly also for persistent storage.</p>
+</div>
+<div class="section" id="storage-listeners">
+<h3>Storage listeners<a class="headerlink" href="#storage-listeners" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="highlight"><pre><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span><span class="o">&gt;</span>
+<span class="cm">/**</span>
+<span class="cm">Page view user info - user_view.html</span>
+<span class="cm">**/</span>
+<span class="kd">var</span> <span class="nx">clientRuntime</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ClientRuntime</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">clientStorage</span> <span class="o">=</span> <span class="nx">clientRuntime</span><span class="p">.</span><span class="nx">storage</span><span class="p">.</span><span class="nx">getPrivateStorage</span><span class="p">(</span><span class="s2">&quot;userinfo&quot;</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+<span class="nx">clientStorage</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">evt</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">evt</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">&quot;username&quot;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#username&quot;</span><span class="p">)</span> <span class="o">=</span> <span class="nx">evt</span><span class="p">.</span><span class="nx">newvalue</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+</td></tr></table></div>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span><span class="o">&gt;</span>
+<span class="cm">/**</span>
+<span class="cm">Page customize user info - user_edit.html</span>
+<span class="cm">**/</span>
+<span class="kd">var</span> <span class="nx">clientRuntime</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ClientRuntime</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">clientStorage</span> <span class="o">=</span> <span class="nx">clientRuntime</span><span class="p">.</span><span class="nx">storage</span><span class="p">.</span><span class="nx">getPrivateStorage</span><span class="p">(</span><span class="s2">&quot;userinfo&quot;</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+<span class="nx">clientStorage</span><span class="p">.</span><span class="nx">setValue</span><span class="p">(</span><span class="s2">&quot;username&quot;</span><span class="p">,</span> <span class="s2">&quot;Radu Cosnita&quot;</span><span class="p">);</span> <span class="c1">// this triggers listener registered in user_view.html page.</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="limitations">
+<h2>Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>You must be aware on the fact that storage marked transparently can be referenced across multiple pages only if pages are displayed within the same tab or window. This is really important to take in consideration when using storages.</li>
+</ol>
+<blockquote>
+<ol class="arabic simple">
+<li>The above mentioned limitation applies also to listeners.</li>
+</ol>
+</blockquote>
+</div>
+<div class="section" id="technical-details">
+<h2>Technical details<a class="headerlink" href="#technical-details" title="Permalink to this headline">¶</a></h2>
+<p>The intention is to provide a proof of concept for this feature as soon as possible. Before we decide on this there are some frameworks that guarantee graceful degrade in case storage is not supported by browsers. Below you can find a list of such frameworks:</p>
+<blockquote>
+<ul class="simple">
+<li>Amplifyjs - <a class="reference external" href="http://amplifyjs.com/api/store/">http://amplifyjs.com/api/store/</a></li>
+<li>Dojo storage - <a class="reference external" href="http://google-opensource.blogspot.com/2008/03/dojo-storage.html">http://google-opensource.blogspot.com/2008/03/dojo-storage.html</a> - I think this will bring an overhead (we already use jQuery).</li>
+</ul>
+</blockquote>
+<p>An alternative to the frameworks mentioned about would be to simply assume all browsers that access RAIN specific applications have HTML 5 support and we do not provide gracefully degrading support.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Client Runtime Storage</a><ul>
+<li><a class="reference internal" href="#functional-requirements">Functional requirements</a></li>
+<li><a class="reference internal" href="#use-cases">Use cases</a></li>
+<li><a class="reference internal" href="#linked-pages">Linked pages</a><ul>
+<li><a class="reference internal" href="#solution">Solution</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wizard">Wizard</a></li>
+<li><a class="reference internal" href="#offline-mode">Offline mode</a><ul>
+<li><a class="reference internal" href="#id1">Solution</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#multiple-fragments-communication">Multiple fragments communication</a><ul>
+<li><a class="reference internal" href="#within-the-same-page">Within the same page</a></li>
+<li><a class="reference internal" href="#across-multiple-pages">Across multiple pages</a></li>
+<li><a class="reference internal" href="#id2">Solution</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#design">Design</a></li>
+<li><a class="reference internal" href="#api">API</a><ul>
+<li><a class="reference internal" href="#private-storage-example">Private storage example</a></li>
+<li><a class="reference internal" href="#api-doc">API doc</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#code-examples-proposal-1">Code examples (Proposal 1)</a><ul>
+<li><a class="reference internal" href="#transient-storage-referencing">Transient storage referencing</a></li>
+<li><a class="reference internal" href="#storage-listeners">Storage listeners</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#limitations">Limitations</a></li>
+<li><a class="reference internal" href="#technical-details">Technical details</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Features-proposal-feature-template.html"
+                        title="previous chapter">Features proposal template</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Features-proposal-client-runtime-a.html"
+                        title="next chapter">Client Runtime (Proposal A)</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Features-proposal-client-runtime-a.html" title="Client Runtime (Proposal A)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Features-proposal-feature-template.html" title="Features proposal template"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

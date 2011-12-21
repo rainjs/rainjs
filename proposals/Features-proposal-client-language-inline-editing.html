@@ -1,0 +1,141 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Client Language Inline Editing &mdash; Rain v0.4.1 documentation</title>
+    <link rel="stylesheet" href="../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/underscore.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <link rel="top" title="Rain v0.4.1 documentation" href="../index.html" />
+    <link rel="next" title="Fragments Configuration Introduction" href="Features-proposal-fragments-configuration.html" />
+    <link rel="prev" title="Client Language Runtime" href="Features-proposal-client-language-a.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Features-proposal-fragments-configuration.html" title="Fragments Configuration Introduction"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Features-proposal-client-language-a.html" title="Client Language Runtime"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="client-language-inline-editing">
+<h1>Client Language Inline Editing<a class="headerlink" href="#client-language-inline-editing" title="Permalink to this headline">¶</a></h1>
+<p>In this section you can find the proposal for translations inline editing. This is meant for developer / administrators / web masters / technical editors to easily change the translations using a WYSIWYG approach. This must be offered by RAIN platform.</p>
+<p>Before continuing to following sections please read <a class="reference internal" href="Features-proposal-view-modes.html"><em>View modes</em></a></p>
+<div class="section" id="functional-requirements">
+<h2>Functional requirements<a class="headerlink" href="#functional-requirements" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<ol class="arabic simple">
+<li>RAIN must support edit translations mode for each fragment.</li>
+<li>RAIN must support reset to default translations.</li>
+<li>RAIN must apply security concerns for edit translations mode.</li>
+<li>RAIN must provide a Translation service that allows the management of resources.</li>
+</ol>
+</blockquote>
+</div>
+<div class="section" id="problem-context">
+<h2>Problem context<a class="headerlink" href="#problem-context" title="Permalink to this headline">¶</a></h2>
+<p>A problem appears when we want to support inline editing for remote fragments. We have this difficulty because we can not edit file on remote sites (at least not easy and not independent of technology). Because of this RAIN impose one constraint: translation must be done using Translation API and some specific RAIN markup.</p>
+</div>
+<div class="section" id="design">
+<h2>Design<a class="headerlink" href="#design" title="Permalink to this headline">¶</a></h2>
+<img alt="../images/language_inline_sequence.png" src="../images/language_inline_sequence.png" />
+<p>This is the sequence diagram for activating and persisting the translations for a specified view.</p>
+</div>
+<div class="section" id="prototype">
+<h2>Prototype<a class="headerlink" href="#prototype" title="Permalink to this headline">¶</a></h2>
+<img alt="../images/language_inline_editing.png" src="../images/language_inline_editing.png" />
+<p>Frames are opened starting from top widget till the bottom one. Each widget will be displayed only when an action is triggered from the previous widget.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Client Language Inline Editing</a><ul>
+<li><a class="reference internal" href="#functional-requirements">Functional requirements</a></li>
+<li><a class="reference internal" href="#problem-context">Problem context</a></li>
+<li><a class="reference internal" href="#design">Design</a></li>
+<li><a class="reference internal" href="#prototype">Prototype</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Features-proposal-client-language-a.html"
+                        title="previous chapter">Client Language Runtime</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Features-proposal-fragments-configuration.html"
+                        title="next chapter">Fragments Configuration Introduction</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Features-proposal-fragments-configuration.html" title="Fragments Configuration Introduction"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Features-proposal-client-language-a.html" title="Client Language Runtime"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

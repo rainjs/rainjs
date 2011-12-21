@@ -3,16 +3,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Messaging API &mdash; Rain 0.4.1 documentation</title>
-    
+    <title>Messaging API &mdash; Rain v0.4.1 documentation</title>
     <link rel="stylesheet" href="../static/default.css" type="text/css" />
     <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -25,7 +22,7 @@
     <script type="text/javascript" src="../static/jquery.js"></script>
     <script type="text/javascript" src="../static/underscore.js"></script>
     <script type="text/javascript" src="../static/doctools.js"></script>
-    <link rel="top" title="Rain 0.4.1 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.4.1 documentation" href="../index.html" />
     <link rel="next" title="Intents Client API" href="intents.html" />
     <link rel="prev" title="RAIN component descriptor" href="../server/component_descriptor.html" /> 
   </head>
@@ -42,7 +39,7 @@
         <li class="right" >
           <a href="../server/component_descriptor.html" title="RAIN component descriptor"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain 0.4.1 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -56,11 +53,11 @@
 <p>Client messaging layer is part of client runtime. In RAIN you have two types of messaging on
 the client side:</p>
 <blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li>Intents messaging</li>
 <li>Publish / subscriber</li>
 </ul>
-</div></blockquote>
+</blockquote>
 <div class="section" id="intents">
 <h2>Intents<a class="headerlink" href="#intents" title="Permalink to this headline">¶</a></h2>
 <p>Intents concept is inspired from android operating system. Basically they allow developer to
@@ -118,13 +115,13 @@ runtime in all its methods. Below you can find an usage example:</p>
 method used to accessing intents mechanism is sendIntent method. This method accept a
 Dictionary as a parameter. Each intent request must contain the following information:</p>
 <blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li>viewContext - This is the requester viewContext object.</li>
 <li>category - This is the intent category as defined in meta.json file.</li>
 <li>action - This is the action of the intent.</li>
 <li>intentContext - This is a dictionary where data specific to the intent are passed.</li>
 </ul>
-</div></blockquote>
+</blockquote>
 <p>The sendIntent method returns a promise that can be used to react onsuccess and onerror. If
 you do not specify a callback for error case then the error is automatically thrown.</p>
 <p>Please search for more examples into components/intents_example folder.</p>
@@ -152,7 +149,7 @@ coupled approach. Lets see a usage example:</p>
 <span class="p">},</span> <span class="k">this</span><span class="p">.</span><span class="nx">viewContext</span><span class="p">);</span>
 
 <span class="c1">// publish an event</span>
-<span class="nx">messaging</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s1">&#39;sliderReady&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">success</span><span class="o">:</span> <span class="kc">true</span><span class="p">},</span> <span class="k">this</span><span class="p">.</span><span class="nx">viewContext</span><span class="p">);</span>
+<span class="nx">messaging</span><span class="p">.</span><span class="nx">publish</span><span class="p">(</span><span class="s1">&#39;sliderReady&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">success</span><span class="o">:</span> <span class="kc">true</span><span class="p">},</span> <span class="k">this</span><span class="p">.</span><span class="nx">viewContext</span><span class="p">);</span>
 </pre></div>
 </td></tr></table></div>
 <p>Now, what this does it that it subscribes to the sliderReady event, and then publishes it.
@@ -218,7 +215,7 @@ event with the :: operator. But enough talk, lets see some code:</p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" size="18" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -244,11 +241,11 @@ event with the :: operator. But enough talk, lets see some code:</p>
         <li class="right" >
           <a href="../server/component_descriptor.html" title="RAIN component descriptor"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain 0.4.1 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

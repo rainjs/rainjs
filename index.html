@@ -3,16 +3,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Rain 0.4.1 Documentation &mdash; Rain 0.4.1 documentation</title>
-    
+    <title>Rain 0.4.1 Documentation &mdash; Rain v0.4.1 documentation</title>
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
@@ -25,7 +22,7 @@
     <script type="text/javascript" src="static/jquery.js"></script>
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
-    <link rel="top" title="Rain 0.4.1 documentation" href="#" />
+    <link rel="top" title="Rain v0.4.1 documentation" href="#" />
     <link rel="next" title="RAIN Installation" href="getting_started/installation.html" /> 
   </head>
   <body>
@@ -38,7 +35,7 @@
         <li class="right" >
           <a href="getting_started/installation.html" title="RAIN Installation"
              accesskey="N">next</a> |</li>
-        <li><a href="#">Rain 0.4.1 documentation</a> &raquo;</li> 
+        <li><a href="#">Rain v0.4.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -90,6 +87,12 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="client/client_storage.html">Client storage API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client/requirejs.html">Client runtime dependencies</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="client/requirejs.html#client-side-controller">Client side controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client/requirejs.html#including-other-modules">Including other modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client/requirejs.html#why-do-we-even-use-requirejs">Why do we even use requirejs?</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="client/websockets.html">Client side websockets API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="client/websockets.html#websockets-within-the-same-component">Websockets within the same component</a></li>
 <li class="toctree-l2"><a class="reference internal" href="client/websockets.html#websockets-from-other-components">Websockets from other components</a></li>
@@ -105,6 +108,7 @@
 <li class="toctree-l1"><a class="reference internal" href="client/api/ClientStorage.html">Class ClientStorage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="client/api/Component.html">Class Component</a></li>
 <li class="toctree-l1"><a class="reference internal" href="client/api/Raintime.ComponentRegistry.html">Class Raintime.ComponentRegistry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client/api/Raintime.messaging.html">Class Raintime.messaging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="client/api/ViewContext.html">Class ViewContext</a></li>
 </ul>
 </div>
@@ -133,6 +137,39 @@
 </ul>
 </div>
 </div>
+<div class="section" id="planning">
+<h2>Planning<a class="headerlink" href="#planning" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal.html">Features Proposal</a></li>
+</ul>
+</div>
+<div class="section" id="features-concepts">
+<h3>Features Concepts<a class="headerlink" href="#features-concepts" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-feature-template.html">Features proposal template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-client-storage.html">Client Runtime Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-client-runtime-a.html">Client Runtime (Proposal A)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-client-contexts.html">Client Side Contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-client-messaging-a.html">Client Runtime: Messaging API (Proposal A)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-client-language-a.html">Client Language Runtime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-client-language-inline-editing.html">Client Language Inline Editing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-fragments-configuration.html">Fragments Configuration Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-hijax-strategy.html">Hijax introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-instances.html">View Instances</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-remote-aggregation.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-rain-authorization.html">RAIN authorization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-view-authorization.html">View authorization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-view-modes.html">View modes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-css-transformation.html">CSS Transformation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-error-handling.html">Error Handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-elastic-architecture.html">Elastic architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-rain-cloud-action.html">RAIN Cloud In Action</a></li>
+</ul>
+</div>
+</div>
+</div>
 </div>
 
 
@@ -156,6 +193,12 @@
 <li><a class="reference internal" href="#server-side-modules">Server side modules</a><ul>
 </ul>
 </li>
+<li><a class="reference internal" href="#planning">Planning</a><ul>
+<li><a class="reference internal" href="#features-concepts">Features Concepts</a><ul>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -166,7 +209,7 @@
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" size="18" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -189,11 +232,11 @@
         <li class="right" >
           <a href="getting_started/installation.html" title="RAIN Installation"
              >next</a> |</li>
-        <li><a href="#">Rain 0.4.1 documentation</a> &raquo;</li> 
+        <li><a href="#">Rain v0.4.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

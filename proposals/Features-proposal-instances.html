@@ -1,0 +1,376 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>View Instances &mdash; Rain v0.4.1 documentation</title>
+    <link rel="stylesheet" href="../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/underscore.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <link rel="top" title="Rain v0.4.1 documentation" href="../index.html" />
+    <link rel="next" title="Introduction" href="Features-proposal-remote-aggregation.html" />
+    <link rel="prev" title="Hijax introduction" href="Features-proposal-hijax-strategy.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Features-proposal-remote-aggregation.html" title="Introduction"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Features-proposal-hijax-strategy.html" title="Hijax introduction"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="view-instances">
+<h1>View Instances<a class="headerlink" href="#view-instances" title="Permalink to this headline">¶</a></h1>
+<p>(A view instance is the term for defining the instance of a view <strong>only</strong>, it is not related to Webcomponent Instances, that actually describe a Webcomponent that a) belongs to a certain user, b) has an instance identifier that identifies this instance across sessions)</p>
+<p>Currently RAIN generates random identifiers (using auto increment way) when rendering a page. This mean that a fragment might get different identifiers each time the page is rendered. The goal of this proposal is to describe a possible solution in which fragments identifiers are generated uniformly and idempotency is ensured.</p>
+<div class="section" id="functional-requirements">
+<h2>Functional requirements<a class="headerlink" href="#functional-requirements" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<ol class="arabic simple">
+<li>RAIN page must support a fragment to be displayed multiple times.</li>
+<li>RAIN fragment must receive an unique identifier.</li>
+<li>RAIN must persist page configuration after the first render process.</li>
+<li>RAIN must merge page configuration with latest changes.</li>
+</ol>
+</blockquote>
+</div>
+<div class="section" id="problem-examples">
+<h2>Problem examples<a class="headerlink" href="#problem-examples" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="same-view-changed-over-time">
+<h2>Same view changed over time<a class="headerlink" href="#same-view-changed-over-time" title="Permalink to this headline">¶</a></h2>
+<p>Imagine we have an html page with the following structure:</p>
+<div class="highlight-html"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span class="nt">&lt;body&gt;</span>
+  <span class="nt">&lt;module1/&gt;</span>
+  <span class="nt">&lt;module2/&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</pre></div>
+</td></tr></table></div>
+<p>After several weeks because of some new requirements for the page html structure changes to:</p>
+<div class="highlight-html"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><span class="nt">&lt;body&gt;</span>
+  <span class="nt">&lt;module1/&gt;</span>
+  <span class="nt">&lt;module2/&gt;</span>
+
+  <span class="nt">&lt;br/&gt;&lt;br/&gt;</span>
+  <span class="nt">&lt;module3/&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</pre></div>
+</td></tr></table></div>
+<p>Current requirements dictate another change to this page structure:</p>
+<div class="highlight-html"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span class="nt">&lt;body&gt;</span>
+  <span class="nt">&lt;module1/&gt;</span>
+
+  <span class="nt">&lt;br/&gt;&lt;br/&gt;</span>
+  <span class="nt">&lt;module3/&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</pre></div>
+</td></tr></table></div>
+<p>Now there is no apparent problem if we don&#8217;t hold any information about these fragments. But it is 100% sure that RAIN must provide support for configuring the fragments. For instance module1 = weather fragment. If we put that fragment twice in the page we want to be able to display weather for two different locations. This is why we need to save page configuration overtime and to update it when necessary.</p>
+<img alt="../images/view_evolution.png" src="../images/view_evolution.png" />
+</div>
+<div class="section" id="possible-solution">
+<h2>Possible solution<a class="headerlink" href="#possible-solution" title="Permalink to this headline">¶</a></h2>
+<p>It is pretty clear that RAIN needs to provide a storage where page configuration is saved: (fragments identifiers included within a page). Starting from this idea the markup should be something like:</p>
+<div class="highlight-html"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span class="nt">&lt;body&gt;</span>
+  <span class="nt">&lt;module1</span> <span class="na">id=</span><span class="s">&quot;1&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;module2</span> <span class="na">id=</span><span class="s">&quot;2&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</pre></div>
+</td></tr></table></div>
+<div class="highlight-html"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="highlight"><pre><span class="nt">&lt;body&gt;</span>
+  <span class="nt">&lt;module1</span> <span class="na">id=</span><span class="s">&quot;1&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;module2</span> <span class="na">id=</span><span class="s">&quot;2&quot;</span><span class="nt">/&gt;</span>
+
+  <span class="nt">&lt;br/&gt;&lt;br/&gt;</span>
+  <span class="nt">&lt;module3</span> <span class="na">id=</span><span class="s">&quot;3&quot;</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/body&gt;</span>
+</pre></div>
+</td></tr></table></div>
+<div class="highlight-html"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span class="nt">&lt;body&gt;</span>
+  <span class="nt">&lt;module1</span> <span class="na">id=</span><span class="s">&quot;1&quot;</span><span class="nt">/&gt;</span>
+
+  <span class="nt">&lt;br/&gt;&lt;br/&gt;</span>
+  <span class="nt">&lt;module3</span> <span class="na">id=</span><span class="s">&quot;3&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</pre></div>
+</td></tr></table></div>
+<p>Now there is no apparent problem if we don&#8217;t hold any information about these fragments. But it is 100% sure that RAIN must provide support for fragments customization. The idea behind this solution is pretty simple. Force the creator of the page to provide a unique and consistent identifier for each included fragment. Even if a fragment is removed the identifiers should remain unchanged for all other fragments. The information should be associated with the moduleId + viewId currently accessed.</p>
+</div>
+<div class="section" id="design">
+<h2>Design<a class="headerlink" href="#design" title="Permalink to this headline">¶</a></h2>
+<img alt="../images/view_instance_overview.png" src="../images/view_instance_overview.png" />
+<img alt="../images/view_request_response.png" src="../images/view_request_response.png" />
+<p>In the above diagrams it is shown how management of instances is done in RAIN. The main idea is to keep pages configuration into a persistent storage after the first parsing of the page.</p>
+</div>
+<div class="section" id="stored-data">
+<h2>Stored data<a class="headerlink" href="#stored-data" title="Permalink to this headline">¶</a></h2>
+<p>In this section you can find the proposed data that will go into the persistent storage. We have two main use cases:</p>
+<blockquote>
+<ul class="simple">
+<li>An user is authenticated to RAIN application.</li>
+<li>No user is authenticated to RAIN application.</li>
+</ul>
+</blockquote>
+</div>
+<div class="section" id="no-authenticated-user">
+<h2>No authenticated user<a class="headerlink" href="#no-authenticated-user" title="Permalink to this headline">¶</a></h2>
+<p>When no user information is available (anonymous) RAIN will save page configuration into a global page storage. Below you can find the data that will be written:</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="highlight"><pre><span class="p">{</span><span class="s2">&quot;pages&quot;</span> <span class="o">:</span> <span class="p">{</span>
+   <span class="s2">&quot;[page url]&quot;</span> <span class="o">:</span> <span class="p">{</span>
+     <span class="s2">&quot;[tag]&quot;</span> <span class="o">:</span> <span class="p">{</span>
+       <span class="s2">&quot;[instanceid]&quot;</span> <span class="o">:</span> <span class="p">{[</span><span class="nx">settings</span> <span class="nx">loaded</span> <span class="nx">from</span> <span class="nx">meta</span><span class="p">.</span><span class="nx">json</span> <span class="nx">file</span><span class="p">]}},</span>
+         <span class="p">......</span>
+    <span class="p">}</span>
+<span class="p">}}</span>
+</pre></div>
+</td></tr></table></div>
+<p>For each accessible url we keep tag configuration into page storage. The instanceid is extracted from markup first time the page is parsed and afterwards it is loaded all the time from page configuration storage. &#8220;[tag]&#8221; points to a dictionary of instances because we might have the same fragment displayed twice on the page. We want to differentiate between the instances of the same fragment.</p>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-html"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="highlight"><pre><span class="nt">&lt;body&gt;</span>
+  <span class="nt">&lt;module1</span> <span class="na">id=</span><span class="s">&quot;1&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;module2</span> <span class="na">id=</span><span class="s">&quot;2&quot;</span><span class="nt">/&gt;</span>
+
+  <span class="nt">&lt;br/&gt;&lt;br/&gt;</span>
+  <span class="nt">&lt;br/&gt;&lt;module3</span> <span class="na">id=</span><span class="s">&quot;5&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;module3</span> <span class="na">id=</span><span class="s">&quot;3&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</pre></div>
+</td></tr></table></div>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="highlight"><pre><span class="p">{</span><span class="s2">&quot;pages&quot;</span> <span class="o">:</span> <span class="p">{</span>
+   <span class="s2">&quot;application-example;1.0&quot;</span> <span class="o">:</span> <span class="p">{</span>
+     <span class="s2">&quot;module1&quot;</span> <span class="o">:</span> <span class="p">{</span>
+       <span class="mi">1</span> <span class="o">:</span> <span class="p">{[</span><span class="nx">settings</span> <span class="nx">loaded</span> <span class="nx">from</span> <span class="nx">meta</span><span class="p">.</span><span class="nx">json</span> <span class="nx">file</span><span class="p">]}</span>
+     <span class="p">},</span>
+     <span class="s2">&quot;module2&quot;</span> <span class="o">:</span> <span class="p">{</span>
+       <span class="mi">2</span> <span class="o">:</span> <span class="p">{[</span><span class="nx">settings</span> <span class="nx">loaded</span> <span class="nx">from</span> <span class="nx">meta</span><span class="p">.</span><span class="nx">json</span> <span class="nx">file</span><span class="p">]}</span>
+     <span class="p">},</span>
+     <span class="s2">&quot;module3&quot;</span> <span class="o">:</span> <span class="p">{</span>
+       <span class="mi">5</span> <span class="o">:</span> <span class="p">{[</span><span class="nx">settings</span> <span class="nx">loaded</span> <span class="nx">from</span> <span class="nx">meta</span><span class="p">.</span><span class="nx">json</span> <span class="nx">file</span><span class="p">]},</span>
+       <span class="mi">3</span> <span class="o">:</span> <span class="p">{[</span><span class="nx">settings</span> <span class="nx">loaded</span> <span class="nx">from</span> <span class="nx">meta</span><span class="p">.</span><span class="nx">json</span> <span class="nx">file</span><span class="p">]}</span>
+     <span class="p">}</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="authenticated-user">
+<h2>Authenticated user<a class="headerlink" href="#authenticated-user" title="Permalink to this headline">¶</a></h2>
+<p>For authenticated users the data structure used for storing page configuration is pretty similar as the global scope. You can see the general format below:</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre></div></td><td class="code"><div class="highlight"><pre><span class="p">{</span><span class="s2">&quot;users&quot;</span> <span class="o">:</span>
+   <span class="s2">&quot;[userId]&quot;</span> <span class="o">:</span> <span class="p">{</span>
+     <span class="s2">&quot;pages&quot;</span> <span class="o">:</span> <span class="p">{</span>
+       <span class="s2">&quot;application-example;1.0&quot;</span> <span class="o">:</span> <span class="p">{</span>
+         <span class="s2">&quot;module1&quot;</span> <span class="o">:</span> <span class="p">{</span>
+           <span class="mi">1</span> <span class="o">:</span> <span class="p">{[</span><span class="nx">settings</span> <span class="nx">loaded</span> <span class="nx">from</span> <span class="nx">meta</span><span class="p">.</span><span class="nx">json</span> <span class="nx">file</span> <span class="nx">or</span> <span class="nx">from</span> <span class="nx">user</span> <span class="nx">profile</span><span class="p">]}</span>
+         <span class="p">},</span>
+         <span class="s2">&quot;module2&quot;</span> <span class="o">:</span> <span class="p">{</span>
+           <span class="mi">2</span> <span class="o">:</span> <span class="p">{[</span><span class="nx">settings</span> <span class="nx">loaded</span> <span class="nx">from</span> <span class="nx">meta</span><span class="p">.</span><span class="nx">json</span> <span class="nx">file</span> <span class="nx">or</span> <span class="nx">from</span> <span class="nx">user</span> <span class="nx">profile</span><span class="p">]}</span>
+         <span class="p">},</span>
+         <span class="s2">&quot;module3&quot;</span> <span class="o">:</span> <span class="p">{</span>
+           <span class="mi">5</span> <span class="o">:</span> <span class="p">{[</span><span class="nx">settings</span> <span class="nx">loaded</span> <span class="nx">from</span> <span class="nx">meta</span><span class="p">.</span><span class="nx">json</span> <span class="nx">file</span> <span class="nx">or</span> <span class="nx">from</span> <span class="nx">user</span> <span class="nx">profile</span><span class="p">]},</span>
+           <span class="mi">3</span> <span class="o">:</span> <span class="p">{[</span><span class="nx">settings</span> <span class="nx">loaded</span> <span class="nx">from</span> <span class="nx">meta</span><span class="p">.</span><span class="nx">json</span> <span class="nx">file</span> <span class="nx">or</span> <span class="nx">from</span> <span class="nx">user</span> <span class="nx">profile</span><span class="p">]}</span>
+         <span class="p">}</span>
+       <span class="p">}</span>
+     <span class="p">}</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>Initially, for an authenticated user the default values apply. These values are saved into user page storage
+and loaded for subsequent requests.</p>
+</div>
+<div class="section" id="client-side">
+<h2>Client side<a class="headerlink" href="#client-side" title="Permalink to this headline">¶</a></h2>
+<p>All the settings mentioned above will be availabe on client side controller.</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span class="nx">define</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// module 3 - id 5 client side controller</span>
+  <span class="kd">function</span> <span class="nx">init</span><span class="p">(</span><span class="nx">viewContext</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">settings</span> <span class="o">=</span> <span class="nx">viewContext</span><span class="p">.</span><span class="nx">getSettings</span><span class="p">();</span> <span class="c1">// this is a map so you can access whatever setting you want.</span>
+    <span class="kd">var</span> <span class="nx">location</span> <span class="o">=</span> <span class="nx">settings</span><span class="p">.</span><span class="nx">location</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="p">{</span><span class="nx">init</span> <span class="o">:</span> <span class="nx">init</span><span class="p">};</span>
+<span class="p">});</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">View Instances</a><ul>
+<li><a class="reference internal" href="#functional-requirements">Functional requirements</a></li>
+<li><a class="reference internal" href="#problem-examples">Problem examples</a></li>
+<li><a class="reference internal" href="#same-view-changed-over-time">Same view changed over time</a></li>
+<li><a class="reference internal" href="#possible-solution">Possible solution</a></li>
+<li><a class="reference internal" href="#design">Design</a></li>
+<li><a class="reference internal" href="#stored-data">Stored data</a></li>
+<li><a class="reference internal" href="#no-authenticated-user">No authenticated user</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+<li><a class="reference internal" href="#authenticated-user">Authenticated user</a></li>
+<li><a class="reference internal" href="#client-side">Client side</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Features-proposal-hijax-strategy.html"
+                        title="previous chapter">Hijax introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Features-proposal-remote-aggregation.html"
+                        title="next chapter">Introduction</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Features-proposal-remote-aggregation.html" title="Introduction"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Features-proposal-hijax-strategy.html" title="Hijax introduction"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

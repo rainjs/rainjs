@@ -92,7 +92,7 @@ coupled approach. Lets see a usage example:
     }, this.viewContext);
 
     // publish an event
-    messaging.subscribe('sliderReady', {success: true}, this.viewContext);
+    messaging.publish('sliderReady', {success: true}, this.viewContext);
 
 Now, what this does it that it subscribes to the sliderReady event, and then publishes it. 
 The arguments are pretty obvious, the first one is the event name, the second one is the callback 
@@ -101,22 +101,22 @@ We also provided some aliases to these methods on the viewContext object which d
 
 We also provide the possibility of namespacing your events, by separating them with the _::_ operator. 
 This allows you to scope your events, or if you want to, to subscribe to global events by prefixing your 
-event with the :: operator. But enough talk, lets see some code:i
+event with the :: operator. But enough talk, lets see some code:
 
 .. code-block:: javascript
-    :linenos:
+ 	:linenos:
 
-    // subscribe to a local event
-    this.viewContext.subscribe('localEvent', function (data) {
-            console.log('local event triggered');
-    });
-
-    // subscribe to a global event
-    this.viewContext.subscribe('::globalEvent', function (data) {
-            console.log('global event triggered
-    });
-
-    // publish the global event
-    this.viewContext.publish('::globalEvent');
+	// subscribe to a local event
+	this.viewContext.subscribe('localEvent', function (data) {
+		console.log('local event triggered');
+	});
+	
+	// subscribe to a global event
+	this.viewContext.subscribe('::globalEvent', function (data) {
+		console.log('global event triggered');
+	});
+	
+	// publish the global event
+	this.viewContext.publish('::globalEvent');
 
 

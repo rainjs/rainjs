@@ -1,0 +1,197 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Fragments Configuration Introduction &mdash; Rain v0.4.1 documentation</title>
+    <link rel="stylesheet" href="../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/underscore.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <link rel="top" title="Rain v0.4.1 documentation" href="../index.html" />
+    <link rel="next" title="Hijax introduction" href="Features-proposal-hijax-strategy.html" />
+    <link rel="prev" title="Client Language Inline Editing" href="Features-proposal-client-language-inline-editing.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Features-proposal-hijax-strategy.html" title="Hijax introduction"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Features-proposal-client-language-inline-editing.html" title="Client Language Inline Editing"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="fragments-configuration-introduction">
+<h1>Fragments Configuration Introduction<a class="headerlink" href="#fragments-configuration-introduction" title="Permalink to this headline">¶</a></h1>
+<p>In this section you can find information about how to configure fragments. From RAIN perspective, a module can contain multiple fragments. This proposal is orientated on fragment level configuration. The following questions are answered into this section:</p>
+<blockquote>
+<ul class="simple">
+<li>What can I configure for a fragment?</li>
+<li>Can I dynamically update a fragment configuration?</li>
+<li>How can I access fragment configuration?</li>
+</ul>
+</blockquote>
+<div class="section" id="rain-module-definition">
+<h2>Rain module definition<a class="headerlink" href="#rain-module-definition" title="Permalink to this headline">¶</a></h2>
+<p>Currently in RAIN each module is defined as follow (configuration is stored in meta.json file):</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="highlight"><pre><span class="p">{</span>
+  <span class="s2">&quot;id&quot;</span> <span class="o">:</span> <span class="s2">&quot;example-app;1.0&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;url&quot;</span> <span class="o">:</span> <span class="s2">&quot;/modules/example-app&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;settings&quot;</span> <span class="o">:</span> <span class="p">{</span>
+    <span class="s2">&quot;default_language&quot;</span> <span class="o">:</span> <span class="s2">&quot;ro_RO&quot;</span>
+    <span class="s2">&quot;recordsPerPage&quot;</span> <span class="o">:</span> <span class="mi">20</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;views&quot;</span> <span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;viewId&quot;</span> <span class="o">:</span> <span class="s2">&quot;display-cities&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;view&quot;</span> <span class="o">:</span> <span class="s2">&quot;/htdocs/display_cities.html&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;controller&quot;</span> <span class="o">:</span> <span class="s2">&quot;/htdocs/scripts/display_cities.js&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;settings&quot;</span> <span class="o">:</span> <span class="p">{</span>
+       <span class="s2">&quot;location&quot;</span> <span class="o">:</span> <span class="s2">&quot;Romania&quot;</span>
+     <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="sections">
+<h2>Sections<a class="headerlink" href="#sections" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-section">
+<h2>Module section<a class="headerlink" href="#module-section" title="Permalink to this headline">¶</a></h2>
+<p>This is the general section where you can define module identifier and the base url.</p>
+</div>
+<div class="section" id="settings">
+<h2>Settings<a class="headerlink" href="#settings" title="Permalink to this headline">¶</a></h2>
+<p>These are general settings of the module. Each view will inherit these settings.</p>
+<div class="section" id="views">
+<h3>Views<a class="headerlink" href="#views" title="Permalink to this headline">¶</a></h3>
+<p>This is the section where you define all public views of the module</p>
+</div>
+<div class="section" id="view-controller">
+<h3>View controller<a class="headerlink" href="#view-controller" title="Permalink to this headline">¶</a></h3>
+<p>This is the javascript file that will be executed automatically on client browser when the fragment is loaded.</p>
+</div>
+<div class="section" id="view-settings">
+<h3>View settings<a class="headerlink" href="#view-settings" title="Permalink to this headline">¶</a></h3>
+<p>Each view can contain a list of settings that will be loaded by RAIN and automatically injected in client side controller.</p>
+</div>
+<div class="section" id="view-security">
+<h3>View security<a class="headerlink" href="#view-security" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="view-modes">
+<h3>View modes<a class="headerlink" href="#view-modes" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Fragments Configuration Introduction</a><ul>
+<li><a class="reference internal" href="#rain-module-definition">Rain module definition</a></li>
+<li><a class="reference internal" href="#sections">Sections</a></li>
+<li><a class="reference internal" href="#module-section">Module section</a></li>
+<li><a class="reference internal" href="#settings">Settings</a><ul>
+<li><a class="reference internal" href="#views">Views</a></li>
+<li><a class="reference internal" href="#view-controller">View controller</a></li>
+<li><a class="reference internal" href="#view-settings">View settings</a></li>
+<li><a class="reference internal" href="#view-security">View security</a></li>
+<li><a class="reference internal" href="#view-modes">View modes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Features-proposal-client-language-inline-editing.html"
+                        title="previous chapter">Client Language Inline Editing</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Features-proposal-hijax-strategy.html"
+                        title="next chapter">Hijax introduction</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Features-proposal-hijax-strategy.html" title="Hijax introduction"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Features-proposal-client-language-inline-editing.html" title="Client Language Inline Editing"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

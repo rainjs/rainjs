@@ -1,0 +1,604 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Elastic architecture &mdash; Rain v0.4.1 documentation</title>
+    <link rel="stylesheet" href="../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/underscore.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <link rel="top" title="Rain v0.4.1 documentation" href="../index.html" />
+    <link rel="next" title="RAIN Cloud In Action" href="Features-proposal-rain-cloud-action.html" />
+    <link rel="prev" title="Error Handling" href="Features-proposal-error-handling.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Features-proposal-rain-cloud-action.html" title="RAIN Cloud In Action"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Features-proposal-error-handling.html" title="Error Handling"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="elastic-architecture">
+<h1>Elastic architecture<a class="headerlink" href="#elastic-architecture" title="Permalink to this headline">¶</a></h1>
+<p>In this document you can find the overview of elastic RAIN architecture. Each component of the architecture is described in great detail.</p>
+<div class="section" id="revisions">
+<h2>Revisions<a class="headerlink" href="#revisions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="19%" />
+<col width="19%" />
+<col width="61%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Author</th>
+<th class="head">Version</th>
+<th class="head">Changes</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Radu Cosnita</td>
+<td>1.0-SNAPSHOT</td>
+<td>Initial proposal for elastic architecture.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="scope">
+<h2>Scope<a class="headerlink" href="#scope" title="Permalink to this headline">¶</a></h2>
+<p>RAIN must be a framework that provides a compatible web 2.0 way of developing application. RAIN takes into consideration deployment details and provides a rich API for interacting with every piece of the architecture.</p>
+</div>
+<div class="section" id="stakeholders-interests">
+<h2>Stakeholders interests<a class="headerlink" href="#stakeholders-interests" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="33%" />
+<col width="47%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Stakeholder</th>
+<th class="head">Interests</th>
+<th class="head">Acceptance scenario</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Network administrators</td>
+<td><ul class="first last simple">
+<li>RAIN deployment control</li>
+<li>RAIN monitoring</li>
+<li>RAIN deployment performance</li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li>Stress tests - more detailed description will come.</li>
+<li>Failover tests.</li>
+<li>Monitoring tests.</li>
+<li>Dynamic configuration tests.</li>
+</ul>
+</td>
+</tr>
+<tr><td>Developers</td>
+<td><ul class="first last simple">
+<li>Create new control center for RAIN.</li>
+</ul>
+</td>
+<td><ul class="first last simple">
+<li>Stable api.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="functional-requirements-fr">
+<h2>Functional requirements (FR)<a class="headerlink" href="#functional-requirements-fr" title="Permalink to this headline">¶</a></h2>
+<p>Here you can find all the functional requirements for this architecture.</p>
+<blockquote>
+<ol class="arabic simple">
+<li>RAIN must support small units of code acting as a single application.</li>
+<li>RAIN must provide an infrastructure map.</li>
+</ol>
+</blockquote>
+</div>
+<div class="section" id="non-functional-requirements-nfr">
+<h2>Non functional requirements (NFR)<a class="headerlink" href="#non-functional-requirements-nfr" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<ol class="arabic simple">
+<li>RAIN must reuse already tested load balancers.</li>
+</ol>
+</blockquote>
+</div>
+<div class="section" id="use-cases">
+<h2>Use cases<a class="headerlink" href="#use-cases" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="rain-cloud-in-action">
+<h3>RAIN Cloud in action<a class="headerlink" href="#rain-cloud-in-action" title="Permalink to this headline">¶</a></h3>
+<p>Please read <a class="reference internal" href="Features-proposal-rain-cloud-action.html"><em>RAIN Cloud In Action</em></a> for a simple example of RAIN cloud.</p>
+</div>
+</div>
+<div class="section" id="design">
+<h2>Design<a class="headerlink" href="#design" title="Permalink to this headline">¶</a></h2>
+<img alt="../images/elastic_overview.png" src="../images/elastic_overview.png" />
+<p>In the above diagram you can see a small cloud rain deployment. The idea behind this architecture is that we have an cloud orchestrator (hypervisor) that can at any time provide information about the cloud. The communication is done through web sockets and is event based. The purpose is to obtain an incomplete connected graph that is used based on some criterias: the components that can be handled by a cloud unit, cpu usage, bandwidth usage, ram usage and so on. The hypervisor should _orchestrate_ this interaction.</p>
+<p>From a technical perspective communication between rain servers and hypervisor and motherships and hypervisor can be done through web sockets.</p>
+<p>Also the hypervisor should allow through it&#8217;s public API to dynamically change the cloud structure:</p>
+<blockquote>
+<ol class="arabic simple">
+<li>Deploy a new webcomponent.</li>
+<li>Instantiate a new webcomponent.</li>
+<li>Destroy an instance of a webcomponent.</li>
+<li>Undeploy an instance of a webcomponent.</li>
+</ol>
+</blockquote>
+<div class="section" id="rain-server">
+<h3>RAIN Server<a class="headerlink" href="#rain-server" title="Permalink to this headline">¶</a></h3>
+<p>A rain server is a node that is responsible for doing aggregation and applying cross cutting concerns provided by RAIN framework. A rain server can be connected to one or more motherships simultaneously. On long run new mothership connection will be probably opened.</p>
+</div>
+<div class="section" id="rain-hypervisor-component-mothership-map">
+<h3>RAIN Hypervisor - Component mothership map<a class="headerlink" href="#rain-hypervisor-component-mothership-map" title="Permalink to this headline">¶</a></h3>
+<p>This is a mechanism for holding information about each mother web components instances. This is really useful if you are interested in finding out which are the motherships who can provide information about certain webcomponents instances.</p>
+<p>Same web component instance might be run on one or more motherships.</p>
+</div>
+<div class="section" id="rain-hypervisor-servers-map">
+<h3>RAIN Hypervisor - Servers map<a class="headerlink" href="#rain-hypervisor-servers-map" title="Permalink to this headline">¶</a></h3>
+<p>This is a mechanism for holding information about the rain servers that can correctly render specific urls. This comes handy when you need to select a rain server to handle a request. After the first request a sticky session behavior is desired for improving performance.</p>
+</div>
+<div class="section" id="rain-cloud-api">
+<h3>RAIN Cloud API<a class="headerlink" href="#rain-cloud-api" title="Permalink to this headline">¶</a></h3>
+<p>RAIN Cloud API is intended to become the only interface that provides information about RAIN Cloud and orchestrate the wiring process. In this context wiring define the link between a RAIN Server and a subset of running motherships.</p>
+<p>Below you can find all operations defined in REST manner that must be provided by RAIN Cloud API:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="6%" />
+<col width="13%" />
+<col width="19%" />
+<col width="14%" />
+<col width="2%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Group</th>
+<th class="head">Operation</th>
+<th class="head">HTTP method</th>
+<th class="head">HTTP Headers</th>
+<th class="head">HTTP
+body</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td colspan="6">We assume that cloud api is deployed within the intranet and has an url assigned to it. Of course the environment can be load balanced.
+The accessible url might be: <a class="reference external" href="https://cloud.rain.1and1.com/">https://cloud.rain.1and1.com/</a>. All operation urls are relative to this address.</td>
+</tr>
+<tr><td>RAIN Servers</td>
+<td>Load registered rain servers.</td>
+<td>GET - /rainservers/all</td>
+<td><ul class="first last simple">
+<li>Content-Type: application/json</li>
+<li>accept: application/json</li>
+<li>user: [user token]</li>
+</ul>
+</td>
+<td>&nbsp;</td>
+<td>Obtain a list of all registered rain servers.</td>
+</tr>
+<tr><td>&nbsp;</td>
+<td>Load rain servers handled urls.</td>
+<td>GET - /rainservers/{serverid}/urls</td>
+<td><ul class="first last simple">
+<li>Content-Type: application/json</li>
+<li>accept: application/json</li>
+<li>user: [user token]</li>
+</ul>
+</td>
+<td>&nbsp;</td>
+<td>Obtain a list of url that can be handled by a specified rain server.</td>
+</tr>
+<tr><td>&nbsp;</td>
+<td>Register a new rain server.</td>
+<td>POST - /rainservers/</td>
+<td><ul class="first last simple">
+<li>Content-Type: application/json</li>
+<li>accept: application/json</li>
+<li>user: [user token]</li>
+<li>[rain server data]</li>
+</ul>
+</td>
+<td>&nbsp;</td>
+<td>Register a new RAIN server.</td>
+</tr>
+<tr><td>&nbsp;</td>
+<td>Reset a rain server wiring.</td>
+<td>PUT - /rainservers/{rainserverid}</td>
+<td><ul class="first last simple">
+<li>Content-Type: application/json</li>
+<li>accept: application/json</li>
+<li>user: [user token]</li>
+</ul>
+</td>
+<td>&nbsp;</td>
+<td>Reset a RAIN server. This mean that connection with mothership is closed and each cached information of this
+rain server is flushed away. The hypervisor will reconfigure this rain server when necessary.</td>
+</tr>
+<tr><td>&nbsp;</td>
+<td>Unregister a rain server.</td>
+<td>DELETE - /rainservers/{rainserverid}</td>
+<td><ul class="first last simple">
+<li>Content-Type: application/json</li>
+<li>accept: application/json</li>
+<li>user: [user token]</li>
+</ul>
+</td>
+<td>&nbsp;</td>
+<td>Unregister a RAIN server.</td>
+</tr>
+<tr><td>Mothership</td>
+<td>Load all motherships.</td>
+<td>GET - /mothership/all</td>
+<td><ul class="first last simple">
+<li>Content-Type: application/json</li>
+<li>accept: application/json</li>
+<li>user: [user token]</li>
+</ul>
+</td>
+<td>&nbsp;</td>
+<td>Obtain a list of all registered motherships.</td>
+</tr>
+<tr><td>&nbsp;</td>
+<td>Load mothership summary.</td>
+<td>GET - /mothership/{mothershipid}</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Obtain a summary of the specified mothership.</td>
+</tr>
+<tr><td>&nbsp;</td>
+<td>Load mothership components</td>
+<td>GET - /mothership/{mothershipid}/webcomponents</td>
+<td><ul class="first last simple">
+<li>Content-Type: application/json</li>
+<li>accept: application/json</li>
+<li>user: [user token]</li>
+</ul>
+</td>
+<td>&nbsp;</td>
+<td>Obtain all webcomponents instances currently deployed in the specified mothership.</td>
+</tr>
+<tr><td>&nbsp;</td>
+<td>Register mothership</td>
+<td>POST - /mothership/</td>
+<td><ul class="first last simple">
+<li>Content-Type: application/json</li>
+<li>accept: application/json</li>
+<li>user: [user token]</li>
+</ul>
+</td>
+<td>&nbsp;</td>
+<td>Register a new mothership to the hypervisor.</td>
+</tr>
+<tr><td>Webcomponent</td>
+<td>Load all deployed components</td>
+<td>GET - /webcomponent/all?start=[start_record]
+&amp;range=[num_of_records]</td>
+<td><ul class="first last simple">
+<li>Content-Type: application/json</li>
+<li>accept: application/json</li>
+<li>user: [user token]</li>
+</ul>
+</td>
+<td>&nbsp;</td>
+<td>Operation used to obtain a list of all deployed web components within the cloud.</td>
+</tr>
+<tr><td>&nbsp;</td>
+<td>Load detailed information about
+an available webcomponent.</td>
+<td>GET - /webcomponent/{id}/{version}</td>
+<td><ul class="first last simple">
+<li>Content-Type: application/json</li>
+<li>accept: application/json</li>
+<li>user: [user token]</li>
+</ul>
+</td>
+<td>&nbsp;</td>
+<td>Operation used to obtain information about an available webcomponent within the cloud: motherships on which is
+deployed, description, and other things.</td>
+</tr>
+<tr><td>&nbsp;</td>
+<td>Load webcomponent descriptor.</td>
+<td>GET - /webcomponent/{id}/{version}/descriptor</td>
+<td><ul class="first last simple">
+<li>Content-Type: application/json</li>
+<li>accept: application/json</li>
+<li>user: [user token]</li>
+</ul>
+</td>
+<td>&nbsp;</td>
+<td>Operation used to obtain the configuration descriptor of a webcomponent (meta.json content).</td>
+</tr>
+<tr><td>&nbsp;</td>
+<td>Load web component statistics.</td>
+<td>GET - /webcomponent/{id}/{version}/statistics</td>
+<td><ul class="first last simple">
+<li>Content-Type: application/json</li>
+<li>accept: application/json</li>
+<li>user: [user token]</li>
+</ul>
+</td>
+<td>&nbsp;</td>
+<td>Operation used to obtain monitoring information about an available webcomponent.</td>
+</tr>
+<tr><td>&nbsp;</td>
+<td>Load webcomponent instance
+information.</td>
+<td>GET - /webcomponent/{instanceid}</td>
+<td><ul class="first last simple">
+<li>Content-Type: application/json</li>
+<li>accept: application/json</li>
+<li>user: [user token]</li>
+</ul>
+</td>
+<td>&nbsp;</td>
+<td>Operation used to obtain information about a specific web component instance.</td>
+</tr>
+<tr><td>&nbsp;</td>
+<td>Instantiate a specified
+webcomponent.</td>
+<td>POST - /webcomponent/{id}/{version}</td>
+<td><ul class="first last simple">
+<li>Content-Type: application/json</li>
+<li>accept: application/json</li>
+<li>user: [user token]</li>
+</ul>
+</td>
+<td>&nbsp;</td>
+<td>Operation used to instantiate a specified webcomponent. Within this operation a complex processing will take
+place. A suitable mothership will be selected. All rain servers that require information about the new instance
+will open a connection to the chosen mothership (if no previous connection is available). Probably monitoring
+will also be enabled here. An instance identifier will be returned to client.</td>
+</tr>
+<tr><td>&nbsp;</td>
+<td>Cluster a webcomponent instance.</td>
+<td>POST - /webcomponent/{instanceId}</td>
+<td><ul class="first last simple">
+<li>Content-Type: application/json</li>
+<li>accept: application/json</li>
+<li>user: [user token]</li>
+</ul>
+</td>
+<td>&nbsp;</td>
+<td>Operation used to clone a web component instance to another mothership. Each change of the instance will be
+replicated to both motherships.</td>
+</tr>
+<tr><td>&nbsp;</td>
+<td>Load detailed information about
+an available webcomponent.</td>
+<td>PUT - /webcomponent/{id}/{version}</td>
+<td><ul class="first last simple">
+<li>Content-Type: application/json</li>
+<li>accept: application/json</li>
+<li>user: [user token]</li>
+</ul>
+</td>
+<td>&nbsp;</td>
+<td>Operation used to refresh all instances of the specified webcomponent.</td>
+</tr>
+<tr><td>&nbsp;</td>
+<td>Undeploy a specified
+webcomponent.</td>
+<td>DELETE - /webcomponent/{id}/{version}</td>
+<td><ul class="first last simple">
+<li>Content-Type: application/json</li>
+<li>accept: application/json</li>
+<li>user: [user token]</li>
+</ul>
+</td>
+<td>&nbsp;</td>
+<td>Operation used to undeploy all instances of a specified webcomponent.</td>
+</tr>
+<tr><td>&nbsp;</td>
+<td>Stop instance.</td>
+<td>DELETE - /webcomponent/{instanceid}</td>
+<td><ul class="first last simple">
+<li>Content-Type: application/json</li>
+<li>accept: application/json</li>
+<li>user: [user token]</li>
+</ul>
+</td>
+<td>&nbsp;</td>
+<td>Operation used to stop a specific instance.</td>
+</tr>
+<tr><td>&nbsp;</td>
+<td>Refresh instance.</td>
+<td>PUT - /webcomponent/{instanceid}</td>
+<td><ul class="first last simple">
+<li>Content-Type: application/json</li>
+<li>accept: application/json</li>
+<li>user: [user token]</li>
+</ul>
+</td>
+<td>&nbsp;</td>
+<td>Operation used to refresh a specific instance.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="rain-hypervisor-communication">
+<h2>RAIN Hypervisor Communication<a class="headerlink" href="#rain-hypervisor-communication" title="Permalink to this headline">¶</a></h2>
+<p>RAIN Hypervisor node is the most complex one from RAIN. It holds information about each running piece (RAIN specific) from the infrastructure. For this to be achievable each running piece must communicate with the hypervisor. The question is how do we want to implement this:</p>
+<blockquote>
+<ol class="arabic simple">
+<li>Use web sockets. (this will definitely provide faster feedback but might generate network issues).</li>
+<li>Use a REST api and communicate over http. (This will be slower and does not provide real time feedback - not without pooling anyway).</li>
+</ol>
+</blockquote>
+<div class="section" id="tehnology-used">
+<h3>Tehnology used<a class="headerlink" href="#tehnology-used" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<ol class="arabic simple">
+<li>For websockets we consider using socketio library. This is already used in RAIN core implementation. Please read carefully <a class="reference external" href="https://github.com/LearnBoost/socket.io/wiki/Socket.IO-and-firewall-software">https://github.com/LearnBoost/socket.io/wiki/Socket.IO-and-firewall-software</a>.</li>
+<li>For REST api we can simply use nodejs http library.</li>
+</ol>
+</blockquote>
+</div>
+<div class="section" id="upcoming">
+<h3>Upcoming<a class="headerlink" href="#upcoming" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<ol class="arabic simple">
+<li>Web sockets to do</li>
+</ol>
+<blockquote>
+<ol class="arabic simple">
+<li>Create a protocol within RAIN Cloud that allows efficient communication between RAIN pieces.</li>
+<li>Create test scenarios that take into consideration possible firewall issues.</li>
+</ol>
+</blockquote>
+<ol class="arabic simple" start="2">
+<li>REST api</li>
+</ol>
+<blockquote>
+<ol class="arabic simple">
+<li>Create the REST operations.</li>
+<li>Deployment must be taken into consideration.</li>
+<li>Security concerns are also important for this approach.</li>
+</ol>
+</blockquote>
+</blockquote>
+</div>
+</div>
+<div class="section" id="code-samples">
+<h2>Code samples<a class="headerlink" href="#code-samples" title="Permalink to this headline">¶</a></h2>
+<p><em>Here come code samples meant to show how developers will use this feature.</em></p>
+</div>
+<div class="section" id="timeline">
+<h2>Timeline<a class="headerlink" href="#timeline" title="Permalink to this headline">¶</a></h2>
+<p><em>Here the estimated work of the feature must be split into packages of work that are correlated with the milestones.</em></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="31%" />
+<col width="40%" />
+<col width="29%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Milestone</th>
+<th class="head">Usable parts</th>
+<th class="head">Comments</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Elastic architecture</a><ul>
+<li><a class="reference internal" href="#revisions">Revisions</a></li>
+<li><a class="reference internal" href="#scope">Scope</a></li>
+<li><a class="reference internal" href="#stakeholders-interests">Stakeholders interests</a></li>
+<li><a class="reference internal" href="#functional-requirements-fr">Functional requirements (FR)</a></li>
+<li><a class="reference internal" href="#non-functional-requirements-nfr">Non functional requirements (NFR)</a></li>
+<li><a class="reference internal" href="#use-cases">Use cases</a><ul>
+<li><a class="reference internal" href="#rain-cloud-in-action">RAIN Cloud in action</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#design">Design</a><ul>
+<li><a class="reference internal" href="#rain-server">RAIN Server</a></li>
+<li><a class="reference internal" href="#rain-hypervisor-component-mothership-map">RAIN Hypervisor - Component mothership map</a></li>
+<li><a class="reference internal" href="#rain-hypervisor-servers-map">RAIN Hypervisor - Servers map</a></li>
+<li><a class="reference internal" href="#rain-cloud-api">RAIN Cloud API</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#rain-hypervisor-communication">RAIN Hypervisor Communication</a><ul>
+<li><a class="reference internal" href="#tehnology-used">Tehnology used</a></li>
+<li><a class="reference internal" href="#upcoming">Upcoming</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#code-samples">Code samples</a></li>
+<li><a class="reference internal" href="#timeline">Timeline</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Features-proposal-error-handling.html"
+                        title="previous chapter">Error Handling</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Features-proposal-rain-cloud-action.html"
+                        title="next chapter">RAIN Cloud In Action</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Features-proposal-rain-cloud-action.html" title="RAIN Cloud In Action"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Features-proposal-error-handling.html" title="Error Handling"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>
