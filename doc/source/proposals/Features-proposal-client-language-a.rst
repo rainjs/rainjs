@@ -1,6 +1,6 @@
-=======================
-Client Language Runtime
-=======================
+====================================
+Client Language Runtime (Proposal A)
+====================================
 
 This document describes all features offered by RAIN client runtime for interacting with localization.
 
