@@ -1,6 +1,6 @@
-============
-Introduction
-============
+==================
+Remote aggregation
+==================
 
 Remote aggregation is one major goal of RAIN. The simplified explanation is we want to allow users to write and hold applications / pages without software constraints. For instance we want to avoid cases were we tell developers: use wicket because RAIN can not use something else.
 
