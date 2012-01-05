@@ -1,0 +1,253 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Server Translations System &mdash; Rain v0.4.1 documentation</title>
+    <link rel="stylesheet" href="../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/underscore.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <link rel="top" title="Rain v0.4.1 documentation" href="../index.html" />
+    <link rel="next" title="Fragments Configuration Introduction" href="Features-proposal-fragments-configuration.html" />
+    <link rel="prev" title="Client Language Inline Editing" href="Features-proposal-client-language-inline-editing.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Features-proposal-fragments-configuration.html" title="Fragments Configuration Introduction"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Features-proposal-client-language-inline-editing.html" title="Client Language Inline Editing"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="server-translations-system">
+<h1>Server Translations System<a class="headerlink" href="#server-translations-system" title="Permalink to this headline">¶</a></h1>
+<p>This document describes how the translations system is defined and used on the server side.</p>
+<div class="section" id="functional-requirements">
+<h2>Functional requirements<a class="headerlink" href="#functional-requirements" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>The translation files must be discovered automatically for all supported languages.</li>
+<li>The translation system must support <em>properties</em> and <em>po</em> files.</li>
+<li>A component must be able to import translations from another component.</li>
+<li>The translation system must support simple text keys:<ul>
+<li>simple keys that support input parameters.</li>
+<li>the translated text is a string in the specified language or in the server&#8217;s default language.</li>
+<li>if the key is not translated in one of the required languages, a default &#8220;<em>key &#8216;x&#8217; is not translated in language &#8216;y&#8217;</em>&#8221; key must be returned.</li>
+</ul>
+</li>
+<li>In the future we may want to define additional types of keys:<ul>
+<li><em>composed keys</em> from simple text, text keys and other composed keys (the translated text contains references to other keys).</li>
+</ul>
+</li>
+</ol>
+</div>
+<div class="section" id="markup">
+<h2>Markup<a class="headerlink" href="#markup" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Import translations from another component:<ul>
+<li>{{translation &#8216;webcomponent://commontranslations;1.0&#8217;}}</li>
+</ul>
+</li>
+<li>Text key:<ul>
+<li>{{key &#8216;message_1&#8217;}}</li>
+<li>{{key &#8216;message_1&#8217; &#8216;en_US&#8217;}}</li>
+</ul>
+</li>
+</ol>
+<p><em>translation</em> and <em>key</em> are Handlebars block helpers. The <em>key</em> helper generates the translated text for the specified key.</p>
+</div>
+<div class="section" id="discovery">
+<h2>Discovery<a class="headerlink" href="#discovery" title="Permalink to this headline">¶</a></h2>
+<p>Here is an example for a folder structure:</p>
+<div class="highlight-python"><pre>appname/htdocs/locales
+                     \
+                     |
+                     |- en_US
+                     |      \
+                     |      |- media
+                     |      |      \
+                     |      |      |- image1.png
+                     |      |      |- audio2.mp3
+                     |      |      |- video3.mp4
+                     |      |      |- video4.ogg
+                     |      |- messages.po
+                     |      |- other.po
+                     |      |- keys.properties
+                     |      o
+                     |
+                     |- de_DE
+                     |      \
+                     |      |- messages.po
+                     |      |- other.po
+                     |      o
+                     |
+                     |- fr_FR
+                     o      \
+                            |- messages.po
+                            |- other.po
+                            o</pre>
+</div>
+</div>
+<div class="section" id="media-keys-currently-not-planned-to-implement">
+<h2>Media keys - Currently NOT planned to implement<a class="headerlink" href="#media-keys-currently-not-planned-to-implement" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Keys that are used for media elements (images, audio or video) that require multiple attributes.</li>
+<li>The translated value is a JSON object with all the key&#8217;s properties in the specified language or in the server&#8217;s default language.</li>
+<li>A media key property can be a reference to a text key.</li>
+<li>If the key is not translated in one of the required languages, an empty JSON object should be returned.</li>
+</ol>
+<div class="section" id="id1">
+<h3>Markup<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>&lt;img {{mkey &#8216;img_1&#8217;}}&#8221;&gt;</li>
+<li>&lt;img {{mkey &#8216;img_1&#8217; &#8216;en_US&#8217;}}&#8221;&gt;</li>
+</ol>
+<p><em>mkey</em> is a Handlebars block helper. The media key helper generates the attributes based on the JSON object that represents a translation (example of generated text: &#8220;src=&#8217;url&#8217; alt=&#8217;text&#8217;&#8221;).</p>
+<p>Here is an example of a media messages translation file (en_US/media_messages.js):</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span class="p">{</span><span class="nx">translations</span> <span class="o">:</span> <span class="p">{</span>
+   <span class="s2">&quot;image_key_1&quot;</span> <span class="o">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span>   <span class="o">:</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;src&quot;</span>    <span class="o">:</span> <span class="s2">&quot;images/image1.png&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;alt&quot;</span>    <span class="o">:</span> <span class="s2">&quot;alternative localized text - en version&quot;</span><span class="p">,</span> <span class="c1">// use &quot;key:message_1&quot; when referencing a text key</span>
+      <span class="s2">&quot;width&quot;</span>  <span class="o">:</span> <span class="s2">&quot;32&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;height&quot;</span> <span class="o">:</span> <span class="s2">&quot;32&quot;</span>
+   <span class="p">}</span>
+<span class="p">}}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="dynamic-translations">
+<h2>Dynamic translations<a class="headerlink" href="#dynamic-translations" title="Permalink to this headline">¶</a></h2>
+<p>The translations for a component are considered dynamic when they are provided by an entity external to the component, like a web service. Each time a component is rendered, a request is made to the web service to retrieve the translations for the component with the specified version. The returned translations must be cached on the RAIN server in order to avoid multiple unnecessary requests.</p>
+<div class="section" id="id2">
+<h3>Functional requirements<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>The web service must provide methods for:<ol class="arabic">
+<li>Obtaining translations:<ul>
+<li>obtaining the list of translation versions for a component.</li>
+<li>obtaining the translations for a component for a specific version in one or more languages.</li>
+</ul>
+</li>
+<li>Changing / updating translations:<ul>
+<li>delete a translation key.</li>
+<li>update the text for a translation key for a component, for a specific version and language.</li>
+<li>delete all translations for a component for a specific version and language.</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>The RAIN Mothership must provide methods for:<ul>
+<li>invalidating cached translations.</li>
+</ul>
+</li>
+</ol>
+<p>The RAIN servers will cache all the translations that they receive from the web service and they keep them until they are notified otherwise. The notification is made by the RAIN Mothership, so a RAIN server must be able to receive them.</p>
+<p>The translation web service MUST notify the RAIN Mothership when a translation for a component was changed, in order to notify all the RAIN servers that have cached those translations to invalidate the cache.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Server Translations System</a><ul>
+<li><a class="reference internal" href="#functional-requirements">Functional requirements</a></li>
+<li><a class="reference internal" href="#markup">Markup</a></li>
+<li><a class="reference internal" href="#discovery">Discovery</a></li>
+<li><a class="reference internal" href="#media-keys-currently-not-planned-to-implement">Media keys - Currently NOT planned to implement</a><ul>
+<li><a class="reference internal" href="#id1">Markup</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dynamic-translations">Dynamic translations</a><ul>
+<li><a class="reference internal" href="#id2">Functional requirements</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Features-proposal-client-language-inline-editing.html"
+                        title="previous chapter">Client Language Inline Editing</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Features-proposal-fragments-configuration.html"
+                        title="next chapter">Fragments Configuration Introduction</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Features-proposal-fragments-configuration.html" title="Fragments Configuration Introduction"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Features-proposal-client-language-inline-editing.html" title="Client Language Inline Editing"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

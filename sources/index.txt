@@ -76,6 +76,7 @@ Features Concepts
     proposals/Features-proposal-client-messaging-a
     proposals/Features-proposal-client-language-a
     proposals/Features-proposal-client-language-inline-editing
+    proposals/Features-proposal-server-language
     proposals/Features-proposal-fragments-configuration
     proposals/Features-proposal-hijax-strategy
     proposals/Features-proposal-instances

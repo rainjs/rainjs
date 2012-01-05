@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../static/underscore.js"></script>
     <script type="text/javascript" src="../static/doctools.js"></script>
     <link rel="top" title="Rain v0.4.1 documentation" href="../index.html" />
-    <link rel="next" title="Fragments Configuration Introduction" href="Features-proposal-fragments-configuration.html" />
+    <link rel="next" title="Server Translations System" href="Features-proposal-server-language.html" />
     <link rel="prev" title="Client Language Runtime" href="Features-proposal-client-language-a.html" /> 
   </head>
   <body>
@@ -34,7 +34,7 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="Features-proposal-fragments-configuration.html" title="Fragments Configuration Introduction"
+          <a href="Features-proposal-server-language.html" title="Server Translations System"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="Features-proposal-client-language-a.html" title="Client Language Runtime"
@@ -51,7 +51,7 @@
   <div class="section" id="client-language-inline-editing">
 <h1>Client Language Inline Editing<a class="headerlink" href="#client-language-inline-editing" title="Permalink to this headline">¶</a></h1>
 <p>In this section you can find the proposal for translations inline editing. This is meant for developer / administrators / web masters / technical editors to easily change the translations using a WYSIWYG approach. This must be offered by RAIN platform.</p>
-<p>Before continuing to following sections please read <a class="reference internal" href="Features-proposal-view-modes.html"><em>View modes</em></a></p>
+<p>Before continuing to following sections please read <a class="reference internal" href="Features-proposal-view-modes.html"><em>View modes</em></a>.</p>
 <div class="section" id="functional-requirements">
 <h2>Functional requirements<a class="headerlink" href="#functional-requirements" title="Permalink to this headline">¶</a></h2>
 <blockquote>
@@ -65,7 +65,7 @@
 </div>
 <div class="section" id="problem-context">
 <h2>Problem context<a class="headerlink" href="#problem-context" title="Permalink to this headline">¶</a></h2>
-<p>A problem appears when we want to support inline editing for remote fragments. We have this difficulty because we can not edit file on remote sites (at least not easy and not independent of technology). Because of this RAIN impose one constraint: translation must be done using Translation API and some specific RAIN markup.</p>
+<p>A problem appears when we want to support inline editing for remote fragments. We have this difficulty because we can not edit file on remote sites (at least not easy and not independent of technology). Because of this RAIN imposes one constraint: translation must be done using Translation API and some specific RAIN markup.</p>
 </div>
 <div class="section" id="design">
 <h2>Design<a class="headerlink" href="#design" title="Permalink to this headline">¶</a></h2>
@@ -75,7 +75,12 @@
 <div class="section" id="prototype">
 <h2>Prototype<a class="headerlink" href="#prototype" title="Permalink to this headline">¶</a></h2>
 <img alt="../images/language_inline_editing.png" src="../images/language_inline_editing.png" />
-<p>Frames are opened starting from top widget till the bottom one. Each widget will be displayed only when an action is triggered from the previous widget.</p>
+<p>When the components are in edit mode we can provide one of the following mechanisms for accessing and updating the translations:</p>
+<ol class="arabic simple">
+<li>Provide a link for opening a popup dialog that shows all the available components in the page. For each component you can see the list of translation keys and for each key the translations in all languages. The user can update and save the changes. This can easily be achieved by adding the link to the header / footer region of the page (when in edit mode).</li>
+<li>Provide a link / icon / right-click menu action for each component that will open a popup dialog similar to the one mentioned above, but containing information only about the current component. This can be achieved by adding automatically a section when rendering each component (when in edit mode).</li>
+<li>Render each translation text as a link that when clicked opens a popup that shows the available translations for that key (when in edit mode). This way we can access faster a specific translation.</li>
+</ol>
 </div>
 </div>
 
@@ -100,8 +105,8 @@
   <p class="topless"><a href="Features-proposal-client-language-a.html"
                         title="previous chapter">Client Language Runtime</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="Features-proposal-fragments-configuration.html"
-                        title="next chapter">Fragments Configuration Introduction</a></p>
+  <p class="topless"><a href="Features-proposal-server-language.html"
+                        title="next chapter">Server Translations System</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -126,7 +131,7 @@
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="Features-proposal-fragments-configuration.html" title="Fragments Configuration Introduction"
+          <a href="Features-proposal-server-language.html" title="Server Translations System"
              >next</a> |</li>
         <li class="right" >
           <a href="Features-proposal-client-language-a.html" title="Client Language Runtime"
