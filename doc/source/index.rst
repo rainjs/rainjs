@@ -53,15 +53,6 @@ Server side modules
     server/websockets
     server/component_descriptor
 
---------
-Planning
---------
-
-.. toctree::
-    :maxdepth: 1
-    
-    proposals/Features-proposal
-
 .................
 Features Concepts
 .................
