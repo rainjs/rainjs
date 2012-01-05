@@ -64,6 +64,9 @@ The steps the rendering process goes through when rendering a component
    5.3. Insert the received HTML rendered content into the correct
         placeholder according to the received *dom-id*
 
+.. image:: ../images/proposals/rendering_layer.jpg
+   :scale: 70%
+
 .. rubric:: Footnotes
 
 .. [#] In the meantime, the server is free to process other things
