@@ -18,6 +18,7 @@ Getting started
     getting_started/installation
     getting_started/rain_sdk_tutorial
     server/component_descriptor
+    getting_started/coding_guidelines
 
 -------------------
 Client side modules
