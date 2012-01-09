@@ -1,3 +1,73 @@
+=================
+Rendering Process
+=================
+
+The whole rendering process consists of 3 layers. All of them are easy expendable with plugins.
+
+1. Template Compiler
+2. Data Layer
+3. Renderer
+
+-----------------
+Template Compiler
+-----------------
+
+1. All the templates will be compiled when the server is starting.
+
+----------
+Data Layer
+----------
+
+1. Receives the data from the renderer and invokes the *getTemplateData( params )* function in the server-side-controller. The data contains the *dataid* of the component and the parameter for the function request.
+2. The server-side-controller function getTemplateData( params ) returns the data back to the renderer Layer. The data must be a valid JSON Object!
+3. When the data layer receives the JSON Object from the server-side-controller the data layer sends the data to the renderer.
+
+^^^^
+Code
+^^^^
+
+.. code-block:: javascript
+    :linenos:
+
+    /**
+     * @param {Object} componentOptions
+     * @param {Function} callback function which receives the error and data as parameter
+     */
+    LayerData.prototype.loadData = function(componentOptions, callback) {
+        var templateData = null,
+            err          = null;
+
+        /**
+         * LOAD DATA
+         *
+         * 1. get server-side-controller of component template from componentContainer
+         * 2. invoke getTemplateData() with params if necessary
+         * 3. invoke getTranslationData()
+         * 4. fill templateData and error if there is an error
+         * 5. invoke callback with these parameters
+         */
+         callback(err, templateData);
+    };
+
+.. code-block:: javascript
+    :linenos:
+
+    ServerSideController.getTemplateData(parentData) {
+        /**
+         * Do some service requests
+         */
+        var templateData = JSON.parse(dataFromService);
+        return templateData;
+    }
+
+    ServerSideController.getTranslationData() {
+        /**
+         * Do some service requests
+         */
+        var translationData = JSON.parse(dataFromService);
+        return translationData;
+    }
+
 ---------------
 Rendering Layer
 ---------------
