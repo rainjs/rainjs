@@ -29,7 +29,7 @@ define(["core-components/client_util",
         this.instanceId = component.id;
         this.parent = component.parent;
         this.storage = new ClientStorage(this);
-        this.viewManager = new ViewManager(this);
+        this.viewManager = new ViewManager(this, Messaging.messaging);
     }
 
     /**
