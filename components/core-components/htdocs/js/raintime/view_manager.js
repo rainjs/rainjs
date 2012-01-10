@@ -7,8 +7,9 @@ define(["core-components/client_util"],
      * @constructor
      * @param {ViewContext} viewContext The view context associated with the manager
      */
-    function ViewManager(viewContext) {
+    function ViewManager(viewContext, messaging) {
         this.viewContext = viewContext;
+        this.messaging = messaging;
         this.root = viewContext.getRoot();
 
         /*
@@ -37,19 +38,43 @@ define(["core-components/client_util"],
         if (belongsToSubcomponent) {
             return false;
         }
-
+		
         if (localRequest.test(url)) {
-            /*
-                For local requests, fetch the component and pass it
-                to {@link ViewManager#displayView}.
-            */
-            $.ajax({
-                headers:    {
-                    Accept: "text/json"
-                },
-                dataType:   "json",
-                url:        url
-            }).done(function (data) { self.displayView(data); });
+			function navigateToDest() {
+	            /*
+	                For local requests, fetch the component and pass it
+	                to {@link ViewManager#displayView}.
+	            */
+	            $.ajax({
+	                headers:    {
+	                    Accept: "text/json"
+	                },
+	                dataType:   "json",
+	                url:        url
+	            }).done(function (data) { self.displayView(data); });				
+			}
+			
+			/**
+			 * Method used to navigate to the requested page only
+			 * when all intents associated with the current view context
+			 * are successfully executed. 
+			 * 
+			 * TODO: in the future we need a discriminator passed by the developer
+			 * called sync. By default this should be true.
+			 */
+			function moveNow(viewContext) {
+				if(intents.isReady(self.viewContext)) {
+					intents.removeOn("intents_context_ready", moveNow);					
+										
+					navigateToDest();					
+				}				
+			}			
+			
+			var intents = self.messaging._intents; 
+						
+			moveNow();
+			
+			intents.on("intents_context_ready", moveNow);
         } else {
             window.open(url, "_blank");
         }

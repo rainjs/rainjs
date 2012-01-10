@@ -34,9 +34,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 define(["core-components/client_util", 
+	    "core-components/event_emitter",
         "core-components/socket.io/socket.io",
         "core-components/promised-io/promise",
-        "core-components/jquery-cookie"], function(ClientUtil, SocketIO, Promise) {
+        "core-components/jquery-cookie"], function(ClientUtil, EventEmitter, SocketIO, Promise) {
     /**
      * Class used to implement client intents object.
      */
@@ -50,9 +51,20 @@ define(["core-components/client_util",
         this._intentsSocket = SocketIO.io.connect(intentsUrl);
         
         this._requestCounter = 0;
+        
+        // this attribute keeps track of intents sent from a specific context.
+        this._intentsContext = {};
+        
+        var self = this;
     }
+    
+    ClientUtil.inherits(ClientIntents, EventEmitter);
 
     ClientIntents.INTENT_SOCKET = "/intents";
+    ClientIntents.INTENT_SENT = 1;
+    ClientIntents.INTENT_RECEIVED_ERR = 2;
+    ClientIntents.INTENT_CONTEXTS_CHANGED = "intents_changed";
+    ClientIntents.INTENTS_CONTEXT_READY = "intents_context_ready";
 
     /**
      * Class used to obtain the intents socket url from the configuration.
@@ -67,7 +79,7 @@ define(["core-components/client_util",
         intentsUrl.push(ClientIntents.INTENT_SOCKET);
 
         return intentsUrl.join("");
-    }
+    };
     
     /**
      * Method used to send an intent request.
@@ -100,7 +112,7 @@ define(["core-components/client_util",
         this._requestCounter++;
         
         var session = ClientUtil.getSession();
-        var requestId = session + this._requestCounter;
+        var requestId = this._requestCounter;
 
         request.session = session;
         request.requestId = requestId;
@@ -110,7 +122,7 @@ define(["core-components/client_util",
         this._handleIntentLoaded(request, defer);
                 
         return defer.promise;
-    }
+    };
     
     /**
      * Method used to validate the requests object.
@@ -133,14 +145,14 @@ define(["core-components/client_util",
         }
         
         return true;
-    }
+    };
         
     /**
      * Method used to emit an request intent event.
      */
     ClientIntents.prototype._requestIntent = function(request, defer) {
-        var viewContext = {"moduleId": request.viewContext.moduleId,
-                           "instanceId": request.viewContext.instanceId};        
+		var contextId = this.__getContextId(request);
+
         this._intentsSocket.emit("request_intent", 
                 {
                     intentCategory: request.category,
@@ -149,37 +161,87 @@ define(["core-components/client_util",
                     session: request.session,
                     requestId: request.requestId
                 });
-    }
+		
+        if(!this._intentsContext[contextId]) {
+        	this._intentsContext[contextId] = {};
+        }
+        
+        this._intentsContext[contextId][request.requestId] = {"status": ClientIntents.INTENT_SENT}; 
+        
+        this.emit(ClientIntents.INTENT_CONTEXTS_CHANGED, this._intentsContext[contextId], 
+        		request.viewContext);
+    };
+    
+    /**
+     * Method used to obtain the context id from which the request is sent.
+     * 
+     * @param {Dictionary} request: the intent request object.
+     * @param {ViewContext} viewContext: an optional view context to use for obtaining the id.
+     */
+    ClientIntents.prototype.__getContextId = function(request, viewContext) {    	
+    	viewContext = viewContext || request.viewContext; 
+    	
+    	return viewContext.moduleId + "@" + viewContext.instanceId;
+    };
     
     /**
      * Method used to handle intent_loaded event.
      */
     ClientIntents.prototype._handleIntentLoaded = function(request, defer) {
-        var self = this;
-        
+    	var self = this;
+    	
         this._intentsSocket.on("intent_loaded", function(intentResponse) {
             if(request.requestId == intentResponse.requestId) {
                 if (intentResponse.data.intentType === "view") {
                     request.viewContext.viewManager.displayView(intentResponse.data, true);
                 }
+				
+				var contextId = self.__getContextId(request);
+				var context = self._intentsContext[contextId];
+				
+				delete context[request.requestId];
 
-                defer.resolve(intentResponse.data);
+		        self.emit(ClientIntents.INTENT_CONTEXTS_CHANGED, context, request.viewContext);				
+				
+				if(JSON.stringify(context) == "{}") {
+					self.emit(ClientIntents.INTENTS_CONTEXT_READY, request.viewContext);
+				}
+				
+				defer.resolve(intentResponse.data);
             }
         });
+    };
+    
+    /**
+     * Method used to determine if all intents for a specified view context
+     * are ready or not. 
+     */
+    ClientIntents.prototype.isReady = function(viewContext) {
+    	var contextId = this.__getContextId(undefined, viewContext);
+    	
+    	var context = this._intentsContext[contextId];
+    	
+    	return JSON.stringify(context) == "{}";
     }
     
     /**
      * Method used to handle error received from the intents socket. 
      */
     ClientIntents.prototype._handleError = function(request, defer) {
-        var self = this;
-        
+    	var self = this;
+    	
         this._intentsSocket.on("intent_exception", function(intentResponse) {
            if(request.requestId == intentResponse.requestId) {
+           		var contextId = self.__getContextId(request);
+           	
+		        self._intentsContext[contextId][request.requestId] = {"status": ClientIntents.INTENT_RECEIVED_ERR};
+
+		        self.emit(ClientIntents.INTENT_CONTEXTS_CHANGED, self._intentsContext[contextId], request.viewContext);
+
                 defer.reject(intentResponse.message);
            } 
         });
-    }
+    };
         
-    return {"intents": ClientIntents};
+    return ClientIntents;
 });

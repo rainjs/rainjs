@@ -49,7 +49,7 @@ define(["core-components/raintime/raintime_config",
         
         _addWebSocketsBaseUrl();
         
-        this._intents = new Intents.intents(config);
+        this._intents = new Intents(config);
         
         var self = this;
         
