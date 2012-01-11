@@ -87,6 +87,42 @@ Below you can find a complete server side intent handler code::
        
        return {"data": msg};
    }
+
+Usually as a developer you will do more complicated things on a server side mapped intent
+than just logging. Most of the time you will want to access the session you receive to read / write
+values. The read value in this case is not async but the write on the other hand is. For write 
+operations you need to take special precautions so that no unexpected results occur (when you write
+something you need to use promises). Below you can find an example of how to correctly read / write values
+to session:
+
+.. code-block:: guess
+  :linenos:
+  
+   var modPromise = require("promised-io/promise");
+
+   exports.executeSessionReadWrite = function(intentCtx, session) {
+      var currentValues = session.get("my_key");
+      var name = session.get("my_name");
+      
+      console.log(name);
+      
+      var defer = modPromise.defer();
+      
+      if(!currentValues) {
+         currentValues = [];
+         
+         currentValues.push("test1");
+         currentValues.push("test2);
+         
+         session.set("my_key", currentValues, function() {
+            defer.resolve("msg": "Great job", "data": currentValues);
+         });         
+      }
+      
+      return defer.promise;
+   }
+
+Internally, RAIN knows how to handle this kind of return (promise) and the behavior is predictable.
    
 Intents mapped on views
 -----------------------
