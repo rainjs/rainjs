@@ -332,7 +332,21 @@ function stop(pid){
       process.exit(1);
     }
   }
-  process.kill(pid, 'SIGTERM');
+
+  try {
+      process.kill(pid, 'SIGTERM');
+      countServer++;
+    } catch (e) {
+      // pid doesn't exist anymore
+    } finally {
+        try {
+            fs.unlinkSync(utils.getPidDir() + '/rain.server.' + pid);
+            fs.unlinkSync(process.cwd() + '/.server');
+        } catch (e) {
+            // ok it's deffinetly stopped
+        }
+    }
+
   console.log("Server stopped!".green);
   process.exit(0);
 };
