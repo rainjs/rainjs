@@ -123,7 +123,7 @@ function createProject(path, project_name){
   } else {
     log("Project exists!".red);
   }
-  
+
   var projectCreated = function(){
     process.stdin.destroy();
     log(
@@ -150,7 +150,7 @@ function createComponent(component_name){
         "This is not a rain project!".red
        ,"Please go to your project root and try it again!"
     )
-  }  
+  }
 };
 
 
@@ -174,14 +174,24 @@ function setupProject(project_path){
   wrench.copyDirSyncRecursive(mod_path.resolve(mod_path.join(__dirname, '../init/conf')), paths.conf);
   //copy core-component
   wrench.copyDirSyncRecursive(mod_path.resolve(mod_path.join(__dirname, '../components/'+coreComponentsName)), mod_path.join(paths.components, coreComponentsName));
-  
+
+  // create a package.json file for the project
+  var projectName = project_path.split('/').splice(-1);
+  var json = [
+    '{',
+    '    "name": "' + projectName + '",',
+    '    "version": "0.0.1",',
+    '    "dependencies": []',
+    '}\n'
+  ];
+  fs.writeFileSync(project_path + '/package.json', json.join('\n'));
   //write ghostfile to know that is a rain project
   fs.writeFileSync(project_path+'/.rain', '');
   return true;
 }
 
 function setupComponent(project_path, component_name, callback){
-  
+
   var component_path = mod_path.join(project_path, 'components', component_name);
   if(utils.componentExists(component_path)){
     console.log("Component already exists".red);
@@ -195,11 +205,11 @@ function setupComponent(project_path, component_name, callback){
       case "wicket":
         console.log("wicket not implemented yet");
         break;
-        
+
       case "pustefix":
         console.log("pustefix not implemented yet");
         break;
-        
+
       case "nodejs":
       default:
         require('./lib/components/nodejs')({
@@ -208,7 +218,7 @@ function setupComponent(project_path, component_name, callback){
         });
         break;
     }
-    
+
     log(
       "Component created".green
       ,""
@@ -228,17 +238,17 @@ function start(confpath){
   var actPath     = process.cwd()
       ,server     = require('../lib/server_new')
       ,child      = require('child_process');
-  
+
   if(!utils.checkPidDirectory())
     utils.createPidDirectory();
-  
+
   if(!utils.checkValidProject(actPath)){
     console.log("this is not a rain project!".red);
     return false;
   }
-  
+
   var ms_conf = program.mothershipConf ? program.mothershipConf : mod_path.join(actPath, 'conf', 'mothership.conf.default');
-  
+
   if(!utils.mothershipIsUp(JSON.parse(fs.readFileSync(ms_conf)).server.port)){
     //===========START MOTHERSHIP===========
     var ms = child.spawn('node', [__dirname+'/lib/start_mothership.js', ms_conf]);
@@ -259,24 +269,24 @@ function start(confpath){
       console.log("server is still running!");
       return false;
     } else {
-      //===========START RAIN SERVER===========  
+      //===========START RAIN SERVER===========
       var conf_path = confpath ? confpath : program.conf ? mod_path.resolve(program.conf) : mod_path.join(actPath, 'conf', 'server.conf.default')
           ,server_conf = fs.readFileSync(conf_path, 'utf8')
           ,pid_path = utils.getPidDir();
-      
+
       var parsed_conf = JSON.parse(server_conf);
-      
+
       //start server
       server({'conf' : JSON.parse(server_conf)}, function(){
         daemon.daemonize(mod_path.join(actPath, 'server.log'), null, function(err, pid){
           var daemon_process = this.process;
-          
+
           if (err) {
             return sys_util.puts('Error starting daemon: ' + err);
           }
-          
+
           daemon_process.title = "rain-server";
-          
+
           //create configurationfile
           var server_prop_file = pid+' '+conf_path
              ,conf_spid    = mod_path.join(pid_path, "rain.server."+pid)
@@ -284,7 +294,7 @@ function start(confpath){
           //write server config
           fs.writeFileSync(conf_spid, server_prop_file);
           fs.writeFileSync(conf_project, server_prop_file);
-          
+
           if(program.debug)
             daemon_process.kill(pid, 'SIGUSR1');
           //clear conf files if server shutting down
@@ -293,7 +303,7 @@ function start(confpath){
             fs.unlinkSync(conf_project);
             daemon_process.exit(0);
           });
-          
+
           daemon_process.on('uncaughtException', function (err) {
             console.log('Caught exception: ' + err);
             daemon_process.kill(pid, 'SIGTERM');
@@ -322,7 +332,21 @@ function stop(pid){
       process.exit(1);
     }
   }
-  process.kill(pid, 'SIGTERM');
+
+  try {
+      process.kill(pid, 'SIGTERM');
+      countServer++;
+    } catch (e) {
+      // pid doesn't exist anymore
+    } finally {
+        try {
+            fs.unlinkSync(utils.getPidDir() + '/rain.server.' + pid);
+            fs.unlinkSync(process.cwd() + '/.server');
+        } catch (e) {
+            // ok it's deffinetly stopped
+        }
+    }
+
   console.log("Server stopped!".green);
   process.exit(0);
 };
@@ -332,20 +356,45 @@ function stopall(){
       motherships = utils.getMothershipList(),
       countServer = 0,
       countMS = 0;
-  
+
   //shutdown all server
   for(var i = server.length; i--;){
-    process.kill(server[i].substring(12),'SIGTERM');
-    countServer++;
+      console.log(server[i]);
+    try {
+      process.kill(server[i].substring(12),'SIGTERM');
+      countServer++;
+    } catch (e) {
+      // pid doesn't exist anymore
+    } finally {
+        try {
+            fs.unlinkSync(utils.getPidDir() + '/' + server[i]);
+            fs.unlinkSync(process.cwd() + '/.server');
+        } catch (e) {
+            // ok it's deffinetly stopped
+        }
+    }
   }
-  
+
   //shutdown all motherships
   for(var i = motherships.length; i--;){
     var result = motherships[i].match(/([0-9]+)$/);
-    process.kill(result[1],'SIGTERM');
+
+    // gracefully degrade if the PID doesn't exist anymore
+    try {
+        process.kill(result[1],'SIGTERM');
+    } catch (e) {
+      // process doesn't exist anymore
+    } finally {
+        try {
+            fs.unlinkSync(utils.getPidDir() + '/' + motherships[i]);
+        } catch (e) {
+            // deffinetly stopped
+        }
+    }
+
     countMS++;
   }
-  
+
   console.log("%s Server shutted down!".green, countServer);
   if(countMS == 1){
     console.log("%s Mothership shutted down!".green, countMS);
@@ -366,12 +415,22 @@ function restart(pid){
       }
     }
   }
-  if(pid)
+  try {
     process.kill(pid, 'SIGTERM');
-  
+  } catch (e) {
+      // pid doesn't exist anymore
+    } finally {
+        try {
+            fs.unlinkSync(utils.getPidDir() + '/' + server[i]);
+            fs.unlinkSync(process.cwd() + '/.server');
+        } catch (e) {
+            // ok it's deffinetly stopped
+        }
+    }
+
   if(!conf)
     console.log('No running server! Starting server with default config');
-  
+
   start(conf);
 };
 
@@ -382,32 +441,32 @@ function list(type){
       head : ['PID', 'Config Path', 'Port']
     , colWidths : [ 10, 45, 10 ]
     });
-    
+
     var files = utils.getMothershipList();
     for(var i = files.length; i--;){
       var ms_file = JSON.parse(fs.readFileSync(mod_path.join(utils.getPidDir() ,files[i])));
       table_ms.push([ms_file.pid, ms_file.path, ms_file.conf.server.port]);
     }
-    
+
     log(
         ' Mothership List:'.cyan,
         table_ms.toString()
     );
   }
-  
+
   if(!type || type == 'server'){
     var table_s = new Table({
       head : ['PID', 'Config Path', 'Port']
     , colWidths : [ 10, 45, 10 ]
     });
-    
+
     var files = utils.getServerList();
     for(var i = files.length; i--;){
       var s_file = utils.getServerPIDContent(mod_path.join(utils.getPidDir() ,files[i]));
       var server_conf = JSON.parse(fs.readFileSync(s_file[1]));
       table_s.push([s_file[0], s_file[1], server_conf.server.port]);
     }
-    
+
     log(
         ' Server List:'.cyan,
         table_s.toString()
