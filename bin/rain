@@ -345,14 +345,39 @@ function stopall(){
 
   //shutdown all server
   for(var i = server.length; i--;){
-    process.kill(server[i].substring(12),'SIGTERM');
-    countServer++;
+      console.log(server[i]);
+    try {
+      process.kill(server[i].substring(12),'SIGTERM');
+      countServer++;
+    } catch (e) {
+      // pid doesn't exist anymore
+    } finally {
+        try {
+            fs.unlinkSync(utils.getPidDir() + '/' + server[i]);
+            fs.unlinkSync(process.cwd() + '/.server');
+        } catch (e) {
+            // ok it's deffinetly stopped
+        }
+    }
   }
 
   //shutdown all motherships
   for(var i = motherships.length; i--;){
     var result = motherships[i].match(/([0-9]+)$/);
-    process.kill(result[1],'SIGTERM');
+
+    // gracefully degrade if the PID doesn't exist anymore
+    try {
+        process.kill(result[1],'SIGTERM');
+    } catch (e) {
+      // process doesn't exist anymore
+    } finally {
+        try {
+            fs.unlinkSync(utils.getPidDir() + '/' + motherships[i]);
+        } catch (e) {
+            // deffinetly stopped
+        }
+    }
+
     countMS++;
   }
 
@@ -376,8 +401,18 @@ function restart(pid){
       }
     }
   }
-  if(pid)
+  try {
     process.kill(pid, 'SIGTERM');
+  } catch (e) {
+      // pid doesn't exist anymore
+    } finally {
+        try {
+            fs.unlinkSync(utils.getPidDir() + '/' + server[i]);
+            fs.unlinkSync(process.cwd() + '/.server');
+        } catch (e) {
+            // ok it's deffinetly stopped
+        }
+    }
 
   if(!conf)
     console.log('No running server! Starting server with default config');
