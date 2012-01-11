@@ -179,9 +179,9 @@ function setupProject(project_path){
   var projectName = project_path.split('/').splice(-1);
   var json = [
     '{',
-    '\s\s\s\s"name": "' + projectName + '",',
-    '\s\s\s\s"version": "0.0.1",',
-    '\s\s\s\s"dependencies": []',
+    '    "name": "' + projectName + '",',
+    '    "version": "0.0.1",',
+    '    "dependencies": []',
     '}\n'
   ];
   fs.writeFileSync(project_path + '/package.json', json.join('\n'));
