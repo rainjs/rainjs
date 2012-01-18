@@ -92,5 +92,22 @@ Instead we add that to the description of the constructor, also adding the *@con
         }
 
 There is no need for an @memberOf annotation here since the parser figures out that methods defined under the *prototype*
-property of your function are public members.
+property of your function are public members with one exception, private methods for which we should add a *@memberOf
+<Class_Name>#* (don't forget the **#** at the end because it specifies that it's an instance method).
 
+.. code-block:: javascript
+        :linenos:
+
+        /**
+         * This is a private method
+         *
+         * @param {MyClas} self the class instance
+         * @param {Dictionary} data the input data
+         * @param {Boolean} [isTrue] optional parameters should be enclosed in brackets
+         * @return {Dictionary}
+         * @private
+         * @memberOf MyClass#
+         */
+        function privateMethod(self, data) {
+            return data;
+        }

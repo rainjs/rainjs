@@ -153,7 +153,35 @@ Instead we add that to the description of the constructor, also adding the <em>&
 </pre></div>
 </td></tr></table></div>
 <p>There is no need for an &#64;memberOf annotation here since the parser figures out that methods defined under the <em>prototype</em>
-property of your function are public members.</p>
+property of your function are public members with one exception, private methods for which we should add a <em>&#64;memberOf
+&lt;Class_Name&gt;#</em> (don&#8217;t forget the <strong>#</strong> at the end because it specifies that it&#8217;s an instance method).</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm"> * This is a private method</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param {MyClas} self the class instance</span>
+<span class="cm"> * @param {Dictionary} data the input data</span>
+<span class="cm"> * @param {Boolean} [isTrue] optional parameters should be enclosed in brackets</span>
+<span class="cm"> * @return {Dictionary}</span>
+<span class="cm"> * @private</span>
+<span class="cm"> * @memberOf MyClass#</span>
+<span class="cm"> */</span>
+<span class="kd">function</span> <span class="nx">privateMethod</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">data</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
 </div>
 </div>
 
