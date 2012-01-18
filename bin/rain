@@ -299,8 +299,12 @@ function start(confpath){
             daemon_process.kill(pid, 'SIGUSR1');
           //clear conf files if server shutting down
           daemon_process.on('SIGTERM', function(){
-            fs.unlinkSync(conf_spid);
-            fs.unlinkSync(conf_project);
+            try{
+                fs.unlinkSync(conf_spid);
+                fs.unlinkSync(conf_project);
+            } catch(ev){
+                
+            }
             daemon_process.exit(0);
           });
 
@@ -359,7 +363,6 @@ function stopall(){
 
   //shutdown all server
   for(var i = server.length; i--;){
-      console.log(server[i]);
     try {
       process.kill(server[i].substring(12),'SIGTERM');
       countServer++;
