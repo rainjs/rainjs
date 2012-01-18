@@ -36,9 +36,9 @@ Add the *@private* annotation to all the private methods in the module
             return data;
         }
 
-------------------------
-Revealing module pattern
-------------------------
+--------------------------------------------------
+Revealing module pattern (only on the server side)
+--------------------------------------------------
 
 Add a comment at the beginning of your module describing it and giving it an *@name*
 
@@ -50,9 +50,6 @@ Add a comment at the beginning of your module describing it and giving it an *@n
          *
          * @name MyModule
          */
-        define(function() {
-            // module code here
-        });
 
 Use the *@memberOf <module>* annotation to explicitly define a method as being a public member of your module
 
