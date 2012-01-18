@@ -1,24 +1,19 @@
 define(["{{application_name}}/custom_lib"], function() {
-  function init() {
-    alert("Component initilized");
-  }
-  
-  function load() {}
-  
-  function start() {}
-  
-  function pause() {}
-  
-  function stop() {}
-  
-  function dispose() {}
-  
-  return {
-    init : init,
-    load : load,
-    start : start,
-    pause : pause,
-    stop : stop,
-    dispose : dispose
-  };
+    /**
+     * Example controller class
+     * @name Controller
+     * @class a controller instance
+     * @constructor
+     */
+    function Controller() {
+        // constructor logic here
+    }
+
+    Controller.prototype.init = function () {
+        // intialization lifecicle (happens imediately after the controller is loaded)
+    };
+
+    Controller.prototype.start = function () {
+        // start lifecicle (happens after the dom is in place)
+    };
 });
