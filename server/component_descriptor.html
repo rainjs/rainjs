@@ -54,9 +54,9 @@
 going into details of what sections are currently available in RAIN we must define
 what a RAIN component is:</p>
 <blockquote>
-&#8220;A RAIN component is a set of views and constraints defined in the meta.json descriptor
+<div>&#8220;A RAIN component is a set of views and constraints defined in the meta.json descriptor
 file. Each view can be individually accessed using a unique url. RAIN automatically apply
-defined constraints based on the request.&#8221;</blockquote>
+defined constraints based on the request.&#8221;</div></blockquote>
 <div class="section" id="complete-descriptor-example">
 <h2>Complete descriptor example<a class="headerlink" href="#complete-descriptor-example" title="Permalink to this headline">¶</a></h2>
 <p>The following descriptor example shows you a complete descriptor (with all sections currently
@@ -96,24 +96,24 @@ supported by RAIN):</p>
 <h2>Module definition<a class="headerlink" href="#module-definition" title="Permalink to this headline">¶</a></h2>
 <p>Here you define the module attributes:</p>
 <blockquote>
-<ul class="simple">
+<div><ul class="simple">
 <li>id - this is the module identifier</li>
 <li>version - this is the current module version</li>
 <li>url - the base url of the components. All views are relative to this path.</li>
 </ul>
-</blockquote>
+</div></blockquote>
 </div>
 <div class="section" id="module-views-definition">
 <h2>Module views definition<a class="headerlink" href="#module-views-definition" title="Permalink to this headline">¶</a></h2>
 <p>Here you define your module views. Each view you need accesible outside your component
 or if you want to apply constraints on it must appear in this section:</p>
 <blockquote>
-<ul class="simple">
+<div><ul class="simple">
 <li>viewid - This is a unique identifier for this view</li>
 <li>view - the view path relative to module url</li>
 <li>controller - this is the client side controller path relative to module url.</li>
 </ul>
-</blockquote>
+</div></blockquote>
 </div>
 <div class="section" id="module-intents-definition">
 <h2>Module intents definition<a class="headerlink" href="#module-intents-definition" title="Permalink to this headline">¶</a></h2>
@@ -124,13 +124,13 @@ or if you want to apply constraints on it must appear in this section:</p>
 <p>In this section tags are mapped on foreign views that are going to be used in this module.
 Each tag definition must contain the following attributes:</p>
 <blockquote>
-<ul class="simple">
+<div><ul class="simple">
 <li>namespace - A namespace for the tag. Currently this is not used.</li>
 <li>selector - This is the selector that is going to be used in markup: Ex &lt;toolbar /&gt;</li>
 <li>module - This is the module identifier from which we extract the tag: [&lt;module-id&gt;-&lt;version&gt;]</li>
 <li>view - The relative path of the view. This will gonna be changed to viewid.</li>
 </ul>
-</blockquote>
+</div></blockquote>
 </div>
 </div>
 
@@ -191,7 +191,7 @@ Each tag definition must contain the following attributes:</p>
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>
