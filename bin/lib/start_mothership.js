@@ -43,7 +43,11 @@ ms_server(JSON.parse(ms_server_conf), function(){
     fs.writeFileSync(conf_mpid, ms_server_prop_file);
     //clear conf files if server shutting down
     daemon_process.on('SIGTERM', function(){
-      fs.unlinkSync(conf_mpid);
+        try {
+            fs.unlinkSync(conf_mpid);
+        } catch(ev){
+            
+        }
       daemon_process.exit(0);
     });
     
