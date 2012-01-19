@@ -1,0 +1,42 @@
+{
+  "name": "rain",
+  "description": "An experiment on component-based and distributed web applications",
+  "version": "0.4.6",
+  "author": "Claus Augusti <claus@formatvorlage.de>",
+  "contributors": [
+    { "name": "Mitko Tschimev", "email": "privat@tschimev.de" },
+    { "name": "Radu Cosnita", "email": "radu.cosnita@gmail.com" }
+  ],
+  "dependencies": {
+    "rain-mothership": "0.0.1",
+    "node-xml": ">= 1.0.0",
+    "promised-io": ">= 0.2.3",
+    "jsdom": ">= 0.2.0",
+    "connect": ">= 1.4.3",
+    "nodeunit": ">= 0.5.1",
+    "socket.io": ">= 0.7.7",
+    "socket.io-client": ">= 0.7.4",
+    "webworker": ">= 0.8.4",
+    "dox": ">= 0.0.5",
+    "csslint": ">= 0.5.0",
+    "redback": ">= 0.2.7",
+    "requirejs": ">=0.26.0",
+    "gettext": ">= 0.0.1",
+    "less": ">= 1.1.4",
+    "colors": ">= 0.5.1",
+    "wrench": ">= 1.2.0",
+    "commander": "0.2.0",
+    "daemon": "0.3.2",
+    "cli-table": "0.0.1",
+	"jinjs": "0.3.2",
+	"swig" : "0.8.0"
+  },
+  "keywords": ["framework", "rain"],
+  "repository": "git://github.com/juxtapos/Rain",
+  "main": "./run",
+  "bin": { "rain": "./bin/rain" },
+  "engines": { "node": "0.4.12" },
+  "scripts" : {
+    "install" : "./make.js"
+  }
+}

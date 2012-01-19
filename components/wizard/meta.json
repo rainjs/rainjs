@@ -1,0 +1,18 @@
+{
+	"id"	     	: "wizard",
+	"version"		: "1.0",
+	"url"         	:  "/components/wizard",
+	"taglib"		: [],
+    "views":[
+        {
+            "viewId":"main",
+            "view":"/htdocs/main.html",
+            "controller":"/htdocs/controller/main.js"
+        },
+        {
+            "viewId":"final",
+            "view":"/htdocs/final.html",
+            "controller":"/htdocs/controller/final.js"
+        }
+    ]
+}
