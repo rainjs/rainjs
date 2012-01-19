@@ -10,16 +10,18 @@ define(["{{application_name}}/custom_lib"], function() {
     }
 
     /**
-     * Initialisation lifecicle step that happens imediatelly after the controller is loaded
+     * Initialisation lifecycle step that happens immediately after the controller is loaded
      */
     Controller.prototype.init = function () {
         // intialization code here
     };
 
     /**
-     * Startup lifecicle step that happens right after the markup is in place
+     * Startup lifecycle step that happens right after the markup is in place
      */
     Controller.prototype.start = function () {
         // startup code here
     };
+    
+    return Controller;
 });
