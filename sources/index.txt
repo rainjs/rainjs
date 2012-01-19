@@ -14,10 +14,12 @@ Getting started
 
 .. toctree::
     :maxdepth: 2
-   
+
     getting_started/installation
     getting_started/rain_sdk_tutorial
     server/component_descriptor
+    getting_started/coding_guidelines
+    getting_started/documenting
 
 -------------------
 Client side modules
@@ -29,6 +31,7 @@ Client side modules
     client/client_messaging
     client/intents
     client/client_storage
+    client/requirejs
     client/websockets
 
 ....
@@ -47,7 +50,17 @@ Server side modules
 
 .. toctree::
     :maxdepth: 2
-    
+
     server/messaging_intents
     server/websockets
     server/component_descriptor
+
+-----------------
+Features Proposal
+-----------------
+
+.. toctree::
+    :maxdepth: 1
+    :glob:
+
+    proposals/*

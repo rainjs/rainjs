@@ -3,16 +3,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Messaging API &mdash; Rain 0.4.1 documentation</title>
-    
+    <title>Messaging API &mdash; Rain v0.4.1 documentation</title>
     <link rel="stylesheet" href="../static/default.css" type="text/css" />
     <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -25,9 +22,9 @@
     <script type="text/javascript" src="../static/jquery.js"></script>
     <script type="text/javascript" src="../static/underscore.js"></script>
     <script type="text/javascript" src="../static/doctools.js"></script>
-    <link rel="top" title="Rain 0.4.1 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.4.1 documentation" href="../index.html" />
     <link rel="next" title="Intents Client API" href="intents.html" />
-    <link rel="prev" title="RAIN component descriptor" href="../server/component_descriptor.html" /> 
+    <link rel="prev" title="Documenting Rain" href="../getting_started/documenting.html" /> 
   </head>
   <body>
     <div class="related">
@@ -40,9 +37,9 @@
           <a href="intents.html" title="Intents Client API"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../server/component_descriptor.html" title="RAIN component descriptor"
+          <a href="../getting_started/documenting.html" title="Documenting Rain"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain 0.4.1 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -152,7 +149,7 @@ coupled approach. Lets see a usage example:</p>
 <span class="p">},</span> <span class="k">this</span><span class="p">.</span><span class="nx">viewContext</span><span class="p">);</span>
 
 <span class="c1">// publish an event</span>
-<span class="nx">messaging</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s1">&#39;sliderReady&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">success</span><span class="o">:</span> <span class="kc">true</span><span class="p">},</span> <span class="k">this</span><span class="p">.</span><span class="nx">viewContext</span><span class="p">);</span>
+<span class="nx">messaging</span><span class="p">.</span><span class="nx">publish</span><span class="p">(</span><span class="s1">&#39;sliderReady&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">success</span><span class="o">:</span> <span class="kc">true</span><span class="p">},</span> <span class="k">this</span><span class="p">.</span><span class="nx">viewContext</span><span class="p">);</span>
 </pre></div>
 </td></tr></table></div>
 <p>Now, what this does it that it subscribes to the sliderReady event, and then publishes it.
@@ -210,15 +207,15 @@ event with the :: operator. But enough talk, lets see some code:</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../server/component_descriptor.html"
-                        title="previous chapter">RAIN component descriptor</a></p>
+  <p class="topless"><a href="../getting_started/documenting.html"
+                        title="previous chapter">Documenting Rain</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="intents.html"
                         title="next chapter">Intents Client API</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" size="18" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -242,13 +239,13 @@ event with the :: operator. But enough talk, lets see some code:</p>
           <a href="intents.html" title="Intents Client API"
              >next</a> |</li>
         <li class="right" >
-          <a href="../server/component_descriptor.html" title="RAIN component descriptor"
+          <a href="../getting_started/documenting.html" title="Documenting Rain"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain 0.4.1 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

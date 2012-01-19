@@ -1,0 +1,178 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Client runtime dependencies &mdash; Rain v0.4.1 documentation</title>
+    <link rel="stylesheet" href="../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/underscore.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <link rel="top" title="Rain v0.4.1 documentation" href="../index.html" />
+    <link rel="next" title="Client side websockets API" href="websockets.html" />
+    <link rel="prev" title="Client storage API" href="client_storage.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="websockets.html" title="Client side websockets API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="client_storage.html" title="Client storage API"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="client-runtime-dependencies">
+<h1>Client runtime dependencies<a class="headerlink" href="#client-runtime-dependencies" title="Permalink to this headline">¶</a></h1>
+<p>On the client side in RAIN we use requirejs <a class="reference external" href="http://requirejs.org">http://requirejs.org</a> for loading scripts in a
+non blocking way. This gives RAIN client side great speed and asynchronicity. Each javascript
+code is grouped and exposed as a requirejs module. Below you can find a list of objects
+that are provided to you all the time:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Raintime</li>
+<li>ViewContext</li>
+<li>Messaging</li>
+<li>jquery</li>
+</ul>
+</div></blockquote>
+<p>You will never have to require this modules as they are already accessible from you client
+side controller.</p>
+<div class="section" id="client-side-controller">
+<h2>Client side controller<a class="headerlink" href="#client-side-controller" title="Permalink to this headline">¶</a></h2>
+<p>Client side controller is a special requirejs module that is automatically binded to a view.
+You can find out how to do this by reading <a class="reference internal" href="../server/component_descriptor.html"><em>RAIN component descriptor</em></a>. Currently,
+client side controllers have two special methods that are automatically invoked:</p>
+<div class="highlight-python"><pre>define(function() {
+   function init() {
+      // here you don't have access to dom tree so please don't do dom transformations.
+      // you have full access to viewContext and clientRuntime objects:
+
+      alert(this.viewContext);
+      alert(this.clientRuntime);
+   }
+
+   function start() {
+      // here you should place all dom transformations.
+   }
+
+   // it's mandatory to declare all public methods:
+   return {init: init,
+           start: start};
+});</pre>
+</div>
+</div>
+<div class="section" id="including-other-modules">
+<h2>Including other modules<a class="headerlink" href="#including-other-modules" title="Permalink to this headline">¶</a></h2>
+<p>To include other requirejs modules to you client side controller you can use the following:</p>
+<div class="highlight-python"><pre>define(function() {
+   function init() {
+      require(["&lt;path to dep1&gt;", "&lt;path to dep2&gt;"], function(dep1, dep2)) {
+         // do something when everything is loaded.
+      }
+   }
+});</pre>
+</div>
+<p>Each component is automatically included in the bootstrap sequence which mean you have
+a shortcut to include javascript from it:</p>
+<div class="highlight-python"><pre>define(["my-module/module_helper1"], function(moduleHelper1) {
+   ....
+});</pre>
+</div>
+<p>my-module is your module identifier as describe in component descriptor (see <a class="reference internal" href="../server/component_descriptor.html"><em>RAIN component descriptor</em></a>).
+This is really easy and gives you the advantage of not knowing the absolute path of the
+module javascript files. This is automatically set up for you by RAIN.</p>
+</div>
+<div class="section" id="why-do-we-even-use-requirejs">
+<h2>Why do we even use requirejs?<a class="headerlink" href="#why-do-we-even-use-requirejs" title="Permalink to this headline">¶</a></h2>
+<p>Requirejs automatically namespace javascript code. This mean that we do not pollute window
+object and moreover we can easily aggregate modules without a single javascript clash. Moreover
+your code is easily to maintain using this approach.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Client runtime dependencies</a><ul>
+<li><a class="reference internal" href="#client-side-controller">Client side controller</a></li>
+<li><a class="reference internal" href="#including-other-modules">Including other modules</a></li>
+<li><a class="reference internal" href="#why-do-we-even-use-requirejs">Why do we even use requirejs?</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="client_storage.html"
+                        title="previous chapter">Client storage API</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="websockets.html"
+                        title="next chapter">Client side websockets API</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="websockets.html" title="Client side websockets API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="client_storage.html" title="Client storage API"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

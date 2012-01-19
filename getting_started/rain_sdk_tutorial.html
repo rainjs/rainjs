@@ -3,16 +3,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>RAIN SDK Tutorial &mdash; Rain 0.4.1 documentation</title>
-    
+    <title>RAIN SDK Tutorial &mdash; Rain v0.4.1 documentation</title>
     <link rel="stylesheet" href="../static/default.css" type="text/css" />
     <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -25,7 +22,7 @@
     <script type="text/javascript" src="../static/jquery.js"></script>
     <script type="text/javascript" src="../static/underscore.js"></script>
     <script type="text/javascript" src="../static/doctools.js"></script>
-    <link rel="top" title="Rain 0.4.1 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.4.1 documentation" href="../index.html" />
     <link rel="next" title="RAIN component descriptor" href="../server/component_descriptor.html" />
     <link rel="prev" title="RAIN Installation" href="installation.html" /> 
   </head>
@@ -42,7 +39,7 @@
         <li class="right" >
           <a href="installation.html" title="RAIN Installation"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain 0.4.1 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -136,10 +133,21 @@ execute the following commands:</p>
 <li>rain start</li>
 </ol>
 </div></blockquote>
-<p>Now you have your first RAIN project. Try the following url in your browser: <a class="reference external" href="http://localhost:1337/components">http://localhost:1337/components</a>/&lt;project-name&gt;/htdocs/index.html.</p>
+<p>Now you have your first RAIN project. Try the following url in your browser: <a class="reference external" href="http://localhost:1337/components">http://localhost:1337/components</a>/&lt;component-name&gt;/htdocs/index.html.Now you have your first RAIN project. Try the following url in your browser: <a class="reference external" href="http://localhost:1337/components">http://localhost:1337/components</a>/&lt;component-name&gt;/htdocs/index.html.</p>
 </div>
 <div class="section" id="rain-sdk-debug-mode">
 <h3>RAIN SDK Debug mode<a class="headerlink" href="#rain-sdk-debug-mode" title="Permalink to this headline">¶</a></h3>
+<p>Rain provides a debug mode for the server-side. You only have to start / restart the server with &#8211;debug.
+It automatically connect the nodejs native debugger with the port 8585.</p>
+<p>If you want to use a graphical debugger than you can install &#8220;node-inspector&#8221;. It&#8217;s a node package manager module.</p>
+<dl class="docutils">
+<dt>For Linux::</dt>
+<dd>sudo npm install node-inspector -g</dd>
+<dt>For Windows::</dt>
+<dd>npm install node-inspector
+export PATH=$PATH:/home/&lt;your user folder&gt;/node_kit/node_modules/node-inspector</dd>
+</dl>
+<p>Now start the node-inspector on the command line with node-inspector and you can access the debugger with <a class="reference external" href="http://localhost:8080">http://localhost:8080</a></p>
 </div>
 </div>
 </div>
@@ -171,7 +179,7 @@ execute the following commands:</p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" size="18" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -197,11 +205,11 @@ execute the following commands:</p>
         <li class="right" >
           <a href="installation.html" title="RAIN Installation"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain 0.4.1 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

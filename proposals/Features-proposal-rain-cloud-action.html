@@ -1,0 +1,136 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>RAIN Cloud In Action &mdash; Rain v0.4.1 documentation</title>
+    <link rel="stylesheet" href="../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/underscore.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <link rel="top" title="Rain v0.4.1 documentation" href="../index.html" />
+    <link rel="next" title="Remote aggregation" href="Features-proposal-remote-aggregation.html" />
+    <link rel="prev" title="RAIN authorization" href="Features-proposal-rain-authorization.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Features-proposal-remote-aggregation.html" title="Remote aggregation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Features-proposal-rain-authorization.html" title="RAIN authorization"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="rain-cloud-in-action">
+<h1>RAIN Cloud In Action<a class="headerlink" href="#rain-cloud-in-action" title="Permalink to this headline">¶</a></h1>
+<p>In this document you can find a simple example of RAIN Cloud deployment sequence. The scenario presented in here applies only for production (not for development mode).</p>
+<div class="section" id="rain-cloud-off-mode">
+<h2>RAIN Cloud off mode<a class="headerlink" href="#rain-cloud-off-mode" title="Permalink to this headline">¶</a></h2>
+<p>When RAIN Cloud is not booted each piece is isolated.</p>
+<img alt="../images/rain_cloud_off_mode.png" src="../images/rain_cloud_off_mode.png" />
+</div>
+<div class="section" id="rain-cloud-booted">
+<h2>RAIN Cloud booted<a class="headerlink" href="#rain-cloud-booted" title="Permalink to this headline">¶</a></h2>
+<p>In this state each piece is wired (but without any running components instances).</p>
+<img alt="../images/rain_cloud_startup.png" src="../images/rain_cloud_startup.png" />
+<p>At the end of this phase the infrastructure is ready.</p>
+</div>
+<div class="section" id="rain-cloud-instantiate-web-components">
+<h2>RAIN Cloud instantiate web components<a class="headerlink" href="#rain-cloud-instantiate-web-components" title="Permalink to this headline">¶</a></h2>
+<p>Now imagine that we already have built two web components in development mode and now we want to publish them to production. RAIN Cloud is already active and the hypervisor has all required information. After we request the deploy / instantiate operations from cloud api the infrastructure is updated:</p>
+<img alt="../images/rain_cloud_webcomp_inst.png" src="../images/rain_cloud_webcomp_inst.png" />
+<p>Now the above diagram shows a possible result. Basically the hypervisor decide how to instantiate the requested web component and how to wire rain servers to motherships for efficiently use of resources. Later on if more pieces become available, hypervisor can decide to clone the instances and use more resources.</p>
+</div>
+<div class="section" id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">¶</a></h2>
+<p>RAIN hypervisor is controlling and adjusting the infrastructure usage for providing best performance based on the requests nature and the number of available resources. This is really important because developer is protected from all this overhead.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">RAIN Cloud In Action</a><ul>
+<li><a class="reference internal" href="#rain-cloud-off-mode">RAIN Cloud off mode</a></li>
+<li><a class="reference internal" href="#rain-cloud-booted">RAIN Cloud booted</a></li>
+<li><a class="reference internal" href="#rain-cloud-instantiate-web-components">RAIN Cloud instantiate web components</a></li>
+<li><a class="reference internal" href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Features-proposal-rain-authorization.html"
+                        title="previous chapter">RAIN authorization</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Features-proposal-remote-aggregation.html"
+                        title="next chapter">Remote aggregation</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Features-proposal-remote-aggregation.html" title="Remote aggregation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Features-proposal-rain-authorization.html" title="RAIN authorization"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

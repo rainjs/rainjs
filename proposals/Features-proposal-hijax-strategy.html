@@ -1,0 +1,188 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Hijax introduction &mdash; Rain v0.4.1 documentation</title>
+    <link rel="stylesheet" href="../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/underscore.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <link rel="top" title="Rain v0.4.1 documentation" href="../index.html" />
+    <link rel="next" title="View Instances" href="Features-proposal-instances.html" />
+    <link rel="prev" title="Fragments Configuration Introduction" href="Features-proposal-fragments-configuration.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Features-proposal-instances.html" title="View Instances"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Features-proposal-fragments-configuration.html" title="Fragments Configuration Introduction"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="hijax-introduction">
+<h1>Hijax introduction<a class="headerlink" href="#hijax-introduction" title="Permalink to this headline">¶</a></h1>
+<p>RAIN must provide hijax support for all applications. A very good example of hijax application is: <a class="reference external" href="http://www.howarths.nl/">http://www.howarths.nl/</a>. It looks amazing and does not break SEO and deep linking.</p>
+<div class="section" id="functional-requirements">
+<h2>Functional requirements<a class="headerlink" href="#functional-requirements" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ol class="arabic simple">
+<li>RAIN must support smooth transitions beetween pages.</li>
+<li>RAIN must not break links when hijax is enabled.</li>
+<li>RAIN must provide enable / disable mechanism for hijax.</li>
+<li>RAIN must provide transition configuration at application level.</li>
+</ol>
+</div></blockquote>
+</div>
+<div class="section" id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="hijax-request">
+<h2>HIJAX Request<a class="headerlink" href="#hijax-request" title="Permalink to this headline">¶</a></h2>
+<img alt="../images/hijax_sequence_lifecycle.png" src="../images/hijax_sequence_lifecycle.png" />
+<p>In the above example you can see how a hijax request is processed into RAIN. Initially when a request is done to RAIN server it determines if the requested view has hijax enabled. If it has the parser behaves differently in sense that all hyperlinks will have some actions added automatically by the parser. After this the page is displayed in the client browser. Now each of the internal hyperlinks within the markup are guaranteed to be displayed correctly and transitions to be executed.</p>
+<p>Using this approach you will benefit from:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Browser history.</li>
+<li>Great user experience.</li>
+</ol>
+</div></blockquote>
+<div class="section" id="example-1-android-l-f">
+<h3>Example 1: Android L&amp;F<a class="headerlink" href="#example-1-android-l-f" title="Permalink to this headline">¶</a></h3>
+<p>If you want to make you site behave like an Android application you can use hijax support provided by RAIN.</p>
+</div>
+<div class="section" id="example-2-hijax-fragment">
+<h3>Example 2: Hijax fragment<a class="headerlink" href="#example-2-hijax-fragment" title="Permalink to this headline">¶</a></h3>
+<p>Imagine you have an aggregated page from a non hijax fragment and a super cool hijax fragment (domains). For instance the non hijax fragment could display commercials and each click on a commercial will get you on a dedicated page outside domains application.</p>
+</div>
+</div>
+<div class="section" id="client-side-api">
+<h2>Client side API<a class="headerlink" href="#client-side-api" title="Permalink to this headline">¶</a></h2>
+<img alt="../images/hijax_client_side_architecture.png" src="../images/hijax_client_side_architecture.png" />
+<p>On client side the intention is to have a class that will use composition for enabling a client side controller to support hijax. This should not be too difficult if we establish an API for the client side controller.</p>
+<p>The markup on client is already generated by the RAIN parser so when page is loaded the client side controller will be hijax enabled (if necessary).</p>
+</div>
+<div class="section" id="configuration-proposal">
+<h2>Configuration proposal<a class="headerlink" href="#configuration-proposal" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-javascript"><pre>{
+  "id" : "hijax-module;1.0",
+  "url" : "/modules/hijax-module",
+  &lt;font color="red"&gt;
+  "hijax" : {
+      "enabled" : true,
+      "transitionOld" : "FADE_OUT",
+      "transitionNew" : "FADE_IN"
+  },
+  &lt;/font&gt;
+  "views" : [
+      .........
+  ]
+}</pre>
+</div>
+</div>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p>For history management similar to html5 we use SWFAddress framework.</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="http://www.asual.com/swfaddress/">http://www.asual.com/swfaddress/</a></li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Hijax introduction</a><ul>
+<li><a class="reference internal" href="#functional-requirements">Functional requirements</a></li>
+<li><a class="reference internal" href="#architecture">Architecture</a></li>
+<li><a class="reference internal" href="#hijax-request">HIJAX Request</a><ul>
+<li><a class="reference internal" href="#example-1-android-l-f">Example 1: Android L&amp;F</a></li>
+<li><a class="reference internal" href="#example-2-hijax-fragment">Example 2: Hijax fragment</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#client-side-api">Client side API</a></li>
+<li><a class="reference internal" href="#configuration-proposal">Configuration proposal</a></li>
+<li><a class="reference internal" href="#dependencies">Dependencies</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Features-proposal-fragments-configuration.html"
+                        title="previous chapter">Fragments Configuration Introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Features-proposal-instances.html"
+                        title="next chapter">View Instances</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Features-proposal-instances.html" title="View Instances"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Features-proposal-fragments-configuration.html" title="Fragments Configuration Introduction"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

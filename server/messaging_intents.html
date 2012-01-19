@@ -3,16 +3,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Intents &mdash; Rain 0.4.1 documentation</title>
-    
+    <title>Intents &mdash; Rain v0.4.1 documentation</title>
     <link rel="stylesheet" href="../static/default.css" type="text/css" />
     <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -25,7 +22,7 @@
     <script type="text/javascript" src="../static/jquery.js"></script>
     <script type="text/javascript" src="../static/underscore.js"></script>
     <script type="text/javascript" src="../static/doctools.js"></script>
-    <link rel="top" title="Rain 0.4.1 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.4.1 documentation" href="../index.html" />
     <link rel="next" title="RAIN Websockets" href="websockets.html" />
     <link rel="prev" title="Class ViewContext" href="../client/api/ViewContext.html" /> 
   </head>
@@ -42,7 +39,7 @@
         <li class="right" >
           <a href="../client/api/ViewContext.html" title="Class ViewContext"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain 0.4.1 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -129,6 +126,60 @@ object is the current user http session object.</p>
     return {"data": msg};
 }</pre>
 </div>
+<p>Usually as a developer you will do more complicated things on a server side mapped intent
+than just logging. Most of the time you will want to access the session you receive to read / write
+values. The read value in this case is not async but the write on the other hand is. For write
+operations you need to take special precautions so that no unexpected results occur (when you write
+something you need to use promises). Below you can find an example of how to correctly read / write values
+to session:</p>
+<div class="highlight-guess"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23</pre></div></td><td class="code"><div class="highlight"><pre> <span class="n">var</span> <span class="n">modPromise</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s">&quot;promised-io/promise&quot;</span><span class="p">);</span>
+
+ <span class="n">exports</span><span class="o">.</span><span class="n">executeSessionReadWrite</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="n">intentCtx</span><span class="p">,</span> <span class="n">session</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">var</span> <span class="n">currentValues</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;my_key&quot;</span><span class="p">);</span>
+    <span class="n">var</span> <span class="n">name</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;my_name&quot;</span><span class="p">);</span>
+
+    <span class="n">console</span><span class="o">.</span><span class="nb">log</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+
+    <span class="n">var</span> <span class="n">defer</span> <span class="o">=</span> <span class="n">modPromise</span><span class="o">.</span><span class="n">defer</span><span class="p">();</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">currentValues</span><span class="p">)</span> <span class="p">{</span>
+       <span class="n">currentValues</span> <span class="o">=</span> <span class="o">[]</span><span class="p">;</span>
+
+       <span class="n">currentValues</span><span class="o">.</span><span class="nb">push</span><span class="p">(</span><span class="s">&quot;test1&quot;</span><span class="p">);</span>
+       <span class="n">currentValues</span><span class="o">.</span><span class="nb">push</span><span class="p">(</span><span class="s">&quot;test2);</span>
+
+<span class="s">       session.set(&quot;</span><span class="n">my_key</span><span class="s">&quot;, currentValues, function() {</span>
+<span class="s">          defer.resolve(&quot;</span><span class="n">msg</span><span class="s">&quot;: &quot;</span><span class="n">Great</span> <span class="n">job</span><span class="s">&quot;, &quot;</span><span class="n">data</span><span class="err">&quot;</span><span class="p">:</span> <span class="n">currentValues</span><span class="p">);</span>
+       <span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">defer</span><span class="o">.</span><span class="n">promise</span><span class="p">;</span>
+ <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>Internally, RAIN knows how to handle this kind of return (promise) and the behavior is predictable.</p>
 </div>
 <div class="section" id="id1">
 <h3>Intents mapped on views<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
@@ -188,7 +239,7 @@ two intents with the same category and intent.</p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" size="18" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -214,11 +265,11 @@ two intents with the same category and intent.</p>
         <li class="right" >
           <a href="../client/api/ViewContext.html" title="Class ViewContext"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain 0.4.1 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

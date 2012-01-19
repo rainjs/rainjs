@@ -1,0 +1,245 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Documenting Rain &mdash; Rain v0.4.1 documentation</title>
+    <link rel="stylesheet" href="../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/underscore.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <link rel="top" title="Rain v0.4.1 documentation" href="../index.html" />
+    <link rel="next" title="Messaging API" href="../client/client_messaging.html" />
+    <link rel="prev" title="Coding Guidelines" href="coding_guidelines.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../client/client_messaging.html" title="Messaging API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="coding_guidelines.html" title="Coding Guidelines"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="documenting-rain">
+<h1>Documenting Rain<a class="headerlink" href="#documenting-rain" title="Permalink to this headline">¶</a></h1>
+<p>This document describes the recomanded way of writing code docblocks for rain using JSDoc Toolkit. All the common
+annotations work but there are some special cases that need to be treated and they are explained below.</p>
+<p>Document all the <em>var</em> statements inside the module giving them a description and marking them with
+the <em>&#64;private</em> anotation.</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm"> * Stores the queue of events</span>
+<span class="cm"> * @private</span>
+<span class="cm"> */</span>
+<span class="kd">var</span> <span class="nx">queue</span> <span class="o">=</span> <span class="p">[];</span>
+</pre></div>
+</td></tr></table></div>
+<p>Add the <em>&#64;private</em> annotation to all the private methods in the module</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm"> * This is a private method</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param {Dictionary} data the input data</span>
+<span class="cm"> * @param {Boolean} [isTrue] optional parameters should be enclosed in brackets</span>
+<span class="cm"> * @return {Dictionary}</span>
+<span class="cm"> * @private</span>
+<span class="cm"> */</span>
+<span class="kd">function</span> <span class="nx">privateMethod</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">data</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<div class="section" id="revealing-module-pattern">
+<h2>Revealing module pattern<a class="headerlink" href="#revealing-module-pattern" title="Permalink to this headline">¶</a></h2>
+<p>Add a comment at the beginning of your module describing it and giving it an <em>&#64;name</em></p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm"> * My module that does some funky stuff</span>
+<span class="cm"> *</span>
+<span class="cm"> * @name MyModule</span>
+<span class="cm"> */</span>
+</pre></div>
+</td></tr></table></div>
+<p>Use the <em>&#64;memberOf &lt;module&gt;</em> annotation to explicitly define a method as being a public member of your module</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm"> * This is a public method</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param {Dictionary} data</span>
+<span class="cm"> * @return {Dictionary}</span>
+<span class="cm"> * @memberOf MyModule</span>
+<span class="cm"> */</span>
+<span class="kd">function</span> <span class="nx">publicMethod</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">data</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p><em>Please note that the revealing module pattern should only be used for server side code</em></p>
+</div>
+<div class="section" id="the-constructor-pattern">
+<h2>The constructor pattern<a class="headerlink" href="#the-constructor-pattern" title="Permalink to this headline">¶</a></h2>
+<p>If you&#8217;re going to be using a constructor, there&#8217;s no need to add a <em>&#64;name</em> annotation in the description of the module.
+Instead we add that to the description of the constructor, also adding the <em>&#64;constructor</em> annotation.</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm"> * This is an example constructor</span>
+<span class="cm"> *</span>
+<span class="cm"> * @name MyClass</span>
+<span class="cm"> * @class this is an instance of my class</span>
+<span class="cm"> * @constructor</span>
+<span class="cm"> */</span>
+<span class="kd">function</span> <span class="nx">MyClass</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// constructor code here</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>There is no need for an &#64;memberOf annotation here since the parser figures out that methods defined under the <em>prototype</em>
+property of your function are public members with one exception, private methods for which we should add a <em>&#64;memberOf
+&lt;Class_Name&gt;#</em> (don&#8217;t forget the <strong>#</strong> at the end because it specifies that it&#8217;s an instance method).</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm"> * This is a private method</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param {MyClas} self the class instance</span>
+<span class="cm"> * @param {Dictionary} data the input data</span>
+<span class="cm"> * @param {Boolean} [isTrue] optional parameters should be enclosed in brackets</span>
+<span class="cm"> * @return {Dictionary}</span>
+<span class="cm"> * @private</span>
+<span class="cm"> * @memberOf MyClass#</span>
+<span class="cm"> */</span>
+<span class="kd">function</span> <span class="nx">privateMethod</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">data</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Documenting Rain</a><ul>
+<li><a class="reference internal" href="#revealing-module-pattern">Revealing module pattern</a></li>
+<li><a class="reference internal" href="#the-constructor-pattern">The constructor pattern</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="coding_guidelines.html"
+                        title="previous chapter">Coding Guidelines</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../client/client_messaging.html"
+                        title="next chapter">Messaging API</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../client/client_messaging.html" title="Messaging API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="coding_guidelines.html" title="Coding Guidelines"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

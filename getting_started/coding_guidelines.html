@@ -1,0 +1,248 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Coding Guidelines &mdash; Rain v0.4.1 documentation</title>
+    <link rel="stylesheet" href="../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/underscore.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <link rel="top" title="Rain v0.4.1 documentation" href="../index.html" />
+    <link rel="next" title="Documenting Rain" href="documenting.html" />
+    <link rel="prev" title="RAIN component descriptor" href="../server/component_descriptor.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="documenting.html" title="Documenting Rain"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../server/component_descriptor.html" title="RAIN component descriptor"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="coding-guidelines">
+<h1>Coding Guidelines<a class="headerlink" href="#coding-guidelines" title="Permalink to this headline">¶</a></h1>
+<p>This document describes the coding conventions used in the source code.</p>
+<div class="section" id="identifiers">
+<h2>Identifiers<a class="headerlink" href="#identifiers" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Identifiers are in camel case.</li>
+<li>Constructor functions start with a capital letter.</li>
+<li>Variable and normal function names start with a lower case letter.</li>
+<li>Function names always start with a verb, e.g.: <em>lock</em>, <em>openFile</em>, <em>parseUsersList</em> etc.</li>
+<li>Variable names never start with a verb, except for booleans: <em>isLocked</em>, <em>hasFeature</em> etc.</li>
+<li>Use the <em>mod</em> prefix for modules.</li>
+<li>File names use only lower case letters and underscores for spaces, e.g.: view_manager.js.</li>
+</ul>
+</div>
+<div class="section" id="style">
+<h2>Style<a class="headerlink" href="#style" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Indentation is 4 spaces.</p>
+</li>
+<li><p class="first">Lines have a maximum of 100 characters.</p>
+</li>
+<li><p class="first">Always use spaces between operators.</p>
+</li>
+<li><dl class="first docutils">
+<dt>Object properties have no space between the property name and colon, but have a space between the colon and the value, e.g.:</dt>
+<dd><div class="first last highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="p">{</span><span class="nx">sort</span><span class="o">:</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="nx">direction</span><span class="o">:</span> <span class="s2">&quot;ascending&quot;</span><span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Function declarations and expressions have no space between function name and opening parantheses:</dt>
+<dd><div class="first last highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span class="kd">function</span> <span class="nx">ajax</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}</span>
+<span class="nx">ajax</span><span class="p">({</span><span class="nx">success</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">});</span>
+</pre></div>
+</td></tr></table></div>
+</dd>
+</dl>
+</li>
+<li><p class="first">Always use braces to surround the body of flow control statements, even when the body consists of a single statement</p>
+</li>
+<li><dl class="first docutils">
+<dt>Put a semicolon after every statement, except for <em>for</em>, <em>function</em>, <em>if</em>, <em>try</em>, <em>switch</em>, but including after a function expression, e.g.:</dt>
+<dd><div class="first last highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">return</span> <span class="kd">function</span> <span class="p">{</span>
+    <span class="cm">/* ... */</span>
+<span class="p">};</span>
+</pre></div>
+</td></tr></table></div>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Always use identity operator instead of the equality operator.</p>
+</li>
+<li><dl class="first docutils">
+<dt>Always cache the length of an array when iterating through it&#8217;s elements, e.g.:</dt>
+<dd><div class="first last highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">l</span> <span class="o">=</span> <span class="nx">a</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">l</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Use the optimized version of backward loops when possible:</dt>
+<dd><div class="first last highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">a</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">--</span><span class="p">;)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Use arrays for long string concatenations instead of the + operator, e.g.:</dt>
+<dd><div class="first last highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">nucleotides</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">dnaSequence</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1001</span><span class="p">;</span> <span class="nx">i</span><span class="o">--</span><span class="p">;)</span> <span class="p">{</span>
+    <span class="nx">dnaSequence</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">nucleotides</span><span class="p">[</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">3</span><span class="p">]);</span>
+<span class="p">}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">dnaSequence</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">));</span>
+</pre></div>
+</td></tr></table></div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Use the bitwise negation operator to optimize string <em>indexOf</em> calls when checking for the existence of a substring, e.g.:</dt>
+<dd><div class="first last highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">if</span> <span class="p">(</span><span class="o">~</span><span class="nx">dnaSequence</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;GATTACA&quot;</span><span class="p">))</span> <span class="p">{</span>
+    <span class="cm">/* Same as: dnaSequence.indexOf(&quot;GATTACA&quot;) !== -1 */</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</dd>
+</dl>
+</li>
+<li><p class="first">Usually try to accept an object as a single input argument for a function instead of a long list of arguments.</p>
+</li>
+<li><p class="first">Always declare local variables using the <em>var</em> keyword at the beginning of the function scope.</p>
+</li>
+<li><dl class="first docutils">
+<dt>Use a comma at the end of the line when declaring multiple variables and also align equal signs e.g.:</dt>
+<dd><div class="first last highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">div</span>      <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">),</span>
+    <span class="nx">fragment</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createDocumentFragment</span><span class="p">(),</span>
+    <span class="nx">email</span>    <span class="o">=</span> <span class="s2">&quot;rain@cloud.net&quot;</span><span class="p">;</span>
+</pre></div>
+</td></tr></table></div>
+</dd>
+</dl>
+</li>
+<li><p class="first">Always provide a <em>default</em> case to switch statements.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="comments">
+<h2>Comments<a class="headerlink" href="#comments" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Use <a class="reference external" href="http://code.google.com/p/jsdoc-toolkit/">jsdoc-toolkit</a> for code comments.</li>
+<li>Avoid redundant or obvious comments.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Coding Guidelines</a><ul>
+<li><a class="reference internal" href="#identifiers">Identifiers</a></li>
+<li><a class="reference internal" href="#style">Style</a></li>
+<li><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li><a class="reference internal" href="#comments">Comments</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../server/component_descriptor.html"
+                        title="previous chapter">RAIN component descriptor</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="documenting.html"
+                        title="next chapter">Documenting Rain</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="documenting.html" title="Documenting Rain"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../server/component_descriptor.html" title="RAIN component descriptor"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

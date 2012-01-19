@@ -1,0 +1,186 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>View modes &mdash; Rain v0.4.1 documentation</title>
+    <link rel="stylesheet" href="../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../static/jquery.js"></script>
+    <script type="text/javascript" src="../static/underscore.js"></script>
+    <script type="text/javascript" src="../static/doctools.js"></script>
+    <link rel="top" title="Rain v0.4.1 documentation" href="../index.html" />
+    <link rel="prev" title="View authorization" href="Features-proposal-view-authorization.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Features-proposal-view-authorization.html" title="View authorization"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="view-modes">
+<h1>View modes<a class="headerlink" href="#view-modes" title="Permalink to this headline">¶</a></h1>
+<p>RAIN must provide multiple modes of the same view.</p>
+<p>This allows platform to provide uniform behaviour for different modes transition.</p>
+<p>Edit (configure) and help modes will be supported by default, but the programmer can also define different custom modes.</p>
+<div class="section" id="functional-requirements">
+<h2>Functional requirements<a class="headerlink" href="#functional-requirements" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Rain should allow edit mode for a view</li>
+<li>Rain should allow help mode for a view</li>
+<li>Rain should allow custom modes for a view</li>
+<li>Rain should allow navigation between main view and modes and return to main view. Modes can be opened in the same page or as modal popups using <a class="reference internal" href="Features-proposal-hijax-strategy.html"><em>Hijax introduction</em></a></li>
+<li>Rain should allow defining custom icons and tooltips for view modes</li>
+<li>Rain should allow automatic discovery for edit and help modes of a view</li>
+</ol>
+</div>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<p>Modes will be defined directly in the meta.json file:</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21</pre></div></td><td class="code"><div class="highlight"><pre><span class="nx">meta</span><span class="p">.</span><span class="nx">json</span><span class="o">:</span>
+<span class="p">{</span>
+  <span class="s2">&quot;id&quot;</span> <span class="o">:</span> <span class="s2">&quot;my-app;1.0&quot;</span>
+  <span class="s2">&quot;url&quot;</span> <span class="o">:</span> <span class="s2">&quot;/modules/my-app&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;views&quot;</span> <span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;viewid&quot;</span>           <span class="o">:</span> <span class="s2">&quot;main&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;view&quot;</span>             <span class="o">:</span> <span class="s2">&quot;/htdocs/main.html&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;controller&quot;</span>       <span class="o">:</span> <span class="s2">&quot;/htdocs/controller/main.js&quot;</span>
+      <span class="s2">&quot;modes&quot;</span> <span class="o">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;name&quot;</span>           <span class="o">:</span> <span class="s2">&quot;edit&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span>           <span class="o">:</span> <span class="s2">&quot;popup&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;viewId&quot;</span>         <span class="o">:</span> <span class="s2">&quot;main_edit&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;icon&quot;</span>           <span class="o">:</span> <span class="s2">&quot;/htdocs/img/edit.png&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;tooltipMsgKey&quot;</span>  <span class="o">:</span> <span class="s2">&quot;msg.view.edit.mode&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+      <span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>Each view can have a list of modes.  For a mode you can specify:</p>
+<blockquote>
+<div><ul class="simple">
+<li>name: the name of the mode, can be edit, help or a custom mode</li>
+<li>type:  can be page or popup depending how you want to open the mode view</li>
+<li>view_id: is the id of a view that will serve the declared mode</li>
+<li>icon: path to an icon to be displayed as a link to this mode</li>
+<li>tooltipMsgKey: a key for a text to be displayed as a tooltip for the link that navigates to the mode</li>
+</ul>
+</div></blockquote>
+<p>Edit and help modes are supported by default in Rain and they will be auto-discovered.
+For a view having viewid, if there are views called viewid_edit and viewid_help Rain will consider them the edit and help modes for that view.
+You should define them in meta.json only if you want to specify custom icon or tooltip.</p>
+<p>Before rendering a view that has modes defined, Rain will include automatically a navigation area with links to the modes into the right-top side of the main view. Rain will take care also to do the proper navigation between main view and modes and vice versa.</p>
+<p>A view that has different modes defined will look like:</p>
+<img alt="../images/view.png" src="../images/view.png" />
+<p>After opening a view mode of type page, the user can return to the main view by clicking the &#8216;Back to view&#8217; button:</p>
+<img alt="../images/view-back.png" src="../images/view-back.png" />
+<p>After opening a view mode of type popup, it can be closed using the &#8216;X&#8217; button of the popup.</p>
+</div>
+<div class="section" id="assumptions">
+<h2>Assumptions<a class="headerlink" href="#assumptions" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">View modes</a><ul>
+<li><a class="reference internal" href="#functional-requirements">Functional requirements</a></li>
+<li><a class="reference internal" href="#implementation">Implementation</a></li>
+<li><a class="reference internal" href="#assumptions">Assumptions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Features-proposal-view-authorization.html"
+                        title="previous chapter">View authorization</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Features-proposal-view-authorization.html" title="View authorization"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>
