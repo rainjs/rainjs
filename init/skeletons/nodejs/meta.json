@@ -6,5 +6,7 @@
 		"viewid": "index",
 		"view": "/htdocs/index.html",
 		"controller": "/htdocs/controller/index.js"
-	}]
+	}],
+    "taglib": [],
+    "intents": []
 }
