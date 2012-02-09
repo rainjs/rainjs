@@ -29,7 +29,7 @@
     "daemon": "0.3.2",
     "cli-table": "0.0.1",
 	"jinjs": "0.3.2",
-	"swig" : "0.8.0"
+	"handlebars" : "1.0.4beta"
   },
   "keywords": ["framework", "rain"],
   "repository": "git://github.com/juxtapos/Rain",
