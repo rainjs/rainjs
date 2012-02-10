@@ -28,8 +28,9 @@
     "commander": "0.2.0",
     "daemon": "0.3.2",
     "cli-table": "0.0.1",
-	"jinjs": "0.3.2",
-	"handlebars" : "1.0.4beta"
+    "jinjs": "0.3.2",
+    "handlebars": "1.0.4beta",
+    "jasmine-node": "= 1.0.20"
   },
   "keywords": ["framework", "rain"],
   "repository": "git://github.com/juxtapos/Rain",
