@@ -1,0 +1,43 @@
+{
+	"id": "exception",
+	"version": "1.0",
+	"url": "/components/exception",
+	"views": [{
+        "viewid": "error",
+        "view": "/htdocs/error.html",
+        "controller": "/htdocs/controller/index.js"
+    },
+    {
+		"viewid": "400",
+		"view": "/htdocs/400.html",
+		"controller": "/htdocs/controller/index.js"
+	},
+	{
+        "viewid": "401",
+        "view": "/htdocs/401.html",
+        "controller": "/htdocs/controller/index.js"
+    },
+    {
+        "viewid": "403",
+        "view": "/htdocs/403.html",
+        "controller": "/htdocs/controller/index.js"
+    },
+    {
+        "viewid": "404",
+        "view": "/htdocs/404.html",
+        "controller": "/htdocs/controller/index.js"
+    },
+    {
+        "viewid": "408",
+        "view": "/htdocs/408.html",
+        "controller": "/htdocs/controller/index.js"
+    },
+    {
+        "viewid": "500",
+        "view": "/htdocs/500.html",
+        "controller": "/htdocs/controller/index.js"
+    }
+	],
+    "taglib": [],
+    "intents": []
+}
