@@ -1,5 +1,4 @@
 var mock = require('./server_mock.js');
-var mod_logger = require(process.cwd() + '/lib/logger.js');
 
 describe('get latest version', function() {
     var componentContainer;
