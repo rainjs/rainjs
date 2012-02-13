@@ -7,3 +7,4 @@
 /.idea
 /doc/build
 *_global_.rst
+/tests/server/reports
