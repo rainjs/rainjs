@@ -1,3 +1,5 @@
+var mod_logger = require(process.cwd() + '/lib/logger.js');
+
 global.Server = {
     conf : {
         server : {
@@ -9,6 +11,16 @@ global.Server = {
     UUID : "SERVER-UUID",
     root : ''
 };
+
+beforeEach(function () {
+    spyOn(mod_logger, 'getLogger');
+    mod_logger.getLogger.andCallFake(function () {
+        return {
+            debug: function () {},
+            warn: function () {}
+        };
+    });
+});
 
 exports.components = [
     {id: 'button', version: '1.0', url: '/components/button'},
