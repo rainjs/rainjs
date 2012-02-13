@@ -38,7 +38,7 @@ describe('get latest version', function() {
 
     it('should not be found', function() {
         componentContainer.scanComponentFolder();
-        expect(componentContainer.getLatestVersion('textbox', '6')).toEqual(false);
-        expect(componentContainer.getLatestVersion('textbox1')).toEqual(false);
+        expect(componentContainer.getLatestVersion('textbox', '6')).toBeUndefined();
+        expect(componentContainer.getLatestVersion('textbox1')).toBeUndefined();
     });
 });
