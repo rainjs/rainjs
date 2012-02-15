@@ -31,14 +31,16 @@ describe('get latest version', function() {
         componentContainer.scanComponentFolder();
         expect(componentContainer.getLatestVersion('textbox', '1')).toEqual('1.7.0');
         expect(componentContainer.getLatestVersion('textbox', '1.0.3')).toEqual('1.0.3');
-        expect(componentContainer.getLatestVersion('button')).toEqual('3.5.8');
+        expect(componentContainer.getLatestVersion('button')).toEqual('5.2.1');
         expect(componentContainer.getLatestVersion('dropdown', '2.3')).toEqual('2.3.7');
         expect(componentContainer.getLatestVersion('dropdown', '1')).toEqual('1.35.89');
+        expect(componentContainer.getLatestVersion('button', '2')).toEqual('2.4');
     });
 
     it('should not be found', function() {
         componentContainer.scanComponentFolder();
         expect(componentContainer.getLatestVersion('textbox', '6')).toBeUndefined();
         expect(componentContainer.getLatestVersion('textbox1')).toBeUndefined();
+        expect(componentContainer.getLatestVersion('button', '4')).toBeUndefined();
     });
 });

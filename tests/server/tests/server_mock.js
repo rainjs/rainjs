@@ -32,6 +32,7 @@ exports.components = [
     {id: 'dropdown', version: '2.3', url: '/components/dropdown'},
     {id: 'button', version: '0.4', url: '/components/button'},
     {id: 'textbox', version: '1.0.3', url: '/components/textbox'},
+    {id: 'button', version: '5.2.1', url: '/components/button'},
     {id: 'dropdown', version: '1.3', url: '/components/dropdown'},
     {id: 'textbox', version: '3.6.1', url: '/components/textbox'},
     {id: 'button', version: '3.5.8', url: '/components/button'},
@@ -45,7 +46,8 @@ exports.versions = {
          { major: 0, minor: 4, micro: 0, versionStr: '0.4' },
          { major: 1, minor: 0, micro: 0, versionStr: '1.0' },
          { major: 2, minor: 4, micro: 0, versionStr: '2.4' },
-         { major: 3, minor: 5, micro: 8, versionStr: '3.5.8' } 
+         { major: 3, minor: 5, micro: 8, versionStr: '3.5.8' },
+         { major: 5, minor: 2, micro: 1, versionStr: '5.2.1' } 
      ],
      textbox: [
          { major: 1, minor: 0, micro: 0, versionStr: '1.0' },
