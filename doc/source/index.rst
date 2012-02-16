@@ -54,6 +54,7 @@ Server side modules
     server/messaging_intents
     server/websockets
     server/component_descriptor
+    server/error_pages
 
 -----------------
 Features Proposal
