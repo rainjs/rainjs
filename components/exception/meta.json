@@ -3,8 +3,8 @@
 	"version": "1.0",
 	"url": "/components/exception",
 	"views": [{
-        "viewid": "error",
-        "view": "/htdocs/error.html",
+        "viewid": "default",
+        "view": "/htdocs/default.html",
         "controller": "/htdocs/controller/index.js"
     },
     {

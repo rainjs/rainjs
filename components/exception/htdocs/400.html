@@ -3,7 +3,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <title>Application Exception</title>
-        <link rel="stylesheet" href="htdocs/css/index.css" />
+
+        {{css path="index.css"}}
     </head>
     <body>
         <div class="content">
@@ -11,7 +12,7 @@
             <p>
                 You made a document request the server didn't understand.
             </p>
-            <a href="javascript:history.back();" class="back">
+            <a href="javascript://history.back();" class="back">
                 Back to the last visited page
             </a>
         </div>
