@@ -1,24 +1,17 @@
-var rootPath = process.cwd(),
-    cssHelper = require(rootPath + '/lib/handlebars/css'),
-    Handlebars = require('handlebars'),
-    mock = require('../server_mock.js');
+var rootPath = process.cwd();
+var cssHelper = require(rootPath + '/lib/handlebars/css');
+var Handlebars = require('handlebars');
+var mock = require('../server_mock.js');
 
-describe('Handlebars css helper', function () {
+Handlebars.registerHelper(cssHelper.name, cssHelper.helper);
 
-    describe('register plugin to handlebars', function () {
-        it('must register the css helper to Handlbars', function () {
-            expect(cssHelper.name).toEqual('css');
-            expect(typeof cssHelper.helper).toEqual('function');
-            Handlebars.registerHelper(cssHelper.name, cssHelper.helper);
-        });
-    });
-    
+describe('handlebars css helper', function () {
     var componentContainer, handlebarsData;
-    
+
     var components = mock.components;    
     var versions = mock.versions;
-    
-    beforeEach(function () {        
+
+    beforeEach(function () {
         var ComponentContainer = require(rootPath + '/lib/componentcontainer.js').ComponentContainer;
         
         componentContainer = {
@@ -47,6 +40,13 @@ describe('Handlebars css helper', function () {
         };
     });
     
+    describe('register plugin to handlebars', function () {
+        it('must register the css helper to handlebars', function () {
+            expect(cssHelper.name).toEqual('css');
+            expect(typeof cssHelper.helper).toEqual('function');
+        });
+    });
+
     describe('test required and optional options', function() {
         it('must parse the given template with an error', function() {
             var template = Handlebars.compile('{{css withoutrequiredPath=""}}');
@@ -63,7 +63,7 @@ describe('Handlebars css helper', function () {
             }).toThrow('precondition failed: css path is missing.');
         });
         
-        it('must be internal css links', function() {
+        it('must be correctly create css links for same component', function() {
             //test internal css resource
             var template = Handlebars.compile('{{css path="index.css"}}');
             expect(template(handlebarsData)).toEqual('<link rel="stylesheet" href="htdocs/css/index.css" type="text/css"/>');
@@ -80,7 +80,7 @@ describe('Handlebars css helper', function () {
             expect(template(handlebarsData)).toEqual('<link rel="stylesheet" href="htdocs/css/index.css" type="text/css"/>');
         })
         
-        it('must be external css links', function() {
+        it('must correctly create css links for external components', function() {
             //test external resource with latest version
             var template = Handlebars.compile('{{css component="textbox" path="index.css"}}');
             expect(template(handlebarsData)).toEqual('<link rel="stylesheet" href="webcomponent://textbox;3.6.1/htdocs/css/index.css" type="text/css"/>');
