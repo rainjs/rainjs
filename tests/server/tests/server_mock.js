@@ -23,19 +23,79 @@ beforeEach(function () {
 });
 
 exports.components = [
-    {id: 'button', version: '1.0', url: '/components/button'},
-    {id: 'button', version: '2.4', url: '/components/button'},
+    {id: 'button', version: '1.0', url: '/components/button',
+       views: [
+       {
+           "viewid": "index",
+           "view": "/htdocs/index.html",
+           "controller": "/htdocs/controller/index.js"
+        },
+        {
+            "viewid": "main",
+            "view": "/htdocs/main.html",
+            "controller": "/htdocs/controller/index.js"
+        }
+    ]},
+    {id: 'button', version: '2.4', url: '/components/button',
+        views: [
+        {
+            "viewid": "index",
+            "view": "/htdocs/index.html",
+            "controller": "/htdocs/controller/index.js"
+        },
+        {
+            "viewid": "main",
+            "view": "/htdocs/main.html",
+            "controller": "/htdocs/controller/index.js"
+        }
+    ]},
     {id: 'textbox', version: '1.7.0', url: '/components/textbox'},
     {id: 'textbox', version: '2.4', url: '/components/textbox'},
     {id: 'textbox', version: '2.7', url: '/components/textbox'},
     {id: 'dropdown', version: '3.3', url: '/components/dropdown'},
     {id: 'dropdown', version: '2.3', url: '/components/dropdown'},
-    {id: 'button', version: '0.4', url: '/components/button'},
+    {id: 'button', version: '0.4', url: '/components/button',
+        views: [
+        {
+            "viewid": "index",
+            "view": "/htdocs/index.html",
+            "controller": "/htdocs/controller/index.js"
+        },
+        {
+            "viewid": "main",
+            "view": "/htdocs/main.html",
+            "controller": "/htdocs/controller/index.js"
+        }
+    ]},
     {id: 'textbox', version: '1.0.3', url: '/components/textbox'},
-    {id: 'button', version: '5.2.1', url: '/components/button'},
+    {id: 'button', version: '5.2.1', url: '/components/button',
+        views: [
+        {
+            "viewid": "index",
+            "view": "/htdocs/index.html",
+            "controller": "/htdocs/controller/index.js"
+        },
+        {
+            "viewid": "main",
+            "view": "/htdocs/main.html",
+            "controller": "/htdocs/controller/index.js"
+        }
+    ]},
     {id: 'dropdown', version: '1.3', url: '/components/dropdown'},
     {id: 'textbox', version: '3.6.1', url: '/components/textbox'},
-    {id: 'button', version: '3.5.8', url: '/components/button'},
+    {id: 'button', version: '3.5.8', url: '/components/button',
+        views: [
+        {
+            "viewid": "index",
+            "view": "/htdocs/index.html",
+            "controller": "/htdocs/controller/index.js"
+        },
+        {
+            "viewid": "main",
+            "view": "/htdocs/main.html",
+            "controller": "/htdocs/controller/index.js"
+        }
+    ]},
     {id: 'dropdown', version: '2.3.7', url: '/components/dropdown'},
     {id: 'textbox', version: '1.0', url: '/components/textbox'},
     {id: 'dropdown', version: '1.35.89', url: '/components/dropdown'}        
