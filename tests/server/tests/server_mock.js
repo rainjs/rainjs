@@ -17,7 +17,8 @@ beforeEach(function () {
     mod_logger.getLogger.andCallFake(function () {
         return {
             debug: function () {},
-            warn: function () {}
+            warn: function () {},
+            error: function () {}
         };
     });
 });
@@ -98,30 +99,46 @@ exports.components = [
     ]},
     {id: 'dropdown', version: '2.3.7', url: '/components/dropdown'},
     {id: 'textbox', version: '1.0', url: '/components/textbox'},
-    {id: 'dropdown', version: '1.35.89', url: '/components/dropdown'}        
+    {id: 'dropdown', version: '1.35.89', url: '/components/dropdown'},
+    {id: 'exception', version: '1.0', url: '/components/exception',
+        views: [
+        {
+            "viewid": "default",
+            "view": "/htdocs/default.html",
+            "controller": "/htdocs/controller/index.js"
+        },
+        {
+            "viewid": "404",
+            "view": "/htdocs/404.html",
+            "controller": "/htdocs/controller/index.js"
+        }
+    ]},
 ];
 
-exports.versions = { 
+exports.versions = {
     button: [
-         { major: 0, minor: 4, micro: 0, versionStr: '0.4' },
-         { major: 1, minor: 0, micro: 0, versionStr: '1.0' },
-         { major: 2, minor: 4, micro: 0, versionStr: '2.4' },
-         { major: 3, minor: 5, micro: 8, versionStr: '3.5.8' },
-         { major: 5, minor: 2, micro: 1, versionStr: '5.2.1' } 
-     ],
-     textbox: [
-         { major: 1, minor: 0, micro: 0, versionStr: '1.0' },
-         { major: 1, minor: 0, micro: 3, versionStr: '1.0.3' },
-         { major: 1, minor: 7, micro: 0, versionStr: '1.7.0' },
-         { major: 2, minor: 4, micro: 0, versionStr: '2.4' },
-         { major: 2, minor: 7, micro: 0, versionStr: '2.7' },
-         { major: 3, minor: 6, micro: 1, versionStr: '3.6.1' } 
-     ],
-     dropdown: [
-         { major: 1, minor: 3, micro: 0, versionStr: '1.3' },
-         { major: 1, minor: 35, micro: 89, versionStr: '1.35.89' },
-         { major: 2, minor: 3, micro: 0, versionStr: '2.3' },
-         { major: 2, minor: 3, micro: 7, versionStr: '2.3.7' },
-         { major: 3, minor: 3, micro: 0, versionStr: '3.3' } 
-     ]
+        { major: 0, minor: 4, micro: 0, versionStr: '0.4' },
+        { major: 1, minor: 0, micro: 0, versionStr: '1.0' },
+        { major: 2, minor: 4, micro: 0, versionStr: '2.4' },
+        { major: 3, minor: 5, micro: 8, versionStr: '3.5.8' },
+        { major: 5, minor: 2, micro: 1, versionStr: '5.2.1' }
+    ],
+    textbox: [
+        { major: 1, minor: 0, micro: 0, versionStr: '1.0' },
+        { major: 1, minor: 0, micro: 3, versionStr: '1.0.3' },
+        { major: 1, minor: 7, micro: 0, versionStr: '1.7.0' },
+        { major: 2, minor: 4, micro: 0, versionStr: '2.4' },
+        { major: 2, minor: 7, micro: 0, versionStr: '2.7' },
+        { major: 3, minor: 6, micro: 1, versionStr: '3.6.1' }
+    ],
+    dropdown: [
+        { major: 1, minor: 3, micro: 0, versionStr: '1.3' },
+        { major: 1, minor: 35, micro: 89, versionStr: '1.35.89' },
+        { major: 2, minor: 3, micro: 0, versionStr: '2.3' },
+        { major: 2, minor: 3, micro: 7, versionStr: '2.3.7' },
+        { major: 3, minor: 3, micro: 0, versionStr: '3.3' }
+    ],
+    exception: [
+        { major: 1, minor: 0, micro: 0, versionStr: '1.0' }
+    ]
 };
