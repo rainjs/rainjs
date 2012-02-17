@@ -71,11 +71,11 @@ describe('Handlebars component helper', function () {
             
             //test static id option
             var template = Handlebars.compile('{{component name="button" sid="buttonTest"}}');
-            expect(template(handlebarsData)).toEqual("<button_521_index data-sid='buttonTest' />");
+            expect(template(handlebarsData)).toEqual('<button_521_index data-sid="buttonTest" />');
             
             //with all options
             var template = Handlebars.compile('{{component name="button" view="main" version="2.4" sid="test"}}');
-            expect(template(handlebarsData)).toEqual("<button_24_main data-sid='test' />");
+            expect(template(handlebarsData)).toEqual('<button_24_main data-sid="test" />');
         });
     })
 
