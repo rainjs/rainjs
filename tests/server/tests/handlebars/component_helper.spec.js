@@ -61,7 +61,7 @@ describe('Handlebars component helper', function () {
             var template = Handlebars.compile('{{component view="main"}}');
             expect(template(handlebarsData)).toEqual('<button_10_main />');
 
-            //with a different version, current component version must used
+            //with a different version, current component version must refused
             var template = Handlebars.compile('{{component version="2.4"}}');
             expect(template(handlebarsData)).toEqual('<button_10_index />');
 
@@ -73,7 +73,7 @@ describe('Handlebars component helper', function () {
             var template = Handlebars.compile('{{component name="button" sid="buttonTest"}}');
             expect(template(handlebarsData)).toEqual('<button_521_index data-sid="buttonTest" />');
 
-            //with all options different viewid
+            //with all options
             var template = Handlebars.compile('{{component name="button" view="main" version="2.4" sid="test"}}');
             expect(template(handlebarsData)).toEqual('<button_24_main data-sid="test" />');
         });
