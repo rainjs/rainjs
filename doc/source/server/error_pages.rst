@@ -2,9 +2,9 @@
 Error Pages
 ===========
 
-Error Pages component is used to define custom error messages for various exception cases. 
+Error Pages component is used to define custom error messages for various exception cases.
 In this way, the developer will have full control over what will be displayed for a specific
-HTTP error code. In order to achieve this, this component will contain a view for each HTTP 
+HTTP error code. In order to achieve this, this component will contain a view for each HTTP
 error code for which a custom message should be shown. If such a view doesn't exist a default
 view will be shown.
 
@@ -20,7 +20,7 @@ Configuration
 .............
 
 As a convention, this component is named `error_pages` and the platform will always use the latest version.
-However, you can override this behaviour in the `server.conf` file using the following configuration 
+However, you can override this behavior in the `server.conf` file using the following configuration
 options (version is optional and if it isn't specified the latest version will be used):
 
 .. code-block:: javascript 
@@ -64,7 +64,7 @@ The following example shows how the view for the 500 error code can look like:
 View Data
 .........
 
-Each view receives a data context which contains information about the error. The Handlebars templating
+Each view receives a data context which contains information about the error. The Handlebars template
 engine is used to display this data in the view. The context contains the following data fields:
 
 #. statusCode: the http status code of the error
@@ -79,8 +79,8 @@ This is the `meta.json` for this component. To specify a custom message for a er
 for which the `viewid` is the same as the error code. If a view for an error doesn't exist, the
 `default` view will be displayed:
 
-.. code-block:: javascript    
-    
+.. code-block:: javascript
+
     {
         "id": "error_pages",
         "version": "1.0",

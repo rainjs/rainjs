@@ -1,4 +1,4 @@
-var mock = require('./server_mock.js');
+var mock = require('./components_mock.js');
 
 describe('get latest version', function() {
     var componentContainer;
@@ -15,7 +15,7 @@ describe('get latest version', function() {
             registerComponent: ComponentContainer.prototype.registerComponent,
             getLatestVersion: ComponentContainer.prototype.getLatestVersion,
             scanComponentFolder: function() {
-                for ( var i = 0, l = components.length; i < l; i++) {
+                for (var i = 0, l = components.length; i < l; i++) {
                     this.registerComponent(components[i]);
                 }
             }
