@@ -24,13 +24,42 @@ describe('authorization', function () {
     
     it('should pass dynamic conditions check', function () {
         var isAuthorized = mod_authorization.authorize(securityContext, [], 
-            [function () { return true; }, function () { return true; }]); 
+            [function () { return true; }, 
+             function () { return true; }]
+        ); 
         expect(isAuthorized).toBeTruthy();
      });
      
      it('should not pass dynamic conditions check', function () {
          var isAuthorized = mod_authorization.authorize(securityContext, [], 
-             [function () { return true; }, function () { return false; }]); 
+             [function () { return true; }, 
+              function () { return false; }]
+         ); 
          expect(isAuthorized).toBeFalsy();
       });
+     
+     it('should be authorized (permissions + dynamic conditions)', function () {
+         var isAuthorized = mod_authorization.authorize(securityContext, ['perm2', 'perm3'], 
+             [function () { return true; }, 
+              function () { return true; }]
+         ); 
+         expect(isAuthorized).toBeTruthy();
+     });
+     
+     it('should be forbidden (permissions + dynamic conditions)', function () {
+         var isAuthorized = mod_authorization.authorize(securityContext, ['perm2', 'perm3'], 
+             [function () { return true; }, 
+              function () { return false; }]
+         );
+         expect(isAuthorized).toBeFalsy();
+     });
+     
+     it('should not execute dynamic conditions when permissions check fails', function () {
+         var isExecuted = false; 
+         mod_authorization.authorize(securityContext, ['perm2', 'perm4'], 
+                 [function () { isExecuted = true; return true; }, 
+                  function () { isExecuted = true; return false; }]
+         );
+         expect(isExecuted).toBeFalsy();
+     });
 });
