@@ -4,12 +4,6 @@ var rootPath = process.cwd(),
     Handlebars = require('handlebars'),
     mock = require('../server_mock.js');
 
-beforeEach(function () {
-    componentHelper = require(rootPath + '/lib/handlebars/component');
-    Handlebars.registerHelper(componentHelper.name, componentHelper.helper);
-});
-
-
 describe('Handlebars component helper', function () {
     var componentContainer, handlebarsData;
 
@@ -17,6 +11,9 @@ describe('Handlebars component helper', function () {
     var versions = mock.versions;
 
     beforeEach(function () {
+        componentHelper = require(rootPath + '/lib/handlebars/component');
+        Handlebars.registerHelper(componentHelper.name, componentHelper.helper);
+        
         var ComponentContainer = require(rootPath + '/lib/componentcontainer.js').ComponentContainer;
 
         componentContainer = {
