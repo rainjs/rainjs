@@ -1,10 +1,14 @@
 var rootPath = process.cwd(),
-    componentHelper = require(rootPath + '/lib/handlebars/component'),
+    componentHelper,
     mod_tagmanager = require(rootPath + '/lib/tagmanager'),
     Handlebars = require('handlebars'),
     mock = require('../server_mock.js');
 
-Handlebars.registerHelper(componentHelper.name, componentHelper.helper);
+beforeEach(function () {
+    componentHelper = require(rootPath + '/lib/handlebars/component');
+    Handlebars.registerHelper(componentHelper.name, componentHelper.helper);
+});
+
 
 describe('Handlebars component helper', function () {
     var componentContainer, handlebarsData;
