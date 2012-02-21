@@ -56,27 +56,27 @@ describe('Handlebars component helper', function () {
         it('must parse the component and give the cutsom tag back', function() {
             // With default options.
             var template = Handlebars.compile('{{component}}');
-            expect(template(handlebarsData)).toEqual('<button_10_index />');
+            expect(template(handlebarsData)).toEqual('<button_1_0_index />');
 
             // With another view id.
             var template = Handlebars.compile('{{component view="main"}}');
-            expect(template(handlebarsData)).toEqual('<button_10_main />');
+            expect(template(handlebarsData)).toEqual('<button_1_0_main />');
 
             // With a different version, current component version must refused.
             var template = Handlebars.compile('{{component version="2.4"}}');
-            expect(template(handlebarsData)).toEqual('<button_10_index />');
+            expect(template(handlebarsData)).toEqual('<button_1_0_index />');
 
             // Test latest version.
             var template = Handlebars.compile('{{component name="button"}}');
-            expect(template(handlebarsData)).toEqual('<button_521_index />');
+            expect(template(handlebarsData)).toEqual('<button_5_2_1_index />');
 
             // Test static id option.
             var template = Handlebars.compile('{{component name="button" sid="buttonTest"}}');
-            expect(template(handlebarsData)).toEqual('<button_521_index data-sid="buttonTest" />');
+            expect(template(handlebarsData)).toEqual('<button_5_2_1_index data-sid="buttonTest" />');
 
             // With all options.
             var template = Handlebars.compile('{{component name="button" view="main" version="2.4" sid="test"}}');
-            expect(template(handlebarsData)).toEqual('<button_24_main data-sid="test" />');
+            expect(template(handlebarsData)).toEqual('<button_2_4_main data-sid="test" />');
         });
     })
 
