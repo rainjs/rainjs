@@ -1,8 +1,8 @@
 var mod_authorization = require(process.cwd() + '/lib/authorization.js');
 
-describe('authorization', function () {
+describe('Authorization: permissions and dynamic conditions', function () {
     var securityContext;
-    
+
     beforeEach(function () {
         securityContext = {
             user: {
@@ -11,55 +11,83 @@ describe('authorization', function () {
             }
         };
     });
-    
+
+    it('should throw an error when permissions key is not an array', function () {
+        expect(function() {
+            mod_authorization.authorize(securityContext);
+        }).toThrow('precondition failed: permissions key is not an array.');
+    });
+
+    it('should throw an error when dynamicConditions key is not an array', function () {
+        expect(function() {
+            mod_authorization.authorize(securityContext, [], undefined);
+        }).toThrow('precondition failed: dynamicConditions key is not an array.');
+    });
+
     it('should pass permissions check', function () {
-       var isAuthorized = mod_authorization.authorize(securityContext, ['perm2', 'perm3'], []); 
+       var isAuthorized = mod_authorization.authorize(securityContext, ['perm2', 'perm3'], []);
        expect(isAuthorized).toBeTruthy();
     });
-    
+
     it('should not pass permissions check', function () {
-        var isAuthorized = mod_authorization.authorize(securityContext, ['perm2', 'perm4'], []); 
+        var isAuthorized = mod_authorization.authorize(securityContext, ['perm2', 'perm4'], []);
         expect(isAuthorized).toBeFalsy();
      });
-    
+
     it('should pass dynamic conditions check', function () {
-        var isAuthorized = mod_authorization.authorize(securityContext, [], 
-            [function () { return true; }, 
+        var isAuthorized = mod_authorization.authorize(securityContext, [],
+            [function () { return true; },
              function () { return true; }]
-        ); 
+        );
         expect(isAuthorized).toBeTruthy();
      });
-     
+
      it('should not pass dynamic conditions check', function () {
-         var isAuthorized = mod_authorization.authorize(securityContext, [], 
-             [function () { return true; }, 
+         var isAuthorized = mod_authorization.authorize(securityContext, [],
+             [function () { return true; },
               function () { return false; }]
-         ); 
+         );
          expect(isAuthorized).toBeFalsy();
       });
-     
+
      it('should be authorized (permissions + dynamic conditions)', function () {
-         var isAuthorized = mod_authorization.authorize(securityContext, ['perm2', 'perm3'], 
-             [function () { return true; }, 
+         var isAuthorized = mod_authorization.authorize(securityContext, ['perm2', 'perm3'],
+             [function () { return true; },
               function () { return true; }]
-         ); 
+         );
          expect(isAuthorized).toBeTruthy();
      });
-     
+
      it('should be forbidden (permissions + dynamic conditions)', function () {
-         var isAuthorized = mod_authorization.authorize(securityContext, ['perm2', 'perm3'], 
-             [function () { return true; }, 
+         var isAuthorized = mod_authorization.authorize(securityContext, ['perm2', 'perm3'],
+             [function () { return true; },
               function () { return false; }]
          );
          expect(isAuthorized).toBeFalsy();
      });
-     
+
      it('should not execute dynamic conditions when permissions check fails', function () {
-         var isExecuted = false; 
-         mod_authorization.authorize(securityContext, ['perm2', 'perm4'], 
-                 [function () { isExecuted = true; return true; }, 
+         var isExecuted = false;
+         mod_authorization.authorize(securityContext, ['perm2', 'perm4'],
+                 [function () { isExecuted = true; return true; },
                   function () { isExecuted = true; return false; }]
          );
          expect(isExecuted).toBeFalsy();
+     });
+
+     it('should be authorized when dynamic conditions require user to have US country', function () {
+         var dynamicCondition = function (context) {
+             return context.user.country === 'US';
+         };
+         var isAuthorized = mod_authorization.authorize(securityContext, [], [dynamicCondition]);
+         expect(isAuthorized).toBeTruthy();
+     });
+
+     it('should be forbidden when dynamic conditions require user to have RO country', function () {
+         var dynamicCondition = function (context) {
+             return context.user.country === 'RO';
+         };
+         var isAuthorized = mod_authorization.authorize(securityContext, [], [dynamicCondition]);
+         expect(isAuthorized).toBeFalsy();
      });
 });
