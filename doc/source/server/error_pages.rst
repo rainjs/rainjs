@@ -19,7 +19,7 @@ auto-discovered by the platform, but you can change the default settings in the 
 Configuration
 .............
 
-As a convention, this component is named `error_pages` and the platform will always use the latest version.
+As a convention, this component is named `exception` and the platform will always use the latest version.
 However, you can override this behavior in the `server.conf` file using the following configuration
 options (version is optional and if it isn't specified the latest version will be used):
 

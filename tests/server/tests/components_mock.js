@@ -1,4 +1,4 @@
-var mod_logger = require('rain/lib/logger.js');
+var mod_logger = require(process.cwd() + '/lib/logger.js');
 
 global.Server = {
     conf : {
@@ -68,7 +68,19 @@ exports.components = [
             "controller": "/htdocs/controller/index.js"
         }
     ]},
-    {id: 'textbox', version: '1.0.3', url: '/components/textbox'},
+    {id: 'textbox', version: '1.0.3', url: '/components/textbox', 
+        dynamicConditions: {
+            _component: function (context) {
+                return context.user.country === 'US';
+            }
+        },
+        views: [
+            {
+                "viewid": "index",
+                "view": "/htdocs/index.html",
+                "controller": "/htdocs/controller/index.js"
+            }           
+    ]},
     {id: 'button', version: '5.2.1', url: '/components/button',
         views: [
         {
@@ -82,8 +94,34 @@ exports.components = [
             "controller": "/htdocs/controller/index.js"
         }
     ]},
-    {id: 'dropdown', version: '1.3', url: '/components/dropdown'},
-    {id: 'textbox', version: '3.6.1', url: '/components/textbox'},
+    {id: 'dropdown', version: '1.3', url: '/components/dropdown', 
+        dynamicConditions: {
+            main: function (context) {
+                return context.user.country === 'US';
+            }
+        },
+        views: [
+            {
+                "viewid": "index",
+                "view": "/htdocs/index.html",
+                "controller": "/htdocs/controller/index.js",
+                "permissions": ["edit_contract"]
+            },
+            {
+                "viewid": "main",
+                "view": "/htdocs/main.html",
+                "controller": "/htdocs/controller/index.js"
+            }            
+    ]},
+    {id: 'textbox', version: '3.6.1', url: '/components/textbox', permisssions: ["edit_contract"],
+        views: [
+            {
+                "viewid": "index",
+                "view": "/htdocs/index.html",
+                "controller": "/htdocs/controller/index.js",
+                "permissions": ["edit_contract"]
+            }           
+    ]},
     {id: 'button', version: '3.5.8', url: '/components/button',
         views: [
         {
@@ -105,6 +143,11 @@ exports.components = [
         {
             "viewid": "default",
             "view": "/htdocs/default.html",
+            "controller": "/htdocs/controller/index.js"
+        },
+        {
+            "viewid": "401",
+            "view": "/htdocs/401.html",
             "controller": "/htdocs/controller/index.js"
         },
         {
