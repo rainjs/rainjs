@@ -5,7 +5,7 @@ var rootPath = process.cwd(),
     mock = require('../components_mock.js');
 
 describe('Handlebars component helper', function () {
-    var componentContainer, handlebarsData;
+    var componentContainer, handlebarsData, handlebarsData1;
 
     var components = mock.components;
     var versions = mock.versions;
@@ -39,10 +39,38 @@ describe('Handlebars component helper', function () {
         handlebarsData = {
             rain: function () {
                 return {
-                    component: component
+                    component: component,
+                    session : {
+                        user: {
+                            accountId: '1o1GUID-ABCDE',
+                            permissions: [
+                                'contracts', 'view_contract', 'choose_contract'
+                            ],
+                            country: 'RO',
+                            language: 'ro_RO'
+                        }
+                    }
                 }
             }
         };
+        
+        handlebarsData1 = {
+                rain: function () {
+                    return {
+                        component: component,
+                        session : {
+                            user: {
+                                accountId: '1o1GUID-ABCDE',
+                                permissions: [
+                                    'edit_contract'
+                                ],
+                                country: 'US',
+                                language: 'en_US'
+                            }
+                        }
+                    }
+                }
+            };
     });
 
     describe('register plugin to handlebars', function () {
@@ -78,7 +106,29 @@ describe('Handlebars component helper', function () {
             var template = Handlebars.compile('{{component name="button" view="main" version="2.4" sid="test"}}');
             expect(template(handlebarsData)).toEqual('<button_2_4_main data-sid="test" />');
         });
-    })
+    });
+    
+    describe('successful authorizathion', function () {
+        it('should pass component level checks for permissions', function () {
+            var template = Handlebars.compile('{{component name="textbox" version="3.6.1" view="index"}}');
+            expect(template(handlebarsData1)).toEqual('<textbox_3_6_1_index />');
+        });
+        
+        it('should pass component level checks for dynamic conditions', function () {
+            var template = Handlebars.compile('{{component name="textbox" version="1.0.3" view="index"}}');
+            expect(template(handlebarsData1)).toEqual('<textbox_1_0_3_index />');
+        });
+        
+        it('should pass view level checks for permissions', function () {
+            var template = Handlebars.compile('{{component name="dropdown" version="1.3" view="index"}}');
+            expect(template(handlebarsData1)).toEqual('<dropdown_1_3_index />');
+        });
+        
+        it('should pass view level checks for dynamic conditions', function () {
+            var template = Handlebars.compile('{{component name="dropdown" version="1.3" view="main"}}');
+            expect(template(handlebarsData1)).toEqual('<dropdown_1_3_main />');
+        });
+    });
 
     describe('test common error scenarios', function () {
         it('should return a 404 error if the component is not found', function () {
@@ -89,6 +139,26 @@ describe('Handlebars component helper', function () {
         it('should return a 404 error if the view is not found', function () {
             var template = Handlebars.compile('{{component name="button" view="inexistent"}}');
             expect(template(handlebarsData)).toEqual('<exception_404 />');
+        });
+        
+        it('should return a 401 error if the component is not authorized (permissions)', function () {
+            var template = Handlebars.compile('{{component name="textbox" version="3.6.1" view="index"}}');
+            expect(template(handlebarsData)).toEqual('<exception_401 />');
+        });
+        
+        it('should return a 401 error if the component is not authorized (dynamic conditions)', function () {
+            var template = Handlebars.compile('{{component name="textbox" version="1.0.3" view="index"}}');
+            expect(template(handlebarsData)).toEqual('<exception_401 />');
+        });
+        
+        it('should return a 401 error if the view is not authorized (permissions)', function () {
+            var template = Handlebars.compile('{{component name="dropdown" version="1.3" view="index"}}');
+            expect(template(handlebarsData)).toEqual('<exception_401 />');
+        });
+        
+        it('should return a 401 error if the view is not authorized (dynamic conditions)', function () {
+            var template = Handlebars.compile('{{component name="dropdown" version="1.3" view="main"}}');
+            expect(template(handlebarsData)).toEqual('<exception_401 />');
         });
 
         it('should return undefined if the exception component cannot be found', function () {
