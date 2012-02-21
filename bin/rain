@@ -236,7 +236,7 @@ function debug(){
 
 function start(confpath){
   var actPath     = process.cwd()
-      ,server     = require('../lib/server_new')
+      ,server     = require('../lib/server')
       ,child      = require('child_process');
 
   if(!utils.checkPidDirectory())
