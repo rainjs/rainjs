@@ -1,12 +1,12 @@
-define(["{{application_name}}/custom_lib"], function() {
+define(function() {
     /**
-     * Example controller class.
+     * Creates a DefaultController component instance.
      *
-     * @name Controller
-     * @class a controller instance
+     * @name DefaultController
+     * @class DefaultController controller class
      * @constructor
      */
-    function Controller() {
+    function DefaultController() {
         // constructor logic here
     }
 
@@ -15,14 +15,14 @@ define(["{{application_name}}/custom_lib"], function() {
      *
      * @function
      */
-    Controller.prototype.init = $.noop;
+    DefaultController.prototype.init = $.noop;
 
     /**
      * Startup lifecycle step that happens right after the markup is in place.
      *
      * @function
      */
-    Controller.prototype.start = $.noop;
+    DefaultController.prototype.start = $.noop;
 
-    return Controller;
+    return DefaultController;
 });

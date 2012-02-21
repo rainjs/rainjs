@@ -1,6 +1,6 @@
 /**
- * The dynamic condition for the component
- * 
+ * The dynamic condition for the component.
+ *
  * @param {Object} securityContext the security context
  * @returns {Boolean} true if user is allowed to access the component or false otherwise
  */
@@ -9,9 +9,9 @@ function _component(securityContext) {
 }
 
 /**
- * The dynamic condition for the index view
- * 
- * @param securityContext
+ * The dynamic condition for the index view.
+ *
+ * @param securityContext the security context
  * @returns {Boolean} true if user is allowed to access the view or false otherwise
  */
 function index(securityContext) {
