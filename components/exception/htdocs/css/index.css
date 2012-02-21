@@ -18,7 +18,7 @@ h1 em, h2 em {
   font-weight: normal;
 }
 h1 {
-  font-size: 60px;
+  font-size: 25px;
 }
 h2 {
   margin-top: 10px;
@@ -54,7 +54,7 @@ ul li:first-child .path {
   padding-left: 0;
 }
 p {
-  line-height: 1.5;
+    margin: 0px;
 }
 a, a.visited {
     color: #33557D;
@@ -66,4 +66,7 @@ a:hover {
 }
 #stacktrace {
   margin-top: 15px;
+}
+.content {
+    margin-left: 20px;
 }

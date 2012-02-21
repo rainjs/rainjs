@@ -1,0 +1,37 @@
+{
+    "id": "authorization_example",
+    "version": "1.0",
+    "url": "/components/authorization_example",
+    "views": [
+        {
+            "viewid": "index",
+            "view": "/htdocs/index.html",
+            "controller": "/htdocs/controller/index.js"
+        },
+        {
+            "viewid": "buttons",
+            "view": "/htdocs/index.html",
+            "controller": "/htdocs/controller/default.js"
+        },
+        {
+            "viewid": "button1",
+            "view": "/htdocs/button1.html",
+            "controller": "/htdocs/controller/default.js",
+            "permissions": ["view_button1"]
+        },
+        {
+            "viewid": "button2",
+            "view": "/htdocs/button2.html",
+            "controller": "/htdocs/controller/default.js",
+            "permissions": ["view_button2"]
+        },
+        {
+            "viewid": "button3",
+            "view": "/htdocs/button3.html",
+            "controller": "/htdocs/controller/default.js",
+            "permissions": ["view_button3"]
+        }
+    ],
+    "taglib": [],
+    "intents": []
+}
