@@ -6,7 +6,8 @@
             "raintime/client_storage.js",
             "raintime/raintime.js",
             "raintime/viewcontext.js",
-            "raintime/messaging_observer.js"
+            "raintime/messaging_observer.js",
+            "/../../../../lib/authorization.js"
         ]
     },
     "server":{

@@ -26,12 +26,12 @@ describe('Authorization: permissions and dynamic conditions', function () {
 
     it('should pass permissions check', function () {
        var isAuthorized = mod_authorization.authorize(securityContext, ['perm2', 'perm3'], []);
-       expect(isAuthorized).toBeTruthy();
+       expect(isAuthorized).toBe(true);
     });
 
     it('should not pass permissions check', function () {
         var isAuthorized = mod_authorization.authorize(securityContext, ['perm2', 'perm4'], []);
-        expect(isAuthorized).toBeFalsy();
+        expect(isAuthorized).toBe(false);
      });
 
     it('should pass dynamic conditions check', function () {
@@ -39,7 +39,7 @@ describe('Authorization: permissions and dynamic conditions', function () {
             [function () { return true; },
              function () { return true; }]
         );
-        expect(isAuthorized).toBeTruthy();
+        expect(isAuthorized).toBe(true);
      });
 
      it('should not pass dynamic conditions check', function () {
@@ -47,7 +47,7 @@ describe('Authorization: permissions and dynamic conditions', function () {
              [function () { return true; },
               function () { return false; }]
          );
-         expect(isAuthorized).toBeFalsy();
+         expect(isAuthorized).toBe(false);
       });
 
      it('should be authorized (permissions + dynamic conditions)', function () {
@@ -63,7 +63,7 @@ describe('Authorization: permissions and dynamic conditions', function () {
              [function () { return true; },
               function () { return false; }]
          );
-         expect(isAuthorized).toBeFalsy();
+         expect(isAuthorized).toBe(false);
      });
 
      it('should not execute dynamic conditions when permissions check fails', function () {
@@ -72,7 +72,7 @@ describe('Authorization: permissions and dynamic conditions', function () {
                  [function () { isExecuted = true; return true; },
                   function () { isExecuted = true; return false; }]
          );
-         expect(isExecuted).toBeFalsy();
+         expect(isExecuted).toBe(false);
      });
 
      it('should be authorized when dynamic conditions require user to have US country', function () {
@@ -80,7 +80,7 @@ describe('Authorization: permissions and dynamic conditions', function () {
              return context.user.country === 'US';
          };
          var isAuthorized = mod_authorization.authorize(securityContext, [], [dynamicCondition]);
-         expect(isAuthorized).toBeTruthy();
+         expect(isAuthorized).toBe(true);
      });
 
      it('should be forbidden when dynamic conditions require user to have RO country', function () {
@@ -88,6 +88,6 @@ describe('Authorization: permissions and dynamic conditions', function () {
              return context.user.country === 'RO';
          };
          var isAuthorized = mod_authorization.authorize(securityContext, [], [dynamicCondition]);
-         expect(isAuthorized).toBeFalsy();
+         expect(isAuthorized).toBe(false);
      });
 });
