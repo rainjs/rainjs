@@ -9,16 +9,6 @@ function _component(securityContext) {
 }
 
 /**
- * The dynamic condition for the index view.
- *
- * @param securityContext the security context
- * @returns {Boolean} true if user is allowed to access the view or false otherwise
- */
-function index(securityContext) {
-    return true;
-}
-
-/**
  * The dynamic condition for the index button1.
  *
  * @param securityContext the security context
@@ -39,8 +29,7 @@ function button2(securityContext) {
 }
 
 module.exports = {
-    _component: _component,
-    index: index,
+    _component: undefined,
     button1: button1,
     button2: button2
 };

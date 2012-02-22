@@ -10,7 +10,7 @@
         },
         {
             "viewid": "buttons",
-            "view": "/htdocs/index.html",
+            "view": "/htdocs/buttons.html",
             "controller": "/htdocs/controller/default.js"
         },
         {
