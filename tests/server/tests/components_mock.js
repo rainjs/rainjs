@@ -138,7 +138,7 @@ exports.components = [
     {id: 'dropdown', version: '2.3.7', url: '/components/dropdown'},
     {id: 'textbox', version: '1.0', url: '/components/textbox'},
     {id: 'dropdown', version: '1.35.89', url: '/components/dropdown'},
-    {id: 'exception', version: '1.0', url: '/components/exception',
+    {id: 'error', version: '1.0', url: '/components/error',
         views: [
         {
             "viewid": "default",
@@ -186,7 +186,7 @@ exports.versions = {
         {major: 2, minor: 3, micro: 7, versionStr: '2.3.7'},
         {major: 3, minor: 3, micro: 0, versionStr: '3.3'}
     ],
-    exception: [
+    error: [
         {major: 1, minor: 0, micro: 0, versionStr: '1.0'}
     ]
 };
