@@ -50,7 +50,19 @@ exports.components = [
             "controller": "/htdocs/controller/index.js"
         }
     ]},
-    {id: 'textbox', version: '1.7.0', url: '/components/textbox'},
+    {id: 'textbox', version: '1.7.0', url: '/components/textbox',
+        views: [
+        {
+            "viewid": "index",
+            "view": "/htdocs/index.html",
+            "controller": "/htdocs/controller/index.js"
+         },
+         {
+             "viewid": "main",
+             "view": "/htdocs/main.html",
+             "controller": "/htdocs/controller/index.js"
+         }
+    ]},
     {id: 'textbox', version: '2.4', url: '/components/textbox'},
     {id: 'textbox', version: '2.7', url: '/components/textbox'},
     {id: 'dropdown', version: '3.3', url: '/components/dropdown'},

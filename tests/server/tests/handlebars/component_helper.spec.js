@@ -82,29 +82,30 @@ describe('Handlebars component helper', function () {
 
     describe('test required and optional options', function() {
         it('must parse the component and give the cutsom tag back', function() {
-            // With default options.
-            var template = Handlebars.compile('{{component}}');
-            expect(template(handlebarsData)).toEqual('<button_1_0_index />');
-
             // With another view id.
             var template = Handlebars.compile('{{component view="main"}}');
-            expect(template(handlebarsData)).toEqual('<button_1_0_main />');
-
-            // With a different version, current component version must refused.
-            var template = Handlebars.compile('{{component version="2.4"}}');
-            expect(template(handlebarsData)).toEqual('<button_1_0_index />');
+            expect(template(handlebarsData)).toEqual('<button_1_0_main />');            
 
             // Test latest version.
-            var template = Handlebars.compile('{{component name="button"}}');
+            var template = Handlebars.compile('{{component name="button" view="index"}}');
             expect(template(handlebarsData)).toEqual('<button_5_2_1_index />');
 
             // Test static id option.
-            var template = Handlebars.compile('{{component name="button" sid="buttonTest"}}');
+            var template = Handlebars.compile('{{component name="button" view="index" sid="buttonTest"}}');
             expect(template(handlebarsData)).toEqual('<button_5_2_1_index data-sid="buttonTest" />');
 
             // With all options.
-            var template = Handlebars.compile('{{component name="button" view="main" version="2.4" sid="test"}}');
+            var template = Handlebars.compile('{{component name="button" version="2.4" view="main" sid="test"}}');
             expect(template(handlebarsData)).toEqual('<button_2_4_main data-sid="test" />');
+            
+            var template = Handlebars.compile('{{component name="textbox" version="1" view="index"}}');
+            expect(template(handlebarsData)).toEqual('<textbox_1_7_0_index />');
+            
+            var template = Handlebars.compile('{{component name="textbox" version="1.7" view="index"}}');
+            expect(template(handlebarsData)).toEqual('<textbox_1_7_0_index />');
+            
+            var template = Handlebars.compile('{{component name="textbox" version="1.7.0" view="index"}}');
+            expect(template(handlebarsData)).toEqual('<textbox_1_7_0_index />');
         });
     });
 
@@ -131,13 +132,38 @@ describe('Handlebars component helper', function () {
     });
 
     describe('test common error scenarios', function () {
-        it('should return a 404 error if the component is not found', function () {
-            var template = Handlebars.compile('{{component name="inexistent"}}');
+        it('should return a 404 error if the view is not found in the textbox component', function () {
+            var template = Handlebars.compile('{{component name="textbox" view="inexistent"}}');
             expect(template(handlebarsData)).toEqual('<error_1_0_404 />');
         });
-
-        it('should return a 404 error if the view is not found', function () {
-            var template = Handlebars.compile('{{component name="button" view="inexistent"}}');
+        
+        it('should return a 404 error if the view is not found in the current component', function () {
+            var template = Handlebars.compile('{{component view="inexistent"}}');
+            expect(template(handlebarsData)).toEqual('<error_1_0_404 />');
+        });
+        
+        it('should return a 404 error if the version is not found', function () {
+            var template = Handlebars.compile('{{component name="dropdown" version="10.11" view="index"}}');
+            expect(template(handlebarsData)).toEqual('<error_1_0_404 />');
+        });
+        
+        it('should return a 404 error if view is not specified', function () {
+            var template = Handlebars.compile('{{component name="button"}}');
+            expect(template(handlebarsData)).toEqual('<error_1_0_404 />');
+        });
+        
+        it('should return a 404 error if the version is specified, but the name isn\'t', function () {
+            var template = Handlebars.compile('{{component version="1.0" view="index"}}');
+            expect(template(handlebarsData)).toEqual('<error_1_0_404 />');
+        });  
+        
+        it('should return a 404 error if only version is specified', function () {
+            var template = Handlebars.compile('{{component version="2.4"}}');
+            expect(template(handlebarsData)).toEqual('<error_1_0_404 />');
+        });     
+        
+        it('should return a 404 error if no option is specified', function () {
+            var template = Handlebars.compile('{{component}}');
             expect(template(handlebarsData)).toEqual('<error_1_0_404 />');
         });
 
