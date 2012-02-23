@@ -8,7 +8,6 @@ describe('Handlebars component helper', function () {
     var componentContainer, handlebarsData, handlebarsData1;
 
     var components = mock.components;
-    var versions = mock.versions;
 
     beforeEach(function () {
         componentHelper = require(rootPath + '/lib/handlebars/component');
@@ -84,27 +83,27 @@ describe('Handlebars component helper', function () {
         it('must parse the component and give the cutsom tag back', function() {
             // With another view id.
             var template = Handlebars.compile('{{component view="main"}}');
-            expect(template(handlebarsData)).toEqual('<button_1_0_main />');            
+            expect(template(handlebarsData)).toEqual('<button_1_0_main />');
 
             // Test latest version.
-            var template = Handlebars.compile('{{component name="button" view="index"}}');
+            template = Handlebars.compile('{{component name="button" view="index"}}');
             expect(template(handlebarsData)).toEqual('<button_5_2_1_index />');
 
             // Test static id option.
-            var template = Handlebars.compile('{{component name="button" view="index" sid="buttonTest"}}');
+            template = Handlebars.compile('{{component name="button" view="index" sid="buttonTest"}}');
             expect(template(handlebarsData)).toEqual('<button_5_2_1_index data-sid="buttonTest" />');
 
             // With all options.
-            var template = Handlebars.compile('{{component name="button" version="2.4" view="main" sid="test"}}');
+            template = Handlebars.compile('{{component name="button" version="2.4" view="main" sid="test"}}');
             expect(template(handlebarsData)).toEqual('<button_2_4_main data-sid="test" />');
-            
-            var template = Handlebars.compile('{{component name="textbox" version="1" view="index"}}');
+
+            template = Handlebars.compile('{{component name="textbox" version="1" view="index"}}');
             expect(template(handlebarsData)).toEqual('<textbox_1_7_0_index />');
-            
-            var template = Handlebars.compile('{{component name="textbox" version="1.7" view="index"}}');
+
+            template = Handlebars.compile('{{component name="textbox" version="1.7" view="index"}}');
             expect(template(handlebarsData)).toEqual('<textbox_1_7_0_index />');
-            
-            var template = Handlebars.compile('{{component name="textbox" version="1.7.0" view="index"}}');
+
+            template = Handlebars.compile('{{component name="textbox" version="1.7.0" view="index"}}');
             expect(template(handlebarsData)).toEqual('<textbox_1_7_0_index />');
         });
     });
@@ -136,35 +135,43 @@ describe('Handlebars component helper', function () {
             var template = Handlebars.compile('{{component name="textbox" view="inexistent"}}');
             expect(template(handlebarsData)).toEqual('<error_1_0_404 />');
         });
-        
+
         it('should return a 404 error if the view is not found in the current component', function () {
             var template = Handlebars.compile('{{component view="inexistent"}}');
             expect(template(handlebarsData)).toEqual('<error_1_0_404 />');
         });
-        
+
         it('should return a 404 error if the version is not found', function () {
             var template = Handlebars.compile('{{component name="dropdown" version="10.11" view="index"}}');
             expect(template(handlebarsData)).toEqual('<error_1_0_404 />');
         });
-        
-        it('should return a 404 error if view is not specified', function () {
+
+        it('should return a precondition error if view is not specified', function () {
             var template = Handlebars.compile('{{component name="button"}}');
-            expect(template(handlebarsData)).toEqual('<error_1_0_404 />');
+            expect(function() {
+                template(handlebarsData);
+            }).toThrow('precondition failed: you have to specify a view id with view="VIEWID"!');
         });
-        
+
+        it('should return a precondition error if view is not specified', function () {
+            var template = Handlebars.compile('{{component }}');
+            expect(function() {
+                template(handlebarsData);
+            }).toThrow('precondition failed: you have to specify a view id with view="VIEWID"!');
+        });
+
         it('should return a 404 error if the version is specified, but the name isn\'t', function () {
             var template = Handlebars.compile('{{component version="1.0" view="index"}}');
-            expect(template(handlebarsData)).toEqual('<error_1_0_404 />');
-        });  
-        
+            expect(function() {
+                template(handlebarsData);
+            }).toThrow('precondition failed: the component name is required if you are specifying the version!');
+        });
+
         it('should return a 404 error if only version is specified', function () {
-            var template = Handlebars.compile('{{component version="2.4"}}');
-            expect(template(handlebarsData)).toEqual('<error_1_0_404 />');
-        });     
-        
-        it('should return a 404 error if no option is specified', function () {
-            var template = Handlebars.compile('{{component}}');
-            expect(template(handlebarsData)).toEqual('<error_1_0_404 />');
+            var template = Handlebars.compile('{{component version="1.0" view="index"}}');
+            expect(function() {
+                template(handlebarsData);
+            }).toThrow('precondition failed: the component name is required if you are specifying the version!');
         });
 
         it('should return a 401 error if the component is not authorized (permissions)', function () {
@@ -185,12 +192,6 @@ describe('Handlebars component helper', function () {
         it('should return a 401 error if the view is not authorized (dynamic conditions)', function () {
             var template = Handlebars.compile('{{component name="dropdown" version="1.3" view="main"}}');
             expect(template(handlebarsData)).toEqual('<error_1_0_401 />');
-        });
-
-        it('should return undefined if the exception component cannot be found', function () {
-            Server.conf.errorComponent = {name: 'inexistent', version: '1.0'};
-            var template = Handlebars.compile('{{component name="inexistent"}}');
-            expect(template(handlebarsData)).toEqual('');
         });
     });
 });
