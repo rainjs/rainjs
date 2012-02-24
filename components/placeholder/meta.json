@@ -1,0 +1,12 @@
+{
+    "id": "placeholder",
+    "version": "1.0",
+    "url": "/components/placeholder",
+    "views": [
+        {
+            "viewid": "index",
+            "view": "/htdocs/index.html",
+            "controller": "/htdocs/controller/index.js"
+        }
+    ]
+}

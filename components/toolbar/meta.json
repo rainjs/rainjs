@@ -9,7 +9,7 @@
 		 	"controller" 	: "/htdocs/controller/toolbar.js"
 		},
 		{
-		    "viewId"        : "toolbarbutton",
+		    "viewid"        : "toolbarbutton",
 		    "view"          : "/htdocs/toolbarbutton.html",
 		    "controller"    : "/htdocs/controller/toolbarbutton.js"
 		}

@@ -11,7 +11,8 @@ define([], function() {
     }
 
     /**
-     * Initialization lifecycle step that happens immediately after the controller is loaded.
+     * Initialization lifecycle step that happens immediately after the
+     * controller is loaded.
      *
      * @function
      */
@@ -22,14 +23,21 @@ define([], function() {
      *
      * @function
      */
-    Controller.prototype.start = function () {
-        clientRenderer.loadComponent({
-            selector: '#catwoman',
-            component: {
-                name: 'button',
-                version: '1.0',
-                view: 'index'
-            }
+    Controller.prototype.start = function() {
+        var runtime = this.clientRuntime;
+
+        this.userTextbox = runtime.ComponentRegistry.getComponent('requestComponent');
+        this.userTextbox.bindState(runtime.ComponentStates.START, function() {
+            this.controller.viewContext.getRoot().find(".button").html("Request Component").click(function() {
+                clientRenderer.loadComponent({
+                    selector: '#catwoman',
+                    component: {
+                        name: 'button',
+                        version: '1.0',
+                        view: 'index'
+                    }
+                });
+            });
         });
     };
 

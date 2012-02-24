@@ -8,7 +8,7 @@ function doGet(request, response) {
     response.writeHead(200, {"Content-Type": "application/jsonp"});
 
     var dataPlaceholder = {
-        css: [ '/component/placeholder/htdocs/css/index.css' ],
+        css: [ '/components/placeholder/htdocs/css/index.css' ],
         controller: '/components/placeholder/htdocs/controller/index.js',
         domId: 200,
         instanceId : 'joker',
@@ -16,28 +16,28 @@ function doGet(request, response) {
         moduleId: 'placeholder-1.0',
         html: '<div class="app_container placeholder_1_0" data-instanceid="joker"\
             data-viewid="VIEW_ID...">\
-            <div class="placeholder_loading"></div>',
+            <div class="placeholder_loading"></div></div>',
         wrapperId: request.query.wrapperId
     };
 
     writeJsonpFunction(dataPlaceholder, response);
 
     var dataButton = {
-        css: [ '/component/textbox/htdocs/css/index.css' ],
-        controller: '/components/textbox/htdocs/controller/index.js',
+        css: [ '/components/hello_world/htdocs/css/index.css' ],
+        controller: '/components/hello_world/htdocs/controller/index.js',
         domId: 500,
         instanceId : 'flash',
         staticId: 'superman',
-        moduleId: 'button-1.0',
-        html: '<div class="app_container button_1_0" data-instanceid="flash"\
-            data-viewid="VIEW_ID...">\
-            <div class="placeholder_loading"></div>',
+        moduleId: 'hello_world-1.0',
+        html: '<div class="app_container hello_world_1_0" data-instanceid="flash"\
+            data-viewid="VIEW_ID..."><div class="hello">HELLO World</div></div>',
         wrapperId: dataPlaceholder.instanceId
     };
 
-    writeJsonpFunction(dataButton, response);
-
-    response.end();
+    setTimeout(function(){
+        writeJsonpFunction(dataButton, response);
+        response.end();
+    }, Math.floor(Math.random()*2000));
 }
 
 function writeJsonpFunction(data, response){

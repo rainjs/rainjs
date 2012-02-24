@@ -53,7 +53,7 @@ define(["authorization_example/jquery-ui-1.8.16.custom.min"], function() {
             success: function (result) {
                 // Redirect to the page where we can see the authorization state for the current
                 // logged user.
-                window.location = window.location.href.replace('index.html', 'buttons.html'); 
+                window.location = window.location.href.replace('index.html', 'buttons.html');
             }
         });
         return false;

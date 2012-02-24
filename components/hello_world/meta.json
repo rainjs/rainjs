@@ -1,0 +1,14 @@
+{
+    "id": "hello_world",
+    "version": "1.0",
+    "url": "/components/hello_world",
+    "views": [
+        {
+            "viewid": "index",
+            "view": "/htdocs/index.html",
+            "controller": "/htdocs/controller/index.js"
+        }
+    ],
+    "taglib": [],
+    "intents": []
+}
