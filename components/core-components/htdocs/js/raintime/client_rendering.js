@@ -66,7 +66,7 @@ define([
     };
 
     /**
-     * Inserts the component in the page
+     * Inserts the component in the page.
      *
      * @param {ClientRenderer} self the class instance
      * @param {Object} component the component to be rendered
