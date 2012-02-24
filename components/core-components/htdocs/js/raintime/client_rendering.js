@@ -35,7 +35,7 @@ define(['core-components/promised-io/promise'], function (Promise) {
     };
 
     /**
-     * Inserts the component in the page
+     * Inserts the component in the page.
      *
      * @param {ClientRenderer} self the class instance
      * @param {Object} component the component to be rendered
@@ -43,9 +43,11 @@ define(['core-components/promised-io/promise'], function (Promise) {
     function insertComponent(self, component) {
         $('#' + component.domId).html(component.html);
         var head = $('head');
-        for (var i = 0, l = component.css.length; i < l; i++) {
-            head.append('<link rel="stylesheet" href="' + component.css[i] + '" type="text/css" />')
+        var html = [head.html()];
+        for (var i = 0, l = component.css.length; i < l; i++) {            
+            html.push('<link rel="stylesheet" href="' + component.css[i] + '" type="text/css" />')
         }
+        head.html(html.join());
     }
 
     /**
