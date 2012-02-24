@@ -13,12 +13,22 @@ Nodejs server
 Linux / Unix / Mac OS
 ~~~~~~~~~~~~~~~~~~~~~
 
+Before you start to install node make sure you have the following tools installed:
+   #. unzip (Ubuntu: sudo apt-get install unzip)
+   #. gcc (Ubuntu: sudo apt-get install gcc)   
+   #. g++ (Ubuntu: sudo apt-get install g++)
+   #. openssl (Ubuntu: sudo apt-get install openssl)
+   #. libssl-dev (Ubuntu: sudo apt-get install libssl-dev)
+   #. make (Ubuntu: sudo apt-get install make)
+
+Now you can start installing node.
+
    #. wget https://github.com/joyent/node/zipball/v0.4.12 -O node-v0.4.12.zip   
-   #. jar -xf node-v0.4.12.zip   
+   #. unzip node-v0.4.12.zip   
    #. cd joyent-node-41e5762   
    #. chmod u+x configure 
    #. chmod u+x tools/waf-light
-   #. ./configure && make && make install
+   #. ./configure && make && sudo make install
    #. make sure /usr/local/bin is added to your PATH environment variable.
    #. node - to make sure node can be run
    #. curl http://npmjs.org/install.sh | sh

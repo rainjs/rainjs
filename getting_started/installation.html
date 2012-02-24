@@ -56,14 +56,27 @@ development machine.</p>
 <h2>Nodejs server<a class="headerlink" href="#nodejs-server" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="linux-unix-mac-os">
 <h3>Linux / Unix / Mac OS<a class="headerlink" href="#linux-unix-mac-os" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>Before you start to install node make sure you have the following tools installed:</dt>
+<dd><ol class="first last arabic simple">
+<li>unzip (Ubuntu: sudo apt-get install unzip)</li>
+<li>gcc (Ubuntu: sudo apt-get install gcc)</li>
+<li>g++ (Ubuntu: sudo apt-get install g++)</li>
+<li>openssl (Ubuntu: sudo apt-get install openssl)</li>
+<li>libssl-dev (Ubuntu: sudo apt-get install libssl-dev)</li>
+<li>make (Ubuntu: sudo apt-get install make)</li>
+</ol>
+</dd>
+</dl>
+<p>Now you can start installing node.</p>
 <blockquote>
 <div><ol class="arabic simple">
 <li>wget <a class="reference external" href="https://github.com/joyent/node/zipball/v0.4.12">https://github.com/joyent/node/zipball/v0.4.12</a> -O node-v0.4.12.zip</li>
-<li>jar -xf node-v0.4.12.zip</li>
+<li>unzip node-v0.4.12.zip</li>
 <li>cd joyent-node-41e5762</li>
 <li>chmod u+x configure</li>
 <li>chmod u+x tools/waf-light</li>
-<li>./configure &amp;&amp; make &amp;&amp; make install</li>
+<li>./configure &amp;&amp; make &amp;&amp; sudo make install</li>
 <li>make sure /usr/local/bin is added to your PATH environment variable.</li>
 <li>node - to make sure node can be run</li>
 <li>curl <a class="reference external" href="http://npmjs.org/install.sh">http://npmjs.org/install.sh</a> | sh</li>
