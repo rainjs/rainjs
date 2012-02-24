@@ -6,7 +6,7 @@
 Rain 0.4.1 Documentation
 ========================
 
-Welcome! This is the documentation for Rain 0.4.1
+Welcome! This is the documentation for Rain 0.6.0
 
 ---------------
 Getting started
