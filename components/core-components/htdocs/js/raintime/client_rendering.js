@@ -1,4 +1,4 @@
-define(function () {
+define(['core-components/promised-io/promise'], function (Promise) {
     /**
      * Get a new instance for ClientRenderer.
      *
@@ -28,10 +28,10 @@ define(function () {
      * @param {Object} component the component to be rendered
      */
     ClientRenderer.prototype.renderComponent = function (component) {
-        var component = registerComponent(this, component);
-        insertComponent(this, component);
-
-        component.controller.start();
+        registerComponent(this, component).then(function (cmp) {
+            insertComponent(this, component);
+            cmp.controller.start();
+        });
     };
 
     /**
@@ -56,6 +56,7 @@ define(function () {
      */
     function registerComponent(self, component) {
         require(["core-components/raintime/raintime"], function (Raintime) {
+            var defer = new Promise.defer();
             var Registry = Raintime.ComponentRegistry;
             var Controller = Raintime.ComponentController;
             var component = Registry.register({
@@ -68,8 +69,10 @@ define(function () {
 
             component.controller.init(); // call the init lifecycle method of the component
 
-            return component;
+            defer.resolve(component);
         });
+
+        return defer.promise;
     }
 
     function insertComponent(self, component) {
