@@ -10,11 +10,13 @@ function doGet(request, response) {
         controller: '/components/textbox/htdocs/controller/index.js',
         domId: 500,
         instanceId : 'b367fd0ee2d8432c202e8af61c288220c420fef3',
+        staticId: 'superman',
+        moduleId: 'button-1.0',
         html : ''
     };
 
     response.writeHead(200, {"Content-Type": "application/jsonp"});
-    response.end('ClientRenderer.renderComponent('+JSON.stringify(data)+')');
+    response.end('clientRenderer.renderComponent('+JSON.stringify(data)+')');
 }
 
 /**

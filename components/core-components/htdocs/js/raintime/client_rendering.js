@@ -35,6 +35,20 @@ define(function () {
     };
 
     /**
+     * Inserts the component in the page
+     *
+     * @param {ClientRenderer} self the class instance
+     * @param {Object} component the component to be rendered
+     */
+    function insertComponent(self, component) {
+        $('#' + component.domId).html(component.html);
+        var head = $('head');
+        for (var i = 0, l = component.css.length; i < l; i++) {
+            head.append('<link rel="stylesheet" href="' + component.css[i] + '" type="text/css" />')
+        }
+    }
+
+    /**
      * Register a component with the framework
      *
      * @param {ClientRenderer} self the class instance
@@ -61,7 +75,7 @@ define(function () {
     function insertComponent(self, component) {
     }
 
-    window.ClientRenderer = new ClientRenderer();
+    window.clientRenderer = new ClientRenderer();
 
-    return window.ClientRenderer;
+    return window.clientRenderer;
 });

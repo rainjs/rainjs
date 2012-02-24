@@ -23,7 +23,7 @@ define([], function() {
      * @function
      */
     Controller.prototype.start = function () {
-        ClientRenderer.loadComponent({
+        clientRenderer.loadComponent({
             component: {
                 name: 'button',
                 version: '1.0',
