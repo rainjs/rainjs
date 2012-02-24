@@ -55,6 +55,7 @@ Server side modules
     server/websockets
     server/component_descriptor
     server/error_pages
+    server/component_versioning
 
 -----------------
 Features Proposal
