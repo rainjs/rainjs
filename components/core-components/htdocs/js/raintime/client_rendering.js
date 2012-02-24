@@ -30,8 +30,18 @@ define(function () {
     ClientRenderer.prototype.renderComponent = function (component) {
         console.log(component);
     };
+    
+    /**
+     * Inserts the component in the page
+     * 
+     * @param {ClientRenderer} self the class instance
+     * @param {Object} component the component to be rendered
+     */
+    function insertComponent(self, component) {
+        
+    }
 
-    window.ClientRenderer = new ClientRenderer();
+    window.clientRenderer = new ClientRenderer();
 
-    return window.ClientRenderer;
+    return window.clientRenderer;
 });
