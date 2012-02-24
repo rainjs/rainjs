@@ -60,6 +60,15 @@ Server side modules
     server/handlebars/css_helper
     server/handlebars/how_to_write_a_helper
 
+----------
+Components
+----------
+
+.. toctree::
+    :maxdepth: 2
+
+    server/error_component
+
 -----------------
 Features Proposal
 -----------------
