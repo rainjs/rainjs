@@ -6,7 +6,7 @@
 Rain 0.4.1 Documentation
 ========================
 
-Welcome! This is the documentation for Rain 0.4.1
+Welcome! This is the documentation for Rain 0.6.0
 
 ---------------
 Getting started
@@ -56,6 +56,19 @@ Server side modules
     server/component_descriptor
     server/error_pages
     server/component_versioning
+    server/handlebars/component_helper
+    server/handlebars/css_helper
+    server/handlebars/how_to_write_a_helper
+    server/authorization
+
+----------
+Components
+----------
+
+.. toctree::
+    :maxdepth: 2
+
+    server/error_component
 
 -----------------
 Features Proposal
