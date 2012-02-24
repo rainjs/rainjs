@@ -28,8 +28,38 @@ define(function () {
      * @param {Object} component the component to be rendered
      */
     ClientRenderer.prototype.renderComponent = function (component) {
-        console.log(component);
+        var component = registerComponent(this, component);
+        insertComponent(this, component);
+
+        component.controller.start();
     };
+
+    /**
+     * Register a component with the framework
+     *
+     * @param {ClientRenderer} self the class instance
+     * @param {Object} component the component to be registered
+     */
+    function registerComponent(self, component) {
+        require(["core-components/raintime/raintime"], function (Raintime) {
+            var Registry = Raintime.ComponentRegistry;
+            var Controller = Raintime.ComponentController;
+            var component = Registry.register({
+                "domId": component.domId,
+                "instanceId": component.instanceId,
+                "moduleId": component.moduleId,
+                "staticId": component.staticId,
+                "clientcontroller": component.controller
+            });
+
+            component.controller.init(); // call the init lifecycle method of the component
+
+            return component;
+        });
+    }
+
+    function insertComponent(self, component) {
+    }
 
     window.ClientRenderer = new ClientRenderer();
 
