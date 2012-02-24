@@ -140,3 +140,8 @@ The following example demonstrates how dynamic conditions can be used (the conte
         index: index,
         view: view
     };
+
+.. seealso::
+
+    :js:class:`Authorization`
+        Authorization API
