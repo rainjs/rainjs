@@ -22,7 +22,15 @@ define([], function() {
      *
      * @function
      */
-    Controller.prototype.start = $.noop;
+    Controller.prototype.start = function () {
+        ClientRenderer.loadComponent({
+            component: {
+                name: 'button',
+                version: '1.0',
+                view: 'index'
+            }
+        })
+    };
 
     return Controller;
 });

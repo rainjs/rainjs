@@ -13,7 +13,7 @@ function doGet(request, response) {
         html : ''
     };
 
-    response.writeHead(statusCode, {"Content-Type": "application/jsonp"});
+    response.writeHead(200, {"Content-Type": "application/jsonp"});
     response.end('ClientRenderer.renderComponent('+JSON.stringify(data)+')');
 }
 
