@@ -38,7 +38,11 @@ define(function () {
      * @param {Object} component the component to be rendered
      */
     function insertComponent(self, component) {
-        
+        $('#' + component.domId).html(component.html);
+        var head = $('head');
+        for (var i = 0, l = component.css.length; i < l; i++) {
+            head.append('<link rel="stylesheet" href="' + component.css[i] + '" type="text/css" />')
+        }
     }
 
     window.clientRenderer = new ClientRenderer();
