@@ -56,6 +56,9 @@ Server side modules
     server/component_descriptor
     server/error_pages
     server/component_versioning
+    server/handlebars/component_helper
+    server/handlebars/css_helper
+    server/handlebars/how_to_write_a_helper
 
 -----------------
 Features Proposal

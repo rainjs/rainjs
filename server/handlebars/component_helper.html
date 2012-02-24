@@ -1,0 +1,162 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Component Helper &mdash; Rain v0.4.1 documentation</title>
+    <link rel="stylesheet" href="../../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <link rel="top" title="Rain v0.4.1 documentation" href="../../index.html" />
+    <link rel="next" title="CSS Helper" href="css_helper.html" />
+    <link rel="prev" title="Component Versioning" href="../component_versioning.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="css_helper.html" title="CSS Helper"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../component_versioning.html" title="Component Versioning"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="component-helper">
+<h1>Component Helper<a class="headerlink" href="#component-helper" title="Permalink to this headline">¶</a></h1>
+<p>The component helper is a custom Handlebars helper that is used to aggregate other components
+inside the current component. It will generate a HTML custom tag automatically and adds this to
+the taglib dynamically, so that the parser can aggregate the component.</p>
+<p>The helper can also generate taglibs that reference to different views of the same component.</p>
+<div class="section" id="usage">
+<span id="handlebars-component-helper-usage"></span><h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>The following example shows a component helper with all the options specified (this aggregates the
+<em>index</em> view from the <em>button</em> component, version <em>1.1</em> and the static id for this component is set
+to <em>button1</em>):</p>
+<div class="highlight-python"><pre>{{component name="button" version="1.1" view="index" sid="button1"}}</pre>
+</div>
+<p>You can also aggregate a view from the current component as in the following example:</p>
+<div class="highlight-python"><pre>{{component view="index"}}</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When the version is not specified the latest version of the component is used.</p>
+</div>
+</div>
+<div class="section" id="html-output">
+<h2>HTML Output<a class="headerlink" href="#html-output" title="Permalink to this headline">¶</a></h2>
+<p>The declaration <tt class="docutils literal"><span class="pre">{{component</span> <span class="pre">name=&quot;button&quot;</span> <span class="pre">view=&quot;index&quot;}}</span></tt> generates the following <em>custom</em> tag:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;button</span><span class="na">_1_0_index</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+<p>The declaration <tt class="docutils literal"><span class="pre">{{component</span> <span class="pre">name=&quot;button&quot;</span> <span class="pre">version=&quot;1.1&quot;</span> <span class="pre">view=&quot;main&quot;}}</span></tt> generates
+the following <em>custom</em> tag:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;button</span><span class="na">_1_1_main</span> <span class="nt">/&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="error-cases">
+<h2>Error Cases<a class="headerlink" href="#error-cases" title="Permalink to this headline">¶</a></h2>
+<p>When the component or the view isn&#8217;t found a 404 error page will be shown. Also, the component helper
+performs authorization before a view is shown. If the authorization fails a 401 error page is shown.</p>
+<p>What happens is that in error cases the custom tag for the component is replaced with the custom tag
+for the exception component, like <tt class="docutils literal"><span class="pre">&lt;error_1_0_404</span> <span class="pre">/&gt;</span></tt> or <tt class="docutils literal"><span class="pre">&lt;error_1_0_401</span> <span class="pre">/&gt;</span></tt>.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><tt class="xref js js-class docutils literal"><span class="pre">ComponentHelper()</span></tt></dt>
+<dd>Component Helper component API</dd>
+<dt><a class="reference internal" href="../component_versioning.html"><em>Component Versioning</em></a></dt>
+<dd>How RAIN handles multiple component versions</dd>
+<dt><tt class="xref doc docutils literal"><span class="pre">../authorization</span></tt></dt>
+<dd>Documentation describing how the authorization process takes place</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Component Helper</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#html-output">HTML Output</a></li>
+<li><a class="reference internal" href="#error-cases">Error Cases</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../component_versioning.html"
+                        title="previous chapter">Component Versioning</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="css_helper.html"
+                        title="next chapter">CSS Helper</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="css_helper.html" title="CSS Helper"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../component_versioning.html" title="Component Versioning"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

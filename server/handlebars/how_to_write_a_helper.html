@@ -1,0 +1,167 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Guidelines for writing a Handlebars helper &mdash; Rain v0.4.1 documentation</title>
+    <link rel="stylesheet" href="../../static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.4.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <link rel="top" title="Rain v0.4.1 documentation" href="../../index.html" />
+    <link rel="next" title="Client Side Contexts" href="../../proposals/Features-proposal-client-contexts.html" />
+    <link rel="prev" title="CSS Helper" href="css_helper.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../proposals/Features-proposal-client-contexts.html" title="Client Side Contexts"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="css_helper.html" title="CSS Helper"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="guidelines-for-writing-a-handlebars-helper">
+<h1>Guidelines for writing a Handlebars helper<a class="headerlink" href="#guidelines-for-writing-a-handlebars-helper" title="Permalink to this headline">¶</a></h1>
+<p>This document describes the guidelines that a developer must follow when writing a Handlebars
+helper in order to be auto-discovered and properly documented.</p>
+<div class="section" id="helper-structure">
+<h2>Helper structure<a class="headerlink" href="#helper-structure" title="Permalink to this headline">¶</a></h2>
+<p>Each helper must be a module that exports two attributes:</p>
+<ol class="arabic simple">
+<li><strong>name</strong> - the helper name. E.g. <em>css</em>.</li>
+<li><strong>helper</strong> - the helper function. It is run when the template engine detects the helper
+statement in the HTML file.</li>
+</ol>
+</div>
+<div class="section" id="helper-location">
+<h2>Helper location<a class="headerlink" href="#helper-location" title="Permalink to this headline">¶</a></h2>
+<p>The helper files must be located in the <tt class="docutils literal"><span class="pre">&lt;RAIN_SDK&gt;/lib/handlebars/</span></tt> folder. Each helper file
+should be named <tt class="docutils literal"><span class="pre">&lt;helper_name&gt;.js</span></tt>. E.g.: <tt class="docutils literal"><span class="pre">css.js</span></tt>.</p>
+</div>
+<div class="section" id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">Each module must have a class function where a basic description of the module is found. E.g.:</p>
+<blockquote>
+<div><div class="highlight-javascript"><div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm"> * This Handlebars helper transforms a set of component parameters into a link tag that</span>
+<span class="cm"> * references a css file location from a specific component.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @name CssHelper</span>
+<span class="cm"> * @constructor</span>
+<span class="cm"> */</span>
+<span class="kd">function</span> <span class="nx">CssHelper</span><span class="p">()</span> <span class="p">{}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Each module must have the helper function that has documentation in the JSDoc format. E.g.:</p>
+<blockquote>
+<div><div class="highlight-javascript"><div class="highlight"><pre><span class="nx">CssHelper</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">helper</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Helper implementation</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">The module must export the helper name and the helper function. E.g.:</p>
+<blockquote>
+<div><div class="highlight-javascript"><div class="highlight"><pre><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;css&#39;</span><span class="p">,</span>
+    <span class="nx">helper</span><span class="o">:</span> <span class="k">new</span> <span class="nx">CssHelper</span><span class="p">().</span><span class="nx">helper</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Guidelines for writing a Handlebars helper</a><ul>
+<li><a class="reference internal" href="#helper-structure">Helper structure</a></li>
+<li><a class="reference internal" href="#helper-location">Helper location</a></li>
+<li><a class="reference internal" href="#documentation">Documentation</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="css_helper.html"
+                        title="previous chapter">CSS Helper</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../../proposals/Features-proposal-client-contexts.html"
+                        title="next chapter">Client Side Contexts</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../proposals/Features-proposal-client-contexts.html" title="Client Side Contexts"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="css_helper.html" title="CSS Helper"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Rain v0.4.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>
