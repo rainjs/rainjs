@@ -16,7 +16,7 @@ function doGet(request, response) {
     };
 
     response.writeHead(200, {"Content-Type": "application/jsonp"});
-    response.end('ClientRenderer.renderComponent('+JSON.stringify(data)+')');
+    response.end('clientRenderer.renderComponent('+JSON.stringify(data)+')');
 }
 
 /**
