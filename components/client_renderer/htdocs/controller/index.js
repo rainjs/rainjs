@@ -24,12 +24,13 @@ define([], function() {
      */
     Controller.prototype.start = function () {
         clientRenderer.loadComponent({
+            selector: '#catwoman',
             component: {
                 name: 'button',
                 version: '1.0',
                 view: 'index'
             }
-        })
+        });
     };
 
     return Controller;

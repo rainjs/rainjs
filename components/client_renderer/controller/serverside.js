@@ -5,18 +5,43 @@
  * @param {Response} response the response object
  */
 function doGet(request, response) {
-    var data = {
+    response.writeHead(200, {"Content-Type": "application/jsonp"});
+
+    var dataPlaceholder = {
+        css: [ '/component/placeholder/htdocs/css/index.css' ],
+        controller: '/components/placeholder/htdocs/controller/index.js',
+        domId: 200,
+        instanceId : 'joker',
+        staticId: 'batman',
+        moduleId: 'placeholder-1.0',
+        html: '<div class="app_container placeholder_1_0" data-instanceid="joker"\
+            data-viewid="VIEW_ID...">\
+            <div class="placeholder_loading"></div>',
+        wrapperId: request.query.wrapperId
+    };
+
+    writeJsonpFunction(dataPlaceholder, response);
+
+    var dataButton = {
         css: [ '/component/textbox/htdocs/css/index.css' ],
         controller: '/components/textbox/htdocs/controller/index.js',
         domId: 500,
-        instanceId : 'b367fd0ee2d8432c202e8af61c288220c420fef3',
+        instanceId : 'flash',
         staticId: 'superman',
         moduleId: 'button-1.0',
-        html : ''
+        html: '<div class="app_container button_1_0" data-instanceid="flash"\
+            data-viewid="VIEW_ID...">\
+            <div class="placeholder_loading"></div>',
+        wrapperId: dataPlaceholder.instanceId
     };
 
-    response.writeHead(200, {"Content-Type": "application/jsonp"});
-    response.end('clientRenderer.renderComponent('+JSON.stringify(data)+')');
+    writeJsonpFunction(dataButton, response);
+
+    response.end();
+}
+
+function writeJsonpFunction(data, response){
+    response.write('clientRenderer.renderComponent('+JSON.stringify(data)+');');
 }
 
 /**

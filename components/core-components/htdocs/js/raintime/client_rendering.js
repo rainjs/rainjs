@@ -1,4 +1,4 @@
-define(function () {
+define(function() {
     /**
      * Get a new instance for ClientRenderer.
      *
@@ -7,6 +7,7 @@ define(function () {
      * @constructor
      */
     function ClientRenderer() {
+        this.uniqueWrapperId = 0;
     }
 
     /**
@@ -14,7 +15,13 @@ define(function () {
      *
      * @param {Object} options
      */
-    ClientRenderer.prototype.loadComponent = function (options) {
+    ClientRenderer.prototype.loadComponent = function(options) {
+        if (!options.selector) {
+            throw "Selector is required";
+        }
+
+        options.wrapperId = this.createTemporarWrapper(options.selector);
+
         $.ajax({
             url: '/components/client_renderer/controller/serverside.js',
             dataType: 'jsonp',
@@ -22,23 +29,30 @@ define(function () {
         });
     };
 
+    ClientRenderer.prototype.createTemporarWrapper = function(selector) {
+        var uWrapperId = "wrapperid-" + this.uniqueWrapperId++;
+        $(selector).after('<div data-instanceid="' + uWrapperId + '"></div>');
+
+        return uWrapperId;
+    };
+
     /**
      * Renders a component received via JSONP.
      *
      * @param {Object} component the component to be rendered
      */
-    ClientRenderer.prototype.renderComponent = function (component) {
+    ClientRenderer.prototype.renderComponent = function(component) {
         console.log(component);
     };
-    
+
     /**
      * Inserts the component in the page
-     * 
+     *
      * @param {ClientRenderer} self the class instance
      * @param {Object} component the component to be rendered
      */
     function insertComponent(self, component) {
-        
+
     }
 
     window.clientRenderer = new ClientRenderer();
