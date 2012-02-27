@@ -3,10 +3,11 @@
         "buildPath": "./doc/source/client/api",
         "srcPath": "./components/core-components/htdocs/js",
         "files": [
-            "raintime/client_storage.js",
-            "raintime/raintime.js",
-            "raintime/viewcontext.js",
-            "raintime/messaging_observer.js",
+            "/raintime/client_storage.js",
+            "/raintime/raintime.js",
+            "/raintime/viewcontext.js",
+            "/raintime/messaging_observer.js",
+            "/raintime/client_rendering.js",
             "/../../../../lib/authorization.js"
         ]
     },

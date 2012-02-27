@@ -46,34 +46,6 @@ Methods
    class-methods
 
 
-addListener
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-.. js:function:: ClientStorage#addListener(callback)
-
-
-    
-    :param  callback: 
-         
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
 get
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
@@ -138,34 +110,6 @@ remove
 
 
 Remove the key from storage
-
-
-
-
-
-
-
-
-
-    
-
-
-
-removeListener
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-.. js:function:: ClientStorage#removeListener(callback)
-
-
-    
-    :param  callback: 
-         
-    
-
-
-
-
-
 
 
 

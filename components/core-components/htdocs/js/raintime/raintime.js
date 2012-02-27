@@ -4,7 +4,7 @@ define(['core-components/client_util',
         'core-components/raintime/messaging',
         'core-components/raintime/client_rendering'], function (ClientUtil, RaintimeConfig) {
 
-    var modules = Array.prototype.splice.call(arguments, 1);
+    var modules = Array.prototype.slice.call(arguments, 2);
     
     if(window.MozWebSocket) {
         window.WebSocket = window.MozWebSocket;
@@ -241,13 +241,20 @@ define(['core-components/client_util',
                  *
                  * @public
                  * @memberOf Raintime.ComponentRegistry#
-                 * @param staticId
+                 * @param {Number} staticId
+                 * @param {ViewContext} [viewContext] the viewContext of the parent component
                  * @returns {Component|undefined}
                  */
-                function getComponent(staticId) {
+                function getComponent(staticId, viewContext) {
                     for (var key in components) {
-                        if (components[key].staticId === staticId) {
-                            return components[key];
+                        var component = components[key];
+                        if (component.staticId === staticId) {
+                            if (viewContext &&
+                                component.parent !== viewContext.instanceId) {
+                                continue;
+                            }
+
+                            return component;
                         }
                     }
                 }

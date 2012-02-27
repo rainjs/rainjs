@@ -10,6 +10,7 @@ Do not understand this wrong: P2P connections are still not possible. Also it is
 mentioning that work on websocket from HTML 5 is not finalize yet. In RAIN it is
 really easy to use websockets.
 
+-------------------------
 RAIN Websockets Interface
 -------------------------
 

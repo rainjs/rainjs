@@ -1,4 +1,4 @@
-define(["hello_world/custom_lib"], function() {
+define([], function() {
     /**
      * Example controller class.
      *
