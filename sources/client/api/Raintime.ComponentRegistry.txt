@@ -105,12 +105,15 @@ Get an instance of the ComponentRegistry
 getComponent
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: Raintime.ComponentRegistry#getComponent(staticId)
+.. js:function:: Raintime.ComponentRegistry#getComponent(staticId, [viewContext])
 
 
     
-    :param  staticId: 
+    :param Number staticId: 
          
+    
+    :param ViewContext viewContext: 
+        the viewContext of the parent component 
     
 
 
