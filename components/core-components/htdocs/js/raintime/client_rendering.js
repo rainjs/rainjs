@@ -73,9 +73,9 @@ define([
      * @param {Object} component the component to be rendered
      */
     ClientRenderer.prototype.renderComponent = function(component) {
-        console.log("renderComponent");
+        var self = this;
         registerComponent(this, component).then(function(cmp) {
-            insertComponent(this, component);
+            insertComponent(self, component);
         });
     };
 
@@ -115,9 +115,9 @@ define([
         var defer = new Promise.defer();
 
         var componentId = component.moduleId.split('-')[0];
-        this.requireConfig.paths[componentId] = componentId + '/htdocs/js';
+        self.requireConfig.paths[componentId] = componentId + '/htdocs/js';
 
-        require(this.requireConfig);
+        require(self.requireConfig);
         require([
             "core-components/raintime/raintime"
         ], function(Raintime) {
