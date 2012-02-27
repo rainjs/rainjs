@@ -26,7 +26,7 @@ define([
     /**
      * Requests a component from the server that will be rendered as soon as it is available.
      *
-     * @param {Object} options
+     * @param {Object} options the data to be sent to the server
      */
     ClientRenderer.prototype.loadComponent = function(options) {
         if (!options.selector) {
