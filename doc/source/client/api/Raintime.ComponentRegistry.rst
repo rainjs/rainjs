@@ -109,7 +109,7 @@ getComponent
 
 
     
-    :param Mixed staticId: 
+    :param  staticId: 
          
     
 
@@ -121,7 +121,7 @@ getComponent
     
 
 
-Get a component by its static Id
+Looks up and returns a component by it's static id.
 
 
 

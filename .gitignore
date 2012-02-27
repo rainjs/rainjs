@@ -6,6 +6,8 @@
 /test/mothership/conf/server.conf.*
 /.idea
 /doc/build
+/doc/source/client/api
+/doc/source/server/api
 *_global_.rst
 /tests/server/reports
 .server
