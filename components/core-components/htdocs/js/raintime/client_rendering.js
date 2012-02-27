@@ -3,9 +3,12 @@ define([
 ], function(Promise) {
 
     /**
-     * Get a new instance for ClientRenderer.
+     * Handler for asynchroniously rendering components in rain. This is achived by sending each component
+     * individually to the client as soon as it's available as a JSONP call to the renderer. This way the user
+     * gets a more responsive experience, since every comonent gets rendered as soon as it's available, thus
+     * giving quicker visual feedback to the user.
      *
-     * @class Handles the asynchronous rendering of components.
+     * @class a ClientRenderer instance
      * @name ClientRenderer
      * @constructor
      */
@@ -21,7 +24,7 @@ define([
     }
 
     /**
-     * Loads a component from the server.
+     * Requests a component from the server that will be rendered as soon as it is available.
      *
      * @param {Object} options
      */
@@ -30,7 +33,7 @@ define([
             throw "Selector is required";
         }
 
-        options.wrapperId = this.createTemporarWrapper(options.selector);
+        options.wrapperId = this.createTemporaryWrapper(options.selector);
 
         $.ajax({
             url: '/components/client_renderer/controller/serverside.js',
@@ -42,11 +45,22 @@ define([
         });
     };
 
+    /**
+     * React to fragments of data sent from the server
+     *
+     * @param {Object} the progress object recived from the onprogress event
+     * @private
+     */
     function onProgress(progress){
         eval(progress.currentTarget.responseText);
     }
 
-    ClientRenderer.prototype.createTemporarWrapper = function(selector) {
+    /**
+     * Create a wrapper in which the response will be placed
+     *
+     * @param {String} selector a jQuery selector for the element after which to append the wrapper
+     */
+    ClientRenderer.prototype.createTemporaryWrapper = function(selector) {
         var uWrapperId = "wrapperid-" + this.uniqueWrapperId++;
         $(selector).after('<div data-instanceid="' + uWrapperId + '"></div>');
 
@@ -54,7 +68,7 @@ define([
     };
 
     /**
-     * Renders a component received via JSONP.
+     * Render a component recived via JSONP.
      *
      * @param {Object} component the component to be rendered
      */
