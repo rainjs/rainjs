@@ -10,7 +10,7 @@ receive a namespace and they are registered at a certain url.
 On the client side, to be able to connect to a websocket you need to specify the url. In 
 RAIN the client runtime provides easy access to websockets.
 
-.. _ws_same_comp:
+------------------------------------
 Websockets within the same component
 ------------------------------------
 
@@ -24,6 +24,7 @@ After you obtain a connection to this websocket you can easly start to emit mess
 react to messages. The obtained socket is obtained from socket.io. For more information
 about socket io visit: http://socket.io/
 
+--------------------------------
 Websockets from other components
 --------------------------------
 
@@ -40,7 +41,8 @@ with the following code::
    var messaging = this.clientRuntime.messaging;
    
    this._socket = messaging._getWebSocket("intents-example-1.0", "chat/dummy socket");
-   
+
+------------------
 Websockets example
 ------------------
 

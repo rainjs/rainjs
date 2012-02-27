@@ -53,11 +53,11 @@
 <p>Client messaging layer is part of client runtime. In RAIN you have two types of messaging on
 the client side:</p>
 <blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li>Intents messaging</li>
 <li>Publish / subscriber</li>
 </ul>
-</div></blockquote>
+</blockquote>
 <div class="section" id="intents">
 <h2>Intents<a class="headerlink" href="#intents" title="Permalink to this headline">¶</a></h2>
 <p>Intents concept is inspired from android operating system. Basically they allow developer to
@@ -115,13 +115,13 @@ runtime in all its methods. Below you can find an usage example:</p>
 method used to accessing intents mechanism is sendIntent method. This method accept a
 Dictionary as a parameter. Each intent request must contain the following information:</p>
 <blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li>viewContext - This is the requester viewContext object.</li>
 <li>category - This is the intent category as defined in meta.json file.</li>
 <li>action - This is the action of the intent.</li>
 <li>intentContext - This is a dictionary where data specific to the intent are passed.</li>
 </ul>
-</div></blockquote>
+</blockquote>
 <p>The sendIntent method returns a promise that can be used to react onsuccess and onerror. If
 you do not specify a callback for error case then the error is automatically thrown.</p>
 <p>Please search for more examples into components/intents_example folder.</p>
@@ -245,7 +245,7 @@ event with the :: operator. But enough talk, lets see some code:</p>
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

@@ -101,10 +101,10 @@
 <p>For each view that requires dynamic authorization, there should be a script called &lt;view_id&gt;.js that is placed in the authorization folder in the application module root path. Rain should support auto-discovery of the authorization script although it can be also defined in the module descriptor in the <strong>access_condition</strong> property.</p>
 <p>One function defined in this script will be invoked by Rain:</p>
 <blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li><strong>canAccessPage(sessionContext)</strong>: returns a boolean that says if the user can access or not this view; a reference to the current user sessionContext is passed as an argument and it is used to dynamically determine if the user can access this view.</li>
 </ul>
-</div></blockquote>
+</blockquote>
 <p>Example:</p>
 <div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
@@ -127,18 +127,18 @@
 </ol>
 <p>There are 2 types of requesting a view:</p>
 <blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li>direct request of view from browser</li>
 <li>Rain indirectly requests a view as a fragment of other view (composition)</li>
 </ul>
-</div></blockquote>
+</blockquote>
 <p>If an user is not authorised to access a view:</p>
 <blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li>Rain will return 403 Forbidden in the first case</li>
 <li>Rain will not include the fragment into the parent view in the second case</li>
 </ul>
-</div></blockquote>
+</blockquote>
 </div>
 <div class="section" id="assumptions">
 <h2>Assumptions<a class="headerlink" href="#assumptions" title="Permalink to this headline">¶</a></h2>
@@ -201,7 +201,7 @@
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

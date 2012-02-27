@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../static/underscore.js"></script>
     <script type="text/javascript" src="../static/doctools.js"></script>
     <link rel="top" title="Rain v0.6.0 documentation" href="../index.html" />
-    <link rel="next" title="RAIN SDK Tutorial" href="rain_sdk_tutorial.html" />
+    <link rel="next" title="Install.sh content" href="install.html" />
     <link rel="prev" title="Rain 0.6.0 Documentation" href="../index.html" /> 
   </head>
   <body>
@@ -34,7 +34,7 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="rain_sdk_tutorial.html" title="RAIN SDK Tutorial"
+          <a href="install.html" title="Install.sh content"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="../index.html" title="Rain 0.6.0 Documentation"
@@ -70,7 +70,7 @@ development machine.</p>
 </dl>
 <p>Now you can start installing node.</p>
 <blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li>wget <a class="reference external" href="https://github.com/joyent/node/zipball/v0.4.12">https://github.com/joyent/node/zipball/v0.4.12</a> -O node-v0.4.12.zip</li>
 <li>unzip node-v0.4.12.zip</li>
 <li>cd joyent-node-41e5762</li>
@@ -81,12 +81,12 @@ development machine.</p>
 <li>node - to make sure node can be run</li>
 <li>curl <a class="reference external" href="http://npmjs.org/install.sh">http://npmjs.org/install.sh</a> | sh</li>
 </ol>
-</div></blockquote>
+</blockquote>
 </div>
 <div class="section" id="windows-os">
 <h3>Windows OS<a class="headerlink" href="#windows-os" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li>Install cygwin with the following options checked for install
 + Base
 + Database
@@ -110,7 +110,7 @@ development machine.</p>
 <li>./configure &amp;&amp; make &amp;&amp; make install &#8212; This will take a while so you can go grab a cup of coffee.</li>
 <li>npm -v</li>
 </ol>
-</div></blockquote>
+</blockquote>
 </div>
 </div>
 <div class="section" id="redis-server">
@@ -126,31 +126,31 @@ development machine.</p>
 <h3>Mac OS<a class="headerlink" href="#mac-os" title="Permalink to this headline">¶</a></h3>
 <p>On Mac OS operating systems you need to execute the following commands:</p>
 <blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li>wget <a class="reference external" href="http://redis.googlecode.com/files/redis-0.900_2.tar.gz">http://redis.googlecode.com/files/redis-0.900_2.tar.gz</a></li>
 <li>tar xzvf redis-0.900_2.tar.gz</li>
 <li>cd redis-0.900</li>
 <li>make</li>
 </ol>
-</div></blockquote>
+</blockquote>
 <p>I recommend you do not install this globally. It is better if you simply run the following
 command from redis-0.900 folder:</p>
 <blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li>./src/redis-server</li>
 </ol>
-</div></blockquote>
+</blockquote>
 </div>
 <div class="section" id="id1">
 <h3>Windows OS<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li>Download redis file <a class="reference external" href="https://github.com/downloads/dmajkic/redis/redis-2.4.2-win32-win64-fix.zip">https://github.com/downloads/dmajkic/redis/redis-2.4.2-win32-win64-fix.zip</a></li>
 <li>Unzip the file.</li>
 <li>cd redis-2.4.2-win32-win64-fix/32bit/</li>
 <li>./redis-server.exe</li>
 </ol>
-</div></blockquote>
+</blockquote>
 <p>Please execute this command everytime before actually running mothership and rain.</p>
 </div>
 </div>
@@ -162,12 +162,12 @@ command from redis-0.900 folder:</p>
 tested on Ubuntu Linux and on Mac OS X. Below you can find the commands to get the sdk running on
 Unix / Linux operating systems:</p>
 <blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li>curl <a class="reference external" href="http://npmjs.org/install.sh">http://npmjs.org/install.sh</a> | sudo sh</li>
 <li>Execute npm -version to make sure npm is correctly installed.</li>
 <li>sudo npm install rain -g</li>
 </ol>
-</div></blockquote>
+</blockquote>
 <p>If everything went well you should be able to run rain sdk from command line. For more information
 about RAIN sdk creating first project read: <a class="reference internal" href="rain_sdk_tutorial.html"><em>RAIN SDK Tutorial</em></a></p>
 </div>
@@ -175,7 +175,7 @@ about RAIN sdk creating first project read: <a class="reference internal" href="
 <h3>Windows Comments<a class="headerlink" href="#windows-comments" title="Permalink to this headline">¶</a></h3>
 <p>For RAIN SDK to run on Windows please run the following commands:</p>
 <blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li>cd /home/&lt;your user folder&gt;</li>
 <li>mkdir node_kit</li>
 <li>cd node_kit</li>
@@ -183,7 +183,7 @@ about RAIN sdk creating first project read: <a class="reference internal" href="
 <li>npm install <a class="reference external" href="mailto:rain&#37;&#52;&#48;0&#46;4&#46;0">rain<span>&#64;</span>0<span>&#46;</span>4<span>&#46;</span>0</a></li>
 <li>export PATH=$PATH:/home/&lt;your user folder&gt;/node_kit/node_modules/rain</li>
 </ol>
-</div></blockquote>
+</blockquote>
 <p>Now everything is ready for you. You can execute rain on command line. To improve the
 experience for later use edit your .profile file and add as last line the following command:</p>
 <div class="highlight-python"><pre>export PATH=$PATH:/home/&lt;your user folder&gt;/node_kit/node_modules/rain</pre>
@@ -198,7 +198,7 @@ you need to execute the following commands:</p>
 <div class="section" id="linux-unix-mac-os-windows">
 <h3>Linux / Unix / Mac OS / Windows<a class="headerlink" href="#linux-unix-mac-os-windows" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li>git clone <a class="reference external" href="https://github.com/rainjs/rainjs.git">https://github.com/rainjs/rainjs.git</a></li>
 <li>cd rain</li>
 <li>npm install -d</li>
@@ -206,7 +206,7 @@ you need to execute the following commands:</p>
 <li>node node_modules/rain-mothership/run.js</li>
 <li>node run.js</li>
 </ol>
-</div></blockquote>
+</blockquote>
 </div>
 <div class="section" id="test-installation">
 <h3>Test installation<a class="headerlink" href="#test-installation" title="Permalink to this headline">¶</a></h3>
@@ -256,8 +256,8 @@ installation try to access: <a class="reference external" href="http://localhost
   <p class="topless"><a href="../index.html"
                         title="previous chapter">Rain 0.6.0 Documentation</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="rain_sdk_tutorial.html"
-                        title="next chapter">RAIN SDK Tutorial</a></p>
+  <p class="topless"><a href="install.html"
+                        title="next chapter">Install.sh content</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -282,7 +282,7 @@ installation try to access: <a class="reference external" href="http://localhost
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="rain_sdk_tutorial.html" title="RAIN SDK Tutorial"
+          <a href="install.html" title="Install.sh content"
              >next</a> |</li>
         <li class="right" >
           <a href="../index.html" title="Rain 0.6.0 Documentation"
@@ -291,7 +291,7 @@ installation try to access: <a class="reference external" href="http://localhost
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

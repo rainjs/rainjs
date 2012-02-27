@@ -1,0 +1,109 @@
+
+
+
+
+
+
+..
+    Classes and methods
+
+Class ClientRenderer
+================================================================================
+
+..
+   class-title
+
+
+Get a new instance for ClientRenderer.
+
+
+
+
+
+
+
+
+    
+
+
+Constructor
+-----------
+
+.. js:class:: ClientRenderer()
+
+
+
+
+
+
+
+
+
+Methods
+-------
+
+..
+   class-methods
+
+
+loadComponent
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: ClientRenderer#loadComponent(options)
+
+
+    
+    :param Object options: 
+         
+    
+
+
+
+
+Loads a component from the server.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+renderComponent
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: ClientRenderer#renderComponent(component)
+
+
+    
+    :param Object component: 
+        the component to be rendered 
+    
+
+
+
+
+Renders a component received via JSONP.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    
+
+
+

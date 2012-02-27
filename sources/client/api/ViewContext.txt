@@ -34,16 +34,16 @@ Constructor
 
 
     
-    :param  component: 
+    :param Object component: 
          
     
-    :param  component.id: 
+    :param String component.id: 
          
     
-    :param  component.parent: 
+    :param Object component.parent: 
          
     
-    :param  component.moduleId: 
+    :param String component.moduleId: 
          
     
 
@@ -69,7 +69,7 @@ getRoot
 
 
     
-    :returns :
+    :returns jQueryElement:
         The component's container jQuery element 
     
 
@@ -102,6 +102,11 @@ getWebSocket
 
 
 
+    
+    :returns Socket:
+         
+    
+
 
 Method used to obtain a web socket for which a handler was defined into this
 component.
@@ -125,18 +130,17 @@ publish
 
 
     
-    :param  eventName: 
+    :param String eventName: 
          
     
-    :param  data: 
+    :param Object data: 
          
     
 
 
 
 
-This is the method that will publish an event
-and will execute all registered callbacks.
+This is the method that will publish an event and will execute all registered callbacks.
 
 
 
@@ -157,13 +161,11 @@ subscribe
 
 
     
-    :param  eventName: 
+    :param String eventName: 
         Event name we want to subscribe to. Can be any string value. 
     
-    :param  callback: 
-        This is the callback method that will get executed. It must have
-                    a single parameter called data.
-            Ex: function(data) 
+    :param Function callback: 
+        This is the callback method that will get executed. It must have a single parameter called data. e.g.: function(data) 
     
 
 
@@ -191,19 +193,17 @@ unsubscribe
 
 
     
-    :param  eventName: 
+    :param String eventName: 
         Event name we want to subscribe to. Can be any string value. 
     
-    :param  callback: 
-        This is the callback method that will get executed. It must have
-                    a single parameter called data.
-            Ex: function(data) 
+    :param Function callback: 
+        This is the callback method that will get executed. It must have a single parameter called data. e.g.: function(data) 
     
 
 
 
 
-Unsubscribe from an event
+Unsubscribe from an event.
 
 
 

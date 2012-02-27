@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../static/doctools.js"></script>
     <link rel="top" title="Rain v0.6.0 documentation" href="../../index.html" />
     <link rel="next" title="Intents" href="../../server/messaging_intents.html" />
-    <link rel="prev" title="Class Raintime.messaging" href="Raintime.messaging.html" /> 
+    <link rel="prev" title="Class Raintime.ComponentStates" href="Raintime.ComponentStates.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,7 +37,7 @@
           <a href="../../server/messaging_intents.html" title="Intents"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="Raintime.messaging.html" title="Class Raintime.messaging"
+          <a href="Raintime.ComponentStates.html" title="Class Raintime.ComponentStates"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
       </ul>
@@ -61,10 +61,10 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>component</strong> &#8211; </li>
-<li><strong>component.id</strong> &#8211; </li>
-<li><strong>component.parent</strong> &#8211; </li>
-<li><strong>component.moduleId</strong> &#8211; </li>
+<li><strong>component</strong> (<em>Object</em>) &#8211; </li>
+<li><strong>component.id</strong> (<em>String</em>) &#8211; </li>
+<li><strong>component.parent</strong> (<em>Object</em>) &#8211; </li>
+<li><strong>component.moduleId</strong> (<em>String</em>) &#8211; </li>
 </ul>
 </td>
 </tr>
@@ -80,10 +80,15 @@
 <dl class="function">
 <dt id="ViewContext#getRoot">
 <tt class="descname">ViewContext#getRoot</tt><big>(</big><big>)</big><a class="headerlink" href="#ViewContext#getRoot" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>:returns :</dt>
-<dd>The component&#8217;s container jQuery element</dd>
-</dl>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">Returns jQueryElement:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body">The component&#8217;s container jQuery element</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <p>Returns the DOM container element for the component associated with this
@@ -98,10 +103,12 @@ view context.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>url</strong> &#8211; </li>
 </ul>
 </td>
+</tr>
+<tr class="field"><th class="field-name">Returns Socket:</th><td class="field-body"></td>
 </tr>
 </tbody>
 </table>
@@ -120,8 +127,8 @@ component.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>eventName</strong> &#8211; </li>
-<li><strong>data</strong> &#8211; </li>
+<li><strong>eventName</strong> (<em>String</em>) &#8211; </li>
+<li><strong>data</strong> (<em>Object</em>) &#8211; </li>
 </ul>
 </td>
 </tr>
@@ -129,8 +136,7 @@ component.</p>
 </table>
 </dd></dl>
 
-<p>This is the method that will publish an event
-and will execute all registered callbacks.</p>
+<p>This is the method that will publish an event and will execute all registered callbacks.</p>
 </div>
 <div class="section" id="subscribe">
 <h3>subscribe<a class="headerlink" href="#subscribe" title="Permalink to this headline">¶</a></h3>
@@ -142,15 +148,8 @@ and will execute all registered callbacks.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>eventName</strong> &#8211; Event name we want to subscribe to. Can be any string value.</li>
-<li><strong>callback</strong> &#8211; <dl class="docutils">
-<dt>This is the callback method that will get executed. It must have</dt>
-<dd><blockquote class="first">
-<div>a single parameter called data.</div></blockquote>
-<p class="last">Ex: function(data)</p>
-</dd>
-</dl>
-</li>
+<li><strong>eventName</strong> (<em>String</em>) &#8211; Event name we want to subscribe to. Can be any string value.</li>
+<li><strong>callback</strong> (<em>Function</em>) &#8211; This is the callback method that will get executed. It must have a single parameter called data. e.g.: function(data)</li>
 </ul>
 </td>
 </tr>
@@ -171,15 +170,8 @@ desired event.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>eventName</strong> &#8211; Event name we want to subscribe to. Can be any string value.</li>
-<li><strong>callback</strong> &#8211; <dl class="docutils">
-<dt>This is the callback method that will get executed. It must have</dt>
-<dd><blockquote class="first">
-<div>a single parameter called data.</div></blockquote>
-<p class="last">Ex: function(data)</p>
-</dd>
-</dl>
-</li>
+<li><strong>eventName</strong> (<em>String</em>) &#8211; Event name we want to subscribe to. Can be any string value.</li>
+<li><strong>callback</strong> (<em>Function</em>) &#8211; This is the callback method that will get executed. It must have a single parameter called data. e.g.: function(data)</li>
 </ul>
 </td>
 </tr>
@@ -187,7 +179,7 @@ desired event.</p>
 </table>
 </dd></dl>
 
-<p>Unsubscribe from an event</p>
+<p>Unsubscribe from an event.</p>
 </div>
 </div>
 <div class="section" id="attributes">
@@ -270,8 +262,8 @@ desired event.</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="Raintime.messaging.html"
-                        title="previous chapter">Class Raintime.messaging</a></p>
+  <p class="topless"><a href="Raintime.ComponentStates.html"
+                        title="previous chapter">Class Raintime.ComponentStates</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="../../server/messaging_intents.html"
                         title="next chapter">Intents</a></p>
@@ -302,13 +294,13 @@ desired event.</p>
           <a href="../../server/messaging_intents.html" title="Intents"
              >next</a> |</li>
         <li class="right" >
-          <a href="Raintime.messaging.html" title="Class Raintime.messaging"
+          <a href="Raintime.ComponentStates.html" title="Class Raintime.ComponentStates"
              >previous</a> |</li>
         <li><a href="../../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>
