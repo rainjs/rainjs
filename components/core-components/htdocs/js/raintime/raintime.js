@@ -4,7 +4,7 @@ define(['core-components/client_util',
         'core-components/raintime/messaging',
         'core-components/raintime/client_rendering'], function (ClientUtil, RaintimeConfig) {
 
-    var modules = Array.prototype.splice.call(arguments, 1);
+    var modules = Array.prototype.slice.call(arguments, 2);
     
     if(window.MozWebSocket) {
         window.WebSocket = window.MozWebSocket;
