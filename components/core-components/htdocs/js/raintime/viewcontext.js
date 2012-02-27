@@ -14,15 +14,15 @@ define(["core-components/client_util",
      *
      * @name ViewContext
      * @constructor
-     * @property moduleId The component's module id
-     * @property instanceId The component's instance id
-     * @property parent 
+     * @property {String} moduleId The component's module id
+     * @property {String} instanceId The component's instance id
+     * @property {Object} parent
      * @property {ClientStorage} storage The local storage manager
      * @property {ViewManager} viewManager The view manager that handles subsequent view requests
-     * @param component
-     * @param component.id
-     * @param component.parent
-     * @param component.moduleId
+     * @param {Object} component
+     * @param {String} component.id
+     * @param {Object} component.parent
+     * @param {String} component.moduleId
      */
     function ViewContext(component) {
         this.moduleId = component.moduleId;
@@ -37,6 +37,7 @@ define(["core-components/client_util",
      * component.
      *
      * @param url
+     * @returns {Socket}
      */
     ViewContext.prototype.getWebSocket = function (url) {
         return Messaging.messaging._getWebSocket(this.moduleId, url);
@@ -46,7 +47,7 @@ define(["core-components/client_util",
      * Returns the DOM container element for the component associated with this
      * view context.
      *
-     * @returns The component's container jQuery element
+     * @returns {jQueryElement} The component's container jQuery element
      */
     ViewContext.prototype.getRoot = function () {
        return $("[data-instanceid='" + this.instanceId + "']"); 
@@ -56,33 +57,28 @@ define(["core-components/client_util",
      * This is the method that allows registration of a callback method to a
      * desired event.
      *
-     * @param eventName Event name we want to subscribe to. Can be any string value.
-     * @param callback This is the callback method that will get executed. It must have
-     *                     a single parameter called data.
-     *             Ex: function(data)
+     * @param {String} eventName Event name we want to subscribe to. Can be any string value.
+     * @param {Function} callback This is the callback method that will get executed. It must have a single parameter called data. e.g.: function(data)
      */
     ViewContext.prototype.subscribe = function (eventName, callback) {
         Observer.subscribe(eventName, callback, this);
     }
 
     /**
-     * Unsubscribe from an event
+     * Unsubscribe from an event.
      *
-     * @param eventName Event name we want to subscribe to. Can be any string value.
-     * @param callback This is the callback method that will get executed. It must have
-     *                     a single parameter called data.
-     *             Ex: function(data)
+     * @param {String} eventName Event name we want to subscribe to. Can be any string value.
+     * @param {Function} callback This is the callback method that will get executed. It must have a single parameter called data. e.g.: function(data)
      */
     ViewContext.prototype.unsubscribe = function (eventName, callback) {
         Observer.unsubscribe(eventName, callback, this);
     }
 
     /**
-     * This is the method that will publish an event
-     * and will execute all registered callbacks.
+     * This is the method that will publish an event and will execute all registered callbacks.
      *
-     * @param eventName
-     * @param data
+     * @param {String} eventName
+     * @param {Object} data
      */
     ViewContext.prototype.publish = function (eventName, data) {
         Observer.publish(eventName, data, this);

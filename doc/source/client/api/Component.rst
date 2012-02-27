@@ -65,7 +65,7 @@ addChild
 
 
 
-Adds a child to the component
+Adds a child to the component.
 
 
 
@@ -93,7 +93,7 @@ addParent
 
 
 
-Sets the components parent
+Sets the components parent.
 
 
 

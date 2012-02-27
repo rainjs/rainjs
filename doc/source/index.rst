@@ -16,6 +16,7 @@ Getting started
     :maxdepth: 2
 
     getting_started/installation
+    getting_started/install
     getting_started/rain_sdk_tutorial
     server/component_descriptor
     getting_started/coding_guidelines
@@ -33,6 +34,8 @@ Client side modules
     client/client_storage
     client/requirejs
     client/websockets
+    client/cross_referencing_css
+    client/client_rendering
 
 ....
 APIs
@@ -54,7 +57,6 @@ Server side modules
     server/messaging_intents
     server/websockets
     server/component_descriptor
-    server/error_pages
     server/component_versioning
     server/handlebars/component_helper
     server/handlebars/css_helper
@@ -69,6 +71,7 @@ Components
     :maxdepth: 2
 
     server/error_component
+    server/placeholder
 
 -----------------
 Features Proposal
