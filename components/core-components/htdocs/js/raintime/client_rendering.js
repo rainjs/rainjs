@@ -84,6 +84,8 @@ define([
      *
      * @param {ClientRenderer} self the class instance
      * @param {Object} component the component to be rendered
+     * @memberOf ClientRenderer
+     * @private
      */
     function insertComponent(self, component) {
         $('[data-instanceid=' + component.wrapperId + ']').replaceWith(component.html);
@@ -106,6 +108,8 @@ define([
      *
      * @param {ClientRenderer} self the class instance
      * @param {Object} component the component to be registered
+     * @memberOf ClientRenderer
+     * @private
      */
     function registerComponent(self, component) {
         var defer = new Promise.defer();

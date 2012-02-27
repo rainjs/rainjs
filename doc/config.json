@@ -8,7 +8,8 @@
             "/raintime/viewcontext.js",
             "/raintime/messaging_observer.js",
             "/raintime/client_rendering.js",
-            "/../../../../lib/authorization.js"
+            "/../../../../lib/authorization.js",
+            "/raintime/client_rendering.js"
         ]
     },
     "server":{
