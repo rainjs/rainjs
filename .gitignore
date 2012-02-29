@@ -12,3 +12,6 @@
 /tests/server/reports
 .server
 server.log
+.settings.xml
+jstd.log
+tests/client/reports
