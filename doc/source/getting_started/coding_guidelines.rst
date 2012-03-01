@@ -13,7 +13,6 @@ Identifiers
 - Variable and normal function names start with a lower case letter.
 - Function names always start with a verb, e.g.: *lock*, *openFile*, *parseUsersList* etc.
 - Variable names never start with a verb, except for booleans: *isLocked*, *hasFeature* etc.
-- Use the *mod* prefix for modules.
 - File names use only lower case letters and underscores for spaces, e.g.: view_manager.js.
 
 -----
@@ -76,7 +75,6 @@ Best Practices
             /* Same as: dnaSequence.indexOf("GATTACA") !== -1 */
         }
 - Usually try to accept an object as a single input argument for a function instead of a long list of arguments.
-- Always declare local variables using the *var* keyword at the beginning of the function scope.
 - Use a comma at the end of the line when declaring multiple variables and also align equal signs e.g.:
     .. code-block:: javascript
         :linenos:
@@ -86,9 +84,82 @@ Best Practices
             email    = "rain@cloud.net";
 - Always provide a *default* case to switch statements.
 
+-------
+Classes
+-------
+
+- Always use the prototype pattern for classes
+
+- Private functions are scoped to the node/requirejs module and always receive as the first argument
+  a *self* object, which is the object instance the function is called on:
+
+    .. code-block:: javascript
+        :linenos:
+
+        function privateMethod(self, val) {
+            // self is the object instance, other arguments follow afterwards
+        }
+
+        // Example of calling the private method ...
+        myClass.prototype.publicMethod = function () {
+
+            // ... from the object instance context
+            privateMethod(this, val);
+
+            // ... and from an asynchronous context, by using a reference to this
+            var self = this;
+            setTimeout(function (val) {
+                privateMethod(self, val);
+            }, 1000);
+        };
+
+- Caution: if you declare a property that is scoped to the node/requirejs module, it will be a
+  static property, and all instances of the class will have access to the same value.
+
+------
+Errors
+------
+
+- All **error objects** that are to be returned have the following structure:
+
+    .. code-block:: javascript
+        :linenos:
+
+        {
+            type: {String | undefined},
+            message: {String},
+            code: {String | Number | undefined}
+            ...
+        }
+
+  Only the ``message`` property is mandatory. The meaning of the error object properties is:
+
+  ``type`` (String | undefined)
+    The type of the error, e.g.: io, net etc.
+
+  ``message`` (String)
+    The detailed message of the error.
+
+  ``code`` (String | Number | undefined)
+    The optional code of the error.
+
+  Any other properties may be added to the error object if they are of concern to the respective
+  error.
+
+- *Errors should never be thrown* since all code needs to be asynchronous.
+- Usually, **promises** should be used that are rejected with the error object described above.
+- If a function needs to accept a **callback**, the callback must also accept as the first argument an
+  error object, which might be null or undefined in case the call was successful.
+- In node, classes may inherit from **``EventEmitter``** and emit an ``error`` event when an error
+  condition occurs, passing it the error object described above. [#node-error-event]_
+
 --------
 Comments
 --------
 
 - Use `jsdoc-toolkit <http://code.google.com/p/jsdoc-toolkit/>`_ for code comments.
 - Avoid redundant or obvious comments.
+
+.. rubric:: Footnotes
+
+.. [#node-error-event] http://nodejs.org/docs/latest/api/events.html#events.EventEmitter
