@@ -1,0 +1,16 @@
+RRRRRRRRRRRRRRRRR                       iiii
+R::::::::::::::::R                     i::::i
+R::::::RRRRRR:::::R                     iiii
+RR:::::R     R:::::R
+  R::::R     R:::::R  aaaaaaaaaaaaa   iiiiiiinnnn  nnnnnnnn
+  R::::R     R:::::R  a::::::::::::a  i:::::in:::nn::::::::nn
+  R::::RRRRRR:::::R   aaaaaaaaa:::::a  i::::in::::::::::::::nn
+  R:::::::::::::RR             a::::a  i::::inn:::::::::::::::n
+  R::::RRRRRR:::::R     aaaaaaa:::::a  i::::i  n:::::nnnn:::::n
+  R::::R     R:::::R  aa::::::::::::a  i::::i  n::::n    n::::n
+  R::::R     R:::::R a::::aaaa::::::a  i::::i  n::::n    n::::n
+  R::::R     R:::::Ra::::a    a:::::a  i::::i  n::::n    n::::n
+RR:::::R     R:::::Ra::::a    a:::::a i::::::i n::::n    n::::n
+R::::::R     R:::::Ra:::::aaaa::::::a i::::::i n::::n    n::::n
+R::::::R     R:::::R a::::::::::aa:::ai::::::i n::::n    n::::n
+RRRRRRRR     RRRRRRR  aaaaaaaaaa  aaaaiiiiiiii nnnnnn    nnnnnn
