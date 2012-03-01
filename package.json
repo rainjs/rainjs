@@ -1,34 +1,26 @@
 {
-  "name": "rain",
-  "description": "An experiment on component-based and distributed web applications",
-  "version": "0.4.6",
-  "author": "Claus Augusti <claus@formatvorlage.de>",
-  "contributors": [
-    { "name": "Mitko Tschimev", "email": "privat@tschimev.de" },
-    { "name": "Radu Cosnita", "email": "radu.cosnita@gmail.com" }
-  ],
-  "dependencies": {
-    "rain-mothership": "0.0.1",
-    "uglify-js": "= 1.2.5",
-    "promised-io": ">= 0.2.3",
-    "connect": ">= 1.4.3",
-    "socket.io": ">= 0.7.7",
-    "socket.io-client": "= 0.9.9",
-    "requirejs": ">=0.26.0",
-    "gettext": ">= 0.0.1",
-    "less": ">= 1.1.4",
-    "colors": ">= 0.5.1",
-    "daemon": "0.3.2",
-    "handlebars": "1.0.4beta",
-    "jasmine-node": "= 1.0.20",
-    "commander": ">= 0.5"
-  },
-  "keywords": ["framework", "rain"],
-  "repository": "git://github.com/juxtapos/Rain",
-  "main": "./run",
-  "bin": { "rain": "./bin/rain" },
-  "engines": { "node": "0.6" },
-  "scripts" : {
-    "install" : "./make.js"
-  }
+    "name": "rain",
+    "description": "An experiment on component-based and distributed web applications",
+    "version": "0.5.0",
+    "author": "Claus Augusti <claus@formatvorlage.de>",
+    "contributors": [
+        { "name": "Mitko Tschimev", "email": "mitko.tschimev@1und1.de" },
+        { "name": "Alexandru Bularca", "email": "alexandru.bularca@1and1.ro" },
+        { "name": "Ciprian Roman", "email": "ciprian.roman@1and1.ro" },
+        { "name": "Daniel Uzunu", "email": "daniel.uzunu@1and1.ro" },
+        { "name": "Razvan Mocanu", "email": "razvan.mocanu@1and1.ro" }
+    ],
+    "dependencies": {
+        "connect": ">= 1.4.3",
+        "handlebars": "1.0.4beta",
+        "jasmine-node": "= 1.0.20",
+        "less": ">= 1.1.4",
+        "promised-io": ">= 0.2.3",
+        "socket.io": ">= 0.7.7"
+    },
+    "keywords": ["framework", "rain"],
+    "repository": "git://github.com/rainjs/rainjs",
+    "main": "./start",
+    "bin": { "rain": "./bin/rain" },
+    "engines": { "node": "0.6.11" }
 }
