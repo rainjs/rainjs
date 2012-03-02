@@ -1,4 +1,4 @@
-define(["{{application_name}}/custom_lib"], function() {
+define([""], function() {
     /**
      * Example controller class.
      *
