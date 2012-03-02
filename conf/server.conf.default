@@ -3,7 +3,8 @@
         "port": 1337,
         "serverRoot": ".",
         "componentPath": "./components",
-        "socketsPort": 1338
+        "socketsPort": 1338,
+        "timeoutForRequests" : 3
     },
 
     "mothership": {
