@@ -2,12 +2,11 @@
     "id": "{{application_name}}",
     "version": "1.0",
     "views": {
-        index : {
+        "index" : {
             "view": "index.html",
             "controller": "index.js",
             "rest": "index.js"
         }
-    }
-    
+    },
     "intents": []
 }
