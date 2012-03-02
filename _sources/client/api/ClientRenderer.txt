@@ -1,0 +1,140 @@
+
+
+
+
+
+
+..
+    Classes and methods
+
+Class ClientRenderer
+================================================================================
+
+..
+   class-title
+
+
+Handler for asynchroniously rendering components in rain. This is achived by sending each component
+individually to the client as soon as it's available as a JSONP call to the renderer. This way the user
+gets a more responsive experience, since every comonent gets rendered as soon as it's available, thus
+giving quicker visual feedback to the user.
+
+
+
+
+
+
+
+
+    
+
+
+Constructor
+-----------
+
+.. js:class:: ClientRenderer()
+
+
+
+
+
+
+
+
+
+Methods
+-------
+
+..
+   class-methods
+
+
+createTemporaryWrapper
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: ClientRenderer#createTemporaryWrapper(selector)
+
+
+    
+    :param String selector: 
+        a jQuery selector for the element after which to append the wrapper 
+    
+
+
+
+
+Create a wrapper in which the response will be placed
+
+
+
+
+
+
+
+
+
+    
+
+
+
+loadComponent
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: ClientRenderer#loadComponent(options)
+
+
+    
+    :param Object options: 
+        the data to be sent to the server 
+    
+
+
+
+
+Requests a component from the server that will be rendered as soon as it is available.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+renderComponent
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: ClientRenderer#renderComponent(component)
+
+
+    
+    :param Object component: 
+        the component to be rendered 
+    
+
+
+
+
+Render a component recived via JSONP.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    
+
+
+
