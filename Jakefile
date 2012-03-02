@@ -1,12 +1,9 @@
 // add the components folder to require.paths
 // TODO: move this to NODE_PATH when we switch to node 0.6
-require.paths.push(process.cwd() + '/components');
 
 
 var child = require('child_process');
 var fs = require('fs');
-var daemon = require('daemon');
-
 
 desc('Print the help message');
 task('default', function (params) {
