@@ -1,14 +1,13 @@
 {
     "id": "{{application_name}}",
     "version": "1.0",
-    "url": "/components/{{application_name}}",
     "views": {
         index : {
             "view": "index.html",
             "controller": "index.js",
             "rest": "index.js"
         }
-    },
-    "taglib": [],
+    }
+    
     "intents": []
 }
