@@ -2,13 +2,13 @@
     "id": "{{application_name}}",
     "version": "1.0",
     "url": "/components/{{application_name}}",
-    "views": [
-        {
-            "viewid": "index",
-            "view": "/htdocs/index.html",
-            "controller": "/htdocs/controller/index.js"
+    "views": {
+        index : {
+            "view": "index.html",
+            "controller": "index.js",
+            "rest": "index.js"
         }
-    ],
+    },
     "taglib": [],
     "intents": []
 }
