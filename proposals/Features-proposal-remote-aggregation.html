@@ -8,8 +8,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Remote aggregation &mdash; Rain v0.6.0 documentation</title>
-    <link rel="stylesheet" href="../static/default.css" type="text/css" />
-    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -19,9 +19,9 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../static/jquery.js"></script>
-    <script type="text/javascript" src="../static/underscore.js"></script>
-    <script type="text/javascript" src="../static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Rain v0.6.0 documentation" href="../index.html" />
     <link rel="next" title="Rendering Process" href="Features-proposal-rendering-layer.html" />
     <link rel="prev" title="RAIN Cloud In Action" href="Features-proposal-rain-cloud-action.html" /> 
@@ -59,7 +59,7 @@
 <h2>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="overview">
 <h3>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h3>
-<img alt="../images/remoting_architecture.jpeg" src="../images/remoting_architecture.jpeg" />
+<img alt="../_images/remoting_architecture.jpeg" src="../_images/remoting_architecture.jpeg" />
 <p>In the above diagram you can see how remote fragments will be aggregated by RAIN.</p>
 </div>
 <div class="section" id="functional-requirements">
@@ -79,11 +79,11 @@
 </div>
 <div class="section" id="aggregation-case-sample">
 <h3>Aggregation case sample<a class="headerlink" href="#aggregation-case-sample" title="Permalink to this headline">¶</a></h3>
-<img alt="../images/case_sample_remote_aggregation.jpeg" src="../images/case_sample_remote_aggregation.jpeg" />
+<img alt="../_images/case_sample_remote_aggregation.jpeg" src="../_images/case_sample_remote_aggregation.jpeg" />
 </div>
 <div class="section" id="aggregation-sequence">
 <h3>Aggregation sequence<a class="headerlink" href="#aggregation-sequence" title="Permalink to this headline">¶</a></h3>
-<img alt="../images/sd_remote_fragments.jpeg" src="../images/sd_remote_fragments.jpeg" />
+<img alt="../_images/sd_remote_fragments.jpeg" src="../_images/sd_remote_fragments.jpeg" />
 <p>In the above diagram you can see how a requests to a page that contains remote fragments is solved by RAIN. For the first request remote server holding the fragment will create a new session. The session id will be pushed back to the RAIN server along with the fragment generated markup.</p>
 <p>For ulterior requests, the session id for the same remote fragment will be sent to the remote server.</p>
 <p>On the RAIN server there will be an association between RAIN remote module and session id. This information will live within RAIN session. Fragments sessions are hidden from client side code executed within client browser.</p>
@@ -221,7 +221,7 @@ javascript using requirejs.</td>
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

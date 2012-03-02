@@ -8,8 +8,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>View modes &mdash; Rain v0.6.0 documentation</title>
-    <link rel="stylesheet" href="../static/default.css" type="text/css" />
-    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -19,9 +19,9 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../static/jquery.js"></script>
-    <script type="text/javascript" src="../static/underscore.js"></script>
-    <script type="text/javascript" src="../static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Rain v0.6.0 documentation" href="../index.html" />
     <link rel="prev" title="View authorization" href="Features-proposal-view-authorization.html" /> 
   </head>
@@ -108,22 +108,22 @@
 </td></tr></table></div>
 <p>Each view can have a list of modes.  For a mode you can specify:</p>
 <blockquote>
-<ul class="simple">
+<div><ul class="simple">
 <li>name: the name of the mode, can be edit, help or a custom mode</li>
 <li>type:  can be page or popup depending how you want to open the mode view</li>
 <li>view_id: is the id of a view that will serve the declared mode</li>
 <li>icon: path to an icon to be displayed as a link to this mode</li>
 <li>tooltipMsgKey: a key for a text to be displayed as a tooltip for the link that navigates to the mode</li>
 </ul>
-</blockquote>
+</div></blockquote>
 <p>Edit and help modes are supported by default in Rain and they will be auto-discovered.
 For a view having viewid, if there are views called viewid_edit and viewid_help Rain will consider them the edit and help modes for that view.
 You should define them in meta.json only if you want to specify custom icon or tooltip.</p>
 <p>Before rendering a view that has modes defined, Rain will include automatically a navigation area with links to the modes into the right-top side of the main view. Rain will take care also to do the proper navigation between main view and modes and vice versa.</p>
 <p>A view that has different modes defined will look like:</p>
-<img alt="../images/view.png" src="../images/view.png" />
+<img alt="../_images/view.png" src="../_images/view.png" />
 <p>After opening a view mode of type page, the user can return to the main view by clicking the &#8216;Back to view&#8217; button:</p>
-<img alt="../images/view-back.png" src="../images/view-back.png" />
+<img alt="../_images/view-back.png" src="../_images/view-back.png" />
 <p>After opening a view mode of type popup, it can be closed using the &#8216;X&#8217; button of the popup.</p>
 </div>
 <div class="section" id="assumptions">
@@ -180,7 +180,7 @@ You should define them in meta.json only if you want to specify custom icon or t
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

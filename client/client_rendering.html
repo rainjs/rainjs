@@ -8,8 +8,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Client rendering &mdash; Rain v0.6.0 documentation</title>
-    <link rel="stylesheet" href="../static/default.css" type="text/css" />
-    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -19,11 +19,11 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../static/jquery.js"></script>
-    <script type="text/javascript" src="../static/underscore.js"></script>
-    <script type="text/javascript" src="../static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Rain v0.6.0 documentation" href="../index.html" />
-    <link rel="next" title="Namespace Authorization" href="api/Authorization.html" />
+    <link rel="next" title="Intents" href="../server/messaging_intents.html" />
     <link rel="prev" title="Cross Referencing" href="cross_referencing_css.html" /> 
   </head>
   <body>
@@ -34,7 +34,7 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="api/Authorization.html" title="Namespace Authorization"
+          <a href="../server/messaging_intents.html" title="Intents"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="cross_referencing_css.html" title="Cross Referencing"
@@ -59,7 +59,7 @@ and invoking the component&#8217;s lifecycle.</p>
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>To load a component you have to use the global object <tt class="docutils literal"><span class="pre">clientRenderer</span></tt>. This object is a
-singleton instance of <a class="reference internal" href="api/ClientRenderer.html#ClientRenderer" title="ClientRenderer"><tt class="xref js js-class docutils literal"><span class="pre">ClientRenderer()</span></tt></a>.</p>
+singleton instance of <tt class="xref js js-class docutils literal"><span class="pre">ClientRenderer()</span></tt>.</p>
 <p>The following code loads a <em>user_configuration</em> component. The component is added after
 the jQuery selector <em>my-div</em>.</p>
 <div class="highlight-javascript"><div class="highlight"><pre><span class="nx">clientRenderer</span><span class="p">.</span><span class="nx">loadComponent</span><span class="p">({</span>
@@ -75,7 +75,7 @@ the jQuery selector <em>my-div</em>.</p>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><a class="reference internal" href="api/ClientRenderer.html#ClientRenderer" title="ClientRenderer"><tt class="xref js js-class docutils literal"><span class="pre">ClientRenderer()</span></tt></a></dt>
+<dt><tt class="xref js js-class docutils literal"><span class="pre">ClientRenderer()</span></tt></dt>
 <dd>Client renderer API</dd>
 </dl>
 </div>
@@ -100,8 +100,8 @@ the jQuery selector <em>my-div</em>.</p>
   <p class="topless"><a href="cross_referencing_css.html"
                         title="previous chapter">Cross Referencing</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="api/Authorization.html"
-                        title="next chapter">Namespace Authorization</a></p>
+  <p class="topless"><a href="../server/messaging_intents.html"
+                        title="next chapter">Intents</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -126,7 +126,7 @@ the jQuery selector <em>my-div</em>.</p>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="api/Authorization.html" title="Namespace Authorization"
+          <a href="../server/messaging_intents.html" title="Intents"
              >next</a> |</li>
         <li class="right" >
           <a href="cross_referencing_css.html" title="Cross Referencing"
@@ -135,7 +135,7 @@ the jQuery selector <em>my-div</em>.</p>
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

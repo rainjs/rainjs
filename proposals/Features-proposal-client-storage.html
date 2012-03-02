@@ -8,8 +8,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Client Runtime Storage &mdash; Rain v0.6.0 documentation</title>
-    <link rel="stylesheet" href="../static/default.css" type="text/css" />
-    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -19,9 +19,9 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../static/jquery.js"></script>
-    <script type="text/javascript" src="../static/underscore.js"></script>
-    <script type="text/javascript" src="../static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Rain v0.6.0 documentation" href="../index.html" />
     <link rel="next" title="CSS Transformation" href="Features-proposal-css-transformation.html" />
     <link rel="prev" title="Client Runtime (Proposal A)" href="Features-proposal-client-runtime-a.html" /> 
@@ -54,7 +54,7 @@
 <div class="section" id="functional-requirements">
 <h2>Functional requirements<a class="headerlink" href="#functional-requirements" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<ol class="arabic simple">
+<div><ol class="arabic simple">
 <li>Application developers must be able to store information on browser level.</li>
 <li>Application developers must be able to store sensitive data in a secure way.</li>
 <li>Application developers must be able to share data across multiple pages.</li>
@@ -63,7 +63,7 @@
 <li>Application developers must be able to intercept the storage events.</li>
 <li>ClientStorage must guarantee that private storage is isolated and can not be overriden by other components.</li>
 </ol>
-</blockquote>
+</div></blockquote>
 </div>
 <div class="section" id="use-cases">
 <h2>Use cases<a class="headerlink" href="#use-cases" title="Permalink to this headline">¶</a></h2>
@@ -74,7 +74,7 @@
 <p>In RAIN we want to provide a lightweight solution to this problem (HTML5 storage / dojo storage).</p>
 <div class="section" id="solution">
 <h3>Solution<a class="headerlink" href="#solution" title="Permalink to this headline">¶</a></h3>
-<img alt="../images/client_storage_pages_shared_session.jpeg" src="../images/client_storage_pages_shared_session.jpeg" />
+<img alt="../_images/client_storage_pages_shared_session.jpeg" src="../_images/client_storage_pages_shared_session.jpeg" />
 <p>One solution for this is that a set of pages to share a region of session. The reason for this is that in the end we expect the shared region to be cleared.</p>
 </div>
 </div>
@@ -88,7 +88,7 @@
 <div class="section" id="id1">
 <h3>Solution<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>In RAIN we&#8217;ll provide a local storage mechanism that allows you to save the state of your application. In addition we can provide helper methods that provide auto save mechanism for instance.</p>
-<img alt="../images/client_page_persistence_storage.jpeg" src="../images/client_page_persistence_storage.jpeg" />
+<img alt="../_images/client_page_persistence_storage.jpeg" src="../_images/client_page_persistence_storage.jpeg" />
 </div>
 </div>
 <div class="section" id="multiple-fragments-communication">
@@ -113,27 +113,27 @@ amplify.request</p>
 <h2>Design<a class="headerlink" href="#design" title="Permalink to this headline">¶</a></h2>
 <p>From the use cases presented above result two major storage mechanism:</p>
 <blockquote>
-<ul class="simple">
+<div><ul class="simple">
 <li>a persistent storage</li>
 <li>a transient storage</li>
 </ul>
-</blockquote>
+</div></blockquote>
 <p>Each storage must provide the following partitions:</p>
 <blockquote>
-<ul class="simple">
+<div><ul class="simple">
 <li>a private / dedicated partition - a shared scope for a limited number of pages / objects.</li>
 <li>a global partition - a global scope accessible by everyone.</li>
 </ul>
-</blockquote>
+</div></blockquote>
 </div>
 <div class="section" id="api">
 <h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
-<img alt="../images/client_storage_api.jpeg" src="../images/client_storage_api.jpeg" />
+<img alt="../_images/client_storage_api.jpeg" src="../_images/client_storage_api.jpeg" />
 <p>As you can see in the above diagram the concepts described in this document are abstracted into an API. Our goal is that underline this API HTML 5 localStorage and sessionStorage objects are used transparently.</p>
 <p>For having access to a private storage or to be able to create a new private storage a client side controller must provide the view context under which is running.</p>
 <div class="section" id="private-storage-example">
 <h3>Private storage example<a class="headerlink" href="#private-storage-example" title="Permalink to this headline">¶</a></h3>
-<img alt="../images/client_storage_partitions_example.jpeg" src="../images/client_storage_partitions_example.jpeg" />
+<img alt="../_images/client_storage_partitions_example.jpeg" src="../_images/client_storage_partitions_example.jpeg" />
 <p>As you can see in the above diagram the global storage from ClientRuntime is designed to be hierarchical. Most of the time applications will use dedicated storage on which they operate. Of course they can also use global storage if they want.</p>
 </div>
 <div class="section" id="api-doc">
@@ -230,20 +230,20 @@ amplify.request</p>
 <li>You must be aware on the fact that storage marked transparently can be referenced across multiple pages only if pages are displayed within the same tab or window. This is really important to take in consideration when using storages.</li>
 </ol>
 <blockquote>
-<ol class="arabic simple">
+<div><ol class="arabic simple">
 <li>The above mentioned limitation applies also to listeners.</li>
 </ol>
-</blockquote>
+</div></blockquote>
 </div>
 <div class="section" id="technical-details">
 <h2>Technical details<a class="headerlink" href="#technical-details" title="Permalink to this headline">¶</a></h2>
 <p>The intention is to provide a proof of concept for this feature as soon as possible. Before we decide on this there are some frameworks that guarantee graceful degrade in case storage is not supported by browsers. Below you can find a list of such frameworks:</p>
 <blockquote>
-<ul class="simple">
+<div><ul class="simple">
 <li>Amplifyjs - <a class="reference external" href="http://amplifyjs.com/api/store/">http://amplifyjs.com/api/store/</a></li>
 <li>Dojo storage - <a class="reference external" href="http://google-opensource.blogspot.com/2008/03/dojo-storage.html">http://google-opensource.blogspot.com/2008/03/dojo-storage.html</a> - I think this will bring an overhead (we already use jQuery).</li>
 </ul>
-</blockquote>
+</div></blockquote>
 <p>An alternative to the frameworks mentioned about would be to simply assume all browsers that access RAIN specific applications have HTML 5 support and we do not provide gracefully degrading support.</p>
 </div>
 </div>
@@ -330,7 +330,7 @@ amplify.request</p>
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

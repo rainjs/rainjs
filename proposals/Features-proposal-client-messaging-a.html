@@ -8,8 +8,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Client Runtime: Messaging API (Proposal A) &mdash; Rain v0.6.0 documentation</title>
-    <link rel="stylesheet" href="../static/default.css" type="text/css" />
-    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -19,9 +19,9 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../static/jquery.js"></script>
-    <script type="text/javascript" src="../static/underscore.js"></script>
-    <script type="text/javascript" src="../static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Rain v0.6.0 documentation" href="../index.html" />
     <link rel="next" title="Client Runtime (Proposal A)" href="Features-proposal-client-runtime-a.html" />
     <link rel="prev" title="Client Language Inline Editing" href="Features-proposal-client-language-inline-editing.html" /> 
@@ -53,23 +53,23 @@
 <p>This layer can be accessed in the client side controllers and allows interaction with all messaging mechanism provided by RAIN.</p>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
-<img alt="../images/messaging_overview.png" src="../images/messaging_overview.png" />
+<img alt="../_images/messaging_overview.png" src="../_images/messaging_overview.png" />
 </div>
 <div class="section" id="functional-requirements">
 <h2>Functional requirements<a class="headerlink" href="#functional-requirements" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<ol class="arabic simple">
+<div><ol class="arabic simple">
 <li>Messaging layer must provide communication between fragments on client side.</li>
 <li>Messaging layer must provide communication between fragments on server side.</li>
 <li>Messaging layer must provide pluggable error handling mechanism for server side messaging.</li>
 <li>Messaging layer must provide a default behavior in case of server side messaging error.</li>
 <li>Messaging layer default error handling behavior must be internationalized.</li>
 </ol>
-</blockquote>
+</div></blockquote>
 </div>
 <div class="section" id="messaging-api">
 <h2>Messaging api<a class="headerlink" href="#messaging-api" title="Permalink to this headline">¶</a></h2>
-<img alt="../images/messaging_api.png" src="../images/messaging_api.png" />
+<img alt="../_images/messaging_api.png" src="../_images/messaging_api.png" />
 </div>
 <div class="section" id="client-side-messaging">
 <h2>Client side messaging<a class="headerlink" href="#client-side-messaging" title="Permalink to this headline">¶</a></h2>
@@ -89,7 +89,7 @@
 </div>
 <div class="section" id="id1">
 <h3>Intent lifecycle<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<img alt="../images/messaging_intent_request1.png" src="../images/messaging_intent_request1.png" />
+<img alt="../_images/messaging_intent_request1.png" src="../_images/messaging_intent_request1.png" />
 <p>It is really important to know that when expressing an intent developer will be able to send a json object that holds specific information. For instance, when sending an email you already know were you want to send it. The expected behavior is to receive back the send mail application with all fields completed.</p>
 </div>
 <div class="section" id="application-descriptor">
@@ -277,7 +277,7 @@
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

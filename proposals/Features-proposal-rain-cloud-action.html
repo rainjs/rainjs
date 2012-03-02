@@ -8,8 +8,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>RAIN Cloud In Action &mdash; Rain v0.6.0 documentation</title>
-    <link rel="stylesheet" href="../static/default.css" type="text/css" />
-    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -19,9 +19,9 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../static/jquery.js"></script>
-    <script type="text/javascript" src="../static/underscore.js"></script>
-    <script type="text/javascript" src="../static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Rain v0.6.0 documentation" href="../index.html" />
     <link rel="next" title="Remote aggregation" href="Features-proposal-remote-aggregation.html" />
     <link rel="prev" title="RAIN authorization" href="Features-proposal-rain-authorization.html" /> 
@@ -54,18 +54,18 @@
 <div class="section" id="rain-cloud-off-mode">
 <h2>RAIN Cloud off mode<a class="headerlink" href="#rain-cloud-off-mode" title="Permalink to this headline">¶</a></h2>
 <p>When RAIN Cloud is not booted each piece is isolated.</p>
-<img alt="../images/rain_cloud_off_mode.png" src="../images/rain_cloud_off_mode.png" />
+<img alt="../_images/rain_cloud_off_mode.png" src="../_images/rain_cloud_off_mode.png" />
 </div>
 <div class="section" id="rain-cloud-booted">
 <h2>RAIN Cloud booted<a class="headerlink" href="#rain-cloud-booted" title="Permalink to this headline">¶</a></h2>
 <p>In this state each piece is wired (but without any running components instances).</p>
-<img alt="../images/rain_cloud_startup.png" src="../images/rain_cloud_startup.png" />
+<img alt="../_images/rain_cloud_startup.png" src="../_images/rain_cloud_startup.png" />
 <p>At the end of this phase the infrastructure is ready.</p>
 </div>
 <div class="section" id="rain-cloud-instantiate-web-components">
 <h2>RAIN Cloud instantiate web components<a class="headerlink" href="#rain-cloud-instantiate-web-components" title="Permalink to this headline">¶</a></h2>
 <p>Now imagine that we already have built two web components in development mode and now we want to publish them to production. RAIN Cloud is already active and the hypervisor has all required information. After we request the deploy / instantiate operations from cloud api the infrastructure is updated:</p>
-<img alt="../images/rain_cloud_webcomp_inst.png" src="../images/rain_cloud_webcomp_inst.png" />
+<img alt="../_images/rain_cloud_webcomp_inst.png" src="../_images/rain_cloud_webcomp_inst.png" />
 <p>Now the above diagram shows a possible result. Basically the hypervisor decide how to instantiate the requested web component and how to wire rain servers to motherships for efficiently use of resources. Later on if more pieces become available, hypervisor can decide to clone the instances and use more resources.</p>
 </div>
 <div class="section" id="conclusion">
@@ -130,7 +130,7 @@
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

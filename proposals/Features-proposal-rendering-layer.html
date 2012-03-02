@@ -8,8 +8,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Rendering Process &mdash; Rain v0.6.0 documentation</title>
-    <link rel="stylesheet" href="../static/default.css" type="text/css" />
-    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -19,9 +19,9 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../static/jquery.js"></script>
-    <script type="text/javascript" src="../static/underscore.js"></script>
-    <script type="text/javascript" src="../static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Rain v0.6.0 documentation" href="../index.html" />
     <link rel="next" title="Server Translations System" href="Features-proposal-server-language.html" />
     <link rel="prev" title="Remote aggregation" href="Features-proposal-remote-aggregation.html" /> 
@@ -190,10 +190,10 @@ documentation for more information.</p>
 <p>3.1. <strong>{{css}}</strong> helpers generate css dependencies and provide no output</p>
 <p>3.2. <strong>{{component}}</strong> helpers are rendered</p>
 <blockquote>
-<p>3.2.1. Generate <em>dom-id</em> for the current aggregation context</p>
+<div><p>3.2.1. Generate <em>dom-id</em> for the current aggregation context</p>
 <p>3.2.2. Go to step 1 for this component</p>
 <p>3.2.3. Return HTML placeholder with generated <em>dom-id</em> for parent component <a class="footnote-reference" href="#id5" id="id2">[2]</a></p>
-</blockquote>
+</div></blockquote>
 </li>
 <li><p class="first">Send rendered component to the client via websocket along with the list
 of CSS dependencies, the client-side JS controller and its <em>dom-id</em> <a class="footnote-reference" href="#id6" id="id3">[3]</a></p>
@@ -208,7 +208,7 @@ of CSS dependencies, the client-side JS controller and its <em>dom-id</em> <a cl
 </dl>
 </li>
 </ol>
-<a class="reference internal image-reference" href="../images/rendering_layer.jpg"><img alt="../images/rendering_layer.jpg" src="../images/rendering_layer.jpg" style="width: 786.8px; height: 705.6px;" /></a>
+<a class="reference internal image-reference" href="../_images/rendering_layer.jpg"><img alt="../_images/rendering_layer.jpg" src="../_images/rendering_layer.jpg" style="width: 786.8px; height: 705.6px;" /></a>
 <p class="rubric">Footnotes</p>
 <table class="docutils footnote" frame="void" id="id4" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
@@ -293,7 +293,7 @@ document&#8217;s BODY rather than into a specific placeholder</td></tr>
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

@@ -8,8 +8,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>View Instances &mdash; Rain v0.6.0 documentation</title>
-    <link rel="stylesheet" href="../static/default.css" type="text/css" />
-    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -19,9 +19,9 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../static/jquery.js"></script>
-    <script type="text/javascript" src="../static/underscore.js"></script>
-    <script type="text/javascript" src="../static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Rain v0.6.0 documentation" href="../index.html" />
     <link rel="next" title="RAIN authorization" href="Features-proposal-rain-authorization.html" />
     <link rel="prev" title="Hijax introduction" href="Features-proposal-hijax-strategy.html" /> 
@@ -55,13 +55,13 @@
 <div class="section" id="functional-requirements">
 <h2>Functional requirements<a class="headerlink" href="#functional-requirements" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<ol class="arabic simple">
+<div><ol class="arabic simple">
 <li>RAIN page must support a fragment to be displayed multiple times.</li>
 <li>RAIN fragment must receive an unique identifier.</li>
 <li>RAIN must persist page configuration after the first render process.</li>
 <li>RAIN must merge page configuration with latest changes.</li>
 </ol>
-</blockquote>
+</div></blockquote>
 </div>
 <div class="section" id="problem-examples">
 <h2>Problem examples<a class="headerlink" href="#problem-examples" title="Permalink to this headline">¶</a></h2>
@@ -109,7 +109,7 @@
 </pre></div>
 </td></tr></table></div>
 <p>Now there is no apparent problem if we don&#8217;t hold any information about these fragments. But it is 100% sure that RAIN must provide support for configuring the fragments. For instance module1 = weather fragment. If we put that fragment twice in the page we want to be able to display weather for two different locations. This is why we need to save page configuration overtime and to update it when necessary.</p>
-<img alt="../images/view_evolution.png" src="../images/view_evolution.png" />
+<img alt="../_images/view_evolution.png" src="../_images/view_evolution.png" />
 </div>
 <div class="section" id="possible-solution">
 <h2>Possible solution<a class="headerlink" href="#possible-solution" title="Permalink to this headline">¶</a></h2>
@@ -157,19 +157,19 @@
 </div>
 <div class="section" id="design">
 <h2>Design<a class="headerlink" href="#design" title="Permalink to this headline">¶</a></h2>
-<img alt="../images/view_instance_overview.png" src="../images/view_instance_overview.png" />
-<img alt="../images/view_request_response.png" src="../images/view_request_response.png" />
+<img alt="../_images/view_instance_overview.png" src="../_images/view_instance_overview.png" />
+<img alt="../_images/view_request_response.png" src="../_images/view_request_response.png" />
 <p>In the above diagrams it is shown how management of instances is done in RAIN. The main idea is to keep pages configuration into a persistent storage after the first parsing of the page.</p>
 </div>
 <div class="section" id="stored-data">
 <h2>Stored data<a class="headerlink" href="#stored-data" title="Permalink to this headline">¶</a></h2>
 <p>In this section you can find the proposed data that will go into the persistent storage. We have two main use cases:</p>
 <blockquote>
-<ul class="simple">
+<div><ul class="simple">
 <li>An user is authenticated to RAIN application.</li>
 <li>No user is authenticated to RAIN application.</li>
 </ul>
-</blockquote>
+</div></blockquote>
 </div>
 <div class="section" id="no-authenticated-user">
 <h2>No authenticated user<a class="headerlink" href="#no-authenticated-user" title="Permalink to this headline">¶</a></h2>
@@ -370,7 +370,7 @@ and loaded for subsequent requests.</p>
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

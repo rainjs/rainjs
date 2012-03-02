@@ -8,8 +8,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Client Side Contexts &mdash; Rain v0.6.0 documentation</title>
-    <link rel="stylesheet" href="../static/default.css" type="text/css" />
-    <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -19,9 +19,9 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../static/jquery.js"></script>
-    <script type="text/javascript" src="../static/underscore.js"></script>
-    <script type="text/javascript" src="../static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Rain v0.6.0 documentation" href="../index.html" />
     <link rel="next" title="Client Language Runtime (Proposal A)" href="Features-proposal-client-language-a.html" />
     <link rel="prev" title="Placeholder" href="../server/placeholder.html" /> 
@@ -53,7 +53,7 @@
 <p>In this document you can find information about various context objects and the place where they should be used. This contexts object become extremely useful in client side controllers because they provide information about the view and some important informations.</p>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
-<img alt="../images/client_contexts.jpeg" src="../images/client_contexts.jpeg" />
+<img alt="../_images/client_contexts.jpeg" src="../_images/client_contexts.jpeg" />
 </div>
 <div class="section" id="view-context">
 <h2>View context<a class="headerlink" href="#view-context" title="Permalink to this headline">¶</a></h2>
@@ -157,12 +157,12 @@
 </td></tr></table></div>
 <p>The first parameter injected into client side controller must is the viewContext. In this case, viewContext holds the following values:</p>
 <blockquote>
-<ul class="simple">
+<div><ul class="simple">
 <li>getClientModuleId() ====&gt; mymodule;1.0</li>
 <li>getInstanceId() =====&gt; x for customer-info and y for customer-preferences.</li>
 <li>getSettings() =====&gt; {}</li>
 </ul>
-</blockquote>
+</div></blockquote>
 </div>
 </div>
 
@@ -221,7 +221,7 @@
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>
