@@ -14,13 +14,6 @@ define([
      */
     function ClientRenderer() {
         this.uniqueWrapperId = 0;
-        this.requireConfig = {
-            "debug": true,
-            "baseUrl": "/components",
-            "paths": {
-                "core": "core/htdocs/js"
-            }
-        };
     }
 
     /**
@@ -90,11 +83,9 @@ define([
     function insertComponent(self, component) {
         $('[data-instanceid=' + component.wrapperId + ']').replaceWith(component.html);
         var head = $('head');
-        var cssRessources = "";
         for ( var i = 0, l = component.css.length; i < l; i++) {
-            cssRessources += component.css[i] + '&';
+            head.append('<link rel="stylesheet" href="' + component.css[i] + '" type="text/css" />');
         }
-        head.append('<link rel="stylesheet" href="/resources?files=' + cssRessources + '" type="text/css" />');
         require([
              "core/raintime/raintime"
          ], function(Raintime) {
@@ -115,9 +106,9 @@ define([
         var defer = new Promise.defer();
 
         var componentId = component.moduleId.split('-')[0];
-        self.requireConfig.paths[componentId] = componentId + '/htdocs/js';
+        requireConfig.paths[componentId] = componentId + '/htdocs/js';
 
-        require(self.requireConfig);
+        require(requireConfig);
         require([
             "core/raintime/raintime"
         ], function(Raintime) {

@@ -1,8 +1,7 @@
 define(['core/client_util',
         'core/raintime/raintime_config', 
         'core/raintime/viewcontext',
-        'core/raintime/messaging',
-        'core/raintime/client_rendering'], function (ClientUtil, RaintimeConfig) {
+        'core/raintime/messaging'], function (ClientUtil, RaintimeConfig) {
 
     var modules = Array.prototype.slice.call(arguments, 2);
     

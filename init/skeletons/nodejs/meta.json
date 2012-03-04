@@ -4,8 +4,10 @@
     "views": {
         "index" : {
             "view": "index.html",
-            "controller": "index.js",
-            "rest": "index.js"
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
         }
     },
     "intents": []

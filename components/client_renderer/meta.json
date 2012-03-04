@@ -1,14 +1,14 @@
 {
     "id": "client_renderer",
     "version": "1.0",
-    "url": "/components/client_renderer",
-    "views": [
-        {
-            "viewid": "index",
-            "view": "/htdocs/index.html",
-            "controller": "/htdocs/controller/index.js"
+    "views": {
+        "index" : {
+            "view": "index.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
         }
-    ],
-    "taglib": [],
+    },
     "intents": []
 }
