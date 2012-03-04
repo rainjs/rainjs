@@ -2,11 +2,11 @@
  * @fileOverview The view context associated with the client side controller
  * @name View Context
  */
-define(["core-components/client_util",
-        "core-components/raintime/client_storage",
-        "core-components/raintime/messaging_observer",
-        "core-components/raintime/messaging",
-        "core-components/raintime/view_manager"],
+define(["core/client_util",
+        "core/raintime/client_storage",
+        "core/raintime/messaging_observer",
+        "core/raintime/messaging",
+        "core/raintime/view_manager"],
         function (ClientUtil, ClientStorage, Observer, Messaging, ViewManager) {
 
     /**

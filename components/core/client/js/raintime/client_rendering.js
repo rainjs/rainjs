@@ -1,5 +1,5 @@
 define([
-    'core-components/promised-io/promise'
+    'core/promised-io/promise'
 ], function(Promise) {
 
     /**
@@ -18,7 +18,7 @@ define([
             "debug": true,
             "baseUrl": "/components",
             "paths": {
-                "core-components": "core-components/htdocs/js"
+                "core": "core/htdocs/js"
             }
         };
     }
@@ -96,7 +96,7 @@ define([
         }
         head.append('<link rel="stylesheet" href="/resources?files=' + cssRessources + '" type="text/css" />');
         require([
-             "core-components/raintime/raintime"
+             "core/raintime/raintime"
          ], function(Raintime) {
             var Controller = Raintime.ComponentController;
             Controller.postRender(component.domId);
@@ -119,7 +119,7 @@ define([
 
         require(self.requireConfig);
         require([
-            "core-components/raintime/raintime"
+            "core/raintime/raintime"
         ], function(Raintime) {
             var Registry = Raintime.ComponentRegistry;
             var Controller = Raintime.ComponentController;

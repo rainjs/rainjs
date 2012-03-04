@@ -1,0 +1,17 @@
+<html>
+    <head>
+	    <title>{{component.title}}</title>
+	    <script type="text/javascript" src="/core/js/ecma5-1.2.1-min.js"></script>
+	    <script type="text/javascript" src="/core/js/require-jquery.js"></script>
+	    <script type="text/javascript" src="/core/js/jquery-ui/js/jquery-ui-dialog.js"></script>
+	    <script type="text/javascript">
+		    var requireConfig = {
+			    "debug": ('{{server.env}}' == 'production'? 'false' : 'true'),
+			    "baseUrl":"/",
+			    "paths":{ "core": "/core/js/"}
+		    };
+		    require(requireConfig, ["core/raintime/raintime"]);
+	    </script>
+    </head>
+    <body></body>
+</html>

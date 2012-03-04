@@ -1,4 +1,4 @@
-define(["core-components/client_util"],
+define(["core/client_util"],
         function (ClientUtil) {
 
     /**
@@ -93,7 +93,7 @@ define(["core-components/client_util"],
      * draggable dialog
      */
     ViewManager.prototype.displayView = function (component, detach) {
-        var Registry = require("core-components/raintime/raintime").ComponentRegistry,
+        var Registry = require("core/raintime/raintime").ComponentRegistry,
             domId = this.viewContext.instanceId,
             componentParts,
             componentContent,
