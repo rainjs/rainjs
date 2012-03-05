@@ -1,5 +1,5 @@
 {
-    "id": "example"
+    "id": "example",
     "version": "0.0.1",
     "views": {
         "index" : {
