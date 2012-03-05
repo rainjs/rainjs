@@ -18,7 +18,8 @@
         "mime": "",
         "node.extend": "",
         "promised-io": ">= 0.2.3",
-        "socket.io": ">= 0.7.7"
+        "socket.io": ">= 0.7.7",
+        "commander": ""
     },
     "keywords": ["framework", "rain"],
     "repository": "git://github.com/rainjs/rainjs",
