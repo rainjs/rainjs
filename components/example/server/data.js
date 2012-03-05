@@ -1,24 +1,24 @@
 /**
- * The dynamic condition for the component.
- *
- * @param {Object} securityContext the security context
- * @returns {Boolean} true if user is allowed to access the component or false otherwise
+ * Template data
  */
-function _component(securityContext) {
-    return true;
+function index(callback, data) {
+    callback(null, data);
 }
 
-/**
- * The dynamic condition for the index view.
- *
- * @param securityContext the security context
- * @returns {Boolean} true if user is allowed to access the view or false otherwise
- */
-function index(securityContext) {
-    return true;
+function nasty_level2(callback, data) {
+    setTimeout(function(){
+        callback(null, data);
+    }, Math.floor(Math.random()*3000));
+}
+
+function nasty_level3(callback, data) {
+    setTimeout(function(){
+        callback(null, data);
+    }, Math.floor(Math.random()*3000));
 }
 
 module.exports = {
-    _component: _component,
-    index: index
+    index: index,
+    nasty_level2: nasty_level2,
+    nasty_level3: nasty_level3
 };
