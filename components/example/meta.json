@@ -1,0 +1,14 @@
+{
+    "id": "example"
+    "version": "0.0.1",
+    "views": {
+        "index" : {
+            "view": "index.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
+        }
+    },
+    "intents": []
+}
