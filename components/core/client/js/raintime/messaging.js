@@ -33,10 +33,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * with intents and pub / sub mechanism.
  */
 
-define(["core/raintime/raintime_config",
-        "core/raintime/messaging_intents",
-        "core/raintime/messaging_observer",
-        "core/socket.io/socket.io"], function(RaintimeConfig, Intents, Observer, SocketIO) {
+define(["core/js/raintime/raintime_config",
+        "core/js/raintime/messaging_intents",
+        "core/js/raintime/messaging_observer",
+        "core/js/socket.io/socket.io"], function(RaintimeConfig, Intents, Observer, SocketIO) {
     /**
      * Class used to build the messaging layer.
      *
