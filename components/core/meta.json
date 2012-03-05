@@ -1,4 +1,9 @@
 {
-    "id" 		: "core",
-	"version"	: "1.0"
+    "id": "core",
+	"version": "1.0",
+	"views": {
+	    "bootstrap": {
+	        "view": "bootstrap.html"
+	    }
+	}
 }

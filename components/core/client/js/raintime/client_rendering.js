@@ -106,7 +106,7 @@ define([
         var defer = new Promise.defer();
 
         var componentId = component.moduleId.split('-')[0];
-        requireConfig.paths[componentId] = componentId + '/htdocs/js';
+        var version = component.moduleId.split('-')[1];
 
         require(requireConfig);
         require([
