@@ -7,7 +7,15 @@ function index(callback, data) {
 
 function nasty_level2(callback, data) {
     setTimeout(function(){
-        callback(null, data);
+        callback(null, {
+            items: [
+                'nasty_level3',
+                'nasty_level3',
+                'nasty_level3',
+                'nasty_level3',
+                'nasty_level3'
+            ]
+        });
     }, Math.floor(Math.random()*3000));
 }
 
