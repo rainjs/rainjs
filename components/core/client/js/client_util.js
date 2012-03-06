@@ -1,4 +1,4 @@
-define(['core/jquery-cookie'], function () {
+define(['core/js/jquery-cookie'], function () {
 
     /**
      * @class A singleton utility class

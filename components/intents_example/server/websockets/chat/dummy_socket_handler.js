@@ -34,21 +34,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * @description This is a test socket handler automatically registered by RAIN platform.
  */
 
-module.exports = DummySocketHandler;
-
-/**
- * This is just an example handler that is automatically registered.
- */
-function DummySocketHandler() {
-    console.log("Dummy socket instantiated. ::::::::::::::::::::::::::::::::::::");
-}
-    
-DummySocketHandler.prototype.getSocketName = function() {
-    return "dummy socket";
-}
-
-DummySocketHandler.prototype.handle = function(socket) {
-    socket.on("hello", function(data) {        
+function handle(socket) {
+    socket.on("hello", function(data) {
         socket.emit("bye", {"message": "Hello sir"})
     });
 }
+
+module.exports = {
+    channel: 'dummy socket',
+    handle: handle
+};
