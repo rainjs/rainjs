@@ -14,14 +14,24 @@ define(['core/js/promised-io/promise'], function (Promise) {
     };
 
     ClientRenderer.prototype.renderComponent = function(component) {
-        insertComponent(component);
+        if(typeof component == 'string'){
+            this.placeholderComponent.instanceId = component;
+            component = this.placeholderComponent;
+        }
+        insertComponent(this, component);
     };
 
-    function insertComponent(component) {
-        $('#' + component.instanceId).replaceWith(component.html);
+    function insertComponent(self, component) {
+        var domElement = $('#' + component.instanceId);
+        domElement.attr('id', component.instanceId);
+        domElement.attr('class', 'app-container '+component.componentId+'_'+component.version.replace(/[\.]/g, '_'));
         var head = $('head');
         for ( var i = 0, l = component.css.length; i < l; i++) {
             head.append('<link rel="stylesheet" href="' + component.css[i] + '" type="text/css" />');
+        }
+        domElement.html(component.html);
+        for(var len = component.children.length, i = 0; i < len; i++){
+            self.renderComponent(component.children[i]);
         }
     }
 

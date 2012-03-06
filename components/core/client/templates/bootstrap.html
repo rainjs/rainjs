@@ -39,7 +39,9 @@
 
             require(requireConfig, ["core/js/raintime/client_rendering"], function(clientRenderer) {
                 clientRenderer.setPlaceholder({{{placeholder}}});
-                
+                if(renderQueueList.length == 0){
+                    clientRenderer.renderComponent($($('body div').get(0)).attr('id'));
+                }
                 renderQueue();
             });
         </script>
