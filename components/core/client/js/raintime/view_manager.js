@@ -1,4 +1,4 @@
-define(["core/client_util"],
+define(["core/js/client_util"],
         function (ClientUtil) {
 
     /**

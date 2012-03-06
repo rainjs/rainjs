@@ -7,17 +7,17 @@
 	    <script type="text/javascript">
 		    var requireConfig = {
 			    "debug": ('{{server.env}}' == 'production'? 'false' : 'true'),
-			    "paths":{ "core": "/core/js"},
-			    "priority": ["core/raintime/raintime"]
+			    "baseUrl": "/",
+			    "priority": ["core/js/raintime/raintime"]
 		    };
 		    var renderQueueList = [];
-			var renderQueue = function(){
+			function renderQueue(){
 			    var len = renderQueueList.length;
                 if(len > 0){
                     for(var i = 0; i < len; i++){
                         clientRenderer.renderComponent(renderQueueList[i]);
                     }
-                    renderQueue = [];
+                    renderQueueList = [];
                 }
 			}
 			
@@ -36,7 +36,7 @@
                 }
             }
 
-			require(requireConfig, ["core/raintime/client_rendering"], function(){
+			require(requireConfig, ["core/js/raintime/client_rendering"], function(){
                 renderQueue();
             });
 	    </script>

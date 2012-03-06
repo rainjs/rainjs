@@ -30,7 +30,7 @@
  * @name Client Storage
  */
 
-define(['core/lib/amplify.store'], function (driver) {
+define(['core/js/lib/amplify.store'], function (driver) {
     var storageTypes = {
         'persistent': [
             'localStorage',
