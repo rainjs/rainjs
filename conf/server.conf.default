@@ -27,9 +27,8 @@
     "default_language": "en_US",
 
     "loadingComponent": {
-        "namespace": "",
-        "selector": "placeholder",
-        "module": "placeholder;1.0",
-        "view": "/htdocs/index.html"
+        "id": "placeholder",
+        "version": "1.0",
+        "viewId": "index"
     }
 }
