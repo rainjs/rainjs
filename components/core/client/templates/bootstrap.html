@@ -21,13 +21,14 @@
                 }
 			}
 			
-			var placeholder = {{placeholder}};
-
 			function renderComponent(component){
-                if(!component){
+			    if(!component){
                     renderQueue();
                     return;
                 }
+			    if(typeof component == "string"){
+			        component = JSON.parse(component);
+			    }
                 if(window.clientRenderer == undefined){
                     renderQueueList.push(component);
                 } else {
@@ -36,7 +37,8 @@
                 }
             }
 
-			require(requireConfig, ["core/js/raintime/client_rendering"], function(){
+			require(requireConfig, ["core/js/raintime/client_rendering"], function(clientRenderer){
+			    clientRenderer.setPlaceholder({{{placeholder}}});
                 renderQueue();
             });
 	    </script>

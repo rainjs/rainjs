@@ -14,7 +14,12 @@ define([
      */
     function ClientRenderer() {
         this.uniqueWrapperId = 0;
+        this.placeholderComponent = null;
     }
+
+    ClientRenderer.prototype.setPlaceholder = function(component){
+        this.placeholderComponent = component;
+    };
 
     /**
      * Requests a component from the server that will be rendered as soon as it is available.
