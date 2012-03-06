@@ -25,14 +25,44 @@ define(['core/js/promised-io/promise'], function (Promise) {
         var domElement = $('#' + component.instanceId);
         domElement.attr('id', component.instanceId);
         domElement.attr('class', 'app-container '+component.componentId+'_'+component.version.replace(/[\.]/g, '_'));
+        loadCSS(this, component.css, function(){
+            domElement.html(component.html);
+            for(var len = component.children.length, i = 0; i < len; i++){
+                self.renderComponent(component.children[i]);
+            }
+        });
+    }
+    
+    /**
+     * Load css files and insert html after the css files are completely loaded
+     * 
+     * Maybe there is a better way
+     * This works on IE8+, Chrome, FF, Safari
+     */
+    function loadCSS(self, css, callback){
         var head = $('head');
-        for ( var i = 0, l = component.css.length; i < l; i++) {
-            head.append('<link rel="stylesheet" href="' + component.css[i] + '" type="text/css" />');
-        }
-        domElement.html(component.html);
-        for(var len = component.children.length, i = 0; i < len; i++){
-            self.renderComponent(component.children[i]);
-        }
+        var loadedFiles = 0;
+        for ( var i = 0, l = css.length; i < l; i++) {
+            if(head.find("link[href='"+css[i]+"']").length > 0){
+                if(++loadedFiles == css.length){
+                    callback();
+                }
+            } else {
+                var link = document.createElement('link');
+                link.type = 'text/css';
+                link.rel = 'stylesheet';
+                link.href = css[i];
+                
+                var loader = document.createElement('img');
+                loader.onerror = function(e){
+                    if(++loadedFiles == css.length){
+                        callback();
+                    }
+                };
+                head.append(link);
+                loader.src = css[i];
+            }
+        }        
     }
 
     window.clientRenderer = new ClientRenderer();
