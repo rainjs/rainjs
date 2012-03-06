@@ -71,6 +71,7 @@ define([
      * @param {Object} component the component to be rendered
      */
     ClientRenderer.prototype.renderComponent = function(component) {
+        console.log(component.children);
         var self = this;
         registerComponent(this, component).then(function(cmp) {
             insertComponent(self, component);
