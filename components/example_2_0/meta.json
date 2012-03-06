@@ -1,6 +1,6 @@
 {
     "id": "example",
-    "version": "0.0.1",
+    "version": "2.0.1",
     "views": {
         "index" : {
             "view": "index.html",

@@ -33,11 +33,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * binded to messaging layer.
  */
 
-define(["core/client_util", 
-	    "core/event_emitter",
-        "core/socket.io/socket.io",
-        "core/promised-io/promise",
-        "core/jquery-cookie"], function(ClientUtil, EventEmitter, SocketIO, Promise) {
+define(["core/js/client_util", 
+	    "core/js/event_emitter",
+        "core/js/socket.io/socket.io",
+        "core/js/promised-io/promise",
+        "core/js/jquery-cookie"], function(ClientUtil, EventEmitter, SocketIO, Promise) {
     /**
      * Class used to implement client intents object.
      */

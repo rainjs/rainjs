@@ -1,5 +1,5 @@
 define([
-    'core/promised-io/promise'
+    'core/js/promised-io/promise'
 ], function(Promise) {
 
     /**
@@ -14,7 +14,12 @@ define([
      */
     function ClientRenderer() {
         this.uniqueWrapperId = 0;
+        this.placeholderComponent = null;
     }
+
+    ClientRenderer.prototype.setPlaceholder = function(component){
+        this.placeholderComponent = component;
+    };
 
     /**
      * Requests a component from the server that will be rendered as soon as it is available.
@@ -66,6 +71,7 @@ define([
      * @param {Object} component the component to be rendered
      */
     ClientRenderer.prototype.renderComponent = function(component) {
+        console.log(component.children);
         var self = this;
         registerComponent(this, component).then(function(cmp) {
             insertComponent(self, component);
@@ -81,16 +87,16 @@ define([
      * @private
      */
     function insertComponent(self, component) {
-        $('[data-instanceid=' + component.wrapperId + ']').replaceWith(component.html);
+        $('#' + component.instanceId).replaceWith(component.html);
         var head = $('head');
         for ( var i = 0, l = component.css.length; i < l; i++) {
             head.append('<link rel="stylesheet" href="' + component.css[i] + '" type="text/css" />');
         }
         require([
-             "core/raintime/raintime"
+             "core/js/raintime/raintime"
          ], function(Raintime) {
             var Controller = Raintime.ComponentController;
-            Controller.postRender(component.domId);
+            Controller.postRender(component.instanceId);
          });
     }
 
@@ -105,24 +111,22 @@ define([
     function registerComponent(self, component) {
         var defer = new Promise.defer();
 
-        var componentId = component.moduleId.split('-')[0];
-        var version = component.moduleId.split('-')[1];
+        var componentId = component.componentId;
+        var version = component.version;
 
-        require(requireConfig);
         require([
-            "core/raintime/raintime"
+            "core/js/raintime/raintime"
         ], function(Raintime) {
             var Registry = Raintime.ComponentRegistry;
             var Controller = Raintime.ComponentController;
             var cmp = Registry.register({
-                "domId": component.domId,
                 "instanceId": component.instanceId,
                 "moduleId": component.moduleId,
                 "staticId": component.staticId,
                 "clientcontroller": component.controller
             });
 
-            Controller.preRender(component.domId);
+            Controller.preRender(component.instanceId);
             defer.resolve(cmp);
         });
 
