@@ -1,35 +1,35 @@
 <!DOCTYPE html>
 <html>
     <head>
-	    <title>{{name}}</title>
-	    <script type="text/javascript" src="/core/js/ecma5-1.2.1-min.js"></script>
-	    <script type="text/javascript" src="/core/js/require-jquery.js"></script>
-	    <script type="text/javascript">
-		    var requireConfig = {
-			    "debug": ('{{server.env}}' == 'production'? 'false' : 'true'),
-			    "baseUrl": "/",
-			    "priority": ["core/js/raintime/raintime"]
-		    };
-		    var renderQueueList = [];
-			function renderQueue(){
-			    var len = renderQueueList.length;
+        <title>{{name}}</title>
+        <script type="text/javascript" src="/core/js/ecma5-1.2.1-min.js"></script>
+        <script type="text/javascript" src="/core/js/require-jquery.js"></script>
+        <script type="text/javascript">
+            var requireConfig = {
+                "debug": ('{{server.env}}' == 'production'? 'false' : 'true'),
+                "baseUrl": "/",
+                "priority": ["core/js/raintime/raintime"]
+            };
+            var renderQueueList = [];
+            function renderQueue(){
+                var len = renderQueueList.length;
                 if(len > 0){
                     for(var i = 0; i < len; i++){
                         clientRenderer.renderComponent(renderQueueList[i]);
                     }
                     renderQueueList = [];
                 }
-			}
-			
-			function renderComponent(component){
-			    if(!component){
+            }
+
+            function renderComponent(component) {
+                if (!component){
                     renderQueue();
                     return;
                 }
-			    if(typeof component == "string"){
-			        component = JSON.parse(component);
-			    }
-                if(window.clientRenderer == undefined){
+                if (typeof component == "string") {
+                    component = JSON.parse(component);
+                }
+                if (window.clientRenderer == undefined) {
                     renderQueueList.push(component);
                 } else {
                     renderQueue();
@@ -37,11 +37,12 @@
                 }
             }
 
-			require(requireConfig, ["core/js/raintime/client_rendering"], function(clientRenderer){
-			    clientRenderer.setPlaceholder({{{placeholder}}});
+            require(requireConfig, ["core/js/raintime/client_rendering"], function(clientRenderer) {
+                clientRenderer.setPlaceholder({{{placeholder}}});
+                
                 renderQueue();
             });
-	    </script>
+        </script>
     </head>
     <body>
         {{component name=name version=version view=viewId data=data}}
