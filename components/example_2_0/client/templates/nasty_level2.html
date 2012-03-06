@@ -2,10 +2,10 @@
 <div>
     LEVEL2
     <div class="nasty-level2">
-        {{component name="example" view="nasty_level3"}}
+        {{#each items}}
+            {{component name="example" view="nasty_level3" }}
+        {{/each}}
         
-        {{component name="example" view="nasty_level3"}}
-        
-        {{component name="example" view="nasty_level3"}}
+        ASDF
     </div>
 </div>
