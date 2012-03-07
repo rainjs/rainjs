@@ -1,9 +1,9 @@
 define(['core/js/promised-io/promise',
         'core/js/client_util',
-        'core/js/socket.io/socket.io'
-], function (Promise, ClientUtil, SocketIO) {
+        'core/js/event_emitter'
+], function (Promise, ClientUtil, EventEmitter) {
 
-    var Raintime = (function () {
+    var raintime = (function () {
 
         var ComponentRegistry = (function () {
             var _instance;
@@ -28,23 +28,29 @@ define(['core/js/promised-io/promise',
                     var component = new Component(comp);
                     components[component.instanceId] = component;
 
-                    require([comp.controller], function (controller) {
-                        ClientUtil.inherits(controller, SocketIO.EventEmitter);
+                    if (!comp.controller) {
+                        ClientUtil.defer(function () {
+                            deferred.resolve(component);
+                        });
+                    } else {
+                        require([comp.controller], function (controller) {
+                            ClientUtil.inherits(controller, EventEmitter);
 
-                        if (typeof controller === "function") {
-                            controller = new controller();
-                        }
+                            if (typeof controller === "function") {
+                                controller = new controller();
+                            }
 
-                        controller.clientRuntime = Raintime;
-                        controller.clientRuntime.getComponent = function (staticId) {
-                            return getComponent(component.instanceId, staticId);
-                        };
-                        component.controller = controller;
+                            controller.clientRuntime = raintime;
+                            controller.clientRuntime.getComponent = function (staticId) {
+                                return getComponent(component.instanceId, staticId);
+                            };
+                            component.controller = controller;
 
-                        controller.emit('start');
+                            controller.emit('start');
 
-                        deferred.resolve(component);
-                    });
+                            deferred.resolve(component);
+                        });
+                    }
 
                     return deferred.promise;
                 }
@@ -84,5 +90,5 @@ define(['core/js/promised-io/promise',
         };
     })();
 
-    return Raintime;
+    return raintime;
 });
