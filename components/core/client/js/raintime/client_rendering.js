@@ -2,7 +2,7 @@ define([
     'core/js/promised-io/promise',
     'core/js/raintime/messaging',
     'core/js/raintime/raintime'
-], function(Promise, messaging, Raintime) {
+], function(Promise, messaging, raintime) {
     function ClientRenderer() {
         this.placeholderComponent = null;
         this.placeholderTimeout = 500;
@@ -21,7 +21,7 @@ define([
 
     ClientRenderer.prototype.renderComponent = function (component, instanceId) {
         component.instanceId = instanceId || component.instanceId;
-        Raintime.ComponentRegistry.register(component);
+        var componentPromise = raintime.ComponentRegistry.register(component);
         insertComponent(this, component, instanceId || component.instanceId);
     };
 
@@ -39,7 +39,7 @@ define([
         loadCSS(this, component.css, function() {
             domElement.show();
         });
-        for ( var len = component.children.length, i = 0; i < len; i++) {
+        for (var len = component.children.length, i = 0; i < len; i++) {
             var instanceIdChild = component.children[i].instanceId;
             setTimeout(function() {
                 if (!$('#' + instanceIdChild).hasClass('app-container')) {
@@ -50,8 +50,8 @@ define([
     }
 
     /**
-     * Load css files and insert html after the css files are completely loaded Maybe there is a better way This works
-     * on IE8+, Chrome, FF, Safari
+     * Load css files and insert html after the css files are completely loaded.
+     * Maybe there is a better way. This works on IE8+, Chrome, FF, Safari.
      */
     function loadCSS(self, css, callback) {
         var head = $('head');
