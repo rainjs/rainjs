@@ -1,10 +1,15 @@
 define([
-    'core/js/promised-io/promise'
-], function(Promise) {
+    'core/js/promised-io/promise',
+    'core/js/raintime/messaging'
+], function(Promise, messaging) {
 
     function ClientRenderer() {
         this.placeholderComponent = null;
         this.placeholderTimeout = 500;
+
+        console.log(messaging)
+        var socket = messaging.getWebSocket('/core');
+        socket.on('render', renderComponent);
     }
 
     ClientRenderer.prototype.setPlaceholder = function(component) {
