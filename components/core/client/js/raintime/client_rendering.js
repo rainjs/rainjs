@@ -21,7 +21,6 @@ define([
 
     ClientRenderer.prototype.renderComponent = function (component, instanceId) {
         component.instanceId = instanceId || component.instanceId;
-        Raintime.ComponentRegistry.register(component);
         insertComponent(this, component, instanceId || component.instanceId);
     };
 
@@ -40,10 +39,11 @@ define([
             domElement.show();
         });
         for ( var len = component.children.length, i = 0; i < len; i++) {
-            var instanceIdChild = component.children[i].instanceId;
+            var childComponent = component.children[i];
+            Raintime.ComponentRegistry.register(childComponent);
             setTimeout(function() {
-                if (!$('#' + instanceIdChild).hasClass('app-container')) {
-                    self.renderPlaceholder(instanceIdChild);
+                if (!$('#' + childComponent.instanceId).hasClass('app-container')) {
+                    self.renderPlaceholder(childComponent.instanceId);
                 }
             }, self.placeholderTimeout);
         }
