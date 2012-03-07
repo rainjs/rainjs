@@ -20,8 +20,8 @@ define([
     };
 
     ClientRenderer.prototype.renderPlaceholder = function(instanceId) {
-        this.renderComponent(this.placeholderComponent, instanceId)
-    }
+        this.renderComponent(this.placeholderComponent, instanceId);
+    };
 
     function insertComponent(self, component, instanceId) {
         var domElement = $('#' + instanceId);
@@ -32,15 +32,15 @@ define([
                                  + component.version.replace(/[\.]/g, '_'));
         loadCSS(this, component.css, function() {
             domElement.show();
-            for ( var len = component.children.length, i = 0; i < len; i++) {
-                var instanceIdChild = component.children[i];
-                setTimeout(function() {
-                    if (!$('#' + instanceIdChild).hasClass('app-container')) {
-                        self.renderPlaceholder(instanceIdChild);
-                    }
-                }, self.placeholderTimeout);
-            }
         });
+        for ( var len = component.children.length, i = 0; i < len; i++) {
+            var instanceIdChild = component.children[i].instanceId;
+            setTimeout(function() {
+                if (!$('#' + instanceIdChild).hasClass('app-container')) {
+                    self.renderPlaceholder(instanceIdChild);
+                }
+            }, self.placeholderTimeout);
+        }
     }
 
     /**
