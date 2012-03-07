@@ -1,50 +1,58 @@
-define(['core/js/promised-io/promise'], function (Promise) {
+define([
+    'core/js/promised-io/promise'
+], function(Promise) {
 
     function ClientRenderer() {
         this.placeholderComponent = null;
         this.placeholderTimeout = 500;
     }
 
-    ClientRenderer.prototype.setPlaceholder = function (component) {
+    ClientRenderer.prototype.setPlaceholder = function(component) {
         this.placeholderComponent = component;
     };
 
-    ClientRenderer.prototype.setPlaceholderTimeout = function (milliseconds) {
+    ClientRenderer.prototype.setPlaceholderTimeout = function(milliseconds) {
         this.placeholderTimeout = milliseconds;
     };
 
-    ClientRenderer.prototype.renderComponent = function(component) {
-        if(typeof component == 'string'){
-            this.placeholderComponent.instanceId = component;
-            component = this.placeholderComponent;
-        }
-        insertComponent(this, component);
+    ClientRenderer.prototype.renderComponent = function(component, instanceId) {
+        insertComponent(this, component, instanceId || component.instanceId);
     };
 
-    function insertComponent(self, component) {
-        var domElement = $('#' + component.instanceId);
+    ClientRenderer.prototype.renderPlaceholder = function(instanceId) {
+        this.renderComponent(this.placeholderComponent, instanceId)
+    }
+
+    function insertComponent(self, component, instanceId) {
+        var domElement = $('#' + instanceId);
+        domElement.hide();
+        domElement.html(component.html);
         domElement.attr('id', component.instanceId);
-        domElement.attr('class', 'app-container '+component.componentId+'_'+component.version.replace(/[\.]/g, '_'));
-        loadCSS(this, component.css, function(){
-            domElement.html(component.html);
-            for(var len = component.children.length, i = 0; i < len; i++){
-                self.renderComponent(component.children[i]);
+        domElement.attr('class', 'app-container ' + component.componentId + '_'
+                                 + component.version.replace(/[\.]/g, '_'));
+        loadCSS(this, component.css, function() {
+            domElement.show();
+            for ( var len = component.children.length, i = 0; i < len; i++) {
+                var instanceIdChild = component.children[i];
+                setTimeout(function() {
+                    if (!$('#' + instanceIdChild).hasClass('app-container')) {
+                        self.renderPlaceholder(instanceIdChild);
+                    }
+                }, self.placeholderTimeout);
             }
         });
     }
-    
+
     /**
-     * Load css files and insert html after the css files are completely loaded
-     * 
-     * Maybe there is a better way
-     * This works on IE8+, Chrome, FF, Safari
+     * Load css files and insert html after the css files are completely loaded Maybe there is a better way This works
+     * on IE8+, Chrome, FF, Safari
      */
-    function loadCSS(self, css, callback){
+    function loadCSS(self, css, callback) {
         var head = $('head');
         var loadedFiles = 0;
-        for ( var i = 0, l = css.length; i < l; i++) {
-            if(head.find("link[href='"+css[i]+"']").length > 0){
-                if(++loadedFiles == css.length){
+        for ( var i = 0, len = css.length; i < len; i++) {
+            if (head.find("link[href='" + css[i] + "']").length > 0) {
+                if (++loadedFiles == css.length) {
                     callback();
                 }
             } else {
@@ -52,17 +60,17 @@ define(['core/js/promised-io/promise'], function (Promise) {
                 link.type = 'text/css';
                 link.rel = 'stylesheet';
                 link.href = css[i];
-                
-                var loader = document.createElement('img');
-                loader.onerror = function(e){
-                    if(++loadedFiles == css.length){
+
+                var loader = new Image();
+                loader.onerror = function(e) {
+                    if (++loadedFiles == css.length) {
                         callback();
                     }
                 };
                 head.append(link);
                 loader.src = css[i];
             }
-        }        
+        }
     }
 
     window.clientRenderer = new ClientRenderer();
