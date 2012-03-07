@@ -11,6 +11,7 @@ define(['core/js/promised-io/promise',
             function getInstance() {
 
                 var components = {};
+                var preComponents = {};
 
                 function Component(comp) {
                     this.id = comp.componentId;
@@ -22,11 +23,11 @@ define(['core/js/promised-io/promise',
                     this.children = comp.children;
                 }
 
-                function register(comp) {
+                function internalRegister(map, comp) {
                     var deferred = new Promise.Deferred();
 
                     var component = new Component(comp);
-                    components[component.instanceId] = component;
+                    map[component.instanceId] = component;
 
                     if (!comp.controller) {
                         ClientUtil.defer(function () {
@@ -46,13 +47,34 @@ define(['core/js/promised-io/promise',
                             };
                             component.controller = controller;
 
-                            controller.emit('start');
+                            controller.emit('init');
 
                             deferred.resolve(component);
                         });
                     }
 
                     return deferred.promise;
+                }
+
+                function register(comp) {
+                    if (!comp || !comp.instanceId) {
+                        return;
+                    }
+
+                    var component = preComponents[comp.instanceId];
+                    if (component) {
+                        delete preComponents[comp.instanceId];
+                        comp = component;
+                    }
+
+                    return internalRegister(components, comp);
+                }
+
+                function preRegister(comp) {
+                    if (!comp || !comp.instanceId) {
+                        return;
+                    }
+                    return internalRegister(preComponents, comp);
                 }
 
                 function deregister(instanceId) {
@@ -73,6 +95,7 @@ define(['core/js/promised-io/promise',
                 }
 
                 return {
+                    preRegister: preRegister,
                     register: register,
                     deregister: deregister
                 };
