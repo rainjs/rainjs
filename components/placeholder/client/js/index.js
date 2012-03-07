@@ -6,17 +6,16 @@ define(function() {
      * @class Placeholder controller class.
      * @constructor
      */
-    function Placeholder() {}
-
-    /**
-     * Initialization lifecycle step that happens immediately after the controller is loaded.
-     */
-    Placeholder.prototype.init = $.noop;
+    function Placeholder() {
+        this.on('start', start);
+    }
 
     /**
      * Startup lifecycle step that happens right after the markup is in place.
      */
-    Placeholder.prototype.start = $.noop;
+    function start() {
+        console.log('Placeholder was started.');
+    };
 
     return Placeholder;
 });
