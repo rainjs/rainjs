@@ -3,6 +3,9 @@ define([
     'core/js/raintime/messaging',
     'core/js/raintime/raintime'
 ], function(Promise, messaging, raintime) {
+    /**
+     *
+     */
     function ClientRenderer() {
         this.placeholderComponent = null;
         this.placeholderTimeout = 500;
@@ -11,19 +14,42 @@ define([
         socket.on('render', this.renderComponent);
     }
 
+    /**
+     * Sets the placeholder component
+     *
+     * @param {Object} component The whole rendered placeholder component
+     */
     ClientRenderer.prototype.setPlaceholder = function (component) {
         this.placeholderComponent = component;
     };
 
+    /**
+     * Sets the placeholder timeout which is set from the server configuration
+     *
+     * @param {Number} milliseconds Time in milliseconds
+     */
     ClientRenderer.prototype.setPlaceholderTimeout = function (milliseconds) {
         this.placeholderTimeout = milliseconds;
     };
 
+    /**
+     * Renders a component
+     *
+     * @param {Object} component The component
+     * @param instanceId The instance id of the component
+     *                   This is sent only if a placeholder is rendered
+     */
     ClientRenderer.prototype.renderComponent = function (component, instanceId) {
+        raintime.ComponentRegistry.register(component);
         component.instanceId = instanceId || component.instanceId;
         insertComponent(this, component, instanceId || component.instanceId);
     };
 
+    /**
+     * Renders a placeholder
+     *
+     * @param {String} instanceId The instanceId of the component for the placeholder
+     */
     ClientRenderer.prototype.renderPlaceholder = function (instanceId) {
         this.renderComponent(this.placeholderComponent, instanceId);
     };
@@ -40,7 +66,7 @@ define([
         });
         for (var len = component.children.length, i = 0; i < len; i++) {
             var childComponent = component.children[i];
-            raintime.ComponentRegistry.register(childComponent);
+            raintime.ComponentRegistry.preRegister(childComponent);
             setTimeout(function() {
                 if (!$('#' + childComponent.instanceId).hasClass('app-container')) {
                     self.renderPlaceholder(childComponent.instanceId);
@@ -79,6 +105,9 @@ define([
         }
     }
 
+    /**
+     * Export as a global
+     */
     window.clientRenderer = new ClientRenderer();
 
     return window.clientRenderer;
