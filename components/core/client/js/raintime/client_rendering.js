@@ -1,26 +1,29 @@
 define([
-    'core/js/promised-io/promise'
-], function(Promise) {
+    'core/js/promised-io/promise',
+    'core/js/raintime/raintime'
+], function (Promise, Raintime) {
 
     function ClientRenderer() {
         this.placeholderComponent = null;
         this.placeholderTimeout = 500;
     }
 
-    ClientRenderer.prototype.setPlaceholder = function(component) {
+    ClientRenderer.prototype.setPlaceholder = function (component) {
         this.placeholderComponent = component;
     };
 
-    ClientRenderer.prototype.setPlaceholderTimeout = function(milliseconds) {
+    ClientRenderer.prototype.setPlaceholderTimeout = function (milliseconds) {
         this.placeholderTimeout = milliseconds;
     };
 
-    ClientRenderer.prototype.renderComponent = function(component, instanceId) {
+    ClientRenderer.prototype.renderComponent = function (component, instanceId) {
+        component.instanceId = instanceId || component.instanceId;
+        Raintime.ComponentRegistry.register(component);
         insertComponent(this, component, instanceId || component.instanceId);
     };
 
-    ClientRenderer.prototype.renderPlaceholder = function(instanceId) {
-        this.renderComponent(this.placeholderComponent, instanceId)
+    ClientRenderer.prototype.renderPlaceholder = function (instanceId) {
+        this.renderComponent(this.placeholderComponent, instanceId);
     }
 
     function insertComponent(self, component, instanceId) {
@@ -32,7 +35,7 @@ define([
                                  + component.version.replace(/[\.]/g, '_'));
         loadCSS(this, component.css, function() {
             domElement.show();
-            for ( var len = component.children.length, i = 0; i < len; i++) {
+            for (var i = 0, len = component.children.length; i < len; i++) {
                 var instanceIdChild = component.children[i];
                 setTimeout(function() {
                     if (!$('#' + instanceIdChild).hasClass('app-container')) {

@@ -6,6 +6,8 @@
  * MIT Licensed
  */
 
+define(function() {
+
 (function (exports, global) {
 
   /**
@@ -3751,3 +3753,6 @@ var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="Sho
   , 'undefined' != typeof io ? io : module.parent.exports
   , this
 );
+
+return io;
+});
