@@ -70,11 +70,11 @@ define([
         for (var len = component.children.length, i = 0; i < len; i++) {
             var childComponent = component.children[i];
             raintime.ComponentRegistry.preRegister(childComponent);
-            placeholderTimeout(childComponent);
+            placeholderTimeout(self, childComponent);
         }
     }
 
-    function placeholderTimeout(childComponent){
+    function placeholderTimeout(self, childComponent){
         setTimeout(function() {
             if (!$('#' + childComponent.instanceId).hasClass('app-container')) {
                 self.renderPlaceholder(childComponent.instanceId);
