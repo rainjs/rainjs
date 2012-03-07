@@ -33,10 +33,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * with intents and pub / sub mechanism.
  */
 
-define(["core/js/raintime/raintime_config",
-        "core/js/raintime/messaging_intents",
-        "core/js/raintime/messaging_observer",
-        "core/js/socket.io/socket.io"], function(RaintimeConfig, Intents, Observer, SocketIO) {
+define(["core/js/raintime/messaging_observer",
+        "core/js/socket.io/socket.io"], function(Observer) {
     /**
      * Class used to build the messaging layer.
      *
@@ -44,62 +42,57 @@ define(["core/js/raintime/raintime_config",
      * @class a messaging instance
      * @memberOf Raintime
      */
-    function Messaging(config) {
-        this._config = config;
-        
-        _addWebSocketsBaseUrl();
-        
-        this._intents = new Intents(config);
-        
+    function Messaging() {
+        //this._intents = new Intents();
+
         var self = this;
-        
-        var sendIntent = this._intents.sendIntent;
-        
-        this.sendIntent = function(request) {
-            return sendIntent.apply(self._intents, [request]);
-        };
+
+        //var sendIntent = this._intents.sendIntent;
+
+        //this.sendIntent = function(request) {
+        //    return sendIntent.apply(self._intents, [request]);
+        //};
         this.publish = Observer.publish;
         this.subscribe = Observer.subscribe;
         this.unsubscribe = Observer.unsubscribe;
     }
-    
+
     /**
      * Method used to obtain a websocket for a specified module and a relative url.
-     * 
+     *
      * @param {String} moduleId: This is the module identifier.
      * @param {String} url: This is the relative url of the web socket.
-     * 
+     *
      * @example
-     * Imagine you have a web sockets structure like: 
+     * Imagine you have a web sockets structure like:
      * comp
      *    websockets
      *      chat
      *          dummy_handler
-     * 
+     *
      * Let's assume module is named chat and it has version 1.0.
-     * 
+     *
      * This mean the socket can be accessed at: http://[configured base url]/chat-1.0/chat/[handler name]
      */
-    Messaging.prototype._getWebSocket = function(moduleId, url) {
+    Messaging.prototype.getWebSocket = function(url) {
         if(url.charAt(0) != "/") {
             url = "/" + url;
         }
-        
-        var socketUrl = RaintimeConfig.raintimeConfig.rain_websockets.baseUrl + "/" + moduleId + url;
-        
-        return SocketIO.io.connect(socketUrl);
+
+        return io.connect(getBaseUrl() + url);
     }
-    
+
     /**
      * Method used to add the base url for websockets.
      */
-    function _addWebSocketsBaseUrl() {
-        var config = RaintimeConfig.raintimeConfig.rain_websockets;
-               
-        config.baseUrl = config.rain_websockets_url + ":" + config.rain_websockets_port;  
+    function getBaseUrl() {
+        var host = window.location.host;
+        var protocol = window.location.protocol + '//';
+
+        return protocol + host;
     }
-    
-    var messaging = new Messaging(RaintimeConfig.raintimeConfig);
-    
-    return {"messaging": messaging}
+
+    var messaging = new Messaging();
+
+    return messaging;
 });

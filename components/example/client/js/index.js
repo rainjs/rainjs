@@ -22,7 +22,9 @@ define([""], function() {
      *
      * @function
      */
-    Controller.prototype.start = $.noop;
+    Controller.prototype.start = function () {
+        console.log('init called');
+    };
 
     return Controller;
 });

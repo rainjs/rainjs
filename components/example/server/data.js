@@ -8,13 +8,13 @@ function index(callback, data) {
 function nasty_level2(callback, data) {
     setTimeout(function(){
         callback(null, data);
-    }, Math.floor(Math.random()*3000));
+    }, Math.floor(Math.random()*1500));
 }
 
 function nasty_level3(callback, data) {
     setTimeout(function(){
         callback(null, data);
-    }, Math.floor(Math.random()*3000));
+    }, Math.floor(Math.random()*1500));
 }
 
 module.exports = {

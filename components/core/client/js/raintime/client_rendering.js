@@ -1,21 +1,27 @@
 define([
-    'core/js/promised-io/promise'
-], function(Promise) {
-
+    'core/js/promised-io/promise',
+    'core/js/raintime/messaging',
+    'core/js/raintime/raintime'
+], function(Promise, messaging, Raintime) {
     function ClientRenderer() {
         this.placeholderComponent = null;
         this.placeholderTimeout = 500;
+
+        var socket = messaging.getWebSocket('/core');
+        socket.on('render', this.renderComponent);
     }
 
-    ClientRenderer.prototype.setPlaceholder = function(component) {
+    ClientRenderer.prototype.setPlaceholder = function (component) {
         this.placeholderComponent = component;
     };
 
-    ClientRenderer.prototype.setPlaceholderTimeout = function(milliseconds) {
+    ClientRenderer.prototype.setPlaceholderTimeout = function (milliseconds) {
         this.placeholderTimeout = milliseconds;
     };
 
-    ClientRenderer.prototype.renderComponent = function(component, instanceId) {
+    ClientRenderer.prototype.renderComponent = function (component, instanceId) {
+        component.instanceId = instanceId || component.instanceId;
+        Raintime.ComponentRegistry.register(component);
         insertComponent(this, component, instanceId || component.instanceId);
     };
 
