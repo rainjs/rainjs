@@ -2,7 +2,9 @@
  * Template data
  */
 function index(callback, data) {
-    callback(null, data);
+    setTimeout(function(){
+        callback(null, data);
+    }, 1000);
 }
 
 function nasty_level2(callback, data) {

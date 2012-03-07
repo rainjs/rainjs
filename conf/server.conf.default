@@ -35,6 +35,7 @@
     "loadingComponent": {
         "id": "placeholder",
         "version": "1.0",
-        "viewId": "index"
+        "viewId": "index",
+        "timeout": 500
     }
 }

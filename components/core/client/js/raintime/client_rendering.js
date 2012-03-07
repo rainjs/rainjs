@@ -2,135 +2,75 @@ define([
     'core/js/promised-io/promise'
 ], function(Promise) {
 
-    /**
-     * Handler for asynchroniously rendering components in rain. This is achived by sending each component
-     * individually to the client as soon as it's available as a JSONP call to the renderer. This way the user
-     * gets a more responsive experience, since every comonent gets rendered as soon as it's available, thus
-     * giving quicker visual feedback to the user.
-     *
-     * @class a ClientRenderer instance
-     * @name ClientRenderer
-     * @constructor
-     */
     function ClientRenderer() {
-        this.uniqueWrapperId = 0;
         this.placeholderComponent = null;
+        this.placeholderTimeout = 500;
     }
 
-    ClientRenderer.prototype.setPlaceholder = function(component){
+    ClientRenderer.prototype.setPlaceholder = function(component) {
         this.placeholderComponent = component;
     };
 
-    /**
-     * Requests a component from the server that will be rendered as soon as it is available.
-     *
-     * @param {Object} options the data to be sent to the server
-     */
-    ClientRenderer.prototype.loadComponent = function(options) {
-        if (!options.selector) {
-            throw "Selector is required";
-        }
+    ClientRenderer.prototype.setPlaceholderTimeout = function(milliseconds) {
+        this.placeholderTimeout = milliseconds;
+    };
 
-        options.wrapperId = this.createTemporaryWrapper(options.selector);
+    ClientRenderer.prototype.renderComponent = function(component, instanceId) {
+        insertComponent(this, component, instanceId || component.instanceId);
+    };
 
-        $.ajax({
-            url: '/components/client_renderer/controller/serverside.js',
-            dataType: 'json',
-            data: options,
-            xhrFields: {
-                onprogress : onProgress
+    ClientRenderer.prototype.renderPlaceholder = function(instanceId) {
+        this.renderComponent(this.placeholderComponent, instanceId)
+    }
+
+    function insertComponent(self, component, instanceId) {
+        var domElement = $('#' + instanceId);
+        domElement.hide();
+        domElement.html(component.html);
+        domElement.attr('id', component.instanceId);
+        domElement.attr('class', 'app-container ' + component.componentId + '_'
+                                 + component.version.replace(/[\.]/g, '_'));
+        loadCSS(this, component.css, function() {
+            domElement.show();
+            for ( var len = component.children.length, i = 0; i < len; i++) {
+                var instanceIdChild = component.children[i];
+                setTimeout(function() {
+                    if (!$('#' + instanceIdChild).hasClass('app-container')) {
+                        self.renderPlaceholder(instanceIdChild);
+                    }
+                }, self.placeholderTimeout);
             }
         });
-    };
-
-    /**
-     * React to fragments of data sent from the server
-     *
-     * @param {Object} the progress object recived from the onprogress event
-     * @private
-     */
-    function onProgress(progress){
-        eval(progress.currentTarget.responseText);
     }
 
     /**
-     * Create a wrapper in which the response will be placed
-     *
-     * @param {String} selector a jQuery selector for the element after which to append the wrapper
+     * Load css files and insert html after the css files are completely loaded Maybe there is a better way This works
+     * on IE8+, Chrome, FF, Safari
      */
-    ClientRenderer.prototype.createTemporaryWrapper = function(selector) {
-        var uWrapperId = "wrapperid-" + this.uniqueWrapperId++;
-        $(selector).after('<div data-instanceid="' + uWrapperId + '"></div>');
-
-        return uWrapperId;
-    };
-
-    /**
-     * Render a component recived via JSONP.
-     *
-     * @param {Object} component the component to be rendered
-     */
-    ClientRenderer.prototype.renderComponent = function(component) {
-        console.log(component.children);
-        var self = this;
-        registerComponent(this, component).then(function(cmp) {
-            insertComponent(self, component);
-        });
-    };
-
-    /**
-     * Inserts the component in the page.
-     *
-     * @param {ClientRenderer} self the class instance
-     * @param {Object} component the component to be rendered
-     * @memberOf ClientRenderer
-     * @private
-     */
-    function insertComponent(self, component) {
-        $('#' + component.instanceId).replaceWith(component.html);
+    function loadCSS(self, css, callback) {
         var head = $('head');
-        for ( var i = 0, l = component.css.length; i < l; i++) {
-            head.append('<link rel="stylesheet" href="' + component.css[i] + '" type="text/css" />');
+        var loadedFiles = 0;
+        for ( var i = 0, len = css.length; i < len; i++) {
+            if (head.find("link[href='" + css[i] + "']").length > 0) {
+                if (++loadedFiles == css.length) {
+                    callback();
+                }
+            } else {
+                var link = document.createElement('link');
+                link.type = 'text/css';
+                link.rel = 'stylesheet';
+                link.href = css[i];
+
+                var loader = new Image();
+                loader.onerror = function(e) {
+                    if (++loadedFiles == css.length) {
+                        callback();
+                    }
+                };
+                head.append(link);
+                loader.src = css[i];
+            }
         }
-        require([
-             "core/js/raintime/raintime"
-         ], function(Raintime) {
-            var Controller = Raintime.ComponentController;
-            Controller.postRender(component.instanceId);
-         });
-    }
-
-    /**
-     * Register a component with the framework
-     *
-     * @param {ClientRenderer} self the class instance
-     * @param {Object} component the component to be registered
-     * @memberOf ClientRenderer
-     * @private
-     */
-    function registerComponent(self, component) {
-        var defer = new Promise.defer();
-
-        var componentId = component.componentId;
-        var version = component.version;
-
-        require([
-            "core/js/raintime/raintime"
-        ], function(Raintime) {
-            var Registry = Raintime.ComponentRegistry;
-            var Controller = Raintime.ComponentController;
-            var cmp = Registry.register({
-                "instanceId": component.instanceId,
-                "moduleId": component.moduleId,
-                "staticId": component.staticId,
-                "clientcontroller": component.controller
-            });
-
-            Controller.preRender(component.instanceId);
-            defer.resolve(cmp);
-        });
-
-        return defer.promise;
     }
 
     window.clientRenderer = new ClientRenderer();
