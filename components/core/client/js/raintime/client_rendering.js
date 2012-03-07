@@ -39,10 +39,9 @@ define([
      * @param instanceId The instance id of the component
      *                   This is sent only if a placeholder is rendered
      */
-    ClientRenderer.prototype.renderComponent = function (component, instanceId) {
+    ClientRenderer.prototype.renderComponent = function (component) {
         raintime.ComponentRegistry.register(component);
-        component.instanceId = instanceId || component.instanceId;
-        insertComponent(this, component, instanceId || component.instanceId);
+        insertComponent(this, component);
     };
 
     /**
@@ -51,11 +50,14 @@ define([
      * @param {String} instanceId The instanceId of the component for the placeholder
      */
     ClientRenderer.prototype.renderPlaceholder = function (instanceId) {
-        this.renderComponent(this.placeholderComponent, instanceId);
+        console.log("renderPlaceholder", instanceId);
+        this.placeholderComponent.instanceId = instanceId;
+        raintime.ComponentRegistry.preRegister(this.placeholderComponent);
+        this.renderComponent(this.placeholderComponent);
     };
 
-    function insertComponent(self, component, instanceId) {
-        var domElement = $('#' + instanceId);
+    function insertComponent(self, component) {
+        var domElement = $('#' + component.instanceId);
         domElement.hide();
         domElement.html(component.html);
         domElement.attr('id', component.instanceId);
@@ -64,16 +66,21 @@ define([
         loadCSS(this, component.css, function() {
             domElement.show();
         });
+
         for (var len = component.children.length, i = 0; i < len; i++) {
             var childComponent = component.children[i];
             raintime.ComponentRegistry.preRegister(childComponent);
-            setTimeout(function() {
-                if (!$('#' + childComponent.instanceId).hasClass('app-container')) {
-                    self.renderPlaceholder(childComponent.instanceId);
-                }
-            }, self.placeholderTimeout);
+            placeholderTimeout(childComponent);
         }
     }
+
+    function placeholderTimeout(childComponent){
+        setTimeout(function() {
+            if (!$('#' + childComponent.instanceId).hasClass('app-container')) {
+                self.renderPlaceholder(childComponent.instanceId);
+            }
+        }, self.placeholderTimeout);
+    };
 
     /**
      * Load css files and insert html after the css files are completely loaded.

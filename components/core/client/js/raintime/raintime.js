@@ -64,10 +64,10 @@ define(['core/js/promised-io/promise',
                     var component = preComponents[comp.instanceId];
                     if (component) {
                         delete preComponents[comp.instanceId];
-                        comp = component;
+                        components[comp.instanceId] = component;
+                    } else {
+                        return internalRegister(components, comp);
                     }
-
-                    return internalRegister(components, comp);
                 }
 
                 function preRegister(comp) {

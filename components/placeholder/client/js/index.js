@@ -7,8 +7,14 @@ define(function() {
      * @constructor
      */
     function Placeholder() {
+        this.on('init', init);
         this.on('start', start);
     }
+
+    function init(){
+        console.log("initi");
+    }
+
 
     /**
      * Startup lifecycle step that happens right after the markup is in place.
