@@ -50,7 +50,6 @@ define([
      * @param {String} instanceId The instanceId of the component for the placeholder
      */
     ClientRenderer.prototype.renderPlaceholder = function (instanceId) {
-        console.log("renderPlaceholder", instanceId);
         this.placeholderComponent.instanceId = instanceId;
         raintime.ComponentRegistry.preRegister(this.placeholderComponent);
         this.renderComponent(this.placeholderComponent);
