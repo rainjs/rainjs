@@ -40,7 +40,6 @@ define([
      *                   This is sent only if a placeholder is rendered
      */
     ClientRenderer.prototype.renderComponent = function (component) {
-        raintime.ComponentRegistry.register(component);
         insertComponent(this, component);
     };
 
@@ -51,17 +50,19 @@ define([
      */
     ClientRenderer.prototype.renderPlaceholder = function (instanceId) {
         this.placeholderComponent.instanceId = instanceId;
-        raintime.ComponentRegistry.preRegister(this.placeholderComponent);
         this.renderComponent(this.placeholderComponent);
     };
 
     function insertComponent(self, component) {
         var domElement = $('#' + component.instanceId);
-        domElement.hide();
-        domElement.html(component.html);
+        domElement.hide().html(component.html);
         domElement.attr('id', component.instanceId);
         domElement.attr('class', 'app-container ' + component.componentId + '_'
                                  + component.version.replace(/[\.]/g, '_'));
+
+        //register component
+        raintime.ComponentRegistry.register(component);
+
         loadCSS(this, component.css, function() {
             domElement.show();
         });
