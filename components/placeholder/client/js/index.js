@@ -6,20 +6,16 @@ define(function() {
      * @class Placeholder controller class.
      * @constructor
      */
-    function Placeholder() {
-        this.on('init', init);
-        this.on('start', start);
-    }
+    function Placeholder() {}
 
-    function init(){
-        console.log("initi");
+    Placeholder.prototype.init = function () {
+        console.log("Placeholder was initialized.");
     }
-
 
     /**
      * Startup lifecycle step that happens right after the markup is in place.
      */
-    function start() {
+    Placeholder.prototype.start = function () {
         console.log('Placeholder was started.');
     };
 
