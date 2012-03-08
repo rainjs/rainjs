@@ -13,7 +13,9 @@ function nasty_level2(callback, data) {
 
 function nasty_level3(callback, data) {
     setTimeout(function(){
-        callback(null, data);
+        callback({
+            arrrghhhhhh: "DAMMNNNNNNNNNN"
+        }, data);
     }, Math.floor(Math.random()*3000));
 }
 

@@ -8,7 +8,8 @@ define([
      * A placeholder is replaced if a component is not in time
      * This works for all transport layers
      *
-     *
+     * @name ClientRenderer
+     * @class A ClientRenderer instance
      */
     function ClientRenderer() {
         this.placeholderComponent = null;
@@ -39,7 +40,7 @@ define([
     /**
      * Renders a component
      *
-     * @param {Object} component The component
+     * @param {Object} component The rendered component
      * @param instanceId The instance id of the component
      *                   This is sent only if a placeholder is rendered
      */
@@ -57,6 +58,14 @@ define([
         this.renderComponent(this.placeholderComponent);
     };
 
+    /**
+     * Insert the component to the dom and register it
+     *
+     * @param {ClientRenderer} self The instance of ClientRenderer
+     * @param {Object} component The rendered component
+     * @memberOf ClientRenderer#
+     * @private
+     */
     function insertComponent(self, component) {
         var domElement = $('#' + component.instanceId);
         domElement.hide().html(component.html);
@@ -79,10 +88,18 @@ define([
         }
     }
 
-    function placeholderTimeout(self, childComponent){
+    /**
+     * Renders the placeholder if the component is not returned in time ( placeholderTimeout )
+     *
+     * @param {ClientRenderer} self The instance of ClientRenderer
+     * @param {Object} placeholder The placeholder component
+     * @memberOf ClientRenderer#
+     * @private
+     */
+    function placeholderTimeout(self, placeholder){
         setTimeout(function() {
-            if (!$('#' + childComponent.instanceId).hasClass('app-container')) {
-                self.renderPlaceholder(childComponent.instanceId);
+            if (!$('#' + placeholder.instanceId).hasClass('app-container')) {
+                self.renderPlaceholder(placeholder.instanceId);
             }
         }, self.placeholderTimeout);
     };
@@ -90,6 +107,12 @@ define([
     /**
      * Load css files and insert html after the css files are completely loaded.
      * Maybe there is a better way. This works on IE8+, Chrome, FF, Safari.
+     *
+     * @param {ClientRenderer} self The instance of ClientRenderer
+     * @param {Array} css CSS dependencies
+     * @param {Function} callback Is invoked after all css dependencies are loaded
+     * @memberOf ClientRenderer#
+     * @private
      */
     function loadCSS(self, css, callback) {
         var head = $('head');
