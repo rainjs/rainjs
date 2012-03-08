@@ -23,6 +23,13 @@
                 "server": "index.js"
             }
         },
+        "need_permissions" : {
+            "view": "need_permissions.html",
+            "controller": {
+                "client": "need_permissions.js"
+            },
+            "permissions": ["need_permissions"]
+        },
         "with_customer_error" : {
             "view": "with_customer_error.html",
             "controller": {
