@@ -1,7 +1,7 @@
-define(['core/js/promised-io/promise',
-        'core/js/client_util',
-        'core/js/event_emitter'
-], function (Promise, ClientUtil, EventEmitter) {
+define(['core/js/client_util',
+        'core/js/event_emitter',
+        'core/js/raintime/view_context'
+], function (ClientUtil, EventEmitter, ViewContext) {
 
     var raintime = (function () {
 
@@ -14,7 +14,7 @@ define(['core/js/promised-io/promise',
                 var preComponents = {};
 
                 function Component(comp) {
-                    this.id = comp.componentId;
+                    this.id = comp.id;
                     this.version = comp.version;
                     this.instanceId = comp.instanceId;
 
@@ -24,46 +24,37 @@ define(['core/js/promised-io/promise',
                 }
 
                 function internalRegister(map, comp) {
-                    var deferred = new Promise.Deferred();
-
                     var component = new Component(comp);
                     map[component.instanceId] = component;
 
                     if (!comp.controller) {
-                        ClientUtil.defer(function () {
-                            deferred.resolve(component);
-                        });
-                    } else {
-                        require([comp.controller], function (controller) {
-                            for (var key in EventEmitter.prototype) {
-                                controller.prototype.__proto__[key] = EventEmitter.prototype[key];
-                            }
-
-                            if (typeof controller === 'function') {
-                                controller = new controller();
-                            }
-
-                            if (typeof controller.init == 'function') {
-                                controller.on('init', controller.init);
-                            }
-
-                            if (typeof controller.start == 'function') {
-                                controller.on('start', controller.start);
-                            }
-
-                            controller.clientRuntime = raintime;
-                            controller.clientRuntime.getComponent = function (staticId) {
-                                return getComponent(component.instanceId, staticId);
-                            };
-                            component.controller = controller;
-
-                            controller.emit('init');
-
-                            deferred.resolve(component);
-                        });
+                        return;
                     }
+                    require([comp.controller], function (controller) {
+                        for (var key in EventEmitter.prototype) {
+                            controller.prototype.__proto__[key] = EventEmitter.prototype[key];
+                        }
 
-                    return deferred.promise;
+                        if (typeof controller === 'function') {
+                            controller = new controller();
+                        }
+
+                        if (typeof controller.init == 'function') {
+                            controller.on('init', controller.init);
+                        }
+
+                        if (typeof controller.start == 'function') {
+                            controller.on('start', controller.start);
+                        }
+
+                        controller.viewContext = new ViewContext(component);
+                        controller.viewContext.find = function (staticId) {
+                            return find(component.instanceId, staticId);
+                        };
+                        component.controller = controller;
+
+                        controller.emit('init');
+                    });
                 }
 
                 function register(comp) {
@@ -73,8 +64,18 @@ define(['core/js/promised-io/promise',
 
                     var component = preComponents[comp.instanceId];
                     if (component) {
-                        delete preComponents[comp.instanceId];
+                        if (component.id != comp.id) {
+                            internalRegister(components, comp);
+                            return;
+                        }
+
+                        component.children = comp.children;
                         components[comp.instanceId] = component;
+                        if (component.controller) {
+                            component.controller.emit('start');
+                        }
+
+                        delete preComponents[comp.instanceId];
                     } else {
                         return internalRegister(components, comp);
                     }
@@ -91,7 +92,7 @@ define(['core/js/promised-io/promise',
                     delete components[instanceId];
                 }
 
-                function getComponent(instanceId, staticId) {
+                function find(instanceId, staticId) {
                     var component = components[instanceId];
                     if (component && component.children) {
                         var children = component.children;

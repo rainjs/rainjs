@@ -20,14 +20,9 @@ define(["core/js/client_util",
      * @property {ClientStorage} storage The local storage manager
      * @property {ViewManager} viewManager The view manager that handles subsequent view requests
      * @param {Object} component
-     * @param {String} component.id
-     * @param {Object} component.parent
-     * @param {String} component.moduleId
      */
     function ViewContext(component) {
-        this.moduleId = component.moduleId;
-        this.instanceId = component.id;
-        this.parent = component.parent;
+        this.instanceId = component.instanceId;
         this.storage = new ClientStorage(this);
         this.viewManager = new ViewManager(this, Messaging.messaging);
     }
@@ -84,9 +79,5 @@ define(["core/js/client_util",
         Observer.publish(eventName, data, this);
     }
 
-    return {
-        addViewContext: function (component) {
-            return new ViewContext(component);
-        }
-    };
+    return ViewContext;
 });

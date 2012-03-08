@@ -12,14 +12,14 @@
         "nasty_level2" : {
             "view": "nasty_level2.html",
             "controller": {
-                "client": "index.js",
+                "client": "nasty_level2.js",
                 "server": "index.js"
             }
         },
         "nasty_level3" : {
             "view": "nasty_level3.html",
             "controller": {
-                "client": "index.js",
+                "client": "nasty_level3.js",
                 "server": "index.js"
             }
         }
