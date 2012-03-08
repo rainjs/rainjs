@@ -5,8 +5,8 @@ define([
 ], function(Promise, messaging, raintime) {
     /**
      * The ClientRenderer handles the registration and inserting of new components from the server.
-     * A placeholder is replaced if a component is not in time
-     * This works for all transport layers
+     * A placeholder is replaced if a component is not in time.
+     * This works for all transport layers.
      *
      * @name ClientRenderer
      * @class A ClientRenderer instance
@@ -20,38 +20,36 @@ define([
     }
 
     /**
-     * Sets the placeholder component
+     * Sets the placeholder component.
      *
-     * @param {Object} component The whole rendered placeholder component
+     * @param {Object} component the whole rendered placeholder component
      */
     ClientRenderer.prototype.setPlaceholder = function (component) {
         this.placeholderComponent = component;
     };
 
     /**
-     * Sets the placeholder timeout which is set from the server configuration
+     * Sets the placeholder timeout which is set from the server configuration.
      *
-     * @param {Number} milliseconds Time in milliseconds
+     * @param {Number} milliseconds time in milliseconds
      */
     ClientRenderer.prototype.setPlaceholderTimeout = function (milliseconds) {
         this.placeholderTimeout = milliseconds;
     };
 
     /**
-     * Renders a component
+     * Renders a component.
      *
-     * @param {Object} component The rendered component
-     * @param instanceId The instance id of the component
-     *                   This is sent only if a placeholder is rendered
+     * @param {Object} component the rendered component
      */
     ClientRenderer.prototype.renderComponent = function (component) {
         insertComponent(this, component);
     };
 
     /**
-     * Renders a placeholder
+     * Renders a placeholder.
      *
-     * @param {String} instanceId The instanceId of the component for the placeholder
+     * @param {String} instanceId the instanceId of the component for the placeholder
      */
     ClientRenderer.prototype.renderPlaceholder = function (instanceId) {
         this.placeholderComponent.instanceId = instanceId;
@@ -59,12 +57,12 @@ define([
     };
 
     /**
-     * Insert the component to the dom and register it
+     * Insert the component to the DOM and registers it.
      *
-     * @param {ClientRenderer} self The instance of ClientRenderer
-     * @param {Object} component The rendered component
-     * @memberOf ClientRenderer#
+     * @param {ClientRenderer} self the class instance
+     * @param {Object} component the rendered component
      * @private
+     * @memberOf ClientRenderer#
      */
     function insertComponent(self, component) {
         var domElement = $('#' + component.instanceId);
@@ -74,8 +72,8 @@ define([
             'app-container ' + component.id + '_' + component.version.replace(/[\.]/g, '_')
         );
 
-        //register component
-        raintime.ComponentRegistry.register(component);
+        // Registers the component.
+        raintime.componentRegistry.register(component);
 
         loadCSS(this, component.css, function() {
             domElement.show();
@@ -83,41 +81,41 @@ define([
 
         for (var len = component.children.length, i = 0; i < len; i++) {
             var childComponent = component.children[i];
-            raintime.ComponentRegistry.preRegister(childComponent);
+            raintime.componentRegistry.preRegister(childComponent);
             placeholderTimeout(self, childComponent);
         }
     }
 
     /**
-     * Renders the placeholder if the component is not returned in time ( placeholderTimeout )
+     * Renders the placeholder if the component is not returned in time ( placeholderTimeout ).
      *
-     * @param {ClientRenderer} self The instance of ClientRenderer
-     * @param {Object} placeholder The placeholder component
-     * @memberOf ClientRenderer#
+     * @param {ClientRenderer} self the class instance
+     * @param {Object} placeholder the placeholder component
      * @private
+     * @memberOf ClientRenderer#
      */
-    function placeholderTimeout(self, placeholder){
+    function placeholderTimeout(self, placeholder) {
         setTimeout(function() {
             if (!$('#' + placeholder.instanceId).hasClass('app-container')) {
                 self.renderPlaceholder(placeholder.instanceId);
             }
         }, self.placeholderTimeout);
-    };
+    }
 
     /**
      * Load css files and insert html after the css files are completely loaded.
      * Maybe there is a better way. This works on IE8+, Chrome, FF, Safari.
      *
-     * @param {ClientRenderer} self The instance of ClientRenderer
+     * @param {ClientRenderer} self the class instance
      * @param {Array} css CSS dependencies
-     * @param {Function} callback Is invoked after all css dependencies are loaded
-     * @memberOf ClientRenderer#
+     * @param {Function} callback is invoked after all css dependencies are loaded
      * @private
+     * @memberOf ClientRenderer#
      */
     function loadCSS(self, css, callback) {
         var head = $('head');
         var loadedFiles = 0;
-        for ( var i = 0, len = css.length; i < len; i++) {
+        for (var i = 0, len = css.length; i < len; i++) {
             if (head.find("link[href='" + css[i] + "']").length > 0) {
                 if (++loadedFiles == css.length) {
                     callback();
@@ -141,7 +139,7 @@ define([
     }
 
     /**
-     * Export as a global
+     * Export as a global.
      */
     window.clientRenderer = new ClientRenderer();
 
