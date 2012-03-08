@@ -4,6 +4,10 @@ define([
     'core/js/raintime/raintime'
 ], function(Promise, messaging, raintime) {
     /**
+     * The ClientRenderer handles the registration and inserting of new components from the server.
+     * A placeholder is replaced if a component is not in time
+     * This works for all transport layers
+     *
      *
      */
     function ClientRenderer() {
@@ -57,8 +61,9 @@ define([
         var domElement = $('#' + component.instanceId);
         domElement.hide().html(component.html);
         domElement.attr('id', component.instanceId);
-        domElement.attr('class', 'app-container ' + component.componentId + '_'
-                                 + component.version.replace(/[\.]/g, '_'));
+        domElement.attr('class',
+            'app-container ' + component.id + '_' + component.version.replace(/[\.]/g, '_')
+        );
 
         //register component
         raintime.ComponentRegistry.register(component);
