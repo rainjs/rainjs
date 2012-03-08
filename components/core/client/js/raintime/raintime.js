@@ -35,10 +35,20 @@ define(['core/js/promised-io/promise',
                         });
                     } else {
                         require([comp.controller], function (controller) {
-                            ClientUtil.inherits(controller, EventEmitter);
+                            for (var key in EventEmitter.prototype) {
+                                controller.prototype.__proto__[key] = EventEmitter.prototype[key];
+                            }
 
-                            if (typeof controller === "function") {
+                            if (typeof controller === 'function') {
                                 controller = new controller();
+                            }
+
+                            if (typeof controller.init == 'function') {
+                                controller.on('init', controller.init);
+                            }
+
+                            if (typeof controller.start == 'function') {
+                                controller.on('start', controller.start);
                             }
 
                             controller.clientRuntime = raintime;
