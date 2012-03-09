@@ -73,7 +73,7 @@ define([
         );
 
         // Registers the component.
-        raintime.componentRegistry.register(component);
+        Raintime.componentRegistry.register(component);
 
         loadCSS(this, component.css, function() {
             domElement.show();
@@ -81,7 +81,7 @@ define([
 
         for (var len = component.children.length, i = 0; i < len; i++) {
             var childComponent = component.children[i];
-            raintime.componentRegistry.preRegister(childComponent);
+            Raintime.componentRegistry.preRegister(childComponent);
             placeholderTimeout(self, childComponent);
         }
     }
