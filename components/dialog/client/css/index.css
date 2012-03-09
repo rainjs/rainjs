@@ -1,0 +1,18 @@
+body {
+  background:-moz-linear-gradient(top, #88F, #FFF) no-repeat;
+  background:-webkit-linear-gradient(top, #88F, #FFF) no-repeat;
+  padding: 50px;
+  font-size: 3em;
+}
+
+.index {
+    color: blue;
+}
+
+.image_index {
+    background: url("/placeholder/1.0/resources/images/loading.gif");
+}
+
+.local_image {
+    background: url("images/example_loading.gif");
+}
