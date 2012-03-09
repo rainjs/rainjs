@@ -1,8 +1,7 @@
 define([
     'core/js/promised-io/promise',
-    'core/js/raintime/messaging',
+    'core/js/messaging/sockets',
     'core/js/raintime/raintime'
-], function(Promise, messaging, raintime) {
     /**
      * The ClientRenderer handles the registration and inserting of new components from the server.
      * A placeholder is replaced if a component is not in time.
@@ -11,11 +10,12 @@ define([
      * @name ClientRenderer
      * @class A ClientRenderer instance
      */
+], function(Promise, Sockets, Raintime) {
     function ClientRenderer() {
         this.placeholderComponent = null;
         this.placeholderTimeout = 500;
 
-        var socket = messaging.getWebSocket('/core');
+        var socket = Sockets.getSocket('/core');
         socket.on('render', this.renderComponent);
     }
 
