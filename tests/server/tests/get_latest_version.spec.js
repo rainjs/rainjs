@@ -1,12 +1,15 @@
+var globals = require(process.cwd() + '/lib/globals.js');
+var config = require(process.cwd() + '/lib/configuration.js');
+
 describe('get latest version', function() {
-    var loadFile = require('mocks').loadFile;
+    var loadFile = require('injectr');
     var mockComponentRegistry, componentRegistry;
 
     beforeEach(function(){
-        require(process.cwd() + '/lib/configuration.js');
-        mockComponentRegistry = loadFile(process.cwd() + '/lib/component_registry.js');
+        mockComponentRegistry = loadFile(process.cwd() + '/lib/component_registry.js', null, true);
         mockComponentRegistry.plugins = [];
         componentRegistry = new mockComponentRegistry.ComponentRegistry();
+        console.log(componentRegistry);
         componentRegistry.initialize();
     });
 
