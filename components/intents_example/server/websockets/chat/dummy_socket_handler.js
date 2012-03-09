@@ -36,7 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 function handle(socket) {
     socket.on("hello", function(data) {
-        socket.emit("bye", {"message": "Hello sir"})
+        socket.emit("bye", {"message": "Hello sir"});
     });
 }
 

@@ -45,8 +45,6 @@ define(["core/js/raintime/messaging_observer",
     function Messaging() {
         //this._intents = new Intents();
 
-        var self = this;
-
         //var sendIntent = this._intents.sendIntent;
 
         //this.sendIntent = function(request) {
@@ -80,7 +78,7 @@ define(["core/js/raintime/messaging_observer",
         }
 
         return io.connect(getBaseUrl() + url);
-    }
+    };
 
     /**
      * Method used to add the base url for websockets.

@@ -92,7 +92,7 @@ define(['core/js/client_util'], function(ClientUtil) {
             if (!parent[child]) {
                 parent[child] = {
                     callbacks: []
-                }
+                };
             }
 
             parent = parent[child];

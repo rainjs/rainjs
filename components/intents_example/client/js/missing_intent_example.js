@@ -110,5 +110,5 @@ define(function() {
     
     return {init: init,
             start: start,
-            configureSocketDummy: configureSocketDummy}
+            configureSocketDummy: configureSocketDummy};
 });

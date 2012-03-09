@@ -32,5 +32,5 @@ function doPut(request, response) {}
 
 exports.get = doGet;
 exports.post = doPost;
-exports.delete = doDelete;
+exports['delete'] = doDelete;
 exports.put = doPut;

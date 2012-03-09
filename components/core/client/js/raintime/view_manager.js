@@ -187,7 +187,7 @@ define(["core/js/client_util"],
             // Evaluate
             new Function(scriptText)();
         });
-    }
+    };
 
     return ViewManager;
 });

@@ -41,5 +41,5 @@ define(function() {
         }
     };
         
-    return {"raintimeConfig": clientConfig}
+    return {"raintimeConfig": clientConfig};
 });

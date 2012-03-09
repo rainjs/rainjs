@@ -55,7 +55,6 @@ define(["core/js/client_util",
         // this attribute keeps track of intents sent from a specific context.
         this._intentsContext = {};
 
-        var self = this;
     }
 
     ClientUtil.inherits(ClientIntents, EventEmitter);
@@ -222,7 +221,7 @@ define(["core/js/client_util",
     	var context = this._intentsContext[contextId];
 
     	return JSON.stringify(context) == "{}";
-    }
+    };
 
     /**
      * Method used to handle error received from the intents socket.

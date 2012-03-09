@@ -27,7 +27,7 @@ define(["core/js/raintime/client_storage"
      */
     Context.prototype.getRoot = function () {
        return $("[id='" + this.instanceId + "']"); 
-    }
+    };
 
     return Context;
 });

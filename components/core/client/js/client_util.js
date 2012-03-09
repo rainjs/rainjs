@@ -32,13 +32,13 @@ define(['core/js/jquery-cookie'], function () {
      * Makes a function inherit from another's prototype.
      *
      * @param {Object} ctor the derived constructor function
-     * @param {Object} superCtor the baes constructor function
+     * @param {Object} superCtor the base constructor function
      */
     ClientUtil.prototype.inherits = function (ctor, superCtor) {
         var __super__ = superCtor.prototype;
         ctor.prototype = create(__super__);
         ctor.prototype.constructor = ctor;
-    }
+    };
 
     /**
      * Binds scope and arguments to a function.
@@ -64,7 +64,7 @@ define(['core/js/jquery-cookie'], function () {
             }
 
             return f.apply(scope, args);
-        }
+        };
     };
 
     /**
