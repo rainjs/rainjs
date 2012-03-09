@@ -1,7 +1,8 @@
-var mod_authorization = require(process.cwd() + '/lib/authorization.js');
+var golbals = require(process.cwd() + '/lib/globals');
+var authorization = require(process.cwd() + '/lib/authorization');
 
 describe('Authorization: permissions and dynamic conditions', function () {
-    var securityContext;
+    var securityContext = null;
 
     beforeEach(function () {
         securityContext = {
@@ -14,28 +15,28 @@ describe('Authorization: permissions and dynamic conditions', function () {
 
     it('should throw an error when permissions key is not an array', function () {
         expect(function() {
-            mod_authorization.authorize(securityContext);
+            authorization.authorize(securityContext);
         }).toThrow('precondition failed: permissions key is not an array.');
     });
 
     it('should throw an error when dynamicConditions key is not an array', function () {
         expect(function() {
-            mod_authorization.authorize(securityContext, [], undefined);
+            authorization.authorize(securityContext, [], undefined);
         }).toThrow('precondition failed: dynamicConditions key is not an array.');
     });
 
     it('should pass permissions check', function () {
-       var isAuthorized = mod_authorization.authorize(securityContext, ['perm2', 'perm3'], []);
+       var isAuthorized = authorization.authorize(securityContext, ['perm2', 'perm3'], []);
        expect(isAuthorized).toBe(true);
     });
 
     it('should not pass permissions check', function () {
-        var isAuthorized = mod_authorization.authorize(securityContext, ['perm2', 'perm4'], []);
+        var isAuthorized = authorization.authorize(securityContext, ['perm2', 'perm4'], []);
         expect(isAuthorized).toBe(false);
      });
 
     it('should pass dynamic conditions check', function () {
-        var isAuthorized = mod_authorization.authorize(securityContext, [],
+        var isAuthorized = authorization.authorize(securityContext, [],
             [function () { return true; },
              function () { return true; }]
         );
@@ -43,7 +44,7 @@ describe('Authorization: permissions and dynamic conditions', function () {
      });
 
      it('should not pass dynamic conditions check', function () {
-         var isAuthorized = mod_authorization.authorize(securityContext, [],
+         var isAuthorized = authorization.authorize(securityContext, [],
              [function () { return true; },
               function () { return false; }]
          );
@@ -51,7 +52,7 @@ describe('Authorization: permissions and dynamic conditions', function () {
       });
 
      it('should be authorized (permissions + dynamic conditions)', function () {
-         var isAuthorized = mod_authorization.authorize(securityContext, ['perm2', 'perm3'],
+         var isAuthorized = authorization.authorize(securityContext, ['perm2', 'perm3'],
              [function () { return true; },
               function () { return true; }]
          );
@@ -59,7 +60,7 @@ describe('Authorization: permissions and dynamic conditions', function () {
      });
 
      it('should be forbidden (permissions + dynamic conditions)', function () {
-         var isAuthorized = mod_authorization.authorize(securityContext, ['perm2', 'perm3'],
+         var isAuthorized = authorization.authorize(securityContext, ['perm2', 'perm3'],
              [function () { return true; },
               function () { return false; }]
          );
@@ -68,7 +69,7 @@ describe('Authorization: permissions and dynamic conditions', function () {
 
      it('should not execute dynamic conditions when permissions check fails', function () {
          var isExecuted = false;
-         mod_authorization.authorize(securityContext, ['perm2', 'perm4'],
+         authorization.authorize(securityContext, ['perm2', 'perm4'],
                  [function () { isExecuted = true; return true; },
                   function () { isExecuted = true; return false; }]
          );
@@ -79,7 +80,7 @@ describe('Authorization: permissions and dynamic conditions', function () {
          var dynamicCondition = function (context) {
              return context.user.country === 'US';
          };
-         var isAuthorized = mod_authorization.authorize(securityContext, [], [dynamicCondition]);
+         var isAuthorized = authorization.authorize(securityContext, [], [dynamicCondition]);
          expect(isAuthorized).toBe(true);
      });
 
@@ -87,7 +88,7 @@ describe('Authorization: permissions and dynamic conditions', function () {
          var dynamicCondition = function (context) {
              return context.user.country === 'RO';
          };
-         var isAuthorized = mod_authorization.authorize(securityContext, [], [dynamicCondition]);
+         var isAuthorized = authorization.authorize(securityContext, [], [dynamicCondition]);
          expect(isAuthorized).toBe(false);
      });
 });
