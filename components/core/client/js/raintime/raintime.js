@@ -1,16 +1,6 @@
 define(['core/js/event_emitter',
-        'core/js/raintime/view_context'
-], function (EventEmitter, ViewContext) {
-
-    /**
-     * The Raintime instance.
-     *
-     * @type {Object}
-     * @property {ComponentRegistry} componentRegistry the component registry instance
-     * @private
-     */
-    var raintime = new Raintime();
-    raintime.componentRegistry = new ComponentRegistry();
+        'core/js/raintime/context'
+], function (EventEmitter, Context) {
 
     /**
      * The map of registered components, indexed by the instanceId property.
@@ -36,8 +26,12 @@ define(['core/js/event_emitter',
      * @name Raintime
      * @class This class is used by the ClientRenderer to register components.
      * @constructor
+     *
+     * @property {ComponentRegistry} componentRegistry the component registry instance
      */
-    function Raintime() {}
+    function Raintime() {
+        this.componentRegistry = new ComponentRegistry();
+    }
 
     /**
      * Creates a new component and sets default values.
@@ -207,7 +201,7 @@ define(['core/js/event_emitter',
             onControllerEvent(controller, 'start');
 
             // Attach modules to the controller.
-            controller.context = new ViewContext(newComponent);
+            controller.context = new Context(newComponent);
             controller.context.find = function (staticId) {
                 return find(newComponent.instanceId, staticId);
             };
@@ -276,5 +270,5 @@ define(['core/js/event_emitter',
         }
     }
 
-    return raintime;
+    return new Raintime();
 });
