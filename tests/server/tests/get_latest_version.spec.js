@@ -1,11 +1,10 @@
 var globals = require(process.cwd() + '/lib/globals.js');
 var config = require(process.cwd() + '/lib/configuration.js');
-var componentRegistry = require(process.cwd() + '/lib/component_registry.js').initialize();
+var componentRegistry = require(process.cwd() + '/lib/component_registry.js').initialize(config, []);
 
 describe('get latest version', function() {
 
     it('must get the correct version', function() {
-        expect(componentRegistry.getLatestVersion('example', '1')).toEqual('1.3.0');
         expect(componentRegistry.getLatestVersion('example', '0.0.1')).toEqual('0.0.1');
         expect(componentRegistry.getLatestVersion('example')).toEqual('4.5.2');
         expect(componentRegistry.getLatestVersion('example', '1.3')).toEqual('1.3.5');
