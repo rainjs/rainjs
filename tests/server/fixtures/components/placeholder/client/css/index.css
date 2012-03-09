@@ -1,0 +1,11 @@
+html, body {
+    padding: 0;
+    margin: 0;
+}
+.placeholder_loading {
+    background: url("images/loading.gif") no-repeat center center !important;
+    width: 100%;
+    height: 100%;
+    min-height: 36px;
+}
+

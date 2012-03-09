@@ -1,0 +1,56 @@
+{
+    "id": "error",
+    "version": "1.0",
+    "views": {
+        "default": {
+            "view": "default.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
+        },
+        "400" : {
+            "view": "400.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
+        },
+        "401" : {
+            "view": "401.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
+        },
+        "403" : {
+            "view": "403.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
+        },
+        "404" : {
+            "view": "404.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
+        },
+        "408" : {
+            "view": "408.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
+        },
+        "500" : {
+            "view": "500.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
+        }
+    },
+    "intents": []
+}

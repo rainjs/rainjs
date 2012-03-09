@@ -137,6 +137,7 @@ namespace('test', function () {
                 return;
             }
 
+	    process.env.RAIN_CONF = process.cwd() + '/tests/server/fixtures/server.conf';
             var specFolder = process.cwd() + '/tests/server/tests/';
             var sys = require('sys');
 
