@@ -1,28 +1,29 @@
 {
-	"server" : {
-		"port" : 1337
-		, "serverRoot"   : "."
-		, "documentRoot" : "."
-		, "componentPath" : "./components"
-		, "socketsPort"   : 1338
-	},
-	
-	"mothership" : {
-	  "port" : 31337,
-	  "host" : "localhost",
-	  "connect" : true
-	},
+    "server": {
+        "port": 1337,
+        "socketsPort": 1338,
+        "timeoutForRequests" : 3,
 
-	"loglevel" : 10,
+        "serverRoot": ".",
+        "componentPath": "./components",
 
-	"remotecontrol" : false,
+        "paths": {
+            "server": ".",
+            "components": "./components"
+        }
+    },
 
-	"websockets" : false,
-	
-	"caching" : {
-		"resources" : false
-		, "ttl"		: 5
-	},
-	
-	"default_language" : "en_US"	
+    "default_language": "en_US",
+    
+    "errorComponent": {
+        "id": "error",
+        "version": "1.0"
+    },
+
+    "loadingComponent": {
+        "id": "placeholder",
+        "version": "1.0",
+        "viewId": "index",
+        "timeout": 500
+    }
 }
