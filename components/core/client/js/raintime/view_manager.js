@@ -161,8 +161,8 @@ define(["core/js/client_util"],
             this.root.replaceWith(componentRoot);
         }
 
-        // Add the component's htdocs/js path to the require config paths
-        requireConfig.paths[component.id] = component.id + "/htdocs/js";
+        // Add the component's js path to the require config paths
+        requireConfig.paths[component.id] = component.id + "/js";
         require(requireConfig);
 
         /*

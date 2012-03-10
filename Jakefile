@@ -1,34 +1,30 @@
-// add the components folder to require.paths
-// TODO: move this to NODE_PATH when we switch to node 0.6
-
-
 var child = require('child_process');
 var fs = require('fs');
 
 desc('Print the help message');
 task('default', function (params) {
-	jake.showAllTaskDescriptions();
+    jake.showAllTaskDescriptions();
 });
 
 namespace('doc', function () {
-	desc('Generate the documentation');
-	task('generate', function () {
-		var children = [],
+    desc('Generate the documentation.');
+    task('generate', function () {
+        var children = [],
             args,
-			conf,
-			buffer;
+            conf,
+            buffer;
 
-		args = [
-			'-jar',
-			'./tools/jsdoc-toolkit/jsrun.jar',
-			'./tools/jsdoc-toolkit/app/run.js',
-			'-c=./tools/jsdoc-toolkit/rain.conf'
-		];
+        args = [
+            '-jar',
+            './tools/jsdoc-toolkit/jsrun.jar',
+            './tools/jsdoc-toolkit/app/run.js',
+            '-c=./tools/jsdoc-toolkit/rain.conf'
+        ];
         var targets = '';
         var cmd = '';
 
-		buffer = new Buffer(fs.readFileSync('./doc/config.json'));
-		conf = JSON.parse(buffer.toString());
+        buffer = new Buffer(fs.readFileSync('./doc/config.json'));
+        conf = JSON.parse(buffer.toString());
 
         console.log('Generating client RST documentation');
 
@@ -43,11 +39,11 @@ namespace('doc', function () {
                 console.log(stdout);
             });
         }
-	});
+    });
 
-    desc('Build the client documentation');
+    desc('Build the client documentation.');
     task('build', function () {
-        console.log('Building documentation');
+        console.log('Building documentation.');
         child.exec('make clean', {cwd:'./doc', env:process.env}, function (error, stdout, stderr) {
             console.log(stdout);
         });
@@ -64,13 +60,12 @@ namespace('doc', function () {
 
 namespace('test', function () {
     namespace('server', function () {
-        desc('Start the JS test driver server');
+        desc('Start the JS test driver server.');
         task('start', function () {
-            console.log('Starting JSTD Server');
+            console.log('Starting JSTD Server.');
             daemon.daemonize('jstd.log', '/tmp/jstd.pid', function () {
                 var jstdPath = './tests/client/bin/JsTestDriver-1.3.3d.jar';
                 var jstdPort = 9876;
-                //var cmd = 'java -jar ' + jstdPath + ' --port ' + jstdPort + ' --runnerMode DEBUG';
                 var args = [
                     '-jar',
                     jstdPath,
@@ -83,11 +78,10 @@ namespace('test', function () {
                 var jstd = child.spawn('java', args, {cwd: process.cwd(), env: process.env, setsid: false});
                 console.log(jstd.pid);
 
-
                 try {
                     fs.writeFileSync('/tmp/jstd_server.pid', jstd.pid + '');
                 } catch (e) {
-                    // for some strange reason we can't write to pid
+                    // For some strange reason we can't write to pid.
                 }
 
                 jstd.on('exit', function () {
@@ -101,16 +95,16 @@ namespace('test', function () {
             console.log('Server started. Now capture your browser by going to http://localhost:9876');
         });
 
-        desc('Stop the JS test driver server');
+        desc('Stop the JS test driver server.');
         task('stop', function () {
-            console.log('Stopping JSTD server');
+            console.log('Stopping JSTD server.');
             var pid = fs.readFileSync('/tmp/jstd.pid');
             var jstd = fs.readFileSync('/tmp/jstd_server.pid');
             try {
                 process.kill(pid, 'SIGKILL');
                 process.kill(jstd, 'SIGTERM');
             } catch (e) {
-                console.log('Couldn\'t kill JSTD server');
+                console.log('Couldn\'t kill the JSTD server.');
             }
         });
     });
@@ -121,7 +115,9 @@ namespace('test', function () {
             var jstdPath = './tests/client/bin/JsTestDriver-1.3.3d.jar';
 
             console.log('Running client side tests...');
-            var cmd = 'java -jar ' + jstdPath + ' --reset --tests all --config tests/client/conf/ClientTests.jstd --verbose --testOutput ./tests/client/reports';
+            var cmd = 'java -jar ' + jstdPath + ' --reset --tests all --config ' +
+                      'tests/client/conf/ClientTests.jstd --verbose ' +
+                      '--testOutput ./tests/client/reports';
             child.exec(cmd, function (error, stdout, stderr) {
                 console.log(stdout);
             });
@@ -133,13 +129,13 @@ namespace('test', function () {
             try {
                 jasmine = require('jasmine-node/lib/jasmine-node/index');
             } catch (e) {
-                console.log('You do not have jasmine-node installed, please run "npm install -d"');
+                console.log('You do not have jasmine-node installed, please run "npm install -d".');
                 return;
             }
 
-	    process.env.RAIN_CONF = process.cwd() + '/tests/server/fixtures/server.conf';
+            process.env.RAIN_CONF = process.cwd() + '/tests/server/fixtures/server.conf';
             var specFolder = process.cwd() + '/tests/server/tests/';
-            var sys = require('sys');
+            var util = require('util');
 
             for (var key in jasmine) {
                 global[key] = jasmine[key];
@@ -149,7 +145,7 @@ namespace('test', function () {
             var showColors = true;
             var teamcity = process.env.TEAMCITY_PROJECT_NAME || false;
             var extentions = "js";
-            var match = '.'
+            var match = '.';
 
             var junitreport = {
                 report: true,
@@ -162,17 +158,18 @@ namespace('test', function () {
             console.log('Running server side tests...');
 
             jasmine.loadHelpersInFolder(specFolder, new RegExp("[-_]helper\\.(" + extentions + ")$"));
-            jasmine.executeSpecsInFolder(specFolder, function(runner, log) {
-                sys.print('\n');
-                    if (runner.results().failedCount == 0) {
+            jasmine.executeSpecsInFolder(specFolder, function (runner, log) {
+                util.print('\n');
+                if (runner.results().failedCount == 0) {
                     exitCode = 0;
                 } else {
                     exitCode = 1;
                 }
-            }, isVerbose, showColors, teamcity, useRequireJs, new RegExp(match + "spec\\.(" + extentions + ")$", 'i'), junitreport);
+            }, isVerbose, showColors, teamcity, useRequireJs,
+               new RegExp(match + "spec\\.(" + extentions + ")$", 'i'), junitreport);
         });
 
-        desc('Run all tests');
+        desc('Run all tests.');
         task('all', function () {
             jake.Task['test:run:server'].invoke();
             jake.Task['test:run:client'].invoke();

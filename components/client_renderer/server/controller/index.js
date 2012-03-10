@@ -8,8 +8,8 @@ function doGet(request, response) {
     response.writeHead(200, {"Content-Type": "application/jsonp"});
 
     var dataPlaceholder = {
-        css: [ '/components/placeholder/htdocs/css/index.css' ],
-        controller: '/components/placeholder/htdocs/controller/index.js',
+        css: [ '/placeholder/css/index.css' ],
+        controller: '/placeholder/js/index.js',
         domId: 200,
         instanceId : 'joker',
         staticId: 'batman',
@@ -23,8 +23,8 @@ function doGet(request, response) {
     writeJsonpFunction(dataPlaceholder, response);
 
     var dataButton = {
-        css: [ '/components/hello_world/htdocs/css/index.css' ],
-        controller: '/components/hello_world/htdocs/controller/index.js',
+        css: [ '/hello_world/css/index.css' ],
+        controller: '/hello_world/js/index.js',
         domId: 500,
         instanceId : 'flash',
         staticId: 'superman',
