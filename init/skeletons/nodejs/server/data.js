@@ -1,24 +1,16 @@
 /**
- * The dynamic condition for the component.
+ * Handles the template data for the view index and returns it with invoking the callback function
  *
- * @param {Object} securityContext the security context
- * @returns {Boolean} true if user is allowed to access the component or false otherwise
+ * @param callback The callback function which must be invoked if the data is completely build
+ * @param data Data of the parent template for special usage
  */
-function _component(securityContext) {
-    return true;
-}
-
-/**
- * The dynamic condition for the index view.
- *
- * @param securityContext the security context
- * @returns {Boolean} true if user is allowed to access the view or false otherwise
- */
-function index(securityContext) {
-    return true;
+function index(callback, data) {
+    var error = null;
+    var customData = null;
+    
+    callback(error, customData);
 }
 
 module.exports = {
-    _component: _component,
     index: index
 };
