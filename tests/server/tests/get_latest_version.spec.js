@@ -1,6 +1,7 @@
-var globals = require(process.cwd() + '/lib/globals.js');
-var config = require(process.cwd() + '/lib/configuration.js');
-var loadFile = require('injectr');
+var cwd = process.cwd();
+var globals = require(cwd + '/lib/globals.js');
+var config = require(cwd + '/lib/configuration.js');
+var loadFile = require(cwd + '/tests/server/rain_mocker');
 
 describe('get latest version', function() {
     var mockComponentRegistry, componentRegistry;
