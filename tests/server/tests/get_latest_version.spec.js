@@ -3,7 +3,7 @@ var globals = require(cwd + '/lib/globals.js');
 var config = require(cwd + '/lib/configuration.js');
 var loadFile = require(cwd + '/tests/server/rain_mocker');
 
-describe('get latest version', function() {
+describe('Get latest version', function() {
     var mockComponentRegistry, componentRegistry;
     beforeEach(function(){
         mockComponentRegistry = loadFile(process.cwd() + '/lib/component_registry.js', null, true);

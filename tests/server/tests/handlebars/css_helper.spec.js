@@ -1,12 +1,13 @@
 "use strict";
+
 var cwd = process.cwd();
 var globals = require(cwd + '/lib/globals.js');
 var config = require(cwd + '/lib/configuration');
 var loadFile = require(cwd + '/tests/server/rain_mocker');
 
-describe('handlebars css helper', function () {
+describe('Handlebars css helper', function () {
     var cssHelper, Handlebars, mockComponentRegistry, componentRegistry, rainContext;
-    
+
     beforeEach(function () {
         mockComponentRegistry = loadFile(process.cwd() + '/lib/component_registry.js', null, true);
         mockComponentRegistry.scanComponentFolder();
@@ -18,7 +19,7 @@ describe('handlebars css helper', function () {
                 version: '1.0'
             }
         };
-        
+
         cssHelper = loadFile(cwd + '/lib/handlebars/css.js', {
             '../component_registry': componentRegistry,
             '../renderer': {
@@ -26,12 +27,11 @@ describe('handlebars css helper', function () {
             }
         });
         Handlebars = require('handlebars');
-        
+
         Handlebars.registerHelper(cssHelper.name, cssHelper.helper);
     });
 
     describe('register plugin to handlebars', function () {
-        console.log(rainContext);
         it('must register the css helper to handlebars', function () {
             expect(cssHelper.name).toEqual('css');
             expect(typeof cssHelper.helper).toEqual('function');
@@ -40,7 +40,6 @@ describe('handlebars css helper', function () {
 
     describe('test required and optional options', function () {
         it('option "path" must be required', function () {
-            console.log(rainContext);
             var template = Handlebars.compile('{{css version="1.0"}}');
             expect(function() {
                 template();
@@ -52,18 +51,18 @@ describe('handlebars css helper', function () {
             expect(rainContext.css.length).toEqual(1);
             expect(rainContext.css[0]).toEqual('/example/1.0/css/index.css');
         });
-        
+
         it('must ignore version here and create correct css dependency', function () {
             Handlebars.compile('{{css path="index.css" version="2.4"}}')();
             expect(rainContext.css.length).toEqual(1);
             expect(rainContext.css[0]).toEqual('/example/1.0/css/index.css');
         });
-        
+
         it('must create correct dependency css with latest version', function() {
             Handlebars.compile('{{css component="example" path="index.css"}}')();
             expect(rainContext.css[0]).toEqual('/example/4.5.2/css/index.css');
         });
-        
+
         it('must create correct css dependency for external components', function() {
             // Test external resource with latest version.
             Handlebars.compile('{{css component="error" path="index.css"}}')();

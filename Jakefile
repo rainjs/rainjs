@@ -155,7 +155,7 @@ namespace('test', function () {
             }
             var useRequireJs = false;
 
-            console.log('Running server side tests...');
+            console.log('\nRunning server side tests...');
 
             jasmine.loadHelpersInFolder(specFolder, new RegExp("[-_]helper\\.(" + extentions + ")$"));
             jasmine.executeSpecsInFolder(specFolder, function (runner, log) {

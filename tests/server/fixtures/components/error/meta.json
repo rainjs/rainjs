@@ -12,42 +12,42 @@
         "400" : {
             "view": "400.html",
             "controller": {
-                "client": "index.js",
+                "client": "400.js",
                 "server": "index.js"
             }
         },
         "401" : {
             "view": "401.html",
             "controller": {
-                "client": "index.js",
+                "client": "401.js",
                 "server": "index.js"
             }
         },
         "403" : {
             "view": "403.html",
             "controller": {
-                "client": "index.js",
+                "client": "403.js",
                 "server": "index.js"
             }
         },
         "404" : {
             "view": "404.html",
             "controller": {
-                "client": "index.js",
+                "client": "404.js",
                 "server": "index.js"
             }
         },
         "408" : {
             "view": "408.html",
             "controller": {
-                "client": "index.js",
+                "client": "408.js",
                 "server": "index.js"
             }
         },
         "500" : {
             "view": "500.html",
             "controller": {
-                "client": "index.js",
+                "client": "500.js",
                 "server": "index.js"
             }
         }
