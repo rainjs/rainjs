@@ -5,7 +5,7 @@ var controllerPathPlugin = require(cwd + '/lib/registry/controller_path');
 describe('Registry Plugin: '+controllerPathPlugin.name, function() {
     var componentConfig = null;
     beforeEach(function(){
-        componentConfig = fs.readFileSync(cwd + '/tests/server/fixtures/components/example/meta.json');
+        componentConfig = JSON.parse(fs.readFileSync(cwd + '/tests/server/fixtures/components/example/meta.json'));
     });
 
     it('must rewrite the js clientside controller to the right url', function() {
@@ -20,7 +20,7 @@ describe('Registry Plugin: '+controllerPathPlugin.name, function() {
         
         for(var view in views){
             if(views[view].controller && views[view].controller.client){
-                expect(views[view].controller.client).toEqual(componentConfig.id+'/'+componentConfig.version+'/js/'+clientController[view]);
+                expect(views[view].controller.client).toEqual('/'+componentConfig.id+'/'+componentConfig.version+'/js/'+clientController[view]);
             }
         }
     });
