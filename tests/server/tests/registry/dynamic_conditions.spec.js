@@ -13,8 +13,14 @@ describe('Registry Plugin: '+registryPlugin.name, function() {
     });
 
     it('must inject dynamic condition functions', function() {
-        var exampleConfig = componentRegistry.getConfig('example');
-        registryPlugin.configure(exampleConfig);
-        expect(registryPlugin.dynamicConditions).toBeNotUndefined();
+        var config = componentRegistry.getConfig('example', '0.0.1');
+        registryPlugin.configure(config);
+        expect(config.dynamicConditions).toBeDefined();
+    });
+    
+    it('must give undefined back cause there are no dynamic conditions', function() {
+        var config = componentRegistry.getConfig('placeholder', '1.0');
+        registryPlugin.configure(config);
+        expect(config.dynamicConditions).toBeUndefined();
     });
 });
