@@ -5,7 +5,7 @@
         "timeoutForRequests" : 3,
 
         "serverRoot": ".",
-        "componentPath": "./components",
+        "components": ["./components"],
 
         "paths": {
             "server": ".",

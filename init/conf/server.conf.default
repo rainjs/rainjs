@@ -5,7 +5,7 @@
         "timeoutForRequests" : 3,
 
         "serverRoot": ".",
-        "componentPath": "./components",
+        "components": ["./components"],
 
         "paths": {
             "server": ".",
@@ -14,7 +14,7 @@
     },
 
     "default_language": "en_US",
-    
+
     "errorComponent": {
         "id": "error",
         "version": "1.0"
