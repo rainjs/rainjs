@@ -1,4 +1,4 @@
-define([""], function() {
+define(['core/js/messaging/intents'], function(Intents) {
     /**
      * Example controller class.
      *
@@ -22,7 +22,18 @@ define([""], function() {
      *
      * @function
      */
-    Controller.prototype.start = $.noop;
+    Controller.prototype.start = function () {
+        $(this.context.getRoot).on('click', '.do-intent', function (event) {
+            Intents.send({
+                category: 'com.rain.test',
+                action: 'DO_SOMETHING',
+                context: {
+                    instanceId: 'modalDialog',
+                }
+            });
+            event.stopImmediatePropagation();
+        });
+    };
 
     return Controller;
 });

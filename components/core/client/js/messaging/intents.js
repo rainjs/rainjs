@@ -1,14 +1,5 @@
 define(['core/js/messaging/sockets'], function (Sockets) {
-    var socket;
-
-    /**
-     * This class handles all aspects of sending intents
-     *
-     * @constructor
-     */
-    function IntentHandler() {
-        socket = Sockets.getSocket('/core');
-    }
+    var socket = Sockets.getSocket('/core');
 
     /**
      * Send an intent and return a promise that gets triggered after the server finishes processing
@@ -19,8 +10,16 @@ define(['core/js/messaging/sockets'], function (Sockets) {
      * @returns {Promise}
      */
     function sendIntent(intent) {
-        var defer = Promise.defer();
+        //var defer = Promise.defer();
 
-        return defer.promise;
+        socket.emit('request_intent', intent, function(error) {
+            console.log('acknowledgement recived, with error: ', error);
+        });
+
+        //return defer.promise;
     }
+
+    return {
+        send: sendIntent
+    };
 });

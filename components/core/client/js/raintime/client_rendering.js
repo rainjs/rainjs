@@ -14,9 +14,12 @@ define([
     function ClientRenderer() {
         this.placeholderComponent = null;
         this.placeholderTimeout = 500;
+        var self = this;
 
         var socket = Sockets.getSocket('/core');
-        socket.on('render', this.renderComponent);
+        socket.on('render', function (data) {
+            self.renderComponent(data);
+        });
     }
 
     /**
@@ -132,6 +135,7 @@ define([
                         callback();
                     }
                 };
+                console.log(link)
                 head.append(link);
                 loader.src = css[i];
             }
