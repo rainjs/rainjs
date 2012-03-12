@@ -15,14 +15,18 @@ define([], function() {
      *
      * @function
      */
-    Controller.prototype.init = $.noop;
+    Controller.prototype.init = function(){
+        console.log("Hello world initialized");
+    };
 
     /**
      * Startup lifecycle step that happens right after the markup is in place.
      *
      * @function
      */
-    Controller.prototype.start = $.noop;
+    Controller.prototype.start = function(){
+        console.log("Hello World started!");
+    };
 
     return Controller;
 });

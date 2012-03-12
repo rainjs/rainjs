@@ -5,8 +5,7 @@
         "index" : {
             "view": "index.html",
             "controller": {
-                "client": "index.js",
-                "server": "index.js"
+                "client": "index.js"
             }
         },
         "nasty_level2" : {
@@ -19,8 +18,7 @@
         "nasty_level3" : {
             "view": "nasty_level3.html",
             "controller": {
-                "client": "nasty_level3.js",
-                "server": "index.js"
+                "client": "nasty_level3.js"
             }
         },
         "need_permissions" : {

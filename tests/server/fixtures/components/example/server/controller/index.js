@@ -4,7 +4,9 @@
  * @param {Request} request the request object
  * @param {Response} response the response object
  */
-function doGet(request, response) {}
+function doGet(request, response) {
+    response.end("finished");
+}
 
 /**
  * Resolves the POST HTTP verb.

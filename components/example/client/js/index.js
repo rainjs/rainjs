@@ -1,4 +1,4 @@
-define([""], function() {
+define([], function(ClientRenderer) {
     /**
      * Example controller class.
      *
@@ -26,6 +26,17 @@ define([""], function() {
      */
     Controller.prototype.start = function () {
         console.log('example component (view index) was started.');
+
+        var context = this.context;
+        var dom = $('<div></div>');
+        context.getRoot().append(dom);
+        context.getRoot().find('.button').click(function(){
+            context.replace({
+                id: "hello_world",
+                view: "index",
+                placeholder: false
+            });
+        });
     };
 
     return Controller;
