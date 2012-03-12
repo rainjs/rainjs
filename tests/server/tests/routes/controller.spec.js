@@ -1,3 +1,5 @@
+"use strict";
+
 var cwd = process.cwd();
 var globals = require(cwd + '/lib/globals.js');
 var config = require(cwd + '/lib/configuration.js');
@@ -47,7 +49,7 @@ describe('Router Plugin: ' + routerPlugin.name, function() {
         response.finished = true;
     });
 
-    waits(config.server.timeoutForRequests+200);
+    waits(config.server.timeoutForRequests+500);
 
     it('must call an error cause there is no specified controller', function() {
         request.method = "get";
@@ -58,7 +60,7 @@ describe('Router Plugin: ' + routerPlugin.name, function() {
         response.finished = true;
     });
 
-    waits(config.server.timeoutForRequests+200);
+    waits(config.server.timeoutForRequests+500);
 
     it('must call an error cause the controller is not anwsering for the given timeout', function() {
         runs(function(){
@@ -68,7 +70,7 @@ describe('Router Plugin: ' + routerPlugin.name, function() {
             routerPlugin.handle(request, response);
         });
 
-        waits(config.server.timeoutForRequests+200);
+        waits(config.server.timeoutForRequests+500);
 
         runs(function(){
             expect(response._body).toEqual("error|The controller method timed out|504");
