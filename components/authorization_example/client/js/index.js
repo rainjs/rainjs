@@ -1,4 +1,4 @@
-define(["authorization_example/jquery-ui-1.8.16.custom.min"], function() {
+define(["authorization_example/js/jquery-ui-1.8.16.custom.min"], function() {
     /**
      * Creates a AuthorizationExample component instance.
      *
@@ -23,7 +23,7 @@ define(["authorization_example/jquery-ui-1.8.16.custom.min"], function() {
      * Find user links and simulate login behavior.
      */
     AuthorizationExample.prototype.start = function () {
-        var root = this.viewContext.getRoot();
+        var root = this.context.getRoot();
         root.find('#nouser').button().click(function (event) {
             simulateUserLogin('nouser');
         });
@@ -45,7 +45,7 @@ define(["authorization_example/jquery-ui-1.8.16.custom.min"], function() {
     function simulateUserLogin(userId) {
         var data = {user: userId};
         $.ajax({
-            url: '/components/authorization_example/controller/serverside.js',
+            url: '/authorization_example/1.0/controller/index',
             type: 'POST',
             dataType: 'json',
             data: data,
@@ -53,7 +53,7 @@ define(["authorization_example/jquery-ui-1.8.16.custom.min"], function() {
             success: function (result) {
                 // Redirect to the page where we can see the authorization state for the current
                 // logged user.
-                window.location = window.location.href.replace('index.html', 'buttons.html');
+                window.location = window.location.href.replace('index', 'buttons');
             }
         });
         return false;
