@@ -37,6 +37,13 @@ define([], function(ClientRenderer) {
                 placeholder: false
             });
         });
+        context.getRoot().find('.button2').click(function(){
+            context.insert({
+                id: "hello_world",
+                view: "index",
+                placeholder: true
+            }, dom);
+        });
     };
 
     return Controller;

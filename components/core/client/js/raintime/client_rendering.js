@@ -15,6 +15,7 @@ define([
         var self = this;
         this.placeholderComponent = null;
         this.placeholderTimeout = 500;
+        this.counter = 0;
 
         var socket = this.socket = Sockets.getSocket('/core');
         socket.on('render', function (component) {
@@ -52,7 +53,7 @@ define([
             return;
         }
         if(component.placeholder && component.placeholder === true){
-            clientRenderer.renderPlaceholder(component);
+            placeholderTimeout(this, component);
         }
         this.socket.emit('render', component, function(error){
 

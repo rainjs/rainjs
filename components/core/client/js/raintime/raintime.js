@@ -257,7 +257,14 @@ define(['core/js/promised-io/promise',
             controller.context.insert = function(component, dom){
                 var instanceId = controller.context.instanceId;
                 component.instanceId = instanceId;
+                var staticId = component.sid || Math.floor(Math.random(0, Date.now()));
+                instanceId = (
+                        Date.now().toString()+
+                        (++clientRenderer.counter)+
+                        staticId+instanceId
+                );
                 $(dom).html('<div id="'+instanceId+'"></div>');
+                component.instanceId = instanceId;
                 clientRenderer.requestComponent(component);
             };
 
