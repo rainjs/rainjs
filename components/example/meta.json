@@ -36,8 +36,7 @@
                 "client": "with_customer_error.js",
                 "server": "index.js"
             }
-        },
-        "no_view" : {}
+        }
     },
     "intents": []
 }

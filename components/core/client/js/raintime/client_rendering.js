@@ -12,11 +12,15 @@ define([
      */
 ], function(Promise, Sockets, Raintime) {
     function ClientRenderer() {
+        var self = this;
         this.placeholderComponent = null;
         this.placeholderTimeout = 500;
 
-        var socket = Sockets.getSocket('/core');
-        socket.on('render', this.renderComponent);
+        var socket = this.socket = Sockets.getSocket('/core');
+        socket.on('render', function (component) {
+            Raintime.componentRegistry.deregister(component.instanceId);
+            self.renderComponent(component);
+        });
     }
 
     /**
@@ -35,6 +39,24 @@ define([
      */
     ClientRenderer.prototype.setPlaceholderTimeout = function (milliseconds) {
         this.placeholderTimeout = milliseconds;
+    };
+
+    /**
+     * Requests a component over websockets
+     *
+     * @param component
+     */
+    ClientRenderer.prototype.requestComponent = function(component){
+        if(!component.id || !component.instanceId || !component.view){
+            console.error('Component id, instance id and view are required!');
+            return;
+        }
+        if(component.placeholder && component.placeholder === true){
+            clientRenderer.renderPlaceholder(component);
+        }
+        this.socket.emit('render', component, function(error){
+
+        });
     };
 
     /**
@@ -82,7 +104,9 @@ define([
         for (var len = component.children.length, i = 0; i < len; i++) {
             var childComponent = component.children[i];
             Raintime.componentRegistry.preRegister(childComponent);
-            placeholderTimeout(self, childComponent);
+            if(childComponent.placeholder === true){
+                placeholderTimeout(self, childComponent);
+            }
         }
     }
 

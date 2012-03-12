@@ -248,6 +248,30 @@ define(['core/js/promised-io/promise',
                 }
                 return find(newComponent.instanceId, staticIds, callback);
             };
+            /**
+             * Insert a new component into the given dom Element
+             *
+             * @param {Object} component The component which to be requested
+             * @param {jQueryDom} dom The dom object where the component is inserted
+             */
+            controller.context.insert = function(component, dom){
+                var instanceId = controller.context.instanceId;
+                component.instanceId = instanceId;
+                $(dom).html('<div id="'+instanceId+'"></div>');
+                clientRenderer.requestComponent(component);
+            };
+
+            /**
+             * Replaces the component from where it is called with the given component
+             *
+             * @param {Object} component The component which to be requested
+             * @param {jQueryDom} dom The dom object where the component is inserted
+             */
+            controller.context.replace = function(component){
+                var instanceId = controller.context.instanceId;
+                component.instanceId = instanceId;
+                clientRenderer.requestComponent(component);
+            };
 
             newComponent.controller = controller;
 
