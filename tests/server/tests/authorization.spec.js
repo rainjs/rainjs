@@ -1,4 +1,6 @@
-var golbals = require(process.cwd() + '/lib/globals');
+"use strict";
+
+var globals = require(process.cwd() + '/lib/globals');
 var authorization = require(process.cwd() + '/lib/authorization');
 
 describe('Authorization: permissions and dynamic conditions', function () {

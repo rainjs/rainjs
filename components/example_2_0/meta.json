@@ -24,5 +24,10 @@
             }
         }
     },
-    "intents": []
+    "intents": [{
+        "category": "com.rain.test",
+        "action": "DO_SOMETHING",
+        "provider": "nasty_level2",
+        "type": "view"
+    }]
 }
