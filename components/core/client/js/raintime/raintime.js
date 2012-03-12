@@ -1,6 +1,7 @@
-define(['core/js/event_emitter',
+define(['core/js/promised-io/promise',
+        'core/js/event_emitter',
         'core/js/raintime/context'
-], function (EventEmitter, Context) {
+], function (Promise, EventEmitter, Context) {
 
     /**
      * The map of registered components, indexed by the instanceId property.
@@ -61,10 +62,15 @@ define(['core/js/event_emitter',
         this.controller = undefined;
         this.children = component.children;
 
+        this.state = Component.LOAD;
         this.controllerLoaded = false;
-        this.initEmitted = false;
         this.htmlLoaded = component.htmlLoaded || false;
     }
+
+    Component.LOAD = 1;
+    Component.INIT = 2;
+    Component.ERROR = 4;
+    Component.START = 8;
 
     /**
      * Creates a new component registry.
@@ -118,7 +124,7 @@ define(['core/js/event_emitter',
         if (!component || !component.instanceId) {
             return;
         }
-        return registerComponent(preComponents, component);
+        registerComponent(preComponents, component);
     };
 
     /**
@@ -133,40 +139,54 @@ define(['core/js/event_emitter',
     };
 
     /**
-     * Finds a component by its staticId in the children of a component with the
+     * Finds one or more components by their staticIds in the children of a component with the
      * corresponding instanceId argument.
      * If the staticId is undefined then all the controllers for the children are returned.
      *
      * @param {String} instanceId the component's instance id
-     * @param {String} staticId the child's static id
-     * @returns {Controller|Array|undefined} a controller or a list of controllers
+     * @param {Array|String} staticIds an array / string of static ids for children
+     * @param {Function} callback the function to be called after the controllers for the requested children were initiated
      * @private
      * @memberOf ComponentRegistry#
      */
-    function find(instanceId, staticId) {
+    function find(instanceId, staticIds, callback) {
         if (!instanceId) {
             throw new Error('ComponentRegistry internal error: instanceId must be defined.');
         }
+
         var component = components[instanceId];
-        if (component && component.children) {
-            var children = component.children;
-            if (staticId) {
+        if (!component || !component.children) {
+            throw new Error('The component has no registered children.');
+        }
+
+        var children = component.children;
+
+        var promises = [];
+
+        if (!staticIds) {
+            for (var i = children.length; i--;) {
+                var childInstanceId = children[i].instanceId;
+                if (components[childInstanceId]) {
+                    promises.push(components[childInstanceId].promise);
+                }
+            }
+        } else {
+            for (var j = staticIds.length; j--;) {
+                var staticId = staticIds[j];
                 for (var i = children.length; i--;) {
-                    if (components[children[i]] &&
-                        components[children[i]].staticId == staticId) {
-                        return components[children[i]].controller;
+                    var childInstanceId = children[i].instanceId;
+                    if (components[childInstanceId] &&
+                        components[childInstanceId].staticId == staticId) {
+                        promises.push(components[childInstanceId].promise);
                     }
                 }
-            } else {
-                var controllers = [];
-                for (var i = children.length; i--;) {
-                    if (components[children[i]] && components[children[i]].controller) {
-                        controllers.push(components[children[i]].controller);
-                    }
-                }
-                return controllers;
             }
         }
+
+        var group = Promise.all(promises);
+        group.then(function (array) {
+            callback.apply(component.controller, array);
+        });
     }
 
     /**
@@ -178,22 +198,36 @@ define(['core/js/event_emitter',
      * @memberOf ComponentRegistry#
      */
     function registerComponent(map, component) {
+        var deferred = new Promise.Deferred();
+
         var newComponent = new Component(component);
         map[newComponent.instanceId] = newComponent;
 
         if (!component.controller) {
+            setTimeout(function () {
+                deferred.resolve();
+            }, 0);
             return;
         }
 
-        require([component.controller], function (controller) {
+        require([component.controller], function (Controller) {
             // Extend the controller with EventEmitter methods.
             for (var key in EventEmitter.prototype) {
-                controller.prototype[key] = EventEmitter.prototype[key];
+                Controller.prototype[key] = EventEmitter.prototype[key];
             }
 
-            if (typeof controller === 'function') {
-                controller = new controller();
+            var controller = Controller;
+            if (typeof Controller === 'function') {
+                controller = new Controller();
             }
+
+            controller.on = function (eventName, callback) {
+                if (eventName === 'start' && newComponent.state === Component.START) {
+                    callback.call(controller);
+                    return;
+                }
+                Controller.prototype.on.apply(controller, arguments);
+            };
 
             // Bind lifecycle events to methods found in the controller.
             onControllerEvent(controller, 'init');
@@ -202,15 +236,28 @@ define(['core/js/event_emitter',
 
             // Attach modules to the controller.
             controller.context = new Context(newComponent);
-            controller.context.find = function (staticId) {
-                return find(newComponent.instanceId, staticId);
+            controller.context.find = function (staticIds, callback) {
+                if (typeof staticIds === 'function') {
+                    callback = staticIds;
+                    staticIds = undefined;
+                } else if (typeof staticIds === 'string') {
+                    staticIds = [staticIds];
+                }
+                if (typeof callback !== 'function') {
+                    throw new Error('The callback parameter must be a function.');
+                }
+                return find(newComponent.instanceId, staticIds, callback);
             };
 
             newComponent.controller = controller;
 
             newComponent.controllerLoaded = true;
             invokeLifecycle(newComponent);
+
+            deferred.resolve(controller);
         });
+
+        newComponent.promise = deferred.promise;
     }
 
     /**
@@ -221,15 +268,17 @@ define(['core/js/event_emitter',
      * @memberOf ComponentRegistry#
      */
     function invokeLifecycle(component) {
-        if (component.controllerLoaded && !component.initEmitted) {
+        if (component.controllerLoaded && component.state < Component.INIT) {
             emitControllerEvent(component.controller, 'init');
-            component.initEmitted = true;
+            component.state = Component.INIT;
         }
-        if (component.htmlLoaded && component.initEmitted) {
+        if (component.htmlLoaded && component.state === Component.INIT) {
             if (component.error) {
                 emitControllerEvent(component.controller, 'error', component.error);
+                component.state = Component.ERROR;
             }
             emitControllerEvent(component.controller, 'start');
+            component.state = Component.START;
         }
     }
 
