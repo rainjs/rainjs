@@ -45,6 +45,15 @@ define([], function(ClientRenderer) {
             }, dom);
         });
     };
+    
+    /**
+     * Destroy lifecycle step that happens before a component gets deregistered
+     * 
+     * @function
+     */
+    Controller.prototype.destroy = function () {
+        console.log('example component (view index) destroyed!');
+    };
 
     return Controller;
 });

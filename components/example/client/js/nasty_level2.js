@@ -27,6 +27,15 @@ define([""], function() {
     Controller.prototype.start = function () {
         console.log('example component (view nasty_level2) was started.');
     };
+    
+    /**
+     * Destroy lifecycle step that happens before a component gets deregistered
+     * 
+     * @function
+     */
+    Controller.prototype.destroy = function () {
+        console.log('example component (view nasty_level2) destroyed!');
+    };
 
     return Controller;
 });

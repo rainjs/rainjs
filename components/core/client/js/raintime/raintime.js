@@ -71,6 +71,7 @@ define(['core/js/promised-io/promise',
     Component.INIT = 2;
     Component.ERROR = 4;
     Component.START = 8;
+    Component.DESTROY = 16;
 
     /**
      * Creates a new component registry.
@@ -133,7 +134,12 @@ define(['core/js/promised-io/promise',
      * @param {String} instanceId the component's instance id
      */
     ComponentRegistry.prototype.deregister = function (instanceId) {
-        if (instanceId) {
+        if (instanceId && components[instanceId]) {
+            var children = components[instanceId].children;
+            for(var i = children.length; i--;){
+                this.deregister(children[i].instanceId);
+            }
+            components[instanceId].controller.emit('destroy');
             delete components[instanceId];
         }
     };
@@ -233,6 +239,7 @@ define(['core/js/promised-io/promise',
             onControllerEvent(controller, 'init');
             onControllerEvent(controller, 'error');
             onControllerEvent(controller, 'start');
+            onControllerEvent(controller, 'destroy');
 
             // Attach modules to the controller.
             controller.context = new Context(newComponent);
