@@ -171,14 +171,14 @@ define(['core/js/promised-io/promise',
         var promises = [];
 
         if (!staticIds) {
-            for (var i = children.length; i--;) {
+            for (var i = 0, len = children.length; i < len; i++) {
                 var childInstanceId = children[i].instanceId;
                 if (components[childInstanceId]) {
                     promises.push(components[childInstanceId].promise);
                 }
             }
         } else {
-            for (var j = staticIds.length; j--;) {
+            for (var j = 0, len = staticIds.length; j < len; j++) {
                 var staticId = staticIds[j];
                 for (var i = children.length; i--;) {
                     var childInstanceId = children[i].instanceId;
