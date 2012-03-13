@@ -23,15 +23,16 @@ define(["authorization_example/js/jquery-ui-1.8.16.custom.min"], function() {
      * Find user links and simulate login behavior.
      */
     AuthorizationExample.prototype.start = function () {
+        var self = this;
         var root = this.context.getRoot();
         root.find('#nouser').button().click(function (event) {
-            simulateUserLogin('nouser');
+            simulateUserLogin(self, 'nouser');
         });
         root.find('#user1').button().click(function (event) {
-            simulateUserLogin('user1');
+            simulateUserLogin(self, 'user1');
         });
         root.find('#user2').button().click(function (event) {
-            simulateUserLogin('user2');
+            simulateUserLogin(self, 'user2');
         });
     };
 
@@ -39,10 +40,11 @@ define(["authorization_example/js/jquery-ui-1.8.16.custom.min"], function() {
      * Simulates a login action by making a post to a server-side controller that stores
      * mocked information about a logged user.
      *
+     * @param {AuthorizationExample} self the class instance
      * @param {String} userId the user id
      * @memberOf AuthorizationExample#
      */
-    function simulateUserLogin(userId) {
+    function simulateUserLogin(self, userId) {
         var data = {user: userId};
         $.ajax({
             url: '/authorization_example/1.0/controller/index',
@@ -53,7 +55,11 @@ define(["authorization_example/js/jquery-ui-1.8.16.custom.min"], function() {
             success: function (result) {
                 // Redirect to the page where we can see the authorization state for the current
                 // logged user.
-                window.location = window.location.href.replace('index', 'buttons');
+                self.context.replace({
+                    id: "authorization_example",
+                    view: "buttons",
+                    placeholder: false
+                });
             }
         });
         return false;

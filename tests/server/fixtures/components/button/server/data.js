@@ -13,7 +13,10 @@ function nasty_level2(callback, data) {
 
 function nasty_level3(callback, data) {
     setTimeout(function(){
-        callback(null, data);
+        callback(null, {
+            old_data: data,
+            new_data: 'my_new_data'
+        });
     }, Math.floor(Math.random()*3000));
 }
 
