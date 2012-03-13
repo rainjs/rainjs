@@ -16,6 +16,13 @@
                 "server": "index.js"
             },
             "permissions": ["view_restricted"]
+        },
+        "nasty_level3" : {
+            "view": "nasty_level3.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
         }
     },
     "intents": []

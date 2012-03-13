@@ -39,7 +39,7 @@ define([], function(ClientRenderer) {
         });
         context.getRoot().find('.button2').click(function(){
             context.insert({
-                id: "hello_world",
+                id: "authorization_example",
                 view: "index",
                 placeholder: true
             }, dom);
