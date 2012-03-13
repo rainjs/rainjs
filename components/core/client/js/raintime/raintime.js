@@ -139,7 +139,8 @@ define(['core/js/promised-io/promise',
             for(var i = children.length; i--;){
                 this.deregister(children[i].instanceId);
             }
-            components[instanceId].controller.emit('destroy');
+            components[instanceId].state = Component.DESTROY;
+            invokeLifecycle(components[instanceId]);
             delete components[instanceId];
         }
     };
@@ -317,6 +318,9 @@ define(['core/js/promised-io/promise',
             }
             emitControllerEvent(component.controller, 'start');
             component.state = Component.START;
+        }
+        if(component.state === Component.DESTROY){
+            emitControllerEvent(component.controller, 'destroy');
         }
     }
 
