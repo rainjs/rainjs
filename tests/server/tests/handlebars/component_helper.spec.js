@@ -8,8 +8,6 @@ var loadFile = require(cwd + '/tests/server/rain_mocker');
 describe('Handlebars component helper', function () {
     var componentHelper, Handlebars,
         mockComponentRegistry, componentRegistry,
-        mockErrorHandler,
-        mockDataLayer,
         mockRenderer,
         rainContext;
 
@@ -36,19 +34,18 @@ describe('Handlebars component helper', function () {
             rain: rainContext,
             createInstanceId: function () {
                 return 'new instance id';
+            },
+            replaceWithError: function(statusCode, component, exception){
+                component.id = 'error',
+                component.view = statusCode;
+                component.version = '1.0';
+            },
+            loadDataAndSend: function(){
+
             }
         };
 
-        mockErrorHandler = loadFile(cwd + '/lib/error_handler.js', {
-            './component_registry': componentRegistry
-        });
-
-        mockDataLayer = loadFile(cwd + '/lib/data_layer.js');
-        mockDataLayer.loadData = function () {};
-
         componentHelper = loadFile(cwd + '/lib/handlebars/component.js', {
-            '../data_layer': mockDataLayer,
-            '../error_handler': mockErrorHandler,
             '../component_registry': componentRegistry,
             '../renderer': mockRenderer
         });
@@ -96,6 +93,7 @@ describe('Handlebars component helper', function () {
         it('must require "view" to be defined', function () {
             Handlebars.compile('{{component name="button"}}')();
             expect(rainContext.childrenInstanceIds.length).toEqual(1);
+            console.log(rainContext.childrenInstanceIds[0]);
             expectError(rainContext.childrenInstanceIds[0], 500);
         });
 
