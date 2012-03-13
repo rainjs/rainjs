@@ -14,7 +14,7 @@ define(['core/js/jquery_modal'], function () {
             'border': '1px solid black'
         });
 
-    }
+    };
 
     return Controller;
 });

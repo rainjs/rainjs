@@ -27,7 +27,7 @@ describe('Router Plugin: CSS Route', function () {
             'index.css': {
                 content: '.other {color: red;}'
             }
-        }
+        };
 
         routerPlugin = loadFile(cwd + '/lib/routes/css.js', {
             "../router_utils": {
@@ -105,6 +105,6 @@ describe('Router Plugin: CSS Route', function () {
         runs(function() {
             expect(response._body.replace(/\s+/g, ' '))
                     .toEqual('.button_2_0 .other { color: red; } ');
-        })
+        });
     });
 });

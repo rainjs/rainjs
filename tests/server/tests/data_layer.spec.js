@@ -11,8 +11,6 @@ describe('Data layer', function() {
 
     var error, data;
 
-    var restrictedDataFn = {};
-
     beforeEach(function () {
         mockComponentRegistry = loadFile(cwd + '/lib/component_registry.js', null, true);
         mockComponentRegistry.scanComponentFolder();
@@ -109,7 +107,7 @@ describe('Data layer', function() {
             version: '1.0',
             viewId: 'nasty_level3',
             data: 'my_data'
-        }
+        };
         var finished = false;
 
         runs(function () {
