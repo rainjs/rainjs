@@ -93,7 +93,6 @@ describe('Handlebars component helper', function () {
         it('must require "view" to be defined', function () {
             Handlebars.compile('{{component name="button"}}')();
             expect(rainContext.childrenInstanceIds.length).toEqual(1);
-            console.log(rainContext.childrenInstanceIds[0]);
             expectError(rainContext.childrenInstanceIds[0], 500);
         });
 
