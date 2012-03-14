@@ -21,7 +21,7 @@ var socket = {
 
 describe('Registry plugin: Websockets', function () {
     beforeEach(function () {        
-        spyOn(util, 'walkDir').andCallFake(function (folder, callback) {
+        spyOn(util, 'walkSync').andCallFake(function (folder, callback) {
             callback(path.join(folder, 'socket.js'), 'socket.js');
         });
         
@@ -36,8 +36,8 @@ describe('Registry plugin: Websockets', function () {
     it('should register sockets from the component/server/websockets directory', function () {
         websockets.configure(conf);
         
-        expect(util.walkDir).toHaveBeenCalled();
-        expect(util.walkDir.mostRecentCall.args[0]).toBe('/components/button2/server/websockets');
+        expect(util.walkSync).toHaveBeenCalled();
+        expect(util.walkSync.mostRecentCall.args[0]).toBe('/components/button2/server/websockets');
     });
     
     it('should require the websocket module', function () {
