@@ -5,7 +5,7 @@
         "timeoutForRequests" : 3,
 
         "serverRoot": ".",
-        "components": ["./components"],
+        "components": ["./components", "../sprints/components"],
 
         "paths": {
             "server": ".",
@@ -16,12 +16,12 @@
     "default_language": "en_US",
 
     "errorComponent": {
-        "id": "error",
+        "id": "error_1and1",
         "version": "1.0"
     },
 
     "loadingComponent": {
-        "id": "placeholder",
+        "id": "placeholder_1and1",
         "version": "1.0",
         "viewId": "index",
         "timeout": 500
