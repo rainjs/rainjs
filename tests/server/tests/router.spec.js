@@ -53,10 +53,22 @@ var componentMap = {
     }
 };
 
+function expectNextToBeCalled(url, code, message) {
+    var next = jasmine.createSpy('next');
+    request.url = url;
+    router(request, response, next);
+    expect(next).toHaveBeenCalled();
+    var error = next.mostRecentCall.args[0];
+    expect(error.code).toBe(code);
+    expect(error.message).toBe(message);
+}
+
 describe('Router', function () {
     beforeEach(function () {
         request = {};
         response = {};
+        
+        spyOn(console, 'log').andCallFake(function () {});
         
         spyOn(Module.prototype, 'require').andCallFake(function (module) {
             if (module === 'fs') {
@@ -119,40 +131,15 @@ describe('Router', function () {
     });
     
     it('must call next with a 404 error if the component was not found', function () {
-        var next = jasmine.createSpy('next');
-        request.url = '/button1/1.0/index';
-        router(request, response, next);
-        expect(next).toHaveBeenCalled();
-        var error = next.mostRecentCall.args[0];
-        expect(error.code).toBe(404);
-        expect(error.message).toBe('The requested component was not found!');
+        expectNextToBeCalled('/button1/1.0/index', 404, 'The requested component was not found!');       
     });
     
     it('must call next with a 404 error if no route was found', function () {
-        var next = jasmine.createSpy('next');
-        request.url = '/invalid/button/1.0/index';
-        router(request, response, next);
-        expect(next).toHaveBeenCalled();
-        var error = next.mostRecentCall.args[0];
-        expect(error.code).toBe(404);
-        expect(error.message).toBe('No route was found!');
+        expectNextToBeCalled('/invalid/button/1.0/index', 404, 'No route was found!');
     });
     
     it('must call next with a 404 error if the url is not valid', function () {
-        var next = jasmine.createSpy('next');
-        request.url = '/button/1.0/js/../index';
-        router(request, response, next);        
-        expect(next).toHaveBeenCalled();
-        var error = next.mostRecentCall.args[0];
-        expect(error.code).toBe(404);
-        expect(error.message).toBe('The url is not valid!');
-        
-        var next = jasmine.createSpy('next');
-        request.url = '/button/1.0/js/%2E%2E/index';
-        router(request, response, next);
-        expect(next).toHaveBeenCalled();
-        var error = next.mostRecentCall.args[0];
-        expect(error.code).toBe(404);
-        expect(error.message).toBe('The url is not valid!');
+        expectNextToBeCalled('/button/1.0/js/../index', 404, 'The url is not valid!');
+        expectNextToBeCalled('/button/1.0/js/%2E%2E/index', 404, 'The url is not valid!');
     });
 });
