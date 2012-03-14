@@ -9,7 +9,7 @@ var button = {
     version: '2.0',
     folder: '/components/button2',
     views: {
-        index: { 
+        index: {
             compiledTemplate: function() {},
             controller: {
                 client: 'index.js'
@@ -23,7 +23,7 @@ var error = {
     version: '1.0',
     folder: '/components/button2',
     views: {
-        404: { 
+        404: {
             compiledTemplate: function() {},
             controller: {
                 client: '404.js'
@@ -78,13 +78,13 @@ var io = {
 };
 
 describe('Renderer', function () {
-    beforeEach(function () {        
+    beforeEach(function () {
         spyOn(bootstrap, 'compiledTemplate').andCallFake(function (data) { return '<span>text</span>'; });
         spyOn(buttonIndex, 'compiledTemplate').andCallFake(function (data) { return '<div>button</div>'; });
         spyOn(error404, 'compiledTemplate').andCallFake(function (data) { return '<div>404</div>'; });
         spyOn(dataLayer, 'loadData').andCallFake(function () {});
         spyOn(ServerResponse.prototype, 'write').andCallFake(function () {});
-        spyOn(ServerResponse.prototype, 'end').andCallFake(function () {}); 
+        spyOn(ServerResponse.prototype, 'end').andCallFake(function () {});
         spyOn(Socket.prototype, 'emit').andCallFake(function () {});
         spyOn(Module.prototype, 'require').andCallFake(function (path) {
             if (path === './error_handler') {
@@ -97,7 +97,7 @@ describe('Renderer', function () {
                     }
                 };
             }
-            
+
             if (path === './component_registry') {
                 return {
                     getConfig: function (id, version) {
@@ -111,34 +111,34 @@ describe('Renderer', function () {
                     }
                 };
             }
-            
+
             if (path === './configuration') {
                 return {
                     loadingComponent: loadingComponent
                 };
             }
-            
+
             if (path === './socket_registry') {
                 return {
                     register: function() {}
                 };
             }
-            
+
             if (path === './data_layer') {
-                return dataLayer;                
+                return dataLayer;
             }
-            
+
             if (path === 'http') {
                 return http;
             }
-            
+
             if (path === 'socket.io') {
                 return io;
             }
-            
+
             return Module._load(path, this);
         });
-        
+
         request = {
             session: {},
             query: "param=value",
@@ -146,41 +146,41 @@ describe('Renderer', function () {
         };
         response = new http.ServerResponse();
         socket = new io.Socket();
-        
+
         renderer = require(cwd + '/lib/renderer');
     });
-    
-    describe('renderBootstrap', function () {       
+
+    describe('renderBootstrap', function () {
         beforeEach(function () {
-            spyOn(renderer, 'renderComponent').andCallFake(function (opt) { return {html: "<div />"}; });                
-        });        
-        
-        it('should call the compiled template for the bootstrap', function () {
+            spyOn(renderer, 'renderComponent').andCallFake(function (opt) { return {html: "<div />"}; });
+        });
+
+        it('must call the compiled template for the bootstrap', function () {
             renderer.renderBootstrap(button, 'index', request, response);
-            
-            expect(bootstrap.compiledTemplate).toHaveBeenCalledWith({ 
+
+            expect(bootstrap.compiledTemplate).toHaveBeenCalledWith({
                 id: 'button',
                 version: '2.0',
                 viewId: 'index',
                 placeholder: '{"html":"<div />"}',
                 placeholderTimeout: 500,
-                data: { query: 'param=value', body: '{}' } 
+                data: { query: 'param=value', body: '{}' }
             });
         });
-        
-        it('should return the bootstrap', function () {
+
+        it('must return the bootstrap', function () {
             var html = renderer.renderBootstrap(button, 'index', request, response);
             expect(html).toBe('<span>text</span>');
         });
     });
-    
+
     describe('renderComponent', function () {
-        it('should render the component', function () {
+        it('must render the component', function () {
             var rain = renderer.createRainContext({
                 transport: response,
                 session: request.session
             });
-            
+
             var opt = {
                 component: button,
                 viewId: 'index',
@@ -188,8 +188,8 @@ describe('Renderer', function () {
                 data: { key1: 'value1', key2: 'value2' },
                 rain: rain
             };
-            
-            expect(renderer.renderComponent(opt)).toEqual({ 
+
+            expect(renderer.renderComponent(opt)).toEqual({
                 css: [],
                 children: [],
                 html: '<div>button</div>',
@@ -198,16 +198,16 @@ describe('Renderer', function () {
                 staticId: '',
                 id: 'button',
                 version: '2.0',
-                error: null 
+                error: null
             });
         });
-        
-        it('should render an error', function () {
+
+        it('must render an error', function () {
             var rain = renderer.createRainContext({
                 transport: response,
                 session: request.session
             });
-            
+
             var opt = {
                 component: button,
                 viewId: 'index1',
@@ -215,8 +215,8 @@ describe('Renderer', function () {
                 data: { key1: 'value1', key2: 'value2' },
                 rain: rain
             };
-            
-            expect(renderer.renderComponent(opt)).toEqual({ 
+
+            expect(renderer.renderComponent(opt)).toEqual({
                 css: [],
                 children: [],
                 html: '<div>404</div>',
@@ -225,50 +225,50 @@ describe('Renderer', function () {
                 staticId: '',
                 id: 'error',
                 version: '1.0',
-                error: null 
+                error: null
             });
         });
     });
-    
+
     describe('loadDataAndSend', function () {
-        it('should call send component with the correct data', function () {
+        it('must call send component with the correct data', function () {
             spyOn(renderer, 'sendComponent').andCallFake(function (transport, opt){});
-            
+
             var comp = {};
             comp.id = 'button';
             comp.version = '2.0';
             comp.view = 'index';
             comp.sid = 'comp1';
             comp.session = request.session;
-            
-            renderer.loadDataAndSend(comp, response);
-            
-            expect(dataLayer.loadData).toHaveBeenCalled();
-            
-            var callback = dataLayer.loadData.mostRecentCall.args[1];
-            
-            callback(null, {field: 'data'});            
 
-            expect(renderer.sendComponent).toHaveBeenCalledWith(response, { 
+            renderer.loadDataAndSend(comp, response);
+
+            expect(dataLayer.loadData).toHaveBeenCalled();
+
+            var callback = dataLayer.loadData.mostRecentCall.args[1];
+
+            callback(null, {field: 'data'});
+
+            expect(renderer.sendComponent).toHaveBeenCalledWith(response, {
                 component: button,
                 viewId: 'index',
                 staticId: 'comp1',
                 data: { field: 'data' },
-                rain: { 
+                rain: {
                     css: [],
                     childrenInstanceIds: [],
                     transport: response,
-                    session: request.session 
-                } 
+                    session: request.session
+                }
             });
         });
-    });  
-    
+    });
+
     describe('replaceWithError', function () {
-        it('should change the component parameter', function () {
+        it('must change the component parameter', function () {
             var component = {id: 'button', version: '1.1', view: 'index'};
             var error = new Error('message');
-            renderer.replaceWithError(404, component, error);           
+            renderer.replaceWithError(404, component, error);
 
             expect(component).toEqual({
                 id : 'error',
@@ -280,31 +280,31 @@ describe('Renderer', function () {
             });
         });
     });
-    
+
     describe('sendComponent', function () {
         beforeEach(function () {
            spyOn(renderer, 'renderComponent').andCallFake(function () { return {html: 'html'}; });
         });
-        
-        it('should decrease the render level', function () {
+
+        it('must decrease the render level', function () {
             response.renderLevel = 2;
             renderer.sendComponent(response, {});
             expect(response.renderLevel).toBe(1);
         });
-        
-        it('should write the component', function () {
+
+        it('must write the component', function () {
             response.renderLevel = 2;
             renderer.sendComponent(response, {});
             expect(response.write).toHaveBeenCalledWith(renderer.clientRendererScript({html: 'html'}));
         });
-        
-        it('should end the connection when render level is 0', function () {
+
+        it('must end the connection when render level is 0', function () {
             response.renderLevel = 1;
             renderer.sendComponent(response, {});
             expect(response.end).toHaveBeenCalledWith(renderer.clientRendererScript({html: 'html'}));
         });
-        
-        it('should write the component using web sockets', function () {
+
+        it('must write the component using web sockets', function () {
             socket.renderLevel = 2;
             renderer.sendComponent(socket, {});
             expect(socket.emit).toHaveBeenCalledWith('render', {html: 'html'});
