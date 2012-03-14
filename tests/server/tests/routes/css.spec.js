@@ -80,8 +80,6 @@ describe('Router Plugin: CSS Route', function () {
             routerPlugin.handle(request, response);
         });
 
-        waits(100);
-
         runs(function() {
             expect(response._body.replace(/\s+/g, ' '))
                    .toEqual('.button_1_0 .other { color: red; } ');
@@ -99,8 +97,6 @@ describe('Router Plugin: CSS Route', function () {
             request.component = componentRegistry.getConfig('button', '1.0');
             routerPlugin.handle(request, response);
         });
-
-        waits(100);
 
         runs(function() {
             expect(response._body.replace(/\s+/g, ' '))

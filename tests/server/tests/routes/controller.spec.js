@@ -49,8 +49,6 @@ describe('Router Plugin: ' + routerPlugin.name, function() {
         response.finished = true;
     });
 
-    waits(config.server.timeoutForRequests+500);
-
     it('must call an error cause there is no specified controller', function() {
         request.method = "get";
         request.path = "nasty_level3";
@@ -60,8 +58,6 @@ describe('Router Plugin: ' + routerPlugin.name, function() {
         response.finished = true;
     });
 
-    waits(config.server.timeoutForRequests+500);
-
     it('must call an error cause the controller is not anwsering for the given timeout', function() {
         runs(function(){
             request.method = "post";
@@ -70,7 +66,11 @@ describe('Router Plugin: ' + routerPlugin.name, function() {
             routerPlugin.handle(request, response);
         });
 
-        waits(config.server.timeoutForRequests+500);
+        waitsFor(function(){
+            if(response._body != null){
+                return true;
+            }
+        });
 
         runs(function(){
             expect(response._body).toEqual("error|The controller method timed out|504");
