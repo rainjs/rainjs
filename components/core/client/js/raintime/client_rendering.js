@@ -98,9 +98,13 @@ define([
         // Registers the component.
         Raintime.componentRegistry.register(component);
 
-        loadCSS(this, component.css, function() {
+        if (!component.css || component.css.length == 0) {
             domElement.show();
-        });
+        } else {
+            loadCSS(this, component.css, function() {
+                domElement.show();
+            });
+        }
 
         for (var len = component.children.length, i = 0; i < len; i++) {
             var childComponent = component.children[i];
