@@ -81,23 +81,6 @@ describe('Data layer', function() {
         runs(function () {
             expect(error).toBeNull();
             expect(data).toBe('my_data');
-
-            finished = false;
-            componentOpt.viewId = 'restricted';
-            componentOpt.data = 'my_data';
-            componentRegistry.getConfig('button', '1.0').folder = correctFolder;
-            dataLayer.loadData(componentOpt, function () {
-                saveParameters(arguments[0], arguments[1]);
-                finished = true;
-            });
-        });
-
-        waitsFor(function () {
-            return finished;
-        }, 'Callback was\'t called.');
-
-        runs(function () {
-            expect(error.message).toBe('No function declared for the view restricted.');
         });
     });
 
