@@ -34,12 +34,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 define(["core/js/client_util",
-	    "core/js/event_emitter",
+        "core/js/event_emitter",
         "core/js/socket.io/socket.io",
         "core/js/promised-io/promise",
         "core/js/jquery-cookie"], function(ClientUtil, EventEmitter, SocketIO, Promise) {
     /**
      * Class used to implement client intents object.
+     *
+     * @name ClientIntents
+     * @class
+     * @constructor
      */
     function ClientIntents(config) {
         this._config = {};
@@ -89,7 +93,6 @@ define(["core/js/client_util",
      * @param {Promise} defer
      * @return {Promise} A promise that provide then method. You can use it for react to success and error situations.
      * @throws {Error} if request object is incomplete then sendIntent raises an error.
-     * @memberOf Raintime.messaging
      *
      * @example:
      * var request = {"viewContext": <viewcontext instance>,
@@ -150,7 +153,7 @@ define(["core/js/client_util",
      * Method used to emit an request intent event.
      */
     ClientIntents.prototype._requestIntent = function(request, defer) {
-		var contextId = this.__getContextId(request);
+        var contextId = this.__getContextId(request);
 
         this._intentsSocket.emit("request_intent",
                 {
@@ -162,13 +165,13 @@ define(["core/js/client_util",
                 });
 
         if(!this._intentsContext[contextId]) {
-        	this._intentsContext[contextId] = {};
+            this._intentsContext[contextId] = {};
         }
 
         this._intentsContext[contextId][request.requestId] = {"status": ClientIntents.INTENT_SENT};
 
         this.emit(ClientIntents.INTENT_CONTEXTS_CHANGED, this._intentsContext[contextId],
-        		request.viewContext);
+                request.viewContext);
     };
 
     /**
@@ -178,16 +181,16 @@ define(["core/js/client_util",
      * @param {ViewContext} viewContext: an optional view context to use for obtaining the id.
      */
     ClientIntents.prototype.__getContextId = function(request, viewContext) {
-    	viewContext = viewContext || request.viewContext;
+        viewContext = viewContext || request.viewContext;
 
-    	return viewContext.moduleId + "@" + viewContext.instanceId;
+        return viewContext.moduleId + "@" + viewContext.instanceId;
     };
 
     /**
      * Method used to handle intent_loaded event.
      */
     ClientIntents.prototype._handleIntentLoaded = function(request, defer) {
-    	var self = this;
+        var self = this;
 
         this._intentsSocket.on("intent_loaded", function(intentResponse) {
             if(request.requestId == intentResponse.requestId) {
@@ -195,18 +198,18 @@ define(["core/js/client_util",
                     request.viewContext.viewManager.displayView(intentResponse.data, true);
                 }
 
-				var contextId = self.__getContextId(request);
-				var context = self._intentsContext[contextId];
+                var contextId = self.__getContextId(request);
+                var context = self._intentsContext[contextId];
 
-				delete context[request.requestId];
+                delete context[request.requestId];
 
-		        self.emit(ClientIntents.INTENT_CONTEXTS_CHANGED, context, request.viewContext);
+                self.emit(ClientIntents.INTENT_CONTEXTS_CHANGED, context, request.viewContext);
 
-				if(JSON.stringify(context) == "{}") {
-					self.emit(ClientIntents.INTENTS_CONTEXT_READY, request.viewContext);
-				}
+                if(JSON.stringify(context) == "{}") {
+                    self.emit(ClientIntents.INTENTS_CONTEXT_READY, request.viewContext);
+                }
 
-				defer.resolve(intentResponse.data);
+                defer.resolve(intentResponse.data);
             }
         });
     };
@@ -216,26 +219,26 @@ define(["core/js/client_util",
      * are ready or not.
      */
     ClientIntents.prototype.isReady = function(viewContext) {
-    	var contextId = this.__getContextId(undefined, viewContext);
+        var contextId = this.__getContextId(undefined, viewContext);
 
-    	var context = this._intentsContext[contextId];
+        var context = this._intentsContext[contextId];
 
-    	return JSON.stringify(context) == "{}";
+        return JSON.stringify(context) == "{}";
     };
 
     /**
      * Method used to handle error received from the intents socket.
      */
     ClientIntents.prototype._handleError = function(request, defer) {
-    	var self = this;
+        var self = this;
 
         this._intentsSocket.on("intent_exception", function(intentResponse) {
            if(request.requestId == intentResponse.requestId) {
-           		var contextId = self.__getContextId(request);
+                   var contextId = self.__getContextId(request);
 
-		        self._intentsContext[contextId][request.requestId] = {"status": ClientIntents.INTENT_RECEIVED_ERR};
+                self._intentsContext[contextId][request.requestId] = {"status": ClientIntents.INTENT_RECEIVED_ERR};
 
-		        self.emit(ClientIntents.INTENT_CONTEXTS_CHANGED, self._intentsContext[contextId], request.viewContext);
+                self.emit(ClientIntents.INTENT_CONTEXTS_CHANGED, self._intentsContext[contextId], request.viewContext);
 
                 defer.reject(intentResponse.message);
            }

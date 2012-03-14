@@ -17,31 +17,44 @@ define(["core/js/raintime/client_storage", "core/js/raintime/messaging_observer"
     function Context(component) {
         this.instanceId = component.instanceId;
         this.storage = new ClientStorage(this);
+
+        /**
+         * Provides methods to publish and subscribe to events.
+         *
+         * @name messaging
+         * @memberOf Context
+         */
         this.messaging = {
+
             /**
              * This is the method that allows registration of a callback method to a
              * desired event.
              *
              * @param {String} eventName Event name we want to subscribe to. Can be any string value.
              * @param {Function} callback This is the callback method that will get executed. It must have a single parameter called data. e.g.: function(data)
+             * @memberOf Context.messaging
              */
             subscribe: function (eventName, callback) {
                 Observer.subscribe(eventName, callback, this);
             },
+
             /**
              * Unsubscribe from an event.
              *
              * @param {String} eventName Event name we want to subscribe to. Can be any string value.
              * @param {Function} callback This is the callback method that will get executed. It must have a single parameter called data. e.g.: function(data)
+             * @memberOf Context.messaging
              */
             unsubscribe: function (eventName, callback) {
                 Observer.unsubscribe(eventName, callback, this);
             },
+
             /**
              * This is the method that will publish an event and will execute all registered callbacks.
              *
              * @param {String} eventName
              * @param {Object} data
+             * @memberOf Context.messaging
              */
             publish: function (eventName, data) {
                 Observer.publish(eventName, data, this);

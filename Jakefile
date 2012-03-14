@@ -1,5 +1,9 @@
+"use strict";
+
 var child = require('child_process');
 var fs = require('fs');
+var path = require('path');
+var util = require(process.cwd() + '/lib/util');
 
 desc('Print the help message');
 task('default', function (params) {
@@ -26,18 +30,44 @@ namespace('doc', function () {
         buffer = new Buffer(fs.readFileSync('./doc/config.json'));
         conf = JSON.parse(buffer.toString());
 
-        console.log('Generating client RST documentation');
+        console.log('Generating RST documentation');
 
-        for (var i in conf.client.files) {
-            var file = conf.client.files[i];
-            cmd = 'java ' + Array.prototype.concat.call(args, [
-                '-d=' + conf.client.buildPath,
-                conf.client.srcPath + file + ' '
-            ]).join(' ');
+        for (var key in conf) {
+            var buildPath = conf[key].buildPath;
+            var pages = conf[key].pages;
+            console.log('\nGenerating %s documentation.', [key]);
 
-            child.exec(cmd, function (error, stdout, stderr) {
-                console.log(stdout);
-            });
+            var files = [];
+            for (var i = 0, len = pages.length; i < len; i++) {
+                var page = pages[i];
+                if (typeof page === 'string') {
+                    var pagePath = path.resolve(page);
+                    try {
+                        var stat = fs.statSync(pagePath);
+                        if (stat.isDirectory()) {
+                            util.walkSync(pagePath, ['.js'], function (file) {
+                                files.push(file);
+                            });
+                        } else {
+                            files.push(pagePath);
+                        }
+                    } catch (e) {
+                        console.log('Invalid documentation file path: %s.', [pagePath]);
+                    }
+                }
+            }
+
+            for (var i = 0, len = files.length; i < len; i++) {
+                cmd = 'java ' + Array.prototype.concat.call(args, [
+                   '-d=' + buildPath, files[i]
+               ]).join(' ');
+
+               child.exec(cmd, function (error, stdout, stderr) {
+                   if (stdout && stdout.replace(/\s+/g, '')) {
+                       console.log(stdout);
+                   }
+               });
+            }
         }
     });
 

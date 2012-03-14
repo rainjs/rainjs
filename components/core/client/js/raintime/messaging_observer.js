@@ -12,17 +12,16 @@ define(['core/js/client_util'], function(ClientUtil) {
 
     /** @private */
     var orphans = {};
-	
-	/**
-	 * This is the method that will publish an event
-	 * and will execute all registered callbacks. 
-	 * 
-	 * @param eventName
-	 * @param data
+    
+    /**
+     * This is the method that will publish an event
+     * and will execute all registered callbacks. 
+     * 
+     * @param eventName
+     * @param data
      * @param viewContext the ViewContext of the component publishing the event
-     * @memberOf Raintime.messaging
-	 */
-	function publish(eventName, data, viewContext) {
+     */
+    function publish(eventName, data, viewContext) {
         var hierarchy = eventName.split('::');
         var parent = queue;
 
@@ -52,24 +51,23 @@ define(['core/js/client_util'], function(ClientUtil) {
 
             return;
         }
-		
-		for(i = 0; i < parent.callbacks.length; i++) {
+        
+        for(i = 0; i < parent.callbacks.length; i++) {
             ClientUtil.defer(ClientUtil.bind(parent.callbacks[i], parent, data));
-		}
-	}
-	
-	/**
-	 * This is the method that allows registration of a callback method to a 
-	 * desired event.
-	 * 
-	 * @param eventName Event name we want to subscribe to. Can be any string value.
-	 * @param callback This is the callback method that will get executed. It must have
-	 * 					a single parameter called data. 
-	 * 			Ex: function(data)
+        }
+    }
+    
+    /**
+     * This is the method that allows registration of a callback method to a 
+     * desired event.
+     * 
+     * @param eventName Event name we want to subscribe to. Can be any string value.
+     * @param callback This is the callback method that will get executed. It must have
+     *                     a single parameter called data. 
+     *             Ex: function(data)
      * @param viewContext the ViewContext of the component publishing the event
-     * @memberOf Raintime.messaging
-	 */
-	function subscribe(eventName, callback, viewContext) {
+     */
+    function subscribe(eventName, callback, viewContext) {
         var hierarchy = eventName.split('::');
         var parent = queue;
 
@@ -101,7 +99,7 @@ define(['core/js/client_util'], function(ClientUtil) {
         if (parent.callbacks.indexOf(callback) === -1) {
             parent.callbacks.push(callback);
         }
-	}
+    }
 
     /**
      * Unsubscribe from an event
@@ -111,9 +109,8 @@ define(['core/js/client_util'], function(ClientUtil) {
      *                     a single parameter called data.
      *             Ex: function(data)
      * @param viewContext the ViewContext of the component publishing the event
-     * @memberOf Raintime.messaging
      */
-	function unsubscribe(eventName, callback, viewContext) {
+    function unsubscribe(eventName, callback, viewContext) {
         var hierarchy = eventName.split('::');
         var parent = queue;
 
@@ -133,17 +130,17 @@ define(['core/js/client_util'], function(ClientUtil) {
             parent = parent[child];
         }
 
-		var foundIndex = parent.callbacks.indexOf(callback);
-		
-		if (foundIndex > -1) {			
-			parent.callbacks.splice(foundIndex, 1);
-		}
-	}
+        var foundIndex = parent.callbacks.indexOf(callback);
+        
+        if (foundIndex > -1) {
+            parent.callbacks.splice(foundIndex, 1);
+        }
+    }
 
-	/**
-	 * We return an instance of a queue to be used at page level.
-	 */
-	return {
+    /**
+     * We return an instance of a queue to be used at page level.
+     */
+    return {
         'publish': publish,
         'subscribe': subscribe,
         'unsubscribe': unsubscribe

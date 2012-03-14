@@ -165,6 +165,8 @@ define([
 
     /**
      * Export as a global.
+     *
+     * @private
      */
     window.clientRenderer = new ClientRenderer();
 

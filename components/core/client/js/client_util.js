@@ -1,7 +1,10 @@
 define(['core/js/jquery-cookie'], function () {
 
     /**
-     * @class A singleton utility class
+     * A singleton utility class.
+     *
+     * @name ClientUtil
+     * @class
      * @constructor
      */
     function ClientUtil() {}

@@ -6,16 +6,20 @@ define(["core/js/socket.io/socket.io"], function (io) {
      * Handler class for WebSockets that manages the way WebSocket instances are cached and
      * created.
      *
+     * @name SocketHandler
+     * @class
      * @constructor
      */
     function SocketHandler() {
         baseUrl = getBaseUrl();
 
-        // check if we're on firefox and only have MozWebSocket and asign it to the WebSocket object
+        // Check if we're on Firefox and only have MozWebSocket
+        // and assign it to the WebSocket object.
         if(window.MozWebSocket) {
             window.WebSocket = window.MozWebSocket;
         }
     }
+
     /**
      * Constructs the base url for the socket server out of the window location.
      *
@@ -26,10 +30,10 @@ define(["core/js/socket.io/socket.io"], function (io) {
         var hostname = window.location.host;
 
         return protocol + hostname;
-    };
+    }
 
     /**
-     * Gets the socket associated to a particular channel
+     * Gets the socket associated to a particular channel.
      *
      * @param {String} channel the channel of the socket
      *

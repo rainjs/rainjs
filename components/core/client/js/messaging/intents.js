@@ -13,7 +13,7 @@ define(['core/js/messaging/sockets'], function (Sockets) {
         //var defer = Promise.defer();
 
         socket.emit('request_intent', intent, function(error) {
-            console.log('acknowledgement recived, with error: ', error);
+            console.log('acknowledgement received, with error: ', error);
         });
 
         //return defer.promise;

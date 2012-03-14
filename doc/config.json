@@ -1,20 +1,17 @@
 {
-    "client":{
+    "client-side": {
         "buildPath": "./doc/source/client/api",
-        "srcPath": "./components/core/client/js",
-        "files": [
-            "/raintime/client_storage.js",
-            "/raintime/raintime.js",
-            "/raintime/view_context.js",
-            "/raintime/messaging_observer.js",
-            "/raintime/client_rendering.js",
-            "/../../../../lib/authorization.js",
-            "/raintime/client_rendering.js"
+        "pages": [
+            "./components/core/client/js/messaging",
+            "./components/core/client/js/raintime",
+            "./components/core/client/js/client_util.js"
         ]
     },
-    "server":{
+
+    "server-side": {
         "buildPath": "./doc/source/server/api",
-        "srcPath": "./lib",
-        "files": []
+        "pages": [
+            "./lib"
+        ]
     }
 }
