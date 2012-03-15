@@ -63,6 +63,16 @@ Server side modules
     server/authorization
     server/data_layer
 
+....
+APIs
+....
+
+.. toctree::
+    :maxdepth: 1
+    :glob:
+
+    server/api/*
+
 ----------
 Components
 ----------
