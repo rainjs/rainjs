@@ -266,39 +266,7 @@ define(['raintime/lib/promise',
                     throw new Error('The callback parameter must be a function.');
                 }
                 return find(newComponent.instanceId, staticIds, callback);
-            };
-
-            /**
-             * Insert a new component into the given dom Element.
-             *
-             * @param {Object} component The component which to be requested
-             * @param {jQueryDom} dom The dom object where the component is inserted
-             */
-            controller.context.insert = function (component, dom) {
-                var instanceId = controller.context.instanceId;
-                component.instanceId = instanceId;
-                var staticId = component.sid || Math.floor(Math.random(0, Date.now()));
-                instanceId = (
-                        Date.now().toString() +
-                        (++clientRenderer.counter) +
-                        staticId + instanceId
-                );
-                $(dom).html('<div id="' + instanceId + '"></div>');
-                component.instanceId = instanceId;
-                clientRenderer.requestComponent(component);
-            };
-
-            /**
-             * Replaces the component from where it is called with the given component.
-             *
-             * @param {Object} component The component which to be requested
-             * @param {jQueryDom} dom The dom object where the component is inserted
-             */
-            controller.context.replace = function (component) {
-                var instanceId = controller.context.instanceId;
-                component.instanceId = instanceId;
-                clientRenderer.requestComponent(component);
-            };
+            };            
 
             newComponent.controller = controller;
 

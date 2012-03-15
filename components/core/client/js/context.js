@@ -77,6 +77,35 @@ define(["raintime/client_storage",
     Context.prototype.getRoot = function () {
        return $("[id='" + this.instanceId + "']");
     };
+    
+    /**
+     * Insert a new component into the given dom Element.
+     *
+     * @param {Object} component The component which to be requested
+     * @param {jQueryDom} dom The dom object where the component is inserted
+     */
+    Context.prototype.insert = function (component, dom) {
+        var staticId = component.sid || Math.floor(Math.random(0, Date.now()));
+        var instanceId = (
+                Date.now().toString() +
+                (++clientRenderer.counter) +
+                staticId + this.instanceId
+        );
+        $(dom).html('<div id="' + instanceId + '"></div>');
+        component.instanceId = instanceId;
+        clientRenderer.requestComponent(component);
+    };
+
+    /**
+     * Replaces the component from where it is called with the given component.
+     *
+     * @param {Object} component The component which to be requested
+     * @param {jQueryDom} dom The dom object where the component is inserted
+     */
+    Context.prototype.replace = function (component) {
+        component.instanceId = this.instanceId;
+        clientRenderer.requestComponent(component);
+    };
 
     return Context;
 });
