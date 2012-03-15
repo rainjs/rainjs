@@ -1,4 +1,4 @@
-define(['core/js/jquery-cookie'], function () {
+define(['raintime/lib/jquery-cookie'], function () {
 
     /**
      * A singleton utility class.

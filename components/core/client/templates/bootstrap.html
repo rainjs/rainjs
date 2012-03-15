@@ -2,13 +2,18 @@
 <html>
     <head>
         <title>{{id}}</title>
-        <script type="text/javascript" src="/core/js/ecma5-1.2.1-min.js"></script>
-        <script type="text/javascript" src="/core/js/require-jquery.js"></script>
+        <script type="text/javascript" src="/core/js/lib/ecma5-1.2.1-min.js"></script>
+        <script type="text/javascript" src="/core/js/lib/require-jquery.js"></script>
         <script type="text/javascript">
             var requireConfig = {
                 "debug": ('{{server.env}}' == 'production'? 'false' : 'true'),
                 "baseUrl": "/",
-                "priority": ["core/js/raintime/raintime"]
+                "packages": [{
+                    "name": "raintime",
+                    "main": "raintime",
+                    "location": "core/js"
+                }],
+                "priority": ["raintime"]
             };
             var renderQueueList = [];
             function renderQueue(){
@@ -34,7 +39,7 @@
                 }
             }
 
-            require(requireConfig, ["core/js/raintime/client_rendering"], function(clientRenderer) {
+            require(requireConfig, ["raintime/client_rendering"], function(clientRenderer) {
                 clientRenderer.setPlaceholderTimeout({{placeholderTimeout}});
                 clientRenderer.setPlaceholder({{{placeholder}}});
                 if(renderQueueList.length == 0){

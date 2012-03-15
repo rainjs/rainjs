@@ -1,4 +1,4 @@
-define(["core/js/socket.io/socket.io"], function (io) {
+define(["raintime/socket.io"], function (io) {
     var sockets = {};
     var baseUrl;
 

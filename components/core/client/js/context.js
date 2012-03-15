@@ -1,4 +1,4 @@
-define(["core/js/raintime/client_storage", "core/js/raintime/messaging_observer"],
+define(["core/js/client_storage", "core/js/messaging/observer"],
        function (ClientStorage, Observer) {
 
     /**
@@ -69,7 +69,7 @@ define(["core/js/raintime/client_storage", "core/js/raintime/messaging_observer"
      * @returns {jQueryElement} The component's container jQuery element
      */
     Context.prototype.getRoot = function () {
-       return $("[id='" + this.instanceId + "']"); 
+       return $("[id='" + this.instanceId + "']");
     };
 
     return Context;

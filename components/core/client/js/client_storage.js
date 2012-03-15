@@ -1,5 +1,4 @@
-define(['core/js/lib/amplify.store'
-], function (driver) {
+define(['raintime/lib/amplify.store'], function (driver) {
 
     var storageTypes = {
         'persistent': [

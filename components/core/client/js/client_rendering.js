@@ -1,7 +1,7 @@
 define([
-    'core/js/promised-io/promise',
-    'core/js/messaging/sockets',
-    'core/js/raintime/raintime'
+    'raintime/promise',
+    'raintime/messaging/sockets',
+    'raintime'
     /**
      * The ClientRenderer handles the registration and inserting of new components from the server.
      * A placeholder is replaced if a component is not in time.

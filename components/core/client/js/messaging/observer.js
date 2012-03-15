@@ -1,22 +1,22 @@
 /**
  * This is a proof of concept for a working publish / subscriber mechanism
  * on client side.
- * 
+ *
  * @author Radu Viorel Cosnita
  * @version 1.0
- * @since 27.08.2011 
+ * @since 27.08.2011
  */
-define(['core/js/client_util'], function(ClientUtil) {
+define(['raintime/util'], function(ClientUtil) {
     /** @private */
     var queue = {};
 
     /** @private */
     var orphans = {};
-    
+
     /**
      * This is the method that will publish an event
-     * and will execute all registered callbacks. 
-     * 
+     * and will execute all registered callbacks.
+     *
      * @param eventName
      * @param data
      * @param viewContext the ViewContext of the component publishing the event
@@ -51,19 +51,19 @@ define(['core/js/client_util'], function(ClientUtil) {
 
             return;
         }
-        
+
         for(i = 0; i < parent.callbacks.length; i++) {
             ClientUtil.defer(ClientUtil.bind(parent.callbacks[i], parent, data));
         }
     }
-    
+
     /**
-     * This is the method that allows registration of a callback method to a 
+     * This is the method that allows registration of a callback method to a
      * desired event.
-     * 
+     *
      * @param eventName Event name we want to subscribe to. Can be any string value.
      * @param callback This is the callback method that will get executed. It must have
-     *                     a single parameter called data. 
+     *                     a single parameter called data.
      *             Ex: function(data)
      * @param viewContext the ViewContext of the component publishing the event
      */
@@ -131,7 +131,7 @@ define(['core/js/client_util'], function(ClientUtil) {
         }
 
         var foundIndex = parent.callbacks.indexOf(callback);
-        
+
         if (foundIndex > -1) {
             parent.callbacks.splice(foundIndex, 1);
         }

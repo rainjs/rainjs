@@ -1,6 +1,6 @@
-define(['core/js/promised-io/promise',
-        'core/js/event_emitter',
-        'core/js/raintime/context'
+define(['raintime/promise',
+        'raintime/event_emitter',
+        'raintime/context'
 ], function (Promise, EventEmitter, Context) {
 
     /**
