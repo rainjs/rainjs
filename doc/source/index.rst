@@ -35,6 +35,7 @@ Client side modules
     client/websockets
     client/cross_referencing_css
     client/client_rendering
+    client/rendering
 
 ....
 APIs
