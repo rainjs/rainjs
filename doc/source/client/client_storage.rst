@@ -14,8 +14,8 @@ be able to work with client data. The API is attached to the controller's view c
 .. code-block:: javascript
     :linenos:
 
-    this.viewContext.storage.set('cart', { items: [1, 2, 3, 4], total: 10});
-    var data = this.viewContext.storage.get('cart');
+    this.context.storage.set('cart', { items: [1, 2, 3, 4], total: 10});
+    var data = this.context.storage.get('cart');
     console.log(data);
 
 and it will print:

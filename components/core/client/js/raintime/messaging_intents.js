@@ -102,7 +102,7 @@ define(["core/js/client_util",
      *                "success": function(data) {.....},
      *                "error": function(error) {....}};
      *
-     * clientRuntime.messaging.sendIntent(request);
+     * context.messaging.sendIntent(request);
      */
     ClientIntents.prototype.sendIntent = function(request, defer) {
         if(!this._validateIntentRequest(request, defer)) {
