@@ -1,4 +1,4 @@
-define(['raintime/messaging/sockets', 'raintime/promise'], function (Sockets, Promise) {
+define(['raintime/messaging/sockets', 'raintime/lib/promise'], function (Sockets, Promise) {
     var socket = Sockets.getSocket('/core');
 
     /**
@@ -30,3 +30,4 @@ define(['raintime/messaging/sockets', 'raintime/promise'], function (Sockets, Pr
         send: sendIntent
     };
 });
+

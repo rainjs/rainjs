@@ -1,5 +1,5 @@
 define([
-    'raintime/promise',
+    'raintime/lib/promise',
     'raintime/messaging/sockets',
     'raintime'
     /**

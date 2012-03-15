@@ -1,5 +1,8 @@
-define(["core/js/client_storage", "core/js/messaging/observer"],
-       function (ClientStorage, Observer) {
+define(["raintime/client_storage",
+        "raintime/messaging/observer",
+        "raintime/messaging/intents",
+        "raintime/messaging/sockets"],
+       function (ClientStorage, Observer, Intents, Sockets) {
 
     /**
      * The context reflects a component's client-side state. It gives access to other
@@ -58,7 +61,10 @@ define(["core/js/client_storage", "core/js/messaging/observer"],
              */
             publish: function (eventName, data) {
                 Observer.publish(eventName, data, this);
-            }
+            },
+
+            sendIntent: Intents.sendIntent,
+            getSocket: Sockets.getSocket
         };
     }
 

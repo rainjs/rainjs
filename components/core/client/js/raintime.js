@@ -1,5 +1,5 @@
-define(['raintime/promise',
-        'raintime/event_emitter',
+define(['raintime/lib/promise',
+        'raintime/lib/event_emitter',
         'raintime/context'
 ], function (Promise, EventEmitter, Context) {
 
