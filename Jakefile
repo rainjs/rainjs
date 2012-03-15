@@ -71,7 +71,14 @@ namespace('doc', function () {
                     });
                 }
             };
-            generateRST(files, buildPath);
+            
+            var prepareGenerateRST = function(buildPath, files){
+                child.exec("rm -rf "+path.resolve(buildPath), function (error, stdout, stderr) {
+                    generateRST(files, buildPath);
+                });
+            }
+            
+            prepareGenerateRST(buildPath, files);
         }
     });
 
