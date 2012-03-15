@@ -24,5 +24,19 @@
             }
         }
     },
-    "intents": []
+    "intents": [
+        {
+            "action": "com.rain.test.general.SHOW_CHAT",
+            "category": "com.rain.test.general",
+            "type": "view",
+            "provider": "missing_intent"
+        },
+        {
+            "action": "com.rain.test.serverside.INLINE_LOGGING",
+            "category": "com.rain.test.general",
+            "type": "server",
+            "provider": "/controller/intents/inline_logging.js",
+            "method": "doLogging"
+        }
+    ]
 }
