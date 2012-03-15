@@ -61,6 +61,7 @@ Server side modules
     server/handlebars/css_helper
     server/handlebars/how_to_write_a_helper
     server/authorization
+    server/data_layer
 
 ----------
 Components
