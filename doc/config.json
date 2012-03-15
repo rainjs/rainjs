@@ -3,8 +3,11 @@
         "buildPath": "./doc/source/client/api",
         "pages": [
             "./components/core/client/js/messaging",
-            "./components/core/client/js/raintime",
-            "./components/core/client/js/client_util.js"
+            "./components/core/client/js/client_rendering.js",
+            "./components/core/client/js/client_storage.js",
+            "./components/core/client/js/context.js",
+            "./components/core/client/js/raintime.js",
+            "./components/core/client/js/lib/util.js"
         ]
     },
 
