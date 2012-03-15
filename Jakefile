@@ -57,17 +57,21 @@ namespace('doc', function () {
                 }
             }
 
-            for (var i = 0, len = files.length; i < len; i++) {
-                cmd = 'java ' + Array.prototype.concat.call(args, [
-                   '-d=' + buildPath, files[i]
-               ]).join(' ');
-
-               child.exec(cmd, function (error, stdout, stderr) {
-                   if (stdout && stdout.replace(/\s+/g, '')) {
-                       console.log(stdout);
-                   }
-               });
-            }
+            var generateRST = function(files, buildPath){
+                if(files.length > 0){
+                    cmd = 'java ' + Array.prototype.concat.call(args, [
+                       '-d=' + buildPath, files[0]
+                    ]).join(' ');
+                    child.exec(cmd, function (error, stdout, stderr) {
+                        if (stdout && stdout.replace(/\s+/g, '')) {
+                            console.log(stdout);
+                        }
+                        files.splice(0, 1);
+                        generateRST(files, buildPath);
+                    });
+                }
+            };
+            generateRST(files, buildPath);
         }
     });
 
