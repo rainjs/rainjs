@@ -2,15 +2,19 @@ define([
     'core/js/promised-io/promise',
     'core/js/messaging/sockets',
     'core/js/raintime/raintime'
+], function (Promise, Sockets, Raintime) {
+
     /**
      * The ClientRenderer handles the registration and inserting of new components from the server.
-     * A placeholder is replaced if a component is not in time.
+     * If a component takes too long to be obtained from the server, a placeholder is used to show
+     * that the component is still loading.
+     *
      * This works for all transport layers.
      *
      * @name ClientRenderer
      * @class A ClientRenderer instance
+     * @constructor
      */
-], function(Promise, Sockets, Raintime) {
     function ClientRenderer() {
         var self = this;
         this.placeholderComponent = null;
@@ -43,21 +47,19 @@ define([
     };
 
     /**
-     * Requests a component over websockets
+     * Requests a component over websockets.
      *
-     * @param component
+     * @param {Object} component the information about the requested component
      */
-    ClientRenderer.prototype.requestComponent = function(component){
-        if(!component.id || !component.instanceId || !component.view){
+    ClientRenderer.prototype.requestComponent = function (component) {
+        if (!component.id || !component.instanceId || !component.view) {
             console.error('Component id, instance id and view are required!');
             return;
         }
-        if(component.placeholder && component.placeholder === true){
+        if (component.placeholder && component.placeholder === true) {
             placeholderTimeout(this, component);
         }
-        this.socket.emit('render', component, function(error){
-
-        });
+        this.socket.emit('render', component, function (error) {});
     };
 
     /**
@@ -70,7 +72,7 @@ define([
     };
 
     /**
-     * Renders a placeholder.
+     * Renders the placeholder.
      *
      * @param {String} instanceId the instanceId of the component for the placeholder
      */
@@ -116,7 +118,7 @@ define([
     }
 
     /**
-     * Renders the placeholder if the component is not returned in time ( placeholderTimeout ).
+     * Renders the placeholder if the component is not returned in time (placeholderTimeout).
      *
      * @param {ClientRenderer} self the class instance
      * @param {Object} placeholder the placeholder component

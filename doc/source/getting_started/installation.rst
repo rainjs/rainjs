@@ -121,7 +121,6 @@ For RAIN SDK to run on Windows please run the following commands:
    #. cd /home/<your user folder>
    #. mkdir node_kit
    #. cd node_kit
-   #. Copy content from :doc:`/getting_started/install` under install.sh and run it into node_kit folder
    #. npm install rain@0.4.0
    #. export PATH=$PATH:/home/<your user folder>/node_kit/node_modules/rain
    
