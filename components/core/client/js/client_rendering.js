@@ -1,7 +1,6 @@
-define([
-    'core/js/promised-io/promise',
-    'core/js/messaging/sockets',
-    'core/js/raintime/raintime'
+define(['raintime/promise',
+        'raintime/messaging/sockets',
+        'raintime'
 ], function (Promise, Sockets, Raintime) {
 
     /**

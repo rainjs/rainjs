@@ -1,4 +1,4 @@
-define(['core/js/messaging/sockets'], function (Sockets) {
+define(['raintime/messaging/sockets', 'raintime/promise'], function (Sockets, Promise) {
     var socket = Sockets.getSocket('/core');
 
     /**
@@ -10,13 +10,20 @@ define(['core/js/messaging/sockets'], function (Sockets) {
      * @returns {Promise}
      */
     function sendIntent(intent) {
-        //var defer = Promise.defer();
+        var defer = Promise.defer();
+
+        intent.context.instanceId = 'modalDialog';
 
         socket.emit('request_intent', intent, function(error) {
-            console.log('acknowledgement received, with error: ', error);
+            if (error) {
+                defer.reject(error);
+                return;
+            }
+
+            defer.resolve();
         });
 
-        //return defer.promise;
+        return defer.promise;
     }
 
     return {

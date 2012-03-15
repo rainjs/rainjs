@@ -1,4 +1,4 @@
-define(['core/js/jquery_modal'], function () {
+define(function () {
     function Controller() {};
 
     Controller.prototype.init = $.noop;

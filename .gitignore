@@ -15,3 +15,4 @@ server.log
 .settings.xml
 jstd.log
 tests/client/reports
+npm-debug.log

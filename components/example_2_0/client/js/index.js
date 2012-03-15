@@ -26,10 +26,7 @@ define(['core/js/messaging/intents'], function(Intents) {
         $(this.context.getRoot).on('click', '.do-intent', function (event) {
             Intents.send({
                 category: 'com.rain.test',
-                action: 'DO_SOMETHING',
-                context: {
-                    instanceId: 'modalDialog',
-                }
+                action: 'DO_SOMETHING'
             });
             event.stopImmediatePropagation();
         });
