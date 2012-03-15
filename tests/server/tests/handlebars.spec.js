@@ -9,6 +9,8 @@ describe('Handlebars configuration', function () {
     var mockHandlebars, plugins;
 
     beforeEach(function () {
+        spyOn(console, 'log').andCallFake(function () {});
+
         plugins = {};
         var mocks = {
             'handlebars': {
