@@ -17,17 +17,17 @@ Usage
 To load a component you have to use the global object ``clientRenderer``. This object is a
 singleton instance of :js:class:`ClientRenderer`.
 
-The following code loads a *user_configuration* component. The component is added after
-the jQuery selector *my-div*.
+The following code requests a *button* component. The ``instanceId`` property indicates
+where the markup of the component should be placed in the page.
 
 .. code-block:: javascript
 
-    clientRenderer.loadComponent({
-        selector: '#my-div',
+    clientRenderer.requestComponent({
         component: {
-            name: 'user_configuration',
+            name: 'button',
             version: '1.0',
-            view: 'index'
+            view: 'index',
+            instanceId: "f1db15e2d25be2697f2cc02e63fce03f39705811"
         }
     });
 

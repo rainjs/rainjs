@@ -75,3 +75,8 @@ to the component helper.
         index: index,
         index1: index1
     };
+    
+.. seealso::
+
+    :js:class:`DataLayer`
+        Data Layer API
