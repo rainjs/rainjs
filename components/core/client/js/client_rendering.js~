@@ -105,6 +105,17 @@ define([
     };
 
     /**
+     * Insert the component to the DOM and registers it.
+     *
+     * @param {ClientRenderer} self the class instance
+     * @param {Object} component the rendered component
+     * @private
+     * @memberOf ClientRenderer#
+     */
+    function insertComponent(self, component) {
+    }
+
+    /**
      * Renders the placeholder if the component is not returned in time (placeholderTimeout).
      *
      * @param {ClientRenderer} self the class instance
