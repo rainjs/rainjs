@@ -12,6 +12,7 @@ define(['raintime/messaging/sockets', 'raintime/lib/promise'], function (Sockets
     function sendIntent(intent) {
         var defer = Promise.defer();
 
+        intent.context = intent.context || {};
         intent.context.instanceId = 'modalDialog';
 
         socket.emit('request_intent', intent, function(error) {
