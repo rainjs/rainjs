@@ -80,7 +80,7 @@ define([
         if (!component.css || component.css.length == 0) {
             domElement.show();
         } else {
-            loadCSS(this, component.css, function() {
+            loadCSS(this, component.css, function () {
                 domElement.show();
             });
         }
@@ -88,8 +88,8 @@ define([
         for (var len = component.children.length, i = 0; i < len; i++) {
             var childComponent = component.children[i];
             Raintime.componentRegistry.preRegister(childComponent);
-            if(childComponent.placeholder === true){
-                placeholderTimeout(self, childComponent);
+            if (childComponent.placeholder === true) {
+                placeholderTimeout(this, childComponent);
             }
         }
     };
