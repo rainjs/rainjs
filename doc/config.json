@@ -6,8 +6,8 @@
             "./components/core/client/js/client_rendering.js",
             "./components/core/client/js/client_storage.js",
             "./components/core/client/js/context.js",
-            "./components/core/client/js/raintime.js",
-            "./components/core/client/js/lib/util.js"
+            "./components/core/client/js/lib/util.js",
+            "./components/core/client/js/lib/event_emitter.js"
         ]
     },
 

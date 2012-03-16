@@ -30,10 +30,8 @@ Client side modules
 
     client/client_messaging
     client/intents
-    client/client_storage
     client/requirejs
     client/websockets
-    client/cross_referencing_css
     client/client_rendering
     client/rendering
 
