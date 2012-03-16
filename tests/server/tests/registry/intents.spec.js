@@ -23,7 +23,8 @@ describe('Registry Plugin: ' + registryPlugin.name, function () {
                 }
             }
         });
-        componentConfig = JSON.parse(fs.readFileSync(cwd + '/tests/server/fixtures/components/intents_example/meta.json'));
+        componentConfig = JSON.parse(fs.readFileSync(cwd +
+                                 '/tests/server/fixtures/components/example_1_3/meta.json'));
     });
 
     it('must register 2 intents', function () {

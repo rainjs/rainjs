@@ -12,28 +12,27 @@ define(['raintime/lib/amplify.store'], function (driver) {
         ]
     };
 
-    function getStorage(type) {
-        type = (type) ? 'transient' : 'persistent';
-
-        for (var i in storageTypes[type]) {
-            var storage = storageTypes[type][i];
-
-            if(storage in driver.store.types) {
-                return driver.store.types[storage];
-            }
-        }
-
-        return driver.store;
-    }
-
     /**
      * Creates a new client storage for the current context.
+     *
+     * It provides methods to work with the client data. The storage methods can be used directly
+     * from the the controller's context through the *storage* key.
      *
      * @name ClientStorage
      * @class The client storage
      * @constructor
-     *
      * @param {Context} context the context of the component.
+     *
+     * @example
+     *     this.context.storage.set('cart', { items: [1, 2, 3, 4], total: 10});
+     *     var data = this.context.storage.get('cart');
+     *     console.log(data);
+     *
+     *     // That will print
+     *     //     {
+     *     //         items: [1, 2, 3, 4],
+     *     //         total: 10
+     *     //     }
      */
     function ClientStorage(context) {
         this.context = context;
@@ -76,6 +75,20 @@ define(['raintime/lib/amplify.store'], function (driver) {
 
         storage(key, null);
     };
+
+    function getStorage(type) {
+        type = (type) ? 'transient' : 'persistent';
+
+        for (var i in storageTypes[type]) {
+            var storage = storageTypes[type][i];
+
+            if(storage in driver.store.types) {
+                return driver.store.types[storage];
+            }
+        }
+
+        return driver.store;
+    }
 
     // TODO: addListener and removeListener function
 
