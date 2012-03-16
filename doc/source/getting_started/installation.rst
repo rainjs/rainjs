@@ -33,6 +33,10 @@ Now you can start installing node.
    #. node - to make sure node can be run
    #. curl http://npmjs.org/install.sh | sh
    
+Installing via package manager:
+
+   https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
+   
 Windows OS
 ~~~~~~~~~~
 
