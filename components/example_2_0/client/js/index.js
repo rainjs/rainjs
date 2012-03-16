@@ -1,4 +1,4 @@
-define(['core/js/messaging/intents'], function(Intents) {
+define(['raintime/messaging/intents'], function(Intents) {
     /**
      * Example controller class.
      *
