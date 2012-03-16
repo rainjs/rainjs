@@ -2,9 +2,25 @@ define(function() {
 
     var isArray = Array.isArray;
 
+    /**
+     * When an EventEmitter instance experiences an error, the typical action is to emit an 'error' event.
+     * Error events are treated as a special case in node.
+     * If there is no listener for it, then the default action is to print a stack trace and exit the program.
+     * All EventEmitters emit the event 'newListener' when new listeners are added.
+     *
+     * @class EventEmitter
+     */
     function EventEmitter() {}
 
     var defaultMaxListeners = 10;
+    /**
+     * By default EventEmitters will print a warning if more than 10 listeners are added for a particular event.
+     * This is a useful default which helps finding memory leaks.
+     * Obviously not all Emitters should be limited to 10. This function allows that to be increased.
+     * Set to zero for unlimited.
+     *
+     * @param {Number} n
+     */
     EventEmitter.prototype.setMaxListeners = function (n) {
         if (!this._events) {
             this._events = {};
@@ -12,6 +28,12 @@ define(function() {
         this._maxListeners = n;
     };
 
+    /**
+     * Execute each of the listeners in order with the supplied arguments.
+     *
+     * @param {String} event The event name
+     * @param [arg,arg2] The arguments to pass
+     */
     EventEmitter.prototype.emit = function () {
         var type = arguments[0];
         // If there is no 'error' event listener then throw.
@@ -76,6 +98,13 @@ define(function() {
         }
     };
 
+    /**
+     * Adds a listener to the end of the listeners array for the specified event.
+     *
+     * @param {String} type The event name
+     * @param {Function} listener The listener function
+     * @returns {EventEmitter}
+     */
     EventEmitter.prototype.addListener = function (type, listener) {
         if ('function' !== typeof listener) {
             throw new Error('addListener only takes instances of Function');
@@ -120,8 +149,24 @@ define(function() {
       return this;
     };
 
+    /**
+     * Adds a listener to the end of the listeners array for the specified event.
+     * This is a shortcut for the method ``addListener``
+     *
+     * @param {String} type The event name
+     * @param {Function} listener The listener function
+     * @returns {EventEmitter} Instance
+     */
     EventEmitter.prototype.on = EventEmitter.prototype.addListener;
 
+    /**
+     * Adds a one time listener for the event.
+     * This listener is invoked only the next time the event is fired, after which it is removed.
+     *
+     * @param {String} type The event name
+     * @param {Function} listener The listener function
+     * @returns {EventEmitter} Instance
+     */
     EventEmitter.prototype.once = function (type, listener) {
         if ('function' !== typeof listener) {
             throw new Error('.once only takes instances of Function');
@@ -139,6 +184,14 @@ define(function() {
         return this;
     };
 
+    /**
+     * Remove a listener from the listener array for the specified event.
+     * **Caution**: changes array indices in the listener array behind the listener.
+     *
+     * @param {String} type The event name
+     * @param {Function} listener The listener function
+     * @returns {EventEmitter} Instance
+     */
     EventEmitter.prototype.removeListener = function (type, listener) {
         if ('function' !== typeof listener) {
             throw new Error('removeListener only takes instances of Function');
@@ -176,6 +229,12 @@ define(function() {
         return this;
     };
 
+    /**
+     * Removes all listeners, or those of the specified event.
+     *
+     * @param {String} type The event name
+     * @returns {EventEmitter} Instance
+     */
     EventEmitter.prototype.removeAllListeners = function (type) {
         if (arguments.length === 0) {
             this._events = {};
@@ -189,6 +248,13 @@ define(function() {
         return this;
     };
 
+    /**
+     * Returns an array of listeners for the specified event.
+     * This array can be manipulated, e.g. to remove listeners.
+     *
+     * @param {String} type The event name
+     * @returns {EventEmitter} Instance
+     */
     EventEmitter.prototype.listeners = function(type) {
         if (!this._events) {
             this._events = {};
