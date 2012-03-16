@@ -9,7 +9,7 @@ describe('Data layer', function() {
     var mockComponentRegistry, componentRegistry,
         mockDataLayer, dataLayer;
 
-    var error, data;
+    var error, context;
 
     beforeEach(function () {
         mockComponentRegistry = loadFile(cwd + '/lib/component_registry.js', null, true);
@@ -25,9 +25,9 @@ describe('Data layer', function() {
         dataLayer = new mockDataLayer.DataLayer();
     });
 
-    function saveParameters(callbackError, callbackData) {
+    function saveParameters(callbackError, callbackContext) {
         error = callbackError;
-        data = callbackData;
+        context = callbackContext;
     }
 
     it('must throw an error when required arguments are missing or invalid', function () {
@@ -66,7 +66,7 @@ describe('Data layer', function() {
             expect(error.message).toBe('View no_view doesn\'t exists in meta.json.');
 
             componentOpt.viewId = 'index';
-            componentOpt.data = 'my_data';
+            componentOpt.context = 'my_data';
             componentRegistry.getConfig('button', '1.0').folder = 'path';
             dataLayer.loadData(componentOpt, function () {
                 saveParameters(arguments[0], arguments[1]);
@@ -80,7 +80,7 @@ describe('Data layer', function() {
 
         runs(function () {
             expect(error).toBeNull();
-            expect(data).toBe('my_data');
+            expect(context).toBe('my_data');
         });
     });
 
@@ -89,7 +89,7 @@ describe('Data layer', function() {
             id: 'button',
             version: '1.0',
             viewId: 'nasty_level3',
-            data: 'my_data'
+            context: 'my_data'
         };
         var finished = false;
 
@@ -106,8 +106,8 @@ describe('Data layer', function() {
 
         runs(function () {
             expect(error).toBeNull();
-            expect(data.old_data).toBe('my_data');
-            expect(data.new_data).toBe('my_new_data');
+            expect(context.old_data).toBe('my_data');
+            expect(context.new_data).toBe('my_new_data');
         });
     });
 });

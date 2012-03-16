@@ -79,9 +79,9 @@ var io = {
 
 describe('Renderer', function () {
     beforeEach(function () {
-        spyOn(bootstrap, 'compiledTemplate').andCallFake(function (data) { return '<span>text</span>'; });
-        spyOn(buttonIndex, 'compiledTemplate').andCallFake(function (data) { return '<div>button</div>'; });
-        spyOn(error404, 'compiledTemplate').andCallFake(function (data) { return '<div>404</div>'; });
+        spyOn(bootstrap, 'compiledTemplate').andCallFake(function (context) { return '<span>text</span>'; });
+        spyOn(buttonIndex, 'compiledTemplate').andCallFake(function (context) { return '<div>button</div>'; });
+        spyOn(error404, 'compiledTemplate').andCallFake(function (context) { return '<div>404</div>'; });
         spyOn(dataLayer, 'loadData').andCallFake(function () {});
         spyOn(ServerResponse.prototype, 'write').andCallFake(function () {});
         spyOn(ServerResponse.prototype, 'end').andCallFake(function () {});
@@ -164,7 +164,7 @@ describe('Renderer', function () {
                 viewId: 'index',
                 placeholder: '{"html":"<div />"}',
                 placeholderTimeout: 500,
-                data: { query: 'param=value', body: '{}' }
+                context: { query: 'param=value', body: '{}' }
             });
         });
 
@@ -185,7 +185,7 @@ describe('Renderer', function () {
                 component: button,
                 viewId: 'index',
                 instanceId: 'id',
-                data: { key1: 'value1', key2: 'value2' },
+                context: { key1: 'value1', key2: 'value2' },
                 rain: rain
             };
 
@@ -212,7 +212,7 @@ describe('Renderer', function () {
                 component: button,
                 viewId: 'index1',
                 instanceId: 'id',
-                data: { key1: 'value1', key2: 'value2' },
+                context: { key1: 'value1', key2: 'value2' },
                 rain: rain
             };
 
@@ -253,7 +253,7 @@ describe('Renderer', function () {
                 component: button,
                 viewId: 'index',
                 staticId: 'comp1',
-                data: { field: 'data' },
+                context: { field: 'data' },
                 rain: {
                     css: [],
                     childrenInstanceIds: [],
@@ -274,7 +274,7 @@ describe('Renderer', function () {
                 id : 'error',
                 version : '1.0',
                 view : 404,
-                data : {
+                context : {
                     error : error
                 }
             });
