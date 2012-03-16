@@ -50,7 +50,9 @@
         </script>
     </head>
     <body>
-        {{component name=id version=version view=viewId data=data}}
+        {{#with context}}
+            {{component name=../id version=../version view=../viewId}}
+        {{/with}}
         <div id="modalDialog" class="core_1_0"></div>
     </body>
 </html>
