@@ -1,8 +1,10 @@
 require.config({
-    baseUrl: '',
-    paths: {
-        'core': 'core/js',
-        'dropdownlist': 'dropdownlist/js',
-        'dropdownlist_example': 'dropdownlist_example/js'
-    }
+    "debug": ('{{server.env}}' == 'production'? 'false' : 'true'),
+    "baseUrl": "/",
+    "packages": [{
+        "name": "raintime",
+        "main": "raintime",
+        "location": "core/js"
+    }],
+    "priority": ["raintime"]
 });

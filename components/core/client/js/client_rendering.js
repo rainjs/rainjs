@@ -88,7 +88,7 @@ define([
         for (var len = component.children.length, i = 0; i < len; i++) {
             var childComponent = component.children[i];
             Raintime.componentRegistry.preRegister(childComponent);
-            if(childComponent.placeholder === true){
+            if (childComponent.placeholder === true){
                 placeholderTimeout(self, childComponent);
             }
         }
