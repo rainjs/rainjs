@@ -8,7 +8,9 @@ define(function() {
      * If there is no listener for it, then the default action is to print a stack trace and exit the program.
      * All EventEmitters emit the event 'newListener' when new listeners are added.
      *
-     * @class EventEmitter
+     * @class
+     * @constructor
+     * @name EventEmitter
      */
     function EventEmitter() {}
 
@@ -150,12 +152,8 @@ define(function() {
     };
 
     /**
-     * Adds a listener to the end of the listeners array for the specified event.
-     * This is a shortcut for the method ``addListener``
-     *
-     * @param {String} type The event name
-     * @param {Function} listener The listener function
-     * @returns {EventEmitter} Instance
+     * @see EventEmitter#addListener
+     * @function
      */
     EventEmitter.prototype.on = EventEmitter.prototype.addListener;
 
