@@ -2,23 +2,23 @@
 Intents Client API
 ==================
 
-On client side intents are really easy to use. Before explaining the details please read 
-the following example (extracted from intents_example sample)::
+On client side intents are really easy to use. Before explaining the details please read
+the following example (extracted from intents_example sample):
+
+.. code-block:: javascript
 
    function start() {
-      ....
-      
-      var messaging = this.clientRuntime.messaging;
-      
+      var messaging = this.context.messaging;
+
       btnMissing.click(function() {
             var request = {
                 "viewContext": self.viewContext,
                 "category": "local_test_intent",
                 "action": "local_action"
             };
-            
+
             var intent = messaging.sendIntent(request);
-            
+
             intent.then(function(data) {
                 console.log("Cool stuff: " + data);
             },
@@ -26,28 +26,31 @@ the following example (extracted from intents_example sample)::
                 alert("ERROR: " + data);
             });
         });
-      
-      ....
    }
-   
-As you can see in the above example there is one single method to use for intents::
 
-   Raintime.messaging.sendIntent(request);
-   
+As you can see in the above example there is one single method to use for intents:
+
+.. code-block:: javascript
+
+   this.context.messaging.sendIntent(request);
+
 Request argument is a dictionary that must contain at least:
 
    + viewContext
    + category
    + action
-   
+
 Optionally you might send an intent context where additional parameters are passed to
 the intent handler.
 
 The sendIntent method returns a promise that you can use to register callback methods for
-success and error scenarios. For this you can use::
+success and error scenarios. For this you can use:
+
+.. code-block:: javascript
 
    then(successHandler, errorHandler);
-   
+
+-------------------------
 Intents technical details
 -------------------------
 
