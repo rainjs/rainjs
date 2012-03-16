@@ -194,6 +194,7 @@ define(['raintime/lib/promise',
         group.then(function (array) {
             if (array.length == 1) {
                 callback.apply(array[0], array[0]);
+                return;
             }
             callback.apply(component.controller, array);
         });
@@ -266,7 +267,7 @@ define(['raintime/lib/promise',
                     throw new Error('The callback parameter must be a function.');
                 }
                 return find(newComponent.instanceId, staticIds, callback);
-            };            
+            };
 
             newComponent.controller = controller;
 
