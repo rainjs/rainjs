@@ -3,12 +3,12 @@ var component = {
     "children": [],
     "html": "<div>Lorem ipsum et sit dolor</div>",
     "controller": "/example/2.0.1/js/index.js",
-    "instanceId":"749e5b7af8b12c1e780b17831fe7b981e56c94d7",
-    "staticId":"",
-    "id":"example",
-    "version":"2.0.1",
-    "error":null
-}
+    "instanceId": "749e5b7af8b12c1e780b17831fe7b981e56c94d7",
+    "staticId": "",
+    "id": "example",
+    "version": "2.0.1",
+    "error": null
+};
 
 
 describe('Client Renderer', function () {
@@ -38,4 +38,3 @@ describe('Client Renderer', function () {
         $('#' + component.instanceId).remove();
     });
 });
-

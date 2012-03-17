@@ -33,7 +33,6 @@ describe('Data layer', function() {
     it('must throw an error when required arguments are missing or invalid', function () {
         var componentOpt = undefined;
         var finished = false;
-        var correctFolder = componentRegistry.getConfig('button', '1.0').folder;
 
         runs(function () {
             dataLayer.loadData(componentOpt, saveParameters);

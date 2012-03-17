@@ -23,7 +23,7 @@ describe('Util module', function () {
         var files = [];
         util.walkSync(folder, [], function (file) {
             files.push(file);
-        })
+        });
         expect(files.length).toBe(9);
     });
 
@@ -31,14 +31,14 @@ describe('Util module', function () {
         var files = [];
         util.walkSync(folder, ['.css'], function (file) {
             files.push(file);
-        })
+        });
         expect(files.length).toBe(1);
         expect(files[0]).toBe(path.join(config.paths('css', true), 'index.css'));
 
         files = [];
         util.walkSync(folder, ['.css', '.json', '.html'], function (file) {
             files.push(file);
-        })
+        });
         expect(files.length).toBe(4);
     });
 });
