@@ -1,12 +1,13 @@
 "use strict";
 
 var cwd = process.cwd();
+var path = require('path');
 var globals = require(cwd + '/lib/globals');
 var loadFile = require(cwd + '/tests/server/rain_mocker');
-var pluginFolder = cwd + '/lib/handlebars/';
+var pluginFolder = path.join(cwd, '/lib/handlebars/');
 
 describe('Handlebars configuration', function () {
-    var mockHandlebars, plugins;
+    var plugins;
 
     beforeEach(function () {
         spyOn(console, 'log').andCallFake(function () {});
@@ -22,15 +23,15 @@ describe('Handlebars configuration', function () {
 
         // Mock the loading of the Handlebars helpers. The helpers are mocked because
         // they have some dependencies that are not so easy to mock.
-        mocks[pluginFolder + 'css.js'] = {
+        mocks[path.join(pluginFolder, 'css.js')] = {
             name: 'css',
             helper: function () {}
         };
-        mocks[pluginFolder + 'component.js'] = {
+        mocks[path.join(pluginFolder, 'component.js')] = {
             name: 'component',
             helper: function () {}
         };
-        mockHandlebars = loadFile(cwd + '/lib/handlebars.js', mocks, true);
+        loadFile(cwd + '/lib/handlebars.js', mocks, true);
     });
 
     it('must register all Handlebars plugins', function () {

@@ -11,7 +11,7 @@ var websockets = require(cwd + '/lib/registry/websockets');
 var conf = {
     id: 'button',
     version: '2.0',
-    folder: '/components/button2'
+    folder: 'components/button2'
 };
 
 var socket = {
@@ -27,7 +27,7 @@ describe('Registry plugin: Websockets', function () {
             callback(path.join(folder, 'socket.js'), 'socket.js');
         });
 
-        //mock for require
+        // Mock for require.
         spyOn(Module.prototype, 'require').andCallFake(function (path) {
             return socket;
         });
@@ -38,14 +38,19 @@ describe('Registry plugin: Websockets', function () {
     it('must register sockets from the component/server/websockets directory', function () {
         websockets.configure(conf);
 
+        var expectedFolder = path.join('components', 'button2', 'server', 'websockets');
+
         expect(util.walkSync).toHaveBeenCalled();
-        expect(util.walkSync.mostRecentCall.args[0]).toBe('/components/button2/server/websockets');
+        expect(util.walkSync.mostRecentCall.args[0]).toBe(expectedFolder);
     });
 
     it('must require the websocket module', function () {
         websockets.configure(conf);
 
-        expect(Module.prototype.require).toHaveBeenCalledWith('/components/button2/server/websockets/socket.js');
+        var expectedFolder = path.join('components', 'button2', 'server',
+                                       'websockets', 'socket.js');
+
+        expect(Module.prototype.require).toHaveBeenCalledWith(expectedFolder);
     });
 
     it('must register the socket', function () {
