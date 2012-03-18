@@ -5,15 +5,11 @@
         "timeoutForRequests" : 3,
 
         "serverRoot": ".",
-        "components": ["./components"],
-
-        "paths": {
-            "server": ".",
-            "components": "./components"
-        }
+        "components": ["./components"]
     },
 
     "default_language": "en_US",
+    "language": "en_US",
 
     "errorComponent": {
         "id": "error",
