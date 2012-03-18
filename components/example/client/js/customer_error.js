@@ -16,7 +16,7 @@ define([""], function() {
      * @function
      */
     Controller.prototype.init = function () {
-        console.log('example component (view nasty_level3) was initialized.');
+        console.log('example component (view level3) was initialized.');
     };
 
     /**
@@ -25,7 +25,7 @@ define([""], function() {
      * @function
      */
     Controller.prototype.start = function () {
-        console.log('example component (view nasty_level3) was started.');
+        console.log('example component (view level3) was started.');
     };
 
     /**

@@ -16,3 +16,25 @@ body {
 .local_image {
     background: url("images/example_loading.gif");
 }
+
+.first_level, .second_level, .third_level {
+    margin-left: 10px;
+}
+
+.second_level {
+    padding: 10px;
+}
+
+.third_level {
+    padding: 10px;
+}
+
+.buttons {
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+.language {
+    font-size: 1.2em;
+    color: red;
+}

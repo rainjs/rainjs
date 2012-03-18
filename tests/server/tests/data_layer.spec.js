@@ -87,7 +87,7 @@ describe('Data layer', function() {
         var componentOpt = {
             id: 'button',
             version: '1.0',
-            viewId: 'nasty_level3',
+            viewId: 'level3',
             context: 'my_data'
         };
         var finished = false;

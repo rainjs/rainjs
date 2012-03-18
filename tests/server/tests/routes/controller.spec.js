@@ -29,7 +29,7 @@ describe('Router Plugin: ' + routerPlugin.name, function() {
 
     it('must call the server side controller and give an anwser back', function() {
         request.method = "get";
-        request.path = "nasty_level2";
+        request.path = "level2";
         request.component = componentRegistry.getConfig("example", "0.0.1");
         routerPlugin.handle(request, response);
         expect(response._body).toEqual("finished");
@@ -51,7 +51,7 @@ describe('Router Plugin: ' + routerPlugin.name, function() {
 
     it('must call an error cause there is no specified controller', function() {
         request.method = "get";
-        request.path = "nasty_level3";
+        request.path = "level3";
         request.component = componentRegistry.getConfig("example", "0.0.1");
         routerPlugin.handle(request, response);
         expect(response._body).toEqual("error|The specified controller was not found!|404");

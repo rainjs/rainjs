@@ -16,7 +16,7 @@ define([""], function() {
      * @function
      */
     Controller.prototype.init = function () {
-        console.log('example component (view nasty_level3) was initialized.');
+        console.log('example component (view level2) was initialized.');
     };
 
     /**
@@ -25,16 +25,7 @@ define([""], function() {
      * @function
      */
     Controller.prototype.start = function () {
-        console.log('example component (view nasty_level3) was started.');
-    };
-    
-    /**
-     * Destroy lifecycle step that happens before a component gets deregistered
-     * 
-     * @function
-     */
-    Controller.prototype.destroy = function () {
-        console.log('example component (view nasty_level3) destroyed!');
+        console.log('example component (view level2) was started.');
     };
 
     return Controller;

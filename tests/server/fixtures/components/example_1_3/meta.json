@@ -9,15 +9,15 @@
                 "server": "index.js"
             }
         },
-        "nasty_level2" : {
-            "view": "nasty_level2.html",
+        "level2" : {
+            "view": "level2.html",
             "controller": {
                 "client": "index.js",
                 "server": "index.js"
             }
         },
-        "nasty_level3" : {
-            "view": "nasty_level3.html",
+        "level3" : {
+            "view": "level3.html",
             "controller": {
                 "client": "index.js",
                 "server": "index.js"

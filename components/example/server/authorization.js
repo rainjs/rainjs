@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * The dynamic condition for the component.
  *

@@ -9,17 +9,17 @@
                 "server": "index.js"
             }
         },
-        "nasty_level2" : {
-            "view": "nasty_level2.html",
+        "level2" : {
+            "view": "level2.html",
             "controller": {
-                "client": "nasty_level2.js",
+                "client": "level2.js",
                 "server": "index.js"
             }
         },
-        "nasty_level3" : {
-            "view": "nasty_level3.html",
+        "level3" : {
+            "view": "level3.html",
             "controller": {
-                "client": "nasty_level3.js",
+                "client": "level3.js",
                 "server": "index.js"
             }
         },
@@ -30,10 +30,10 @@
             },
             "permissions": ["need_permissions"]
         },
-        "with_customer_error" : {
-            "view": "with_customer_error.html",
+        "customer_error" : {
+            "view": "customer_error.html",
             "controller": {
-                "client": "with_customer_error.js",
+                "client": "customer_error.js",
                 "server": "index.js"
             }
         }
