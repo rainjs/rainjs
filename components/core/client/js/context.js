@@ -100,7 +100,6 @@ define(["raintime/client_storage",
      * Replaces the component from where it is called with the given component.
      *
      * @param {Object} component The component which to be requested
-     * @param {jQueryDom} dom The dom object where the component is inserted
      */
     Context.prototype.replace = function (component) {
         component.instanceId = this.instanceId;
