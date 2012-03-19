@@ -23,8 +23,11 @@ function level3(environment, callback, data) {
         case 'ro_RO':
             text = 'Limba curentă a platformei este Română';
             break;
-        default:
+        case 'en_US':
             text = 'The current platform language is English';
+            break;
+        default:
+            text = 'The current platform language is ' + language;
     };
     setTimeout(function () {
         callback(null, {text: text});
