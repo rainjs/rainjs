@@ -75,7 +75,7 @@ define(["raintime/client_storage",
      * @returns {jQueryElement} The component's container jQuery element
      */
     Context.prototype.getRoot = function () {
-       return $("[id='" + this.instanceId + "']");
+       return $("#" + this.instanceId);
     };
 
     /**
