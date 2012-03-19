@@ -3,17 +3,17 @@
 /**
  * Template data
  */
-function index(callback, data) {
+function index(environment, callback, data) {
     callback(null, data);
 }
 
-function level2(callback, data) {
+function level2(environment, callback, data) {
     setTimeout(function () {
         callback(null, data);
     }, Math.floor(Math.random() * 1500));
 }
 
-function level3(callback, data) {
+function level3(environment, callback, data) {
     setTimeout(function () {
         callback(null, {
             old_data: data,
@@ -22,7 +22,7 @@ function level3(callback, data) {
     }, Math.floor(Math.random()*3000));
 }
 
-function with_customer_error(callback, data){
+function with_customer_error(environment, callback, data){
     callback({
         arrrghhhhhh: "DAMMNNNNNNNNNN"
     }, data);

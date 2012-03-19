@@ -1,20 +1,22 @@
-function index(callback, data) {
+"use strict";
+
+function index(environment, callback, data) {
     callback(null, data);
 }
 
-function buttons(callback, data) {
+function buttons(environment, callback, data) {
     callback(null, data);
 }
 
-function button1(callback, data) {
+function button1(environment, callback, data) {
     callback(null, data);
 }
 
-function button2(callback, data) {
+function button2(environment, callback, data) {
     callback(null, data);
 }
 
-function button3(callback, data) {
+function button3(environment, callback, data) {
     callback(null, data);
 }
 module.exports = {

@@ -3,13 +3,13 @@
 /**
  * Template data
  */
-function index(callback, data) {
+function index(environment, callback, data) {
     setTimeout(function () {
         callback(null, data);
     }, 1000);
 }
 
-function level2(callback, data) {
+function level2(environment, callback, data) {
     setTimeout(function () {
         callback(null, {
             items: [
@@ -23,7 +23,7 @@ function level2(callback, data) {
     }, Math.floor(Math.random()*3000));
 }
 
-function level3(callback, data) {
+function level3(environment, callback, data) {
     setTimeout(function () {
         callback(null, data);
     }, Math.floor(Math.random()*3000));

@@ -1,31 +1,33 @@
+"use strict";
+
 /**
  * Template data
  */
-function f400(callback, data) {
+function f400(environment, callback, data) {
     callback(null, data);
 }
 
-function f401(callback, data) {
+function f401(environment, callback, data) {
     callback(null, data);
 }
 
-function f403(callback, data) {
+function f403(environment, callback, data) {
     callback(null, data);
 }
 
-function f404(callback, data) {
+function f404(environment, callback, data) {
     callback(null, data);
 }
 
-function f408(callback, data) {
+function f408(environment, callback, data) {
     callback(null, data);
 }
 
-function f500(callback, data) {
+function f500(environment, callback, data) {
     callback(null, data);
 }
 
-function fDefault(callback, data) {
+function fDefault(environment, callback, data) {
     callback(null, data);
 }
 
