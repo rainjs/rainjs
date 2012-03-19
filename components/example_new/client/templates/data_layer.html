@@ -1,17 +1,19 @@
 {{css path="data_layer.css"}}
 
-<h1>{{category}}</h1>
-<table>
-    <tr>
-        <th>Author</th>
-        <th>Title</th>
-        <th>Year</th>
-    </tr>
-    {{#each items}}
-    <tr>
-        <td>{{author}}</td>
-        <td>{{title}}</td>
-        <td>{{year}}</td>
-    </tr>
-    {{/each}}
-</table>
+<div class="data">
+    <h1>{{category}}</h1>
+    <table>
+        <tr>
+            <th>Author</th>
+            <th>Title</th>
+            <th>Year</th>
+        </tr>
+        {{#each items}}
+        <tr>
+            <td>{{author}}</td>
+            <td>{{title}}</td>
+            <td>{{year}}</td>
+        </tr>
+        {{/each}}
+    </table>
+</div>
