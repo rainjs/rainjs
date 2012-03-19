@@ -3,6 +3,7 @@
 var cwd = process.cwd();
 var globals = require(cwd + '/lib/globals.js');
 var config = require(cwd + '/lib/configuration');
+var authorization = require(cwd + '/lib/authorization');
 var loadFile = require(cwd + '/tests/server/rain_mocker');
 
 describe('Handlebars component helper', function () {
@@ -27,7 +28,7 @@ describe('Handlebars component helper', function () {
             },
             childrenInstanceIds: [],
             instanceId: '12345',
-            transport: {},
+            transport: {}
         };
 
         mockRenderer = {
@@ -42,6 +43,33 @@ describe('Handlebars component helper', function () {
             },
             loadDataAndSend: function(){
 
+            },
+            isAuthorized: function(childComponent){
+                var componentConfig = componentRegistry.getConfig(childComponent.id,
+                                                                  childComponent.version);
+                var permissions = [].concat(componentConfig.permissions || [],
+                                            componentConfig.views[childComponent.view].permissions || []);
+
+                var dynamicConditions = [];
+
+                // Add component dynamic conditions.
+                if (componentConfig.dynamicConditions && componentConfig.dynamicConditions._component) {
+                    dynamicConditions.push(componentConfig.dynamicConditions._component);
+                }
+
+                // Add view dynamic conditions.
+                if (componentConfig.dynamicConditions &&
+                    componentConfig.dynamicConditions[childComponent.view]) {
+                    dynamicConditions.push(componentConfig.dynamicConditions[childComponent.view]);
+                }
+
+                var securityContext = { user: rainContext.session ? rainContext.session.user : null };
+
+                if (!authorization.authorize(securityContext, permissions, dynamicConditions)) {
+                    return false;
+                }
+
+                return true;
             }
         };
 
@@ -117,11 +145,12 @@ describe('Handlebars component helper', function () {
     describe('test default options and error cases', function () {
 
         it('must use the current component when "name" is not defined', function () {
+            rainContext.component.version = "1.3.0";
             Handlebars.compile('{{component view="index"}}')();
             var childComponent = rainContext.childrenInstanceIds[0];
             expectComponent(childComponent, {
                 id: 'example',
-                version: '0.0.1',
+                version: '1.3.0',
                 controller: 'index.js'
             });
         });
@@ -156,7 +185,7 @@ describe('Handlebars component helper', function () {
     }
 
     describe('test authorization cases', function () {
-
+        
         it('must use the required component when the permission cases pass', function () {
             setUserInSession();
             Handlebars.compile('{{component name="button" version="1.0" view="restricted"}}')();
