@@ -29,6 +29,7 @@ define(['/example/js/accordian.min.js'], function() {
             active: false,
             autoHeight: false,
             change: function(event, ui){
+                ui.oldContent.empty();
                 self.context.insert({
                     id: "example",
                     view: ui.newContent.data("example-view"),

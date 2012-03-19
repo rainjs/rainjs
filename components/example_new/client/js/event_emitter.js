@@ -23,17 +23,17 @@ define([], function () {
 
         var root = self.context.getRoot();
         var events = root.find('.events');
-        events.append('<div>The component was started.</div>');
+        events.append('<li>The component was started.</li>');
 
         setTimeout(function () {
-            events.append('<div>Emitting the custom event "ready" in 3 seconds!</div>');
+            events.append('<li>Emitting the custom event "ready" in 3 seconds!</li>');
 
             setTimeout(function () {
                 self.emit('ready');
             }, 3000);
 
             self.on('ready', function () {
-                events.append('<div>The "ready" event was received.</div>');
+                events.append('<li><div>The "ready" event was received.</li>');
             });
         }, 2000);
     };

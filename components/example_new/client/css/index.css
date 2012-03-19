@@ -9,6 +9,6 @@
   font-size: 3em;
 }
 
-.event_emitter, .events, .events > div {
+.event_emitter, .events, .events > li {
     padding: 20px;
 }
