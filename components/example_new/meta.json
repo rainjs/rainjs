@@ -17,6 +17,13 @@
         },
         "postboard": {
             "view": "postboard.html"
+        },
+        "event_emitter": {
+            "view": "event_emitter.html",
+            "controller": {
+                "client": "event_emitter.js",
+                "server": "index.js"
+            }
         }
     },
     "intents": []

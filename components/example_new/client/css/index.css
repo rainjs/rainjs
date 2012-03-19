@@ -1,6 +1,33 @@
+.header {
+    margin: 20px;
+    text-align: center;
+    color:#2779AA;
+    text-shadow: -1px -1px 0px #202020, 1px 1px 0px #fff;
+}
+
+.navi {
+    display: none;
+}
+
 .css {
   background:-moz-linear-gradient(top, #88F, #FFF) no-repeat;
   background:-webkit-linear-gradient(top, #88F, #FFF) no-repeat;
   padding: 50px;
   font-size: 3em;
+}
+
+.event_emitter, .events, .events > li {
+    padding: 20px;
+}
+
+.first_level, .second_level, .third_level {
+    margin-left: 10px;
+}
+
+.second_level {
+    padding: 10px;
+}
+
+.third_level {
+    padding: 10px;
 }
