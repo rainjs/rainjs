@@ -1,3 +1,10 @@
+.header {
+    margin: 20px;
+    text-align: center;
+    color:#2779AA;
+    text-shadow: -1px -1px 0px #202020, 1px 1px 0px #fff;
+}
+
 .navi {
     display: none;
 }
