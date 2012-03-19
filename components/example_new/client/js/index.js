@@ -30,11 +30,13 @@ define(['/example/js/accordian.min.js'], function() {
             autoHeight: false,
             change: function(event, ui){
                 ui.oldContent.empty();
-                self.context.insert({
-                    id: "example",
-                    view: ui.newContent.data("example-view"),
-                    placeholder: true
-                }, ui.newContent);
+                if(ui.options.active !== false){
+                    self.context.insert({
+                        id: "example",
+                        view: ui.newContent.data("example-view"),
+                        placeholder: true
+                    }, ui.newContent);
+                }
             }
         }).show();
     };
