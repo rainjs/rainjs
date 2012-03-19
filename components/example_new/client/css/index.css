@@ -20,14 +20,11 @@
     padding: 20px;
 }
 
-.first_level, .second_level, .third_level {
+.first_level {
+    margin-top: 20px;
     margin-left: 10px;
 }
 
-.second_level {
-    padding: 10px;
-}
-
-.third_level {
-    padding: 10px;
+.second_level, .third_level {
+    margin: 10px 30px 10px 40px;
 }

@@ -18,7 +18,10 @@
                 "client": "event_emitter.js",
                 "server": "index.js"
             }
-        }
+        },
+        "level1" : {},
+        "level2" : {},
+        "level3" : {}
     },
     "intents": []
 }
