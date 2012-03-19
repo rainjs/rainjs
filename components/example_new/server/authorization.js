@@ -19,6 +19,6 @@ function index(securityContext) {
 }
 
 module.exports = {
-    _component: _component,
-    index: index
+    //_component: _component,
+    //index: index
 };

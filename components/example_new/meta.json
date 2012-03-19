@@ -8,6 +8,9 @@
                 "client": "index.js",
                 "server": "index.js"
             }
+        },
+        "data_layer": {
+            "view": "data_layer.html"
         }
     },
     "intents": []
