@@ -4,3 +4,7 @@
   padding: 50px;
   font-size: 3em;
 }
+
+.event_emitter, .events, .events > div {
+    padding: 20px;
+}
