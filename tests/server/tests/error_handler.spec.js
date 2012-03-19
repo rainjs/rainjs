@@ -1,75 +1,57 @@
-
 "use strict";
 
-var rootPath = process.cwd();
-var mod_errorHandler = require(rootPath + '/lib/error_handler');
-
-var errorHandler;
-
-var mockComponents = require('./components_mock.js');
+var cwd = process.cwd();
+var globals = require(cwd + '/lib/globals');
+var loadFile = require(cwd + '/tests/server/rain_mocker');
+var configuration = require(cwd + '/lib/configuration');
 
 describe('Error handler', function () {
-    var componentContainer;
-    var components = mockComponents.components;
+    var mockComponentRegistry, componentRegistry,
+        mockErrorHandler, errorHandler,
+        mockConfiguration;
 
     beforeEach(function () {
-        global.Server = {
-            conf: {
-                server: {
-                    port: 1337,
-                    serverRoot: '',
-                    componentPath : ''
-                },
-                errorComponent: {
-                    name: 'error',
-                    version: '1.0'
-                }
-            },
-            UUID : "SERVER-UUID",
-            root : ''
+        mockComponentRegistry = loadFile(process.cwd() + '/lib/component_registry.js', null, true);
+        mockComponentRegistry.scanComponentFolder();
+        componentRegistry = new mockComponentRegistry.ComponentRegistry();
+
+        mockConfiguration = {
+            errorComponent: configuration.errorComponent
         };
+        mockErrorHandler = loadFile(cwd + '/lib/error_handler.js', {
+            './component_registry': componentRegistry,
+            './configuration': mockConfiguration
+        }, true);
+    });
 
-        var mod_componentContainer = require(rootPath + '/lib/componentcontainer.js').ComponentContainer;
+    it('must throw an error when the error component is not found', function () {
+        mockConfiguration.errorComponent = {};
+        expect(function() {
+            errorHandler = new mockErrorHandler.ErrorHandler();
+        }).toThrow('No error component specified or default doesn\'t exist!');
+    });
 
-        componentContainer = {
-            componentMap: {},
-            versions: {},
-            registerComponent: mod_componentContainer.prototype.registerComponent,
-            getLatestVersion: mod_componentContainer.prototype.getLatestVersion,
-            createComponent: mod_componentContainer.prototype.createComponent,
-            getConfiguration: mod_componentContainer.prototype.getConfiguration,
-            getViewByViewId: mod_componentContainer.prototype.getViewByViewId,
-            scanComponentFolder: function () {
-                for (var i = 0, l = components.length; i < l; i++) {
-                    this.registerComponent(components[i]);
-                }
-            }
+    it('must throw an error when the default view is not specified', function () {
+        mockConfiguration.errorComponent = {
+            id: 'example',
+            version: '0.0.1'
         };
-
-        componentContainer.scanComponentFolder();
-
-        this.errorHandler = new mod_errorHandler(componentContainer);
+        expect(function() {
+            errorHandler = new mockErrorHandler.ErrorHandler();
+        }).toThrow('The error component doesn\'t have a default view!');
     });
 
-
-    describe('error valid code', function () {
-        it('500 error code', function () {
-            var config = this.errorHandler.renderError(500);
-
-            expect(config).toBeDefined();
-            expect(config.module).toEqual('error;1.0');
-            expect(config.view).toEqual('/htdocs/500.html');
-        });
+    it('must return the default view when the status code is unknown', function () {
+        errorHandler = new mockErrorHandler.ErrorHandler();
+        var result = errorHandler.getErrorComponent('123');
+        expect(result.component).toEqual(componentRegistry.getConfig('error', '1.0'));
+        expect(result.view).toEqual('default');
     });
 
-    describe('error invalid code', function () {
-        it('900 error code', function () {
-            var config = this.errorHandler.renderError(900);
-            expect(config).toBeUndefined();
-        });
+    it('must return the correct status code when it is known', function () {
+        errorHandler = new mockErrorHandler.ErrorHandler();
+        var result = errorHandler.getErrorComponent('400');
+        expect(result.view).toEqual('400');
     });
 
-    afterEach(function () {
-        delete this.errorHandler;
-    });
 });

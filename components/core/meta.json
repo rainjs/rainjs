@@ -1,0 +1,15 @@
+{
+    "id": "core",
+    "version": "1.0",
+    "views": {
+        "bootstrap": {
+            "view": "bootstrap.html"
+        },
+        "dialog": {
+            "view": "dialog.html",
+            "controller": {
+                "client": "dialog.js"
+            }
+        }
+    }
+}

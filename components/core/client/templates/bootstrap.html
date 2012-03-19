@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{id}}</title>
+        <script type="text/javascript" src="/core/js/lib/ecma5-1.2.1-min.js"></script>
+        <script type="text/javascript" src="/core/js/lib/require-jquery.js"></script>
+        <script type="text/javascript">
+            var requireConfig = {
+                "debug": ('{{server.env}}' == 'production'? 'false' : 'true'),
+                "baseUrl": "/",
+                "packages": [{
+                    "name": "raintime",
+                    "main": "raintime",
+                    "location": "core/js"
+                }],
+                "priority": ["raintime"]
+            };
+            var renderQueueList = [];
+            function renderQueue(){
+                var len = renderQueueList.length;
+                if(len > 0){
+                    for(var i = 0; i < len; i++){
+                        clientRenderer.renderComponent(renderQueueList[i]);
+                    }
+                    renderQueueList = [];
+                }
+            }
+
+            function renderComponent(component) {
+                if (!component){
+                    renderQueue();
+                    return;
+                }
+                if (window.clientRenderer == undefined) {
+                    renderQueueList.push(component);
+                } else {
+                    renderQueue();
+                    clientRenderer.renderComponent(component);
+                }
+            }
+
+            require(requireConfig, ["raintime/client_rendering"], function(clientRenderer) {
+                clientRenderer.setPlaceholderTimeout({{placeholderTimeout}});
+                clientRenderer.setPlaceholder({{{placeholder}}});
+                if(renderQueueList.length == 0){
+                    clientRenderer.renderPlaceholder($($('body div').get(0)).attr('id'));
+                }
+                renderQueue();
+            });
+        </script>
+    </head>
+    <body>
+        {{#with context}}
+            {{component name=../id version=../version view=../viewId}}
+        {{/with}}
+        <div id="modalDialog" class="core_1_0"></div>
+    </body>
+</html>

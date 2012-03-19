@@ -18,18 +18,23 @@ When the parts are retrieved, the placeholders are replaced with the actual html
 Configuration
 -------------
 
-The configuration for the placeholder is specified in the *server.conf* file. If it's missing, a
-default *placeholder* component will be set: ::
+The configuration for the placeholder is specified in the ``server.conf`` file. If it's missing, a
+default ``placeholder`` component will be set:
+
+.. code-block:: javascript
 
     "loadingComponent": {
-        "namespace": "",
-        "selector": "placeholder",
-        "module": "placeholder;1.0",
-        "view": "/htdocs/index.html"
+        "id": "placeholder",
+        "version": "1.0",
+        "viewId": "index",
+        "timeout": 500
     }
 
+The ``timeout`` property is used to tell how many milliseconds the rendering process will wait for
+the component's data before displaying the placeholder.
+
 You can define your own component to be used instead of the default one by adding a custom
-*loadingComponent* key in the server configuration file.
+``loadingComponent`` key in the server configuration file.
 
 .. warning::
 

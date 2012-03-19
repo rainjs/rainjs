@@ -160,7 +160,7 @@ function setupProject(project_path){
 	    ,components  : mod_path.join(project_path, 'components')
 	    ,'public'    : mod_path.join(project_path, 'public')
 	  },
-  	  coreComponentsName = "core-components";
+  	  coreComponentsName = "core";
   //create project directory
   fs.mkdirSync(project_path, 0755);
   //create components directory

@@ -3,10 +3,8 @@ Component Helper
 ================
 
 The component helper is a custom Handlebars helper that is used to aggregate other components
-inside the current component. It will generate a HTML custom tag automatically and adds this to 
-the taglib dynamically, so that the parser can aggregate the component.
-
-The helper can also generate taglibs that reference to different views of the same component.
+inside the current component. It will generate a placeholder with an instanceId as ``id html attribute``
+and calls the loading of the custom data for the template.
 
 .. _handlebars-component-helper-usage:
 
@@ -25,7 +23,8 @@ You can also aggregate a view from the current component as in the following exa
     {{component view="index"}}
 
 .. note::   
-    When the version is not specified the latest version of the component is used.
+    When the component and version is not specified the version of the parent component is used.
+    When only the version is not specified the latest version of the component is used.
 
 -----------
 HTML Output
@@ -35,14 +34,7 @@ The declaration ``{{component name="button" view="index"}}`` generates the follo
 
 .. code-block:: html
 
-    <button_1_0_index />
-
-The declaration ``{{component name="button" version="1.1" view="main"}}`` generates
-the following *custom* tag:
-
-.. code-block:: html
-
-    <button_1_1_main />
+    <div id="instanceID"></div>
 
 -----------
 Error Cases
@@ -51,8 +43,7 @@ Error Cases
 When the component or the view isn't found a 404 error page will be shown. Also, the component helper
 performs authorization before a view is shown. If the authorization fails a 401 error page is shown.
 
-What happens is that in error cases the custom tag for the component is replaced with the custom tag
-for the exception component, like ``<error_1_0_404 />`` or ``<error_1_0_401 />``.
+What happens is that in error cases the component is replaced with the error component.
 
 .. seealso::
 

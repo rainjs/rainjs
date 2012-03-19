@@ -1,0 +1,9 @@
+{{css path="index.css"}}
+<div>
+    Level 2 Component
+    <div class="second_level">
+        {{#each items}}
+            {{component name="example" view="level3" }}
+        {{/each}}
+    </div>
+</div>

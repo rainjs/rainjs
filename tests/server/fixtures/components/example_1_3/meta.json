@@ -1,0 +1,42 @@
+{
+    "id": "example",
+    "version": "1.3.0",
+    "views": {
+        "index" : {
+            "view": "index.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
+        },
+        "level2" : {
+            "view": "level2.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
+        },
+        "level3" : {
+            "view": "level3.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
+        }
+    },
+    "intents": [
+        {
+            "action": "com.rain.test.general.SHOW_CHAT",
+            "category": "com.rain.test.general",
+            "type": "view",
+            "provider": "missing_intent"
+        },
+        {
+            "action": "com.rain.test.serverside.INLINE_LOGGING",
+            "category": "com.rain.test.general",
+            "type": "server",
+            "provider": "/controller/intents/inline_logging.js",
+            "method": "doLogging"
+        }
+    ]
+}

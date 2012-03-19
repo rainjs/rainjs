@@ -1,0 +1,29 @@
+{
+    "id": "button",
+    "version": "2.0",
+    "views": {
+        "index" : {
+            "view": "index.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
+        },
+        "buttons" : {
+            "view": "buttons.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
+        },
+        "restricted" : {
+            "view": "restricted.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            },
+            "permissions": ["need_permissions"]
+        }
+    },
+    "intents": []
+}

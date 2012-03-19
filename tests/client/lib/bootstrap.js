@@ -1,9 +1,10 @@
 require.config({
-	baseUrl: '/components',
-	paths: {
-		'core-components': 'core-components/htdocs/js',
-		'dropdownlist': 'dropdownlist/htdocs/js',
-		'dropdownlist_example': 'dropdownlist_example/htdocs/js'
-    }
+    "debug": ('{{server.env}}' == 'production'? 'false' : 'true'),
+    "baseUrl": "/",
+    "packages": [{
+        "name": "raintime",
+        "main": "raintime",
+        "location": "core/js"
+    }],
+    "priority": ["raintime"]
 });
-
