@@ -30,11 +30,10 @@ Client side modules
 
     client/client_messaging
     client/intents
-    client/client_storage
     client/requirejs
     client/websockets
-    client/cross_referencing_css
     client/client_rendering
+    client/rendering
 
 ....
 APIs
@@ -61,6 +60,17 @@ Server side modules
     server/handlebars/css_helper
     server/handlebars/how_to_write_a_helper
     server/authorization
+    server/data_layer
+
+....
+APIs
+....
+
+.. toctree::
+    :maxdepth: 1
+    :glob:
+
+    server/api/*
 
 ----------
 Components

@@ -1,46 +1,30 @@
-var mock = require('./components_mock.js');
+"use strict";
 
-describe('get latest version', function() {
-    var componentContainer;
+var cwd = process.cwd();
+var globals = require(cwd + '/lib/globals.js');
+var config = require(cwd + '/lib/configuration.js');
+var loadFile = require(cwd + '/tests/server/rain_mocker');
 
-    var components = mock.components;
-    var versions = mock.versions;
+describe('Get latest version', function() {
+    var mockComponentRegistry, componentRegistry;
 
-    beforeEach(function() {
-        var ComponentContainer = require(process.cwd() + '/lib/componentcontainer.js').ComponentContainer;
-
-        componentContainer = {
-            componentMap: {},
-            versions: {},
-            registerComponent: ComponentContainer.prototype.registerComponent,
-            getLatestVersion: ComponentContainer.prototype.getLatestVersion,
-            scanComponentFolder: function() {
-                for (var i = 0, l = components.length; i < l; i++) {
-                    this.registerComponent(components[i]);
-                }
-            }
-        };
+    beforeEach(function () {
+        mockComponentRegistry = loadFile(process.cwd() + '/lib/component_registry.js', null, true);
+        mockComponentRegistry.scanComponentFolder();
+        componentRegistry = new mockComponentRegistry.ComponentRegistry();
     });
 
-    it('should correctly sort the versions when registering components', function() {
-        componentContainer.scanComponentFolder();
-        expect(componentContainer.versions).toEqual(versions);
+    it('must get the correct version', function () {
+        expect(componentRegistry.getLatestVersion('example', '0.0.1')).toEqual('0.0.1');
+        expect(componentRegistry.getLatestVersion('example')).toEqual('4.5.2');
+        expect(componentRegistry.getLatestVersion('example', '1.3')).toEqual('1.3.5');
+        expect(componentRegistry.getLatestVersion('example', '1')).toEqual('1.3.5');
+        expect(componentRegistry.getLatestVersion('example', '2')).toEqual('2.0.1');
     });
 
-    it('should get the correct version', function() {
-        componentContainer.scanComponentFolder();
-        expect(componentContainer.getLatestVersion('textbox', '1')).toEqual('1.7.0');
-        expect(componentContainer.getLatestVersion('textbox', '1.0.3')).toEqual('1.0.3');
-        expect(componentContainer.getLatestVersion('button')).toEqual('5.2.1');
-        expect(componentContainer.getLatestVersion('dropdown', '2.3')).toEqual('2.3.7');
-        expect(componentContainer.getLatestVersion('dropdown', '1')).toEqual('1.35.89');
-        expect(componentContainer.getLatestVersion('button', '2')).toEqual('2.4');
-    });
-
-    it('should not be found', function() {
-        componentContainer.scanComponentFolder();
-        expect(componentContainer.getLatestVersion('textbox', '6')).toBeUndefined();
-        expect(componentContainer.getLatestVersion('textbox1')).toBeUndefined();
-        expect(componentContainer.getLatestVersion('button', '4')).toBeUndefined();
+    it('must be undefined version', function () {
+        expect(componentRegistry.getLatestVersion('example', '6')).toBeUndefined();
+        expect(componentRegistry.getLatestVersion('example_dosnt_exist')).toBeUndefined();
+        expect(componentRegistry.getLatestVersion('example', '3')).toBeUndefined();
     });
 });

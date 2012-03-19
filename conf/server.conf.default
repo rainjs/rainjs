@@ -1,34 +1,25 @@
 {
     "server": {
         "port": 1337,
+        "socketsPort": 1338,
+        "timeoutForRequests" : 3,
+
         "serverRoot": ".",
-        "componentPath": "./components",
-        "socketsPort": 1338
-    },
-
-    "mothership": {
-        "port": 31337,
-        "host": "localhost",
-        "connect": true
-    },
-
-    "loglevel" : 10,
-
-    "remotecontrol" : false,
-
-    "websockets" : false,
-
-    "caching": {
-        "resources": false,
-        "ttl": 5
+        "components": ["./components"]
     },
 
     "default_language": "en_US",
+    "language": "en_US",
+
+    "errorComponent": {
+        "id": "error",
+        "version": "1.0"
+    },
 
     "loadingComponent": {
-        "namespace": "",
-        "selector": "placeholder",
-        "module": "placeholder;1.0",
-        "view": "/htdocs/index.html"
+        "id": "placeholder",
+        "version": "1.0",
+        "viewId": "index",
+        "timeout": 500
     }
 }

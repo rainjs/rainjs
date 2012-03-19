@@ -1,0 +1,42 @@
+{
+    "id": "example",
+    "version": "0.0.1",
+    "views": {
+        "index" : {
+            "view": "index.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
+        },
+        "level2" : {
+            "view": "level2.html",
+            "controller": {
+                "client": "level2.js",
+                "server": "index.js"
+            }
+        },
+        "level3" : {
+            "view": "level3.html",
+            "controller": {
+                "client": "level3.js",
+                "server": "index.js"
+            }
+        },
+        "need_permissions" : {
+            "view": "need_permissions.html",
+            "controller": {
+                "client": "need_permissions.js"
+            },
+            "permissions": ["need_permissions"]
+        },
+        "customer_error" : {
+            "view": "customer_error.html",
+            "controller": {
+                "client": "customer_error.js",
+                "server": "index.js"
+            }
+        }
+    },
+    "intents": []
+}

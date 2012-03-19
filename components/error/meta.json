@@ -1,44 +1,56 @@
 {
     "id": "error",
     "version": "1.0",
-    "url": "/components/error",
-    "views": [
-        {
-            "viewid": "default",
-            "view": "/htdocs/default.html",
-            "controller": "/htdocs/controller/index.js"
+    "views": {
+        "default": {
+            "view": "default.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
         },
-        {
-            "viewid": "400",
-            "view": "/htdocs/400.html",
-            "controller": "/htdocs/controller/index.js"
+        "400" : {
+            "view": "400.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
         },
-        {
-            "viewid": "401",
-            "view": "/htdocs/401.html",
-            "controller": "/htdocs/controller/index.js"
+        "401" : {
+            "view": "401.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
         },
-        {
-            "viewid": "403",
-            "view": "/htdocs/403.html",
-            "controller": "/htdocs/controller/index.js"
+        "403" : {
+            "view": "403.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
         },
-        {
-            "viewid": "404",
-            "view": "/htdocs/404.html",
-            "controller": "/htdocs/controller/index.js"
+        "404" : {
+            "view": "404.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
         },
-        {
-            "viewid": "408",
-            "view": "/htdocs/408.html",
-            "controller": "/htdocs/controller/index.js"
+        "408" : {
+            "view": "408.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
         },
-        {
-            "viewid": "500",
-            "view": "/htdocs/500.html",
-            "controller": "/htdocs/controller/index.js"
+        "500" : {
+            "view": "500.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
         }
-    ],
-    "taglib": [],
+    },
     "intents": []
 }
