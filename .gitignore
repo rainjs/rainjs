@@ -16,3 +16,5 @@ server.log
 jstd.log
 tests/client/reports
 npm-debug.log
+*.sublime-project
+*.sublime-workspace
