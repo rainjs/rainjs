@@ -1,4 +1,4 @@
-define([], function() {
+define(['/example/js/accordian.min.js'], function() {
     /**
      * Example controller class.
      *
@@ -22,7 +22,21 @@ define([], function() {
      *
      * @function
      */
-    Controller.prototype.start = $.noop;
+    Controller.prototype.start = function(){
+        var self = this;
+        this.context.getRoot().find('.navi').accordion({
+            collapsible: true,
+            active: false,
+            autoHeight: false,
+            change: function(event, ui){
+                self.context.insert({
+                    id: "example",
+                    view: ui.newContent.data("example-view"),
+                    placeholder: true
+                }, ui.newContent);
+            }
+        }).show();
+    };
 
     return Controller;
 });
