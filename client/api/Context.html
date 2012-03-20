@@ -103,6 +103,11 @@ view context.</p>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>component</strong> (<em>Object</em>) &#8211; The component which to be requested</li>
+<li><strong>component.id</strong> (<em>String</em>) &#8211; The component id</li>
+<li><strong>component.view</strong> (<em>String</em>) &#8211; The component view id</li>
+<li><strong>component.sid</strong> (<em>String</em>) &#8211; The component staticd id</li>
+<li><strong>component.data</strong> (<em>Object</em>) &#8211; Custom data for the template</li>
+<li><strong>component.placeholder</strong> (<em>Boolean</em>) &#8211; Enable / Disable placeholder</li>
 <li><strong>dom</strong> (<em>jQueryDom</em>) &#8211; The dom object where the component is inserted</li>
 </ul>
 </td>
@@ -117,14 +122,18 @@ view context.</p>
 <h3>replace<a class="headerlink" href="#replace" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="Context#replace">
-<tt class="descname">Context#replace</tt><big>(</big><em>component</em>, <em>dom</em><big>)</big><a class="headerlink" href="#Context#replace" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">Context#replace</tt><big>(</big><em>component</em><big>)</big><a class="headerlink" href="#Context#replace" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>component</strong> (<em>Object</em>) &#8211; The component which to be requested</li>
-<li><strong>dom</strong> (<em>jQueryDom</em>) &#8211; The dom object where the component is inserted</li>
+<li><strong>component.id</strong> (<em>String</em>) &#8211; The component id</li>
+<li><strong>component.view</strong> (<em>String</em>) &#8211; The component view id</li>
+<li><strong>component.sid</strong> (<em>String</em>) &#8211; The component staticd id</li>
+<li><strong>component.data</strong> (<em>Object</em>) &#8211; Custom data for the template</li>
+<li><strong>component.placeholder</strong> (<em>Boolean</em>) &#8211; Enable / Disable placeholder</li>
 </ul>
 </td>
 </tr>
@@ -150,7 +159,7 @@ view context.</p>
 <h3>messaging<a class="headerlink" href="#messaging" title="Permalink to this headline">¶</a></h3>
 <dl class="attribute">
 <dt id="messaging ">
-<tt class="descname">messaging </tt><a class="headerlink" href="#messaging " title="Permalink to this definition">¶</a></dt>
+<tt class="descname">messaging , <em>static</em></tt><a class="headerlink" href="#messaging " title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>Provides methods to publish and subscribe to events.</p>
@@ -232,7 +241,7 @@ view context.</p>
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

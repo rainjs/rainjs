@@ -71,7 +71,7 @@ should be named <tt class="docutils literal"><span class="pre">&lt;helper_name&g
 <ol class="arabic">
 <li><p class="first">Each module must have a class function where a basic description of the module is found. E.g.:</p>
 <blockquote>
-<div><div class="highlight-javascript"><div class="highlight"><pre><span class="cm">/**</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="cm">/**</span>
 <span class="cm"> * This Handlebars helper transforms a set of component parameters into a link tag that</span>
 <span class="cm"> * references a css file location from a specific component.</span>
 <span class="cm"> *</span>
@@ -81,26 +81,26 @@ should be named <tt class="docutils literal"><span class="pre">&lt;helper_name&g
 <span class="kd">function</span> <span class="nx">CssHelper</span><span class="p">()</span> <span class="p">{}</span>
 </pre></div>
 </div>
-</div></blockquote>
+</blockquote>
 </li>
 <li><p class="first">Each module must have the helper function that has documentation in the JSDoc format. E.g.:</p>
 <blockquote>
-<div><div class="highlight-javascript"><div class="highlight"><pre><span class="nx">CssHelper</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">helper</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">CssHelper</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">helper</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// Helper implementation</span>
 <span class="p">};</span>
 </pre></div>
 </div>
-</div></blockquote>
+</blockquote>
 </li>
 <li><p class="first">The module must export the helper name and the helper function. E.g.:</p>
 <blockquote>
-<div><div class="highlight-javascript"><div class="highlight"><pre><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
     <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;css&#39;</span><span class="p">,</span>
     <span class="nx">helper</span><span class="o">:</span> <span class="k">new</span> <span class="nx">CssHelper</span><span class="p">().</span><span class="nx">helper</span>
 <span class="p">};</span>
 </pre></div>
 </div>
-</div></blockquote>
+</blockquote>
 </li>
 </ol>
 </div>
@@ -161,7 +161,7 @@ should be named <tt class="docutils literal"><span class="pre">&lt;helper_name&g
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

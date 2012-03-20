@@ -91,6 +91,21 @@ insert
     :param Object component: 
         The component which to be requested 
     
+    :param String component.id: 
+        The component id 
+    
+    :param String component.view: 
+        The component view id 
+    
+    :param String component.sid: 
+        The component staticd id 
+    
+    :param Object component.data: 
+        Custom data for the template 
+    
+    :param Boolean component.placeholder: 
+        Enable / Disable placeholder 
+    
     :param jQueryDom dom: 
         The dom object where the component is inserted 
     
@@ -115,15 +130,27 @@ Insert a new component into the given dom Element.
 replace
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: Context#replace(component, dom)
+.. js:function:: Context#replace(component)
 
 
     
     :param Object component: 
         The component which to be requested 
     
-    :param jQueryDom dom: 
-        The dom object where the component is inserted 
+    :param String component.id: 
+        The component id 
+    
+    :param String component.view: 
+        The component view id 
+    
+    :param String component.sid: 
+        The component staticd id 
+    
+    :param Object component.data: 
+        Custom data for the template 
+    
+    :param Boolean component.placeholder: 
+        Enable / Disable placeholder 
     
 
 

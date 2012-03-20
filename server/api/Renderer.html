@@ -107,6 +107,30 @@
 
 <p>Creates an instance id related to the session id, parent instance id and static id</p>
 </div>
+<div class="section" id="isauthorized">
+<h3>isAuthorized<a class="headerlink" href="#isauthorized" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Renderer#isAuthorized">
+<tt class="descname">Renderer#isAuthorized</tt><big>(</big><em>childComponent</em><big>)</big><a class="headerlink" href="#Renderer#isAuthorized" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>childComponent</strong> (<em>Object</em>) &#8211; The component information for the rendering process</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Returns Boolean:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"><p class="first last">Returns the authorization status</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Checks the user permissions and replace the component with an error component if the user ha no rights</p>
+</div>
 <div class="section" id="loaddataandsend">
 <h3>loadDataAndSend<a class="headerlink" href="#loaddataandsend" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
@@ -193,7 +217,7 @@ This is only used for the HTTP transport layer</p>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>opt</strong> (<em>Object</em>) &#8211; Map of component information for the <a class="reference internal" href="#Renderer#renderComponent" title="Renderer#renderComponent"><tt class="xref js js-func docutils literal"><span class="pre">Renderer#renderComponent()</span></tt></a></li>
-<li><strong>opt</strong> &#8211; </li>
+<li><strong>opt</strong> (<em>Object</em>) &#8211; </li>
 </ul>
 </td>
 </tr>
@@ -235,6 +259,7 @@ This is only used for the HTTP transport layer</p>
 <li><a class="reference internal" href="#methods">Methods</a><ul>
 <li><a class="reference internal" href="#clientrendererscript">clientRendererScript</a></li>
 <li><a class="reference internal" href="#createinstanceid">createInstanceId</a></li>
+<li><a class="reference internal" href="#isauthorized">isAuthorized</a></li>
 <li><a class="reference internal" href="#loaddataandsend">loadDataAndSend</a></li>
 <li><a class="reference internal" href="#renderbootstrap">renderBootstrap</a></li>
 <li><a class="reference internal" href="#rendercomponent">renderComponent</a></li>
@@ -288,7 +313,7 @@ This is only used for the HTTP transport layer</p>
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

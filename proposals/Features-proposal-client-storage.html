@@ -54,7 +54,7 @@
 <div class="section" id="functional-requirements">
 <h2>Functional requirements<a class="headerlink" href="#functional-requirements" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li>Application developers must be able to store information on browser level.</li>
 <li>Application developers must be able to store sensitive data in a secure way.</li>
 <li>Application developers must be able to share data across multiple pages.</li>
@@ -63,7 +63,7 @@
 <li>Application developers must be able to intercept the storage events.</li>
 <li>ClientStorage must guarantee that private storage is isolated and can not be overriden by other components.</li>
 </ol>
-</div></blockquote>
+</blockquote>
 </div>
 <div class="section" id="use-cases">
 <h2>Use cases<a class="headerlink" href="#use-cases" title="Permalink to this headline">¶</a></h2>
@@ -113,18 +113,18 @@ amplify.request</p>
 <h2>Design<a class="headerlink" href="#design" title="Permalink to this headline">¶</a></h2>
 <p>From the use cases presented above result two major storage mechanism:</p>
 <blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li>a persistent storage</li>
 <li>a transient storage</li>
 </ul>
-</div></blockquote>
+</blockquote>
 <p>Each storage must provide the following partitions:</p>
 <blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li>a private / dedicated partition - a shared scope for a limited number of pages / objects.</li>
 <li>a global partition - a global scope accessible by everyone.</li>
 </ul>
-</div></blockquote>
+</blockquote>
 </div>
 <div class="section" id="api">
 <h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
@@ -230,20 +230,20 @@ amplify.request</p>
 <li>You must be aware on the fact that storage marked transparently can be referenced across multiple pages only if pages are displayed within the same tab or window. This is really important to take in consideration when using storages.</li>
 </ol>
 <blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li>The above mentioned limitation applies also to listeners.</li>
 </ol>
-</div></blockquote>
+</blockquote>
 </div>
 <div class="section" id="technical-details">
 <h2>Technical details<a class="headerlink" href="#technical-details" title="Permalink to this headline">¶</a></h2>
 <p>The intention is to provide a proof of concept for this feature as soon as possible. Before we decide on this there are some frameworks that guarantee graceful degrade in case storage is not supported by browsers. Below you can find a list of such frameworks:</p>
 <blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li>Amplifyjs - <a class="reference external" href="http://amplifyjs.com/api/store/">http://amplifyjs.com/api/store/</a></li>
 <li>Dojo storage - <a class="reference external" href="http://google-opensource.blogspot.com/2008/03/dojo-storage.html">http://google-opensource.blogspot.com/2008/03/dojo-storage.html</a> - I think this will bring an overhead (we already use jQuery).</li>
 </ul>
-</div></blockquote>
+</blockquote>
 <p>An alternative to the frameworks mentioned about would be to simply assume all browsers that access RAIN specific applications have HTML 5 support and we do not provide gracefully degrading support.</p>
 </div>
 </div>
@@ -330,7 +330,7 @@ amplify.request</p>
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>
