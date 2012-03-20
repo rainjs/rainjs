@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class ClientStorage &mdash; Rain v0.6.0 documentation</title>
+    <title>Class ClientStorage &mdash; Rain v0.7.0 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.6.0',
+        VERSION:     '0.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,8 +22,8 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.6.0 documentation" href="../../index.html" />
-    <link rel="next" title="Class Component" href="Component.html" />
+    <link rel="top" title="Rain v0.7.0 documentation" href="../../index.html" />
+    <link rel="next" title="Class ClientUtil" href="ClientUtil.html" />
     <link rel="prev" title="Class ClientRenderer" href="ClientRenderer.html" /> 
   </head>
   <body>
@@ -34,12 +34,12 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="Component.html" title="Class Component"
+          <a href="ClientUtil.html" title="Class ClientUtil"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="ClientRenderer.html" title="Class ClientRenderer"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -50,13 +50,40 @@
             
   <div class="section" id="class-clientstorage">
 <h1>Class ClientStorage<a class="headerlink" href="#class-clientstorage" title="Permalink to this headline">¶</a></h1>
-<p>Client storage implementation</p>
+<p>Creates a new client storage for the current context.</p>
+<p>It provides methods to work with the client data. The storage methods can be used directly
+from the the controller&#8217;s context through the <em>storage</em> key.</p>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">storage</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;cart&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">items</span><span class="o">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="nx">total</span><span class="o">:</span> <span class="mi">10</span><span class="p">});</span>
+<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">storage</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;cart&#39;</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+
+<span class="c1">// That will print</span>
+<span class="c1">//     {</span>
+<span class="c1">//         items: [1, 2, 3, 4],</span>
+<span class="c1">//         total: 10</span>
+<span class="c1">//     }</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="constructor">
 <h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="ClientStorage">
-<em class="property">class </em><tt class="descname">ClientStorage</tt><big>(</big><big>)</big><a class="headerlink" href="#ClientStorage" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<em class="property">class </em><tt class="descname">ClientStorage</tt><big>(</big><em>context</em><big>)</big><a class="headerlink" href="#ClientStorage" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>context</strong> (<a class="reference internal" href="Context.html#Context" title="Context"><em>Context</em></a>) &#8211; the context of the component.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </div>
 <div class="section" id="methods">
@@ -71,23 +98,19 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>key</strong> (<em>String</em>) &#8211; </li>
-<li><strong>isTransient</strong> (<em>Boolean</em>) &#8211; whether to use persistent storage or transient storage (defaults to false)</li>
+<li><strong>key</strong> (<em>String</em>) &#8211; the key</li>
+<li><strong>isTransient</strong> (<em>Boolean</em>) &#8211; whether to use persistent storage or transient storage (<em>Default</em>: &#8216;false&#8217;)</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Throws Error:</th><td class="field-body"><p class="first">: if client storage is not supported</p>
-</td>
-</tr>
-<tr class="field"><th class="field-name" colspan="2">Returns String|Boolean:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><p class="first last">the value of key or null on failure</p>
+<tr class="field"><th class="field-name">Returns Object:</th><td class="field-body"><p class="first last">the key value</p>
 </td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<p>Retrieves the value of key from storage</p>
+<p>Retrieves the value of a key from storage.</p>
 </div>
 <div class="section" id="remove">
 <h3>remove<a class="headerlink" href="#remove" title="Permalink to this headline">¶</a></h3>
@@ -98,20 +121,17 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>key</strong> (<em>String</em>) &#8211; </li>
-<li><strong>isTransient</strong> (<em>Boolean</em>) &#8211; whether to use persistent storage or transient storage (defaults to false)</li>
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>key</strong> (<em>String</em>) &#8211; the key</li>
+<li><strong>isTransient</strong> (<em>Boolean</em>) &#8211; whether to use persistent storage or transient storage (<em>Default</em>: &#8216;false&#8217;)</li>
 </ul>
-</td>
-</tr>
-<tr class="field"><th class="field-name">Throws Error:</th><td class="field-body"><p class="first last">: if client storage is not supported</p>
 </td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<p>Remove the key from storage</p>
+<p>Removes a key from storage.</p>
 </div>
 <div class="section" id="set">
 <h3>set<a class="headerlink" href="#set" title="Permalink to this headline">¶</a></h3>
@@ -122,21 +142,18 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>key</strong> (<em>String</em>) &#8211; </li>
-<li><strong>value</strong> (<em>Object</em>) &#8211; </li>
-<li><strong>isTransient</strong> (<em>Boolean</em>) &#8211; whether to use persistent storage or transient storage (defaults to false)</li>
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>key</strong> (<em>String</em>) &#8211; the key</li>
+<li><strong>value</strong> (<em>Object</em>) &#8211; the value</li>
+<li><strong>isTransient</strong> (<em>Boolean</em>) &#8211; whether to use persistent storage or transient storage (<em>Default</em>: &#8216;false&#8217;)</li>
 </ul>
-</td>
-</tr>
-<tr class="field"><th class="field-name">Throws Error:</th><td class="field-body"><p class="first last">: if client storage is not supported</p>
 </td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<p>Set the value of key (add it if key doesn&#8217;t exist) into storage</p>
+<p>Sets the value of a key (add it if key doesn&#8217;t exist) into storage.</p>
 </div>
 </div>
 </div>
@@ -150,6 +167,7 @@
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Class ClientStorage</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
 <li><a class="reference internal" href="#constructor">Constructor</a></li>
 <li><a class="reference internal" href="#methods">Methods</a><ul>
 <li><a class="reference internal" href="#get">get</a></li>
@@ -165,8 +183,8 @@
   <p class="topless"><a href="ClientRenderer.html"
                         title="previous chapter">Class ClientRenderer</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="Component.html"
-                        title="next chapter">Class Component</a></p>
+  <p class="topless"><a href="ClientUtil.html"
+                        title="next chapter">Class ClientUtil</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -191,12 +209,12 @@
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="Component.html" title="Class Component"
+          <a href="ClientUtil.html" title="Class ClientUtil"
              >next</a> |</li>
         <li class="right" >
           <a href="ClientRenderer.html" title="Class ClientRenderer"
              >previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

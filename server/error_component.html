@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Error component &mdash; Rain v0.6.0 documentation</title>
+    <title>Error component &mdash; Rain v0.7.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.6.0',
+        VERSION:     '0.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,9 +22,9 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.6.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.7.0 documentation" href="../index.html" />
     <link rel="next" title="Placeholder" href="placeholder.html" />
-    <link rel="prev" title="Authorization" href="authorization.html" /> 
+    <link rel="prev" title="Class Server" href="api/Server.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,9 +37,9 @@
           <a href="placeholder.html" title="Placeholder"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="authorization.html" title="Authorization"
+          <a href="api/Server.html" title="Class Server"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -75,51 +75,49 @@ version will be used):</p>
 <div class="section" id="view-example">
 <h3>View Example<a class="headerlink" href="#view-example" title="Permalink to this headline">¶</a></h3>
 <p>The following example shows how the view for the 500 error code can look like:</p>
-<div class="highlight-html"><div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="nt">&lt;html&gt;</span>
-    <span class="nt">&lt;head&gt;</span>
-        <span class="nt">&lt;title&gt;</span>Application Error<span class="nt">&lt;/title&gt;</span>
+<div class="highlight-html"><div class="highlight"><pre>{{css path=&quot;index.css&quot;}}
 
-        {{css path=&quot;index.css&quot;}}
-    <span class="nt">&lt;/head&gt;</span>
-    <span class="nt">&lt;body&gt;</span>
-        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;h1&gt;</span>500 Internal Server Error<span class="nt">&lt;/h1&gt;</span>
-            <span class="nt">&lt;p&gt;</span>
-                An unexpected condition was encountered. Please try the request again.
-            <span class="nt">&lt;/p&gt;</span>
-        <span class="nt">&lt;/div&gt;</span>
-    <span class="nt">&lt;/body&gt;</span>
-<span class="nt">&lt;/html&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>500 Internal Server Error<span class="nt">&lt;/h1&gt;</span>
+    <span class="nt">&lt;p&gt;</span>
+        An unexpected condition was encountered. Please try the request again.
+    <span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;p&gt;</span>
+        {{{error.stack}}}
+    <span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="meta-json">
 <h3>meta.json<a class="headerlink" href="#meta-json" title="Permalink to this headline">¶</a></h3>
-<p>This is the <cite>meta.json</cite> for this component. To specify a custom message for a error you add a view
-for which the <cite>viewid</cite> is the same as the error code. If a view for an error doesn&#8217;t exist, the
-<cite>default</cite> view will be displayed:</p>
+<p>This is the <tt class="docutils literal"><span class="pre">meta.json</span></tt> for this component. To specify a custom message for a error you add a
+view for which the view id is the same as the error code. If a view for an error doesn&#8217;t exist,
+the <cite>default</cite> view will be displayed:</p>
 <div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span>
     <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="s2">&quot;error_pages&quot;</span><span class="p">,</span>
     <span class="s2">&quot;version&quot;</span><span class="o">:</span> <span class="s2">&quot;1.0&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;url&quot;</span><span class="o">:</span> <span class="s2">&quot;/components/error_pages&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;views&quot;</span><span class="o">:</span> <span class="p">[</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;viewid&quot;</span><span class="o">:</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;view&quot;</span><span class="o">:</span> <span class="s2">&quot;/htdocs/default.html&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;controller&quot;</span><span class="o">:</span> <span class="s2">&quot;/htdocs/controller/default.js&quot;</span>
+    <span class="s2">&quot;views&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;default&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;view&quot;</span><span class="o">:</span> <span class="s2">&quot;default.html&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;controller&quot;</span><span class="o">:</span> <span class="p">{</span>
+                <span class="s2">&quot;client&quot;</span><span class="o">:</span> <span class="s2">&quot;default.js&quot;</span>
+            <span class="p">}</span>
         <span class="p">},</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;viewid&quot;</span><span class="o">:</span> <span class="s2">&quot;404&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;view&quot;</span><span class="o">:</span> <span class="s2">&quot;/htdocs/404.html&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;controller&quot;</span><span class="o">:</span> <span class="s2">&quot;/htdocs/controller/404.js&quot;</span>
+        <span class="s2">&quot;404&quot;</span> <span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;view&quot;</span><span class="o">:</span> <span class="s2">&quot;404.html&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;controller&quot;</span><span class="o">:</span> <span class="p">{</span>
+                <span class="s2">&quot;client&quot;</span><span class="o">:</span> <span class="s2">&quot;404.js&quot;</span>
+            <span class="p">}</span>
         <span class="p">},</span>
-        <span class="p">{</span>
-            <span class="s2">&quot;viewid&quot;</span><span class="o">:</span> <span class="s2">&quot;500&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;view&quot;</span><span class="o">:</span> <span class="s2">&quot;/htdocs/500.html&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;controller&quot;</span><span class="o">:</span> <span class="s2">&quot;/htdocs/controller/500.js&quot;</span>
+        <span class="s2">&quot;500&quot;</span> <span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;view&quot;</span><span class="o">:</span> <span class="s2">&quot;500.html&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;controller&quot;</span><span class="o">:</span> <span class="p">{</span>
+                <span class="s2">&quot;client&quot;</span><span class="o">:</span> <span class="s2">&quot;500.js&quot;</span>
+            <span class="p">}</span>
         <span class="p">}</span>
-    <span class="p">]</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -151,8 +149,8 @@ for which the <cite>viewid</cite> is the same as the error code. If a view for a
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="authorization.html"
-                        title="previous chapter">Authorization</a></p>
+  <p class="topless"><a href="api/Server.html"
+                        title="previous chapter">Class Server</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="placeholder.html"
                         title="next chapter">Placeholder</a></p>
@@ -183,9 +181,9 @@ for which the <cite>viewid</cite> is the same as the error code. If a view for a
           <a href="placeholder.html" title="Placeholder"
              >next</a> |</li>
         <li class="right" >
-          <a href="authorization.html" title="Authorization"
+          <a href="api/Server.html" title="Class Server"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

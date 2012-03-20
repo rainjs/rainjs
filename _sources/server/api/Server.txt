@@ -1,0 +1,72 @@
+
+
+
+
+
+
+..
+    Classes and methods
+
+Class Server
+================================================================================
+
+..
+   class-title
+
+
+Configures the server components and starts it.
+
+
+
+
+
+
+
+
+    
+
+
+Constructor
+-----------
+
+.. js:class:: Server()
+
+
+
+
+
+
+
+
+
+    
+
+Attributes
+----------
+
+..
+   class-attributes
+
+
+config
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:attribute:: config   
+
+
+the server configuration
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+

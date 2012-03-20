@@ -1,0 +1,94 @@
+
+
+
+
+
+
+..
+    Classes and methods
+
+Class DataLayer
+================================================================================
+
+..
+   class-title
+
+
+This module is used to call the server-side functions.
+
+
+
+
+
+
+
+
+    
+
+
+Constructor
+-----------
+
+.. js:class:: DataLayer()
+
+
+
+
+
+
+
+
+
+Methods
+-------
+
+..
+   class-methods
+
+
+loadData
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: DataLayer#loadData(componentOpt, callback)
+
+
+    
+    :param Object componentOpt: 
+        the component information 
+    
+    :param Object componentOpt.id: 
+        the component id 
+    
+    :param Object componentOpt.version: 
+        the component version 
+    
+    :param Object componentOpt.viewId: 
+        the view id 
+    
+    :param Function callback: 
+        receives the error and data as parameter 
+    
+
+
+
+
+Validates all necessary parameters and invokes the data function from the component
+to receive custom data. If the data returns, it calls the callback function.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    
+
+
+

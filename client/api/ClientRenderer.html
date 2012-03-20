@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class ClientRenderer &mdash; Rain v0.6.0 documentation</title>
+    <title>Class ClientRenderer &mdash; Rain v0.7.0 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.6.0',
+        VERSION:     '0.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,9 +22,9 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.6.0 documentation" href="../../index.html" />
+    <link rel="top" title="Rain v0.7.0 documentation" href="../../index.html" />
     <link rel="next" title="Class ClientStorage" href="ClientStorage.html" />
-    <link rel="prev" title="Namespace Authorization" href="Authorization.html" /> 
+    <link rel="prev" title="Rendering" href="../rendering.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,9 +37,9 @@
           <a href="ClientStorage.html" title="Class ClientStorage"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="Authorization.html" title="Namespace Authorization"
+          <a href="../rendering.html" title="Rendering"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -50,10 +50,10 @@
             
   <div class="section" id="class-clientrenderer">
 <h1>Class ClientRenderer<a class="headerlink" href="#class-clientrenderer" title="Permalink to this headline">¶</a></h1>
-<p>Handler for asynchroniously rendering components in rain. This is achived by sending each component
-individually to the client as soon as it&#8217;s available as a JSONP call to the renderer. This way the user
-gets a more responsive experience, since every comonent gets rendered as soon as it&#8217;s available, thus
-giving quicker visual feedback to the user.</p>
+<p>The ClientRenderer handles the registration and inserting of new components from the server.
+If a component takes too long to be obtained from the server, a placeholder is used to show
+that the component is still loading.</p>
+<p>This works for all transport layers.</p>
 <div class="section" id="constructor">
 <h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -64,46 +64,6 @@ giving quicker visual feedback to the user.</p>
 </div>
 <div class="section" id="methods">
 <h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="createtemporarywrapper">
-<h3>createTemporaryWrapper<a class="headerlink" href="#createtemporarywrapper" title="Permalink to this headline">¶</a></h3>
-<dl class="function">
-<dt id="ClientRenderer#createTemporaryWrapper">
-<tt class="descname">ClientRenderer#createTemporaryWrapper</tt><big>(</big><em>selector</em><big>)</big><a class="headerlink" href="#ClientRenderer#createTemporaryWrapper" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>selector</strong> (<em>String</em>) &#8211; a jQuery selector for the element after which to append the wrapper</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<p>Create a wrapper in which the response will be placed</p>
-</div>
-<div class="section" id="loadcomponent">
-<h3>loadComponent<a class="headerlink" href="#loadcomponent" title="Permalink to this headline">¶</a></h3>
-<dl class="function">
-<dt id="ClientRenderer#loadComponent">
-<tt class="descname">ClientRenderer#loadComponent</tt><big>(</big><em>options</em><big>)</big><a class="headerlink" href="#ClientRenderer#loadComponent" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>options</strong> (<em>Object</em>) &#8211; the data to be sent to the server</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<p>Requests a component from the server that will be rendered as soon as it is available.</p>
-</div>
 <div class="section" id="rendercomponent">
 <h3>renderComponent<a class="headerlink" href="#rendercomponent" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
@@ -114,7 +74,7 @@ giving quicker visual feedback to the user.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>component</strong> (<em>Object</em>) &#8211; the component to be rendered</li>
+<li><strong>component</strong> (<em>Object</em>) &#8211; the rendered component</li>
 </ul>
 </td>
 </tr>
@@ -122,7 +82,87 @@ giving quicker visual feedback to the user.</p>
 </table>
 </dd></dl>
 
-<p>Render a component recived via JSONP.</p>
+<p>Renders the component to the DOM and registers it.</p>
+</div>
+<div class="section" id="renderplaceholder">
+<h3>renderPlaceholder<a class="headerlink" href="#renderplaceholder" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ClientRenderer#renderPlaceholder">
+<tt class="descname">ClientRenderer#renderPlaceholder</tt><big>(</big><em>instanceId</em><big>)</big><a class="headerlink" href="#ClientRenderer#renderPlaceholder" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>instanceId</strong> (<em>String</em>) &#8211; the instanceId of the component for the placeholder</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Renders the placeholder.</p>
+</div>
+<div class="section" id="requestcomponent">
+<h3>requestComponent<a class="headerlink" href="#requestcomponent" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ClientRenderer#requestComponent">
+<tt class="descname">ClientRenderer#requestComponent</tt><big>(</big><em>component</em><big>)</big><a class="headerlink" href="#ClientRenderer#requestComponent" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>component</strong> (<em>Object</em>) &#8211; the information about the requested component</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Requests a component over websockets.</p>
+</div>
+<div class="section" id="setplaceholder">
+<h3>setPlaceholder<a class="headerlink" href="#setplaceholder" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ClientRenderer#setPlaceholder">
+<tt class="descname">ClientRenderer#setPlaceholder</tt><big>(</big><em>component</em><big>)</big><a class="headerlink" href="#ClientRenderer#setPlaceholder" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>component</strong> (<em>Object</em>) &#8211; the whole rendered placeholder component</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Sets the placeholder component.</p>
+</div>
+<div class="section" id="setplaceholdertimeout">
+<h3>setPlaceholderTimeout<a class="headerlink" href="#setplaceholdertimeout" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ClientRenderer#setPlaceholderTimeout">
+<tt class="descname">ClientRenderer#setPlaceholderTimeout</tt><big>(</big><em>milliseconds</em><big>)</big><a class="headerlink" href="#ClientRenderer#setPlaceholderTimeout" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>milliseconds</strong> (<em>Number</em>) &#8211; time in milliseconds</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Sets the placeholder timeout which is set from the server configuration.</p>
 </div>
 </div>
 </div>
@@ -138,9 +178,11 @@ giving quicker visual feedback to the user.</p>
 <li><a class="reference internal" href="#">Class ClientRenderer</a><ul>
 <li><a class="reference internal" href="#constructor">Constructor</a></li>
 <li><a class="reference internal" href="#methods">Methods</a><ul>
-<li><a class="reference internal" href="#createtemporarywrapper">createTemporaryWrapper</a></li>
-<li><a class="reference internal" href="#loadcomponent">loadComponent</a></li>
 <li><a class="reference internal" href="#rendercomponent">renderComponent</a></li>
+<li><a class="reference internal" href="#renderplaceholder">renderPlaceholder</a></li>
+<li><a class="reference internal" href="#requestcomponent">requestComponent</a></li>
+<li><a class="reference internal" href="#setplaceholder">setPlaceholder</a></li>
+<li><a class="reference internal" href="#setplaceholdertimeout">setPlaceholderTimeout</a></li>
 </ul>
 </li>
 </ul>
@@ -148,8 +190,8 @@ giving quicker visual feedback to the user.</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="Authorization.html"
-                        title="previous chapter">Namespace Authorization</a></p>
+  <p class="topless"><a href="../rendering.html"
+                        title="previous chapter">Rendering</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="ClientStorage.html"
                         title="next chapter">Class ClientStorage</a></p>
@@ -180,9 +222,9 @@ giving quicker visual feedback to the user.</p>
           <a href="ClientStorage.html" title="Class ClientStorage"
              >next</a> |</li>
         <li class="right" >
-          <a href="Authorization.html" title="Namespace Authorization"
+          <a href="../rendering.html" title="Rendering"
              >previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

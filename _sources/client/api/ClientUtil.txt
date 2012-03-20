@@ -1,0 +1,312 @@
+
+
+
+
+
+
+..
+    Classes and methods
+
+Class ClientUtil
+================================================================================
+
+..
+   class-title
+
+
+A singleton utility class.
+
+
+
+
+
+
+
+
+    
+
+
+Constructor
+-----------
+
+.. js:class:: ClientUtil()
+
+
+
+
+
+
+
+
+
+Methods
+-------
+
+..
+   class-methods
+
+
+bind
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: ClientUtil#bind(f, scope)
+
+
+    
+    :param Function f: 
+        the function to which scope and/or arguments are bound 
+    
+    :param Object scope: 
+        the scope to bind to the function 
+    
+
+
+    
+    :throws Error:
+        : illegal argument exception if f is not a function
+    
+
+
+    
+    :returns Function:
+        the bound function 
+    
+
+
+Binds scope and arguments to a function.
+All arguments passed after scope are considered bound.
+Arguments passed to the binder function at call-time are also passed through at the
+end of the parameter list, after the original bound parameters.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+bindPrivate
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: ClientUtil#bindPrivate(f, scope)
+
+
+    
+    :param Function f: 
+        the function to which scope and/or arguments are bound 
+    
+    :param Object scope: 
+        the scope to bind as the first parameter of the function 
+    
+
+
+
+    
+    :returns Function:
+        the bound function 
+    
+
+
+Helper bind function for working with private methods.
+Automatically binds the first parameter to be the scope too.
+
+
+
+
+
+
+
+.. seealso::
+
+    #bind
+
+
+
+    
+
+
+
+decorate
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: ClientUtil#decorate(f, advice)
+
+
+    
+    :param Function f: 
+        the function to be decorated 
+    
+    :param Object advice: 
+        holds advice functions 
+    
+    :param Function advice.before: 
+        An advice (function) to insert before the actual call 
+    
+    :param Function advice.after: 
+        An advice (function) to insert after the actual call 
+    
+    :param Function advice.exception: 
+        An advice (function) to call in case of an
+exception being thrown from the original function 
+    
+
+
+    
+    :throws Error:
+        : illegal argument exception if f is not a function
+    
+    :throws Error:
+        : illegal argument exception if any of the possible advices is not a function
+    
+
+
+
+Decorate a function with advice.
+Use {@link #bind} to bind the advice functions to the desired scope.
+
+
+
+
+
+
+
+.. seealso::
+
+    #bind
+
+
+
+    
+
+
+
+defer
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: ClientUtil#defer(f)
+
+
+    
+    :param Function f: 
+        the function to defer 
+    
+
+
+
+
+Defers the execution of a function until the first possible moment to run it.
+Use {@link #bind} to bind scope and arguments to the function.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+getSession
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: ClientUtil#getSession()
+
+
+
+
+    
+    :returns String:
+        the rain session id 
+    
+
+
+Returns the rain session id.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+inherits
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: ClientUtil#inherits(ctor, superCtor)
+
+
+    
+    :param Object ctor: 
+        the derived constructor function 
+    
+    :param Object superCtor: 
+        the base constructor function 
+    
+
+
+
+
+Makes a function inherit from another's prototype.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+inject
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: ClientUtil#inject(on, from)
+
+
+    
+    :param Object on: 
+        the object which borrows the properties 
+    
+    :param Object from: 
+        the object which lends the properties 
+    
+
+
+
+
+Inject the properties from one object into another.
+Useful for borrowing methods.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    
+
+
+

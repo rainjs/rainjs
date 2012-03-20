@@ -1,0 +1,223 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class ComponentRegistry &mdash; Rain v0.7.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.7.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Rain v0.7.0 documentation" href="../../index.html" />
+    <link rel="next" title="Class Configuration" href="Configuration.html" />
+    <link rel="prev" title="Class ComponentHelper" href="ComponentHelper.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Configuration.html" title="Class Configuration"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ComponentHelper.html" title="Class ComponentHelper"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="class-componentregistry">
+<h1>Class ComponentRegistry<a class="headerlink" href="#class-componentregistry" title="Permalink to this headline">¶</a></h1>
+<p>Keeps components configuration and exposes an interface to obtain information about them.</p>
+<div class="section" id="constructor">
+<h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="ComponentRegistry">
+<em class="property">class </em><tt class="descname">ComponentRegistry</tt><big>(</big><big>)</big><a class="headerlink" href="#ComponentRegistry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="getconfig">
+<h3>getConfig<a class="headerlink" href="#getconfig" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ComponentRegistry#getConfig">
+<tt class="descname">ComponentRegistry#getConfig</tt><big>(</big><em>id</em>, <em>version</em><big>)</big><a class="headerlink" href="#ComponentRegistry#getConfig" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>id</strong> (<em>String</em>) &#8211; the id of the component</li>
+<li><strong>version</strong> (<em>String</em>) &#8211; the version of the component</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns Object:</th><td class="field-body"><p class="first last">the component configuration</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Gets the configuration for a component.</p>
+</div>
+<div class="section" id="getlatestversion">
+<h3>getLatestVersion<a class="headerlink" href="#getlatestversion" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ComponentRegistry#getLatestVersion">
+<tt class="descname">ComponentRegistry#getLatestVersion</tt><big>(</big><em>componentId</em><span class="optional">[</span>, <em>fragment</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#ComponentRegistry#getLatestVersion" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>componentId</strong> (<em>String</em>) &#8211; the id of the component</li>
+<li><strong>fragment</strong> (<em>String</em>) &#8211; a version fragment</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns String:</th><td class="field-body"><p class="first last">the latest version of the component of undefined if it isn&#8217;t found</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Returns the latest version for a component. This method also supports
+specifying version fragments in the second optional parameter. This means
+that if the provided version is &#8220;1&#8221;, it will return the latest version that
+has &#8220;1&#8221; as its major version (like &#8220;1.8.5&#8221;). You can also specify an exact
+version in the fragment. If the component isn&#8217;t found, it returns undefined.
+Also, if you provide a fragment that it is too big, it will return undefined
+(like 3.2 and the latest version is 2.5.3).</p>
+</div>
+<div class="section" id="initialize">
+<h3>initialize<a class="headerlink" href="#initialize" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ComponentRegistry#initialize">
+<tt class="descname">ComponentRegistry#initialize</tt><big>(</big><em>config</em><big>)</big><a class="headerlink" href="#ComponentRegistry#initialize" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>config</strong> (<a class="reference internal" href="Configuration.html#Configuration" title="Configuration"><em>Configuration</em></a>) &#8211; Instance of configuration module</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Returns ComponentRegistry:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"><p class="first last">the class instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Registers the components, holds their configuration configures the plugins.</p>
+</div>
+</div>
+<div class="section" id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="component-metafile">
+<h3>COMPONENT_METAFILE<a class="headerlink" href="#component-metafile" title="Permalink to this headline">¶</a></h3>
+<dl class="attribute">
+<dt id="COMPONENT_METAFILE ">
+<tt class="descname">COMPONENT_METAFILE </tt><a class="headerlink" href="#COMPONENT_METAFILE " title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The name of the component configuration file. It is a constant.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class ComponentRegistry</a><ul>
+<li><a class="reference internal" href="#constructor">Constructor</a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#getconfig">getConfig</a></li>
+<li><a class="reference internal" href="#getlatestversion">getLatestVersion</a></li>
+<li><a class="reference internal" href="#initialize">initialize</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#attributes">Attributes</a><ul>
+<li><a class="reference internal" href="#component-metafile">COMPONENT_METAFILE</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ComponentHelper.html"
+                        title="previous chapter">Class ComponentHelper</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Configuration.html"
+                        title="next chapter">Class Configuration</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Configuration.html" title="Class Configuration"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ComponentHelper.html" title="Class ComponentHelper"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

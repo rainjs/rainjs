@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>CSS Helper &mdash; Rain v0.6.0 documentation</title>
+    <title>CSS Helper &mdash; Rain v0.7.0 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.6.0',
+        VERSION:     '0.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.6.0 documentation" href="../../index.html" />
+    <link rel="top" title="Rain v0.7.0 documentation" href="../../index.html" />
     <link rel="next" title="Guidelines for writing a Handlebars helper" href="how_to_write_a_helper.html" />
     <link rel="prev" title="Component Helper" href="component_helper.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="component_helper.html" title="Component Helper"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -51,12 +51,12 @@
   <div class="section" id="css-helper">
 <h1>CSS Helper<a class="headerlink" href="#css-helper" title="Permalink to this headline">¶</a></h1>
 <p>The <strong>CSS</strong> helper is a custom Handlebars <a class="footnote-reference" href="#handlebars" id="id1">[1]</a> helper that is used to declare references to CSS files
-inside the current component or from other RAIN components. It will generate an HTML <em>link</em> tag
-with the <em>href</em> attribute corresponding to the location of the CSS file.</p>
+inside the current component or from other RAIN components. It collects the links corresponding to the location of the CSS file
+and give it back to the component.</p>
 <div class="section" id="usage">
 <span id="handlebars-css-helper-usage"></span><h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>The following line references the <em>index.css</em> file from the current component, found at the
-following physical location: <tt class="docutils literal"><span class="pre">&lt;component_folder&gt;/htdocs/css/index.css</span></tt>:</p>
+following physical location: <tt class="docutils literal"><span class="pre">&lt;component_folder&gt;/client/css/index.css</span></tt>:</p>
 <div class="highlight-python"><pre>{{css path="index.css"}}</pre>
 </div>
 <p>The following line references the <tt class="docutils literal"><span class="pre">index.css</span></tt> file from the <em>button</em> component, version <em>1.1</em>:</p>
@@ -65,31 +65,25 @@ following physical location: <tt class="docutils literal"><span class="pre">&lt;
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">The css helper declaration <strong>must</strong> include a <em>path</em> parameter that defines the location of the
-CSS file found in the <tt class="docutils literal"><span class="pre">&lt;component_folder&gt;/htdocs/css/</span></tt> folder. This is the only parameter that
+CSS file found in the <tt class="docutils literal"><span class="pre">&lt;component_folder&gt;/client/css/</span></tt> folder. This is the only parameter that
 is not optional.</p>
 </div>
 </div>
 <div class="section" id="html-output">
 <h2>HTML output<a class="headerlink" href="#html-output" title="Permalink to this headline">¶</a></h2>
-<p>The declaration <em>{{css path=&#8221;index.css&#8221;}}</em> generates the following <em>link</em> tag:</p>
-<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;htdocs/css/index.css&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">/&gt;</span>
+<p>The declaration <em>{{css path=&#8221;index.css&#8221;}}</em> generates the following <em>link</em> tag on client side:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;link</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;/componentId/componentVersion/css/index.css&quot;</span> <span class="nt">/&gt;</span>
 </pre></div>
 </div>
 <p>The declaration <em>{{css component=&#8221;button&#8221; version=&#8221;1.1&#8221; path=&#8221;index.css&#8221;}}</em> generates
-the following <em>link</em> tag:</p>
-<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;webcomponent://button;1.1/htdocs/css/index.css&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">/&gt;</span>
+the following <em>link</em> tag on client side:</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;link</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;/button/1.1/css/index.css&quot;</span> <span class="nt">/&gt;</span>
 </pre></div>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">When the component id and / or version is declared and the pair corresponds to the current
-component, the output will not use the <tt class="docutils literal"><span class="pre">webcomponent</span></tt> prefix and instead just reference the
-file located in the current component&#8217;s folder structure.</p>
 </div>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><tt class="xref js js-class docutils literal"><span class="pre">CssHelper()</span></tt></dt>
+<dt><a class="reference internal" href="../api/CssHelper.html#CssHelper" title="CssHelper"><tt class="xref js js-class docutils literal"><span class="pre">CssHelper()</span></tt></a></dt>
 <dd>CSS Helper API</dd>
 <dt><a class="reference internal" href="../component_versioning.html"><em>Component Versioning</em></a></dt>
 <dd>How RAIN handles multiple component versions</dd>
@@ -155,7 +149,7 @@ file located in the current component&#8217;s folder structure.</p>
         <li class="right" >
           <a href="component_helper.html" title="Component Helper"
              >previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

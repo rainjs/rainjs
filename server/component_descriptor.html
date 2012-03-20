@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>RAIN component descriptor &mdash; Rain v0.6.0 documentation</title>
+    <title>RAIN component descriptor &mdash; Rain v0.7.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.6.0',
+        VERSION:     '0.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.6.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.7.0 documentation" href="../index.html" />
     <link rel="next" title="Component Versioning" href="component_versioning.html" />
     <link rel="prev" title="RAIN Websockets" href="websockets.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="websockets.html" title="RAIN Websockets"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -50,44 +50,44 @@
             
   <div class="section" id="rain-component-descriptor">
 <h1>RAIN component descriptor<a class="headerlink" href="#rain-component-descriptor" title="Permalink to this headline">¶</a></h1>
-<p>Each RAIN component is described using a JSON file. This file is called meta.json. Before
+<p>Each RAIN component is described using a JSON file. This file is called <tt class="docutils literal"><span class="pre">meta.json</span></tt>. Before
 going into details of what sections are currently available in RAIN we must define
 what a RAIN component is:</p>
 <blockquote>
 <div>&#8220;A RAIN component is a set of views and constraints defined in the meta.json descriptor
-file. Each view can be individually accessed using a unique url. RAIN automatically apply
+file. Each view can be individually accessed using a unique url. RAIN automatically applies
 defined constraints based on the request.&#8221;</div></blockquote>
 <div class="section" id="complete-descriptor-example">
 <h2>Complete descriptor example<a class="headerlink" href="#complete-descriptor-example" title="Permalink to this headline">¶</a></h2>
 <p>The following descriptor example shows you a complete descriptor (with all sections currently
 supported by RAIN):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
- <span class="s">&quot;id&quot;</span>        <span class="p">:</span> <span class="s">&quot;intents-example&quot;</span><span class="p">,</span>
- <span class="s">&quot;version&quot;</span>   <span class="p">:</span> <span class="s">&quot;1.0&quot;</span><span class="p">,</span>
- <span class="s">&quot;url&quot;</span>       <span class="p">:</span> <span class="s">&quot;/components/intents_example&quot;</span><span class="p">,</span>
- <span class="s">&quot;views&quot;</span><span class="p">:</span> <span class="p">[</span>
-     <span class="p">{</span><span class="s">&quot;viewid&quot;</span><span class="p">:</span> <span class="s">&quot;missing_intent&quot;</span><span class="p">,</span>
-      <span class="s">&quot;view&quot;</span><span class="p">:</span> <span class="s">&quot;/htdocs/missing_intent_example.html&quot;</span><span class="p">,</span>
-      <span class="s">&quot;controller&quot;</span><span class="p">:</span> <span class="s">&quot;/htdocs/scripts/missing_intent_example.js&quot;</span><span class="p">}</span>
- <span class="p">],</span>
- <span class="s">&quot;intents&quot;</span><span class="p">:</span> <span class="p">[{</span>
-     <span class="s">&quot;action&quot;</span><span class="p">:</span> <span class="s">&quot;com.rain.test.general.SHOW_CHAT&quot;</span><span class="p">,</span>
-     <span class="s">&quot;category&quot;</span><span class="p">:</span> <span class="s">&quot;com.rain.test.general&quot;</span><span class="p">,</span>
-     <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;view&quot;</span><span class="p">,</span>
-     <span class="s">&quot;provider&quot;</span><span class="p">:</span> <span class="s">&quot;missing_intent&quot;</span>
- <span class="p">},</span>
- <span class="p">{</span><span class="s">&quot;action&quot;</span><span class="p">:</span> <span class="s">&quot;com.rain.test.serverside.INLINE_LOGGING&quot;</span><span class="p">,</span>
-  <span class="s">&quot;category&quot;</span><span class="p">:</span> <span class="s">&quot;com.rain.test.general&quot;</span><span class="p">,</span>
-  <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;server&quot;</span><span class="p">,</span>
-  <span class="s">&quot;provider&quot;</span><span class="p">:</span> <span class="s">&quot;/controller/intents/inline_logging.js&quot;</span><span class="p">,</span>
-  <span class="s">&quot;method&quot;</span><span class="p">:</span> <span class="s">&quot;doLogging&quot;</span><span class="p">}],</span>
- <span class="s">&quot;taglib&quot;</span><span class="p">:</span> <span class="p">[</span>
-   <span class="p">{</span>
-      <span class="s">&quot;namespace&quot;</span> <span class="p">:</span> <span class="s">&quot;&quot;</span>
-      <span class="p">,</span> <span class="s">&quot;selector&quot;</span> <span class="p">:</span> <span class="s">&quot;toolbar&quot;</span>
-      <span class="p">,</span> <span class="s">&quot;module&quot;</span> <span class="p">:</span> <span class="s">&quot;toolbar;1.0&quot;</span>
-      <span class="p">,</span> <span class="s">&quot;view&quot;</span> <span class="p">:</span> <span class="s">&quot;/htdocs/toolbar.html&quot;</span>
-   <span class="p">}]</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="s2">&quot;intents-example&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;version&quot;</span><span class="o">:</span> <span class="s2">&quot;1.0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;views&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;missing_intent&quot;</span> <span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;view&quot;</span><span class="o">:</span> <span class="s2">&quot;missing_intent_example.html&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;controller&quot;</span><span class="o">:</span> <span class="p">{</span>
+                <span class="s2">&quot;client&quot;</span><span class="o">:</span> <span class="s2">&quot;missing_intent_example.js&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;server&quot;</span><span class="o">:</span> <span class="s2">&quot;index.js&quot;</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;need_permissions&quot;</span> <span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;view&quot;</span><span class="o">:</span> <span class="s2">&quot;need_permissions.html&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;controller&quot;</span><span class="o">:</span> <span class="p">{</span>
+                <span class="s2">&quot;client&quot;</span><span class="o">:</span> <span class="s2">&quot;need_permissions.js&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;permissions&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;need_permissions&quot;</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;intents&quot;</span><span class="o">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;category&quot;</span><span class="o">:</span> <span class="s2">&quot;com.rain.test.general.SHOW_CHAT&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;action&quot;</span><span class="o">:</span> <span class="s2">&quot;com.rain.test.general&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;provider&quot;</span><span class="o">:</span> <span class="s2">&quot;missing_intent&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;view&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -99,38 +99,37 @@ supported by RAIN):</p>
 <div><ul class="simple">
 <li>id - this is the module identifier</li>
 <li>version - this is the current module version</li>
-<li>url - the base url of the components. All views are relative to this path.</li>
 </ul>
 </div></blockquote>
 </div>
-<div class="section" id="module-views-definition">
-<h2>Module views definition<a class="headerlink" href="#module-views-definition" title="Permalink to this headline">¶</a></h2>
-<p>Here you define your module views. Each view you need accesible outside your component
+<div class="section" id="views-definition">
+<h2>Views definition<a class="headerlink" href="#views-definition" title="Permalink to this headline">¶</a></h2>
+<p>Here you define your module views. Each view you need accessible outside your component
 or if you want to apply constraints on it must appear in this section:</p>
 <blockquote>
-<div><ul class="simple">
-<li>viewid - This is a unique identifier for this view</li>
-<li>view - the view path relative to module url</li>
-<li>controller - this is the client side controller path relative to module url.</li>
+<div><ul>
+<li><p class="first">viewId - the keys in the <tt class="docutils literal"><span class="pre">views</span></tt> object; this is the unique identifier for this view</p>
+</li>
+<li><p class="first">view - the path to the view, relative to <tt class="docutils literal"><span class="pre">&lt;component_folder&gt;/client/templates/</span></tt></p>
+</li>
+<li><dl class="first docutils">
+<dt>controller - can have two keys: <tt class="docutils literal"><span class="pre">client</span></tt> and <tt class="docutils literal"><span class="pre">server</span></tt>; the values represent the paths</dt>
+<dd><p class="first last">to the client and server-side controllers; the client-side controllers are
+located in <tt class="docutils literal"><span class="pre">&lt;component_folder&gt;/client/js</span></tt> and the server-side controllers
+are located in <tt class="docutils literal"><span class="pre">&lt;component_folder&gt;/server/controller</span></tt></p>
+</dd>
+</dl>
+</li>
 </ul>
 </div></blockquote>
 </div>
-<div class="section" id="module-intents-definition">
-<h2>Module intents definition<a class="headerlink" href="#module-intents-definition" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="intents-definition">
+<h2>Intents definition<a class="headerlink" href="#intents-definition" title="Permalink to this headline">¶</a></h2>
 <p>Please read <a class="reference internal" href="messaging_intents.html"><em>Intents</em></a> for more information.</p>
 </div>
-<div class="section" id="module-cross-referencing-views">
-<h2>Module cross referencing views<a class="headerlink" href="#module-cross-referencing-views" title="Permalink to this headline">¶</a></h2>
-<p>In this section tags are mapped on foreign views that are going to be used in this module.
-Each tag definition must contain the following attributes:</p>
-<blockquote>
-<div><ul class="simple">
-<li>namespace - A namespace for the tag. Currently this is not used.</li>
-<li>selector - This is the selector that is going to be used in markup: Ex &lt;toolbar /&gt;</li>
-<li>module - This is the module identifier from which we extract the tag: [&lt;module-id&gt;-&lt;version&gt;]</li>
-<li>view - The relative path of the view. This will gonna be changed to viewid.</li>
-</ul>
-</div></blockquote>
+<div class="section" id="permissions-definition">
+<h2>Permissions definition<a class="headerlink" href="#permissions-definition" title="Permalink to this headline">¶</a></h2>
+<p>Please read <a class="reference internal" href="authorization.html"><em>Authorization</em></a> for more information.</p>
 </div>
 </div>
 
@@ -145,9 +144,9 @@ Each tag definition must contain the following attributes:</p>
 <li><a class="reference internal" href="#">RAIN component descriptor</a><ul>
 <li><a class="reference internal" href="#complete-descriptor-example">Complete descriptor example</a></li>
 <li><a class="reference internal" href="#module-definition">Module definition</a></li>
-<li><a class="reference internal" href="#module-views-definition">Module views definition</a></li>
-<li><a class="reference internal" href="#module-intents-definition">Module intents definition</a></li>
-<li><a class="reference internal" href="#module-cross-referencing-views">Module cross referencing views</a></li>
+<li><a class="reference internal" href="#views-definition">Views definition</a></li>
+<li><a class="reference internal" href="#intents-definition">Intents definition</a></li>
+<li><a class="reference internal" href="#permissions-definition">Permissions definition</a></li>
 </ul>
 </li>
 </ul>
@@ -187,7 +186,7 @@ Each tag definition must contain the following attributes:</p>
         <li class="right" >
           <a href="websockets.html" title="RAIN Websockets"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

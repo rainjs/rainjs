@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Component Helper &mdash; Rain v0.6.0 documentation</title>
+    <title>Component Helper &mdash; Rain v0.7.0 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.6.0',
+        VERSION:     '0.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.6.0 documentation" href="../../index.html" />
+    <link rel="top" title="Rain v0.7.0 documentation" href="../../index.html" />
     <link rel="next" title="CSS Helper" href="css_helper.html" />
     <link rel="prev" title="Component Versioning" href="../component_versioning.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="../component_versioning.html" title="Component Versioning"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -51,9 +51,8 @@
   <div class="section" id="component-helper">
 <h1>Component Helper<a class="headerlink" href="#component-helper" title="Permalink to this headline">¶</a></h1>
 <p>The component helper is a custom Handlebars helper that is used to aggregate other components
-inside the current component. It will generate a HTML custom tag automatically and adds this to
-the taglib dynamically, so that the parser can aggregate the component.</p>
-<p>The helper can also generate taglibs that reference to different views of the same component.</p>
+inside the current component. It will generate a placeholder with an instanceId as <tt class="docutils literal"><span class="pre">id</span> <span class="pre">html</span> <span class="pre">attribute</span></tt>
+and calls the loading of the custom data for the template.</p>
 <div class="section" id="usage">
 <span id="handlebars-component-helper-usage"></span><h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>The following example shows a component helper with all the options specified (this aggregates the
@@ -66,18 +65,14 @@ to <em>button1</em>):</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">When the version is not specified the latest version of the component is used.</p>
+<p class="last">When the component and version is not specified the version of the parent component is used.
+When only the version is not specified the latest version of the component is used.</p>
 </div>
 </div>
 <div class="section" id="html-output">
 <h2>HTML Output<a class="headerlink" href="#html-output" title="Permalink to this headline">¶</a></h2>
 <p>The declaration <tt class="docutils literal"><span class="pre">{{component</span> <span class="pre">name=&quot;button&quot;</span> <span class="pre">view=&quot;index&quot;}}</span></tt> generates the following <em>custom</em> tag:</p>
-<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;button</span><span class="na">_1_0_index</span> <span class="nt">/&gt;</span>
-</pre></div>
-</div>
-<p>The declaration <tt class="docutils literal"><span class="pre">{{component</span> <span class="pre">name=&quot;button&quot;</span> <span class="pre">version=&quot;1.1&quot;</span> <span class="pre">view=&quot;main&quot;}}</span></tt> generates
-the following <em>custom</em> tag:</p>
-<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;button</span><span class="na">_1_1_main</span> <span class="nt">/&gt;</span>
+<div class="highlight-html"><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;instanceID&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
 </pre></div>
 </div>
 </div>
@@ -85,12 +80,11 @@ the following <em>custom</em> tag:</p>
 <h2>Error Cases<a class="headerlink" href="#error-cases" title="Permalink to this headline">¶</a></h2>
 <p>When the component or the view isn&#8217;t found a 404 error page will be shown. Also, the component helper
 performs authorization before a view is shown. If the authorization fails a 401 error page is shown.</p>
-<p>What happens is that in error cases the custom tag for the component is replaced with the custom tag
-for the exception component, like <tt class="docutils literal"><span class="pre">&lt;error_1_0_404</span> <span class="pre">/&gt;</span></tt> or <tt class="docutils literal"><span class="pre">&lt;error_1_0_401</span> <span class="pre">/&gt;</span></tt>.</p>
+<p>What happens is that in error cases the component is replaced with the error component.</p>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><tt class="xref js js-class docutils literal"><span class="pre">ComponentHelper()</span></tt></dt>
+<dt><a class="reference internal" href="../api/ComponentHelper.html#ComponentHelper" title="ComponentHelper"><tt class="xref js js-class docutils literal"><span class="pre">ComponentHelper()</span></tt></a></dt>
 <dd>Component Helper component API</dd>
 <dt><a class="reference internal" href="../component_versioning.html"><em>Component Versioning</em></a></dt>
 <dd>How RAIN handles multiple component versions</dd>
@@ -152,7 +146,7 @@ for the exception component, like <tt class="docutils literal"><span class="pre"
         <li class="right" >
           <a href="../component_versioning.html" title="Component Versioning"
              >previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

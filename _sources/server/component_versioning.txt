@@ -15,40 +15,44 @@ Understanding RAIN's versioning semantics is important because when interacting 
 interfaces and templates the issue plays a central role.
 
 -------------------
-Describing Versions
+Describing versions
 -------------------
 
 It all begins in the component's ``meta.json`` descriptor file. Consider the two following
 components that register two versions for the same component id:
 
-``/components/nasa-missions/apollo-11/meta.json``:
+``/components/nasa-missions-apollo-11/meta.json``
 
 .. code-block:: javascript
 
     {
-        id:         'apollo',
-        version:    '11.0',
-        url:        '/components/nasa-missions/apollo-11',
-        views:      [{
-            viewId:     'eagle',
-            view:       '/htdocs/spacecraft/eagle.html',
-            controller: '/htocs/controller/spacecraft/eagle.js'
-        }]
+        "id": "apollo",
+        "version": "11.0",
+        "views": {
+            "eagle": {
+                "view": "eagle.html",
+                "controller": {
+                    "client": "eagle.js"
+                }
+            }
+        }
     }
 
-``/components/nasa-missions/apollo-13/meta.json``:
+``/components/nasa-missions-apollo-13/meta.json``
 
 .. code-block:: javascript
 
     {
-        id:         'apollo',
-        version:    '13.0',
-        url:        '/components/nasa-missions/apollo-13',
-        views:      [{
-            viewId:     'aquarius',
-            view:       '/htdocs/spacecraft/aquarius.html',
-            controller: '/htdocs/controller/spacecraft/aquarius.js'
-        }]
+        "id": "apollo",
+        "version": "13.0",
+        "views": {
+            "aquarius": {
+                "view": "aquarius.html",
+                "controller": {
+                    "client": "aquarius.js"
+                }
+            }
+        }
     }
 
 .. note::
@@ -57,7 +61,7 @@ components that register two versions for the same component id:
     number is optional, but also more than 3 version parts is not valid.
 
 ----------------
-Version Matching
+Version matching
 ----------------
 
 Referencing components in view templates and when using RAIN's interfaces requires specifying the

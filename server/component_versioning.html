@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Component Versioning &mdash; Rain v0.6.0 documentation</title>
+    <title>Component Versioning &mdash; Rain v0.7.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.6.0',
+        VERSION:     '0.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.6.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.7.0 documentation" href="../index.html" />
     <link rel="next" title="Component Helper" href="handlebars/component_helper.html" />
     <link rel="prev" title="RAIN component descriptor" href="component_descriptor.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="component_descriptor.html" title="RAIN component descriptor"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -60,32 +60,36 @@ constraints are correctly fulfilled.</p>
 interfaces and templates the issue plays a central role.</p>
 </div>
 <div class="section" id="describing-versions">
-<h2>Describing Versions<a class="headerlink" href="#describing-versions" title="Permalink to this headline">¶</a></h2>
+<h2>Describing versions<a class="headerlink" href="#describing-versions" title="Permalink to this headline">¶</a></h2>
 <p>It all begins in the component&#8217;s <tt class="docutils literal"><span class="pre">meta.json</span></tt> descriptor file. Consider the two following
 components that register two versions for the same component id:</p>
-<p><tt class="docutils literal"><span class="pre">/components/nasa-missions/apollo-11/meta.json</span></tt>:</p>
+<p><tt class="docutils literal"><span class="pre">/components/nasa-missions-apollo-11/meta.json</span></tt></p>
 <div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span>
-    <span class="nx">id</span><span class="o">:</span>         <span class="s1">&#39;apollo&#39;</span><span class="p">,</span>
-    <span class="nx">version</span><span class="o">:</span>    <span class="s1">&#39;11.0&#39;</span><span class="p">,</span>
-    <span class="nx">url</span><span class="o">:</span>        <span class="s1">&#39;/components/nasa-missions/apollo-11&#39;</span><span class="p">,</span>
-    <span class="nx">views</span><span class="o">:</span>      <span class="p">[{</span>
-        <span class="nx">viewId</span><span class="o">:</span>     <span class="s1">&#39;eagle&#39;</span><span class="p">,</span>
-        <span class="nx">view</span><span class="o">:</span>       <span class="s1">&#39;/htdocs/spacecraft/eagle.html&#39;</span><span class="p">,</span>
-        <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;/htocs/controller/spacecraft/eagle.js&#39;</span>
-    <span class="p">}]</span>
+    <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="s2">&quot;apollo&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;version&quot;</span><span class="o">:</span> <span class="s2">&quot;11.0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;views&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;eagle&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;view&quot;</span><span class="o">:</span> <span class="s2">&quot;eagle.html&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;controller&quot;</span><span class="o">:</span> <span class="p">{</span>
+                <span class="s2">&quot;client&quot;</span><span class="o">:</span> <span class="s2">&quot;eagle.js&quot;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p><tt class="docutils literal"><span class="pre">/components/nasa-missions/apollo-13/meta.json</span></tt>:</p>
+<p><tt class="docutils literal"><span class="pre">/components/nasa-missions-apollo-13/meta.json</span></tt></p>
 <div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span>
-    <span class="nx">id</span><span class="o">:</span>         <span class="s1">&#39;apollo&#39;</span><span class="p">,</span>
-    <span class="nx">version</span><span class="o">:</span>    <span class="s1">&#39;13.0&#39;</span><span class="p">,</span>
-    <span class="nx">url</span><span class="o">:</span>        <span class="s1">&#39;/components/nasa-missions/apollo-13&#39;</span><span class="p">,</span>
-    <span class="nx">views</span><span class="o">:</span>      <span class="p">[{</span>
-        <span class="nx">viewId</span><span class="o">:</span>     <span class="s1">&#39;aquarius&#39;</span><span class="p">,</span>
-        <span class="nx">view</span><span class="o">:</span>       <span class="s1">&#39;/htdocs/spacecraft/aquarius.html&#39;</span><span class="p">,</span>
-        <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;/htdocs/controller/spacecraft/aquarius.js&#39;</span>
-    <span class="p">}]</span>
+    <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="s2">&quot;apollo&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;version&quot;</span><span class="o">:</span> <span class="s2">&quot;13.0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;views&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;aquarius&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;view&quot;</span><span class="o">:</span> <span class="s2">&quot;aquarius.html&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;controller&quot;</span><span class="o">:</span> <span class="p">{</span>
+                <span class="s2">&quot;client&quot;</span><span class="o">:</span> <span class="s2">&quot;aquarius.js&quot;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -97,7 +101,7 @@ number is optional, but also more than 3 version parts is not valid.</p>
 </div>
 </div>
 <div class="section" id="version-matching">
-<h2>Version Matching<a class="headerlink" href="#version-matching" title="Permalink to this headline">¶</a></h2>
+<h2>Version matching<a class="headerlink" href="#version-matching" title="Permalink to this headline">¶</a></h2>
 <p>Referencing components in view templates and when using RAIN&#8217;s interfaces requires specifying the
 pair (<tt class="docutils literal"><span class="pre">id</span></tt>, <tt class="docutils literal"><span class="pre">version</span></tt>) for the cases when it is not obvious what component is being referenced.
 RAIN allows developers to use version <strong>fragments</strong> which are resolved to the closest match found in
@@ -139,8 +143,8 @@ version list will <strong>not</strong> match any version.</li>
   <ul>
 <li><a class="reference internal" href="#">Component Versioning</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
-<li><a class="reference internal" href="#describing-versions">Describing Versions</a></li>
-<li><a class="reference internal" href="#version-matching">Version Matching</a></li>
+<li><a class="reference internal" href="#describing-versions">Describing versions</a></li>
+<li><a class="reference internal" href="#version-matching">Version matching</a></li>
 </ul>
 </li>
 </ul>
@@ -180,7 +184,7 @@ version list will <strong>not</strong> match any version.</li>
         <li class="right" >
           <a href="component_descriptor.html" title="RAIN component descriptor"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

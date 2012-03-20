@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>RAIN Installation &mdash; Rain v0.6.0 documentation</title>
+    <title>RAIN Installation &mdash; Rain v0.7.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.6.0',
+        VERSION:     '0.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,9 +22,9 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.6.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.7.0 documentation" href="../index.html" />
     <link rel="next" title="RAIN SDK Tutorial" href="rain_sdk_tutorial.html" />
-    <link rel="prev" title="Rain 0.6.0 Documentation" href="../index.html" /> 
+    <link rel="prev" title="Rain 0.7.0 Documentation" href="../index.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,9 +37,9 @@
           <a href="rain_sdk_tutorial.html" title="RAIN SDK Tutorial"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../index.html" title="Rain 0.6.0 Documentation"
+          <a href="../index.html" title="Rain 0.7.0 Documentation"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -71,124 +71,58 @@ development machine.</p>
 <p>Now you can start installing node.</p>
 <blockquote>
 <div><ol class="arabic simple">
-<li>wget <a class="reference external" href="https://github.com/joyent/node/zipball/v0.4.12">https://github.com/joyent/node/zipball/v0.4.12</a> -O node-v0.4.12.zip</li>
-<li>unzip node-v0.4.12.zip</li>
-<li>cd joyent-node-41e5762</li>
+<li>wget <a class="reference external" href="http://nodejs.org/dist/v0.6.13/node-v0.6.13.tar.gz">http://nodejs.org/dist/v0.6.13/node-v0.6.13.tar.gz</a></li>
+<li>tar -zxvf node-v0.6.13.tar.gz</li>
+<li>cd node-v0.6.13</li>
 <li>chmod u+x configure</li>
 <li>chmod u+x tools/waf-light</li>
 <li>./configure &amp;&amp; make &amp;&amp; sudo make install</li>
 <li>make sure /usr/local/bin is added to your PATH environment variable.</li>
 <li>node - to make sure node can be run</li>
-<li>curl <a class="reference external" href="http://npmjs.org/install.sh">http://npmjs.org/install.sh</a> | sh</li>
 </ol>
 </div></blockquote>
+<p>Installing via package manager:</p>
+<blockquote>
+<div><a class="reference external" href="https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager">https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager</a></div></blockquote>
 </div>
 <div class="section" id="windows-os">
 <h3>Windows OS<a class="headerlink" href="#windows-os" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <div><ol class="arabic simple">
-<li>Install cygwin with the following options checked for install
-+ Base
-+ Database
-+ Devel
-+ Editors
-+ Mingw
-+ Net (make sure curl is checked in)
-+ Shells
-+ Python
-+ Perl</li>
-<li>Run cygwin</li>
-<li>Edit /etc/resolv.conf file and add your nameservers like: nameserver &lt;ip&gt;</li>
-<li>Download node from <a class="reference external" href="https://github.com/joyent/node/zipball/v0.4.12">https://github.com/joyent/node/zipball/v0.4.12</a> -O node-v0.4.12.zip</li>
-<li>Extract node in your home folder from cygwin.</li>
-<li>Enter node folder</li>
-<li>./configure &amp;&amp; make &amp;&amp; make install</li>
-<li>node - to make sure node can be run</li>
-<li>In the root folder of your node workspace execute:</li>
-<li>git clone <a class="reference external" href="https://github.com/cspotcode/npm.git">https://github.com/cspotcode/npm.git</a></li>
-<li>cd npm</li>
-<li>./configure &amp;&amp; make &amp;&amp; make install &#8212; This will take a while so you can go grab a cup of coffee.</li>
-<li>npm -v</li>
+<li>Download <a class="reference external" href="http://nodejs.org/dist/v0.6.13/node-v0.6.13.msi">http://nodejs.org/dist/v0.6.13/node-v0.6.13.msi</a></li>
+<li>Install the msi package</li>
+<li>That&#8217;s all :)</li>
+<li>NPM is in the bundle too ;)</li>
 </ol>
 </div></blockquote>
-</div>
-</div>
-<div class="section" id="redis-server">
-<h2>Redis Server<a class="headerlink" href="#redis-server" title="Permalink to this headline">¶</a></h2>
-<p>For both RAIN SDK or RAIN from source code you need redis server.</p>
-<div class="section" id="ubuntu-os">
-<h3>Ubuntu OS<a class="headerlink" href="#ubuntu-os" title="Permalink to this headline">¶</a></h3>
-<p>On Ubuntu is really simple:</p>
-<div class="highlight-python"><pre>sudo apt-get install redis-server</pre>
-</div>
 </div>
 <div class="section" id="mac-os">
 <h3>Mac OS<a class="headerlink" href="#mac-os" title="Permalink to this headline">¶</a></h3>
 <p>On Mac OS operating systems you need to execute the following commands:</p>
 <blockquote>
 <div><ol class="arabic simple">
-<li>wget <a class="reference external" href="http://redis.googlecode.com/files/redis-0.900_2.tar.gz">http://redis.googlecode.com/files/redis-0.900_2.tar.gz</a></li>
-<li>tar xzvf redis-0.900_2.tar.gz</li>
-<li>cd redis-0.900</li>
-<li>make</li>
+<li>Download <a class="reference external" href="http://nodejs.org/dist/v0.6.13/node-v0.6.13.pkg">http://nodejs.org/dist/v0.6.13/node-v0.6.13.pkg</a></li>
+<li>Install the package</li>
+<li>That&#8217;s all :)</li>
+<li>NPM is in the bundle too ;)</li>
 </ol>
 </div></blockquote>
-<p>I recommend you do not install this globally. It is better if you simply run the following
-command from redis-0.900 folder:</p>
-<blockquote>
-<div><ol class="arabic simple">
-<li>./src/redis-server</li>
-</ol>
-</div></blockquote>
-</div>
-<div class="section" id="id1">
-<h3>Windows OS<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><ol class="arabic simple">
-<li>Download redis file <a class="reference external" href="https://github.com/downloads/dmajkic/redis/redis-2.4.2-win32-win64-fix.zip">https://github.com/downloads/dmajkic/redis/redis-2.4.2-win32-win64-fix.zip</a></li>
-<li>Unzip the file.</li>
-<li>cd redis-2.4.2-win32-win64-fix/32bit/</li>
-<li>./redis-server.exe</li>
-</ol>
-</div></blockquote>
-<p>Please execute this command everytime before actually running mothership and rain.</p>
 </div>
 </div>
 <div class="section" id="rain-sdk">
 <h2>RAIN SDK<a class="headerlink" href="#rain-sdk" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id2">
-<h3>Linux / Unix / Mac OS<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id1">
+<h3>Linux / Unix / Mac OS<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>The easiest way to configure your development machine is to use RAIN SDK. The SDK was currently
 tested on Ubuntu Linux and on Mac OS X. Below you can find the commands to get the sdk running on
-Unix / Linux operating systems:</p>
+Unix / Linux operating systems ( npm is required! ):</p>
 <blockquote>
 <div><ol class="arabic simple">
-<li>curl <a class="reference external" href="http://npmjs.org/install.sh">http://npmjs.org/install.sh</a> | sudo sh</li>
-<li>Execute npm -version to make sure npm is correctly installed.</li>
 <li>sudo npm install rain -g</li>
 </ol>
 </div></blockquote>
 <p>If everything went well you should be able to run rain sdk from command line. For more information
 about RAIN sdk creating first project read: <a class="reference internal" href="rain_sdk_tutorial.html"><em>RAIN SDK Tutorial</em></a></p>
-</div>
-<div class="section" id="windows-comments">
-<h3>Windows Comments<a class="headerlink" href="#windows-comments" title="Permalink to this headline">¶</a></h3>
-<p>For RAIN SDK to run on Windows please run the following commands:</p>
-<blockquote>
-<div><ol class="arabic simple">
-<li>cd /home/&lt;your user folder&gt;</li>
-<li>mkdir node_kit</li>
-<li>cd node_kit</li>
-<li>Copy content from <a class="reference internal" href="install.html"><em>Install.sh content</em></a> under install.sh and run it into node_kit folder</li>
-<li>npm install <a class="reference external" href="mailto:rain&#37;&#52;&#48;0&#46;4&#46;0">rain<span>&#64;</span>0<span>&#46;</span>4<span>&#46;</span>0</a></li>
-<li>export PATH=$PATH:/home/&lt;your user folder&gt;/node_kit/node_modules/rain</li>
-</ol>
-</div></blockquote>
-<p>Now everything is ready for you. You can execute rain on command line. To improve the
-experience for later use edit your .profile file and add as last line the following command:</p>
-<div class="highlight-python"><pre>export PATH=$PATH:/home/&lt;your user folder&gt;/node_kit/node_modules/rain</pre>
-</div>
-<p>Like this you don&#8217;t have to execute export command each time you launch cygwin.</p>
 </div>
 </div>
 <div class="section" id="rain-from-source-code">
@@ -202,18 +136,14 @@ you need to execute the following commands:</p>
 <li>git clone <a class="reference external" href="https://github.com/rainjs/rainjs.git">https://github.com/rainjs/rainjs.git</a></li>
 <li>cd rain</li>
 <li>npm install -d</li>
-<li>Make sure redis server is running.</li>
-<li>node node_modules/rain-mothership/run.js</li>
-<li>node run.js</li>
+<li>node start</li>
 </ol>
 </div></blockquote>
 </div>
 <div class="section" id="test-installation">
 <h3>Test installation<a class="headerlink" href="#test-installation" title="Permalink to this headline">¶</a></h3>
 <p>This should give you a running instance of RAIN server and mothership. For testing your
-installation try to access: <a class="reference external" href="http://localhost:1337/components/cockpit/htdocs/main.html">http://localhost:1337/components/cockpit/htdocs/main.html</a></p>
-<p>If you see the following image it means your RAIN server is configured correctly.</p>
-<img alt="../_images/cockpit.png" src="../_images/cockpit.png" />
+installation try to access: <a class="reference external" href="http://localhost:1337/example/index">http://localhost:1337/example/index</a></p>
 </div>
 </div>
 </div>
@@ -230,17 +160,11 @@ installation try to access: <a class="reference external" href="http://localhost
 <li><a class="reference internal" href="#nodejs-server">Nodejs server</a><ul>
 <li><a class="reference internal" href="#linux-unix-mac-os">Linux / Unix / Mac OS</a></li>
 <li><a class="reference internal" href="#windows-os">Windows OS</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#redis-server">Redis Server</a><ul>
-<li><a class="reference internal" href="#ubuntu-os">Ubuntu OS</a></li>
 <li><a class="reference internal" href="#mac-os">Mac OS</a></li>
-<li><a class="reference internal" href="#id1">Windows OS</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#rain-sdk">RAIN SDK</a><ul>
-<li><a class="reference internal" href="#id2">Linux / Unix / Mac OS</a></li>
-<li><a class="reference internal" href="#windows-comments">Windows Comments</a></li>
+<li><a class="reference internal" href="#id1">Linux / Unix / Mac OS</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#rain-from-source-code">RAIN from source code</a><ul>
@@ -254,7 +178,7 @@ installation try to access: <a class="reference external" href="http://localhost
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="../index.html"
-                        title="previous chapter">Rain 0.6.0 Documentation</a></p>
+                        title="previous chapter">Rain 0.7.0 Documentation</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="rain_sdk_tutorial.html"
                         title="next chapter">RAIN SDK Tutorial</a></p>
@@ -285,9 +209,9 @@ installation try to access: <a class="reference external" href="http://localhost
           <a href="rain_sdk_tutorial.html" title="RAIN SDK Tutorial"
              >next</a> |</li>
         <li class="right" >
-          <a href="../index.html" title="Rain 0.6.0 Documentation"
+          <a href="../index.html" title="Rain 0.7.0 Documentation"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

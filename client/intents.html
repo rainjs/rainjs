@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Intents Client API &mdash; Rain v0.6.0 documentation</title>
+    <title>Intents Client API &mdash; Rain v0.7.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.6.0',
+        VERSION:     '0.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,8 +22,8 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.6.0 documentation" href="../index.html" />
-    <link rel="next" title="Client storage API" href="client_storage.html" />
+    <link rel="top" title="Rain v0.7.0 documentation" href="../index.html" />
+    <link rel="next" title="Client runtime dependencies" href="requirejs.html" />
     <link rel="prev" title="Messaging API" href="client_messaging.html" /> 
   </head>
   <body>
@@ -34,12 +34,12 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="client_storage.html" title="Client storage API"
+          <a href="requirejs.html" title="Client runtime dependencies"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="client_messaging.html" title="Messaging API"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -52,33 +52,30 @@
 <h1>Intents Client API<a class="headerlink" href="#intents-client-api" title="Permalink to this headline">¶</a></h1>
 <p>On client side intents are really easy to use. Before explaining the details please read
 the following example (extracted from intents_example sample):</p>
-<div class="highlight-python"><pre>function start() {
-   ....
+<div class="highlight-javascript"><div class="highlight"><pre><span class="kd">function</span> <span class="nx">start</span><span class="p">()</span> <span class="p">{</span>
+   <span class="kd">var</span> <span class="nx">messaging</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">messaging</span><span class="p">;</span>
 
-   var messaging = this.clientRuntime.messaging;
+   <span class="nx">btnMissing</span><span class="p">.</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+         <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="p">{</span>
+             <span class="s2">&quot;viewContext&quot;</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">viewContext</span><span class="p">,</span>
+             <span class="s2">&quot;category&quot;</span><span class="o">:</span> <span class="s2">&quot;local_test_intent&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;action&quot;</span><span class="o">:</span> <span class="s2">&quot;local_action&quot;</span>
+         <span class="p">};</span>
 
-   btnMissing.click(function() {
-         var request = {
-             "viewContext": self.viewContext,
-             "category": "local_test_intent",
-             "action": "local_action"
-         };
+         <span class="kd">var</span> <span class="nx">intent</span> <span class="o">=</span> <span class="nx">messaging</span><span class="p">.</span><span class="nx">sendIntent</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
 
-         var intent = messaging.sendIntent(request);
-
-         intent.then(function(data) {
-             console.log("Cool stuff: " + data);
-         },
-         function(data) {
-             alert("ERROR: " + data);
-         });
-     });
-
-   ....
-}</pre>
+         <span class="nx">intent</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+             <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Cool stuff: &quot;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">);</span>
+         <span class="p">},</span>
+         <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+             <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;ERROR: &quot;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">);</span>
+         <span class="p">});</span>
+     <span class="p">});</span>
+<span class="p">}</span>
+</pre></div>
 </div>
 <p>As you can see in the above example there is one single method to use for intents:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">Raintime</span><span class="o">.</span><span class="n">messaging</span><span class="o">.</span><span class="n">sendIntent</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">messaging</span><span class="p">.</span><span class="nx">sendIntent</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>Request argument is a dictionary that must contain at least:</p>
@@ -93,7 +90,7 @@ the following example (extracted from intents_example sample):</p>
 the intent handler.</p>
 <p>The sendIntent method returns a promise that you can use to register callback methods for
 success and error scenarios. For this you can use:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">then</span><span class="p">(</span><span class="n">successHandler</span><span class="p">,</span> <span class="n">errorHandler</span><span class="p">);</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">then</span><span class="p">(</span><span class="nx">successHandler</span><span class="p">,</span> <span class="nx">errorHandler</span><span class="p">);</span>
 </pre></div>
 </div>
 <div class="section" id="intents-technical-details">
@@ -124,8 +121,8 @@ the request is not http based.</p>
   <p class="topless"><a href="client_messaging.html"
                         title="previous chapter">Messaging API</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="client_storage.html"
-                        title="next chapter">Client storage API</a></p>
+  <p class="topless"><a href="requirejs.html"
+                        title="next chapter">Client runtime dependencies</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -150,12 +147,12 @@ the request is not http based.</p>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="client_storage.html" title="Client storage API"
+          <a href="requirejs.html" title="Client runtime dependencies"
              >next</a> |</li>
         <li class="right" >
           <a href="client_messaging.html" title="Messaging API"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

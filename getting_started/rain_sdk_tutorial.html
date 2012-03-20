@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>RAIN SDK Tutorial &mdash; Rain v0.6.0 documentation</title>
+    <title>RAIN SDK Tutorial &mdash; Rain v0.7.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.6.0',
+        VERSION:     '0.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.6.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.7.0 documentation" href="../index.html" />
     <link rel="next" title="RAIN component descriptor" href="../server/component_descriptor.html" />
     <link rel="prev" title="RAIN Installation" href="installation.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="installation.html" title="RAIN Installation"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -50,8 +50,8 @@
             
   <div class="section" id="rain-sdk-tutorial">
 <h1>RAIN SDK Tutorial<a class="headerlink" href="#rain-sdk-tutorial" title="Permalink to this headline">¶</a></h1>
-<p>In this section you can find the tutorial for creating projects with RAIN SDK. Previous this
-step please read <a class="reference internal" href="installation.html"><em>RAIN Installation</em></a></p>
+<p>In this section you can find the tutorial for creating projects with RAIN SDK.
+Please read <a class="reference internal" href="installation.html"><em>RAIN Installation</em></a> before this.</p>
 <div class="section" id="rain-sdk-basic-usage">
 <h2>RAIN SDK Basic usage<a class="headerlink" href="#rain-sdk-basic-usage" title="Permalink to this headline">¶</a></h2>
 <p>Below you can find a bunch of useful commands to use:</p>
@@ -80,32 +80,35 @@ $ restart [#pid]
 1. on project root the command restarts the associated server
 2. with [#pid] restarts the server with the associated process id
 
-$ list [server|mothership]
-lists all running server/motherships, with [type] only 1 of both will be displayed
+$ list [server]
+lists all running server, with [type] only 1 of both will be displayed
 
 $ stopall
-shutting down all server and motherships
+shutting down all servers
+
 Options:
 
 -h, --help output usage information
 -d, --debug debugging
 -c, --conf &lt;path_to_conf&gt; start server with custom configuration
--m, --mothership-conf &lt;path_to_conf&gt; start server with custom mothership configuration
--p, --platform &lt;platform&gt; choose the platform for the application Available platforms: nodejs
+-p, --platform &lt;platform&gt; choose the platform for the application available platforms: nodejs
+
 Examples:
 
 $ rain create-project /home/username/workspace newProject
 $ rain start
 $ rain start -c /home/username/workspace/custom_confs/server.conf
-$ rain start -m /home/username/workspace/custom_confs/mothership.conf $ rain stop $ rain stop 5361
-Rain creates following structure on first start of a server
+$ rain stop
+$ rain stop 5361
+
+Rain creates the following structure on first start of a server:
 
 /home/user/.rain
-A server pid file contains "PID /path/to/server-conf" and looks like this "rain.server.5734" -&gt; rain.server.PID
-
-A mothership file contains the complete mothership configuration and looks like this "rain.ms.31337.11324" -&gt; rain.ms.PORT.PID
+A server pid file contains "PID /path/to/server-conf" and looks like this:
+"rain.server.5734" -&gt; rain.server.PID
 
 Creating an Application
+
 2 modes will be available: quick mode and configuration mode (default)
 
 "Quick mode" creates the project with the nodejs skeleton and standard meta.json
@@ -118,10 +121,9 @@ description
 version
 platform</pre>
 </div>
-<p>You need to be sure that redis server is started prior to starting the Rain SDK. It is strongly
-recommended to start redis server prior to use rain sdk.</p>
+</div>
 <div class="section" id="rain-sdk-create-project">
-<h3>RAIN SDK Create project<a class="headerlink" href="#rain-sdk-create-project" title="Permalink to this headline">¶</a></h3>
+<h2>RAIN SDK Create project<a class="headerlink" href="#rain-sdk-create-project" title="Permalink to this headline">¶</a></h2>
 <p>You can easily used rain sdk to create projects and components. To create a new project
 execute the following commands:</p>
 <blockquote>
@@ -133,22 +135,23 @@ execute the following commands:</p>
 <li>rain start</li>
 </ol>
 </div></blockquote>
-<p>Now you have your first RAIN project. Try the following url in your browser: <a class="reference external" href="http://localhost:1337/components">http://localhost:1337/components</a>/&lt;component-name&gt;/htdocs/index.html.Now you have your first RAIN project. Try the following url in your browser: <a class="reference external" href="http://localhost:1337/components">http://localhost:1337/components</a>/&lt;component-name&gt;/htdocs/index.html.</p>
+<p>Now you have your first RAIN project.
+Try the following url in your browser: <a class="reference external" href="http://localhost:1337">http://localhost:1337</a>/&lt;component-name&gt;/index.</p>
 </div>
 <div class="section" id="rain-sdk-debug-mode">
-<h3>RAIN SDK Debug mode<a class="headerlink" href="#rain-sdk-debug-mode" title="Permalink to this headline">¶</a></h3>
-<p>Rain provides a debug mode for the server-side. You only have to start / restart the server with &#8211;debug.
-It automatically connect the nodejs native debugger with the port 8585.</p>
-<p>If you want to use a graphical debugger than you can install &#8220;node-inspector&#8221;. It&#8217;s a node package manager module.</p>
+<h2>RAIN SDK Debug mode<a class="headerlink" href="#rain-sdk-debug-mode" title="Permalink to this headline">¶</a></h2>
+<p>Rain provides a debug mode for the server-side. You only have to start / restart the server
+with &#8211;debug. It automatically connects the nodejs native debugger with the port 5858.</p>
+<p>If you want to use a graphical debugger then you can install &#8220;node-inspector&#8221;.
+It&#8217;s a node package manager module.</p>
 <dl class="docutils">
 <dt>For Linux::</dt>
 <dd>sudo npm install node-inspector -g</dd>
 <dt>For Windows::</dt>
-<dd>npm install node-inspector
-export PATH=$PATH:/home/&lt;your user folder&gt;/node_kit/node_modules/node-inspector</dd>
+<dd>npm install node-inspector -g</dd>
 </dl>
-<p>Now start the node-inspector on the command line with node-inspector and you can access the debugger with <a class="reference external" href="http://localhost:8080">http://localhost:8080</a></p>
-</div>
+<p>Now start the node-inspector in the command line with <tt class="docutils literal"><span class="pre">node-inspector</span></tt> and you can access
+the debugger with <a class="reference external" href="http://localhost:8080">http://localhost:8080</a>.</p>
 </div>
 </div>
 
@@ -161,11 +164,9 @@ export PATH=$PATH:/home/&lt;your user folder&gt;/node_kit/node_modules/node-insp
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">RAIN SDK Tutorial</a><ul>
-<li><a class="reference internal" href="#rain-sdk-basic-usage">RAIN SDK Basic usage</a><ul>
+<li><a class="reference internal" href="#rain-sdk-basic-usage">RAIN SDK Basic usage</a></li>
 <li><a class="reference internal" href="#rain-sdk-create-project">RAIN SDK Create project</a></li>
 <li><a class="reference internal" href="#rain-sdk-debug-mode">RAIN SDK Debug mode</a></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -205,7 +206,7 @@ export PATH=$PATH:/home/&lt;your user folder&gt;/node_kit/node_modules/node-insp
         <li class="right" >
           <a href="installation.html" title="RAIN Installation"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

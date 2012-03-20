@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Client side websockets API &mdash; Rain v0.6.0 documentation</title>
+    <title>Client side websockets API &mdash; Rain v0.7.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.6.0',
+        VERSION:     '0.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,8 +22,8 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.6.0 documentation" href="../index.html" />
-    <link rel="next" title="Cross Referencing" href="cross_referencing_css.html" />
+    <link rel="top" title="Rain v0.7.0 documentation" href="../index.html" />
+    <link rel="next" title="Client rendering" href="client_rendering.html" />
     <link rel="prev" title="Client runtime dependencies" href="requirejs.html" /> 
   </head>
   <body>
@@ -34,12 +34,12 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="cross_referencing_css.html" title="Cross Referencing"
+          <a href="client_rendering.html" title="Client rendering"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="requirejs.html" title="Client runtime dependencies"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -51,77 +51,59 @@
   <div class="section" id="client-side-websockets-api">
 <h1>Client side websockets API<a class="headerlink" href="#client-side-websockets-api" title="Permalink to this headline">¶</a></h1>
 <p>In RAIN you can easy access websockets that are defined in RAIN components. As described
-in page <a class="reference internal" href="../server/websockets.html"><em>RAIN Websockets</em></a> , websockets in RAIN have a well defined model and are
+in page <a class="reference internal" href="../server/websockets.html"><em>RAIN Websockets</em></a>, websockets in RAIN have a well defined model and are
 auto discovered for each component. During autodiscovery process the web sockets handlers
-receive a namespace and they are registered at a certain url.</p>
+receive a channel and they are registered at a certain url.</p>
 <p>On the client side, to be able to connect to a websocket you need to specify the url. In
 RAIN the client runtime provides easy access to websockets.</p>
-<div class="section" id="websockets-within-the-same-component">
-<h2>Websockets within the same component<a class="headerlink" href="#websockets-within-the-same-component" title="Permalink to this headline">¶</a></h2>
-<p>Client side controllers have direct access to websockets defined by their parent component.
-Below you can find a simple example of how to obtain a websocket connection for this case (
-extracted from intents_example):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">this</span><span class="o">.</span><span class="n">_socket</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">viewContext</span><span class="o">.</span><span class="n">getWebSocket</span><span class="p">(</span><span class="s">&quot;chat/dummy socket&quot;</span><span class="p">);</span>
+<p>Below you can find a simple example of how to obtain a websocket connection for this case
+(extracted from intents_example):</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="k">this</span><span class="p">.</span><span class="nx">_socket</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">getSocket</span><span class="p">(</span><span class="s2">&quot;/component;version/channel&quot;</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>After you obtain a connection to this websocket you can easly start to emit messages and
+<p>After you obtain a connection to this websocket you can easily start to emit messages and
 react to messages. The obtained socket is obtained from socket.io. For more information
 about socket io visit: <a class="reference external" href="http://socket.io/">http://socket.io/</a></p>
-</div>
-<div class="section" id="websockets-from-other-components">
-<h2>Websockets from other components<a class="headerlink" href="#websockets-from-other-components" title="Permalink to this headline">¶</a></h2>
-<p>There will definitely be situations when you need to connect to a websocket that is not
-defined within your component. To obtain a connection to such a websocket you can use
-the following code:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">this</span><span class="o">.</span><span class="n">_socket</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">clientRuntime</span><span class="o">.</span><span class="n">messaging</span><span class="o">.</span><span class="n">_getWebSocket</span><span class="p">(</span><span class="s">&quot;&lt;module-id&gt;&quot;</span><span class="p">,</span> <span class="s">&quot;&lt;socket name&gt;&quot;</span><span class="p">);</span>
-</pre></div>
-</div>
-<p>Module id is formed from module-name minus version. Socket name includes the namespace into it.
-For instance if we take the example described in <em class="xref std std-ref">ws_same_comp</em> you would access dummy socket
-with the following code:</p>
-<div class="highlight-python"><pre>var messaging = this.clientRuntime.messaging;
-
-this._socket = messaging._getWebSocket("intents-example-1.0", "chat/dummy socket");</pre>
-</div>
-</div>
 <div class="section" id="websockets-example">
 <h2>Websockets example<a class="headerlink" href="#websockets-example" title="Permalink to this headline">¶</a></h2>
 <p>In the components folder you can find a simple example of how to send and receive messages.
 Below you can find a function client controller example:</p>
-<div class="highlight-python"><pre>define(function() {
-    function init() {
-        this._socket = this.viewContext.getWebSocket("chat/dummy socket");
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">define</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 
-        this.configureSocketDummy();
-        this.start();
-    }
+    <span class="kd">function</span> <span class="nx">Controller</span><span class="p">()</span> <span class="p">{}</span>
 
-    function start() {
-        var messaging = this.clientRuntime.messaging;
+    <span class="nx">Controller</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_socket</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">getSocket</span><span class="p">(</span><span class="s2">&quot;/example;1.0/example&quot;</span><span class="p">);</span>
 
-        var root = this.viewContext.getRoot();
-        var btnDummyTalk = root.find("input[data-itemid='btnCustomHandler']");
+        <span class="k">this</span><span class="p">.</span><span class="nx">configureSocketDummy</span><span class="p">();</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">start</span><span class="p">();</span>
+    <span class="p">};</span>
 
-        var self = this;
+    <span class="nx">Controller</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">start</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">messaging</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">messaging</span><span class="p">;</span>
 
-        btnDummyTalk.click(function() {
-            self._socket.emit("hello", {"ignored": true});
-        });
-    }
+        <span class="kd">var</span> <span class="nx">root</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">getRoot</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">btnDummyTalk</span> <span class="o">=</span> <span class="nx">root</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s2">&quot;input[data-itemid=&#39;btnCustomHandler&#39;]&quot;</span><span class="p">);</span>
 
-    /**
-     * Method used to communicate with the dummy server side handler.
-     */
-    function configureSocketDummy() {
-        this._socket.on("bye", function(data) {
-            alert(JSON.stringify(data));
-        });
-    }
+        <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
 
-    return {init: init,
-            start: start,
-            configureSocketDummy: configureSocketDummy}
-});</pre>
+        <span class="nx">btnDummyTalk</span><span class="p">.</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">_socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;ignored&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">});</span>
+        <span class="p">});</span>
+    <span class="p">};</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * Method used to communicate with the dummy server side handler.</span>
+<span class="cm">     */</span>
+    <span class="nx">Controller</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">configureSocketDummy</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;bye&quot;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">alert</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">));</span>
+        <span class="p">});</span>
+    <span class="p">};</span>
+
+    <span class="k">return</span> <span class="nx">Controller</span><span class="p">;</span>
+<span class="p">});</span>
+</pre></div>
 </div>
 <p>The above example does the following:</p>
 <blockquote>
@@ -142,8 +124,6 @@ Below you can find a function client controller example:</p>
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Client side websockets API</a><ul>
-<li><a class="reference internal" href="#websockets-within-the-same-component">Websockets within the same component</a></li>
-<li><a class="reference internal" href="#websockets-from-other-components">Websockets from other components</a></li>
 <li><a class="reference internal" href="#websockets-example">Websockets example</a></li>
 </ul>
 </li>
@@ -153,8 +133,8 @@ Below you can find a function client controller example:</p>
   <p class="topless"><a href="requirejs.html"
                         title="previous chapter">Client runtime dependencies</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="cross_referencing_css.html"
-                        title="next chapter">Cross Referencing</a></p>
+  <p class="topless"><a href="client_rendering.html"
+                        title="next chapter">Client rendering</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -179,12 +159,12 @@ Below you can find a function client controller example:</p>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="cross_referencing_css.html" title="Cross Referencing"
+          <a href="client_rendering.html" title="Client rendering"
              >next</a> |</li>
         <li class="right" >
           <a href="requirejs.html" title="Client runtime dependencies"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

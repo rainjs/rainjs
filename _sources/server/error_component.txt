@@ -39,54 +39,52 @@ The following example shows how the view for the 500 error code can look like:
 
 .. code-block:: html
 
-    <!DOCTYPE html>
-    <html>
-        <head>
-            <title>Application Error</title>
+    {{css path="index.css"}}
 
-            {{css path="index.css"}}
-        </head>
-        <body>
-            <div class="content">
-                <h1>500 Internal Server Error</h1>
-                <p>
-                    An unexpected condition was encountered. Please try the request again.
-                </p>
-            </div>
-        </body>
-    </html>
+    <div class="content">
+        <h1>500 Internal Server Error</h1>
+        <p>
+            An unexpected condition was encountered. Please try the request again.
+        </p>
+        <br />
+        <p>
+            {{{error.stack}}}
+        </p>
+    </div>
 
 .........
 meta.json
 .........
 
-This is the `meta.json` for this component. To specify a custom message for a error you add a view
-for which the `viewid` is the same as the error code. If a view for an error doesn't exist, the
-`default` view will be displayed:
+This is the ``meta.json`` for this component. To specify a custom message for a error you add a
+view for which the view id is the same as the error code. If a view for an error doesn't exist,
+the `default` view will be displayed:
 
 .. code-block:: javascript
 
     {
         "id": "error_pages",
         "version": "1.0",
-        "url": "/components/error_pages",
-        "views": [
-            {
-                "viewid": "default",
-                "view": "/htdocs/default.html",
-                "controller": "/htdocs/controller/default.js"
+        "views": {
+            "default": {
+                "view": "default.html",
+                "controller": {
+                    "client": "default.js"
+                }
             },
-            {
-                "viewid": "404",
-                "view": "/htdocs/404.html",
-                "controller": "/htdocs/controller/404.js"
+            "404" : {
+                "view": "404.html",
+                "controller": {
+                    "client": "404.js"
+                }
             },
-            {
-                "viewid": "500",
-                "view": "/htdocs/500.html",
-                "controller": "/htdocs/controller/500.js"
+            "500" : {
+                "view": "500.html",
+                "controller": {
+                    "client": "500.js"
+                }
             }
-        ]
+        }
     }
 
 .. note::

@@ -1,0 +1,215 @@
+
+
+
+
+
+
+..
+    Classes and methods
+
+Class Context
+================================================================================
+
+..
+   class-title
+
+
+The context reflects a component's client-side state. It gives access to other
+important libraries like client storage, messaging and web sockets.
+
+
+
+
+
+
+
+
+    
+
+
+Constructor
+-----------
+
+.. js:class:: Context(component)
+
+
+
+    
+    :param Component component: 
+        the component object 
+    
+
+
+
+
+
+
+
+Methods
+-------
+
+..
+   class-methods
+
+
+getRoot
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Context#getRoot()
+
+
+
+
+    
+    :returns jQueryElement:
+        The component's container jQuery element 
+    
+
+
+Returns the DOM container element for the component associated with this
+view context.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+insert
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Context#insert(component, dom)
+
+
+    
+    :param Object component: 
+        The component which to be requested 
+    
+    :param jQueryDom dom: 
+        The dom object where the component is inserted 
+    
+
+
+
+
+Insert a new component into the given dom Element.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+replace
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Context#replace(component, dom)
+
+
+    
+    :param Object component: 
+        The component which to be requested 
+    
+    :param jQueryDom dom: 
+        The dom object where the component is inserted 
+    
+
+
+
+
+Replaces the component from where it is called with the given component.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    
+
+Attributes
+----------
+
+..
+   class-attributes
+
+
+instanceId
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:attribute:: instanceId   
+
+
+the component's instance id
+
+
+
+
+
+
+
+
+    
+
+
+
+messaging
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:attribute:: messaging (static)  
+
+
+Provides methods to publish and subscribe to events.
+
+
+
+
+
+
+
+
+    
+
+
+
+storage
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:attribute:: storage   
+
+
+the local storage manager
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+

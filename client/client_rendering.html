@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Client rendering &mdash; Rain v0.6.0 documentation</title>
+    <title>Client rendering &mdash; Rain v0.7.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.6.0',
+        VERSION:     '0.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,9 +22,9 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.6.0 documentation" href="../index.html" />
-    <link rel="next" title="Namespace Authorization" href="api/Authorization.html" />
-    <link rel="prev" title="Cross Referencing" href="cross_referencing_css.html" /> 
+    <link rel="top" title="Rain v0.7.0 documentation" href="../index.html" />
+    <link rel="next" title="Rendering" href="rendering.html" />
+    <link rel="prev" title="Client side websockets API" href="websockets.html" /> 
   </head>
   <body>
     <div class="related">
@@ -34,12 +34,12 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="api/Authorization.html" title="Namespace Authorization"
+          <a href="rendering.html" title="Rendering"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="cross_referencing_css.html" title="Cross Referencing"
+          <a href="websockets.html" title="Client side websockets API"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -60,14 +60,14 @@ and invoking the component&#8217;s lifecycle.</p>
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>To load a component you have to use the global object <tt class="docutils literal"><span class="pre">clientRenderer</span></tt>. This object is a
 singleton instance of <a class="reference internal" href="api/ClientRenderer.html#ClientRenderer" title="ClientRenderer"><tt class="xref js js-class docutils literal"><span class="pre">ClientRenderer()</span></tt></a>.</p>
-<p>The following code loads a <em>user_configuration</em> component. The component is added after
-the jQuery selector <em>my-div</em>.</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">clientRenderer</span><span class="p">.</span><span class="nx">loadComponent</span><span class="p">({</span>
-    <span class="nx">selector</span><span class="o">:</span> <span class="s1">&#39;#my-div&#39;</span><span class="p">,</span>
+<p>The following code requests a <em>button</em> component. The <tt class="docutils literal"><span class="pre">instanceId</span></tt> property indicates
+where the markup of the component should be placed in the page.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">clientRenderer</span><span class="p">.</span><span class="nx">requestComponent</span><span class="p">({</span>
     <span class="nx">component</span><span class="o">:</span> <span class="p">{</span>
-        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;user_configuration&#39;</span><span class="p">,</span>
+        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;button&#39;</span><span class="p">,</span>
         <span class="nx">version</span><span class="o">:</span> <span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
-        <span class="nx">view</span><span class="o">:</span> <span class="s1">&#39;index&#39;</span>
+        <span class="nx">view</span><span class="o">:</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span>
+        <span class="nx">instanceId</span><span class="o">:</span> <span class="s2">&quot;f1db15e2d25be2697f2cc02e63fce03f39705811&quot;</span>
     <span class="p">}</span>
 <span class="p">});</span>
 </pre></div>
@@ -97,11 +97,11 @@ the jQuery selector <em>my-div</em>.</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="cross_referencing_css.html"
-                        title="previous chapter">Cross Referencing</a></p>
+  <p class="topless"><a href="websockets.html"
+                        title="previous chapter">Client side websockets API</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="api/Authorization.html"
-                        title="next chapter">Namespace Authorization</a></p>
+  <p class="topless"><a href="rendering.html"
+                        title="next chapter">Rendering</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -126,12 +126,12 @@ the jQuery selector <em>my-div</em>.</p>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="api/Authorization.html" title="Namespace Authorization"
+          <a href="rendering.html" title="Rendering"
              >next</a> |</li>
         <li class="right" >
-          <a href="cross_referencing_css.html" title="Cross Referencing"
+          <a href="websockets.html" title="Client side websockets API"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.6.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

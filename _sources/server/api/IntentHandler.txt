@@ -1,0 +1,81 @@
+
+
+
+
+
+
+..
+    Classes and methods
+
+Class IntentHandler
+================================================================================
+
+..
+   class-title
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+Constructor
+-----------
+
+.. js:class:: IntentHandler()
+
+
+
+
+
+
+
+
+
+Methods
+-------
+
+..
+   class-methods
+
+
+configure
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: IntentHandler#configure(componentConfig)
+
+
+    
+    :param Object componentConfig: 
+        The component config given from the ComponentRegistry 
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    
+
+
+

@@ -1,0 +1,294 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class ProxyStore &mdash; Rain v0.7.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.7.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Rain v0.7.0 documentation" href="../../index.html" />
+    <link rel="next" title="Class Renderer" href="Renderer.html" />
+    <link rel="prev" title="Class IntentsRegistry" href="IntentsRegistry.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Renderer.html" title="Class Renderer"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="IntentsRegistry.html" title="Class IntentsRegistry"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="class-proxystore">
+<h1>Class ProxyStore<a class="headerlink" href="#class-proxystore" title="Permalink to this headline">¶</a></h1>
+<p>Proxy store implementation for connect. Uses dependency injection to aggregate implementations
+for local and remote stores. By default, a <tt class="xref js js-class docutils literal"><span class="pre">MemoryStore()</span></tt> is used for the local store
+and a <tt class="xref js js-class docutils literal"><span class="pre">HipStore()</span></tt> is used for the remote store. It uses lazy instantiation of stores.</p>
+<p>It exposes the <a class="reference internal" href="#ProxyStore#authorize" title="ProxyStore#authorize"><tt class="xref js js-func docutils literal"><span class="pre">ProxyStore#authorize()</span></tt></a> method for switching the store implementation at
+runtime, i.e. providing a way to switch the store at runtime after login.</p>
+<div class="section" id="constructor">
+<h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="ProxyStore">
+<em class="property">class </em><tt class="descname">ProxyStore</tt><big>(</big><span class="optional">[</span><em>LocalStore</em><span class="optional">]</span><span class="optional">[</span>, <em>RemoteStore</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#ProxyStore" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>LocalStore</strong> (<em>connect.session.Store</em>) &#8211; store class to use for local storage (<em>Default</em>: MemoryStore)</li>
+<li><strong>RemoteStore</strong> (<em>connect.session.Store</em>) &#8211; store class to use for remote storage (<em>Default</em>: MemoryStore)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="authorize">
+<h3>authorize<a class="headerlink" href="#authorize" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ProxyStore#authorize">
+<tt class="descname">ProxyStore#authorize</tt><big>(</big><em>sid</em>, <em>remotesid</em>, <em>sess</em><big>)</big><a class="headerlink" href="#ProxyStore#authorize" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sid</strong> (<em>String</em>) &#8211; the session id to be authorized</li>
+<li><strong>remotesid</strong> (<em>String</em>) &#8211; the remote session id</li>
+<li><strong>sess</strong> (<em>connect.session.Session</em>) &#8211; the session to authorize</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Authorizes a session.</p>
+<p>Stores the session id in the list of authorized sessions that use the remote store.</p>
+</div>
+<div class="section" id="destroy">
+<h3>destroy<a class="headerlink" href="#destroy" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ProxyStore#destroy">
+<tt class="descname">ProxyStore#destroy</tt><big>(</big><em>sid</em>, <em>fn</em><big>)</big><a class="headerlink" href="#ProxyStore#destroy" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sid</strong> (<em>String</em>) &#8211; the session id</li>
+<li><strong>fn</strong> (<em>Function</em>) &#8211; the callback that is invoked after the session is destroyed</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Destroys the session with a given session id.</p>
+<p>Destroys the session both on the remote and on the local stores.</p>
+</div>
+<div class="section" id="get">
+<h3>get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ProxyStore#get">
+<tt class="descname">ProxyStore#get</tt><big>(</big><em>sid</em>, <em>fn</em><big>)</big><a class="headerlink" href="#ProxyStore#get" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sid</strong> (<em>String</em>) &#8211; the session id</li>
+<li><strong>fn</strong> (<em>Function</em>) &#8211; the callback that is invoked when the session is available</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Get the session from the store with a given session id.</p>
+</div>
+<div class="section" id="getremotesid">
+<h3>getRemoteSid<a class="headerlink" href="#getremotesid" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ProxyStore#getRemoteSid">
+<tt class="descname">ProxyStore#getRemoteSid</tt><big>(</big><em>sid</em><big>)</big><a class="headerlink" href="#ProxyStore#getRemoteSid" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>sid</strong> (<em>String</em>) &#8211; the session id</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns String:</th><td class="field-body"><p class="first last">the remote session id</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Gets the remote session id.</p>
+</div>
+<div class="section" id="set">
+<h3>set<a class="headerlink" href="#set" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ProxyStore#set">
+<tt class="descname">ProxyStore#set</tt><big>(</big><em>sid</em>, <em>sess</em>, <em>fn</em><big>)</big><a class="headerlink" href="#ProxyStore#set" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sid</strong> (<em>String</em>) &#8211; the session id</li>
+<li><strong>sess</strong> (<em>connect.session.Session</em>) &#8211; the session to save</li>
+<li><strong>fn</strong> (<em>Function</em>) &#8211; the callback that is invoked after the session is saved</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Save the session to the store with a given session id.</p>
+</div>
+</div>
+<div class="section" id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="authorizedsessions">
+<h3>authorizedSessions<a class="headerlink" href="#authorizedsessions" title="Permalink to this headline">¶</a></h3>
+<dl class="attribute">
+<dt id="authorizedSessions">
+<tt class="descname">authorizedSessions</tt><a class="headerlink" href="#authorizedSessions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>the object associating authorized sids with remote sids</p>
+</div>
+<div class="section" id="localstore">
+<h3>localStore<a class="headerlink" href="#localstore" title="Permalink to this headline">¶</a></h3>
+<dl class="attribute">
+<dt id="localStore">
+<tt class="descname">localStore</tt><a class="headerlink" href="#localStore" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>the local store instance</p>
+</div>
+<div class="section" id="remotestore">
+<h3>remoteStore<a class="headerlink" href="#remotestore" title="Permalink to this headline">¶</a></h3>
+<dl class="attribute">
+<dt id="remoteStore">
+<tt class="descname">remoteStore</tt><a class="headerlink" href="#remoteStore" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>the remote store instance</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class ProxyStore</a><ul>
+<li><a class="reference internal" href="#constructor">Constructor</a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#authorize">authorize</a></li>
+<li><a class="reference internal" href="#destroy">destroy</a></li>
+<li><a class="reference internal" href="#get">get</a></li>
+<li><a class="reference internal" href="#getremotesid">getRemoteSid</a></li>
+<li><a class="reference internal" href="#set">set</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#attributes">Attributes</a><ul>
+<li><a class="reference internal" href="#authorizedsessions">authorizedSessions</a></li>
+<li><a class="reference internal" href="#localstore">localStore</a></li>
+<li><a class="reference internal" href="#remotestore">remoteStore</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="IntentsRegistry.html"
+                        title="previous chapter">Class IntentsRegistry</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Renderer.html"
+                        title="next chapter">Class Renderer</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Renderer.html" title="Class Renderer"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="IntentsRegistry.html" title="Class IntentsRegistry"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

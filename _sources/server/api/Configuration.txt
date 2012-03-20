@@ -1,0 +1,54 @@
+
+
+
+
+
+
+..
+    Classes and methods
+
+Class Configuration
+================================================================================
+
+..
+   class-title
+
+
+Reads the server configuration file. It also validates the contents of this file
+and sets the defaults. The configuration is a singleton.
+
+
+
+
+
+
+
+
+    
+
+
+Constructor
+-----------
+
+.. js:class:: Configuration()
+
+
+
+
+    
+    :throws RainError:
+        : when the server configuration file doesn't exist
+    
+    :throws RainError:
+        : when the server configuration file doesn't contain valid JSON
+    
+
+
+
+
+
+
+    
+
+
+
