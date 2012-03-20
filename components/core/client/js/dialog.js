@@ -1,5 +1,5 @@
 define(function () {
-    function Controller() {};
+    function Controller() {}
 
     Controller.prototype.init = $.noop;
     Controller.prototype.start = function () {

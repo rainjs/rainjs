@@ -28,7 +28,7 @@ function level3(environment, callback, data) {
             break;
         default:
             text = 'The current platform language is ' + language;
-    };
+    }
     setTimeout(function () {
         callback(null, {text: text});
     }, Math.floor(Math.random() * 3000));
