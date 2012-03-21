@@ -3,7 +3,7 @@ CSS Helper
 ==========
 
 The **CSS** helper is a custom Handlebars [#handlebars]_ helper that is used to declare references to CSS files
-inside the current component or from other RAIN components. It collects the links corresponding to the location of the CSS file
+inside the current component or from other RAIN components (for cross referencing). It collects the links corresponding to the location of the CSS file
 and give it back to the component.
 
 .. _handlebars-css-helper-usage:
