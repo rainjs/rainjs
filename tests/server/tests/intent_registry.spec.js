@@ -10,7 +10,7 @@ var intent = {
     type: 'view',
     category: 'com.intents.rain.test',
     action: 'DO_SOMETHING',
-    provider: 'some_view'
+    view: 'some_view'
 };
 
 var component = {
@@ -66,41 +66,45 @@ describe('Intents Registry: ', function () {
             expect(mockedIntentRegistry.intents).toEqual(intents);
         });
 
-        it('must throw an error if the intent category is not specified in the descriptor', function () {
+        it('must throw an error if the intent category is not specified', function () {
             expect(function () {
                 intentRegistry.register(component, {
                     action: 'some_action',
                     type: 'view',
-                    provider: 'some_provider'
+                    view: 'some_provider'
                 });
-            }).toThrow('You need to specify a category for an intent in component: ' + component.id + ';' + component.version);
+            }).toThrow('You need to specify a category for an intent in component: ' +
+                       component.id + ';' + component.version + '.');
         });
 
-        it('must throw an error if the intent action is not specified in the descriptor', function () {
+        it('must throw an error if the intent action is not specified', function () {
             expect(function () {
                 intentRegistry.register(component, {
                     category: 'some_category',
                     type: 'view',
-                    provider: 'some_provider'
+                    view: 'some_provider'
                 });
-            }).toThrow('You need to specify a action for an intent in component: ' + component.id + ';' + component.version);
+            }).toThrow('You need to specify an action for an intent in component: ' +
+                       component.id + ';' + component.version + '.');
         });
 
-        it('must throw an error if the intent provider is not specified in the descriptor', function () {
+        it('must throw an error if the intent view is not specified', function () {
             expect(function () {
                 intentRegistry.register(component, {
                     category: 'some_category',
                     action: 'some_action',
-                    type: 'view'
+                    type: 'view',
+                    view: 'inexisting'
                 });
-            }).toThrow('You need to specify a provider for an intent in component: ' + component.id + ';' + component.version);
+            }).toThrow('View inexisting was not found in ' + component.id + '.');
         });
 
         it('must throw an error if the intent is already registered', function () {
             intentRegistry.register(component, intent);
             expect(function () {
                 intentRegistry.register(component, intent);
-            }).toThrow(['Intent', intent.category, '.', intent.action, 'is already registered.'].join(' '));
+            }).toThrow('Intent ' + intent.category + '.' + intent.action +
+                       ' is already registered.');
             socketHandlers = {};
         });
     });

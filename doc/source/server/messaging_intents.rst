@@ -23,7 +23,6 @@ In meta.json file each component can use the following format to define intents:
    {"action": "...",
     "category": "...",
     "type": "view" | "server",
-    "provider: "...",
     optional_attributes
    ...]
 
@@ -45,11 +44,11 @@ intents mapped on views are defined::
         "action": "SHOW_CHAT",
         "category": "com.rain.test.general",
         "type": "view",
-        "provider": "missing_intent"
+        "view": "missing_intent"
     },
     ....
 
-For this kind of intents provider is matched against a component viewId. If the viewId
+For this kind of intents view is matched against a component viewId. If the viewId
 is not found than the registration process will throw an error.
 
 Intents mapped on server side code
@@ -64,12 +63,12 @@ Below you can find a simple example of how to use this intent (extracted from co
    {"action": "com.rain.test.serverside.INLINE_LOGGING",
      "category": "com.rain.test.general",
      "type": "server",
-     "provider": "/controller/intents/inline_logging.js",
+     "controller": "/controller/intents/inline_logging.js",
      "method": "doLogging"}
     ...]
 
 The client will receive a json representation of data returned by the server side controller.
-Provider for this intent is relative to component root path. As you can see in the code
+Controller for this intent is relative to component root path. As you can see in the code
 snippet above you also need to specify method attribute. Each method specified in there
 must have the following signature::
 
@@ -143,12 +142,12 @@ sample)::
            "action": "com.rain.test.general.SHOW_CHAT",
            "category": "com.rain.test.general",
            "type": "view",
-           "provider": "missing_intent"
+           "view": "missing_intent"
        }
        ...
        ]
    }
 
-In this case provider identifies a declared view within the component. The intents registry simply
+In this case view identifies a declared view within the component. The intents registry simply
 publish the intent to a global intents registry. The only constraint here is not to have
 two intents with the same category and intent.

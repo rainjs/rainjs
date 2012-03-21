@@ -28,7 +28,7 @@
         {
             "category": "com.rain.test",
             "action": "DO_SOMETHING",
-            "provider": "level2",
+            "view": "level2",
             "type": "view"
         }
     ]
