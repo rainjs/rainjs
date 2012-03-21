@@ -1,0 +1,8 @@
+.round_div
+{
+    padding: 5px;
+    border:2px solid;
+    border-radius:25px;
+    -moz-border-radius:25px; /* Firefox 3.6 and earlier */
+    box-shadow: 10px 10px 5px #888888;
+}
