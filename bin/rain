@@ -167,9 +167,6 @@ function setupProject(project_path){
   fs.mkdirSync(paths.components, 0755);
   //create conf directory
   fs.mkdirSync(paths.conf, 0755);
-  //create public folder
-  fs.mkdirSync(paths.public, 0755);
-  wrench.copyDirSyncRecursive(mod_path.resolve(mod_path.join(__dirname, '../init/public')), paths.public);
   //copy default configurations
   wrench.copyDirSyncRecursive(mod_path.resolve(mod_path.join(__dirname, '../init/conf')), paths.conf);
   //copy core-component
