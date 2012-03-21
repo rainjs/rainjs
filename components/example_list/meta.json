@@ -3,11 +3,6 @@
     "version": "3.0",
     "views": {
         "index" : {
-            "view": "index.html",
-            "controller": {
-                "client": "index.js",
-                "server": "index.js"
-            }
         },
         "data_layer": {
             "view": "data_layer.html"
