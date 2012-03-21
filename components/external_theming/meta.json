@@ -1,0 +1,14 @@
+{
+    "id": "external_theming",
+    "version": "1.0",
+    "views": {
+        "index" : {
+            "view": "index.html",
+            "controller": {
+                "client": "index.js",
+                "server": "index.js"
+            }
+        }
+    },
+    "intents": []
+}

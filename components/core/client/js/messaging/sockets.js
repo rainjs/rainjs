@@ -1,6 +1,6 @@
 define(["raintime/lib/socket.io"], function (io) {
     var sockets = {};
-    var baseUrl;
+    var baseUrl = undefined;
 
     /**
      * Handler class for WebSockets that manages the way WebSocket instances are cached and

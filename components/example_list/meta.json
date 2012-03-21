@@ -3,11 +3,6 @@
     "version": "3.0",
     "views": {
         "index" : {
-            "view": "index.html",
-            "controller": {
-                "client": "index.js",
-                "server": "index.js"
-            }
         },
         "data_layer": {
             "view": "data_layer.html"
@@ -27,7 +22,8 @@
         },
         "level1" : {},
         "level2" : {},
-        "level3" : {}
+        "level3" : {},
+        "css_cross_referencing": {}
     },
     "intents": []
 }
