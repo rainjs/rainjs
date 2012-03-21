@@ -30,6 +30,13 @@
             "action": "DO_SOMETHING",
             "view": "level2",
             "type": "view"
+        },
+        {
+            "category": "com.rain.test",
+            "action": "LOG_MESSAGE",
+            "type": "server",
+            "controller": "index",
+            "method": "log"
         }
     ]
 }
