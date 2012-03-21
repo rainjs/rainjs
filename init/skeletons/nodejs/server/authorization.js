@@ -18,7 +18,12 @@ function index(securityContext) {
     return true;
 }
 
-module.exports = {
-    _component: _component,
-    index: index
-};
+/**
+ * @example
+ * module.exports = {
+ *     _component: _component,
+ *     index: index
+ * };
+ *
+ */
+module.exports = {};
