@@ -18,7 +18,8 @@ var component = {
     version: '2.0',
     views: {
         'some_view': {}
-    }
+    },
+    paths: function() {return 'server'; }
 };
 
 var intents = {
@@ -49,7 +50,9 @@ describe('Intents Registry: ', function () {
                     }
                 },
                 './component_registry': {},
-                './renderer': {}
+                './renderer': {
+                    isAuthorized: function () { return false; }
+                }
             }
         }, true);
         intentRegistry = mockedIntentRegistry.module.exports;
@@ -106,6 +109,56 @@ describe('Intents Registry: ', function () {
             }).toThrow('Intent ' + intent.category + '.' + intent.action +
                        ' is already registered.');
             socketHandlers = {};
+        });
+    });
+
+    describe('handle intents', function () {
+        var fn;
+        var serverIntent = {
+            category: "com.rain.test",
+            action: "LOG_MESSAGE",
+            type: "server",
+            controller: "index",
+            method: "log"
+        };
+
+        beforeEach(function () {
+            intentRegistry.register(component, serverIntent);
+            
+            var callbacks = {};
+            var socket = {
+                on: function (event, callback) {
+                    callbacks[event] = callback;
+                }
+            };
+            
+            mockedIntentRegistry.handleIntent(socket);
+
+            fn = callbacks['request_intent'];
+        });
+        
+        it('must send error message if the intent category is missing', function () {
+            var ack = jasmine.createSpy();
+            fn({action: 'DO_SOMETHING', context: {}}, ack);
+            expect(ack).toHaveBeenCalledWith('You must specify intent category.');
+        });
+        
+        it('must send error message if the intent action is missing', function () {
+            var ack = jasmine.createSpy();
+            fn({category: 'com.intents.rain.test', context: {}}, ack);
+            expect(ack).toHaveBeenCalledWith('You must specify intent action.');
+        });
+        
+        it('must send error message if the intent context is missing', function () {
+            var ack = jasmine.createSpy();
+            fn({category: 'com.intents.rain.test', action: 'DO_SOMETHING'}, ack);
+            expect(ack).toHaveBeenCalledWith('You must specify intent context');
+        });
+        
+        it('must send error message if the intent is not authorized', function () {
+            var ack = jasmine.createSpy();
+            fn({category: 'com.rain.test', action: 'LOG_MESSAGE', context: {}}, ack);
+            expect(ack).toHaveBeenCalledWith('Unauthorized access to component button!');
         });
     });
 });
