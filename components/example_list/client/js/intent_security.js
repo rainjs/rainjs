@@ -27,9 +27,9 @@ define(['raintime/messaging/intents'], function (Intents) {
             });
 
             promise.then(function () {
-                alert('Intent was successfull');
+                alert('Server intent was successfull');
             }, function (error) {
-                alert('Intent failed with error: ' + error);
+                alert('Server intent failed with error: ' + error);
             });
         });
 
@@ -40,9 +40,9 @@ define(['raintime/messaging/intents'], function (Intents) {
             });
 
             promise.then(function () {
-                alert('Intent was successfull');
+                alert('Server intent was successfull');
             }, function (error) {
-                alert('Intent failed with error: ' + error);
+                alert('Server intent failed with error: ' + error);
             });
         });
     };
