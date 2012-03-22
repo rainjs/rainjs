@@ -10,6 +10,7 @@ describe('Handlebars component helper', function () {
     var componentHelper, Handlebars,
         mockComponentRegistry, componentRegistry,
         mockRenderer,
+        renderer,
         rainContext;
 
     beforeEach(function () {
@@ -19,6 +20,15 @@ describe('Handlebars component helper', function () {
         mockComponentRegistry.registerPlugins(plugins);
         mockComponentRegistry.configurePlugins(plugins);
         componentRegistry = new mockComponentRegistry.ComponentRegistry();
+        mockRenderer = loadFile(cwd + '/lib/renderer.js', {
+            './error_handler': null,
+            './socket_registry': {
+                register: function(){}
+            },
+            './data_layer': null,
+            './component_registry': componentRegistry
+        }, true);
+        renderer = new mockRenderer.Renderer();
 
         rainContext = {
             css: [],
@@ -31,51 +41,20 @@ describe('Handlebars component helper', function () {
             transport: {}
         };
 
-        mockRenderer = {
-            rain: rainContext,
-            createInstanceId: function () {
-                return 'new instance id';
-            },
-            replaceWithError: function(statusCode, component, exception){
-                component.id = 'error',
-                component.view = statusCode;
-                component.version = '1.0';
-            },
-            loadDataAndSend: function(){
-
-            },
-            isAuthorized: function(childComponent){
-                var componentConfig = componentRegistry.getConfig(childComponent.id,
-                                                                  childComponent.version);
-                var permissions = [].concat(componentConfig.permissions || [],
-                                            componentConfig.views[childComponent.view].permissions || []);
-
-                var dynamicConditions = [];
-
-                // Add component dynamic conditions.
-                if (componentConfig.dynamicConditions && componentConfig.dynamicConditions._component) {
-                    dynamicConditions.push(componentConfig.dynamicConditions._component);
-                }
-
-                // Add view dynamic conditions.
-                if (componentConfig.dynamicConditions &&
-                    componentConfig.dynamicConditions[childComponent.view]) {
-                    dynamicConditions.push(componentConfig.dynamicConditions[childComponent.view]);
-                }
-
-                var securityContext = { user: rainContext.session ? rainContext.session.user : null };
-
-                if (!authorization.authorize(securityContext, permissions, dynamicConditions)) {
-                    return false;
-                }
-
-                return true;
-            }
+        renderer.rain = rainContext;
+        renderer.createInstanceId = function () {
+            return 'new instance id';
+        };
+        renderer.loadDataAndSend = function(){};
+        renderer.replaceWithError = function(statusCode, component, exception){
+            component.id = 'error',
+            component.view = statusCode;
+            component.version = '1.0';
         };
 
         componentHelper = loadFile(cwd + '/lib/handlebars/component.js', {
             '../component_registry': componentRegistry,
-            '../renderer': mockRenderer
+            '../renderer': renderer
         });
 
         Handlebars = require('handlebars');
@@ -185,7 +164,7 @@ describe('Handlebars component helper', function () {
     }
 
     describe('test authorization cases', function () {
-        
+
         it('must use the required component when the permission cases pass', function () {
             setUserInSession();
             Handlebars.compile('{{component name="button" version="1.0" view="restricted"}}')();
