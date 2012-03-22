@@ -8,16 +8,12 @@ define(function() {
      */
     function Placeholder() {}
 
-    Placeholder.prototype.init = function () {
-        console.log("Placeholder was initialized.");
-    };
+    Placeholder.prototype.init = function () {};
 
     /**
      * Startup lifecycle step that happens right after the markup is in place.
      */
-    Placeholder.prototype.start = function () {
-        console.log('Placeholder was started.');
-    };
+    Placeholder.prototype.start = function () {};
 
     return Placeholder;
 });
