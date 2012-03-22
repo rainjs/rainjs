@@ -13,16 +13,16 @@ Configuration
 The default server configuration file is located in the ``conf/server.conf.default`` file. There
 are two important properties related to language:
 
-- ``default_language`` - the platform default language
+- ``defaultLanguage`` - the platform default language
 - ``language`` - the current language
 
-The configuration **must** have a ``default_language`` key that specifies the language that will be
+The configuration **must** have a ``defaultLanguage`` key that specifies the language that will be
 used when:
 
 - the current language is not specified
 - a view / translation is not found for the current language.
 
-If the ``language`` key is not specified, it will default to the ``default_language`` value.
+If the ``language`` key is not specified, it will default to the ``defaultLanguage`` value.
 
 E.g. **en_US**, **en_UK**, **de_DE**.
 
