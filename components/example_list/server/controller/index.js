@@ -30,6 +30,14 @@ function doDelete(request, response) {}
  */
 function doPut(request, response) {}
 
+function allowedIntent() {
+    return true;
+}
+
+function deniedIntent() {
+    return true;
+}
+
 exports.get = doGet;
 exports.post = doPost;
 exports['delete'] = doDelete;

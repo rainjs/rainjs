@@ -7,12 +7,6 @@
         "data_layer": {
             "view": "data_layer.html"
         },
-        "postit" :{
-            "view": "postit.html"
-        },
-        "postboard": {
-            "view": "postboard.html"
-        },
         "event_emitter": {
             "view": "event_emitter.html",
             "controller": {
@@ -23,7 +17,38 @@
         "level1" : {},
         "level2" : {},
         "level3" : {},
-        "css_cross_referencing": {}
+        "css_cross_referencing": {},
+        "intent_security": {
+            "controller": {
+                "client": "intent_security.js"
+            }
+        },
+        "denied": {
+            "permissions": ["some_permission"]
+        }
     },
-    "intents": []
+    "intents": [{
+        "category": "com.rain.example.security",
+        "action": "ALLOWED_VIEW",
+        "type": "view",
+        "view": "level1"
+    }, {
+        "category": "com.rain.example.security",
+        "action": "DENIED_VIEW",
+        "type": "view",
+        "view": "denied"
+    }, {
+        "category": "com.rain.example.security",
+        "action": "ALLOWED_SERVER",
+        "type": "server",
+        "controller": "index.js",
+        "method": "allowedIntent"
+    }, {
+        "category": "com.rain.example.security",
+        "action": "DENIED_SERVER",
+        "type": "server",
+        "permissions": ["some_permission"],
+        "controller": "index.js",
+        "method": "deniedIntent"
+    }]
 }
