@@ -19,7 +19,7 @@ following physical location: ``<component_folder>/client/css/index.css``::
 
 The following line references the ``index.css`` file from the *button* component, version *1.1*::
 
-{{css component="button" version="1.1" path="index.css"}}
+{{css name="button" version="1.1" path="index.css"}}
 
 .. note::
 
@@ -37,7 +37,7 @@ The declaration *{{css path="index.css"}}* generates the following *link* tag on
 
     <link type="text/css" rel="stylesheet" href="/componentId/componentVersion/css/index.css" />
 
-The declaration *{{css component="button" version="1.1" path="index.css"}}* generates
+The declaration *{{css name="button" version="1.1" path="index.css"}}* generates
 the following *link* tag on client side:
 
 .. code-block:: html
