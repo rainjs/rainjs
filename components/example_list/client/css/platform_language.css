@@ -1,0 +1,18 @@
+.box-shadow (@offx: 0, @offy: 0, @blur: 0, @spread: 0, @color: #000) {
+	box-shadow: @arguments;
+	-moz-box-shadow: @arguments;
+	-webkit-box-shadow: @arguments;
+}
+
+.map-frame {
+	width: 600px;
+	padding: 5px;
+	margin: auto;
+
+	.box-shadow(2px, 3px, 10px, 0, #6683b8);
+
+	.map-title {
+		font-family: Ubuntu, Verdana, Arial, sans;
+		margin-bottom: 15px;
+	}
+}
