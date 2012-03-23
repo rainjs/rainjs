@@ -23,7 +23,8 @@
         "level1" : {},
         "level2" : {},
         "level3" : {},
-        "css_cross_referencing": {}
+        "css_cross_referencing": {},
+        "platform_language": {}
     },
     "intents": []
 }
