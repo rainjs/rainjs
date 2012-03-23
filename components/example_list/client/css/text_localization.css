@@ -4,4 +4,6 @@
 
 .email-response {
     color: green;
+    font-size: 2em;
+    text-align: center;
 }

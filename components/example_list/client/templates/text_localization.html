@@ -37,11 +37,9 @@
     <p>
         {{t "%s %s" firstName lastName}}
     </p>
-    <p>
-        <br />
-        {{#with "Send email"}}
-            {{component name="external_theming" view="button" sid="sendEmail"}}
-        {{/with}}
-        <span class="email-response"></span>
-    </p>
+    <br />
+    {{#with "Send email"}}
+        {{component name="external_theming" view="button" sid="sendEmail"}}
+    {{/with}}
+    <div class="email-response"></div>
 </div>
