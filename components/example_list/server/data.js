@@ -65,10 +65,35 @@ function level3(environment, callback, data) {
     }, Math.floor(Math.random() * 3000));
 }
 
+function platform_language(env, fn, ctx) {
+    var when = require('promised-io/promise').when,
+        Map = require('./lib/map'),
+        countries = require('./lib/map_countries');
+
+    // extract ISO-3166-1 alpha2 country code
+    var code = env.language.slice(env.language.lastIndexOf('_') + 1).toLowerCase();
+    // correct for uk
+    if (code === 'uk') { code = 'gb'; }
+
+    var map = new Map(code);
+
+    // load the map and pass data to template or signal error
+    when(map.load(),
+        function (src) {
+            fn(null, {
+                src: src,
+                country: countries[code]
+            });
+        },
+        fn.bind(null, {error: true})
+    );
+}
+
 module.exports = {
     index: index,
     data_layer: data_layer,
     level1: level1,
     level2: level2,
-    level3: level3
+    level3: level3,
+    platform_language: platform_language
 };
