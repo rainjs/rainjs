@@ -1,8 +1,8 @@
 var http = require('http'),
-	url = require('url'),
-	Deferred = require('promised-io/promise').Deferred,
-	seq = require('promised-io/promise').seq,
-	Options = require('./map_options');
+    url = require('url'),
+    Deferred = require('promised-io/promise').Deferred,
+    seq = require('promised-io/promise').seq,
+    Options = require('./map_options');
 
 /**
  * This class makes available the final URL to a static
@@ -19,7 +19,7 @@ var http = require('http'),
  * @property {Options} options map options object to retrieve OSM HTTP options
  */
 function Map(code) {
-	this.options = new Options(code);
+    this.options = new Options(code);
 };
 
 /**
@@ -31,16 +31,16 @@ function Map(code) {
  * @returns {Promise} a promise that will get resolved with the static map image URL
  */
 Map.prototype.load = function () {
-	var deferred = new Deferred(),
-		self = this,
-		// seq doesn't take a context, so bind one to each step
-		steps = [search, parse, assemble].map(
-			function (fn) {
-				return fn.bind(self, self);
-			}
-		);
+    var deferred = new Deferred(),
+        self = this,
+        // seq doesn't take a context, so bind one to each step
+        steps = [search, parse, assemble].map(
+            function (fn) {
+                return fn.bind(self, self);
+            }
+        );
 
-	return seq(steps);
+    return seq(steps);
 };
 
 /**
@@ -50,17 +50,17 @@ Map.prototype.load = function () {
  * @returns {Promise} a promise that gets resolved with the POI data
  */
 function search(self) {
-	var deferred = new Deferred();
-	var req = http.get(self.options.pois(), function (res) {
-		var data = [];
-		res.setEncoding('utf8');
-		res.on('data', data.push.bind(data));
-		res.on('end', function () {
-			deferred.resolve(data.join(''));
-		});
-	});
-	req.on('error', deferred.reject);
-	return deferred.promise;
+    var deferred = new Deferred();
+    var req = http.get(self.options.pois(), function (res) {
+        var data = [];
+        res.setEncoding('utf8');
+        res.on('data', data.push.bind(data));
+        res.on('end', function () {
+            deferred.resolve(data.join(''));
+        });
+    });
+    req.on('error', deferred.reject);
+    return deferred.promise;
 }
 
 /**
@@ -71,20 +71,20 @@ function search(self) {
  * @returns {Promise} a promise that gets resolved with an array of locations for pois
  */
 function parse(self, pois) {
-	var deferred = new Deferred();
+    var deferred = new Deferred();
 
-	process.nextTick(function () {
-		try { pois = JSON.parse(pois); }
-		catch (e) { return deferred.reject(); }
+    process.nextTick(function () {
+        try { pois = JSON.parse(pois); }
+        catch (e) { return deferred.reject(); }
 
-		deferred.resolve(
-			pois.map(function (poi) {
-				return [poi.lat, poi.lon];
-			})
-		);
-	});
+        deferred.resolve(
+            pois.map(function (poi) {
+                return [poi.lat, poi.lon];
+            })
+        );
+    });
 
-	return deferred.promise;
+    return deferred.promise;
 };
 
 /**
@@ -95,13 +95,13 @@ function parse(self, pois) {
  * @returns {Promise} a promise that gets resolved with the final URL
  */
 function assemble(self, pois) {
-	var deferred = new Deferred();
+    var deferred = new Deferred();
 
-	process.nextTick(function () {
-		deferred.resolve(url.format(self.options.map(pois)));
-	});
+    process.nextTick(function () {
+        deferred.resolve(url.format(self.options.map(pois)));
+    });
 
-	return deferred.promise;
+    return deferred.promise;
 };
 
 module.exports = Map;
