@@ -99,7 +99,8 @@ describe('Intents Registry: ', function () {
                     type: 'view',
                     view: 'inexisting'
                 });
-            }).toThrow('View inexisting was not found in ' + component.id + '.');
+            }).toThrow('View inexisting was not found in ' +
+                       component.id + ';' + component.version + '.');
         });
 
         it('must throw an error if the intent is already registered', function () {

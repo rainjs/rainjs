@@ -63,7 +63,7 @@ define(["raintime/client_storage",
                 Observer.publish(eventName, data, this);
             },
 
-            sendIntent: Intents.sendIntent,
+            sendIntent: Intents.send,
             getSocket: Sockets.getSocket
         };
     }
@@ -84,7 +84,7 @@ define(["raintime/client_storage",
      * @param {Object} component The component which to be requested
      * @param {String} component.id The component id
      * @param {String} component.view The component view id
-     * @param {String} component.sid The component staticd id
+     * @param {String} component.sid The component staticId id
      * @param {Object} component.data Custom data for the template
      * @param {Boolean} component.placeholder Enable / Disable placeholder
      * @param {jQueryDom} dom The dom object where the component is inserted
@@ -107,7 +107,7 @@ define(["raintime/client_storage",
      * @param {Object} component The component which to be requested
      * @param {String} component.id The component id
      * @param {String} component.view The component view id
-     * @param {String} component.sid The component staticd id
+     * @param {String} component.sid The component staticId id
      * @param {Object} component.data Custom data for the template
      * @param {Boolean} component.placeholder Enable / Disable placeholder
      */

@@ -11,7 +11,7 @@ define(['raintime/messaging/sockets',
      *
      * @returns {Promise}
      */
-    function sendIntent(intent) {
+    function send(intent) {
         var defer = Promise.defer();
 
         intent.context = intent.context || {};
@@ -30,7 +30,7 @@ define(['raintime/messaging/sockets',
     }
 
     return {
-        send: sendIntent
+        send: send
     };
 });
 
