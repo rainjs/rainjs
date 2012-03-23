@@ -1,4 +1,4 @@
-{{css path="index.css"}}
+{{css path="text_localization.css"}}
 <div class="reference">
     <p>
         {{t "Dear %s %s," boss.title boss.lastName}}
@@ -36,5 +36,12 @@
     </p>
     <p>
         {{t "%s %s" firstName lastName}}
+    </p>
+    <p>
+        <br />
+        {{#with "Send email"}}
+            {{component name="external_theming" view="button" sid="sendEmail"}}
+        {{/with}}
+        <span class="email-response"></span>
     </p>
 </div>
