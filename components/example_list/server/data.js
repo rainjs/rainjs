@@ -65,10 +65,27 @@ function level3(environment, callback, data) {
     }, Math.floor(Math.random() * 3000));
 }
 
+function text_localization(environment, callback, data) {
+    var customData = {
+        boss: {
+            title: 'Mr.',
+            lastName: 'Doe'
+        },
+        company: "ABC Company",
+        months: 5,
+        firstName: "John",
+        lastName: 'Smith',
+        email: 'jsmith@abcd.com',
+        phone: '(111) 111-1111'
+    };
+    callback(null, customData);
+}
+
 module.exports = {
     index: index,
     data_layer: data_layer,
     level1: level1,
     level2: level2,
-    level3: level3
+    level3: level3,
+    text_localization: text_localization
 };

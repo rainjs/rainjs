@@ -28,3 +28,7 @@
 .second_level, .third_level {
     margin: 10px 30px 10px 40px;
 }
+
+.reference {
+    font-size: 0.8em;
+}
