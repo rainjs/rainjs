@@ -1,0 +1,10 @@
+html {}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+  
+.app-container {
+    display: inline !important;
+}
