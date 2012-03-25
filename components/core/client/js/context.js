@@ -18,6 +18,7 @@ define(["raintime/client_storage",
      * @property {ClientStorage} storage the local storage manager
      */
     function Context(component) {
+        var self = this;
         this.instanceId = component.instanceId;
         this.storage = new ClientStorage(this);
 
@@ -38,7 +39,7 @@ define(["raintime/client_storage",
              * @memberOf Context.messaging
              */
             subscribe: function (eventName, callback) {
-                Observer.subscribe(eventName, callback, this);
+                Observer.subscribe(eventName, callback, self);
             },
 
             /**
@@ -49,7 +50,7 @@ define(["raintime/client_storage",
              * @memberOf Context.messaging
              */
             unsubscribe: function (eventName, callback) {
-                Observer.unsubscribe(eventName, callback, this);
+                Observer.unsubscribe(eventName, callback, self);
             },
 
             /**
@@ -60,7 +61,7 @@ define(["raintime/client_storage",
              * @memberOf Context.messaging
              */
             publish: function (eventName, data) {
-                Observer.publish(eventName, data, this);
+                Observer.publish(eventName, data, self);
             },
 
             sendIntent: Intents.sendIntent,
