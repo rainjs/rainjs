@@ -1,0 +1,2 @@
+msgid "Dear %s %s,"
+msgstr "Hello %s %s,"
