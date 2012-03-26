@@ -1,9 +1,3 @@
-var env = require(process.cwd() + '/lib/environment');
-
-function t(msgid) { return msgid; }
-
-function nt() {}
-
 /**
  * Resolves the GET HTTP verb.
  *
