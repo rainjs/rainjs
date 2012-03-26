@@ -7,12 +7,6 @@
         "data_layer": {
             "view": "data_layer.html"
         },
-        "postit" :{
-            "view": "postit.html"
-        },
-        "postboard": {
-            "view": "postboard.html"
-        },
         "event_emitter": {
             "view": "event_emitter.html",
             "controller": {
