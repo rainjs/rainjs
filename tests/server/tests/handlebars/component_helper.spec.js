@@ -3,31 +3,48 @@
 var cwd = process.cwd();
 var globals = require(cwd + '/lib/globals.js');
 var config = require(cwd + '/lib/configuration');
-var authorization = require(cwd + '/lib/authorization');
 var loadFile = require(cwd + '/tests/server/rain_mocker');
 
 describe('Handlebars component helper', function () {
     var componentHelper, Handlebars,
         mockComponentRegistry, componentRegistry,
         mockRenderer,
+        mockRenderUtils,
         renderer,
         rainContext;
 
     beforeEach(function () {
+        var errorHandler = {
+            getErrorComponent: function(statusCode){
+                return {
+                    component: {
+                        id: "error",
+                        version: "1.0"
+                    },
+                    view: statusCode
+                };
+            }
+        };
         mockComponentRegistry = loadFile(cwd + '/lib/component_registry.js', null, true);
         var plugins = ['dynamic_conditions'];
         mockComponentRegistry.scanComponentFolder();
         mockComponentRegistry.registerPlugins(plugins);
         mockComponentRegistry.configurePlugins(plugins);
         componentRegistry = new mockComponentRegistry.ComponentRegistry();
+        mockRenderUtils = loadFile(cwd + '/lib/render_utils.js', {
+            './error_handler': errorHandler,
+            './component_registry': componentRegistry
+        });
         mockRenderer = loadFile(cwd + '/lib/renderer.js', {
-            './error_handler': null,
+            './error_handler': errorHandler,
             './socket_registry': {
                 register: function(){}
             },
             './data_layer': null,
-            './component_registry': componentRegistry
+            './component_registry': componentRegistry,
+            './render_utils': mockRenderUtils
         }, true);
+
         renderer = new mockRenderer.Renderer();
 
         rainContext = {
@@ -46,15 +63,10 @@ describe('Handlebars component helper', function () {
             return 'new instance id';
         };
         renderer.loadDataAndSend = function(){};
-        renderer.replaceWithError = function(statusCode, component, exception){
-            component.id = 'error',
-            component.view = statusCode;
-            component.version = '1.0';
-        };
-
         componentHelper = loadFile(cwd + '/lib/handlebars/component.js', {
             '../component_registry': componentRegistry,
-            '../renderer': renderer
+            '../renderer': renderer,
+            '../render_utils': mockRenderUtils
         });
 
         Handlebars = require('handlebars');

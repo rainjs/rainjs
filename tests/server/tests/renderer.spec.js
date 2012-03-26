@@ -2,7 +2,7 @@
 
 var cwd = process.cwd();
 var Module = require('module');
-var renderer;
+var renderer, render_utils;
 
 var button = {
     id: 'button',
@@ -148,6 +148,7 @@ describe('Renderer', function () {
         socket = new io.Socket();
 
         renderer = require(cwd + '/lib/renderer');
+        render_utils = require(cwd + '/lib/render_utils');
     });
 
     describe('renderBootstrap', function () {
@@ -268,7 +269,7 @@ describe('Renderer', function () {
         it('must change the component parameter', function () {
             var component = {id: 'button', version: '1.1', view: 'index'};
             var error = new Error('message');
-            renderer.replaceWithError(404, component, error);
+            render_utils.replaceWithError(404, component, error);
 
             expect(component).toEqual({
                 id : 'error',
