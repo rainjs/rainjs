@@ -26,3 +26,6 @@ msgstr "%1$s %2$s"
 
 msgid "Email was sent successfully!"
 msgstr "E-Mail wurde erfolgreich gesendet!"
+
+msgid "Send email"
+msgstr "E-Mail senden"

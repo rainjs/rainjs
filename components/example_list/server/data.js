@@ -71,12 +71,13 @@ function text_localization(environment, callback, data) {
             title: 'Mr.',
             lastName: 'Doe'
         },
-        company: "ABC Company",
+        company: 'ABC Company',
         months: 5,
-        firstName: "John",
+        firstName: 'John',
         lastName: 'Smith',
         email: 'jsmith@abcd.com',
-        phone: '(111) 111-1111'
+        phone: '(111) 111-1111',
+        sendButtonLabel: t('Send email')
     };
     callback(null, customData);
 }
