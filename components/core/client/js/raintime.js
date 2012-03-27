@@ -3,6 +3,8 @@ define(['raintime/lib/promise',
         'raintime/context'
 ], function (Promise, EventEmitter, Context) {
 
+    var raintime = new Raintime();
+
     /**
      * The map of registered components, indexed by the instanceId property.
      *
@@ -20,6 +22,17 @@ define(['raintime/lib/promise',
      * @private
      */
     var preComponents = {};
+
+    /**
+     * The map of callbacks for components that will be inserted or that will replace other
+     * components. These callbacks will be called after the controllers for the components are
+     * loaded and before invoking the lifecycle for them.
+     * The components are indexed by the instanceId property.
+     *
+     * @type {Object}
+     * @private
+     */
+    var callbacks = {};
 
     /**
      * The main client-side starting point used to access other libraries used in the controllers.
@@ -146,6 +159,20 @@ define(['raintime/lib/promise',
     };
 
     /**
+     * Sets a callback to be called after the controller for the component was loaded and before
+     * invoking the lifecycle.
+     *
+     * @param {String} instanceId the component's instance id
+     * @param {Function} callback the callback function
+     */
+    ComponentRegistry.prototype.setCallback = function (instanceId, callback) {
+        if (!instanceId || typeof callback !== 'function') {
+            return;
+        }
+        callbacks[instanceId] = callback;
+    };
+
+    /**
      * Finds one or more components by their staticIds in the children of a component with the
      * corresponding instanceId argument.
      * If the staticId is undefined then all the controllers for the children are returned.
@@ -218,6 +245,7 @@ define(['raintime/lib/promise',
             setTimeout(function () {
                 deferred.resolve();
             }, 0);
+            delete callbacks[newComponent.instanceId];
             return;
         }
 
@@ -255,7 +283,7 @@ define(['raintime/lib/promise',
             /**
              * The context of the controller. It is populated with useful functionality.
              */
-            controller.context = new Context(newComponent);
+            controller.context = new Context(raintime, newComponent);
             controller.context.find = function (staticIds, callback) {
                 if (typeof staticIds === 'function') {
                     callback = staticIds;
@@ -270,6 +298,11 @@ define(['raintime/lib/promise',
             };
 
             newComponent.controller = controller;
+
+            if (callbacks[newComponent.instanceId]) {
+                callbacks[newComponent.instanceId].apply(controller);
+                delete callbacks[newComponent.instanceId];
+            }
 
             newComponent.controllerLoaded = true;
             invokeLifecycle(newComponent);
@@ -342,5 +375,5 @@ define(['raintime/lib/promise',
         }
     }
 
-    return new Raintime();
+    return raintime;
 });
