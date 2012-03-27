@@ -2,8 +2,8 @@
 RAIN Localization
 =================
 
-RAIN provides features to localize templates, translations and static resources. Depending on the
-localized needs, these features can be used on the client-side, server-side or both.
+RAIN provides features to localize text, templates and static resources. Depending on the
+localization needs, these features can be used on the client-side, server-side or both.
 
 The localization process uses the current platform language and tries to localize the requested
 resource. If the resource is not found it tries to use the default platform language. If this
@@ -53,6 +53,9 @@ URL path. E.g.:
 - unlocalized image: /example/3.0/resources/images/flag.png
 - localized image: /example/3.0/resources/images/flag.png?loc
 
+Localized resources are placed in the same folder with the other resources. They only add a locale 
+suffix to the file name like `flag_de_DE.png` for german language if the original file name is `flag.png`.
+
 ^^^^^^^^^^^^^^
 Resources URLs
 ^^^^^^^^^^^^^^
@@ -72,3 +75,8 @@ Here are some examples of resource URLs:
 ------------------
 Views localization
 ------------------
+
+Views can be localized by adding a locale suffix to the view name (`index_de_DE.html` for `index.html`).
+First, Rain tries to use the view for the platform language. If this view doesn't exist it tries to use
+the view for the default platform language. If this is missing it will take the view with no language 
+suffix.
