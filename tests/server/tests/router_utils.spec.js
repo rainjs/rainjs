@@ -1,6 +1,7 @@
 "use strict";
 
 var cwd = process.cwd();
+var path = require('path');
 var globals = require(process.cwd() + '/lib/globals');
 var fs = require('fs');
 var loadFile = require(cwd + '/tests/server/rain_mocker');
@@ -10,23 +11,28 @@ var errorComponent = JSON.parse(
     fs.readFileSync(cwd +'/tests/server/fixtures/components/error/meta.json')
 );
 
+var configuration = JSON.parse(
+    fs.readFileSync(cwd +'/tests/server/fixtures/server.conf')
+);
+
 var routerUtils = loadFile(cwd + '/lib/router_utils.js', {
     './renderer': {
-        renderBootstrap: function(component, view, req, res){
-            return "bootstrap with "+component.id+" "+component.version+" "+view;
+        renderBootstrap: function (component, view, req, res) {
+            return "bootstrap with " + component.id + " " + component.version + " " + view;
         }
     },
     './error_handler': {
-        getErrorComponent: function(statusCode){
+        getErrorComponent: function (statusCode) {
             return {
                 view: statusCode,
                 component: errorComponent
             };
         }
-    }
+    },
+    './configuration': configuration
 });
 
-describe('Router Utilities', function(){
+describe('Router Utilities', function () {
     var request = null;
     var response = null;
 
@@ -35,24 +41,24 @@ describe('Router Utilities', function(){
 
         response = new http.ServerResponse();
         request = new http.ServerRequest();
-        request.destroy = function(){
+        request.destroy = function () {
             this.destroyed = true;
         };
         request.headers = {
             accept: '.......text/html.....'
         };
-        response.write = function(text){
-            if(!this._body){
+        response.write = function (text) {
+            if (!this._body) {
                 this._body = "";
             }
             this._body += text;
         };
-        response.end = function(body){
-            if(body){
+        response.end = function (body) {
+            if (body) {
                 this._body = body.toString();
             }
         };
-        response.getHeader = function(header){
+        response.getHeader = function (header) {
             return this._headers[header];
         };
     });
@@ -89,7 +95,7 @@ describe('Router Utilities', function(){
         });
     });
 
-    describe('handle not found', function(){
+    describe('handle not found', function () {
         it('must call handle error handler with 404', function () {
             routerUtils.handleNotFound(request, response);
             expect(response.statusCode).toEqual(404);
@@ -97,7 +103,7 @@ describe('Router Utilities', function(){
         });
     });
 
-    describe('validate path', function(){
+    describe('validate path', function () {
         it('must return valid', function () {
             expect(routerUtils.isValid("/example/resource/images/picture.jpg")).toEqual(true);
         });
@@ -107,7 +113,7 @@ describe('Router Utilities', function(){
         });
     });
 
-    describe('validate resource path', function(){
+    describe('validate resource path', function () {
         it('must return valid', function () {
             expect(
                 routerUtils.checkPath(
@@ -117,20 +123,21 @@ describe('Router Utilities', function(){
         });
 
         it('must return invalid', function () {
-            expect(
-                   routerUtils.checkPath(
-                       cwd +'/tests/server/fixtures/components/example/resource/',
-                       cwd +'/tests/server/fixtures/components/example/resource/images/.hiddenfile.config'
-                   )).toEqual(false);
+            var result = routerUtils.checkPath(
+               cwd +'/tests/server/fixtures/components/example/resource/',
+               cwd +'/tests/server/fixtures/components/example/resource/images/.hiddenfile.config'
+            );
+            expect(result).toEqual(false);
         });
     });
 
-    describe('set resource headers', function(){
+    describe('set resource headers', function () {
         it('must set the headers correctly', function () {
             var maxAge = 150000000;
             var lastModified = new Date();
             var len = 9999;
-            routerUtils.setResourceHeaders(request, response, maxAge, new Date(), "text/html", len);
+            routerUtils.setResourceHeaders(request, response, maxAge, new Date(),
+                                           "text/html", len);
             expect(response._headers['Date']).toBeDefined();
             expect(response._headers['Cache-Control']).toEqual(maxAge);
             expect(response._headers['Last-Modified']).toEqual(lastModified.toUTCString());
@@ -144,12 +151,13 @@ describe('Router Utilities', function(){
         });
     });
 
-    describe('handle static resources', function(){
+    describe('handle static resources', function () {
         it('must return the static resource', function () {
             var maxAge = 150000000;
             var type = 'resources';
             request.path = '/placeholder/resources/images/loading.gif';
-            request.component = fs.readFileSync(cwd +'/tests/server/fixtures/components/placeholder/meta.json');
+            request.component = fs.readFileSync(cwd +
+                                    '/tests/server/fixtures/components/placeholder/meta.json');
             routerUtils.handleStaticResource(request, response, maxAge, type);
         });
 
@@ -157,13 +165,15 @@ describe('Router Utilities', function(){
             var maxAge = 150000000;
             var type = 'resources';
             request.path = '/placeholder/resources/images/loading.giffff';
-            request.component = fs.readFileSync(cwd +'/tests/server/fixtures/components/placeholder/meta.json');
+            request.component = fs.readFileSync(cwd +
+                                    '/tests/server/fixtures/components/placeholder/meta.json');
             routerUtils.handleStaticResource(request, response, maxAge, type);
             expect(response.statusCode).toEqual(405);
         });
 
         it('must return an error', function () {
-            var mockComponentRegistry = loadFile(process.cwd() + '/lib/component_registry.js', null, true);
+            var mockComponentRegistry = loadFile(process.cwd() + '/lib/component_registry.js',
+                                                 null, true);
             mockComponentRegistry.scanComponentFolder();
             var componentRegistry = new mockComponentRegistry.ComponentRegistry();
             var maxAge = 150000000;
@@ -172,24 +182,24 @@ describe('Router Utilities', function(){
             request.method = 'GET';
             request.component = componentRegistry.getConfig("placeholder", "1.0");
 
-
-            runs(function(){
+            runs(function () {
                 routerUtils.handleStaticResource(request, response, maxAge, type);
             });
 
-            waitsFor(function(){
-                if(response.statusCode){
+            waitsFor(function () {
+                if (response.statusCode) {
                     return true;
                 }
             });
 
-            runs(function(){
+            runs(function () {
                 expect(response.statusCode).toEqual(404);
             });
         });
 
         it('must return the resource', function () {
-            var mockComponentRegistry = loadFile(process.cwd() + '/lib/component_registry.js', null, true);
+            var mockComponentRegistry = loadFile(process.cwd() + '/lib/component_registry.js',
+                                                 null, true);
             mockComponentRegistry.scanComponentFolder();
             var componentRegistry = new mockComponentRegistry.ComponentRegistry();
             var maxAge = 150000000;
@@ -198,33 +208,113 @@ describe('Router Utilities', function(){
             request.method = 'GET';
             request.component = componentRegistry.getConfig("placeholder", "1.0");
 
-            spyOn(fs, 'createReadStream').andCallFake(function(){
-                console.log("spy is on");
+            spyOn(fs, 'createReadStream').andCallFake(function () {
                 return {
-                    destroy: function(){},
-                    pipe: function(response){
+                    destroy: function () {},
+                    pipe: function (response) {
                         response.statusCode = 200;
                         response.end("received Data");
                     },
-                    on: function(){}
+                    on: function () {}
                 };
             });
 
-            request.on = function(){};
-            runs(function(){
+            request.on = function () {};
+            runs(function () {
                 routerUtils.handleStaticResource(request, response, maxAge, type);
             });
 
-            waitsFor(function(){
-                if(response.statusCode){
+            waitsFor(function () {
+                if (response.statusCode) {
                     return true;
                 }
             });
 
-            runs(function(){
+            runs(function () {
                 expect(response.statusCode).toEqual(200);
                 expect(response._body).toEqual("received Data");
             });
+        });
+
+        /**
+         * Test the path that is used to read a static resource that's localized.
+         * The component used is example;0.0.1
+         *
+         * @param {String} filePath the file path
+         * @param {String} expectedPath the expected path
+         * @param {Boolean} notFound true when the file should be missing
+         */
+        function localize(filePath, expectedPath, notFound) {
+            var mockComponentRegistry = loadFile(process.cwd() + '/lib/component_registry.js',
+                                                 null, true);
+            mockComponentRegistry.scanComponentFolder();
+            var componentRegistry = new mockComponentRegistry.ComponentRegistry();
+            var maxAge = 150000000;
+            var type = 'resources';
+            request.query = {
+                'loc': undefined
+            };
+            request.path = filePath;
+            request.method = 'GET';
+            request.component = componentRegistry.getConfig('example', '0.0.1');
+
+            var localizedResource = undefined;
+
+            spyOn(fs, 'createReadStream').andCallFake(function (resource, opts) {
+                localizedResource = resource;
+                return {
+                    destroy: function () {},
+                    pipe: function (response) {
+                        response.statusCode = 200;
+                        response.end("received Data");
+                    },
+                    on: function () {}
+                };
+            });
+
+            request.on = function () {};
+            runs(function () {
+                routerUtils.handleStaticResource(request, response, maxAge, type);
+            });
+
+            waitsFor(function () {
+                if (response.statusCode) {
+                    return true;
+                }
+            });
+
+            runs(function () {
+                if (notFound) {
+                    expect(response.statusCode).toBe(404);
+                } else {
+                    var resourcesFolder = request.component.paths('resources', true);
+                    expect(localizedResource).toBe(path.join(resourcesFolder, expectedPath));
+                }
+            });
+        }
+
+        it('must return the current language localized resource', function () {
+            configuration.language = 'de_DE';
+            configuration.defaultLanguage = 'en_US';
+            localize('/info.txt', 'info_de_DE.txt');
+        });
+
+        it('must return the default language localized resource', function () {
+            configuration.language = 'en_UK';
+            configuration.defaultLanguage = 'ro_RO';
+            localize('/info.txt', 'info_ro_RO.txt');
+        });
+
+        it('must return the unlocalized resource', function () {
+            configuration.language = 'en_US';
+            configuration.defaultLanguage = 'en_US';
+            localize('/info.txt', 'info.txt');
+        });
+
+        it('must return a 404 when the localized resource is not found', function () {
+            configuration.language = 'en_US';
+            configuration.defaultLanguage = 'en_US';
+            localize('/no_file.txt', '', true);
         });
     });
 });
