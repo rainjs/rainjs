@@ -8,7 +8,7 @@
         "components": ["./components"]
     },
 
-    "default_language": "en_US",
+    "defaultLanguage": "en_US",
     "language": "en_US",
 
     "errorComponent": {
