@@ -37,28 +37,9 @@ for more information and examples: :js:class:`Translation functions <Translation
     You shouldn't declare functions named ``t`` or ``nt`` in the server-side controllers because
     the global translation functions will be overridden by them.
 
-----------------------
-Resources localization
-----------------------
-
-The static resource files for a component are located in the ``<component_folder>/resources/``
-folder. There are multiple ways to generate the URLs for them:
-
-- in template files: using the :js:class:`Url Helper <UrlHelper>`
-- in all files: directly constructing the url path
-
-RAIN provides a very easy way to localize resources. Just add the ``loc`` query parameter to the
-URL path. E.g.:
-
-- unlocalized image: /example/3.0/resources/images/flag.png
-- localized image: /example/3.0/resources/images/flag.png?loc
-
-Localized resources are placed in the same folder with the other resources. They only add a locale 
-suffix to the file name like `flag_de_DE.png` for german language if the original file name is `flag.png`.
-
-^^^^^^^^^^^^^^
-Resources URLs
-^^^^^^^^^^^^^^
+-------------
+Resource URLs
+-------------
 
 A resource URL path has several parts separated by the '/' character:
 
@@ -69,14 +50,39 @@ A resource URL path has several parts separated by the '/' character:
 
 Here are some examples of resource URLs:
 
-- /example/3.0/resources/images/flag.png
-- /hello_world/resources/file.pdf
+- ``/example/3.0/resources/images/flag.png``
+- ``/hello_world/resources/file.pdf``
+
+Use :js:class:`Url Helper <UrlHelper>` for easier handling.
+
+^^^^^^^^^^^^^^^^^^^^^^
+Resources localization
+^^^^^^^^^^^^^^^^^^^^^^
+
+The static resource files for a component are located in the ``<component_folder>/resources/``
+folder. There are multiple ways to generate the URLs for them:
+
+- in template files: using the :js:class:`Url Helper <UrlHelper>`
+- in all files: directly constructing the url path
+
+RAIN provides a very easy way to localize resources. Just add the ``loc`` query parameter to the
+URL path. E.g.:
+
+- unlocalized image: ``/example/3.0/resources/images/flag.png``
+- localized image: ``/example/3.0/resources/images/flag.png?loc``
+
+Localized resources are placed in the same folder with the other resources. They only add a locale 
+suffix to the file name like ``flag_de_DE.png`` for german language if the original file name is ``flag.png``.
 
 ------------------
 Views localization
 ------------------
 
-Views can be localized by adding a locale suffix to the view name (`index_de_DE.html` for `index.html`).
+Views can be localized by adding a locale suffix to the view name (``index_de_DE.html`` for ``index.html``).
 First, Rain tries to use the view for the platform language. If this view doesn't exist it tries to use
-the view for the default platform language. If this is missing it will take the view with no language 
+the view for the default platform language. If this is missing it will take the view for `en_US` with no language 
 suffix.
+
+.. warning::
+
+    Templates without a suffix are related to `en_US`!
