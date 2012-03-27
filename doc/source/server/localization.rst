@@ -71,8 +71,9 @@ URL path. E.g.:
 - unlocalized image: ``/example/3.0/resources/images/flag.png``
 - localized image: ``/example/3.0/resources/images/flag.png?loc``
 
-Localized resources are placed in the same folder with the other resources. They only add a locale 
-suffix to the file name like ``flag_de_DE.png`` for german language if the original file name is ``flag.png``.
+Localized resources are placed in the same folder with the other resources. The file name for a
+localized resource has a locale sufffix. For example, for the german language, ``flag_de_DE.png``
+is the localized version for ``flag.png``.
 
 ------------------
 Views localization
