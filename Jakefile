@@ -3,7 +3,7 @@
 var child = require('child_process');
 var fs = require('fs');
 var path = require('path');
-var util = require('util');
+var util = require('./lib/util');
 
 desc('Print the help message');
 task('default', function (params) {
@@ -176,7 +176,6 @@ namespace('test', function () {
 
             process.env.RAIN_CONF = process.cwd() + '/tests/server/fixtures/server.conf';
             var specFolder = process.cwd() + '/tests/server/tests/';
-            var util = require('util');
 
             for (var key in jasmine) {
                 global[key] = jasmine[key];
