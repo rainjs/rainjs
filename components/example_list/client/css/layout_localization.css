@@ -1,0 +1,8 @@
+.layout_width {
+    font-size: 1.2em;
+    width: 450px;
+}
+
+.layout_width p {
+    margin: 25px 0;
+}
