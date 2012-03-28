@@ -13,8 +13,6 @@ var util = require('util');
  * @param {String} [code=undefined] the error code
  */
 var RainError = function (message, args, type, code) {
-    var error = new Error();
-
     // identify arguments
     if (!Array.isArray(args)) {
         code = type;
@@ -26,16 +24,16 @@ var RainError = function (message, args, type, code) {
     args.unshift(message || 'unknown error');
 
     // format the message with the possible arguments
-    error.message = util.format.apply(util, args);
-    error.type = type;
-    error.code = code;
+    this.message = util.format.apply(util, args);
+    this.type = type;
+    this.code = code;
 
+    // generate a stack
+    var error = new Error();
     // fix stack: remove call to Error() from this constructor
     var stack = error.stack.split('\n');
     stack.splice(1, 1);
-    error.stack = stack.join('\n');
-
-    return error;
+    this.stack = stack.join('\n');
 };
 
 /**
@@ -44,6 +42,7 @@ var RainError = function (message, args, type, code) {
 RainError.ERROR_IO = 0;
 RainError.ERROR_NET = 1;
 RainError.ERROR_PRECONDITION_FAILED = 2;
+RainError.ERROR_HTTP = 3;
 
 util.inherits(RainError, Error);
 
