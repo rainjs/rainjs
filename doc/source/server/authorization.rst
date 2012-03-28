@@ -51,7 +51,8 @@ Intents
 -----------------
 
 There are 2 types of intents ( view intent and server intent ).
-View intents have the same workflow like views.
+The view intents use the authorization rulez defined in the view they are mapped to, so no special
+treatment is required in this case.
 For server intents the dynamic conditions are excluded. You define the permissions under the ``permissions`` key in the meta.json on it's intent.
 Here is an example of defining intents permissions, e.g.:
 
