@@ -3,8 +3,6 @@
 var cwd = process.cwd();
 var loadFile = require(cwd + '/tests/server/rain_mocker');
 var globals = require(cwd + '/lib/globals.js');
-var conf = require(cwd + '/lib/configuration');
-var util = require('util');
 
 var intent = {
     type: 'view',
@@ -19,7 +17,9 @@ var component = {
     views: {
         'some_view': {}
     },
-    paths: function() {return 'server'; }
+    paths: function () {
+        return 'server';
+    }
 };
 
 var intents = {
@@ -51,7 +51,9 @@ describe('Intents Registry: ', function () {
                 },
                 './component_registry': {},
                 './renderer': {
-                    isAuthorized: function () { return false; }
+                    isAuthorized: function () {
+                        return false;
+                    }
                 }
             }
         }, true);
@@ -59,6 +61,7 @@ describe('Intents Registry: ', function () {
     });
 
     describe('registration', function () {
+
         it('must register itself to the socket registry on initialization', function () {
             expect(socketHandlers['/core']).toEqual(mockedIntentRegistry.handleIntent);
         });
@@ -114,6 +117,7 @@ describe('Intents Registry: ', function () {
     });
 
     describe('handle intents', function () {
+
         var fn;
         var serverIntent = {
             category: "com.rain.test",
@@ -125,42 +129,50 @@ describe('Intents Registry: ', function () {
 
         beforeEach(function () {
             intentRegistry.register(component, serverIntent);
-            
+
             var callbacks = {};
             var socket = {
                 on: function (event, callback) {
                     callbacks[event] = callback;
                 }
             };
-            
+
             mockedIntentRegistry.handleIntent(socket);
 
             fn = callbacks['request_intent'];
         });
-        
+
         it('must send error message if the intent category is missing', function () {
-            var ack = jasmine.createSpy();
-            fn({action: 'DO_SOMETHING', context: {}}, ack);
-            expect(ack).toHaveBeenCalledWith('You must specify intent category.');
+            var rainError;
+            fn({action: 'DO_SOMETHING', context: {}}, function (err) {
+                rainError = err;
+            });
+
+            expect(rainError.message).toBe('You must specify intent category.');
         });
-        
+
         it('must send error message if the intent action is missing', function () {
-            var ack = jasmine.createSpy();
-            fn({category: 'com.intents.rain.test', context: {}}, ack);
-            expect(ack).toHaveBeenCalledWith('You must specify intent action.');
+            var rainError;
+            fn({category: 'com.intents.rain.test', context: {}}, function (err) {
+                rainError = err;
+            });
+            expect(rainError.message).toBe('You must specify intent action.');
         });
-        
+
         it('must send error message if the intent context is missing', function () {
-            var ack = jasmine.createSpy();
-            fn({category: 'com.intents.rain.test', action: 'DO_SOMETHING'}, ack);
-            expect(ack).toHaveBeenCalledWith('You must specify intent context');
+            var rainError;
+            fn({category: 'com.intents.rain.test', action: 'DO_SOMETHING'}, function (err) {
+                rainError = err;
+            });
+            expect(rainError.message).toBe('You must specify intent context');
         });
-        
+
         it('must send error message if the intent is not authorized', function () {
-            var ack = jasmine.createSpy();
-            fn({category: 'com.rain.test', action: 'LOG_MESSAGE', context: {}}, ack);
-            expect(ack).toHaveBeenCalledWith('Unauthorized access to component button!');
+            var rainError;
+            fn({category: 'com.rain.test', action: 'LOG_MESSAGE', context: {}}, function (err) {
+                rainError = err;
+            });
+            expect(rainError.message).toBe('Unauthorized access to component button!');
         });
     });
 });
-

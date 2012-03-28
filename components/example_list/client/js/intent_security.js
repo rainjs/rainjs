@@ -1,5 +1,6 @@
+"use strict";
+
 define(['raintime/messaging/intents'], function (Intents) {
-    "use strict";
 
     function Controller() {}
 
@@ -29,7 +30,7 @@ define(['raintime/messaging/intents'], function (Intents) {
             promise.then(function () {
                 alert('Server intent was successfull');
             }, function (error) {
-                alert('Server intent failed with error: ' + error);
+                alert('Server intent failed with error: ' + error.message);
             });
         });
 
@@ -42,7 +43,7 @@ define(['raintime/messaging/intents'], function (Intents) {
             promise.then(function () {
                 alert('Server intent was successfull');
             }, function (error) {
-                alert('Server intent failed with error: ' + error);
+                alert('Server intent failed with error: ' + error.message);
             });
         });
     };

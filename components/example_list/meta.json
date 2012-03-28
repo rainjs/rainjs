@@ -27,28 +27,33 @@
             "permissions": ["some_permission"]
         }
     },
-    "intents": [{
-        "category": "com.rain.example.security",
-        "action": "ALLOWED_VIEW",
-        "type": "view",
-        "view": "level1"
-    }, {
-        "category": "com.rain.example.security",
-        "action": "DENIED_VIEW",
-        "type": "view",
-        "view": "denied"
-    }, {
-        "category": "com.rain.example.security",
-        "action": "ALLOWED_SERVER",
-        "type": "server",
-        "controller": "index.js",
-        "method": "allowedIntent"
-    }, {
-        "category": "com.rain.example.security",
-        "action": "DENIED_SERVER",
-        "type": "server",
-        "permissions": ["some_permission"],
-        "controller": "index.js",
-        "method": "deniedIntent"
-    }]
+    "intents": [
+        {
+            "category": "com.rain.example.security",
+            "action": "ALLOWED_VIEW",
+            "type": "view",
+            "view": "level1"
+        },
+        {
+            "category": "com.rain.example.security",
+            "action": "DENIED_VIEW",
+            "type": "view",
+            "view": "denied"
+        },
+        {
+            "category": "com.rain.example.security",
+            "action": "ALLOWED_SERVER",
+            "type": "server",
+            "controller": "index.js",
+            "method": "allowedIntent"
+        },
+        {
+            "category": "com.rain.example.security",
+            "action": "DENIED_SERVER",
+            "type": "server",
+            "permissions": ["some_permission"],
+            "controller": "index.js",
+            "method": "deniedIntent"
+        }
+    ]
 }
