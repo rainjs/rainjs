@@ -5,6 +5,8 @@ var globals = require(cwd + '/lib/globals.js');
 var loadFile = require(cwd + '/tests/server/rain_mocker');
 var Handlebars = require('handlebars');
 
+var configuration = {};
+
 describe('Registry Plugin: Precompile Templates Plugin', function () {
     var mockComponentRegistry, componentRegistry, registryPlugin;
 
@@ -14,7 +16,8 @@ describe('Registry Plugin: Precompile Templates Plugin', function () {
         componentRegistry = new mockComponentRegistry.ComponentRegistry();
 
         registryPlugin = loadFile(cwd + '/lib/registry/precompile_templates.js', {
-            '../handlebars': Handlebars
+            '../handlebars': Handlebars,
+            '../configuration': configuration
         });
     });
 
@@ -37,5 +40,38 @@ describe('Registry Plugin: Precompile Templates Plugin', function () {
         config.views['400'].view = undefined;
         registryPlugin.configure(config);
         expect(config.views['400'].view).toEqual('400.html');
+    });
+
+    it('must compile the template in the current language', function () {
+        configuration.language = 'de_DE';
+        configuration.defaultLanguage = 'ro_RO';
+
+        var config = componentRegistry.getConfig('example', '0.0.1');
+        registryPlugin.configure(config);
+
+        var template = config.views['info'].compiledTemplate;
+        expect(template().replace(/\s+/g, '')).toEqual('de_DE');
+    });
+
+    it('must compile the template in the default language', function () {
+        configuration.language = 'en_UK';
+        configuration.defaultLanguage = 'ro_RO';
+
+        var config = componentRegistry.getConfig('example', '0.0.1');
+        registryPlugin.configure(config);
+
+        var template = config.views['info'].compiledTemplate;
+        expect(template().replace(/\s+/g, '')).toEqual('ro_RO');
+    });
+
+    it('must compile the template in English', function () {
+        configuration.language = 'en_UK';
+        configuration.defaultLanguage = 'fr_FR';
+
+        var config = componentRegistry.getConfig('example', '0.0.1');
+        registryPlugin.configure(config);
+
+        var template = config.views['info'].compiledTemplate;
+        expect(template().replace(/\s+/g, '')).toEqual('en_US');
     });
 });
