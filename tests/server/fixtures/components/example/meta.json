@@ -34,7 +34,8 @@
                 "client": "with_customer_error.js",
                 "server": "index.js"
             }
-        }
+        },
+        "info": {}
     },
     "intents": []
 }

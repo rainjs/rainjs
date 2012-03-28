@@ -18,7 +18,8 @@
         "level2" : {},
         "level3" : {},
         "css_cross_referencing": {},
-        "platform_language": {}
+        "platform_language": {},
+        "layout_localization": {}
     },
     "intents": []
 }
