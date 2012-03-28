@@ -42,7 +42,7 @@ supported by RAIN):
             {
                 "category": "com.rain.test.general.SHOW_CHAT",
                 "action": "com.rain.test.general",
-                "provider": "missing_intent",
+                "view": "missing_intent",
                 "type": "view"
             }
         ]

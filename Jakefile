@@ -181,6 +181,9 @@ namespace('test', function () {
             for (var key in jasmine) {
                 global[key] = jasmine[key];
             }
+            
+            //extend jasmine with functionality needed by Rain
+            require(process.cwd() + '/tests/server/lib/jasmine_rain');
 
             var isVerbose = true;
             var showColors = true;

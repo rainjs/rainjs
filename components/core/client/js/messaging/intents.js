@@ -1,4 +1,6 @@
-define(['raintime/messaging/sockets', 'raintime/lib/promise'], function (Sockets, Promise) {
+define(['raintime/messaging/sockets',
+        'raintime/lib/promise'
+], function (Sockets, Promise) {
     var socket = Sockets.getSocket('/core');
 
     /**
@@ -9,7 +11,7 @@ define(['raintime/messaging/sockets', 'raintime/lib/promise'], function (Sockets
      *
      * @returns {Promise}
      */
-    function sendIntent(intent) {
+    function send(intent) {
         var defer = Promise.defer();
 
         intent.context = intent.context || {};
@@ -28,7 +30,7 @@ define(['raintime/messaging/sockets', 'raintime/lib/promise'], function (Sockets
     }
 
     return {
-        send: sendIntent
+        send: send
     };
 });
 

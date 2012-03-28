@@ -28,8 +28,12 @@
         {
             "category": "com.rain.test",
             "action": "DO_SOMETHING",
-            "provider": "level2",
-            "type": "view"
+            "provider": "level2"
+        },
+        {
+            "category": "com.rain.test",
+            "action": "LOG_MESSAGE",
+            "provider": "index#log"
         }
     ]
 }

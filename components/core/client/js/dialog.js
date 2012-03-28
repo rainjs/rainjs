@@ -1,19 +1,18 @@
-define(function () {
+define(['raintime'], function (Raintime) {
+    "use strict";
+
     function Controller() {}
 
     Controller.prototype.init = $.noop;
     Controller.prototype.start = function () {
-        var dialog = $('#core-dialog');
-        dialog.css({
-            'position': 'absolute',
-            'top': (window.innerHeight * 20 / 100) + 'px',
-            'left': ((window.innerWidth - 600) / 2) + 'px',
-            'width': '600px',
-            'height': '300px',
-            'overflow-y': 'scroll',
-            'border': '1px solid black'
+        var close = $('.core-dialog .close');
+
+        close.on('click', function () {
+            $('.core-dialog').remove();
+            $('.core-modal').remove();
         });
 
+        Raintime.componentRegistry.deregister(this.context.instanceId);
     };
 
     return Controller;

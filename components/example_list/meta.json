@@ -19,7 +19,32 @@
         "level3" : {},
         "css_cross_referencing": {},
         "platform_language": {},
-        "layout_localization": {}
+        "layout_localization": {},
+        "intent_security": {
+            "controller": {
+                "client": "intent_security.js"
+            }
+        },
+        "denied": {
+            "permissions": ["some_permission"]
+        }
     },
-    "intents": []
+    "intents": [{
+        "category": "com.rain.example.security",
+        "action": "ALLOWED_VIEW",
+        "provider": "level1"
+    }, {
+        "category": "com.rain.example.security",
+        "action": "DENIED_VIEW",
+        "provider": "denied"
+    }, {
+        "category": "com.rain.example.security",
+        "action": "ALLOWED_SERVER",
+        "provider": "index.js#allowedIntent"
+    }, {
+        "category": "com.rain.example.security",
+        "action": "DENIED_SERVER",
+        "permissions": ["some_permission"],
+        "provider": "index.js#deniedIntent"
+    }]
 }

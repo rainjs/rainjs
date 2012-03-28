@@ -1,36 +1,10 @@
-/**
- * Resolves the GET HTTP verb.
- *
- * @param {Request} request the request object
- * @param {Response} response the response object
- */
-function doGet(request, response) {}
+function allowedIntent() {
+    return true;
+}
 
-/**
- * Resolves the POST HTTP verb.
- *
- * @param {Request} request the request object
- * @param {Response} response the response object
- */
-function doPost(request, response) {}
+function deniedIntent() {
+    return true;
+}
 
-/**
- * Resolves the DELETE HTTP verb.
- *
- * @param {Request} request the request object
- * @param {Response} response the response object
- */
-function doDelete(request, response) {}
-
-/**
- * Resolves the PUT HTTP verb.
- *
- * @param {Request} request the request object
- * @param {Response} response the response object
- */
-function doPut(request, response) {}
-
-exports.get = doGet;
-exports.post = doPost;
-exports['delete'] = doDelete;
-exports.put = doPut;
+exports.allowedIntent = allowedIntent;
+exports.deniedIntent = deniedIntent;

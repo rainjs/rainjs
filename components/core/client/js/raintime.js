@@ -1,6 +1,7 @@
 define(['raintime/lib/promise',
         'raintime/lib/event_emitter',
-        'raintime/context'
+        'raintime/context',
+        'raintime/lib/rain_error'
 ], function (Promise, EventEmitter, Context) {
 
     /**

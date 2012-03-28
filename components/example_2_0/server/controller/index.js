@@ -30,7 +30,17 @@ function doDelete(request, response) {}
  */
 function doPut(request, response) {}
 
+/**
+ * Log a message.
+ *
+ * @param {Object} context an object containing a message
+ */
+function log(context) {
+    console.log("A message was received: " + context.message);
+}
+
 exports.get = doGet;
 exports.post = doPost;
 exports['delete'] = doDelete;
 exports.put = doPut;
+exports.log = log;

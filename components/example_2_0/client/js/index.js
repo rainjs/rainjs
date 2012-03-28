@@ -28,6 +28,15 @@ define(['raintime/messaging/intents'], function(Intents) {
                 category: 'com.rain.test',
                 action: 'DO_SOMETHING'
             });
+
+            Intents.send({
+                category: 'com.rain.test',
+                action: 'LOG_MESSAGE',
+                context: {
+                    message: 'Hello from the client-side'
+                }
+            });
+
             event.stopImmediatePropagation();
         });
     };

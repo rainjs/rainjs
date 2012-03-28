@@ -3,17 +3,17 @@ define(['raintime/lib/jquery-cookie'], function () {
     /**
      * A singleton utility class.
      *
-     * @name ClientUtil
+     * @name Util
      * @class
      * @constructor
      */
-    function ClientUtil() {}
+    function Util() {}
 
     /**
      * A reusable empty function for inheritance.
      *
      * @private
-     * @memberOf ClientUtil#
+     * @memberOf Util#
      */
     function empty() {};
 
@@ -23,7 +23,7 @@ define(['raintime/lib/jquery-cookie'], function () {
      * @param {Object} proto the prototype object to inherit from
      * @returns {Object} the object instance
      * @private
-     * @memberOf ClientUtil#
+     * @memberOf Util#
      */
     function create(proto) {
         var F = empty;
@@ -34,13 +34,17 @@ define(['raintime/lib/jquery-cookie'], function () {
     /**
      * Makes a function inherit from another's prototype.
      *
+     * In order to make it compatible with node's implementation,
+     * it also makes ``superCtor`` accessible through ``ctor.super_``.
+     *
      * @param {Object} ctor the derived constructor function
      * @param {Object} superCtor the base constructor function
      */
-    ClientUtil.prototype.inherits = function (ctor, superCtor) {
+    Util.prototype.inherits = function (ctor, superCtor) {
         var __super__ = superCtor.prototype;
         ctor.prototype = create(__super__);
         ctor.prototype.constructor = ctor;
+        ctor.super_ = superCtor;
     };
 
     /**
@@ -54,7 +58,7 @@ define(['raintime/lib/jquery-cookie'], function () {
      * @returns {Function} the bound function
      * @throws {Error} illegal argument exception if f is not a function
      */
-    ClientUtil.prototype.bind = function (f, scope) {
+    Util.prototype.bind = function (f, scope) {
         if (typeof f !== 'function') {
             throw new Error('illegal argument exception: expected f to be a function');
         }
@@ -79,7 +83,7 @@ define(['raintime/lib/jquery-cookie'], function () {
      * @returns {Function} the bound function
      * @see #bind
      */
-    ClientUtil.prototype.bindPrivate = function (f, scope) {
+    Util.prototype.bindPrivate = function (f, scope) {
         return bind(f, scope, scope);
     };
 
@@ -88,7 +92,7 @@ define(['raintime/lib/jquery-cookie'], function () {
      * Use {@link #bind} to bind the advice functions to the desired scope.
      *
      * @see #bind
-     * @memberOf ClientUtil#
+     * @memberOf Util#
      * @param {Function} f the function to be decorated
      * @param {Object} advice holds advice functions
      * @param {Function} [advice.before] An advice (function) to insert before the actual call
@@ -98,7 +102,7 @@ define(['raintime/lib/jquery-cookie'], function () {
      * @throws {Error} illegal argument exception if f is not a function
      * @throws {Error} illegal argument exception if any of the possible advices is not a function
      */
-    ClientUtil.prototype.decorate = function (f, advice) {
+    Util.prototype.decorate = function (f, advice) {
         if (typeof f !== 'function') {
             throw new Error('illegal argument exception: expected f to be a function');
         }
@@ -149,7 +153,7 @@ define(['raintime/lib/jquery-cookie'], function () {
      * @param {Object} on the object which borrows the properties
      * @param {Object} from the object which lends the properties
      */
-    ClientUtil.prototype.inject = function (on, from) {
+    Util.prototype.inject = function (on, from) {
         for (var key in from) {
             if (from.hasOwnProperty(key)) {
                 on[key] = from[key];
@@ -164,7 +168,7 @@ define(['raintime/lib/jquery-cookie'], function () {
      *
      * @returns {String} the rain session id
      */
-    ClientUtil.prototype.getSession = function () {
+    Util.prototype.getSession = function () {
         return $.cookie('rain.sid');
     };
 
@@ -174,9 +178,22 @@ define(['raintime/lib/jquery-cookie'], function () {
      *
      * @param {Function} f the function to defer
      */
-    ClientUtil.prototype.defer = function (f) {
+    Util.prototype.defer = function (f) {
         setTimeout(f, 0);
     };
+
+    /**
+     * (Too) simple sprintf implementation.
+     *
+     * @todo remove after all error messages are thrown with only the message
+     */
+    Util.prototype.format = function (msg) {
+        var i = 0,
+            args = arguments;
+        return msg.replace(/%(?:s|d)/g, function (match) {
+            return ++i && typeof args[i] !== 'undefined' ? args[i] + '' : match;
+        });
+    }
 
     /**
      * Internet explorer console wrapper
@@ -190,7 +207,6 @@ define(['raintime/lib/jquery-cookie'], function () {
       };
     }
 
-
-    return new ClientUtil();
+    return new Util();
 });
 
