@@ -44,7 +44,6 @@ var RainError = function (message, args, type, code) {
 RainError.ERROR_IO = 0;
 RainError.ERROR_NET = 1;
 RainError.ERROR_PRECONDITION_FAILED = 2;
-RainError.ERROR_HTTP = 3;
 
 util.inherits(RainError, Error);
 

@@ -6,7 +6,7 @@
  * @version 1.0
  * @since 27.08.2011
  */
-define(['raintime/lib/util'], function(ClientUtil) {
+define(['util'], function(ClientUtil) {
     /** @private */
     var queue = {};
 
