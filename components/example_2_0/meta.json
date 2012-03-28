@@ -28,15 +28,12 @@
         {
             "category": "com.rain.test",
             "action": "DO_SOMETHING",
-            "view": "level2",
-            "type": "view"
+            "provider": "level2"
         },
         {
             "category": "com.rain.test",
             "action": "LOG_MESSAGE",
-            "type": "server",
-            "controller": "index",
-            "method": "log"
+            "provider": "index#log"
         }
     ]
 }
