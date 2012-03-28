@@ -51,8 +51,8 @@ Intents
 -----------------
 
 There are 2 types of intents ( view intent and server intent ).
-View intents have the same workflow excepting dynamic conditions.
-For server intents you define it under the ``permissions`` key in the meta.json on it's intent.
+View intents have the same workflow like views.
+For server intents the dynamic conditions are excluded. You define the permissions under the ``permissions`` key in the meta.json on it's intent.
 Here is an example of defining intents permissions, e.g.:
 
 .. code-block:: javascript
@@ -74,15 +74,12 @@ Here is an example of defining intents permissions, e.g.:
             {
                 "category": "com.rain.test",
                 "action": "SHOW_EMAIL",
-                "view": "index",
-                "type": "view"
+                "provider": "index"
             },
             {
                 "category": "com.rain.test",
                 "action": "SEND_EMAIL",
-                "type": "server",
-                "controller": "emails.js",
-                "method": "post",
+                "provider": "emails.js#post",
                 "permissions": ["send_email"]
             }
         ]
@@ -104,7 +101,22 @@ When a server intent is requested, authorization is done by the system in the fo
 #. If permissions are defined at component level, it checks that the user has those permissions.
 #. If permissions are defined at intent level, it checks that the user has those permissions.
 
-In case any of these conditions fail a *401* message will be received as an promise error.
+In case any of these conditions fail the promise of the sent intent is rejected and a RainError will be received.
+
+Here is an example:
+
+.. code-block:: javascript
+
+    var promise = Intents.send({
+        category: 'com.rain.example.security',
+        action: 'DENIED_SERVER'
+    });
+
+    promise.then(function () {
+        alert('Server intent was successfull');
+    }, function (error) {
+        alert('Server intent failed with error: ' + error);
+    });
 
 
 ------------------
