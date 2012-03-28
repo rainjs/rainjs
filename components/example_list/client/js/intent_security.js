@@ -28,7 +28,7 @@ define(['raintime/messaging/intents'], function (Intents) {
             });
 
             promise.then(function () {
-                alert('Server intent was successfull');
+                alert('Server intent was successful');
             }, function (error) {
                 alert('Server intent failed with error: ' + error.message);
             });
