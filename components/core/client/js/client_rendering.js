@@ -139,10 +139,16 @@ define([
                     callback();
                 }
             } else {
-                var link = document.createElement('link');
-                link.type = 'text/css';
-                link.rel = 'stylesheet';
-                link.href = css[i];
+                var link = null;
+
+                if (document.createStyleSheet) {
+                    link = document.createStyleSheet(css[i]);
+                } else {
+                    link = document.createElement('link');
+                    link.type = 'text/css';
+                    link.rel = 'stylesheet';
+                    link.href = css[i];
+                }
 
                 var loader = new Image();
                 loader.onerror = function(e) {

@@ -194,7 +194,7 @@ define(['raintime/lib/promise',
         var group = Promise.all(promises);
         group.then(function (array) {
             if (array.length == 1) {
-                callback.apply(array[0], array[0]);
+                callback.apply(array[0], array);
                 return;
             }
             callback.apply(component.controller, array);
