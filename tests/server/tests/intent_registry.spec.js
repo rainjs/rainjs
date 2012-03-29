@@ -141,11 +141,6 @@ describe('Intents Registry: ', function () {
     describe('handle intents', function () {
 
         var fn;
-        var serverIntent = {
-            category: "com.rain.test",
-            action: "LOG_MESSAGE",
-            provider: "index.js#log"
-        };
 
         beforeEach(function () {
             mockedIntentRegistry.intents['com.rain.test'] = {
