@@ -186,19 +186,26 @@ define(['raintime/lib/promise',
                     if (components[childInstanceId] &&
                         components[childInstanceId].staticId == staticId) {
                         promises.push(components[childInstanceId].promise);
+                        break;
+                    } else if (preComponents[childInstanceId] &&
+                        preComponents[childInstanceId].staticId == staticId) {
+                        promises.push(preComponents[childInstanceId].promise);
+                        break;
                     }
                 }
             }
         }
 
-        var group = Promise.all(promises);
-        group.then(function (array) {
-            if (array.length == 1) {
-                callback.apply(array[0], array);
-                return;
-            }
-            callback.apply(component.controller, array);
-        });
+        if (promises.length > 0) {
+            var group = Promise.all(promises);
+            group.then(function (array) {
+                if (array.length == 1) {
+                    callback.apply(array[0], array);
+                    return;
+                }
+                callback.apply(component.controller, array);
+            });
+        }
     }
 
     /**

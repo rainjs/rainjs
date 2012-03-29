@@ -67,6 +67,14 @@ define([
      * @param {Object} component the rendered component
      */
     ClientRenderer.prototype.renderComponent = function (component) {
+        for (var len = component.children.length, i = 0; i < len; i++) {
+            var childComponent = component.children[i];
+            Raintime.componentRegistry.preRegister(childComponent);
+            if (childComponent.placeholder === true) {
+                placeholderTimeout(this, childComponent);
+            }
+        }
+
         var domElement = $('#' + component.instanceId);
         domElement.hide().html(component.html);
         domElement.attr('id', component.instanceId);
@@ -83,14 +91,6 @@ define([
             loadCSS(this, component.css, function () {
                 domElement.show();
             });
-        }
-
-        for (var len = component.children.length, i = 0; i < len; i++) {
-            var childComponent = component.children[i];
-            Raintime.componentRegistry.preRegister(childComponent);
-            if (childComponent.placeholder === true) {
-                placeholderTimeout(this, childComponent);
-            }
         }
     };
 
