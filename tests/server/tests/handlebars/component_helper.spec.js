@@ -39,7 +39,7 @@ describe('Handlebars component helper', function () {
         mockRenderer = loadFile(cwd + '/lib/renderer.js', {
             './error_handler': errorHandler,
             './socket_registry': {
-                register: function(){}
+                register: function () {}
             },
             './data_layer': null,
             './component_registry': componentRegistry,
@@ -68,9 +68,10 @@ describe('Handlebars component helper', function () {
         };
 
         childComponent = null;
-        renderer.loadDataAndSend = function(component){
+        renderer.loadDataAndSend = function (component) {
             childComponent = component;
         };
+
         componentHelper = loadFile(cwd + '/lib/handlebars/component.js', {
             '../component_registry': componentRegistry,
             '../renderer': renderer,
@@ -240,6 +241,7 @@ describe('Handlebars component helper', function () {
     });
 
     describe('test that the components are added to the children for the parent', function () {
+
         it('must contain the correct child information', function () {
             Handlebars.compile('{{component name="button" version="1.0" view="index"}}')();
             var childComponentForParent = rainContext.childrenInstanceIds[0];
@@ -250,6 +252,7 @@ describe('Handlebars component helper', function () {
     });
 
     describe('test that the context is extended with custom attributes', function () {
+
         it('must extend the aggregated component with custom attributes', function () {
             Handlebars.compile('{{component name="button" version="1.0" view="index" ' +
                                    'customValueNumber=4 ' +
@@ -259,6 +262,19 @@ describe('Handlebars component helper', function () {
             expect(childComponent.context.customValueNumber).toEqual(4);
             expect(childComponent.context.customValueString).toEqual("string");
             expect(childComponent.context.customValueBoolean).toEqual(true);
+        });
+    });
+
+    describe('test component helper used as a block helper', function () {
+
+        it('must add the context function as a key', function () {
+            Handlebars.compile('{{#component name="button" version="1.0" view="index"}}' +
+                               '{{state}}' +
+                               '{{/component}}')();
+
+            var state = 'test';
+            expect(typeof childComponent.fn === 'function').toBe(true);
+            expect(childComponent.fn({state: state})).toBe(state);
         });
     });
 });
