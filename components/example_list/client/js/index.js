@@ -1,4 +1,4 @@
-define(['/example/js/accordian.min.js'], function() {
+define(['/example/js/accordian.min.js'], function () {
     /**
      * Example controller class.
      *
@@ -19,23 +19,23 @@ define(['/example/js/accordian.min.js'], function() {
 
     /**
      * Startup lifecycle step that happens right after the markup is in place.
-     *
-     * @function
      */
-    Controller.prototype.start = function(){
+    Controller.prototype.start = function () {
         var self = this;
         this.context.getRoot().find('.navi').accordion({
             collapsible: true,
             active: false,
             autoHeight: false,
-            change: function(event, ui){
+            change: function (event, ui) {
                 ui.oldContent.empty();
-                if(ui.options.active !== false){
+                if (ui.options.active !== false) {
                     self.context.insert({
                         id: "example",
                         view: ui.newContent.data("example-view"),
                         placeholder: true
-                    }, ui.newContent);
+                    }, ui.newContent, function () {
+                        // "this" is the controller for new component
+                    });
                 }
             }
         }).show();

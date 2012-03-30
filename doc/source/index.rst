@@ -62,6 +62,7 @@ Server side modules
     server/authorization
     server/data_layer
     server/platform_language
+    server/localization
 
 ....
 APIs

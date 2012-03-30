@@ -49,7 +49,8 @@ describe('Intents Registry: ', function () {
                     }
                 },
                 './component_registry': {},
-                './renderer': {
+                './renderer': {},
+                './render_utils': {
                     isAuthorized: function () {
                         return false;
                     }

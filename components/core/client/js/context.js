@@ -1,8 +1,10 @@
-define(["raintime/client_storage",
-        "raintime/messaging/observer",
-        "raintime/messaging/intents",
-        "raintime/messaging/sockets"],
-       function (ClientStorage, Observer, Intents, Sockets) {
+define(['raintime/client_storage',
+        'raintime/messaging/observer',
+        'raintime/messaging/intents',
+        'raintime/messaging/sockets'
+], function (ClientStorage, Observer, Intents, Sockets) {
+
+    var raintime = null;
 
     /**
      * The context reflects a component's client-side state. It gives access to other
@@ -12,13 +14,16 @@ define(["raintime/client_storage",
      * @class
      * @constructor
      *
+     * @param {Raintime} raintimeInstance
      * @param {Component} component the component object
      *
      * @property {String} instanceId the component's instance id
      * @property {ClientStorage} storage the local storage manager
      */
-    function Context(component) {
+    function Context(raintimeInstance, component) {
         var self = this;
+
+        raintime = raintimeInstance;
         this.instanceId = component.instanceId;
         this.storage = new ClientStorage(this);
 
@@ -80,7 +85,10 @@ define(["raintime/client_storage",
     };
 
     /**
-     * Insert a new component into the given dom Element.
+     * Insert a new component into the given DOM Element and set a function that will be called
+     * after the controller for the new controller was loaded.
+     *
+     * The context for the callback function will be the component's controller.
      *
      * @param {Object} component The component which to be requested
      * @param {String} component.id The component id
@@ -89,8 +97,9 @@ define(["raintime/client_storage",
      * @param {Object} component.data Custom data for the template
      * @param {Boolean} component.placeholder Enable / Disable placeholder
      * @param {jQueryDom} dom The dom object where the component is inserted
+     * @param {Function} [callback] the function to be called after the controller was loaded
      */
-    Context.prototype.insert = function (component, dom) {
+    Context.prototype.insert = function (component, dom, callback) {
         var staticId = component.sid || Math.floor(Math.random(0, Date.now()));
         var instanceId = (
                 Date.now().toString() +
@@ -99,11 +108,15 @@ define(["raintime/client_storage",
         );
         $(dom).html('<div id="' + instanceId + '"></div>');
         component.instanceId = instanceId;
+        raintime.componentRegistry.setCallback(instanceId, callback);
         clientRenderer.requestComponent(component);
     };
 
     /**
-     * Replaces the component from where it is called with the given component.
+     * Replaces the component from where it is called with the given component and set a
+     * function that will be called after the controller for the new component was loaded.
+     *
+     * The context for the callback function will be the component's controller.
      *
      * @param {Object} component The component which to be requested
      * @param {String} component.id The component id
@@ -111,9 +124,11 @@ define(["raintime/client_storage",
      * @param {String} component.sid The component staticId id
      * @param {Object} component.data Custom data for the template
      * @param {Boolean} component.placeholder Enable / Disable placeholder
+     * @param {Function} [callback] the function to be called after the controller was loaded
      */
-    Context.prototype.replace = function (component) {
+    Context.prototype.replace = function (component, callback) {
         component.instanceId = this.instanceId;
+        raintime.componentRegistry.setCallback(component.instanceId, callback);
         clientRenderer.requestComponent(component);
     };
 

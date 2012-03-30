@@ -2,8 +2,7 @@
     "id": "example",
     "version": "3.0",
     "views": {
-        "index" : {
-        },
+        "index" : {},
         "data_layer": {
             "view": "data_layer.html"
         },
@@ -27,7 +26,8 @@
         },
         "denied": {
             "permissions": ["some_permission"]
-        }
+        },
+        "image_localization": {}
     },
     "intents": [{
         "category": "com.rain.example.security",
