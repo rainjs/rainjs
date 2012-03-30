@@ -11,7 +11,8 @@ describe('Handlebars component helper', function () {
         mockRenderer,
         mockRenderUtils,
         renderer,
-        rainContext;
+        rainContext,
+        childComponent;
 
     beforeEach(function () {
         var errorHandler = {
@@ -55,14 +56,21 @@ describe('Handlebars component helper', function () {
             },
             childrenInstanceIds: [],
             instanceId: '12345',
-            transport: {}
+            transport: {
+                renderCount: 0,
+                renderLevel: 0
+            }
         };
 
         renderer.rain = rainContext;
         renderer.createInstanceId = function () {
             return 'new instance id';
         };
-        renderer.loadDataAndSend = function(){};
+
+        childComponent = null;
+        renderer.loadDataAndSend = function(component){
+            childComponent = component;
+        };
         componentHelper = loadFile(cwd + '/lib/handlebars/component.js', {
             '../component_registry': componentRegistry,
             '../renderer': renderer,
@@ -92,7 +100,7 @@ describe('Handlebars component helper', function () {
     function expectError(childComponent, statusCode) {
         expect(childComponent.id).toEqual('error');
         expect(childComponent.version).toEqual('1.0');
-        expect(childComponent.controller).toEqual(statusCode + '.js');
+        expect(childComponent.view).toEqual(statusCode);
     }
 
     /**
@@ -104,7 +112,7 @@ describe('Handlebars component helper', function () {
     function expectComponent(childComponent, component) {
         expect(childComponent.id).toEqual(component.id);
         expect(childComponent.version).toEqual(component.version);
-        expect(childComponent.controller).toEqual(component.controller);
+        expect(childComponent.view).toEqual(component.view);
     }
 
     describe('test required and optional options', function () {
@@ -112,22 +120,23 @@ describe('Handlebars component helper', function () {
         it('must require "view" to be defined', function () {
             Handlebars.compile('{{component name="button"}}')();
             expect(rainContext.childrenInstanceIds.length).toEqual(1);
-            expectError(rainContext.childrenInstanceIds[0], 500);
+            expectError(childComponent, 500);
         });
 
         it('must require "name" to be defined when "version" is present', function () {
             Handlebars.compile('{{component version="1.1" view="index"}}')();
-            expectError(rainContext.childrenInstanceIds[0], 500);
+            expectError(childComponent, 500);
         });
 
         it('must add all the necessary JSON dependencies', function () {
             Handlebars.compile('{{component name="button" version="1.0" view="index"}}')();
-            var childComponent = rainContext.childrenInstanceIds[0];
             expect(childComponent.instanceId).toBeDefined();
+            expect(rainContext.transport.renderCount).toEqual(1);
+            expect(rainContext.transport.renderLevel).toEqual(1);
             expectComponent(childComponent, {
                 id: 'button',
                 version: '1.0',
-                controller: 'index.js'
+                view: 'index'
             });
         });
 
@@ -138,22 +147,21 @@ describe('Handlebars component helper', function () {
         it('must use the current component when "name" is not defined', function () {
             rainContext.component.version = "1.3.0";
             Handlebars.compile('{{component view="index"}}')();
-            var childComponent = rainContext.childrenInstanceIds[0];
             expectComponent(childComponent, {
                 id: 'example',
                 version: '1.3.0',
-                controller: 'index.js'
+                view: 'index'
             });
         });
 
         it('must use the "error" component when the component is not found', function () {
             Handlebars.compile('{{component name="invalid_name" view="index"}}')();
-            expectError(rainContext.childrenInstanceIds[0], 404);
+            expectError(childComponent, 404);
         });
 
         it('must use the "error" component when the view is not found', function () {
             Handlebars.compile('{{component name="button" view="invalid_index"}}')();
-            expectError(rainContext.childrenInstanceIds[0], 404);
+            expectError(childComponent, 404);
         });
 
     });
@@ -180,27 +188,25 @@ describe('Handlebars component helper', function () {
         it('must use the required component when the permission cases pass', function () {
             setUserInSession();
             Handlebars.compile('{{component name="button" version="1.0" view="restricted"}}')();
-            var childComponent = rainContext.childrenInstanceIds[0];
             expectComponent(childComponent, {
                 id: 'button',
                 version: '1.0',
-                controller: 'index.js'
+                view: 'restricted'
             });
         });
 
         it('must use the "error" component when permission cases fail', function () {
             Handlebars.compile('{{component name="button" version="1.0" view="restricted"}}')();
-            expectError(rainContext.childrenInstanceIds[0], 401);
+            expectError(childComponent, 401);
         });
 
         it('must pass component level checks for dynamic conditions', function () {
             setUserInSession();
             Handlebars.compile('{{component name="button" version="2.0" view="buttons"}}')();
-            var childComponent = rainContext.childrenInstanceIds[0];
             expectComponent(childComponent, {
                 id: 'button',
                 version: '2.0',
-                controller: 'index.js'
+                view: 'buttons'
             });
         });
 
@@ -209,17 +215,16 @@ describe('Handlebars component helper', function () {
                 country: 'RO'
             });
             Handlebars.compile('{{component name="button" version="2.0" view="buttons"}}')();
-            expectError(rainContext.childrenInstanceIds[0], 401);
+            expectError(childComponent, 401);
         });
 
         it('must pass view level checks for dynamic conditions', function () {
             setUserInSession();
             Handlebars.compile('{{component name="button" version="2.0" view="index"}}')();
-            var childComponent = rainContext.childrenInstanceIds[0];
             expectComponent(childComponent, {
                 id: 'button',
                 version: '2.0',
-                controller: 'index.js'
+                view: 'index'
             });
         });
 
@@ -229,8 +234,31 @@ describe('Handlebars component helper', function () {
                 language: 'ro_RO'
             });
             Handlebars.compile('{{component name="button" version="2.0" view="index"}}')();
-            expectError(rainContext.childrenInstanceIds[0], 401);
+            expectError(childComponent, 401);
         });
 
+    });
+
+    describe('test that the components are added to the children for the parent', function () {
+        it('must contain the correct child information', function () {
+            Handlebars.compile('{{component name="button" version="1.0" view="index"}}')();
+            var childComponentForParent = rainContext.childrenInstanceIds[0];
+            expect(childComponentForParent.id).toEqual("button");
+            expect(childComponentForParent.version).toEqual("1.0");
+            expect(childComponentForParent.controller).toEqual("index.js");
+        });
+    });
+
+    describe('test that the context is extended with custom attributes', function () {
+        it('must extend the aggregated component with custom attributes', function () {
+            Handlebars.compile('{{component name="button" version="1.0" view="index" ' +
+                                   'customValueNumber=4 ' +
+                                   'customValueString="string" ' +
+                                   'customValueBoolean=true ' +
+                               '}}')();
+            expect(childComponent.context.customValueNumber).toEqual(4);
+            expect(childComponent.context.customValueString).toEqual("string");
+            expect(childComponent.context.customValueBoolean).toEqual(true);
+        });
     });
 });
