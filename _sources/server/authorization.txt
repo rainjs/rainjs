@@ -27,7 +27,7 @@ component and it's views, e.g.:
                 "view": "index.html",
                 "controller": {
                     "client": "index.js"
-                }
+                },
                 "permissions": ["example-index"]
             }
         }
@@ -45,6 +45,80 @@ When a view is requested, authorization is done by the system in the following o
 In case any of these conditions fail a *401* view will be rendered instead of the requested view.
 This works independently of the context (so you don't have to worry if you're in an aggregated
 context or you component is supposed to be accessed directly.
+
+-----------------
+Intents
+-----------------
+
+There are 2 types of intents ( view intent and server intent ).
+The view intents use the authorization rulez defined in the view they are mapped to, so no special
+treatment is required in this case.
+For server intents the dynamic conditions are excluded. You define the permissions under the ``permissions`` key in the meta.json on it's intent.
+Here is an example of defining intents permissions, e.g.:
+
+.. code-block:: javascript
+
+    {
+        "id": "example_app",
+        "version": "1.0",
+        "permissions": ["example"],
+        "views": {
+            "index": {
+                "view": "index.html",
+                "controller": {
+                    "client": "index.js"
+                },
+                "permissions": ["example-index"]
+            }
+        },
+        intents: [
+            {
+                "category": "com.rain.test",
+                "action": "SHOW_EMAIL",
+                "provider": "index"
+            },
+            {
+                "category": "com.rain.test",
+                "action": "SEND_EMAIL",
+                "provider": "emails.js#post",
+                "permissions": ["send_email"]
+            }
+        ]
+    }
+
+The permissions are evaluated in the following order:
+
+When a view intent is requested, authorization is done by the system in the following order:
+
+#. If permissions are defined at component level, it checks that the user has those permissions.
+#. If permissions are defined at view level, it checks that the user has those permissions.
+
+In case any of these conditions fail a *401* view will be rendered instead of the requested view.
+This works independently of the context (so you don't have to worry if you're in an aggregated
+context or you component is supposed to be accessed directly.
+
+When a server intent is requested, authorization is done by the system in the following order:
+
+#. If permissions are defined at component level, it checks that the user has those permissions.
+#. If permissions are defined at intent level, it checks that the user has those permissions.
+
+In case any of these conditions fail the promise of the sent intent is rejected and a RainError will be received.
+
+Here is an example:
+
+.. code-block:: javascript
+
+    var promise = Intents.send({
+        category: 'com.rain.example.security',
+        action: 'DENIED_SERVER'
+    });
+
+    promise.then(function () {
+        alert('Server intent was successfull');
+    }, function (error) {
+        alert('Server intent failed with error: ' + error);
+    });
+
 
 ------------------
 Dynamic Conditions

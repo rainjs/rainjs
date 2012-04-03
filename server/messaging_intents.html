@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Rain v0.7.0 documentation" href="../index.html" />
     <link rel="next" title="RAIN Websockets" href="websockets.html" />
-    <link rel="prev" title="Class SocketHandler" href="../client/api/SocketHandler.html" /> 
+    <link rel="prev" title="Class Util" href="../client/api/Util.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,7 +37,7 @@
           <a href="websockets.html" title="RAIN Websockets"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../client/api/SocketHandler.html" title="Class SocketHandler"
+          <a href="../client/api/Util.html" title="Class Util"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
@@ -58,18 +58,16 @@ side.</p>
 within the same component.</p>
 <p>Currently a component can define the following intent types:</p>
 <blockquote>
-<ul class="simple">
+<div><ul class="simple">
 <li>Intents that return views (this are mapped on component views)</li>
 <li>Intents that execute a server side action and return their result (intent mapped on a nodejs module method).</li>
 </ul>
-</blockquote>
+</div></blockquote>
 <p>In meta.json file each component can use the following format to define intents:</p>
 <div class="highlight-python"><pre>"intents": [...
 {"action": "...",
  "category": "...",
- "type": "view" | "server",
- "provider: "...",
- optional_attributes
+ "provider": "..."
 ...]</pre>
 </div>
 <p>Optional attributes are defined only for certain types of intents.</p>
@@ -86,12 +84,11 @@ intents mapped on views are defined:</p>
 "intents": [{
     "action": "SHOW_CHAT",
     "category": "com.rain.test.general",
-    "type": "view",
     "provider": "missing_intent"
 },
 ....</pre>
 </div>
-<p>For this kind of intents provider is matched against a component viewId. If the viewId
+<p>For this kind of intents view is matched against a component viewId. If the viewId
 is not found than the registration process will throw an error.</p>
 </div>
 <div class="section" id="intents-mapped-on-server-side-code">
@@ -103,90 +100,32 @@ Below you can find a simple example of how to use this intent (extracted from co
 <div class="highlight-python"><pre>intents: [....
 {"action": "com.rain.test.serverside.INLINE_LOGGING",
   "category": "com.rain.test.general",
-  "type": "server",
-  "provider": "/controller/intents/inline_logging.js",
-  "method": "doLogging"}
+  "provider": "inline_logging.js#doLogging"
  ...]</pre>
 </div>
-<p>The client will receive a json representation of data returned by the server side controller.
-Provider for this intent is relative to component root path. As you can see in the code
-snippet above you also need to specify method attribute. Each method specified in there
-must have the following signature:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">method</span><span class="p">(</span><span class="n">intentCtx</span><span class="p">,</span> <span class="n">session</span><span class="p">)</span>
-</pre></div>
+<p>As you can see in the code snippet above the provider contains the controller name and the method to
+be execute separated by a <em>hash</em>. The method must have the following signature:</p>
+<div class="highlight-python"><pre>function myFunction(intentContext) {
+    // code here
+}</pre>
 </div>
-<p>Intent context parameter gives developer access to what was send from client side. Session
-object is the current user http session object.</p>
-<p>Below you can find a complete server side intent handler code:</p>
-<div class="highlight-python"><pre>exports.doLogging = function(intentCtx, session) {
-    var msg = "doLogging method: " + intentCtx.message || "No message specified";
+<p>The intent context will contain the data sent from the client that might be necessary for running the
+bsiness logic.</p>
+<p>Below you can find a complete server side intent handler implementation:</p>
+<div class="highlight-python"><pre>exports.doLogging = function(intentContext) {
+    var msg = "doLogging method: " + intentContext.message || "No message specified";
 
     console.log(msg);
 
     return {"data": msg};
 }</pre>
 </div>
-<p>Usually as a developer you will do more complicated things on a server side mapped intent
-than just logging. Most of the time you will want to access the session you receive to read / write
-values. The read value in this case is not async but the write on the other hand is. For write
-operations you need to take special precautions so that no unexpected results occur (when you write
-something you need to use promises). Below you can find an example of how to correctly read / write values
-to session:</p>
-<div class="highlight-guess"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23</pre></div></td><td class="code"><div class="highlight"><pre> <span class="n">var</span> <span class="n">modPromise</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s">&quot;promised-io/promise&quot;</span><span class="p">);</span>
-
- <span class="n">exports</span><span class="o">.</span><span class="n">executeSessionReadWrite</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="n">intentCtx</span><span class="p">,</span> <span class="n">session</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">var</span> <span class="n">currentValues</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;my_key&quot;</span><span class="p">);</span>
-    <span class="n">var</span> <span class="n">name</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;my_name&quot;</span><span class="p">);</span>
-
-    <span class="n">console</span><span class="o">.</span><span class="nb">log</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
-
-    <span class="n">var</span> <span class="n">defer</span> <span class="o">=</span> <span class="n">modPromise</span><span class="o">.</span><span class="n">defer</span><span class="p">();</span>
-
-    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">currentValues</span><span class="p">)</span> <span class="p">{</span>
-       <span class="n">currentValues</span> <span class="o">=</span> <span class="o">[]</span><span class="p">;</span>
-
-       <span class="n">currentValues</span><span class="o">.</span><span class="nb">push</span><span class="p">(</span><span class="s">&quot;test1&quot;</span><span class="p">);</span>
-       <span class="n">currentValues</span><span class="o">.</span><span class="nb">push</span><span class="p">(</span><span class="s">&quot;test2);</span>
-
-<span class="s">       session.set(&quot;</span><span class="n">my_key</span><span class="s">&quot;, currentValues, function() {</span>
-<span class="s">          defer.resolve(&quot;</span><span class="n">msg</span><span class="s">&quot;: &quot;</span><span class="n">Great</span> <span class="n">job</span><span class="s">&quot;, &quot;</span><span class="n">data</span><span class="err">&quot;</span><span class="p">:</span> <span class="n">currentValues</span><span class="p">);</span>
-       <span class="p">});</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="n">defer</span><span class="o">.</span><span class="n">promise</span><span class="p">;</span>
- <span class="p">}</span>
-</pre></div>
-</td></tr></table></div>
 <p>Internally, RAIN knows how to handle this kind of return (promise) and the behavior is predictable.</p>
 </div>
 <div class="section" id="id1">
 <h3>Intents mapped on views<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<p>This intent will return a json object that contains all information related to a view (css,
-javascript, markup). The returned object can be easily displayed on the client using view manager
-layer. Below you can find an example of how to define such an intent (example taken from intents_example
-sample):</p>
+<p>This intent will display the provided view to the client abstracting away the logic of displaying it
+yourself:</p>
 <div class="highlight-python"><pre>{
    ...
     "views": [
@@ -197,15 +136,14 @@ sample):</p>
     "intents": [{
         "action": "com.rain.test.general.SHOW_CHAT",
         "category": "com.rain.test.general",
-        "type": "view",
         "provider": "missing_intent"
     }
     ...
     ]
 }</pre>
 </div>
-<p>In this case provider identifies a declared view within the component. The intents registry simply
-publish the intent to a global intents registry. The only constraint here is not to have
+<p>In this case <em>provider</em> identifies a declared view within the component. The intents registry simply
+publishes the intent to a global intents registry. The only constraint here is not to have
 two intents with the same category and intent.</p>
 </div>
 </div>
@@ -231,8 +169,8 @@ two intents with the same category and intent.</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../client/api/SocketHandler.html"
-                        title="previous chapter">Class SocketHandler</a></p>
+  <p class="topless"><a href="../client/api/Util.html"
+                        title="previous chapter">Class Util</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="websockets.html"
                         title="next chapter">RAIN Websockets</a></p>
@@ -263,13 +201,13 @@ two intents with the same category and intent.</p>
           <a href="websockets.html" title="RAIN Websockets"
              >next</a> |</li>
         <li class="right" >
-          <a href="../client/api/SocketHandler.html" title="Class SocketHandler"
+          <a href="../client/api/Util.html" title="Class Util"
              >previous</a> |</li>
         <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

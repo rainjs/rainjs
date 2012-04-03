@@ -30,10 +30,13 @@ important libraries like client storage, messaging and web sockets.
 Constructor
 -----------
 
-.. js:class:: Context(component)
+.. js:class:: Context(raintimeInstance, component)
 
 
 
+    
+    :param Raintime raintimeInstance: 
+         
     
     :param Component component: 
         the component object 
@@ -84,7 +87,7 @@ view context.
 insert
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: Context#insert(component, dom)
+.. js:function:: Context#insert(component, dom, [callback])
 
 
     
@@ -98,7 +101,7 @@ insert
         The component view id 
     
     :param String component.sid: 
-        The component staticd id 
+        The component staticId id 
     
     :param Object component.data: 
         Custom data for the template 
@@ -109,11 +112,17 @@ insert
     :param jQueryDom dom: 
         The dom object where the component is inserted 
     
+    :param Function callback: 
+        the function to be called after the controller was loaded 
+    
 
 
 
 
-Insert a new component into the given dom Element.
+Insert a new component into the given DOM Element and set a function that will be called
+after the controller for the new controller was loaded.
+
+The context for the callback function will be the component's controller.
 
 
 
@@ -130,7 +139,7 @@ Insert a new component into the given dom Element.
 replace
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: Context#replace(component)
+.. js:function:: Context#replace(component, [callback])
 
 
     
@@ -144,7 +153,7 @@ replace
         The component view id 
     
     :param String component.sid: 
-        The component staticd id 
+        The component staticId id 
     
     :param Object component.data: 
         Custom data for the template 
@@ -152,11 +161,17 @@ replace
     :param Boolean component.placeholder: 
         Enable / Disable placeholder 
     
+    :param Function callback: 
+        the function to be called after the controller was loaded 
+    
 
 
 
 
-Replaces the component from where it is called with the given component.
+Replaces the component from where it is called with the given component and set a
+function that will be called after the controller for the new component was loaded.
+
+The context for the callback function will be the component's controller.
 
 
 

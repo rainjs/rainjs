@@ -76,6 +76,7 @@
 <li class="toctree-l2"><a class="reference internal" href="getting_started/coding_guidelines.html#style">Style</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started/coding_guidelines.html#best-practices">Best Practices</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started/coding_guidelines.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/coding_guidelines.html#patterns">Patterns</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started/coding_guidelines.html#errors">Errors</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started/coding_guidelines.html#comments">Comments</a></li>
 </ul>
@@ -130,10 +131,10 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="client/api/ClientRenderer.html">Class ClientRenderer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="client/api/ClientStorage.html">Class ClientStorage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="client/api/ClientUtil.html">Class ClientUtil</a></li>
 <li class="toctree-l1"><a class="reference internal" href="client/api/Context.html">Class Context</a></li>
 <li class="toctree-l1"><a class="reference internal" href="client/api/EventEmitter.html">Class EventEmitter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="client/api/SocketHandler.html">Class SocketHandler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client/api/Util.html">Class Util</a></li>
 </ul>
 </div>
 </div>
@@ -183,11 +184,23 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="server/authorization.html">Authorization</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="server/authorization.html#permissions-based">Permissions based</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/authorization.html#intents">Intents</a></li>
 <li class="toctree-l2"><a class="reference internal" href="server/authorization.html#dynamic-conditions">Dynamic Conditions</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="server/data_layer.html">Data Layer</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="server/data_layer.html#usage">Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="server/platform_language.html">Platform language</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server/platform_language.html#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/platform_language.html#using-the-language">Using the language</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="server/localization.html">RAIN Localization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server/localization.html#text-localization">Text localization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/localization.html#resource-urls">Resource URLs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/localization.html#views-localization">Views localization</a></li>
 </ul>
 </li>
 </ul>
@@ -204,11 +217,11 @@
 <li class="toctree-l1"><a class="reference internal" href="server/api/DataLayer.html">Class DataLayer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/Environment.html">Class Environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/ErrorHandler.html">Class ErrorHandler</a></li>
-<li class="toctree-l1"><a class="reference internal" href="server/api/IntentHandler.html">Class IntentHandler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/IntentsRegistry.html">Class IntentsRegistry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/ProxyStore.html">Class ProxyStore</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/Renderer.html">Class Renderer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/Server.html">Class Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/URLHelper.html">Class URLHelper</a></li>
 </ul>
 </div>
 </div>
@@ -336,7 +349,7 @@
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

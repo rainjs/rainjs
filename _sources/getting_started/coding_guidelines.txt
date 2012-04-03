@@ -116,6 +116,32 @@ Classes
 - Caution: if you declare a property that is scoped to the node/requirejs module, it will be a
   static property, and all instances of the class will have access to the same value.
 
+--------
+Patterns
+--------
+
+^^^^^^^^^
+Singleton
+^^^^^^^^^
+
+- When defining singletons, we use the following simple pattern
+
+    .. code-block:: javascript
+        :linenos:
+
+        function A() {}
+
+        var instance;
+
+        A.get = function () {
+            return instance || (instance = new A());
+        }
+
+        module.exports = A;
+
+- This avoids running code at require time
+- This means that we always use singletons by calling the ``get()`` method, e.g.: ``A.get().doSomething()``
+
 ------
 Errors
 ------

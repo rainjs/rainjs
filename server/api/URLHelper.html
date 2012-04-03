@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class IntentHandler &mdash; Rain v0.7.0 documentation</title>
+    <title>Class URLHelper &mdash; Rain v0.7.0 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -23,8 +23,8 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="Rain v0.7.0 documentation" href="../../index.html" />
-    <link rel="next" title="Class IntentsRegistry" href="IntentsRegistry.html" />
-    <link rel="prev" title="Class ErrorHandler" href="ErrorHandler.html" /> 
+    <link rel="next" title="Error component" href="../error_component.html" />
+    <link rel="prev" title="Class Server" href="Server.html" /> 
   </head>
   <body>
     <div class="related">
@@ -34,10 +34,10 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="IntentsRegistry.html" title="Class IntentsRegistry"
+          <a href="../error_component.html" title="Error component"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="ErrorHandler.html" title="Class ErrorHandler"
+          <a href="Server.html" title="Class Server"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
@@ -48,29 +48,30 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="class-intenthandler">
-<h1>Class IntentHandler<a class="headerlink" href="#class-intenthandler" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="class-urlhelper">
+<h1>Class URLHelper<a class="headerlink" href="#class-urlhelper" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="constructor">
 <h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="IntentHandler">
-<em class="property">class </em><tt class="descname">IntentHandler</tt><big>(</big><big>)</big><a class="headerlink" href="#IntentHandler" title="Permalink to this definition">¶</a></dt>
+<dt id="URLHelper">
+<em class="property">class </em><tt class="descname">URLHelper</tt><big>(</big><big>)</big><a class="headerlink" href="#URLHelper" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
 <div class="section" id="methods">
 <h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="configure">
-<h3>configure<a class="headerlink" href="#configure" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="helper">
+<h3>helper<a class="headerlink" href="#helper" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="IntentHandler#configure">
-<tt class="descname">IntentHandler#configure</tt><big>(</big><em>componentConfig</em><big>)</big><a class="headerlink" href="#IntentHandler#configure" title="Permalink to this definition">¶</a></dt>
+<dt id="URLHelper.helper">
+<tt class="descclassname">URLHelper.</tt><tt class="descname">helper</tt><big>(</big><em>src</em>, <em>localized</em><big>)</big><a class="headerlink" href="#URLHelper.helper" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>componentConfig</strong> (<em>Object</em>) &#8211; The component config given from the ComponentRegistry</li>
+<li><strong>src</strong> (<em>String</em>) &#8211; the resource path</li>
+<li><strong>localized</strong> (<em>Boolean</em>) &#8211; true to request a localized resource</li>
 </ul>
 </td>
 </tr>
@@ -78,6 +79,29 @@
 </table>
 </dd></dl>
 
+<p>URL handlebars helper.</p>
+<p>Tries to interpret the given URL as a resource URL: relative paths
+are converted to resource routes for the current component and
+absolute and external paths are left as is.</p>
+<p>For relative and absolute paths, the second accepted parameter
+identifies a localized resource by adding a &#8216;loc&#8217; query parameter to the URL.</p>
+<div class="highlight-javascript"><pre>  Getting an image from the component's resource folder (note that the
+URL value inside the helper needs to be surrounded by double quotes):
+&lt;img src="{{url "images/img.jpg"}}"&gt;
+
+Getting a localized image from the component's resource folder:
+&lt;img src="{{url "images/img.jpg" true}}"&gt;
+
+Getting an image from another component, following the normal resource route
+(the localized parameter can also be specified here if needed):
+&lt;img src="{{url "/other/resources/images/img.jpg"}}"&gt;
+
+Getting an external image:
+&lt;img src="{{url "http://www.example.com/img.jpg"}}"&gt;
+
+Other uses:
+&lt;div style="background: url('{{url "images/background.jpg"}}') repeat-x 0 0;"&gt;&lt;/div&gt;</pre>
+</div>
 </div>
 </div>
 </div>
@@ -90,10 +114,10 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Class IntentHandler</a><ul>
+<li><a class="reference internal" href="#">Class URLHelper</a><ul>
 <li><a class="reference internal" href="#constructor">Constructor</a></li>
 <li><a class="reference internal" href="#methods">Methods</a><ul>
-<li><a class="reference internal" href="#configure">configure</a></li>
+<li><a class="reference internal" href="#helper">helper</a></li>
 </ul>
 </li>
 </ul>
@@ -101,11 +125,11 @@
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="ErrorHandler.html"
-                        title="previous chapter">Class ErrorHandler</a></p>
+  <p class="topless"><a href="Server.html"
+                        title="previous chapter">Class Server</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="IntentsRegistry.html"
-                        title="next chapter">Class IntentsRegistry</a></p>
+  <p class="topless"><a href="../error_component.html"
+                        title="next chapter">Error component</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -130,16 +154,16 @@
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="IntentsRegistry.html" title="Class IntentsRegistry"
+          <a href="../error_component.html" title="Error component"
              >next</a> |</li>
         <li class="right" >
-          <a href="ErrorHandler.html" title="Class ErrorHandler"
+          <a href="Server.html" title="Class Server"
              >previous</a> |</li>
         <li><a href="../../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

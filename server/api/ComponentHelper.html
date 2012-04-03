@@ -52,10 +52,11 @@
 <h1>Class ComponentHelper<a class="headerlink" href="#class-componenthelper" title="Permalink to this headline">¶</a></h1>
 <p>This Handlebars helper aggregates child components into the parent.
 The helper invokes the renderer to load custom data from the data layer for the template
-and calls the rendering process after the data is received, to render the component.</p>
+and calls the rendering process after the data is received, to render the component.
+The aggregated component receives automatically the context of his parent.</p>
 <dl class="docutils">
 <dt>Complete syntax:</dt>
-<dd>{{component name=&#8221;compnentId&#8221; version=&#8221;versionNumber&#8221; view=&#8221;viewID&#8221; sid=&#8221;staticId&#8221; placeholder=true}}</dd>
+<dd>{{component name=&#8221;compnentId&#8221; version=&#8221;versionNumber&#8221; view=&#8221;viewID&#8221; sid=&#8221;staticId&#8221; placeholder=true customAttr=value }}</dd>
 </dl>
 <p>&lt;/pre&gt;</p>
 <div class="section" id="examples">
@@ -79,13 +80,18 @@ and calls the rendering process after the data is received, to render the compon
      {{component name="button" view="index" sid="button1"}}
  &lt;/div&gt;</pre>
 </div>
-<div class="highlight-javascript"><pre>Aggregates the view ``help`` from the parent component but dosn't load the palceholder.</pre>
+<div class="highlight-javascript"><pre>Aggregates the view ``help`` from the parent component but doesn't load the placeholder.
+
+ &lt;div class="template"&gt;
+     {{component view="help" placeholder=false}}
+ &lt;/div&gt;</pre>
 </div>
-<dl class="docutils">
-<dt>&lt;div class=&#8221;template&#8221;&gt;</dt>
-<dd>{{component view=&#8221;help&#8221; placeholder=false}}</dd>
-</dl>
-<p>&lt;/div&gt;</p>
+<div class="highlight-javascript"><pre>Aggregates the view ``help`` from the parent component and extends the context with custom attribute data.
+
+ &lt;div class="template"&gt;
+     {{component view="help" label="Hello" value=1}}
+ &lt;/div&gt;</pre>
+</div>
 </div>
 <div class="section" id="constructor">
 <h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
@@ -113,6 +119,7 @@ and calls the rendering process after the data is received, to render the compon
 <li><strong>options.view</strong> (<em>String</em>) &#8211; the view that will be aggregated.</li>
 <li><strong>options.sid</strong> (<em>String</em>) &#8211; the component static id, used in the client-side controller (<em>Default</em>: &#8216;undefined&#8217;)</li>
 <li><strong>options.placeholder</strong> (<em>Boolean</em>) &#8211; set the placeholder to be rendered or not (<em>Default</em>: true)</li>
+<li><strong>options.customAttrN</strong> (<em>Boolean|Number|String|Object|Array</em>) &#8211; Sets a custom attribute which is extended to the context</li>
 </ul>
 </td>
 </tr>
@@ -195,7 +202,7 @@ It sends automatically an error component if something went wrong.</p>
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

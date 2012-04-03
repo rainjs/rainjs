@@ -69,7 +69,7 @@ component and it&#8217;s views, e.g.:</p>
             <span class="s2">&quot;view&quot;</span><span class="o">:</span> <span class="s2">&quot;index.html&quot;</span><span class="p">,</span>
             <span class="s2">&quot;controller&quot;</span><span class="o">:</span> <span class="p">{</span>
                 <span class="s2">&quot;client&quot;</span><span class="o">:</span> <span class="s2">&quot;index.js&quot;</span>
-            <span class="p">}</span>
+            <span class="p">},</span>
             <span class="s2">&quot;permissions&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;example-index&quot;</span><span class="p">]</span>
         <span class="p">}</span>
     <span class="p">}</span>
@@ -87,6 +87,71 @@ component and it&#8217;s views, e.g.:</p>
 <p>In case any of these conditions fail a <em>401</em> view will be rendered instead of the requested view.
 This works independently of the context (so you don&#8217;t have to worry if you&#8217;re in an aggregated
 context or you component is supposed to be accessed directly.</p>
+</div>
+<div class="section" id="intents">
+<h2>Intents<a class="headerlink" href="#intents" title="Permalink to this headline">¶</a></h2>
+<p>There are 2 types of intents ( view intent and server intent ).
+The view intents use the authorization rulez defined in the view they are mapped to, so no special
+treatment is required in this case.
+For server intents the dynamic conditions are excluded. You define the permissions under the <tt class="docutils literal"><span class="pre">permissions</span></tt> key in the meta.json on it&#8217;s intent.
+Here is an example of defining intents permissions, e.g.:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="s2">&quot;example_app&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;version&quot;</span><span class="o">:</span> <span class="s2">&quot;1.0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;permissions&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;example&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;views&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;index&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;view&quot;</span><span class="o">:</span> <span class="s2">&quot;index.html&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;controller&quot;</span><span class="o">:</span> <span class="p">{</span>
+                <span class="s2">&quot;client&quot;</span><span class="o">:</span> <span class="s2">&quot;index.js&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;permissions&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;example-index&quot;</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">intents</span><span class="o">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;category&quot;</span><span class="o">:</span> <span class="s2">&quot;com.rain.test&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;action&quot;</span><span class="o">:</span> <span class="s2">&quot;SHOW_EMAIL&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;provider&quot;</span><span class="o">:</span> <span class="s2">&quot;index&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;category&quot;</span><span class="o">:</span> <span class="s2">&quot;com.rain.test&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;action&quot;</span><span class="o">:</span> <span class="s2">&quot;SEND_EMAIL&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;provider&quot;</span><span class="o">:</span> <span class="s2">&quot;emails.js#post&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;permissions&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;send_email&quot;</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The permissions are evaluated in the following order:</p>
+<p>When a view intent is requested, authorization is done by the system in the following order:</p>
+<ol class="arabic simple">
+<li>If permissions are defined at component level, it checks that the user has those permissions.</li>
+<li>If permissions are defined at view level, it checks that the user has those permissions.</li>
+</ol>
+<p>In case any of these conditions fail a <em>401</em> view will be rendered instead of the requested view.
+This works independently of the context (so you don&#8217;t have to worry if you&#8217;re in an aggregated
+context or you component is supposed to be accessed directly.</p>
+<p>When a server intent is requested, authorization is done by the system in the following order:</p>
+<ol class="arabic simple">
+<li>If permissions are defined at component level, it checks that the user has those permissions.</li>
+<li>If permissions are defined at intent level, it checks that the user has those permissions.</li>
+</ol>
+<p>In case any of these conditions fail the promise of the sent intent is rejected and a RainError will be received.</p>
+<p>Here is an example:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">promise</span> <span class="o">=</span> <span class="nx">Intents</span><span class="p">.</span><span class="nx">send</span><span class="p">({</span>
+    <span class="nx">category</span><span class="o">:</span> <span class="s1">&#39;com.rain.example.security&#39;</span><span class="p">,</span>
+    <span class="nx">action</span><span class="o">:</span> <span class="s1">&#39;DENIED_SERVER&#39;</span>
+<span class="p">});</span>
+
+<span class="nx">promise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Server intent was successfull&#39;</span><span class="p">);</span>
+<span class="p">},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Server intent failed with error: &#39;</span> <span class="o">+</span> <span class="nx">error</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="dynamic-conditions">
 <h2>Dynamic Conditions<a class="headerlink" href="#dynamic-conditions" title="Permalink to this headline">¶</a></h2>
@@ -201,6 +266,7 @@ starting to render the view.</p>
   <ul>
 <li><a class="reference internal" href="#">Authorization</a><ul>
 <li><a class="reference internal" href="#permissions-based">Permissions based</a></li>
+<li><a class="reference internal" href="#intents">Intents</a></li>
 <li><a class="reference internal" href="#dynamic-conditions">Dynamic Conditions</a><ul>
 <li><a class="reference internal" href="#usage">Usage</a></li>
 </ul>
@@ -248,7 +314,7 @@ starting to render the view.</p>
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

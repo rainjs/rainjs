@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="Rain v0.7.0 documentation" href="../../index.html" />
     <link rel="next" title="Class EventEmitter" href="EventEmitter.html" />
-    <link rel="prev" title="Class ClientUtil" href="ClientUtil.html" /> 
+    <link rel="prev" title="Class ClientStorage" href="ClientStorage.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,7 +37,7 @@
           <a href="EventEmitter.html" title="Class EventEmitter"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="ClientUtil.html" title="Class ClientUtil"
+          <a href="ClientStorage.html" title="Class ClientStorage"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
@@ -56,12 +56,13 @@ important libraries like client storage, messaging and web sockets.</p>
 <h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="Context">
-<em class="property">class </em><tt class="descname">Context</tt><big>(</big><em>component</em><big>)</big><a class="headerlink" href="#Context" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">Context</tt><big>(</big><em>raintimeInstance</em>, <em>component</em><big>)</big><a class="headerlink" href="#Context" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>raintimeInstance</strong> (<em>Raintime</em>) &#8211; </li>
 <li><strong>component</strong> (<em>Component</em>) &#8211; the component object</li>
 </ul>
 </td>
@@ -96,7 +97,7 @@ view context.</p>
 <h3>insert<a class="headerlink" href="#insert" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="Context#insert">
-<tt class="descname">Context#insert</tt><big>(</big><em>component</em>, <em>dom</em><big>)</big><a class="headerlink" href="#Context#insert" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">Context#insert</tt><big>(</big><em>component</em>, <em>dom</em><span class="optional">[</span>, <em>callback</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#Context#insert" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -105,10 +106,11 @@ view context.</p>
 <li><strong>component</strong> (<em>Object</em>) &#8211; The component which to be requested</li>
 <li><strong>component.id</strong> (<em>String</em>) &#8211; The component id</li>
 <li><strong>component.view</strong> (<em>String</em>) &#8211; The component view id</li>
-<li><strong>component.sid</strong> (<em>String</em>) &#8211; The component staticd id</li>
+<li><strong>component.sid</strong> (<em>String</em>) &#8211; The component staticId id</li>
 <li><strong>component.data</strong> (<em>Object</em>) &#8211; Custom data for the template</li>
 <li><strong>component.placeholder</strong> (<em>Boolean</em>) &#8211; Enable / Disable placeholder</li>
 <li><strong>dom</strong> (<em>jQueryDom</em>) &#8211; The dom object where the component is inserted</li>
+<li><strong>callback</strong> (<em>Function</em>) &#8211; the function to be called after the controller was loaded</li>
 </ul>
 </td>
 </tr>
@@ -116,13 +118,15 @@ view context.</p>
 </table>
 </dd></dl>
 
-<p>Insert a new component into the given dom Element.</p>
+<p>Insert a new component into the given DOM Element and set a function that will be called
+after the controller for the new controller was loaded.</p>
+<p>The context for the callback function will be the component&#8217;s controller.</p>
 </div>
 <div class="section" id="replace">
 <h3>replace<a class="headerlink" href="#replace" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="Context#replace">
-<tt class="descname">Context#replace</tt><big>(</big><em>component</em><big>)</big><a class="headerlink" href="#Context#replace" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">Context#replace</tt><big>(</big><em>component</em><span class="optional">[</span>, <em>callback</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#Context#replace" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -131,9 +135,10 @@ view context.</p>
 <li><strong>component</strong> (<em>Object</em>) &#8211; The component which to be requested</li>
 <li><strong>component.id</strong> (<em>String</em>) &#8211; The component id</li>
 <li><strong>component.view</strong> (<em>String</em>) &#8211; The component view id</li>
-<li><strong>component.sid</strong> (<em>String</em>) &#8211; The component staticd id</li>
+<li><strong>component.sid</strong> (<em>String</em>) &#8211; The component staticId id</li>
 <li><strong>component.data</strong> (<em>Object</em>) &#8211; Custom data for the template</li>
 <li><strong>component.placeholder</strong> (<em>Boolean</em>) &#8211; Enable / Disable placeholder</li>
+<li><strong>callback</strong> (<em>Function</em>) &#8211; the function to be called after the controller was loaded</li>
 </ul>
 </td>
 </tr>
@@ -141,7 +146,9 @@ view context.</p>
 </table>
 </dd></dl>
 
-<p>Replaces the component from where it is called with the given component.</p>
+<p>Replaces the component from where it is called with the given component and set a
+function that will be called after the controller for the new component was loaded.</p>
+<p>The context for the callback function will be the component&#8217;s controller.</p>
 </div>
 </div>
 <div class="section" id="attributes">
@@ -159,7 +166,7 @@ view context.</p>
 <h3>messaging<a class="headerlink" href="#messaging" title="Permalink to this headline">¶</a></h3>
 <dl class="attribute">
 <dt id="messaging ">
-<tt class="descname">messaging , <em>static</em></tt><a class="headerlink" href="#messaging " title="Permalink to this definition">¶</a></dt>
+<tt class="descname">messaging </tt><a class="headerlink" href="#messaging " title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>Provides methods to publish and subscribe to events.</p>
@@ -203,8 +210,8 @@ view context.</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="ClientUtil.html"
-                        title="previous chapter">Class ClientUtil</a></p>
+  <p class="topless"><a href="ClientStorage.html"
+                        title="previous chapter">Class ClientStorage</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="EventEmitter.html"
                         title="next chapter">Class EventEmitter</a></p>
@@ -235,13 +242,13 @@ view context.</p>
           <a href="EventEmitter.html" title="Class EventEmitter"
              >next</a> |</li>
         <li class="right" >
-          <a href="ClientUtil.html" title="Class ClientUtil"
+          <a href="ClientStorage.html" title="Class ClientStorage"
              >previous</a> |</li>
         <li><a href="../../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

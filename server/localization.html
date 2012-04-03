@@ -1,0 +1,192 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>RAIN Localization &mdash; Rain v0.7.0 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.7.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Rain v0.7.0 documentation" href="../index.html" />
+    <link rel="next" title="Namespace Authorization" href="api/Authorization.html" />
+    <link rel="prev" title="Platform language" href="platform_language.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="api/Authorization.html" title="Namespace Authorization"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="platform_language.html" title="Platform language"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="rain-localization">
+<h1>RAIN Localization<a class="headerlink" href="#rain-localization" title="Permalink to this headline">¶</a></h1>
+<p>RAIN provides features to localize text, templates and static resources. Depending on the
+localization needs, these features can be used on the client-side, server-side or both.</p>
+<p>The localization process uses the current platform language and tries to localize the requested
+resource. If the resource is not found it tries to use the default platform language. If this
+fails also, a default action is taken.</p>
+<div class="section" id="text-localization">
+<h2>Text localization<a class="headerlink" href="#text-localization" title="Permalink to this headline">¶</a></h2>
+<p>Text can be localized both on client-side and on server-side.</p>
+<div class="section" id="text-localization-on-server-side">
+<h3>Text localization on server-side<a class="headerlink" href="#text-localization-on-server-side" title="Permalink to this headline">¶</a></h3>
+<p>On the server-side, text can be localized in two places:</p>
+<ul class="simple">
+<li>templates</li>
+<li>controllers</li>
+</ul>
+<p>In <strong>templates</strong>, when you need some text localized, you can use the <tt class="docutils literal"><span class="pre">t</span></tt> and <tt class="docutils literal"><span class="pre">nt</span></tt> Handlebars
+helpers. For a more detailed description, input parameters and examples of how to use the helpers
+check the API documentation here: <tt class="xref js js-class docutils literal"><span class="pre">Translation</span> <span class="pre">Helper</span></tt>,
+<tt class="xref js js-class docutils literal"><span class="pre">Plural</span> <span class="pre">Translation</span> <span class="pre">Helper</span></tt>.</p>
+<p>In <strong>controllers</strong> you can use the <tt class="docutils literal"><span class="pre">t</span></tt> and <tt class="docutils literal"><span class="pre">nt</span></tt> global functions. Check the API documentation
+for more information and examples: <tt class="xref js js-class docutils literal"><span class="pre">Translation</span> <span class="pre">functions</span></tt>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">You shouldn&#8217;t declare functions named <tt class="docutils literal"><span class="pre">t</span></tt> or <tt class="docutils literal"><span class="pre">nt</span></tt> in the server-side controllers because
+the global translation functions will be overridden by them.</p>
+</div>
+</div>
+</div>
+<div class="section" id="resource-urls">
+<h2>Resource URLs<a class="headerlink" href="#resource-urls" title="Permalink to this headline">¶</a></h2>
+<p>A resource URL path has several parts separated by the &#8216;/&#8217; character:</p>
+<ol class="arabic simple">
+<li>component id - the component that has the required resource</li>
+<li>component version - the component version (this is optional)</li>
+<li>resources - a static path identifier</li>
+<li>path - the path to the file, related to the <tt class="docutils literal"><span class="pre">resources</span></tt> folder</li>
+</ol>
+<p>Here are some examples of resource URLs:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">/example/3.0/resources/images/flag.png</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">/hello_world/resources/file.pdf</span></tt></li>
+</ul>
+<p>Use <tt class="xref js js-class docutils literal"><span class="pre">Url</span> <span class="pre">Helper</span></tt> for easier handling.</p>
+<div class="section" id="resources-localization">
+<h3>Resources localization<a class="headerlink" href="#resources-localization" title="Permalink to this headline">¶</a></h3>
+<p>The static resource files for a component are located in the <tt class="docutils literal"><span class="pre">&lt;component_folder&gt;/resources/</span></tt>
+folder. There are multiple ways to generate the URLs for them:</p>
+<ul class="simple">
+<li>in template files: using the <tt class="xref js js-class docutils literal"><span class="pre">Url</span> <span class="pre">Helper</span></tt></li>
+<li>in all files: directly constructing the url path</li>
+</ul>
+<p>RAIN provides a very easy way to localize resources. Just add the <tt class="docutils literal"><span class="pre">loc</span></tt> query parameter to the
+URL path. E.g.:</p>
+<ul class="simple">
+<li>unlocalized image: <tt class="docutils literal"><span class="pre">/example/3.0/resources/images/flag.png</span></tt></li>
+<li>localized image: <tt class="docutils literal"><span class="pre">/example/3.0/resources/images/flag.png?loc</span></tt></li>
+</ul>
+<p>Localized resources are placed in the same folder with the other resources. The file name for a
+localized resource has a locale sufffix. For example, for the german language, <tt class="docutils literal"><span class="pre">flag_de_DE.png</span></tt>
+is the localized version for <tt class="docutils literal"><span class="pre">flag.png</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="views-localization">
+<h2>Views localization<a class="headerlink" href="#views-localization" title="Permalink to this headline">¶</a></h2>
+<p>Views can be localized by adding a locale suffix to the view name (<tt class="docutils literal"><span class="pre">index_de_DE.html</span></tt> for
+<tt class="docutils literal"><span class="pre">index.html</span></tt>). First, Rain tries to use the view for the platform language. If this view doesn&#8217;t
+exist it tries to use the view for the default platform language. If this is missing it will take
+the view for <cite>en_US</cite> with no language suffix.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Templates without a suffix are related to <cite>en_US</cite>!</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">RAIN Localization</a><ul>
+<li><a class="reference internal" href="#text-localization">Text localization</a><ul>
+<li><a class="reference internal" href="#text-localization-on-server-side">Text localization on server-side</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#resource-urls">Resource URLs</a><ul>
+<li><a class="reference internal" href="#resources-localization">Resources localization</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#views-localization">Views localization</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="platform_language.html"
+                        title="previous chapter">Platform language</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api/Authorization.html"
+                        title="next chapter">Namespace Authorization</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="api/Authorization.html" title="Namespace Authorization"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="platform_language.html" title="Platform language"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

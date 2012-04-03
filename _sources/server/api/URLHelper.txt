@@ -1,0 +1,112 @@
+
+
+
+
+
+
+..
+    Classes and methods
+
+Class URLHelper
+================================================================================
+
+..
+   class-title
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+Constructor
+-----------
+
+.. js:class:: URLHelper()
+
+
+
+
+
+
+
+
+
+Methods
+-------
+
+..
+   class-methods
+
+
+helper
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: URLHelper.helper(src, localized)
+
+
+    
+    :param String src: 
+        the resource path 
+    
+    :param Boolean localized: 
+        true to request a localized resource 
+    
+
+
+
+
+URL handlebars helper.
+
+Tries to interpret the given URL as a resource URL: relative paths
+are converted to resource routes for the current component and
+absolute and external paths are left as is.
+
+For relative and absolute paths, the second accepted parameter
+identifies a localized resource by adding a 'loc' query parameter to the URL.
+
+
+
+
+
+
+
+
+
+    
+
+
+.. code-block:: javascript
+
+    Getting an image from the component's resource folder (note that the
+  URL value inside the helper needs to be surrounded by double quotes):
+  <img src="{{url "images/img.jpg"}}">
+
+  Getting a localized image from the component's resource folder:
+  <img src="{{url "images/img.jpg" true}}">
+
+  Getting an image from another component, following the normal resource route
+  (the localized parameter can also be specified here if needed):
+  <img src="{{url "/other/resources/images/img.jpg"}}">
+
+  Getting an external image:
+  <img src="{{url "http://www.example.com/img.jpg"}}">
+
+  Other uses:
+  <div style="background: url('{{url "images/background.jpg"}}') repeat-x 0 0;"></div>
+
+
+
+
+
+    
+
+
+

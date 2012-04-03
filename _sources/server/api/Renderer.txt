@@ -118,39 +118,6 @@ Creates an instance id related to the session id, parent instance id and static 
 
 
 
-isAuthorized
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-.. js:function:: Renderer#isAuthorized(childComponent)
-
-
-    
-    :param Object childComponent: 
-        The component information for the rendering process 
-    
-
-
-
-    
-    :returns Boolean:
-        Returns the authorization status 
-    
-
-
-Checks the user permissions and replace the component with an error component if the user ha no rights
-
-
-
-
-
-
-
-
-
-    
-
-
-
 loadDataAndSend
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
@@ -315,6 +282,44 @@ Attributes
 
 ..
    class-attributes
+
+
+AUTHORIZATION_TYPE_INTENT
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:attribute:: AUTHORIZATION_TYPE_INTENT   
+
+
+Constant used when checking if the user can use a server type intent.
+
+
+
+
+
+
+
+
+    
+
+
+
+AUTHORIZATION_TYPE_VIEW
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:attribute:: AUTHORIZATION_TYPE_VIEW   
+
+
+Constant used when checking if the user can see a view.
+
+
+
+
+
+
+
+
+    
+
 
 
 rain

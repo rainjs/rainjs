@@ -182,7 +182,7 @@
 <li><p class="first">Private functions are scoped to the node/requirejs module and always receive as the first argument
 a <em>self</em> object, which is the object instance the function is called on:</p>
 <blockquote>
-<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div><div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -215,19 +215,54 @@ a <em>self</em> object, which is the object instance the function is called on:<
 <span class="p">};</span>
 </pre></div>
 </td></tr></table></div>
-</blockquote>
+</div></blockquote>
 </li>
 <li><p class="first">Caution: if you declare a property that is scoped to the node/requirejs module, it will be a
 static property, and all instances of the class will have access to the same value.</p>
 </li>
 </ul>
 </div>
+<div class="section" id="patterns">
+<h2>Patterns<a class="headerlink" href="#patterns" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="singleton">
+<h3>Singleton<a class="headerlink" href="#singleton" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first">When defining singletons, we use the following simple pattern</p>
+<blockquote>
+<div><div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span class="kd">function</span> <span class="nx">A</span><span class="p">()</span> <span class="p">{}</span>
+
+<span class="kd">var</span> <span class="nx">instance</span><span class="p">;</span>
+
+<span class="nx">A</span><span class="p">.</span><span class="nx">get</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">instance</span> <span class="o">||</span> <span class="p">(</span><span class="nx">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">A</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">A</span><span class="p">;</span>
+</pre></div>
+</td></tr></table></div>
+</div></blockquote>
+</li>
+<li><p class="first">This avoids running code at require time</p>
+</li>
+<li><p class="first">This means that we always use singletons by calling the <tt class="docutils literal"><span class="pre">get()</span></tt> method, e.g.: <tt class="docutils literal"><span class="pre">A.get().doSomething()</span></tt></p>
+</li>
+</ul>
+</div>
+</div>
 <div class="section" id="errors">
 <h2>Errors<a class="headerlink" href="#errors" title="Permalink to this headline">¶</a></h2>
 <ul>
 <li><p class="first">All <strong>error objects</strong> that are to be returned have the following structure:</p>
 <blockquote>
-<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+<div><div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3
 4
@@ -240,7 +275,7 @@ static property, and all instances of the class will have access to the same val
 <span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
-</blockquote>
+</div></blockquote>
 <p>Only the <tt class="docutils literal"><span class="pre">message</span></tt> property is mandatory. The meaning of the error object properties is:</p>
 <dl class="docutils">
 <dt><tt class="docutils literal"><span class="pre">type</span></tt> (String | undefined)</dt>
@@ -297,6 +332,10 @@ condition occurs, passing it the error object described above. <a class="footnot
 <li><a class="reference internal" href="#style">Style</a></li>
 <li><a class="reference internal" href="#best-practices">Best Practices</a></li>
 <li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#patterns">Patterns</a><ul>
+<li><a class="reference internal" href="#singleton">Singleton</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#errors">Errors</a></li>
 <li><a class="reference internal" href="#comments">Comments</a></li>
 </ul>
@@ -342,7 +381,7 @@ condition occurs, passing it the error object described above. <a class="footnot
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

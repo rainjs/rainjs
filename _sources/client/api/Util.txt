@@ -7,7 +7,7 @@
 ..
     Classes and methods
 
-Class ClientUtil
+Class Util
 ================================================================================
 
 ..
@@ -29,7 +29,7 @@ A singleton utility class.
 Constructor
 -----------
 
-.. js:class:: ClientUtil()
+.. js:class:: Util()
 
 
 
@@ -49,7 +49,7 @@ Methods
 bind
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: ClientUtil#bind(f, scope)
+.. js:function:: Util#bind(f, scope)
 
 
     
@@ -93,7 +93,7 @@ end of the parameter list, after the original bound parameters.
 bindPrivate
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: ClientUtil#bindPrivate(f, scope)
+.. js:function:: Util#bindPrivate(f, scope)
 
 
     
@@ -134,7 +134,7 @@ Automatically binds the first parameter to be the scope too.
 decorate
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: ClientUtil#decorate(f, advice)
+.. js:function:: Util#decorate(f, advice)
 
 
     
@@ -188,7 +188,7 @@ Use {@link #bind} to bind the advice functions to the desired scope.
 defer
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: ClientUtil#defer(f)
+.. js:function:: Util#defer(f)
 
 
     
@@ -214,10 +214,38 @@ Use {@link #bind} to bind scope and arguments to the function.
 
 
 
+format
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Util#format(msg)
+
+
+    
+    :param  msg: 
+         
+    
+
+
+
+
+(Too) simple sprintf implementation.
+
+
+
+
+
+
+
+
+
+    
+
+
+
 getSession
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: ClientUtil#getSession()
+.. js:function:: Util#getSession()
 
 
 
@@ -245,7 +273,7 @@ Returns the rain session id.
 inherits
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: ClientUtil#inherits(ctor, superCtor)
+.. js:function:: Util#inherits(ctor, superCtor)
 
 
     
@@ -260,6 +288,9 @@ inherits
 
 
 Makes a function inherit from another's prototype.
+
+In order to make it compatible with node's implementation,
+it also makes ``superCtor`` accessible through ``ctor.super_``.
 
 
 
@@ -276,7 +307,7 @@ Makes a function inherit from another's prototype.
 inject
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: ClientUtil#inject(on, from)
+.. js:function:: Util#inject(on, from)
 
 
     

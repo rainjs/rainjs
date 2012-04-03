@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class ClientUtil &mdash; Rain v0.7.0 documentation</title>
+    <title>Class Util &mdash; Rain v0.7.0 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -23,8 +23,8 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="Rain v0.7.0 documentation" href="../../index.html" />
-    <link rel="next" title="Class Context" href="Context.html" />
-    <link rel="prev" title="Class ClientStorage" href="ClientStorage.html" /> 
+    <link rel="next" title="Intents" href="../../server/messaging_intents.html" />
+    <link rel="prev" title="Class SocketHandler" href="SocketHandler.html" /> 
   </head>
   <body>
     <div class="related">
@@ -34,10 +34,10 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="Context.html" title="Class Context"
+          <a href="../../server/messaging_intents.html" title="Intents"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="ClientStorage.html" title="Class ClientStorage"
+          <a href="SocketHandler.html" title="Class SocketHandler"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
@@ -48,14 +48,14 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="class-clientutil">
-<h1>Class ClientUtil<a class="headerlink" href="#class-clientutil" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="class-util">
+<h1>Class Util<a class="headerlink" href="#class-util" title="Permalink to this headline">¶</a></h1>
 <p>A singleton utility class.</p>
 <div class="section" id="constructor">
 <h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="ClientUtil">
-<em class="property">class </em><tt class="descname">ClientUtil</tt><big>(</big><big>)</big><a class="headerlink" href="#ClientUtil" title="Permalink to this definition">¶</a></dt>
+<dt id="Util">
+<em class="property">class </em><tt class="descname">Util</tt><big>(</big><big>)</big><a class="headerlink" href="#Util" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
@@ -64,8 +64,8 @@
 <div class="section" id="bind">
 <h3>bind<a class="headerlink" href="#bind" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="ClientUtil#bind">
-<tt class="descname">ClientUtil#bind</tt><big>(</big><em>f</em>, <em>scope</em><big>)</big><a class="headerlink" href="#ClientUtil#bind" title="Permalink to this definition">¶</a></dt>
+<dt id="Util#bind">
+<tt class="descname">Util#bind</tt><big>(</big><em>f</em>, <em>scope</em><big>)</big><a class="headerlink" href="#Util#bind" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -95,8 +95,8 @@ end of the parameter list, after the original bound parameters.</p>
 <div class="section" id="bindprivate">
 <h3>bindPrivate<a class="headerlink" href="#bindprivate" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="ClientUtil#bindPrivate">
-<tt class="descname">ClientUtil#bindPrivate</tt><big>(</big><em>f</em>, <em>scope</em><big>)</big><a class="headerlink" href="#ClientUtil#bindPrivate" title="Permalink to this definition">¶</a></dt>
+<dt id="Util#bindPrivate">
+<tt class="descname">Util#bindPrivate</tt><big>(</big><em>f</em>, <em>scope</em><big>)</big><a class="headerlink" href="#Util#bindPrivate" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -125,8 +125,8 @@ Automatically binds the first parameter to be the scope too.</p>
 <div class="section" id="decorate">
 <h3>decorate<a class="headerlink" href="#decorate" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="ClientUtil#decorate">
-<tt class="descname">ClientUtil#decorate</tt><big>(</big><em>f</em>, <em>advice</em><big>)</big><a class="headerlink" href="#ClientUtil#decorate" title="Permalink to this definition">¶</a></dt>
+<dt id="Util#decorate">
+<tt class="descname">Util#decorate</tt><big>(</big><em>f</em>, <em>advice</em><big>)</big><a class="headerlink" href="#Util#decorate" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -146,7 +146,7 @@ Automatically binds the first parameter to be the scope too.</p>
 
 <p>exception being thrown from the original function</p>
 <blockquote>
-<table class="docutils field-list" frame="void" rules="none">
+<div><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
@@ -156,7 +156,7 @@ Automatically binds the first parameter to be the scope too.</p>
 </tr>
 </tbody>
 </table>
-</blockquote>
+</div></blockquote>
 <p>Decorate a function with advice.
 Use <a class="reference external" href="mailto:{&#37;&#52;&#48;link">{<span>&#64;</span>link</a> #bind} to bind the advice functions to the desired scope.</p>
 <div class="admonition-see-also admonition seealso">
@@ -167,8 +167,8 @@ Use <a class="reference external" href="mailto:{&#37;&#52;&#48;link">{<span>&#64
 <div class="section" id="defer">
 <h3>defer<a class="headerlink" href="#defer" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="ClientUtil#defer">
-<tt class="descname">ClientUtil#defer</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#ClientUtil#defer" title="Permalink to this definition">¶</a></dt>
+<dt id="Util#defer">
+<tt class="descname">Util#defer</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#Util#defer" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -185,11 +185,31 @@ Use <a class="reference external" href="mailto:{&#37;&#52;&#48;link">{<span>&#64
 <p>Defers the execution of a function until the first possible moment to run it.
 Use <a class="reference external" href="mailto:{&#37;&#52;&#48;link">{<span>&#64;</span>link</a> #bind} to bind scope and arguments to the function.</p>
 </div>
+<div class="section" id="format">
+<h3>format<a class="headerlink" href="#format" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Util#format">
+<tt class="descname">Util#format</tt><big>(</big><em>msg</em><big>)</big><a class="headerlink" href="#Util#format" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>msg</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>(Too) simple sprintf implementation.</p>
+</div>
 <div class="section" id="getsession">
 <h3>getSession<a class="headerlink" href="#getsession" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="ClientUtil#getSession">
-<tt class="descname">ClientUtil#getSession</tt><big>(</big><big>)</big><a class="headerlink" href="#ClientUtil#getSession" title="Permalink to this definition">¶</a></dt>
+<dt id="Util#getSession">
+<tt class="descname">Util#getSession</tt><big>(</big><big>)</big><a class="headerlink" href="#Util#getSession" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -205,8 +225,8 @@ Use <a class="reference external" href="mailto:{&#37;&#52;&#48;link">{<span>&#64
 <div class="section" id="inherits">
 <h3>inherits<a class="headerlink" href="#inherits" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="ClientUtil#inherits">
-<tt class="descname">ClientUtil#inherits</tt><big>(</big><em>ctor</em>, <em>superCtor</em><big>)</big><a class="headerlink" href="#ClientUtil#inherits" title="Permalink to this definition">¶</a></dt>
+<dt id="Util#inherits">
+<tt class="descname">Util#inherits</tt><big>(</big><em>ctor</em>, <em>superCtor</em><big>)</big><a class="headerlink" href="#Util#inherits" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -222,12 +242,14 @@ Use <a class="reference external" href="mailto:{&#37;&#52;&#48;link">{<span>&#64
 </dd></dl>
 
 <p>Makes a function inherit from another&#8217;s prototype.</p>
+<p>In order to make it compatible with node&#8217;s implementation,
+it also makes <tt class="docutils literal"><span class="pre">superCtor</span></tt> accessible through <tt class="docutils literal"><span class="pre">ctor.super_</span></tt>.</p>
 </div>
 <div class="section" id="inject">
 <h3>inject<a class="headerlink" href="#inject" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="ClientUtil#inject">
-<tt class="descname">ClientUtil#inject</tt><big>(</big><em>on</em>, <em>from</em><big>)</big><a class="headerlink" href="#ClientUtil#inject" title="Permalink to this definition">¶</a></dt>
+<dt id="Util#inject">
+<tt class="descname">Util#inject</tt><big>(</big><em>on</em>, <em>from</em><big>)</big><a class="headerlink" href="#Util#inject" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -256,13 +278,14 @@ Useful for borrowing methods.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Class ClientUtil</a><ul>
+<li><a class="reference internal" href="#">Class Util</a><ul>
 <li><a class="reference internal" href="#constructor">Constructor</a></li>
 <li><a class="reference internal" href="#methods">Methods</a><ul>
 <li><a class="reference internal" href="#bind">bind</a></li>
 <li><a class="reference internal" href="#bindprivate">bindPrivate</a></li>
 <li><a class="reference internal" href="#decorate">decorate</a></li>
 <li><a class="reference internal" href="#defer">defer</a></li>
+<li><a class="reference internal" href="#format">format</a></li>
 <li><a class="reference internal" href="#getsession">getSession</a></li>
 <li><a class="reference internal" href="#inherits">inherits</a></li>
 <li><a class="reference internal" href="#inject">inject</a></li>
@@ -273,11 +296,11 @@ Useful for borrowing methods.</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="ClientStorage.html"
-                        title="previous chapter">Class ClientStorage</a></p>
+  <p class="topless"><a href="SocketHandler.html"
+                        title="previous chapter">Class SocketHandler</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="Context.html"
-                        title="next chapter">Class Context</a></p>
+  <p class="topless"><a href="../../server/messaging_intents.html"
+                        title="next chapter">Intents</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -302,16 +325,16 @@ Useful for borrowing methods.</p>
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="Context.html" title="Class Context"
+          <a href="../../server/messaging_intents.html" title="Intents"
              >next</a> |</li>
         <li class="right" >
-          <a href="ClientStorage.html" title="Class ClientStorage"
+          <a href="SocketHandler.html" title="Class SocketHandler"
              >previous</a> |</li>
         <li><a href="../../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>
