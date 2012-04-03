@@ -45,7 +45,7 @@ The developer that uses the group view can write his code like this::
         My first button: {{component name="button" view="index" sid="button1"}}
 
         <div class="my_class">
-            My second button here: {{component name="button" view="index" sid="button2}}
+            My second button here: {{component name="button" view="index" sid="button2"}}
         </div>
 
     {{/component}}
