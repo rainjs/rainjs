@@ -34,9 +34,9 @@ Block usage
 You can use the helper also as a block element. This use case can be better explained
 through an example.
 
-Suppose you want to create a **group of buttons**, but also give the developer the opportunity to
-play with the html output. For the grouping page you have to create a new view that uses
-the ``html`` key. That means you have to have in your view the following code: ``{{html}}``.
+Suppose you need to create a **group of buttons** functionality, but also easily control
+the html output. For the grouping page you must create a new view that uses the ``html`` key.
+This means the view must contain the following code: ``{{html}}``.
 
 The developer that uses the group view can write his code like this::
 
@@ -45,7 +45,7 @@ The developer that uses the group view can write his code like this::
         My first button: {{component name="button" view="index" sid="button1"}}
 
         <div class="my_class">
-            My second button here: {{component name="button" view="index" sid="button1"}}
+            My second button here: {{component name="button" view="index" sid="button2}}
         </div>
 
     {{/component}}
@@ -66,7 +66,7 @@ The ``group.html`` view can look like this::
     element.
 
 This usage is useful when you want to implement some logic but also give the developer a way to
-customize the html output. In the previous example you can have a logic for how the grouped
+customize the look and feel. In the previous example you can have a logic for how the grouped
 buttons are behaving and the developer can decide how the place the buttons in the page.
 
 -----------
@@ -83,11 +83,9 @@ The declaration ``{{component name="button" view="index"}}`` generates the follo
 Error Cases
 -----------
 
-When the component or the view isn't found a 404 error page will be shown. Also, the component
-helper performs authorization before a view is shown. If the authorization fails a 401 error page
-is shown.
-
-What happens is that in error cases the component is replaced with the error component.
+When the component or the view isn't found a 404 error page will be shown.
+When the authorization fails for a view a 401 error page is shown.
+The error pages are views within the error component.
 
 .. seealso::
 

@@ -9,31 +9,31 @@ var request, response;
 var routesFolder = path.join(__dirname, 'routes');
 
 var routes = {
-    'controller.js': {
+    'controller': {
         name: "Controller Route",
         route: /^\/([\w-]+)\/(?:(\d(?:\.\d)?(?:\.\d)?)\/)?(?:controller)\/(.+)/,
         handle: function (req, res) {},
         url: '/button/1.0/controller/index'
     },
-    'css.js': {
+    'css': {
         name: "CSS Route",
         route: /^\/([\w-]+)\/(?:(\d(?:\.\d)?(?:\.\d)?)\/)?(?:css)\/(.+)/,
         handle: function (req, res) {},
         url: '/button/1.0/css/index.css'
     },
-    'javascript.js': {
+    'javascript': {
         name: "Javascript Route",
         route: /^\/([\w-]+)\/(?:(\d(?:\.\d)?(?:\.\d)?)\/)?(?:js)\/(.+)/,
         handle: function (req, res) {},
         url: '/button/1.0/js/index.js'
     },
-    'resource.js': {
+    'resource': {
         name: "Resource Route",
         route: /^\/([\w-]+)\/(?:((?:\d\.)?\d\.\d)\/)?resources\/(.+)/,
         handle: function (req, res) {},
         url: '/button/1.0/resources/image.png'
     },
-    'view.js': {
+    'view': {
         name: "View Route",
         route: /^\/([\w-]+)\/(?:(\d(?:\.\d)?(?:\.\d)?)\/)?(.+)$/,
         handle: function (req, res) {},
@@ -114,7 +114,7 @@ describe('Router', function () {
     });
 
     it('must get the component config', function () {
-        var route = routes['view.js'];
+        var route = routes['view'];
         var next = jasmine.createSpy('next');
         request.url = route.url;
         router(request, response, next);
