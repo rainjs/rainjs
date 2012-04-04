@@ -7,13 +7,14 @@
         "serverRoot": ".",
         "components": ["./components"],
 
-        "paths": {
-            "server": ".",
-            "components": "./components"
+        "logs": {
+            "error": "log/error.log",
+            "access": "log/access.log"
         }
     },
 
     "defaultLanguage": "en_US",
+    "language": "en_US",
 
     "errorComponent": {
         "id": "error",

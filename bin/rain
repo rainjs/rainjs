@@ -15,13 +15,10 @@ var fs = require('fs')
 process.title = "rain";
 
 program
+    .version(JSON.parse(fs.readFileSync('package.json', 'utf8')).version)    
     .usage("<options> <command>")
     .option("-d, --debug", "start the server with the node debugger")
-    .option("-c, --conf <path_to_conf>", "start server with custom configuration")
-    .option("-m, --mothership-conf <path_to_conf>", "start server with custom mothership configuration")
-    .option("-p, --platform <platform>", [
-          "choose the platform for the application",
-          "      Available platforms:            "+platform_list.join(', ')].join('\n'));
+    .option("-c, --conf <path_to_conf>", "start server with custom configuration");
 
 program
     .command("create-project <path> <project-name>")
@@ -156,9 +153,10 @@ function createComponent(component_name){
 
 function setupProject(project_path){
   var paths = {
-	    conf        : mod_path.join(project_path, 'conf')
-	    ,components  : mod_path.join(project_path, 'components')
-	    ,'public'    : mod_path.join(project_path, 'public')
+	    conf: mod_path.join(project_path, 'conf'),
+	    components: mod_path.join(project_path, 'components'),
+	    'public': mod_path.join(project_path, 'public'),
+	    log: mod_path.join(project_path, 'log')
 	  },
   	  coreComponentsName = "core";
   //create project directory
@@ -167,6 +165,8 @@ function setupProject(project_path){
   fs.mkdirSync(paths.components, 0755);
   //create conf directory
   fs.mkdirSync(paths.conf, 0755);
+  //create log directory
+  fs.mkdirSync(paths.log, 0755);
   //copy default configurations
   wrench.copyDirSyncRecursive(mod_path.resolve(mod_path.join(__dirname, '../init/conf')), paths.conf);
   //copy core-component
@@ -232,9 +232,8 @@ function debug(){
 };
 
 function start(confpath){
-  var actPath     = process.cwd()
-      ,server     = require('../lib/server')
-      ,child      = require('child_process');
+  var actPath     = process.cwd(),
+      child      = require('child_process');
 
   if(!utils.checkPidDirectory())
     utils.createPidDirectory();
@@ -244,77 +243,56 @@ function start(confpath){
     return false;
   }
 
-  var ms_conf = program.mothershipConf ? program.mothershipConf : mod_path.join(actPath, 'conf', 'mothership.conf.default');
 
-  if(!utils.mothershipIsUp(JSON.parse(fs.readFileSync(ms_conf)).server.port)){
-    //===========START MOTHERSHIP===========
-    var ms = child.spawn('node', [__dirname+'/lib/start_mothership.js', ms_conf]);
-    ms.stdout.on('data', function(data){
-      var data = data.toString();
-      process.stdout.write(data);
-      if(~data.search(/mothership started/i) || ~data.search("mothership is still running")){
-        return startServer();
-      }
-    })
-    //===========MOTHERSHIP STARTED===========
-  } else {
-    return startServer();
-  }
-
-  function startServer(){
+  
     if(utils.serverIsUp(actPath)){
       console.log("server is still running!");
       return false;
     } else {
       //===========START RAIN SERVER===========
-      var conf_path = confpath ? confpath : program.conf ? mod_path.resolve(program.conf) : mod_path.join(actPath, 'conf', 'server.conf.default')
-          ,server_conf = fs.readFileSync(conf_path, 'utf8')
+      var conf_path = program.conf || process.env.RAIN_CONF || mod_path.join(actPath, 'conf', 'server.conf.default') 
           ,pid_path = utils.getPidDir();
-
-      var parsed_conf = JSON.parse(server_conf);
-
-      //start server
-      server({'conf' : JSON.parse(server_conf)}, function(){
-        daemon.daemonize(mod_path.join(actPath, 'server.log'), null, function(err, pid){
-          var daemon_process = this.process;
-
-          if (err) {
-            return sys_util.puts('Error starting daemon: ' + err);
-          }
-
-          daemon_process.title = "rain-server";
-
-          //create configurationfile
-          var server_prop_file = pid+' '+conf_path
-             ,conf_spid    = mod_path.join(pid_path, "rain.server."+pid)
-             ,conf_project = mod_path.join(actPath, ".server");
-          //write server config
-          fs.writeFileSync(conf_spid, server_prop_file);
-          fs.writeFileSync(conf_project, server_prop_file);
-
-          if(program.debug)
-            daemon_process.kill(pid, 'SIGUSR1');
-          //clear conf files if server shutting down
-          daemon_process.on('SIGTERM', function(){
-            try{
-                fs.unlinkSync(conf_spid);
-                fs.unlinkSync(conf_project);
-            } catch(ev){
-                
-            }
-            daemon_process.exit(0);
-          });
-
-          daemon_process.on('uncaughtException', function (err) {
-            console.log('Caught exception: ' + err);
-            daemon_process.kill(pid, 'SIGTERM');
-          });
-        });
+      
+      process.title = "rain-server";
+      
+      //start daemon
+      daemon.start();
+      
+      //create configurationfile
+      var server_prop_file = process.pid+' '+conf_path
+         ,conf_spid    = mod_path.join(pid_path, "rain.server."+process.pid)
+         ,conf_project = mod_path.join(actPath, ".server");
+      //write server config
+      fs.writeFileSync(conf_spid, server_prop_file);
+      fs.writeFileSync(conf_project, server_prop_file);
+      
+      //lock pidfile
+      daemon.lock(conf_spid);
+      
+      if(program.debug)
+          process.kill(process.pid, 'SIGUSR1');
+      
+      //clear conf files if server shutting down
+      process.on('SIGTERM', function(){
+        try{
+            fs.unlinkSync(conf_spid);
+            fs.unlinkSync(conf_project);
+        } catch(ev){
+            
+        }
+        process.exit(0);
       });
+
+      process.on('uncaughtException', function (err) {
+        console.error('Caught exception: ' + err);
+        process.kill(process.pid, 'SIGTERM');
+      });
+      
+      require('../lib/server').initialize();
+            
       //===========RAIN SERVER STARTED===========
       return true;
     }
-  }
 };
 
 function stop(pid){
@@ -354,9 +332,7 @@ function stop(pid){
 
 function stopall(){
   var server = utils.getServerList(),
-      motherships = utils.getMothershipList(),
-      countServer = 0,
-      countMS = 0;
+      countServer = 0;
 
   //shutdown all server
   for(var i = server.length; i--;){
@@ -375,32 +351,7 @@ function stopall(){
     }
   }
 
-  //shutdown all motherships
-  for(var i = motherships.length; i--;){
-    var result = motherships[i].match(/([0-9]+)$/);
-
-    // gracefully degrade if the PID doesn't exist anymore
-    try {
-        process.kill(result[1],'SIGTERM');
-    } catch (e) {
-      // process doesn't exist anymore
-    } finally {
-        try {
-            fs.unlinkSync(utils.getPidDir() + '/' + motherships[i]);
-        } catch (e) {
-            // deffinetly stopped
-        }
-    }
-
-    countMS++;
-  }
-
   console.log("%s Server shutted down!".green, countServer);
-  if(countMS == 1){
-    console.log("%s Mothership shutted down!".green, countMS);
-  } else {
-    console.log("%s Motherships shutted down!".green, countMS);
-  }
 };
 
 function restart(pid){
@@ -415,13 +366,14 @@ function restart(pid){
       }
     }
   }
+  
   try {
     process.kill(pid, 'SIGTERM');
   } catch (e) {
       // pid doesn't exist anymore
     } finally {
         try {
-            fs.unlinkSync(utils.getPidDir() + '/' + server[i]);
+            fs.unlinkSync(utils.getPidDir() + '/rain.server.' + pid);
             fs.unlinkSync(process.cwd() + '/.server');
         } catch (e) {
             // ok it's deffinetly stopped
@@ -435,24 +387,6 @@ function restart(pid){
 };
 
 function list(type){
-
-  if(!type || type == 'mothership'){
-    var table_ms = new Table({
-      head : ['PID', 'Config Path', 'Port']
-    , colWidths : [ 10, 45, 10 ]
-    });
-
-    var files = utils.getMothershipList();
-    for(var i = files.length; i--;){
-      var ms_file = JSON.parse(fs.readFileSync(mod_path.join(utils.getPidDir() ,files[i])));
-      table_ms.push([ms_file.pid, ms_file.path, ms_file.conf.server.port]);
-    }
-
-    log(
-        ' Mothership List:'.cyan,
-        table_ms.toString()
-    );
-  }
 
   if(!type || type == 'server'){
     var table_s = new Table({

@@ -5,7 +5,12 @@
         "timeoutForRequests" : 3,
 
         "serverRoot": ".",
-        "components": ["./components"]
+        "components": ["./components", "../sprint/components"],
+        
+        "logs": {
+            "error": "log/error.log",
+            "access": "log/access.log"
+        }
     },
 
     "defaultLanguage": "en_US",
