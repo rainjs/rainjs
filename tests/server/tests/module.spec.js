@@ -1,8 +1,8 @@
 "use strict";
 
-var cwd = process.cwd();
-var path = require('path');
-var module = require(cwd + '/lib/module');
+var cwd = process.cwd(),
+    path = require('path'),
+    module = require(cwd + '/lib/module');
 
 describe('Module tests', function () {
 
