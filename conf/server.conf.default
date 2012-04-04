@@ -5,8 +5,8 @@
         "timeoutForRequests" : 3,
 
         "serverRoot": ".",
-        "components": ["./components", "../sprint/components"],
-        
+        "components": ["./components"],
+
         "logs": {
             "error": "log/error.log",
             "access": "log/access.log"
