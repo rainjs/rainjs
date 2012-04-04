@@ -31,12 +31,23 @@ describe('Handlebars configuration', function () {
             name: 'component',
             helper: function () {}
         };
+        mocks[path.join(pluginFolder, 'translation.js')] = {
+            name: 't',
+            helper: function () {}
+        };
+        mocks[path.join(pluginFolder, 'translation_plural.js')] = {
+            name: 'nt',
+            helper: function () {}
+        };
+
         loadFile(cwd + '/lib/handlebars.js', mocks, true);
     });
 
     it('must register all Handlebars plugins', function () {
         expect(typeof plugins['css'] === 'function').toBe(true);
         expect(typeof plugins['component'] === 'function').toBe(true);
+        expect(typeof plugins['t'] === 'function').toBe(true);
+        expect(typeof plugins['nt'] === 'function').toBe(true);
     });
 
 });
