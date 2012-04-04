@@ -21,7 +21,10 @@
         "socket.io": ">= 0.7.7",
         "commander": "",
         "mocks": "",
-        "daemon": "https://github.com/arcade/daemon.node/tarball/master"
+        "daemon": "https://github.com/arcade/daemon.node/tarball/master",
+        "colors": "",
+        "wrench": "",
+        "cli-table": ""
     },
     "keywords": ["framework", "rain"],
     "repository": "git://github.com/rainjs/rainjs",

@@ -246,7 +246,7 @@ function start(confpath){
 
   
     if(utils.serverIsUp(actPath)){
-      console.log("server is still running!");
+      console.log("Server is still running!".yellow);
       return false;
     } else {
       //===========START RAIN SERVER===========

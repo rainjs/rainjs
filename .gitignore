@@ -18,3 +18,4 @@ tests/client/reports
 npm-debug.log
 *.sublime-project
 *.sublime-workspace
+/log/*
