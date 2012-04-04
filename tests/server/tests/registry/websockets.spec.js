@@ -24,11 +24,11 @@ describe('Registry plugin: Websockets', function () {
         spyOn(console, 'log').andCallFake(function () {});
 
         spyOn(util, 'walkSync').andCallFake(function (folder, callback) {
-            callback(path.join(folder, 'socket.js'), 'socket.js');
+            callback(path.join(folder, 'socket.js'));
         });
 
-        // Mock for require.
-        spyOn(Module.prototype, 'require').andCallFake(function (path) {
+        // Mock for requireWithContext
+        spyOn(global, 'requireWithContext').andCallFake(function (path) {
             return socket;
         });
 
@@ -50,7 +50,7 @@ describe('Registry plugin: Websockets', function () {
         var expectedFolder = path.join('components', 'button2', 'server',
                                        'websockets', 'socket.js');
 
-        expect(Module.prototype.require).toHaveBeenCalledWith(expectedFolder);
+        expect(global.requireWithContext.mostRecentCall.args[0]).toBe(expectedFolder);
     });
 
     it('must register the socket', function () {
