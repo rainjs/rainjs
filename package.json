@@ -20,7 +20,8 @@
         "promised-io": ">= 0.2.3",
         "socket.io": ">= 0.7.7",
         "commander": "",
-        "mocks": ""
+        "mocks": "",
+        "daemon": "https://github.com/arcade/daemon.node/tarball/master"
     },
     "keywords": ["framework", "rain"],
     "repository": "git://github.com/rainjs/rainjs",
