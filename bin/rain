@@ -1,16 +1,17 @@
 #!/usr/bin/env node
 
 var fs = require('fs')
-  , mod_path = require('path')
-  , color = require('colors')
-  , exec = require('child_process').exec
-  , wrench = require('wrench')
-  , program = require('commander')
-  , daemon = require('daemon')
-  , platform_list = ["nodejs"]
-  , utils   = require('./lib/utils.js')
-  , sys_util = require('util')
-  , Table = require('cli-table');
+    mod_path = require('path')
+    color = require('colors')
+    exec = require('child_process').exec
+    wrench = require('wrench')
+    program = require('commander')
+    daemon = require('daemon')
+    platform_list = ["nodejs"]
+    utils   = require('./lib/utils.js')
+    sys_util = require('util')
+    Table = require('cli-table'),
+    Promise = require('promised-io/promise');
 
 process.title = "rain";
 program
@@ -230,159 +231,146 @@ function debug(){
   console.log(program);
 };
 
-function start(confpath){
-  var actPath     = process.cwd(),
-      child      = require('child_process');
+function start(conf){
+    var actPath = process.cwd(),
+        child = require('child_process');
 
-  if(!utils.checkPidDirectory())
-    utils.createPidDirectory();
+    if (!utils.checkPidDirectory()) {
+        utils.createPidDirectory();
+    }
 
-  if(!utils.checkValidProject(actPath)){
-    console.log("this is not a rain project!".red);
-    return false;
-  }
+    if (!utils.checkValidProject(actPath)){
+        console.log("this is not a rain project!".red);
+        return false;
+    }
 
-
-
-    if(utils.serverIsUp(actPath)){
-      console.log("Server is still running!".yellow);
-      return false;
+    if (conf) {
+        program.conf = conf;
+    }
+    
+    if (utils.serverIsUp(actPath)) {
+        console.log("Server is still running!".yellow);
+        return false;
     } else {
-      //===========START RAIN SERVER===========
-      var conf_path = program.conf || process.env.RAIN_CONF || mod_path.join(actPath, 'conf', 'server.conf.default')
-          ,pid_path = utils.getPidDir();
+        //===========START RAIN SERVER===========
+        var conf_path = program.conf ||
+                        process.env.RAIN_CONF ||
+                        mod_path.join(actPath, 'conf', 'server.conf.default'),
+            pid_path = utils.getPidDir();
 
-      process.title = "rain-server";
+        process.title = "rain-server";
 
-      //start daemon
-      daemon.start();
+        //start daemon
+        daemon.start();
 
-      //create configurationfile
-      var server_prop_file = process.pid+' '+conf_path
-         ,conf_spid    = mod_path.join(pid_path, "rain.server."+process.pid)
-         ,conf_project = mod_path.join(actPath, ".server");
-      //write server config
-      fs.writeFileSync(conf_spid, server_prop_file);
-      fs.writeFileSync(conf_project, server_prop_file);
+        //create configurationfile
+        var server_prop_file = process.pid+' '+conf_path,
+            conf_spid    = mod_path.join(pid_path, "rain.server."+process.pid),
+            conf_project = mod_path.join(actPath, ".server");
+        
+        //write server config
+        fs.writeFileSync(conf_spid, server_prop_file);
+        fs.writeFileSync(conf_project, server_prop_file);
 
-      //lock pidfile
-      daemon.lock(conf_spid);
+        //lock pidfile
+        daemon.lock(conf_spid);
 
-      if(program.debug)
-          process.kill(process.pid, 'SIGUSR1');
-
-      //clear conf files if server shutting down
-      process.on('SIGTERM', function(){
-        try{
-            fs.unlinkSync(conf_spid);
-            fs.unlinkSync(conf_project);
-        } catch(ev){
-
+        if (program.debug) {
+            process.kill(process.pid, 'SIGUSR1');
         }
-        process.exit(0);
-      });
 
-      process.on('uncaughtException', function (err) {
-        console.error('Caught exception: ' + err);
-        process.kill(process.pid, 'SIGTERM');
-      });
+        //clear conf files if server shutting down
+        process.on('SIGTERM', function() {
+            try {
+                console.log("kill files", new Date().toString());
+                fs.unlinkSync(conf_project);
+                fs.unlinkSync(conf_spid);
+            } catch(ev){
 
-      require('../lib/server').initialize();
+            }
+            process.exit(0);
+        });
 
-      //===========RAIN SERVER STARTED===========
-      return true;
+        process.on('uncaughtException', function (err) {
+            console.error('Caught exception: ' + err);
+            process.kill(process.pid, 'SIGTERM');
+        });
+
+        require('../lib/server').initialize();
+
+        //===========RAIN SERVER STARTED===========
+        return true;
     }
 };
 
 function stop(pid){
-  if(!pid){
-    var actPath = process.cwd();
-    if(utils.checkValidProject(actPath)){
-      if(utils.serverIsUp(actPath)){
-        var result = utils.getServerPIDContent(mod_path.join(actPath, '.server'));
-        pid = result[0];
-      } else {
-        console.log('No running server for this project');
-        process.exit(0);
-      }
-    } else {
-      console.log("this is not a compatible project!".red);
-      process.exit(1);
-    }
-  }
-
-  try {
-      process.kill(pid, 'SIGTERM');
-      countServer++;
-    } catch (e) {
-      // pid doesn't exist anymore
-    } finally {
-        try {
-            fs.unlinkSync(utils.getPidDir() + '/rain.server.' + pid);
-            fs.unlinkSync(process.cwd() + '/.server');
-        } catch (e) {
-            // ok it's deffinetly stopped
+    if (!pid) {
+        var actPath = process.cwd();
+        if (utils.checkValidProject(actPath)) {
+            if(utils.serverIsUp(actPath)) {
+                var result = utils.getServerPIDContent(mod_path.join(actPath, '.server'));
+                pid = result[0];
+            } else {
+                console.log('No running server for this project');
+                process.exit(0);
+            }
+        } else {
+            console.log("this is not a compatible project!".red);
+            process.exit(1);
         }
     }
-
-  console.log("Server stopped!".green);
-  process.exit(0);
+    
+    process.kill(pid, 'SIGTERM');
+    
+    console.log("Server stopped!".green);
+    process.exit(0);
 };
 
 function stopall(){
-  var server = utils.getServerList(),
-      countServer = 0;
+    var server = utils.getServerList(),
+        countServer = 0;
 
-  //shutdown all server
-  for(var i = server.length; i--;){
-    try {
-      process.kill(server[i].substring(12),'SIGTERM');
-      countServer++;
-    } catch (e) {
-      // pid doesn't exist anymore
-    } finally {
-        try {
-            fs.unlinkSync(utils.getPidDir() + '/' + server[i]);
-            fs.unlinkSync(process.cwd() + '/.server');
-        } catch (e) {
-            // ok it's deffinetly stopped
-        }
+    //shutdown all server
+    for(var i = server.length; i--;){
+        var pid = server[i].substring(12);
+      try {
+        process.kill(pid,'SIGTERM');
+        countServer++;
+      } catch (e) {}
     }
-  }
 
-  console.log("%s Server shutted down!".green, countServer);
-};
+    console.log("%s Server shutted down!".green, countServer);
+  };
 
 function restart(pid){
-  var conf = null;
-  if(!pid){
-    var actPath = process.cwd();
-    if(utils.checkValidProject(actPath)){
-      if(utils.serverIsUp(actPath)){
-        var result = utils.getServerPIDContent(mod_path.join(actPath, '.server'));
-        pid = result[0];
-        conf = result[1];
-      }
-    }
-  }
-
-  try {
-    process.kill(pid, 'SIGTERM');
-  } catch (e) {
-      // pid doesn't exist anymore
-    } finally {
-        try {
-            fs.unlinkSync(utils.getPidDir() + '/rain.server.' + pid);
-            fs.unlinkSync(process.cwd() + '/.server');
-        } catch (e) {
-            // ok it's deffinetly stopped
+    var conf = null;
+    if (!pid){
+        var actPath = process.cwd();
+        if(utils.checkValidProject(actPath)){
+            if(utils.serverIsUp(actPath)){
+                var result = utils.getServerPIDContent(mod_path.join(actPath, '.server'));
+                pid = result[0];
+                conf = result[1];
+            }
         }
     }
 
-  if(!conf)
-    console.log('No running server! Starting server with default config');
+    try {
+        if (pid) {
+            process.kill(pid, 'SIGTERM');
+        }
+    } catch (e) {
+        // pid doesn't exist anymore
+    }
 
-  start(conf);
+    if (!conf) {
+        var promise = new Promise.Deferred();
+        console.log('No running server!'.yellow);
+        console.log('Starting server with default config'.green);
+    }
+    //wait till the old server was finally killed
+    while (utils.serverIsUp(actPath) == true) {}
+    start(conf);
 };
 
 function list(type){
