@@ -264,7 +264,6 @@ function start(conf){
         process.title = 'rain-server';
 
         if (withDaemon) {
-            console.log('daemon!!');
             //start daemon
             daemon.start();
             
