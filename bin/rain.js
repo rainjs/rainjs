@@ -80,7 +80,7 @@ if (!program.debug && program.rawArgs.length <= 2) {
     console.log(program.helpInformation()+'\n\n\n'+extendedHelp);
 }
 
-var noDaemon = program.daemon == false || process.platform == 'darwin' || process.platform == 'windows';
+var withDaemon = program.daemon && process.platform != 'darwin' && process.platform != 'windows';
 
 /**
  * create new application
@@ -263,7 +263,7 @@ function start(conf){
 
         process.title = 'rain-server';
 
-        if (noDaemon) {
+        if (withDaemon) {
             console.log('daemon!!');
             //start daemon
             daemon.start();
