@@ -1,4 +1,4 @@
-define(['raintime/messaging/intents'], function(Intents) {
+define(['raintime/messaging/intents', '/external_theming/js/jquery_button.js'], function(Intents) {
     /**
      * Example controller class.
      *
@@ -23,7 +23,7 @@ define(['raintime/messaging/intents'], function(Intents) {
      * @function
      */
     Controller.prototype.start = function () {
-        $(this.context.getRoot).on('click', '.do-intent', function (event) {
+        $(this.context.getRoot().children()[0]).button().on('click', '.do-intent', function (event) {
             Intents.send({
                 category: 'com.rain.test',
                 action: 'DO_SOMETHING'
