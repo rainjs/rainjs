@@ -65,7 +65,6 @@ var extendedHelp = [
     ,''
     ,'    $ rain start'
     ,'    $ rain start -c /home/username/workspace/custom_confs/server.conf'
-    ,'    $ rain start -m /home/username/workspace/custom_confs/mothership.conf'
     ,''
     ,'    $ rain stop'
     ,'    $ rain stop 5361'
@@ -77,7 +76,7 @@ program.on('--help', function(){
 });
 
 program.parse(process.argv);
-if (!program.mothership && !program.debug && program.rawArgs.length <= 2) {
+if (!program.debug && program.rawArgs.length <= 2) {
     console.log(program.helpInformation()+'\n\n\n'+extendedHelp);
 }
 
