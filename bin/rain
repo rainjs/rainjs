@@ -11,7 +11,7 @@ var fs = require('fs')
     utils   = require('./lib/utils.js')
     sys_util = require('util')
     Table = require('cli-table'),
-    Promise = require('promised-io/promise');
+    RainError = require('../lib/rain_error');
 
 process.title = "rain";
 program
@@ -235,8 +235,7 @@ function debug(){
 };
 
 function start(conf){
-    var actPath = process.cwd(),
-        child = require('child_process');
+    var actPath = process.cwd();
 
     if (!utils.checkPidDirectory()) {
         utils.createPidDirectory();
@@ -295,8 +294,8 @@ function start(conf){
         });
 
         process.on('uncaughtException', function (err) {
-            console.error('Caught exception: ' + err);
-            process.kill(process.pid, 'SIGTERM');
+            console.error('Uncaught exception: ' + err.stack);
+            require('child_process').exec('cd ' + actPath +' && rain restart');
         });
 
         require('../lib/server').initialize();
