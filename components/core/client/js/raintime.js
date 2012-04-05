@@ -203,6 +203,8 @@ define(['raintime/lib/promise',
                 var childInstanceId = children[i].instanceId;
                 if (components[childInstanceId]) {
                     promises.push(components[childInstanceId].promise);
+                } else if (preComponents[childInstanceId]) {
+                    promises.push(preComponents[childInstanceId].promise);
                 }
             }
         } else {
