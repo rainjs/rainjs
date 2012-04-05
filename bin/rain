@@ -33,34 +33,28 @@ program
 program
     .command("start [#pid]")
     .description([
-       "1. on project root the command starts the server and creates an pid file"
+       "start the server on project root"
     ].join('\n'))
     .action(start);
 
 program
     .command("stop [#pid]")
     .description([
-       "1. on project root the command stops the associated server",
-       "2. with [#pid] stops the server with the associated process id"
+       "stop the associated server on project root",
+       "stop the server with the associated with the process id [#pid]"
     ].join('\n'))
     .action(stop);
 
 program
-    .command("restart [#pid]")
+    .command("restart")
     .description([
-       "1. on project root the command restarts the associated server",
-       "2. with [#pid] restarts the server with the associated process id"
+       "restarts the associated server on project root"
     ].join('\n'))
     .action(restart);
 
-//program
-//    .command("list [server|mothership]")
-//    .description("lists all running server/motherships, with [type] only 1 of both will be displayed")
-//    .action(list);
-
 program
     .command("stopall")
-    .description("shutting down all server and motherships")
+    .description("shutting down all server")
     .action(stopall);
 
 
@@ -342,8 +336,9 @@ function stopall(){
     console.log("%s Server shutted down!".green, countServer);
   };
 
-function restart(pid){
-    var conf = null;
+function restart(){
+    var pid = null,
+        conf = null;
     if (!pid){
         var actPath = process.cwd();
         if(utils.checkValidProject(actPath)){
@@ -352,6 +347,9 @@ function restart(pid){
                 pid = result[0];
                 conf = result[1];
             }
+        } else {
+            console.log("this is not a rain project!".red);
+            return false;
         }
     }
 
