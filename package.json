@@ -17,7 +17,7 @@
         "less": ">= 1.1.4",
         "mime": "",
         "node.extend": "",
-        "promised-io": ">= 0.2.3",
+        "promised-io": "https://github.com/kriszyp/promised-io/tarball/master",
         "socket.io": ">= 0.7.7",
         "commander": "",
         "mocks": "",
@@ -30,6 +30,6 @@
     "keywords": ["framework", "rain"],
     "repository": "git://github.com/rainjs/rainjs",
     "main": "./start",
-    "bin": { "rain": "./bin/rain" },
+    "bin": { "rain": "./bin/rain.js" },
     "engines": { "node": "0.6.11" }
 }

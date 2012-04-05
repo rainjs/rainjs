@@ -21,17 +21,6 @@ exports.createPidDirectory = function(){
   fs.mkdirSync(this.getPidDir(), 0775);
 };
 
-exports.mothershipIsUp = function(port){
-  var files = this.getMothershipList();
-  for(var i = files.length; i--;){
-    var result = files[i].match(/rain\.ms\.([0-9]+)\.([0-9]+)/);
-    if(result[1] == port)
-      return true;
-  }
-  
-  return false;
-};
-
 exports.getPidDir = function(){
   return mod_path.resolve(process.env.HOME || process.env.UserProfile, '.rain');
 };
@@ -55,17 +44,6 @@ exports.getServerList = function(){
   
   for(var i = files.length; i--;){
     if(~files[i].indexOf('rain.server'))
-      serverfiles.push(files[i]);
-  }
-  return serverfiles;
-};
-
-exports.getMothershipList = function(){
-  var files = fs.readdirSync(this.getPidDir()),
-      serverfiles = [];
-
-  for(var i = files.length; i--;){
-    if(~files[i].indexOf('rain.ms'))
       serverfiles.push(files[i]);
   }
   return serverfiles;
