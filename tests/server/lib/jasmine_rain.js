@@ -20,7 +20,7 @@ function toThrowType(type, code) {
                 ", but the type is `" + e.type + (code ? '` and code is `' + e.code + '`' : '');
         };
 
-        return e instanceof RainError && e.type === type && (code ? e.code === code : true);
+        return e instanceof RainError && e.type === type && (code !== undefined ? e.code === code : true);
     }
 
     this.message = function () {
