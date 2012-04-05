@@ -13,9 +13,8 @@ var fs = require('fs')
   , Table = require('cli-table');
 
 process.title = "rain";
-
 program
-    .version(JSON.parse(fs.readFileSync('package.json', 'utf8')).version)    
+    .version(JSON.parse(fs.readFileSync(mod_path.join(mod_path.dirname(__dirname), 'package.json'), 'utf8')).version)
     .usage("<options> <command>")
     .option("-d, --debug", "start the server with the node debugger")
     .option("-c, --conf <path_to_conf>", "start server with custom configuration");
@@ -244,20 +243,20 @@ function start(confpath){
   }
 
 
-  
+
     if(utils.serverIsUp(actPath)){
       console.log("Server is still running!".yellow);
       return false;
     } else {
       //===========START RAIN SERVER===========
-      var conf_path = program.conf || process.env.RAIN_CONF || mod_path.join(actPath, 'conf', 'server.conf.default') 
+      var conf_path = program.conf || process.env.RAIN_CONF || mod_path.join(actPath, 'conf', 'server.conf.default')
           ,pid_path = utils.getPidDir();
-      
+
       process.title = "rain-server";
-      
+
       //start daemon
       daemon.start();
-      
+
       //create configurationfile
       var server_prop_file = process.pid+' '+conf_path
          ,conf_spid    = mod_path.join(pid_path, "rain.server."+process.pid)
@@ -265,20 +264,20 @@ function start(confpath){
       //write server config
       fs.writeFileSync(conf_spid, server_prop_file);
       fs.writeFileSync(conf_project, server_prop_file);
-      
+
       //lock pidfile
       daemon.lock(conf_spid);
-      
+
       if(program.debug)
           process.kill(process.pid, 'SIGUSR1');
-      
+
       //clear conf files if server shutting down
       process.on('SIGTERM', function(){
         try{
             fs.unlinkSync(conf_spid);
             fs.unlinkSync(conf_project);
         } catch(ev){
-            
+
         }
         process.exit(0);
       });
@@ -287,9 +286,9 @@ function start(confpath){
         console.error('Caught exception: ' + err);
         process.kill(process.pid, 'SIGTERM');
       });
-      
+
       require('../lib/server').initialize();
-            
+
       //===========RAIN SERVER STARTED===========
       return true;
     }
@@ -366,7 +365,7 @@ function restart(pid){
       }
     }
   }
-  
+
   try {
     process.kill(pid, 'SIGTERM');
   } catch (e) {
