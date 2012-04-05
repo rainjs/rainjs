@@ -16,7 +16,8 @@ process.title = 'rain';
 program
     .version(JSON.parse(fs.readFileSync(mod_path.join(mod_path.dirname(__dirname), 'package.json'), 'utf8')).version)
     .usage('<options> <command>')
-    .option('-d, --debug', 'start the server with the node debugger')
+    .option('-d, --debug', 'start the server with the node debugger\n'+
+            '\t\t\t       server is NOT restarting on uncaught exceptions\n')
     .option('-c, --conf <path_to_conf>', 'start server with custom configuration')
     .option('-n, --no-daemon', 'start server without daemon mode');
 
@@ -80,7 +81,7 @@ if (!program.debug && program.rawArgs.length <= 2) {
     console.log(program.helpInformation()+'\n\n\n'+extendedHelp);
 }
 
-var withDaemon = program.daemon && process.platform != 'darwin' && process.platform != 'windows';
+var withDaemon = program.daemon && process.platform != 'darwin' && process.platform != 'win32';
 
 /**
  * create new application
@@ -282,7 +283,6 @@ function start(conf){
             //clear conf files if server shutting down
             process.on('SIGTERM', function() {
                 try {
-                    console.log('kill files', new Date().toString());
                     fs.unlinkSync(conf_project);
                     fs.unlinkSync(conf_spid);
                 } catch(ev){
@@ -293,7 +293,9 @@ function start(conf){
             
             process.on('uncaughtException', function (err) {
                 console.error('Uncaught exception: ' + err.stack);
-                require('child_process').exec('cd ' + actPath +' && rain restart');
+                if (!program.debug) {
+                    require('child_process').exec('cd ' + actPath +' && rain restart');
+                }
             });
         }
 
