@@ -74,25 +74,32 @@ define([
                 placeholderTimeout(this, childComponent);
             }
         }
-
+        
         var domElement = $('#' + component.instanceId);
         domElement.hide().html(component.html);
         domElement.attr('id', component.instanceId);
         domElement.attr('class',
-            'app-container ' + component.id + '_' + component.version.replace(/[\.]/g, '_')
+                        'app-container ' + component.id + '_' + component.version.replace(/[\.]/g, '_')
         );
 
-        // Registers the component.
-        Raintime.componentRegistry.register(component);
-
         if (!component.css || component.css.length == 0) {
-            domElement.show();
+            showHTML(component, domElement);
         } else {
             loadCSS(this, component.css, function () {
-                domElement.show();
+                showHTML(component, domElement);
             });
         }
     };
+    
+    /**
+     * @param {Object} component the rendered component
+     * @param {DomElement} element The wrapper of the component
+     */
+    function showHTML(component, element) {
+        element.show();
+        // Registers the component.
+        Raintime.componentRegistry.register(component);
+    }
 
     /**
      * Renders the placeholder.
