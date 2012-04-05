@@ -24,7 +24,8 @@
         "daemon": "https://github.com/arcade/daemon.node/tarball/master",
         "colors": "",
         "wrench": "",
-        "cli-table": ""
+        "cli-table": "",
+        "jed": ""
     },
     "keywords": ["framework", "rain"],
     "repository": "git://github.com/rainjs/rainjs",
