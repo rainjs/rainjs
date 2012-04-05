@@ -89,11 +89,30 @@ function platform_language(env, fn, ctx) {
     );
 }
 
+function text_localization(environment, callback, data) {
+    var customData = {
+        boss: {
+            title: 'Mr.',
+            lastName: 'Doe'
+        },
+        company: 'ABC Company',
+        months: 5,
+        firstName: 'John',
+        lastName: 'Smith',
+        email: 'jsmith@abcd.com',
+        phone: '(111) 111-1111',
+        sendButtonLabel: t('Send email')
+    };
+    callback(null, customData);
+}
+
+
 module.exports = {
     index: index,
     data_layer: data_layer,
     level1: level1,
     level2: level2,
     level3: level3,
-    platform_language: platform_language
+    platform_language: platform_language,
+    text_localization: text_localization
 };

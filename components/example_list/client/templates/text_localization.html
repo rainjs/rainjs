@@ -1,0 +1,34 @@
+{{css path="text_localization.css"}}
+<div class="reference">
+    <p>
+        {{t "Dear %1$s %2$s," boss.title boss.lastName}}
+    </p>
+    <br />
+    <p>
+        {{t "I am writing to ask whether it would be possible for you to provide a reference for me."}}
+    </p>
+    <p>
+        {{{nt "If you were able to attest to my qualifications for employment, and the skills I attained during my <b>one month</b> tenure at <b>%2$s</b>, I would sincerely appreciate it."
+              "If you were able to attest to my qualifications for employment, and the skills I attained during my <b>%1$d months</b> tenure at <b>%2$s</b>, I would sincerely appreciate it."
+              months months company}}}
+    </p>
+    <p>
+        {{t "I am in the process of seeking employment and a positive reference from you would enhance my prospects of achieving my career goals."}}
+    </p>
+    <p>
+        {{t "Please let me know if there is any information I can provide regarding my experience to assist you in giving me a reference. I can be reached at %1$s or %2$s." email phone}}
+    </p>
+    <p>
+        {{t "Thank you for your consideration."}}
+    </p>
+    <br />
+    <p>
+        {{t "Sincerely,"}}
+    </p>
+    <p>
+        {{t "%1$s %2$s" firstName lastName}}
+    </p>
+    <br />
+    {{component name="external_theming" view="button" sid="sendEmail" label=sendButtonLabel}}
+    <div class="email-response"></div>
+</div>

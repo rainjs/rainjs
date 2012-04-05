@@ -27,7 +27,8 @@
         "denied": {
             "permissions": ["some_permission"]
         },
-        "image_localization": {}
+        "image_localization": {},
+        "text_localization": {}
     },
     "intents": [{
         "category": "com.rain.example.security",

@@ -24,12 +24,12 @@ describe('Server configuration and validation', function () {
     }
 
     it('must set the language to the default one', function () {
-        var configuration = loadConfiguration();
+        var configuration = loadConfiguration(configurationsFolder + 'server_two.conf');
         expect(configuration.language).toBe('en_US');
     });
 
     it('must set the language to the one specified in the configuration', function () {
-        var configuration = loadConfiguration(configurationsFolder + 'server_two.conf');
+        var configuration = loadConfiguration();
         expect(configuration.language).toBe('ro_RO');
     });
 
