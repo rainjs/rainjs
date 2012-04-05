@@ -43,7 +43,7 @@ describe('Handlebars css helper', function () {
             var template = Handlebars.compile('{{css version="1.0"}}');
             expect(function() {
                 template();
-            }).toThrow('CSS path is missing.');
+            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'css');
         });
 
         it('must create correct css dependencies for the same component', function () {
@@ -56,7 +56,7 @@ describe('Handlebars css helper', function () {
             var template = Handlebars.compile('{{css path="index.css" version="2.4"}}');
             expect(function() {
                 template();
-            }).toThrow('The component name is required if you are specifying the version.');
+            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'name missing');
         });
 
         it('must create correct dependency css with latest version', function() {

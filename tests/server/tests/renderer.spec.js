@@ -383,7 +383,7 @@ describe('Renderer', function () {
             expect(response.end).toHaveBeenCalledWith(
                 renderer.clientRendererScript({
                     html: 'html'
-                })
+                }) + '\n\t</body>\n</html>'
             );
         });
 

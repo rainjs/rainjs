@@ -78,7 +78,7 @@ describe('Intents Registry: ', function () {
                     action: 'some_action',
                     provider: 'some_provider'
                 });
-            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED);
+            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'category');
         });
 
         it('must throw an error if the intent action is not specified', function () {
@@ -87,7 +87,7 @@ describe('Intents Registry: ', function () {
                     category: 'some_category',
                     provider: 'some_provider'
                 });
-            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED);
+            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'action');
         });
 
         it('must throw an error if the intent provider is not specified', function () {
@@ -96,7 +96,7 @@ describe('Intents Registry: ', function () {
                     action: 'some_action',
                     category: 'some_category'
                 });
-            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED);
+            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'provider');
         });
 
         it('must throw an error if the intent view does not exist', function () {
@@ -106,7 +106,7 @@ describe('Intents Registry: ', function () {
                     action: 'some_action',
                     provider: 'inexisting'
                 });
-            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED);
+            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'view');
         });
 
         it('must throw an error if the intent controller does not exist', function () {
@@ -116,7 +116,7 @@ describe('Intents Registry: ', function () {
                     action: 'some_action',
                     provider: 'inexisting#log'
                 });
-            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED);
+            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'controller');
         });
 
         it('must throw an error if the intent provider is not valid', function () {
@@ -126,14 +126,14 @@ describe('Intents Registry: ', function () {
                     action: 'some_action',
                     provider: 'file#log#invalid'
                 });
-            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED);
+            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'invalid');
         });
 
         it('must throw an error if the intent is already registered', function () {
             intentRegistry.register(component, intent);
             expect(function () {
                 intentRegistry.register(component, intent);
-            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED);
+            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'registered');
 
             socketHandlers = {};
         });
@@ -177,7 +177,7 @@ describe('Intents Registry: ', function () {
                 rainError = err;
             });
 
-            expect(rainError.type).toBe(RainError.ERROR_PRECONDITION_FAILED);
+            expect(rainError.type).toBe(RainError.ERROR_PRECONDITION_FAILED, 'category');
         });
 
         it('must send error message if the intent action is missing', function () {
@@ -185,7 +185,7 @@ describe('Intents Registry: ', function () {
             fn({category: 'com.intents.rain.test', context: {}}, function (err) {
                 rainError = err;
             });
-            expect(rainError.type).toBe(RainError.ERROR_PRECONDITION_FAILED);
+            expect(rainError.type).toBe(RainError.ERROR_PRECONDITION_FAILED, 'action');
         });
 
         it('must send error message if the intent context is missing', function () {
@@ -193,7 +193,7 @@ describe('Intents Registry: ', function () {
             fn({category: 'com.intents.rain.test', action: 'DO_SOMETHING'}, function (err) {
                 rainError = err;
             });
-            expect(rainError.type).toBe(RainError.ERROR_PRECONDITION_FAILED);
+            expect(rainError.type).toBe(RainError.ERROR_PRECONDITION_FAILED, 'context');
         });
 
         it('must send error message if the intent is not authorized', function () {
