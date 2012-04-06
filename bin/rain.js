@@ -6,7 +6,6 @@ var fs = require('fs')
     exec = require('child_process').exec
     wrench = require('wrench')
     program = require('commander')
-    daemon = require('daemon')
     platform_list = ['nodejs']
     utils   = require('./lib/utils.js')
     sys_util = require('util')
@@ -149,14 +148,14 @@ function createComponent(component_name){
 
 
 function setupProject(project_path) {
-    var coreComponentsName = 'core', 
+    var coreComponentsName = 'core',
         paths = {
              conf: mod_path.join(project_path, 'conf'),
              components: mod_path.join(project_path, 'components'),
              'public': mod_path.join(project_path, 'public'),
              log: mod_path.join(project_path, 'log')
         };
-    
+
     //create project directory
     fs.mkdirSync(project_path, 0755);
     //create components directory
@@ -251,7 +250,7 @@ function start(conf){
     if (conf) {
         program.conf = conf;
     }
-    
+
     if (utils.serverIsUp(actPath)) {
         console.log('Server is still running!'.yellow);
         return false;
@@ -265,32 +264,33 @@ function start(conf){
         process.title = 'rain-server';
 
         if (withDaemon) {
+            var daemon = require('daemon');
             //start daemon
             daemon.start();
-            
+
             //create configurationfile
             var server_prop_file = process.pid+' '+conf_path,
             conf_spid    = mod_path.join(pid_path, 'rain.server.'+process.pid),
             conf_project = mod_path.join(actPath, '.server');
-            
+
             //write server config
             fs.writeFileSync(conf_spid, server_prop_file);
             fs.writeFileSync(conf_project, server_prop_file);
-            
+
             //lock pidfile
             daemon.lock(conf_spid);
-            
+
             //clear conf files if server shutting down
             process.on('SIGTERM', function() {
                 try {
                     fs.unlinkSync(conf_project);
                     fs.unlinkSync(conf_spid);
                 } catch(ev){
-                    
+
                 }
                 process.exit(0);
             });
-            
+
             process.on('uncaughtException', function (err) {
                 console.error('Uncaught exception: ' + err.stack);
                 if (!program.debug) {
@@ -326,7 +326,7 @@ function stop(pid){
             process.exit(1);
         }
     }
-    
+
     try {
         process.kill(pid, 'SIGTERM');
         console.log('Server stopped!'.green);
@@ -339,7 +339,7 @@ function stop(pid){
         } catch (ev) {}
         console.log('No running server for this project');
     }
-    
+
     process.exit(0);
 };
 
