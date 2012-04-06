@@ -80,8 +80,6 @@ if (!program.debug && program.rawArgs.length <= 2) {
     console.log(program.helpInformation()+'\n\n\n'+extendedHelp);
 }
 
-var withDaemon = program.daemon && process.platform != 'darwin' && process.platform != 'win32';
-
 /**
  * create new application
  */
@@ -259,7 +257,8 @@ function start(conf){
         var conf_path = program.conf ||
                         process.env.RAIN_CONF ||
                         mod_path.join(actPath, 'conf', 'server.conf.default'),
-            pid_path = utils.getPidDir();
+            pid_path = utils.getPidDir(),
+            withDaemon = program.daemon && process.platform != 'darwin' && process.platform != 'win32';
 
         process.title = 'rain-server';
 
