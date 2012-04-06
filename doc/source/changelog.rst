@@ -38,3 +38,8 @@ v 0.5
 + Added contract selector component that uses mocked contract data
 + Added static dashboard example
 + Added platform-level placeholder component and configuration
+
+v 0.4
+-----
+
+Here be dragons
