@@ -50,7 +50,3 @@
   like tag libraries.
 * The render code was rewritten, mostly from scratch.
 * Many improvements in the supplied example components.
-
-## &lt; 0.4.0
-
-Here be dragons.
