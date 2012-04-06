@@ -38,8 +38,7 @@
 ## 0.4.0
 
 * View urls use the same scheme as other resources (with /htdocs included).
-* Client-side controller are fully supported, may be defined by <script type="client-side-controller" src=""> or
-  inside the component meta file, see the example in _skeleton.
+* Client-side controller are fully supported
 * Components now have individual meta.json files, there is no global configuration file anymore.
 * On startup, the component root folder is scanned for components which are then auto-registered.
 * The server-side controller paths were fixed.
@@ -51,6 +50,6 @@
 * The render code was rewritten, mostly from scratch.
 * Many improvements in the supplied example components.
 
-## <0.4.0
+## < 0.4.0
 
 Here be dragons.
