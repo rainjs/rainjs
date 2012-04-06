@@ -51,6 +51,6 @@
 * The render code was rewritten, mostly from scratch.
 * Many improvements in the supplied example components.
 
-## <0.4.0
+## < 0.4.0
 
 Here be dragons.
