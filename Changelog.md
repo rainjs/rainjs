@@ -2,7 +2,7 @@
 
 ##
 
-## 0.8
+## 0.8.0
 
 * Implemented the security mecanism to intents
 * Added a configuration option for the platform language and default language
@@ -13,7 +13,7 @@
 * Added support for block components
 * Added the feature proposal for transporting localization files to the client
 
-## 0.7
+## 0.7.0
 
 * Rewrote all legacy server code: improvements in quality, structure and performance
 * New router middleware for connect supporting plugins
