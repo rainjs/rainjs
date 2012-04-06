@@ -1,7 +1,5 @@
 # Changelog
 
-##
-
 ## 0.8.0
 
 * Implemented the security mecanism to intents
