@@ -1,6 +1,18 @@
 Changelog
 =========
 
+v 0.8
+-----
+
++ Implemented the security mecanism to intents
++ Added a configuration option for the platform language and default language
++ Added support for localized messages in the templates
++ Added support for localized messages in the server side code
++ Added support for localized images
++ Added support for extended context in templates
++ Added support for block components
++ Added the feature proposal for transporting localization files to the client
+
 v 0.7
 -----
 
