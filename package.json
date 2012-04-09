@@ -1,6 +1,6 @@
 {
     "name": "rain",
-    "description": "An experiment on component-based and distributed web applications",
+    "description": "An component-based and distributed web application framework",
     "version": "0.8.0",
     "author": "Claus Augusti <claus@formatvorlage.de>",
     "contributors": [
