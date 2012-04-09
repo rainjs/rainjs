@@ -3,10 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Rain 0.7.0 Documentation
+Rain 0.8.0 Documentation
 ========================
 
-Welcome! This is the documentation for Rain 0.7.0
+Welcome! This is the documentation for Rain 0.8.0
 
 ---------------
 Getting started
