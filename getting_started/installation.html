@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>RAIN Installation &mdash; Rain v0.7.0 documentation</title>
+    <title>RAIN Installation &mdash; Rain v0.8.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.7.0',
+        VERSION:     '0.8.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,9 +22,9 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.7.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.8.0 documentation" href="../index.html" />
     <link rel="next" title="RAIN SDK Tutorial" href="rain_sdk_tutorial.html" />
-    <link rel="prev" title="Rain 0.7.0 Documentation" href="../index.html" /> 
+    <link rel="prev" title="Rain 0.8.0 Documentation" href="../index.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,9 +37,9 @@
           <a href="rain_sdk_tutorial.html" title="RAIN SDK Tutorial"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../index.html" title="Rain 0.7.0 Documentation"
+          <a href="../index.html" title="Rain 0.8.0 Documentation"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.8.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -59,54 +59,56 @@ development machine.</p>
 <dl class="docutils">
 <dt>Before you start to install node make sure you have the following tools installed:</dt>
 <dd><ol class="first last arabic simple">
-<li>unzip (Ubuntu: sudo apt-get install unzip)</li>
-<li>gcc (Ubuntu: sudo apt-get install gcc)</li>
-<li>g++ (Ubuntu: sudo apt-get install g++)</li>
-<li>openssl (Ubuntu: sudo apt-get install openssl)</li>
-<li>libssl-dev (Ubuntu: sudo apt-get install libssl-dev)</li>
-<li>make (Ubuntu: sudo apt-get install make)</li>
+<li>unzip (Ubuntu: <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">unzip</span></tt>)</li>
+<li>gcc (Ubuntu: <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">gcc</span></tt>)</li>
+<li>g++ (Ubuntu: <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">g++</span></tt>)</li>
+<li>openssl (Ubuntu: <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">openssl</span></tt>)</li>
+<li>libssl-dev (Ubuntu: <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">libssl-dev</span></tt>)</li>
+<li>make (Ubuntu: <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">make</span></tt>)</li>
 </ol>
 </dd>
 </dl>
 <p>Now you can start installing node.</p>
 <blockquote>
-<div><ol class="arabic simple">
-<li>wget <a class="reference external" href="http://nodejs.org/dist/v0.6.13/node-v0.6.13.tar.gz">http://nodejs.org/dist/v0.6.13/node-v0.6.13.tar.gz</a></li>
-<li>tar -zxvf node-v0.6.13.tar.gz</li>
-<li>cd node-v0.6.13</li>
-<li>chmod u+x configure</li>
-<li>chmod u+x tools/waf-light</li>
-<li>./configure &amp;&amp; make &amp;&amp; sudo make install</li>
-<li>make sure /usr/local/bin is added to your PATH environment variable.</li>
-<li>node - to make sure node can be run</li>
+<ol class="arabic simple">
+<li><tt class="docutils literal"><span class="pre">wget</span> <span class="pre">http://nodejs.org/dist/v0.6.13/node-v0.6.13.tar.gz</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">tar</span> <span class="pre">-zxvf</span> <span class="pre">node-v0.6.13.tar.gz</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">cd</span> <span class="pre">node-v0.6.13</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">chmod</span> <span class="pre">u+x</span> <span class="pre">configure</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">chmod</span> <span class="pre">u+x</span> <span class="pre">tools/waf-light</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">./configure</span> <span class="pre">&amp;&amp;</span> <span class="pre">make</span> <span class="pre">&amp;&amp;</span> <span class="pre">sudo</span> <span class="pre">make</span> <span class="pre">install</span></tt></li>
+<li>Make sure /usr/local/bin is added to your PATH environment variable.</li>
+<li><tt class="docutils literal"><span class="pre">node</span> <span class="pre">-V</span></tt> to make sure node can be run</li>
+<li><tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">npm</span> <span class="pre">install</span> <span class="pre">node-gyp</span> <span class="pre">-g</span></tt> to install the latest node native module build tool</li>
 </ol>
-</div></blockquote>
+</blockquote>
 <p>Installing via package manager:</p>
 <blockquote>
-<div><a class="reference external" href="https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager">https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager</a></div></blockquote>
+<a class="reference external" href="https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager">https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager</a></blockquote>
 </div>
 <div class="section" id="windows-os">
 <h3>Windows OS<a class="headerlink" href="#windows-os" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li>Download <a class="reference external" href="http://nodejs.org/dist/v0.6.13/node-v0.6.13.msi">http://nodejs.org/dist/v0.6.13/node-v0.6.13.msi</a></li>
 <li>Install the msi package</li>
 <li>That&#8217;s all :)</li>
 <li>NPM is in the bundle too ;)</li>
 </ol>
-</div></blockquote>
+</blockquote>
 </div>
 <div class="section" id="mac-os">
 <h3>Mac OS<a class="headerlink" href="#mac-os" title="Permalink to this headline">¶</a></h3>
 <p>On Mac OS operating systems you need to execute the following commands:</p>
 <blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li>Download <a class="reference external" href="http://nodejs.org/dist/v0.6.13/node-v0.6.13.pkg">http://nodejs.org/dist/v0.6.13/node-v0.6.13.pkg</a></li>
 <li>Install the package</li>
 <li>That&#8217;s all :)</li>
 <li>NPM is in the bundle too ;)</li>
+<li><tt class="docutils literal"><span class="pre">npm</span> <span class="pre">install</span> <span class="pre">node-gyp</span> <span class="pre">-g</span></tt> as administrator to install the latest node native module build tool</li>
 </ol>
-</div></blockquote>
+</blockquote>
 </div>
 </div>
 <div class="section" id="rain-sdk">
@@ -117,10 +119,11 @@ development machine.</p>
 tested on Ubuntu Linux and on Mac OS X. Below you can find the commands to get the sdk running on
 Unix / Linux operating systems ( npm is required! ):</p>
 <blockquote>
-<div><ol class="arabic simple">
-<li>sudo npm install rain -g</li>
+<ol class="arabic simple">
+<li><tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">npm</span> <span class="pre">install</span> <span class="pre">node-gyp</span> <span class="pre">-g</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">npm</span> <span class="pre">install</span> <span class="pre">rain</span> <span class="pre">-g</span></tt></li>
 </ol>
-</div></blockquote>
+</blockquote>
 <p>If everything went well you should be able to run rain sdk from command line. For more information
 about RAIN sdk creating first project read: <a class="reference internal" href="rain_sdk_tutorial.html"><em>RAIN SDK Tutorial</em></a></p>
 </div>
@@ -132,18 +135,20 @@ you need to execute the following commands:</p>
 <div class="section" id="linux-unix-mac-os-windows">
 <h3>Linux / Unix / Mac OS / Windows<a class="headerlink" href="#linux-unix-mac-os-windows" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><ol class="arabic simple">
-<li>git clone <a class="reference external" href="https://github.com/rainjs/rainjs.git">https://github.com/rainjs/rainjs.git</a></li>
-<li>cd rain</li>
-<li>npm install -d</li>
-<li>node start</li>
+<ol class="arabic simple">
+<li><tt class="docutils literal"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/rainjs/rainjs.git</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">cd</span> <span class="pre">rainjs</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">npm</span> <span class="pre">install</span> <span class="pre">node-gyp</span> <span class="pre">-g</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">npm</span> <span class="pre">install</span> <span class="pre">-d</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">npm</span> <span class="pre">link</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">rain</span> <span class="pre">start</span></tt></li>
 </ol>
-</div></blockquote>
+</blockquote>
 </div>
 <div class="section" id="test-installation">
 <h3>Test installation<a class="headerlink" href="#test-installation" title="Permalink to this headline">¶</a></h3>
 <p>This should give you a running instance of RAIN server and mothership. For testing your
-installation try to access: <a class="reference external" href="http://localhost:1337/example/index">http://localhost:1337/example/index</a></p>
+installation try to access: <a class="reference external" href="http://localhost:1337/example/index">http://localhost:1337/example/index</a>.</p>
 </div>
 </div>
 </div>
@@ -178,7 +183,7 @@ installation try to access: <a class="reference external" href="http://localhost
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="../index.html"
-                        title="previous chapter">Rain 0.7.0 Documentation</a></p>
+                        title="previous chapter">Rain 0.8.0 Documentation</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="rain_sdk_tutorial.html"
                         title="next chapter">RAIN SDK Tutorial</a></p>
@@ -209,13 +214,13 @@ installation try to access: <a class="reference external" href="http://localhost
           <a href="rain_sdk_tutorial.html" title="RAIN SDK Tutorial"
              >next</a> |</li>
         <li class="right" >
-          <a href="../index.html" title="Rain 0.7.0 Documentation"
+          <a href="../index.html" title="Rain 0.8.0 Documentation"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.8.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

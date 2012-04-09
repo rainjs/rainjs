@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class ComponentHelper &mdash; Rain v0.7.0 documentation</title>
+    <title>Class ComponentHelper &mdash; Rain v0.8.0 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.7.0',
+        VERSION:     '0.8.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.7.0 documentation" href="../../index.html" />
+    <link rel="top" title="Rain v0.8.0 documentation" href="../../index.html" />
     <link rel="next" title="Class ComponentRegistry" href="ComponentRegistry.html" />
     <link rel="prev" title="Namespace Authorization" href="Authorization.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="Authorization.html" title="Namespace Authorization"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.8.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -54,11 +54,9 @@
 The helper invokes the renderer to load custom data from the data layer for the template
 and calls the rendering process after the data is received, to render the component.
 The aggregated component receives automatically the context of his parent.</p>
-<dl class="docutils">
-<dt>Complete syntax:</dt>
-<dd>{{component name=&#8221;compnentId&#8221; version=&#8221;versionNumber&#8221; view=&#8221;viewID&#8221; sid=&#8221;staticId&#8221; placeholder=true customAttr=value }}</dd>
-</dl>
-<p>&lt;/pre&gt;</p>
+<p>Complete syntax:</p>
+<div class="highlight-python"><pre>{{component view="viewID" [name="componentId" [version="versionNumber"]] [sid="staticId"] [placeholder=true] [customAttr=value]}}</pre>
+</div>
 <div class="section" id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-javascript"><pre>Aggregates the view ``button_green`` from the parent component.
@@ -73,8 +71,7 @@ The aggregated component receives automatically the context of his parent.</p>
      {{component name="textbox" view="index"}}
  &lt;/div&gt;</pre>
 </div>
-<div class="highlight-javascript"><pre>Aggregates the view ``index`` of the component ``textbox`` with the latest version
- and sets the static id ``button1``.
+<div class="highlight-javascript"><pre>Aggregates the view ``index`` of the component ``textbox`` with the latest version and sets the static id ``button1``.
 
  &lt;div class="template"&gt;
      {{component name="button" view="index" sid="button1"}}
@@ -198,11 +195,11 @@ It sends automatically an error component if something went wrong.</p>
         <li class="right" >
           <a href="Authorization.html" title="Namespace Authorization"
              >previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.8.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

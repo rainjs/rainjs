@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class ErrorHandler &mdash; Rain v0.8.0 documentation</title>
+    <title>Class TranslationPluralHelper &mdash; Rain v0.8.0 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -23,8 +23,8 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="Rain v0.8.0 documentation" href="../../index.html" />
-    <link rel="next" title="Class IntentsRegistry" href="IntentsRegistry.html" />
-    <link rel="prev" title="Class Environment" href="Environment.html" /> 
+    <link rel="next" title="Class URLHelper" href="URLHelper.html" />
+    <link rel="prev" title="Class TranslationHelper" href="TranslationHelper.html" /> 
   </head>
   <body>
     <div class="related">
@@ -34,10 +34,10 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="IntentsRegistry.html" title="Class IntentsRegistry"
+          <a href="URLHelper.html" title="Class URLHelper"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="Environment.html" title="Class Environment"
+          <a href="TranslationHelper.html" title="Class TranslationHelper"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Rain v0.8.0 documentation</a> &raquo;</li> 
       </ul>
@@ -48,50 +48,57 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="class-errorhandler">
-<h1>Class ErrorHandler<a class="headerlink" href="#class-errorhandler" title="Permalink to this headline">¶</a></h1>
-<p>Creates the ErrorHandler and loads the specified / default error component.</p>
+  <div class="section" id="class-translationpluralhelper">
+<h1>Class TranslationPluralHelper<a class="headerlink" href="#class-translationpluralhelper" title="Permalink to this headline">¶</a></h1>
+<p>This Handlebars helper is used to translate plural text.</p>
+<p>Syntax:</p>
+<div class="highlight-python"><pre>{{nt msgId msgIdPlural count [[arg1] [arg2] [argN]]}}</pre>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-javascript"><pre>&lt;span&gt;
+     {{nt "%1$s %2$s, you won one car." "%1$s %2$s, you won %3$d cars." 4 "Mr." "Wayne" 4}}
+ &lt;/span&gt;</pre>
+</div>
+</div>
 <div class="section" id="constructor">
 <h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="ErrorHandler">
-<em class="property">class </em><tt class="descname">ErrorHandler</tt><big>(</big><big>)</big><a class="headerlink" href="#ErrorHandler" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name" colspan="2">Throws RainError:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body">: when the error component is not specified or if it doesn&#8217;t have the default view</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
+<dt id="TranslationPluralHelper">
+<em class="property">class </em><tt class="descname">TranslationPluralHelper</tt><big>(</big><big>)</big><a class="headerlink" href="#TranslationPluralHelper" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 <div class="section" id="methods">
 <h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="geterrorcomponent">
-<h3>getErrorComponent<a class="headerlink" href="#geterrorcomponent" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="helper">
+<h3>helper<a class="headerlink" href="#helper" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="ErrorHandler#getErrorComponent">
-<tt class="descname">ErrorHandler#getErrorComponent</tt><big>(</big><em>statusCode</em><big>)</big><a class="headerlink" href="#ErrorHandler#getErrorComponent" title="Permalink to this definition">¶</a></dt>
+<dt id="TranslationPluralHelper#helper">
+<tt class="descname">TranslationPluralHelper#helper</tt><big>(</big><em>msgId</em>, <em>msgIdPlural</em>, <em>count</em><big>)</big><a class="headerlink" href="#TranslationPluralHelper#helper" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>statusCode</strong> (<em>Integer</em>) &#8211; the status code for the error</li>
+<li><strong>msgId</strong> (<em>String</em>) &#8211; the message id for the translation</li>
+<li><strong>msgIdPlural</strong> (<em>String</em>) &#8211; the message id for the plural translation</li>
+<li><strong>count</strong> (<em>String</em>) &#8211; the count for the plural decision</li>
+<li><strong>arg1..N</strong> (<em>String|Number</em>) &#8211; the arguments for the translation text</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns Object:</th><td class="field-body"><p class="first last">The component and view for the status code</p>
+<tr class="field"><th class="field-name">Returns String:</th><td class="field-body"><p class="first last">translated text</p>
 </td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<p>Renders an error view from a given status code.</p>
+<p>Translates a message to the language specified in the platform configuration. First it checks if
+the message exists for the platform language. If this is not found it tries the default language.
+The last fallback is to return the message passed as parameter. It also decides if the
+singular or plural form should be used based on the count parameter.</p>
 </div>
 </div>
 </div>
@@ -104,10 +111,11 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Class ErrorHandler</a><ul>
+<li><a class="reference internal" href="#">Class TranslationPluralHelper</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
 <li><a class="reference internal" href="#constructor">Constructor</a></li>
 <li><a class="reference internal" href="#methods">Methods</a><ul>
-<li><a class="reference internal" href="#geterrorcomponent">getErrorComponent</a></li>
+<li><a class="reference internal" href="#helper">helper</a></li>
 </ul>
 </li>
 </ul>
@@ -115,11 +123,11 @@
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="Environment.html"
-                        title="previous chapter">Class Environment</a></p>
+  <p class="topless"><a href="TranslationHelper.html"
+                        title="previous chapter">Class TranslationHelper</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="IntentsRegistry.html"
-                        title="next chapter">Class IntentsRegistry</a></p>
+  <p class="topless"><a href="URLHelper.html"
+                        title="next chapter">Class URLHelper</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -144,10 +152,10 @@
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="IntentsRegistry.html" title="Class IntentsRegistry"
+          <a href="URLHelper.html" title="Class URLHelper"
              >next</a> |</li>
         <li class="right" >
-          <a href="Environment.html" title="Class Environment"
+          <a href="TranslationHelper.html" title="Class TranslationHelper"
              >previous</a> |</li>
         <li><a href="../../index.html">Rain v0.8.0 documentation</a> &raquo;</li> 
       </ul>

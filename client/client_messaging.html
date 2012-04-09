@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Messaging API &mdash; Rain v0.7.0 documentation</title>
+    <title>Messaging API &mdash; Rain v0.8.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.7.0',
+        VERSION:     '0.8.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.7.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.8.0 documentation" href="../index.html" />
     <link rel="next" title="Intents Client API" href="intents.html" />
     <link rel="prev" title="Documenting Rain" href="../getting_started/documenting.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="../getting_started/documenting.html" title="Documenting Rain"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.8.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -53,11 +53,11 @@
 <p>Client messaging layer is part of client runtime. In RAIN you have two types of messaging on
 the client side:</p>
 <blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li>Intents messaging</li>
 <li>Publish / subscriber</li>
 </ul>
-</div></blockquote>
+</blockquote>
 <div class="section" id="intents">
 <h2>Intents<a class="headerlink" href="#intents" title="Permalink to this headline">¶</a></h2>
 <p>Intents concept is inspired from the Android operating system. Basically they allow the developer
@@ -102,13 +102,13 @@ has access to all its methods. Below you can find an usage example:</p>
 method used to accessing intents mechanism is sendIntent method. This method accept a
 Dictionary as a parameter. Each intent request must contain the following information:</p>
 <blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li>viewContext - This is the requester viewContext object.</li>
 <li>category - This is the intent category as defined in meta.json file.</li>
 <li>action - This is the action of the intent.</li>
 <li>intentContext - This is a dictionary where data specific to the intent are passed.</li>
 </ul>
-</div></blockquote>
+</blockquote>
 <p>The sendIntent method returns a promise that can be used to react onsuccess and onerror. If
 you do not specify a callback for error case then the error is automatically thrown.</p>
 </div>
@@ -206,11 +206,11 @@ events by prefixing your event with the :: operator. But enough talk, lets see s
         <li class="right" >
           <a href="../getting_started/documenting.html" title="Documenting Rain"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.8.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Guidelines for writing a Handlebars helper &mdash; Rain v0.7.0 documentation</title>
+    <title>Guidelines for writing a Handlebars helper &mdash; Rain v0.8.0 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.7.0',
+        VERSION:     '0.8.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.7.0 documentation" href="../../index.html" />
+    <link rel="top" title="Rain v0.8.0 documentation" href="../../index.html" />
     <link rel="next" title="Authorization" href="../authorization.html" />
     <link rel="prev" title="CSS Helper" href="css_helper.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="css_helper.html" title="CSS Helper"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.8.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -71,7 +71,7 @@ should be named <tt class="docutils literal"><span class="pre">&lt;helper_name&g
 <ol class="arabic">
 <li><p class="first">Each module must have a class function where a basic description of the module is found. E.g.:</p>
 <blockquote>
-<div><div class="highlight-javascript"><div class="highlight"><pre><span class="cm">/**</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="cm">/**</span>
 <span class="cm"> * This Handlebars helper transforms a set of component parameters into a link tag that</span>
 <span class="cm"> * references a css file location from a specific component.</span>
 <span class="cm"> *</span>
@@ -81,26 +81,26 @@ should be named <tt class="docutils literal"><span class="pre">&lt;helper_name&g
 <span class="kd">function</span> <span class="nx">CssHelper</span><span class="p">()</span> <span class="p">{}</span>
 </pre></div>
 </div>
-</div></blockquote>
+</blockquote>
 </li>
 <li><p class="first">Each module must have the helper function that has documentation in the JSDoc format. E.g.:</p>
 <blockquote>
-<div><div class="highlight-javascript"><div class="highlight"><pre><span class="nx">CssHelper</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">helper</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">CssHelper</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">helper</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// Helper implementation</span>
 <span class="p">};</span>
 </pre></div>
 </div>
-</div></blockquote>
+</blockquote>
 </li>
 <li><p class="first">The module must export the helper name and the helper function. E.g.:</p>
 <blockquote>
-<div><div class="highlight-javascript"><div class="highlight"><pre><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
     <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;css&#39;</span><span class="p">,</span>
     <span class="nx">helper</span><span class="o">:</span> <span class="k">new</span> <span class="nx">CssHelper</span><span class="p">().</span><span class="nx">helper</span>
 <span class="p">};</span>
 </pre></div>
 </div>
-</div></blockquote>
+</blockquote>
 </li>
 </ol>
 </div>
@@ -157,11 +157,11 @@ should be named <tt class="docutils literal"><span class="pre">&lt;helper_name&g
         <li class="right" >
           <a href="css_helper.html" title="CSS Helper"
              >previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.8.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

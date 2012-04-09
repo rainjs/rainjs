@@ -14,7 +14,11 @@ Class CssHelper
    class-title
 
 
-This Handlebars helper collects the css dependencies of a view and provide it to the renderer
+This Handlebars helper collects the css dependencies of a view and provides it to the renderer
+
+Syntax::
+
+     {{css path="cssPath" [name="componentId" [version="versionNumber"]]}}
 
 
 
@@ -24,6 +28,23 @@ This Handlebars helper collects the css dependencies of a view and provide it to
 
 
     
+
+Examples
+--------
+
+
+.. code-block:: javascript
+
+    Collects the ``index.css`` of the current component.
+
+     {{css path="index.css"}}
+
+.. code-block:: javascript
+
+    Collects the ``roundDiv.css`` of the component external_theming  with the latest version.
+
+     {{css name="external_theming" path="roundDiv.css"}}
+
 
 
 Constructor

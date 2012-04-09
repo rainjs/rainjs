@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class URLHelper &mdash; Rain v0.7.0 documentation</title>
+    <title>Class URLHelper &mdash; Rain v0.8.0 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.7.0',
+        VERSION:     '0.8.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,9 +22,9 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.7.0 documentation" href="../../index.html" />
+    <link rel="top" title="Rain v0.8.0 documentation" href="../../index.html" />
     <link rel="next" title="Error component" href="../error_component.html" />
-    <link rel="prev" title="Class Server" href="Server.html" /> 
+    <link rel="prev" title="Class TranslationPluralHelper" href="TranslationPluralHelper.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,9 +37,9 @@
           <a href="../error_component.html" title="Error component"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="Server.html" title="Class Server"
+          <a href="TranslationPluralHelper.html" title="Class TranslationPluralHelper"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.8.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -64,14 +64,18 @@
 <h3>helper<a class="headerlink" href="#helper" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="URLHelper.helper">
-<tt class="descclassname">URLHelper.</tt><tt class="descname">helper</tt><big>(</big><em>src</em>, <em>localized</em><big>)</big><a class="headerlink" href="#URLHelper.helper" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">URLHelper.</tt><tt class="descname">helper</tt><big>(</big><em>options</em><big>)</big><a class="headerlink" href="#URLHelper.helper" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>src</strong> (<em>String</em>) &#8211; the resource path</li>
-<li><strong>localized</strong> (<em>Boolean</em>) &#8211; true to request a localized resource</li>
+<li><strong>options</strong> (<em>Object</em>) &#8211; the helper parameters and arguments</li>
+<li><strong>options.hash</strong> (<em>Object</em>) &#8211; the helper key-value pairs</li>
+<li><strong>options.hash.name</strong> (<em>String</em>) &#8211; the name of the component</li>
+<li><strong>options.hash.version</strong> (<em>String</em>) &#8211; the component&#8217;s version</li>
+<li><strong>options.hash.path</strong> (<em>String</em>) &#8211; the path relative to the component&#8217;s resources folder</li>
+<li><strong>options.hash.localized</strong> (<em>Boolean</em>) &#8211; true to specify that the resource should be localized</li>
 </ul>
 </td>
 </tr>
@@ -80,27 +84,24 @@
 </dd></dl>
 
 <p>URL handlebars helper.</p>
-<p>Tries to interpret the given URL as a resource URL: relative paths
-are converted to resource routes for the current component and
-absolute and external paths are left as is.</p>
-<p>For relative and absolute paths, the second accepted parameter
-identifies a localized resource by adding a &#8216;loc&#8217; query parameter to the URL.</p>
-<div class="highlight-javascript"><pre>  Getting an image from the component's resource folder (note that the
-URL value inside the helper needs to be surrounded by double quotes):
-&lt;img src="{{url "images/img.jpg"}}"&gt;
+<p>Tries to interpret the given URL as a resource URL. It supports
+accessing the current component or other components.</p>
+<p>It supports localized paths by specifying a &#8220;localized&#8221; boolean parameter.</p>
+<div class="highlight-javascript"><pre>  Getting an image from the component's resource folder:
+&lt;img src="{{url path="images/img.jpg"}}"&gt;
 
 Getting a localized image from the component's resource folder:
-&lt;img src="{{url "images/img.jpg" true}}"&gt;
+&lt;img src="{{url path="images/img.jpg" localized=true}}"&gt;
 
-Getting an image from another component, following the normal resource route
+Getting an image from another component
 (the localized parameter can also be specified here if needed):
-&lt;img src="{{url "/other/resources/images/img.jpg"}}"&gt;
+&lt;img src="{{url name="other" version="1.0" path="images/img.jpg"}}"&gt;
 
 Getting an external image:
-&lt;img src="{{url "http://www.example.com/img.jpg"}}"&gt;
+&lt;img src="{{url path="http://www.example.com/img.jpg"}}"&gt;
 
 Other uses:
-&lt;div style="background: url('{{url "images/background.jpg"}}') repeat-x 0 0;"&gt;&lt;/div&gt;</pre>
+&lt;div style="background: url('{{url path="images/background.jpg"}}') repeat-x 0 0;"&gt;&lt;/div&gt;</pre>
 </div>
 </div>
 </div>
@@ -125,8 +126,8 @@ Other uses:
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="Server.html"
-                        title="previous chapter">Class Server</a></p>
+  <p class="topless"><a href="TranslationPluralHelper.html"
+                        title="previous chapter">Class TranslationPluralHelper</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="../error_component.html"
                         title="next chapter">Error component</a></p>
@@ -157,13 +158,13 @@ Other uses:
           <a href="../error_component.html" title="Error component"
              >next</a> |</li>
         <li class="right" >
-          <a href="Server.html" title="Class Server"
+          <a href="TranslationPluralHelper.html" title="Class TranslationPluralHelper"
              >previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.8.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

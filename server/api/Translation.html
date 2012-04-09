@@ -1,0 +1,290 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class Translation &mdash; Rain v0.8.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.8.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Rain v0.8.0 documentation" href="../../index.html" />
+    <link rel="next" title="Class TranslationHelper" href="TranslationHelper.html" />
+    <link rel="prev" title="Class Server" href="Server.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="TranslationHelper.html" title="Class TranslationHelper"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Server.html" title="Class Server"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Rain v0.8.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="class-translation">
+<h1>Class Translation<a class="headerlink" href="#class-translation" title="Permalink to this headline">¶</a></h1>
+<p>Implements internationalization support</p>
+<div class="section" id="constructor">
+<h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Translation">
+<em class="property">class </em><tt class="descname">Translation</tt><big>(</big><big>)</big><a class="headerlink" href="#Translation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="generatecontext">
+<h3>generateContext<a class="headerlink" href="#generatecontext" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Translation#generateContext">
+<tt class="descname">Translation#generateContext</tt><big>(</big><em>component</em><big>)</big><a class="headerlink" href="#Translation#generateContext" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>component</strong> (<em>Object</em>) &#8211; the component configuration for the component</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns Object:</th><td class="field-body"><p class="first last">the context in which the component will run</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Generate a context in which the component will be run</p>
+</div>
+<div class="section" id="get">
+<h3>get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Translation.get">
+<tt class="descclassname">Translation.</tt><tt class="descname">get</tt><big>(</big><big>)</big><a class="headerlink" href="#Translation.get" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">Returns Translation:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body">the singleton instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Returns the Tranlation instance</p>
+</div>
+<div class="section" id="loadlanguagefile">
+<h3>loadLanguageFile<a class="headerlink" href="#loadlanguagefile" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Translation#loadLanguageFile">
+<tt class="descname">Translation#loadLanguageFile</tt><big>(</big><em>file</em>, <em>locale</em>, <em>component</em><big>)</big><a class="headerlink" href="#Translation#loadLanguageFile" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>file</strong> (<em>String</em>) &#8211; the file path</li>
+<li><strong>locale</strong> (<em>String</em>) &#8211; the locale for which this file should be used</li>
+<li><strong>component</strong> (<em>Object</em>) &#8211; the descriptor of the component</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Throws RainError:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"><p class="first last">: when the po file doesn&#8217;t exist</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Loads a po file</p>
+</div>
+<div class="section" id="nt">
+<h3>nt<a class="headerlink" href="#nt" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Translation#nt">
+<tt class="descname">Translation#nt</tt><big>(</big><em>msgid</em>, <em>msgidPlural</em>, <em>count</em><span class="optional">[</span>, <em>args</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#Translation#nt" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>msgid</strong> (<em>String</em>) &#8211; the message to be translated</li>
+<li><strong>msgidPlural</strong> (<em>String</em>) &#8211; the plural form of the message</li>
+<li><strong>count</strong> (<em>Number</em>) &#8211; determines what form of the translation will be used: singular or plural</li>
+<li><strong>args</strong> (<em>Array</em>) &#8211; an array of values that will replace the placeholders in the message</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns String:</th><td class="field-body"><p class="first last">the translated message</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Allow component developers to use translation in server-side code. This method
+is automatically injected in the scope of the server side modules. It uses the messages
+defined for the component in which the code runs. This method should be used when
+the program needs to decide if the singular or plural form should be used based on
+the value of a variable.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">nt</span><span class="p">(</span><span class="s1">&#39;one book&#39;</span><span class="p">,</span> <span class="s1">&#39;%1$d books&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="t">
+<h3>t<a class="headerlink" href="#t" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Translation#t">
+<tt class="descname">Translation#t</tt><big>(</big><em>msgid</em><span class="optional">[</span>, <em>args</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#Translation#t" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>msgid</strong> (<em>String</em>) &#8211; the message to be translated</li>
+<li><strong>args</strong> (<em>Array</em>) &#8211; an array of values that will replace the placeholders in the message</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns String:</th><td class="field-body"><p class="first last">the translated message</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Allow component developers to use translation in server-side code. This method
+is automatically injected in the scope of the server side modules. It uses the messages
+defined for the component in which the code runs.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">t</span><span class="p">(</span><span class="s1">&#39;%1$s and %2$s are playing.&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Mike&#39;</span><span class="p">,</span> <span class="s1">&#39;Joey&#39;</span><span class="p">]);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="translate">
+<h3>translate<a class="headerlink" href="#translate" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Translation#translate">
+<tt class="descname">Translation#translate</tt><big>(</big><em>component</em>, <em>msgid</em><span class="optional">[</span>, <em>msgidPlural</em><span class="optional">]</span><span class="optional">[</span>, <em>count</em><span class="optional">]</span><span class="optional">[</span>, <em>args</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#Translation#translate" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>component</strong> (<em>Object</em>) &#8211; the descriptor of the component for which we do the translation</li>
+<li><strong>msgid</strong> (<em>String</em>) &#8211; the message to be translated</li>
+<li><strong>msgidPlural</strong> (<em>String</em>) &#8211; the plural form of the message</li>
+<li><strong>count</strong> (<em>Number</em>) &#8211; determines what form of the translation will be used: singular or plural. In some languages the rules for plurals are more complex</li>
+<li><strong>args</strong> (<em>Array</em>) &#8211; an array of values that will replace the placeholders in the message</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns String:</th><td class="field-body"><p class="first last">the translated message</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Translates a message to the language specified in the platform configuration. First it checks if
+the message exists for the platform language. If this is not found it tries the default language.
+The last fallback is to return the message passed as parameter.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class Translation</a><ul>
+<li><a class="reference internal" href="#constructor">Constructor</a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#generatecontext">generateContext</a></li>
+<li><a class="reference internal" href="#get">get</a></li>
+<li><a class="reference internal" href="#loadlanguagefile">loadLanguageFile</a></li>
+<li><a class="reference internal" href="#nt">nt</a></li>
+<li><a class="reference internal" href="#t">t</a></li>
+<li><a class="reference internal" href="#translate">translate</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Server.html"
+                        title="previous chapter">Class Server</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="TranslationHelper.html"
+                        title="next chapter">Class TranslationHelper</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="TranslationHelper.html" title="Class TranslationHelper"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Server.html" title="Class Server"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Rain v0.8.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

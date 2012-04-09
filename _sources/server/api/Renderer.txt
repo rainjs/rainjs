@@ -65,7 +65,7 @@ clientRendererScript
     
 
 
-Creates the script tag for the frontend
+Creates the script tag for the frontend.
 
 
 
@@ -214,6 +214,9 @@ renderComponent
     
     :param Object opt.error: 
         Customer error handling 
+    
+    :param Object opt.fn: 
+        the function used to generate the contents of a block helper 
     
 
 

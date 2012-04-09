@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Elastic architecture &mdash; Rain v0.7.0 documentation</title>
+    <title>Elastic architecture &mdash; Rain v0.8.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.7.0',
+        VERSION:     '0.8.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.7.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.8.0 documentation" href="../index.html" />
     <link rel="next" title="Error Handling" href="Features-proposal-error-handling.html" />
     <link rel="prev" title="Dashboard Component Model" href="Features-proposal-dashboard-component-model.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="Features-proposal-dashboard-component-model.html" title="Dashboard Component Model"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.8.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -124,19 +124,19 @@
 <h2>Functional requirements (FR)<a class="headerlink" href="#functional-requirements-fr" title="Permalink to this headline">¶</a></h2>
 <p>Here you can find all the functional requirements for this architecture.</p>
 <blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li>RAIN must support small units of code acting as a single application.</li>
 <li>RAIN must provide an infrastructure map.</li>
 </ol>
-</div></blockquote>
+</blockquote>
 </div>
 <div class="section" id="non-functional-requirements-nfr">
 <h2>Non functional requirements (NFR)<a class="headerlink" href="#non-functional-requirements-nfr" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li>RAIN must reuse already tested load balancers.</li>
 </ol>
-</div></blockquote>
+</blockquote>
 </div>
 <div class="section" id="use-cases">
 <h2>Use cases<a class="headerlink" href="#use-cases" title="Permalink to this headline">¶</a></h2>
@@ -152,13 +152,13 @@
 <p>From a technical perspective communication between rain servers and hypervisor and motherships and hypervisor can be done through web sockets.</p>
 <p>Also the hypervisor should allow through it&#8217;s public API to dynamically change the cloud structure:</p>
 <blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li>Deploy a new webcomponent.</li>
 <li>Instantiate a new webcomponent.</li>
 <li>Destroy an instance of a webcomponent.</li>
 <li>Undeploy an instance of a webcomponent.</li>
 </ol>
-</div></blockquote>
+</blockquote>
 <div class="section" id="rain-server">
 <h3>RAIN Server<a class="headerlink" href="#rain-server" title="Permalink to this headline">¶</a></h3>
 <p>A rain server is a node that is responsible for doing aggregation and applying cross cutting concerns provided by RAIN framework. A rain server can be connected to one or more motherships simultaneously. On long run new mothership connection will be probably opened.</p>
@@ -455,43 +455,43 @@ webcomponent.</td>
 <h2>RAIN Hypervisor Communication<a class="headerlink" href="#rain-hypervisor-communication" title="Permalink to this headline">¶</a></h2>
 <p>RAIN Hypervisor node is the most complex one from RAIN. It holds information about each running piece (RAIN specific) from the infrastructure. For this to be achievable each running piece must communicate with the hypervisor. The question is how do we want to implement this:</p>
 <blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li>Use web sockets. (this will definitely provide faster feedback but might generate network issues).</li>
 <li>Use a REST api and communicate over http. (This will be slower and does not provide real time feedback - not without pooling anyway).</li>
 </ol>
-</div></blockquote>
+</blockquote>
 <div class="section" id="tehnology-used">
 <h3>Tehnology used<a class="headerlink" href="#tehnology-used" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li>For websockets we consider using socketio library. This is already used in RAIN core implementation. Please read carefully <a class="reference external" href="https://github.com/LearnBoost/socket.io/wiki/Socket.IO-and-firewall-software">https://github.com/LearnBoost/socket.io/wiki/Socket.IO-and-firewall-software</a>.</li>
 <li>For REST api we can simply use nodejs http library.</li>
 </ol>
-</div></blockquote>
+</blockquote>
 </div>
 <div class="section" id="upcoming">
 <h3>Upcoming<a class="headerlink" href="#upcoming" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li>Web sockets to do</li>
 </ol>
 <blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li>Create a protocol within RAIN Cloud that allows efficient communication between RAIN pieces.</li>
 <li>Create test scenarios that take into consideration possible firewall issues.</li>
 </ol>
-</div></blockquote>
+</blockquote>
 <ol class="arabic simple" start="2">
 <li>REST api</li>
 </ol>
 <blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li>Create the REST operations.</li>
 <li>Deployment must be taken into consideration.</li>
 <li>Security concerns are also important for this approach.</li>
 </ol>
-</div></blockquote>
-</div></blockquote>
+</blockquote>
+</blockquote>
 </div>
 </div>
 <div class="section" id="code-samples">
@@ -594,11 +594,11 @@ webcomponent.</td>
         <li class="right" >
           <a href="Features-proposal-dashboard-component-model.html" title="Dashboard Component Model"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.7.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.8.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>
