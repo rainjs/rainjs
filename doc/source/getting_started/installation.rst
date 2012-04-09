@@ -24,12 +24,12 @@ Before you start to install node make sure you have the following tools installe
 Now you can start installing node.
 
    #. ``wget http://nodejs.org/dist/v0.6.13/node-v0.6.13.tar.gz``
-   #. ``tar -zxvf node-v0.6.13.tar.gz
+   #. ``tar -zxvf node-v0.6.13.tar.gz``
    #. ``cd node-v0.6.13``
    #. ``chmod u+x configure``
    #. ``chmod u+x tools/waf-light``
    #. ``./configure && make && sudo make install``
-   #. make sure /usr/local/bin is added to your PATH environment variable.
+   #. Make sure /usr/local/bin is added to your PATH environment variable.
    #. ``node -V`` to make sure node can be run
    #. ``sudo npm install node-gyp -g`` to install the latest node native module build tool
 
@@ -70,7 +70,8 @@ The easiest way to configure your development machine is to use RAIN SDK. The SD
 tested on Ubuntu Linux and on Mac OS X. Below you can find the commands to get the sdk running on
 Unix / Linux operating systems ( npm is required! ):
 
-   #. sudo npm install rain -g
+   #. ``sudo npm install node-gyp -g``
+   #. ``sudo npm install rain -g``
 
 If everything went well you should be able to run rain sdk from command line. For more information
 about RAIN sdk creating first project read: :doc:`/getting_started/rain_sdk_tutorial`
@@ -87,14 +88,15 @@ Linux / Unix / Mac OS / Windows
 ...............................
 
    #. ``git clone https://github.com/rainjs/rainjs.git``
-   #. ``cd rain``
+   #. ``cd rainjs``
    #. ``sudo npm install node-gyp -g``
    #. ``npm install -d``
-   #. ``node start``
+   #. ``sudo npm link``
+   #. ``rain start``
 
 .................
 Test installation
 .................
 
 This should give you a running instance of RAIN server and mothership. For testing your
-installation try to access: http://localhost:1337/example/index
+installation try to access: http://localhost:1337/example/index.
