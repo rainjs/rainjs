@@ -33,4 +33,10 @@ describe('Server configuration and validation', function () {
         expect(configuration.language).toBe('ro_RO');
     });
 
+    it('must throw an error when language is missing', function () {
+        expect(function () {
+            loadConfiguration(configurationsFolder + 'server_three.conf');
+        }).toThrowType(RainError.ERROR_PRECONDITION_FAILED);
+    });
+
 });
