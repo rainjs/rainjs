@@ -14,23 +14,24 @@ Linux / Unix / Mac OS
 .....................
 
 Before you start to install node make sure you have the following tools installed:
-   #. unzip (Ubuntu: sudo apt-get install unzip)
-   #. gcc (Ubuntu: sudo apt-get install gcc)   
-   #. g++ (Ubuntu: sudo apt-get install g++)
-   #. openssl (Ubuntu: sudo apt-get install openssl)
-   #. libssl-dev (Ubuntu: sudo apt-get install libssl-dev)
-   #. make (Ubuntu: sudo apt-get install make)
+   #. unzip (Ubuntu: ``sudo apt-get install unzip``)
+   #. gcc (Ubuntu: ``sudo apt-get install gcc``)
+   #. g++ (Ubuntu: ``sudo apt-get install g++``)
+   #. openssl (Ubuntu: ``sudo apt-get install openssl``)
+   #. libssl-dev (Ubuntu: ``sudo apt-get install libssl-dev``)
+   #. make (Ubuntu: ``sudo apt-get install make``)
 
 Now you can start installing node.
 
-   #. wget http://nodejs.org/dist/v0.6.13/node-v0.6.13.tar.gz
-   #. tar -zxvf node-v0.6.13.tar.gz
-   #. cd node-v0.6.13
-   #. chmod u+x configure 
-   #. chmod u+x tools/waf-light
-   #. ./configure && make && sudo make install
+   #. ``wget http://nodejs.org/dist/v0.6.13/node-v0.6.13.tar.gz``
+   #. ``tar -zxvf node-v0.6.13.tar.gz
+   #. ``cd node-v0.6.13``
+   #. ``chmod u+x configure``
+   #. ``chmod u+x tools/waf-light``
+   #. ``./configure && make && sudo make install``
    #. make sure /usr/local/bin is added to your PATH environment variable.
-   #. node - to make sure node can be run
+   #. ``node -V`` to make sure node can be run
+   #. ``sudo npm install node-gyp -g`` to install the latest node native module build tool
 
 Installing via package manager:
 
@@ -55,6 +56,7 @@ On Mac OS operating systems you need to execute the following commands:
    #. Install the package
    #. That's all :)
    #. NPM is in the bundle too ;)
+   #. ``npm install node-gyp -g`` as administrator to install the latest node native module build tool
 
 --------
 RAIN SDK
@@ -84,10 +86,11 @@ you need to execute the following commands:
 Linux / Unix / Mac OS / Windows
 ...............................
 
-   #. git clone https://github.com/rainjs/rainjs.git
-   #. cd rain
-   #. npm install -d
-   #. node start
+   #. ``git clone https://github.com/rainjs/rainjs.git``
+   #. ``cd rain``
+   #. ``sudo npm install node-gyp -g``
+   #. ``npm install -d``
+   #. ``node start``
 
 .................
 Test installation
