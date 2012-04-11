@@ -31,5 +31,5 @@
     "repository": "git://github.com/rainjs/rainjs",
     "main": "./start",
     "bin": { "rain": "./bin/rain.js" },
-    "engines": { "node": "0.6.14" }
+    "engines": { "node": "0.6.x" }
 }
