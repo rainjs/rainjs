@@ -9,14 +9,15 @@
             var requireConfig = {
                 "debug": ('{{server.env}}' == 'production'? 'false' : 'true'),
                 "baseUrl": "/",
+                "paths": {
+                    "util": "core/js/lib/util",
+                    "require-text": "core/js/lib/require-text",
+                    "require-locale": "core/js/lib/require-locale"
+                },
                 "packages": [{
                     "name": "raintime",
                     "main": "raintime",
                     "location": "core/js"
-                }, {
-                    "name": "util",
-                    "main": "util",
-                    "location": "core/js/lib"
                 }],
                 "priority": ["raintime"]
             };
