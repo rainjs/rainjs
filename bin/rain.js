@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
-var fs = require('fs')
-    mod_path = require('path')
-    color = require('colors')
-    exec = require('child_process').exec
-    wrench = require('wrench')
-    program = require('commander')
-    platform_list = ['nodejs']
-    utils   = require('./lib/utils.js')
-    sys_util = require('util')
+var fs = require('fs'),
+    mod_path = require('path'),
+    color = require('colors'),
+    exec = require('child_process').exec,
+    wrench = require('wrench'),
+    program = require('commander'),
+    platform_list = ['nodejs'],
+    utils   = require('./lib/utils.js'),
+    sys_util = require('util'),
     Table = require('cli-table');
 
 process.title = 'rain';
@@ -99,7 +99,7 @@ function createProject(path, project_name) {
                                     projectCreated();
                                 });
                             } else {
-                                log('Error: problem to setup component'.red)
+                                log('Error: problem to setup component'.red);
                                 projectCreated();
                             }
                         });
@@ -126,7 +126,7 @@ function createProject(path, project_name) {
             ,'Happy developing ;-)'.rainbow
             ,''
         );
-    }
+    };
 };
 
 
@@ -140,7 +140,7 @@ function createComponent(component_name){
         log(
             'This is not a rain project!'.red
             ,'Please go to your project root and try it again!'
-        )
+        );
     }
 };
 
