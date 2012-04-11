@@ -209,7 +209,8 @@ namespace('test', function () {
                     exitCode = 1;
                 }
             }, isVerbose, showColors, teamcity, useRequireJs,
-               new RegExp(match + "spec\\.(" + extentions + ")$", 'i'), junitreport);
+//               new RegExp(match + "spec\\.(" + extentions + ")$", 'i'), junitreport);
+                new RegExp("locale\\.spec\\.(" + extentions + ")$", 'i'), junitreport);
         });
 
         desc('Run all tests.');
