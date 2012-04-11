@@ -17,11 +17,11 @@
         "less": ">= 1.1.4",
         "mime": "",
         "node.extend": "",
-        "promised-io": "https://github.com/kriszyp/promised-io/tarball/master",
+        "promised-io": "git://github.com/kriszyp/promised-io.git",
         "socket.io": ">= 0.7.7",
         "commander": "",
         "mocks": "",
-        "daemon": "https://github.com/arcade/daemon.node/tarball/master",
+        "daemon": "git://github.com/arcade/daemon.node.git",
         "colors": "",
         "wrench": "",
         "cli-table": "",
@@ -31,5 +31,5 @@
     "repository": "git://github.com/rainjs/rainjs",
     "main": "./start",
     "bin": { "rain": "./bin/rain.js" },
-    "engines": { "node": "0.6.14" }
+    "engines": { "node": "0.6.x" }
 }
