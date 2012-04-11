@@ -147,6 +147,8 @@ function createComponent(component_name){
 
 function setupProject(project_path) {
     var coreComponentsName = 'core',
+        errorComponentName = 'error',
+        placeholderComponentName = 'placeholder',
         paths = {
              conf: mod_path.join(project_path, 'conf'),
              components: mod_path.join(project_path, 'components'),
@@ -171,6 +173,16 @@ function setupProject(project_path) {
     wrench.copyDirSyncRecursive(
         mod_path.resolve(mod_path.join(__dirname, '../components/'+coreComponentsName)),
         mod_path.join(paths.components, coreComponentsName)
+    );
+    //copy error-component
+    wrench.copyDirSyncRecursive(
+        mod_path.resolve(mod_path.join(__dirname, '../components/'+errorComponentName)),
+        mod_path.join(paths.components, errorComponentName)
+    );
+    //copy placeholder-component
+    wrench.copyDirSyncRecursive(
+        mod_path.resolve(mod_path.join(__dirname, '../components/'+placeholderComponentName)),
+        mod_path.join(paths.components, placeholderComponentName)
     );
 
     // create a package.json file for the project
