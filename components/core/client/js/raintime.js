@@ -259,7 +259,7 @@ define(['raintime/lib/promise',
             return;
         }
 
-        require([component.controller], function (Controller) {
+        require([component.controller, 'raintime/translation'], function (Controller, Translation) {
             // Extend the controller with EventEmitter methods.
             for (var key in EventEmitter.prototype) {
                 Controller.prototype[key] = EventEmitter.prototype[key];

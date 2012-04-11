@@ -1,3 +1,3 @@
-define(['raintime/lib/jed'], function (Jed) {
-
+define(['raintime/lib/jed'], function (gigi) {
+    console.log('Jed:', gigi);
 });
