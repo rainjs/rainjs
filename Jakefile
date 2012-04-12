@@ -103,37 +103,39 @@ namespace('test', function () {
     namespace('server', function () {
         desc('Start the JS test driver server.');
         task('start', function () {
-            console.log('Starting JSTD Server.');
-            daemon.daemonize('jstd.log', '/tmp/jstd.pid', function () {
-                var jstdPath = './tests/client/bin/JsTestDriver-1.3.3d.jar';
-                var jstdPort = 9876;
-                var args = [
-                    '-jar',
-                    jstdPath,
-                    '--port',
-                    jstdPort,
-                    '--runnerMode',
-                    'DEBUG'
-                ];
+            var daemon = require('daemon');
+            console.log('JSTD server started. Now capture your browser by going to http://localhost:9876');
 
-                var jstd = child.spawn('java', args, {cwd: process.cwd(), env: process.env, setsid: false});
-                console.log(jstd.pid);
+            daemon.start('jstd.log');
+            daemon.lock('/tmp/jstd.pid')
 
+            var jstdPath = './tests/client/bin/JsTestDriver-1.3.3d.jar';
+            var jstdPort = 9876;
+            var args = [
+                '-jar',
+                jstdPath,
+                '--port',
+                jstdPort,
+                '--runnerMode',
+                'DEBUG'
+            ];
+
+            var jstd = child.spawn('java', args, {cwd: process.cwd(), env: process.env, setsid: false});
+
+            try {
+                fs.writeFileSync('/tmp/jstd_server.pid', jstd.pid + '');
+            } catch (e) {
+                // For some strange reason we can't write to pid.
+            }
+
+            jstd.on('exit', function () {
                 try {
-                    fs.writeFileSync('/tmp/jstd_server.pid', jstd.pid + '');
+                    process.kill(jstd.pid, 'SIGTERM');
+                    fs.unlinkSync('/tmp/jstd_server.pid');
                 } catch (e) {
-                    // For some strange reason we can't write to pid.
+                    // can't
                 }
-
-                jstd.on('exit', function () {
-                    try {
-                        fs.unlinkSync('/tmp/jstd_server.pid');
-                    } catch (e) {
-                        // can't
-                    }
-                });
             });
-            console.log('Server started. Now capture your browser by going to http://localhost:9876');
         });
 
         desc('Stop the JS test driver server.');
@@ -142,7 +144,7 @@ namespace('test', function () {
             var pid = fs.readFileSync('/tmp/jstd.pid');
             var jstd = fs.readFileSync('/tmp/jstd_server.pid');
             try {
-                process.kill(pid, 'SIGKILL');
+                process.kill(pid, 'SIGTERM');
                 process.kill(jstd, 'SIGTERM');
             } catch (e) {
                 console.log('Couldn\'t kill the JSTD server.');
@@ -180,7 +182,7 @@ namespace('test', function () {
             for (var key in jasmine) {
                 global[key] = jasmine[key];
             }
-            
+
             //extend jasmine with functionality needed by Rain
             require(process.cwd() + '/tests/server/lib/jasmine_rain');
 
