@@ -28,24 +28,30 @@
             "permissions": ["some_permission"]
         },
         "image_localization": {},
-        "text_localization": {}
+        "text_localization": {},
+        "client_side_text_localization": {}
     },
-    "intents": [{
-        "category": "com.rain.example.security",
-        "action": "ALLOWED_VIEW",
-        "provider": "level1"
-    }, {
-        "category": "com.rain.example.security",
-        "action": "DENIED_VIEW",
-        "provider": "denied"
-    }, {
-        "category": "com.rain.example.security",
-        "action": "ALLOWED_SERVER",
-        "provider": "index.js#allowedIntent"
-    }, {
-        "category": "com.rain.example.security",
-        "action": "DENIED_SERVER",
-        "permissions": ["some_permission"],
-        "provider": "index.js#deniedIntent"
-    }]
+    "intents": [
+        {
+            "category": "com.rain.example.security",
+            "action": "ALLOWED_VIEW",
+            "provider": "level1"
+        },
+        {
+            "category": "com.rain.example.security",
+            "action": "DENIED_VIEW",
+            "provider": "denied"
+        },
+        {
+            "category": "com.rain.example.security",
+            "action": "ALLOWED_SERVER",
+            "provider": "index.js#allowedIntent"
+        },
+        {
+            "category": "com.rain.example.security",
+            "action": "DENIED_SERVER",
+            "permissions": ["some_permission"],
+            "provider": "index.js#deniedIntent"
+        }
+    ]
 }

@@ -311,7 +311,10 @@ define(['raintime/lib/promise',
             };
 
             var translation = new Translation(localeJson);
-            controller.context.translation = translation;
+            controller.context.t = function (msgId, args) {
+                return translation.translate(msgId, undefined, undefined, args);
+            };
+            controller.context.nt = translation.translate.bind(translation);
 
             newComponent.controller = controller;
 

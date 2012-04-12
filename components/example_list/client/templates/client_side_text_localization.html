@@ -1,0 +1,20 @@
+{{css path="text_localization.css"}}
+<div class="reference">
+    <p class="dear"></p>
+    <br />
+    <p class="possible"></p>
+    <p class="attest"></p>
+    <p class="process"></p>
+    <p class="let"></p>
+    <p class="thank"></p>
+    <br />
+    <p class="sincerely">
+        {{t "Sincerely,"}}
+    </p>
+    <p class="name">
+        {{t "%1$s %2$s" firstName lastName}}
+    </p>
+    <br />
+    {{component name="external_theming" view="button" sid="sendEmail"}}
+    <div class="email-response"></div>
+</div>
