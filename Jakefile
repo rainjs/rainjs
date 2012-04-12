@@ -164,7 +164,7 @@ namespace('test', function () {
             });
         });
 
-        desc('Run server tests');
+        desc('Run server tests.    USE: test:run:server[filname1,filename2] without .spec.js! to test separated files');
         task('server', function () {
             var jasmine;
             try {
@@ -199,6 +199,16 @@ namespace('test', function () {
             var useRequireJs = false;
 
             console.log('\nRunning server side tests...');
+            
+            if (arguments.length == 1) {
+                match = arguments[0];
+            } else if (arguments.length > 0) {
+                match = [];
+                for (var i = 0, len = arguments.length; i < len; i++) {
+                    match.push(arguments[i]);
+                }
+                match = match.join('|');
+            }
 
             jasmine.loadHelpersInFolder(specFolder, new RegExp("[-_]helper\\.(" + extentions + ")$"));
             jasmine.executeSpecsInFolder(specFolder, function (runner, log) {
@@ -209,7 +219,7 @@ namespace('test', function () {
                     exitCode = 1;
                 }
             }, isVerbose, showColors, teamcity, useRequireJs,
-               new RegExp(match + "spec\\.(" + extentions + ")$", 'i'), junitreport);
+               new RegExp(match + "\.spec\\.(" + extentions + ")$", 'i'), junitreport);
         });
 
         desc('Run all tests.');
