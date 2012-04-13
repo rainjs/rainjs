@@ -16,7 +16,9 @@ program
     .version(JSON.parse(fs.readFileSync(mod_path.join(mod_path.dirname(__dirname), 'package.json'), 'utf8')).version)
     .usage('<options> <command>')
     .option('-d, --debug', 'start the server with the node debugger\n'+
-            '\t\t\t       server is NOT restarting on uncaught exceptions\n')
+            '\t\t\t       server is NOT restarting on uncaught exceptions\n'+
+            '\t\t\t       NOT working for windows\n'
+            )
     .option('-c, --conf <path_to_conf>', 'start server with custom configuration')
     .option('-n, --no-daemon', 'start server without daemon mode');
 
@@ -296,7 +298,7 @@ function start(conf){
                 try {
                     fs.unlinkSync(conf_project);
                     fs.unlinkSync(conf_spid);
-                } catch(ev){
+                } catch(ev) {
 
                 }
                 process.exit(0);
@@ -310,7 +312,7 @@ function start(conf){
             });
         }
 
-        if (program.debug) {
+        if (program.debug && process.platform != 'win32') {
             process.kill(process.pid, 'SIGUSR1');
         }
 
