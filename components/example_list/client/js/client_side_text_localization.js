@@ -42,8 +42,8 @@ define([], function () {
 
         var emailResponse = root.find('.email-response');
         this.context.find('sendEmail', function () {
-            this.context.getRoot().find('.ui-button-text').html(t('Send email'));
             this.on('start', function () {
+                $(this.context.getRoot().children()[0]).button( "option", "label", t('Send email'));
                 $(this.context.getRoot().children()[0]).click(function () {
                     $.get("/example/controller/text_localization", function (data) {
                         emailResponse.html(data);
