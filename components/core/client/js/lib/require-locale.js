@@ -13,7 +13,7 @@ define(['text'],
      *
      * Under the hood, it accepts JSON data and tries to parse it and make it
      * available as a native JavaScript object.
-     * 
+     *
      * @param {plugin} text the require.js standard text plugin
      */
     function (text) {
@@ -59,7 +59,7 @@ define(['text'],
         return {
             /**
              * The require.JS load() implementation, following the plugin API.
-             * 
+             *
              * Uses the text plugin's AJAX get() method to load the JSON from
              * the locale route.
              */
