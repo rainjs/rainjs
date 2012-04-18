@@ -1,4 +1,4 @@
-define([], function () {
+define([], function (t, nt) {
 
     /**
      * Client-side text localization example controller.
@@ -13,9 +13,6 @@ define([], function () {
      * Startup lifecycle step that happens right after the markup is in place.
      */
     ClientTextLocalization.prototype.start = function () {
-        var t = this.context.t,
-            nt = this.context.nt;
-
         var root = this.context.getRoot(),
             boss = {
                 title: 'Mr.',

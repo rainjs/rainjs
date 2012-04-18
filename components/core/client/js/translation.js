@@ -119,5 +119,31 @@ define(['raintime/lib/jed'], function (Jed) {
         return false;
     }
 
+    /**
+     * A map that holds the translation objects. The key is a component identifier obtained in the
+     * following way: component.id + ' ' + component.version
+     *
+     * @type {Object}
+     * @private
+     */
+    var instances = {};
+
+    /**
+     * Creates a new Translation instance for the specified component or returns an existing one.
+     * This function will always return the same instance for a specified component, because
+     * there is only one locale data object associated with a component.
+     *
+     * @param {Object} component the component info
+     * @param {Object} locale the translations data
+     * @param {String} type 'language' or 'defaultLanguage'
+     * @returns {ClientTranslation} the instance associated with the specified component
+     *
+     * @memberOf ClientTranslation
+     */
+    ClientTranslation.get = function (component, locale) {
+        var id = component.id + ' ' + component.version;
+        return instances[id] || (instances[id] = new ClientTranslation(locale));
+    };
+
     return ClientTranslation;
 });

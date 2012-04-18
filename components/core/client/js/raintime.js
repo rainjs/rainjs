@@ -259,10 +259,7 @@ define(['raintime/lib/promise',
             return;
         }
 
-        var localeUrl = 'locale!' + component.id + '/' + component.version;
-
-        require([component.controller, 'raintime/translation', localeUrl],
-                function (Controller, Translation, localeJson) {
+        require([component.controller], function (Controller) {
             // Extend the controller with EventEmitter methods.
             for (var key in EventEmitter.prototype) {
                 Controller.prototype[key] = EventEmitter.prototype[key];
@@ -309,12 +306,6 @@ define(['raintime/lib/promise',
                 }
                 return find(newComponent.instanceId, staticIds, callback);
             };
-
-            var translation = new Translation(localeJson);
-            controller.context.t = function (msgId, args) {
-                return translation.translate(msgId, undefined, undefined, args);
-            };
-            controller.context.nt = translation.translate.bind(translation);
 
             newComponent.controller = controller;
 
