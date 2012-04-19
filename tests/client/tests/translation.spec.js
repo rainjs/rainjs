@@ -39,7 +39,7 @@ describe('Translation module', function () {
     it('should properly translate an existing message id',
         ['core/js/translation', 'raintime/lib/jed'],
         function (ClientTranslation, Jed) {
-            var translation = mock(new ClientTranslation(locale));
+            var translation = new ClientTranslation(locale);
             translation.translate.andCallThrough();
             Jed.sprintf.andCallThrough();
 
@@ -50,7 +50,7 @@ describe('Translation module', function () {
     it('should properly translate an existing message id with arguments',
         ['core/js/translation', 'raintime/lib/jed'],
         function (ClientTranslation, Jed) {
-            var translation = mock(new ClientTranslation(locale));
+            var translation = new ClientTranslation(locale);
             translation.translate.andCallThrough();
             Jed.sprintf.andCallThrough();
 
@@ -61,7 +61,7 @@ describe('Translation module', function () {
     it('should use the default language if it cannot find the translation',
         ['core/js/translation', 'raintime/lib/jed'],
         function (ClientTranslation, Jed) {
-            var translation = mock(new ClientTranslation(locale));
+            var translation = new ClientTranslation(locale);
             translation.translate.andCallThrough();
             Jed.sprintf.andCallThrough();
 
@@ -72,7 +72,7 @@ describe('Translation module', function () {
     it('should return the message id if it cannot find the translation',
         ['core/js/translation', 'raintime/lib/jed'],
         function (ClientTranslation, Jed) {
-            var translation = mock(new ClientTranslation(locale));
+            var translation = new ClientTranslation(locale);
             translation.translate.andCallThrough();
             Jed.sprintf.andCallThrough();
 
@@ -83,7 +83,7 @@ describe('Translation module', function () {
     it('should properly translate an existing plural',
         ['core/js/translation', 'raintime/lib/jed'],
         function (ClientTranslation, Jed) {
-            var translation = mock(new ClientTranslation(locale));
+            var translation = new ClientTranslation(locale);
             translation.translate.andCallThrough();
             Jed.sprintf.andCallThrough();
 
@@ -94,7 +94,7 @@ describe('Translation module', function () {
     it('should use the default language if it cannot find a plural',
         ['core/js/translation', 'raintime/lib/jed'],
         function (ClientTranslation, Jed) {
-            var translation = mock(new ClientTranslation(locale));
+            var translation = new ClientTranslation(locale);
             translation.translate.andCallThrough();
             Jed.sprintf.andCallThrough();
 
@@ -105,7 +105,7 @@ describe('Translation module', function () {
     it('should return the key if trying to translate a plural form that doesn\'t exist',
         ['core/js/translation', 'raintime/lib/jed'],
         function (ClientTranslation, Jed) {
-            var translation = mock(new ClientTranslation(locale));
+            var translation = new ClientTranslation(locale);
             translation.translate.andCallThrough();
             Jed.sprintf.andCallThrough();
 

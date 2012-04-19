@@ -150,20 +150,20 @@ jasmine.util.extend(jasmine.getGlobal(), (function () {
      */
     JasmineRain.prototype.mock = function (module) {
         functions = module;
-        if (typeof module == 'function ') {
+        if (typeof module == 'function') {
             functions = module.prototype;
         }
 
         for(var f in functions) {
-            if (typeof module[f] != 'function') {
+            if (typeof functions[f] != 'function') {
                 continue;
             }
 
-            if (jasmine.isSpy(module[f])) {
+            if (jasmine.isSpy(functions[f])) {
                 continue;
             }
 
-            spyOn(module, f);
+            spyOn(functions, f);
         }
 
         return module;
