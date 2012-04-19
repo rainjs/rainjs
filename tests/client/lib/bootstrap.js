@@ -17,8 +17,8 @@ require.config(requireConfig);
 
 require.execCb = function (name, callback, args, exports) {
     var module = callback.apply(exports, args);
-
-    if (~jasmine.loadedModules.indexOf(module)) {
+debugger;
+    if (jasmine.loadedModules.indexOf(module) === -1) {
         jasmine.loadedModules.push(module);
     }
 
