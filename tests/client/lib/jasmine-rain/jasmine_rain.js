@@ -149,21 +149,31 @@ jasmine.util.extend(jasmine.getGlobal(), (function () {
      * @returns {Object} the mocked module
      */
     JasmineRain.prototype.mock = function (module) {
-        functions = module;
-        if (typeof module == 'function') {
-            functions = module.prototype;
+        var prototype = module && (module.prototype || {}),
+            f;
+
+        for(f in module) {
+            if (typeof module[f] != 'function') {
+                continue;
+            }
+
+            if (jasmine.isSpy(module[f])) {
+                continue;
+            }
+
+            spyOn(module, f);
         }
 
-        for(var f in functions) {
-            if (typeof functions[f] != 'function') {
+        for(f in prototype) {
+            if (typeof prototype[f] != 'function') {
                 continue;
             }
 
-            if (jasmine.isSpy(functions[f])) {
+            if (jasmine.isSpy(prototype[f])) {
                 continue;
             }
 
-            spyOn(functions, f);
+            spyOn(prototype, f);
         }
 
         return module;

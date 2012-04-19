@@ -42,6 +42,13 @@ describe('Translation module', function () {
             var translation = new ClientTranslation(locale);
             translation.translate.andCallThrough();
             Jed.sprintf.andCallThrough();
+            Jed.prototype.translate.andCallThrough();
+            Jed.prototype.textdomain.andCallFake(function () {
+                return 'messages';
+            });
+            Jed.prototype.dcnpgettext.andCallFake(function () {
+                return 'Trimite email';
+            });
 
             expect(translation.translate('Send email', null, 1))
                 .toEqual("Trimite email");
@@ -53,6 +60,13 @@ describe('Translation module', function () {
             var translation = new ClientTranslation(locale);
             translation.translate.andCallThrough();
             Jed.sprintf.andCallThrough();
+            Jed.prototype.translate.andCallThrough();
+            Jed.prototype.textdomain.andCallFake(function () {
+                return 'messages';
+            });
+            Jed.prototype.dcnpgettext.andCallFake(function () {
+                return 'Draga Domnule John Doe,';
+            });
 
             expect(translation.translate('Dear Mr %1$s %2$s,', null, 1, ['John', 'Doe']))
                 .toEqual("Draga Domnule John Doe,");
@@ -64,6 +78,13 @@ describe('Translation module', function () {
             var translation = new ClientTranslation(locale);
             translation.translate.andCallThrough();
             Jed.sprintf.andCallThrough();
+            Jed.prototype.translate.andCallThrough();
+            Jed.prototype.textdomain.andCallFake(function () {
+                return 'messages';
+            });
+            Jed.prototype.dcnpgettext.andCallFake(function () {
+                return 'Salut Domnule John Doe,';
+            });
 
             expect(translation.translate('Hello Mr %1$s %2$s,', null, 1, ['John', 'Doe']))
                 .toEqual("Salut Domnule John Doe,");
@@ -75,6 +96,13 @@ describe('Translation module', function () {
             var translation = new ClientTranslation(locale);
             translation.translate.andCallThrough();
             Jed.sprintf.andCallThrough();
+            Jed.prototype.translate.andCallThrough();
+            Jed.prototype.textdomain.andCallFake(function () {
+                return 'messages';
+            });
+            Jed.prototype.dcnpgettext.andCallFake(function () {
+                return 'Cancel';
+            });
 
             expect(translation.translate('Cancel', null, 1, ['John', 'Doe']))
                 .toEqual("Cancel");
@@ -86,6 +114,13 @@ describe('Translation module', function () {
             var translation = new ClientTranslation(locale);
             translation.translate.andCallThrough();
             Jed.sprintf.andCallThrough();
+            Jed.prototype.translate.andCallThrough();
+            Jed.prototype.textdomain.andCallFake(function () {
+                return 'messages';
+            });
+            Jed.prototype.dcnpgettext.andCallFake(function () {
+                return 'Draga Domnilor John Doe,';
+            });
 
             expect(translation.translate('Dear Mr %1$s %2$s,', null, 2, ['John', 'Doe']))
                 .toEqual("Draga Domnilor John Doe,");
@@ -97,6 +132,13 @@ describe('Translation module', function () {
             var translation = new ClientTranslation(locale);
             translation.translate.andCallThrough();
             Jed.sprintf.andCallThrough();
+            Jed.prototype.translate.andCallThrough();
+            Jed.prototype.textdomain.andCallFake(function () {
+                return 'messages';
+            });
+            Jed.prototype.dcnpgettext.andCallFake(function () {
+                return 'Pentru voi';
+            });
 
             expect(translation.translate('For you', null, 2, ['John', 'Doe']))
                 .toEqual("Pentru voi");
@@ -108,6 +150,13 @@ describe('Translation module', function () {
             var translation = new ClientTranslation(locale);
             translation.translate.andCallThrough();
             Jed.sprintf.andCallThrough();
+            Jed.prototype.translate.andCallThrough();
+            Jed.prototype.textdomain.andCallFake(function () {
+                return 'messages';
+            });
+            Jed.prototype.dcnpgettext.andCallFake(function () {
+                return 'Send email';
+            });
 
             expect(translation.translate('Send email', null, 3))
                 .toEqual("Send email");
