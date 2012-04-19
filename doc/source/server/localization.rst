@@ -15,9 +15,9 @@ Text localization
 
 Text can be localized both on client-side and on server-side.
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Text localization on server-side
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Text localization on the server-side
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 On the server-side, text can be localized in two places:
 
@@ -79,9 +79,9 @@ is the localized version for ``flag.png``.
 Views localization
 ------------------
 
-Views can be localized by adding a locale suffix to the view name (``index_de_DE.html`` for 
-``index.html``). First, Rain tries to use the view for the platform language. If this view doesn't 
-exist it tries to use the view for the default platform language. If this is missing it will take 
+Views can be localized by adding a locale suffix to the view name (``index_de_DE.html`` for
+``index.html``). First, Rain tries to use the view for the platform language. If this view doesn't
+exist it tries to use the view for the default platform language. If this is missing it will take
 the view for `en_US` with no language suffix.
 
 .. warning::
