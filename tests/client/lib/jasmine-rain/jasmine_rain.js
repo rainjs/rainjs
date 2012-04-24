@@ -30,8 +30,10 @@ jasmine.util.extend(jasmine.getGlobal(), (function () {
 
         /**
          * References the modules loaded to jasmine
+         *
+         * @type {Array}
          */
-         jasmine.loadedModules = [];
+        jasmine.loadedModules = [];
 
         // Setup all behavior in a runner beforeEach
         beforeEach(function () {
@@ -117,16 +119,15 @@ jasmine.util.extend(jasmine.getGlobal(), (function () {
             modules = [];
         }
 
-        requireConfig.context = Date.now();
-        require = requirejs.config(requireConfig);
-
         var deps = [];
 
-        require(modules, function () {
-           deps = Array.prototype.slice.call(arguments, 0);
-        });
-
         return jasmineIt(description, function () {
+            runs(function () {
+                require(modules, function () {
+                   deps = Array.prototype.slice.call(arguments, 0);
+                });
+            });
+
            waitsFor(function () {
                return deps.length === modules.length;
            });
