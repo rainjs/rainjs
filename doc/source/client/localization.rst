@@ -1,14 +1,3 @@
-=================
-RAIN Localization
-=================
-
-RAIN provides features to localize text, templates and static resources. Depending on the
-localization needs, these features can be used on the client-side, server-side or both.
-
-The localization process uses the current platform language and tries to localize the requested
-resource. If the resource is not found it tries to use the default platform language. If this
-fails also, a default action is taken.
-
 -----------------
 Text localization
 -----------------
@@ -18,6 +7,10 @@ Text can be localized both on client-side and on server-side.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Text localization on the client-side
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The localization process uses the current platform language and tries to localize the requested
+resource. If the resource is not found it tries to use the default platform language. If this
+fails also, a default action is taken.
 
 On the client-side, text can be localized in any JavaScript file that is loaded though the requireJS
 module system.
