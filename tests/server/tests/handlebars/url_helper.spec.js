@@ -196,9 +196,8 @@ describe('Handlebars url helper', function () {
                     localized: true
                 },
                 tpl = Handlebars.compile('{{{url path=src localized=localized}}}'),
-                result = tpl(data),
-                c = ctx.component;
-            
+                result = tpl(data);
+
             var q = qs.parse(url.parse(result).query);
             expect(q.loc).toBeDefined();
         });
@@ -209,15 +208,14 @@ describe('Handlebars url helper', function () {
                     localized: true
                 },
                 tpl = Handlebars.compile('{{{url path=src localized=localized}}}'),
-                result = tpl(data),
-                c = ctx.component;
+                result = tpl(data);
 
             var q = qs.parse(url.parse(result).query);
             expect(q.loc).toBeDefined();
             expect(q.w).toBeDefined();
             expect(q.h).toBeDefined();
             expect(q.q).toBeDefined();
-        })
+        });
 
     });
 
