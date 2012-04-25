@@ -3,6 +3,7 @@ define([
     'raintime/messaging/sockets',
     'raintime'
 ], function (Promise, Sockets, Raintime) {
+    var socketQueue = [];
     /**
      * The ClientRenderer handles the registration and inserting of new components from the server.
      * If a component takes too long to be obtained from the server, a placeholder is used to show
@@ -24,6 +25,12 @@ define([
         socket.on('render', function (component) {
             Raintime.componentRegistry.deregister(component.instanceId);
             self.renderComponent(component);
+        });
+
+        socket.on('connect', function() {
+            for (var i = 0, len = socketQueue.length; i < len; i++) {
+                socket.emit('render', socketQueue[i], function (error) {});
+            }
         });
     }
 
@@ -58,7 +65,11 @@ define([
         if (component.placeholder && component.placeholder === true) {
             placeholderTimeout(this, component);
         }
-        this.socket.emit('render', component, function (error) {});
+        if (this.socket.socket.connected) {
+            this.socket.emit('render', component, function (error) {});
+        } else {
+            socketQueue.push(component);
+        }
     };
 
     /**
@@ -74,7 +85,7 @@ define([
                 placeholderTimeout(this, childComponent);
             }
         }
-        
+
         var domElement = $('#' + component.instanceId);
         domElement.hide().html(component.html);
         domElement.attr('id', component.instanceId);
@@ -90,7 +101,7 @@ define([
             });
         }
     };
-    
+
     /**
      * @param {Object} component the rendered component
      * @param {DomElement} element The wrapper of the component
