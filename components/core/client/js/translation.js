@@ -1,6 +1,14 @@
 define(['raintime/lib/jed'], function (Jed) {
 
     /**
+     * Empty jed instance used to enable the default behavior of gettext.
+     *
+     * @type {Jed}
+     * @private
+     */
+    var emptyJed = new Jed({});
+
+    /**
      * Provides client-side text localization support. The constructor receives the translations
      * associated with a component and constructs the Jed instances that will be used to translate
      * message keys.
@@ -10,7 +18,6 @@ define(['raintime/lib/jed'], function (Jed) {
      * @constructor
      *
      * @property {Object} locales the object with the Jed instances
-     * @property {Jed} emptyJed empty jed instance used to enable the default gettext behavior
      *
      * @param {Object} localeJson the object containing the information about the translations
      * @param {Object} localeJson.language the current language translations for a component
@@ -18,7 +25,6 @@ define(['raintime/lib/jed'], function (Jed) {
      */
     function ClientTranslation(localeJson) {
         this.locales = {};
-        this.emptyJed = new Jed({});
 
         if (localeJson.language) {
             createJed(this, localeJson, 'language');
@@ -88,7 +94,7 @@ define(['raintime/lib/jed'], function (Jed) {
         // If no locale was found we create an empty instance to enable the default behavior of
         // gettext: it returns msgId if count equals 1 or msgIdPlural otherwise.
         // In this way, the program is working without any translation files.
-        jed = jed || this.emptyJed;
+        jed = jed || emptyJed;
 
         try {
             return jed.translate(msgId).ifPlural(count, msgIdPlural).fetch(args);
