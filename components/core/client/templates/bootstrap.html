@@ -9,16 +9,20 @@
             var requireConfig = {
                 "debug": ('{{server.env}}' == 'production'? 'false' : 'true'),
                 "baseUrl": "/",
+                "paths": {
+                    "util": "core/js/lib/util",
+                    "text": "core/js/lib/require-text",
+                    "locale": "core/js/lib/require-locale"
+                },
                 "packages": [{
                     "name": "raintime",
                     "main": "raintime",
                     "location": "core/js"
-                }, {
-                    "name": "util",
-                    "main": "util",
-                    "location": "core/js/lib"
                 }],
-                "priority": ["raintime"]
+                "priority": [
+                    "raintime/translation_bootstrap",
+                    "raintime"
+                ]
             };
             var renderQueueList = [];
             function renderQueue(){

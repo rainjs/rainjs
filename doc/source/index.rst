@@ -35,6 +35,7 @@ Client side modules
     client/websockets
     client/client_rendering
     client/rendering
+    client/localization
 
 ....
 APIs

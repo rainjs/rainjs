@@ -12,6 +12,8 @@ var component = {
 
 
 describe('Client Renderer', function () {
+    return; // disable this test till it gets refactored
+
     beforeEach(function () {
         $('body').append($('<div id="' + component.instanceId + '"></div>'));
     });
