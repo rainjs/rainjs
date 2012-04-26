@@ -320,11 +320,13 @@ function start(conf){
             });
         }
 
-        process.on('SIGINT', function () {
-            console.log('\nServer is stopping...'.green);
-            watcher.closeWatchers();
-            process.exit(0);
-        });
+        if (process.platform != 'win32') {
+            process.on('SIGINT', function () {
+                console.log('\nServer is stopping...'.green);
+                watcher.closeWatchers();
+                process.exit(0);
+            });
+        }
 
         if (program.debug && process.platform != 'win32') {
             process.kill(process.pid, 'SIGUSR1');
