@@ -278,12 +278,13 @@ function start(conf){
 
         if (withDaemon) {
             var daemon = require('daemon');
+            var watcher = null;
             //start daemon
             daemon.start();
 
             //create configurationfile
             var server_prop_file = process.pid+' '+conf_path,
-            conf_spid    = mod_path.join(pid_path, 'rain.server.'+process.pid),
+            conf_spid    = mod_path.join(pid_path, actPath.replace(/\//gi, '._.')+'RAINSERVER'+process.pid),
             conf_project = mod_path.join(actPath, '.server');
 
             //write server config
@@ -296,9 +297,15 @@ function start(conf){
             //clear conf files if server shutting down
             process.on('SIGTERM', function() {
                 try {
+                    watcher.closeWatchers();
+                } catch(ex) {
+                    console.error("Can't close all watching files: " + ex.stack);
+                }
+
+                try {
                     fs.unlinkSync(conf_project);
                     fs.unlinkSync(conf_spid);
-                } catch(ev) {
+                } catch(ex) {
 
                 }
                 process.exit(0);
@@ -307,16 +314,24 @@ function start(conf){
             process.on('uncaughtException', function (err) {
                 console.error('Uncaught exception: ' + err.stack);
                 if (!program.debug) {
+                    watcher.closeWatchers();
                     require('child_process').exec('cd ' + actPath +' && rain restart');
                 }
             });
         }
+
+        process.on('SIGINT', function () {
+            console.log('\nServer is stopping...'.green);
+            watcher.closeWatchers();
+            process.exit(0);
+        });
 
         if (program.debug && process.platform != 'win32') {
             process.kill(process.pid, 'SIGUSR1');
         }
 
         require('../lib/server').initialize();
+        watcher = require('../lib/watcher.js');
 
         //===========RAIN SERVER STARTED===========
         return true;
@@ -342,7 +357,8 @@ function stop(pid){
 
     try {
         process.kill(pid, 'SIGTERM');
-        console.log('Server stopped!'.green);
+        console.log('Server is stopping...'.green);
+        while(utils.serverIsUp(actPath)) {}
     } catch (ev) {
         try {
             fs.unlinkSync(mod_path.join(actPath, '.server'));
@@ -352,8 +368,6 @@ function stop(pid){
         } catch (ev) {}
         console.log('No running server for this project');
     }
-
-    process.exit(0);
 };
 
 function stopall(){
@@ -362,14 +376,22 @@ function stopall(){
 
     //shutdown all server
     for(var i = server.length; i--;){
-        var pid = server[i].substring(12);
-      try {
-        process.kill(pid,'SIGTERM');
-        countServer++;
-      } catch (e) {}
+        var pid = server[i].split('RAINSERVER')[1];
+        try {
+            process.kill(pid,'SIGTERM');
+            countServer++;
+        } catch (e) {}
+    }
+    if (countServer > 0) {
+        console.log('Stopping servers...');
+        for(var i = server.length; i--;){
+            var serverPath = server[i].split('RAINSERVER')[0].replace(/\._\./gi, '/');
+            while(utils.serverIsUp(serverPath)) {}
+            countServer++;
+        }
     }
 
-    console.log('%s Server shutted down!'.green, countServer);
+    console.log('%s Server stopped!'.green, countServer);
   };
 
 function restart(){
@@ -392,6 +414,9 @@ function restart(){
     try {
         if (pid) {
             process.kill(pid, 'SIGTERM');
+            console.log('Restarting server...'.green);
+            //wait till the old server was finally killed
+            while(utils.serverIsUp(actPath)) {}
         }
     } catch (e) {
         // pid doesn't exist anymore
@@ -401,8 +426,6 @@ function restart(){
         console.log('No running server!'.yellow);
         console.log('Starting server with default config'.green);
     }
-    //wait till the old server was finally killed
-    while (utils.serverIsUp(actPath) == true) {}
     start(conf);
 };
 

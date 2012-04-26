@@ -43,7 +43,7 @@ exports.getServerList = function(){
       serverfiles = [];
   
   for(var i = files.length; i--;){
-    if(~files[i].indexOf('rain.server'))
+    if(~files[i].indexOf('RAINSERVER'))
       serverfiles.push(files[i]);
   }
   return serverfiles;
