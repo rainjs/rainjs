@@ -2,15 +2,50 @@ define(function () {
     var oldExecCb = require.execCb,
         oldOnScriptLoad = require.onScriptLoad,
         oldDefine = define,
+        oldAddScriptToDom = require.addScriptToDom,
         currentDeps,
         currentCallback,
         isDummyDepAdded,
-        translatedModules = {};
+        translatedModules = {},
+        useInteractive = false, //this is only for IE
+        currentlyAddingScript,
+        interactiveScript = null;
 
     // used by RequireJS for browser detection
     var isBrowser = !!(typeof window !== "undefined" && navigator && document),
+        isOpera = typeof opera !== "undefined" && opera.toString() === "[object Opera]",
         readyRegExp = isBrowser && navigator.platform === 'PLAYSTATION 3' ?
             /^complete$/ : /^(complete|loaded)$/;
+
+    require.addScriptToDom = function (node) {
+        currentlyAddingScript = node;
+
+        if (node.attachEvent
+            && !(node.attachEvent.toString && node.attachEvent.toString().indexOf('[native code]') < 0)
+            && !isOpera) {
+            useInteractive = true;
+        }
+
+        oldAddScriptToDom(node);
+
+        currentlyAddingScript = null;
+    };
+
+    function getInteractiveScript() {
+        var scripts, i, script;
+        if (interactiveScript && interactiveScript.readyState === 'interactive') {
+            return interactiveScript;
+        }
+
+        scripts = document.getElementsByTagName('script');
+        for (i = scripts.length - 1; i > -1 && (script = scripts[i]); i--) {
+            if (script.readyState === 'interactive') {
+                return (interactiveScript = script);
+            }
+        }
+
+        return null;
+    }
 
     /**
      * Determines if the last 2 arguments of a function are t and nt
@@ -26,6 +61,22 @@ define(function () {
             len = args.length;
 
         return len >= 2 && args[len - 2] === 't' && args[len - 1] === 'nt';
+    }
+
+    function addTranslation(moduleName, deps, callback) {
+        var moduleRegex = /^\/([\w-]+)\/(?:(\d(?:\.\d)?(?:\.\d)?)\/)(?:js)\/(.+)/,
+            matches = moduleName && moduleName.match(moduleRegex);
+
+        //add translation and locale dependencies
+        if (matches && matches[1] && matches[2] && usesTranslation(callback)) {
+            var component = {
+                id: matches[1],
+                version: matches[2]
+            };
+            deps.push('raintime/translation');
+            deps.push('locale!' + component.id + '/' + component.version);
+            translatedModules[moduleName] = component;
+        }
     }
 
     define = function (name, deps, callback) {
@@ -55,6 +106,29 @@ define(function () {
         } else {
             oldDefine(currentDeps, currentCallback);
         }
+
+        if (isDummyDepAdded) {
+            //remove dummy dependency
+            currentDeps.pop();
+        }
+
+        //IE
+        if (useInteractive) {
+            var node = currentlyAddingScript || getInteractiveScript();
+            if (node) {
+                if (!name) {
+                    name = node.getAttribute("data-requiremodule");
+                }
+                context = require.s.contexts[node.getAttribute("data-requirecontext")];
+                if (context && context.defQueue.length > 0) {
+                    var def = context.defQueue[context.defQueue.length - 1];
+                    addTranslation(def[0], def[1], def[2]);
+                }
+            }
+
+            currentDeps = null;
+            currentCallback = null;
+        }
     };
 
     define.amd = oldDefine.amd;
@@ -65,24 +139,11 @@ define(function () {
         var node = evt.currentTarget || evt.srcElement;
 
         if (evt.type === "load" || (node && readyRegExp.test(node.readyState))) {
-            if (isDummyDepAdded) {
-                //remove dummy dependency
-                currentDeps.pop();
-            }
-
-            var moduleName = node.getAttribute("data-requiremodule"),
-                moduleRegex = /^\/([\w-]+)\/(?:(\d(?:\.\d)?(?:\.\d)?)\/)(?:js)\/(.+)/,
-                matches = moduleName && moduleName.match(moduleRegex);
-
-            //add translation and locale dependencies
-            if (matches && matches[1] && matches[2] && usesTranslation(currentCallback)) {
-                var component = {
-                    id: matches[1],
-                    version: matches[2]
-                };
-                currentDeps.push('raintime/translation');
-                currentDeps.push('locale!' + component.id + '/' + component.version);
-                translatedModules[moduleName] = component;
+            interactiveScript = null;
+            //all browsers except IE
+            if (currentDeps && currentCallback) {
+                var moduleName = node.getAttribute("data-requiremodule");
+                addTranslation(moduleName, currentDeps, currentCallback);
             }
 
             oldOnScriptLoad(evt);
