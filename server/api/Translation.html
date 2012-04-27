@@ -50,7 +50,7 @@
             
   <div class="section" id="class-translation">
 <h1>Class Translation<a class="headerlink" href="#class-translation" title="Permalink to this headline">¶</a></h1>
-<p>Implements internationalization support</p>
+<p>Implements internationalization support.</p>
 <div class="section" id="constructor">
 <h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -82,7 +82,7 @@
 </table>
 </dd></dl>
 
-<p>Generate a context in which the component will be run</p>
+<p>Generate a context in which the component will be run.</p>
 </div>
 <div class="section" id="get">
 <h3>get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
@@ -100,7 +100,66 @@
 </table>
 </dd></dl>
 
-<p>Returns the Tranlation instance</p>
+<p>Returns the Translation instance.</p>
+</div>
+<div class="section" id="getlocale">
+<h3>getLocale<a class="headerlink" href="#getlocale" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Translation#getLocale">
+<tt class="descname">Translation#getLocale</tt><big>(</big><em>component</em>, <em>locale</em><big>)</big><a class="headerlink" href="#Translation#getLocale" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>component</strong> (<em>Object</em>) &#8211; the component configuration</li>
+<li><strong>locale</strong> (<em>String</em>) &#8211; the language</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Throws:</th><td class="field-body"><ul class="first simple">
+<li><strong>RainError</strong> &#8211; : &#8216;component&#8217; precondition failed when the component parameter is missing</li>
+<li><strong>RainError</strong> &#8211; : &#8216;locale&#8217; precondition failed when the locale parameter is missing</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns Object:</th><td class="field-body"><p class="first last">the messages object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Get the translation messages from a component, in a specific language.</p>
+<p>If there aren&#8217;t any translations messages for the component an empty Object is returned.</p>
+</div>
+<div class="section" id="getlocales">
+<h3>getLocales<a class="headerlink" href="#getlocales" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Translation#getLocales">
+<tt class="descname">Translation#getLocales</tt><big>(</big><em>component</em><big>)</big><a class="headerlink" href="#Translation#getLocales" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>component</strong> (<em>Object</em>) &#8211; Component object</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Throws RainError:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"><p class="first last">: &#8216;component&#8217; precondition failed when  the component parameter is missing</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>:returns :</dt>
+<dd>Object which contains language and defaultLanguage if their are not similar</dd>
+</dl>
+</dd></dl>
+
+<p>Creates an object which contains the translations for the component and required languages.</p>
 </div>
 <div class="section" id="loadlanguagefile">
 <h3>loadLanguageFile<a class="headerlink" href="#loadlanguagefile" title="Permalink to this headline">¶</a></h3>
@@ -126,20 +185,20 @@
 </table>
 </dd></dl>
 
-<p>Loads a po file</p>
+<p>Loads a po file.</p>
 </div>
 <div class="section" id="nt">
 <h3>nt<a class="headerlink" href="#nt" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="Translation#nt">
-<tt class="descname">Translation#nt</tt><big>(</big><em>msgid</em>, <em>msgidPlural</em>, <em>count</em><span class="optional">[</span>, <em>args</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#Translation#nt" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">Translation#nt</tt><big>(</big><em>msgId</em>, <em>msgIdPlural</em>, <em>count</em><span class="optional">[</span>, <em>args</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#Translation#nt" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>msgid</strong> (<em>String</em>) &#8211; the message to be translated</li>
-<li><strong>msgidPlural</strong> (<em>String</em>) &#8211; the plural form of the message</li>
+<li><strong>msgId</strong> (<em>String</em>) &#8211; the message to be translated</li>
+<li><strong>msgIdPlural</strong> (<em>String</em>) &#8211; the plural form of the message</li>
 <li><strong>count</strong> (<em>Number</em>) &#8211; determines what form of the translation will be used: singular or plural</li>
 <li><strong>args</strong> (<em>Array</em>) &#8211; an array of values that will replace the placeholders in the message</li>
 </ul>
@@ -165,13 +224,13 @@ the value of a variable.</p>
 <h3>t<a class="headerlink" href="#t" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="Translation#t">
-<tt class="descname">Translation#t</tt><big>(</big><em>msgid</em><span class="optional">[</span>, <em>args</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#Translation#t" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">Translation#t</tt><big>(</big><em>msgId</em><span class="optional">[</span>, <em>args</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#Translation#t" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>msgid</strong> (<em>String</em>) &#8211; the message to be translated</li>
+<li><strong>msgId</strong> (<em>String</em>) &#8211; the message to be translated</li>
 <li><strong>args</strong> (<em>Array</em>) &#8211; an array of values that will replace the placeholders in the message</li>
 </ul>
 </td>
@@ -194,15 +253,15 @@ defined for the component in which the code runs.</p>
 <h3>translate<a class="headerlink" href="#translate" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="Translation#translate">
-<tt class="descname">Translation#translate</tt><big>(</big><em>component</em>, <em>msgid</em><span class="optional">[</span>, <em>msgidPlural</em><span class="optional">]</span><span class="optional">[</span>, <em>count</em><span class="optional">]</span><span class="optional">[</span>, <em>args</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#Translation#translate" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">Translation#translate</tt><big>(</big><em>component</em>, <em>msgId</em><span class="optional">[</span>, <em>msgIdPlural</em><span class="optional">]</span><span class="optional">[</span>, <em>count</em><span class="optional">]</span><span class="optional">[</span>, <em>args</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#Translation#translate" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>component</strong> (<em>Object</em>) &#8211; the descriptor of the component for which we do the translation</li>
-<li><strong>msgid</strong> (<em>String</em>) &#8211; the message to be translated</li>
-<li><strong>msgidPlural</strong> (<em>String</em>) &#8211; the plural form of the message</li>
+<li><strong>msgId</strong> (<em>String</em>) &#8211; the message to be translated</li>
+<li><strong>msgIdPlural</strong> (<em>String</em>) &#8211; the plural form of the message</li>
 <li><strong>count</strong> (<em>Number</em>) &#8211; determines what form of the translation will be used: singular or plural. In some languages the rules for plurals are more complex</li>
 <li><strong>args</strong> (<em>Array</em>) &#8211; an array of values that will replace the placeholders in the message</li>
 </ul>
@@ -220,6 +279,18 @@ the message exists for the platform language. If this is not found it tries the 
 The last fallback is to return the message passed as parameter.</p>
 </div>
 </div>
+<div class="section" id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="lastmodified">
+<h3>lastModified<a class="headerlink" href="#lastmodified" title="Permalink to this headline">¶</a></h3>
+<dl class="attribute">
+<dt id="lastModified">
+<tt class="descname">lastModified</tt><a class="headerlink" href="#lastModified" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>the last modified date for the translations</p>
+</div>
+</div>
 </div>
 
 
@@ -235,10 +306,16 @@ The last fallback is to return the message passed as parameter.</p>
 <li><a class="reference internal" href="#methods">Methods</a><ul>
 <li><a class="reference internal" href="#generatecontext">generateContext</a></li>
 <li><a class="reference internal" href="#get">get</a></li>
+<li><a class="reference internal" href="#getlocale">getLocale</a></li>
+<li><a class="reference internal" href="#getlocales">getLocales</a></li>
 <li><a class="reference internal" href="#loadlanguagefile">loadLanguageFile</a></li>
 <li><a class="reference internal" href="#nt">nt</a></li>
 <li><a class="reference internal" href="#t">t</a></li>
 <li><a class="reference internal" href="#translate">translate</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#attributes">Attributes</a><ul>
+<li><a class="reference internal" href="#lastmodified">lastModified</a></li>
 </ul>
 </li>
 </ul>

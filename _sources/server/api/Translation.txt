@@ -14,7 +14,7 @@ Class Translation
    class-title
 
 
-Implements internationalization support
+Implements internationalization support.
 
 
 
@@ -65,7 +65,7 @@ generateContext
     
 
 
-Generate a context in which the component will be run
+Generate a context in which the component will be run.
 
 
 
@@ -93,7 +93,91 @@ get
     
 
 
-Returns the Tranlation instance
+Returns the Translation instance.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+getLocale
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Translation#getLocale(component, locale)
+
+
+    
+    :param Object component: 
+        the component configuration 
+    
+    :param String locale: 
+        the language 
+    
+
+
+    
+    :throws RainError:
+        : 'component' precondition failed when the component parameter is missing
+    
+    :throws RainError:
+        : 'locale' precondition failed when the locale parameter is missing
+    
+
+
+    
+    :returns Object:
+        the messages object 
+    
+
+
+Get the translation messages from a component, in a specific language.
+
+If there aren't any translations messages for the component an empty Object is returned.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+getLocales
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Translation#getLocales(component)
+
+
+    
+    :param Object component: 
+        Component object 
+    
+
+
+    
+    :throws RainError:
+        : 'component' precondition failed when  the component parameter is missing
+    
+
+
+    
+    :returns :
+        Object which contains language and defaultLanguage if their are not similar 
+    
+
+
+Creates an object which contains the translations for the component and required languages.
 
 
 
@@ -132,7 +216,7 @@ loadLanguageFile
 
 
 
-Loads a po file
+Loads a po file.
 
 
 
@@ -149,14 +233,14 @@ Loads a po file
 nt
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: Translation#nt(msgid, msgidPlural, count, [args])
+.. js:function:: Translation#nt(msgId, msgIdPlural, count, [args])
 
 
     
-    :param String msgid: 
+    :param String msgId: 
         the message to be translated 
     
-    :param String msgidPlural: 
+    :param String msgIdPlural: 
         the plural form of the message 
     
     :param Number count: 
@@ -201,11 +285,11 @@ the value of a variable.
 t
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: Translation#t(msgid, [args])
+.. js:function:: Translation#t(msgId, [args])
 
 
     
-    :param String msgid: 
+    :param String msgId: 
         the message to be translated 
     
     :param Array args: 
@@ -245,17 +329,17 @@ defined for the component in which the code runs.
 translate
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: Translation#translate(component, msgid, [msgidPlural], [count], [args])
+.. js:function:: Translation#translate(component, msgId, [msgIdPlural], [count], [args])
 
 
     
     :param Object component: 
         the descriptor of the component for which we do the translation 
     
-    :param String msgid: 
+    :param String msgId: 
         the message to be translated 
     
-    :param String msgidPlural: 
+    :param String msgIdPlural: 
         the plural form of the message 
     
     :param Number count: 
@@ -291,6 +375,33 @@ The last fallback is to return the message passed as parameter.
 
 
     
+
+Attributes
+----------
+
+..
+   class-attributes
+
+
+lastModified
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:attribute:: lastModified   
+
+
+the last modified date for the translations
+
+
+
+
+
+
+
+
+    
+
+
+
 
 
 

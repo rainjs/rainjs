@@ -1,0 +1,152 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Text localization &mdash; Rain v0.8.0 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.8.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Rain v0.8.0 documentation" href="../index.html" />
+    <link rel="next" title="Class ClientRenderer" href="api/ClientRenderer.html" />
+    <link rel="prev" title="Rendering" href="rendering.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="api/ClientRenderer.html" title="Class ClientRenderer"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="rendering.html" title="Rendering"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain v0.8.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="text-localization">
+<h1>Text localization<a class="headerlink" href="#text-localization" title="Permalink to this headline">¶</a></h1>
+<p>Text can be localized both on client-side and on server-side.</p>
+<div class="section" id="text-localization-on-the-client-side">
+<h2>Text localization on the client-side<a class="headerlink" href="#text-localization-on-the-client-side" title="Permalink to this headline">¶</a></h2>
+<p>The localization process uses the current platform language and tries to localize the requested
+resource. If the resource is not found it tries to use the default platform language. If this
+fails also, a default action is taken.</p>
+<p>On the client-side, text can be localized in any JavaScript file that is loaded though the requireJS
+module system.</p>
+<p>Localization on the client side is done through the <tt class="docutils literal"><span class="pre">t</span></tt> and <tt class="docutils literal"><span class="pre">nt</span></tt> functions provided by the
+framework, and the only thing you need to do is to include them as the last two paramaters of the
+callback passed to <tt class="docutils literal"><span class="pre">define</span></tt> or <tt class="docutils literal"><span class="pre">require</span></tt> like so:</p>
+<div class="highlight-python"><pre>define(['mycomp/js/lib/myModule'], function (myModule, t, nt) {
+    t('my string')
+});</pre>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Failing to include the t and nt functions at the end of the parameter list will make them
+unavailable to your code, and RAIN has no way of explicitly determining if you have used them
+in your code, so you will have runtime errors due to the functions being undefined.</p>
+</div>
+<p>The translation used can be found in the <tt class="docutils literal"><span class="pre">locale</span></tt> folder inside your component under
+<tt class="docutils literal"><span class="pre">&lt;locale&gt;/messages.po</span></tt>, and they will be automatically loaded by the framework when your client
+side controller is initialised.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When translating a string RAIN will first look it up in the messages defined for the platform
+language. If it does not find it there, it will then fallback to looking for them in the
+platforms default language. If the message cannot be found, the string passed to the translation
+function will be returned.</p>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><tt class="xref js js-func docutils literal"><span class="pre">t()</span></tt></dt>
+<dd>the <tt class="docutils literal"><span class="pre">t</span></tt> function documentation</dd>
+<dt><tt class="xref js js-func docutils literal"><span class="pre">nt()</span></tt></dt>
+<dd>the <tt class="docutils literal"><span class="pre">nt</span></tt> function documentation</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Text localization</a><ul>
+<li><a class="reference internal" href="#text-localization-on-the-client-side">Text localization on the client-side</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="rendering.html"
+                        title="previous chapter">Rendering</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api/ClientRenderer.html"
+                        title="next chapter">Class ClientRenderer</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="api/ClientRenderer.html" title="Class ClientRenderer"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="rendering.html" title="Rendering"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain v0.8.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>
