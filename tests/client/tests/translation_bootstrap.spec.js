@@ -133,17 +133,20 @@ describe('translation bootstrap', function () {
             // it means we lose the translation define() function, so we bring it back
             // here artificially.
             define = test.define;
+
         });
 
         it('should pass arguments through to define() when all parameters are specified',
             function () {
 
+                var fx = $.extend(true, {}, fixtures.normal);
+
                 // reset to no longer call through for the purpose of testing the new define()
                 // but still have access to the original define() spy
-                spy.define.reset();
+                spy.define.andCallFake(function () {});
 
                 // test
-                define(fixtures.normal.name, fixtures.normal.deps, fixtures.normal.fn);
+                define(fx.name, fx.deps, fx.fn);
 
                 expect(spy.define).toHaveBeenCalledWith(
                     fixtures.normal.name,
@@ -154,7 +157,8 @@ describe('translation bootstrap', function () {
 
         it('should pass correct arguments to define() when name is missing',
             function () {
-                define(fixtures.normal.deps, fixtures.normal.fn);
+                var fx = $.extend(true, {}, fixtures.normal);
+                define(fx.deps, fx.fn);
                 expect(spy.define).toHaveBeenCalledWith(
                     fixtures.normal.deps,
                     fixtures.normal.fn
@@ -163,7 +167,8 @@ describe('translation bootstrap', function () {
 
         it('should pass correct arguments to define() when deps are missing',
             function () {
-                define(fixtures.normal.name, fixtures.normal.fn);
+                var fx = $.extend(true, {}, fixtures.normal);
+                define(fx.name, fx.fn);
                 expect(spy.define).toHaveBeenCalledWith(
                     fixtures.normal.name,
                     [],
@@ -175,15 +180,6 @@ describe('translation bootstrap', function () {
             function () {
                 define(fixtures.normal.fn);
                 expect(spy.define).toHaveBeenCalledWith([], fixtures.normal.fn);
-        });
-
-        it('should add a dummy dependency when using translation but no deps',
-            function () {
-                define(fixtures.translation.fn);
-                expect(spy.define).toHaveBeenCalledWith(
-                    ['dummy'],
-                    fixtures.translation.fn
-                );
         });
 
     });
