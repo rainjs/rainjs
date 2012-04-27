@@ -42,8 +42,5 @@ side controller is initialised.
 
 .. seealso::
 
-    :js:func:`t`
-        the ``t`` function documentation
-
-    :js:func:`nt`
-        the ``nt`` function documentation
+    :js:class:`Translation`
+        Translation functions (t and nt)
