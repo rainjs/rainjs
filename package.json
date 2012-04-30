@@ -2,7 +2,7 @@
     "name": "rain",
     "description": "A component-based and distributed web application framework",
     "version": "0.9.0",
-    "author": "Claus Augusti <claus@formatvorlage.de>",
+    "author": "Rain Team <rain-team@1and1.ro>",
     "contributors": [
         { "name": "Mitko Tschimev", "email": "mitko.tschimev@1und1.de" },
         { "name": "Alexandru Bularca", "email": "alexandru.bularca@1and1.ro" },
