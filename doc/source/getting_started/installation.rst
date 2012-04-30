@@ -41,7 +41,7 @@ Installing via package manager:
 Windows OS
 ..........
 
-   #. Download http://nodejs.org/dist/v0.6.13/node-v0.6.13.msi
+   #. Download http://nodejs.org/dist/v0.6.15/node-v0.6.15.msi
    #. Install the msi package
    #. That's all :)
    #. NPM is in the bundle too ;)
@@ -52,11 +52,10 @@ Mac OS
 
 On Mac OS operating systems you need to execute the following commands:
 
-   #. Download http://nodejs.org/dist/v0.6.13/node-v0.6.13.pkg
+   #. Download http://nodejs.org/dist/v0.6.15/node-v0.6.15.pkg
    #. Install the package
    #. That's all :)
    #. NPM is in the bundle too ;)
-   #. ``npm install node-gyp -g`` as administrator to install the latest node native module build tool
 
 --------
 RAIN SDK
@@ -84,7 +83,7 @@ This is the way to go if you want to contribute to this project. To get started 
 you need to execute the following commands:
 
 ...............................
-Linux / Unix / Mac OS / Windows
+Linux / Unix / Mac OS
 ...............................
 
    #. ``git clone https://github.com/rainjs/rainjs.git``
@@ -94,9 +93,13 @@ Linux / Unix / Mac OS / Windows
    #. ``sudo npm link``
    #. ``rain start``
 
+In windows npm link is not working. You have to install the package globally
+but this means it not takes all changes automatically.
+Go to rainjs and type ``sudo npm install -g``
+
 .................
 Test installation
 .................
 
-This should give you a running instance of RAIN server and mothership. For testing your
+This should give you a running instance of a RAIN server. For testing your
 installation try to access: http://localhost:1337/example/index.
