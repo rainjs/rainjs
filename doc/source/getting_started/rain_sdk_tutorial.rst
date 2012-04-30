@@ -13,69 +13,56 @@ Below you can find a bunch of useful commands to use::
 
    rain --help
 
-   Usage:
+   Usage: rain <options> <command>
 
-   $ rain
+  Commands:
 
-   Commands:
+    create-project <path> <project-name>
+    create a project
 
-   $ create-project <path> <project-name>
-   create a project
+    create-component <component-name>
+    create a component
 
-   $ create-component <component-name>
-   create a component
+    start [#pid]
+    start the server on project root
 
-   $ start [#pid]
-   1. on project root the command starts the server and creates an pid file
+    stop [#pid]
+    stop the associated server on project root
+    stop the server with the associated with the process id [#pid]
 
-   $ stop [#pid]
-   1. on project root the command stops the associated server
-   2. with [#pid] stops the server with the associated process id
+    restart
+    restarts the associated server on project root
 
-   $ restart [#pid]
-   1. on project root the command restarts the associated server
-   2. with [#pid] restarts the server with the associated process id
+    stopall
+    shutting down all server
 
-   $ list [server] 
-   lists all running server, with [type] only 1 of both will be displayed
+  Options:
 
-   $ stopall
-   shutting down all servers
+    -h, --help                 output usage information
+    -V, --version              output the version number
+    -d, --debug                start the server with the node debugger
+    			       server is NOT restarting on uncaught exceptions
+    			       NOT working for windows
 
-   Options:
+    -c, --conf <path_to_conf>  start server with custom configuration
+    -n, --no-daemon            start server without daemon mode
 
-   -h, --help output usage information
-   -d, --debug debugging
-   -c, --conf <path_to_conf> start server with custom configuration
-   -p, --platform <platform> choose the platform for the application available platforms: nodejs
 
-   Examples:
 
-   $ rain create-project /home/username/workspace newProject
-   $ rain start
-   $ rain start -c /home/username/workspace/custom_confs/server.conf
-   $ rain stop
-   $ rain stop 5361
+
+  Examples:
+
+    $ rain create-project /home/username/workspace newProject
+
+    $ rain start
+    $ rain start -c /home/username/workspace/custom_confs/server.conf
+
+    $ rain stop
+    $ rain stop 5361
 
    Rain creates the following structure on first start of a server:
 
    /home/user/.rain 
-   A server pid file contains "PID /path/to/server-conf" and looks like this:
-   "rain.server.5734" -> rain.server.PID
-
-   Creating an Application
-
-   2 modes will be available: quick mode and configuration mode (default)
-
-   "Quick mode" creates the project with the nodejs skeleton and standard meta.json
-
-   "Configuration mode" asks the user about different settings
-
-   name
-   author
-   description
-   version
-   platform
 
 -----------------------
 RAIN SDK Create project
@@ -91,7 +78,7 @@ execute the following commands:
    #. rain start
 
 Now you have your first RAIN project.
-Try the following url in your browser: http://localhost:1337/<component-name>/index.
+Try the following url in your browser: http://localhost:1337/<component-name>/<view-id>.
 
 -------------------
 RAIN SDK Debug mode
