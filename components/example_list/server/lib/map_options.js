@@ -44,7 +44,7 @@ var options = {
                     zoom: 7
                 }
             },
-            pathname: '/staticmap/v3/getmap',
+            pathname: '/staticmap/v4/getmap',
             search: '?%s',
             params: {
                 size: '600,500',
