@@ -1,7 +1,6 @@
 "use strict";
 
 var cwd = process.cwd();
-var loadFile = require(cwd + '/tests/server/rain_mocker');
 var globals = require(cwd + '/lib/globals.js');
 
 var intent = {
@@ -41,22 +40,20 @@ describe('Intents Registry: ', function () {
     var socketHandlers = {};
 
     beforeEach(function () {
-        mockedIntentRegistry = loadFile(cwd + '/lib/intent_registry.js', {
-            mocks: {
-                './socket_registry': {
-                    register: function(channel, handler) {
-                        socketHandlers[channel] = handler;
-                    }
-                },
-                './component_registry': {},
-                './renderer': {},
-                './render_utils': {
-                    isAuthorized: function () {
-                        return false;
-                    }
+        mockedIntentRegistry = loadModuleContext('/lib/intent_registry.js', {
+            './socket_registry': {
+                register: function(channel, handler) {
+                    socketHandlers[channel] = handler;
+                }
+            },
+            './component_registry': {},
+            './renderer': {},
+            './render_utils': {
+                isAuthorized: function () {
+                    return false;
                 }
             }
-        }, true);
+        });
         intentRegistry = mockedIntentRegistry.module.exports;
     });
 

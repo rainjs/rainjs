@@ -5,14 +5,13 @@ var path = require('path');
 var globals = require(cwd + '/lib/globals.js');
 var logger = require(cwd + '/lib/logger.js');
 var configuration = require(cwd + '/lib/configuration.js');
-var loadFile = require(cwd + '/tests/server/rain_mocker');
 
 var util = require(cwd + '/lib/util.js');
 
 describe('Util module', function () {
 
     var mockComponentRegistry, componentRegistry;
-    mockComponentRegistry = loadFile(process.cwd() + '/lib/component_registry.js', null, true);
+    mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
     mockComponentRegistry.scanComponentFolder();
     componentRegistry = new mockComponentRegistry.ComponentRegistry();
 

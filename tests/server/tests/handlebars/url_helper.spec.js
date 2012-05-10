@@ -2,7 +2,6 @@
 
 var cwd = process.cwd(),
     globals = require(cwd + '/lib/globals.js'),
-    mock = require(cwd + '/tests/server/rain_mocker'),
     url = require('url'),
     qs = require('querystring');
 
@@ -19,8 +18,8 @@ describe('Handlebars url helper', function () {
         // the rain context
         ctx = { component: components.example };
 
-    var helper = mock(
-        cwd + '/lib/handlebars/url.js',
+    var helper = loadModuleExports(
+        '/lib/handlebars/url.js',
         {
             '../renderer': { rain: ctx },
             '../component_registry': {

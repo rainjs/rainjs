@@ -3,7 +3,6 @@
 var cwd = process.cwd();
 var globals = require(cwd + '/lib/globals.js');
 var config = require(cwd + '/lib/configuration.js');
-var loadFile = require(cwd + '/tests/server/rain_mocker');
 
 describe('Data layer', function() {
     var mockComponentRegistry, componentRegistry,
@@ -12,7 +11,7 @@ describe('Data layer', function() {
     var error, context;
 
     beforeEach(function () {
-        mockComponentRegistry = loadFile(cwd + '/lib/component_registry.js', null, true);
+        mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
         mockComponentRegistry.scanComponentFolder();
         componentRegistry = new mockComponentRegistry.ComponentRegistry();
 
@@ -20,7 +19,7 @@ describe('Data layer', function() {
             './component_registry': componentRegistry
         };
 
-        mockDataLayer = loadFile(cwd + '/lib/data_layer.js', mocks, true);
+        mockDataLayer = loadModuleContext('/lib/data_layer.js', mocks);
 
         dataLayer = new mockDataLayer.DataLayer();
     });

@@ -11,9 +11,9 @@ describe('testing locale routing', function () {
     }
 
     beforeEach(function() {
-        locale = getModule('/lib/routes/locale.js'),
+        locale = loadModuleContext('/lib/routes/locale.js');
 
-        request = { component: true },
+        request = { component: true };
         response = { end: function (content) { localeContent = content; } };
 
 

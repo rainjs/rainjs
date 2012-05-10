@@ -1,9 +1,12 @@
 "use strict";
 
+var fs = require('fs'),
+    path = require('path'),
+    vm = require('vm'),
+    extend = require('node.extend');
+
 var cwd = process.cwd();
-//these paths should be relative in order to be able to require this file from sprint
 require('../../../lib/globals');
-var loadFile = require('../rain_mocker');
 
 jasmine.util.extend(jasmine.getGlobal(), (function () {
 
@@ -56,12 +59,101 @@ jasmine.util.extend(jasmine.getGlobal(), (function () {
     }
 
     /**
+     * Cache for module code to avoid reading the file multiple times if the
+     * the same module is requested more than once.
      *
-     * @param {String} modulePath Path to the module related to the process cwd
-     * @returns The module with access to all private variables and functions too.
+     * @type {Object}
      */
-    JasmineRain.prototype.getModule = function(modulePath) {
-        return loadFile(cwd + modulePath, null, true);
+    var code = {};
+
+    /**
+     * Loads a module and returns it's entire context.
+     * Convenience method for :js:func`#loadModule` with the last parameter set to true.
+     *
+     * @see :js:func:`#loadModule`
+     */
+    JasmineRain.prototype.loadModuleContext = function () {
+        var args = [];
+        for (var i = 0, l = arguments.length; i < l; i++) {
+            args.push(arguments[i]);
+        }
+
+        // complete argument list with missing parameters until the last one
+        l = loadModule.length - 1;
+        while (i++ < l) {
+            args.push(null);
+        }
+
+        return loadModule.apply(null, args.concat([true]));
+    }
+
+    /**
+     * Loads a module and returns it's exports object.
+     * Convenience method for :js:func`#loadModule` with the last parameter set to false.
+     *
+     * @see :js:func:`#loadModule`
+     */
+    JasmineRain.prototype.loadModuleExports = function () {
+        var args = [];
+        for (var i = 0, l = arguments.length; i < l; i++) {
+            args.push(arguments[i]);
+        }
+
+        // complete argument list with missing parameters until the last one
+        l = loadModule.length - 1;
+        while (i++ < l) {
+            args.push(null);
+        }
+
+        return loadModule.apply(null, args.concat([false]));
+    }
+
+    /**
+     * Loads a module by sandboxing it and making all it's local scope available to the caller.
+     * Mocking private functions for unit testing hasn't been easier.
+     *
+     * @param {String} modpath the module's file path
+     * @param {Object} mocks an object containing properties with filename keys and
+     * values that will be used in place of the original module's exports object
+     * @param {Object} deps an object containing properties with variable names
+     * and values that will be used for mocked dependencies injected into the loaded module
+     * @param {Boolean} all whether to return the full context or just the exports object
+     * @returns {Object} the loaded module's context
+     */
+    JasmineRain.prototype.loadModule = function(modpath, mocks, deps, all) {
+        mocks = mocks || {};
+        deps = deps || {};
+
+        var file = cwd + modpath;
+
+        if (!code[file]) {
+            // Use sync version because `require` is sync, so that's what the user expects
+            code[file] = fs.readFileSync(file, 'utf8');
+        }
+
+        var context = vm.createContext(global);
+        /*
+            Extend the context with module specific properties
+            and provided mock dependencies.
+        */
+        extend(
+            context,
+            {
+                require: sandboxRequire.bind(null, file, mocks),
+                module: { exports: {} },
+                __filename: path.resolve(file)
+            },
+            deps
+        );
+
+        // Some more augmentation
+        context.exports = context.module.exports;
+        context.__dirname = path.dirname(context.__filename);
+
+        // Run the module in the the created context
+        vm.runInContext(code[file], context, file);
+
+        return all ? context : context.module.exports;
     };
 
     /**

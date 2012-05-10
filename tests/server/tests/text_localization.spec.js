@@ -40,7 +40,7 @@ describe('Testing translation modul', function() {
     describe('Testing locale function', function() {
         var translation, transInstance;
         beforeEach(function() {
-            translation = getModule('/lib/translation.js');
+            translation = loadModuleContext('/lib/translation.js');
             transInstance = new translation.Translation();
         });
 
@@ -83,7 +83,7 @@ describe('Testing translation modul', function() {
     describe('Testing locales function', function() {
         var translation, transInstance;
         beforeEach(function() {
-            translation = getModule('/lib/translation.js');
+            translation = loadModuleContext('/lib/translation.js');
             transInstance = new translation.Translation();
         });
 

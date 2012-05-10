@@ -3,7 +3,6 @@
 var cwd = process.cwd();
 var path = require('path');
 var globals = require(cwd + '/lib/globals');
-var loadFile = require(cwd + '/tests/server/rain_mocker');
 var pluginFolder = path.join(cwd, '/lib/handlebars/');
 
 describe('Handlebars configuration', function () {
@@ -40,7 +39,7 @@ describe('Handlebars configuration', function () {
             helper: function () {}
         };
 
-        loadFile(cwd + '/lib/handlebars.js', mocks, true);
+        loadModuleContext('/lib/handlebars.js', mocks);
     });
 
     it('must register all Handlebars plugins', function () {

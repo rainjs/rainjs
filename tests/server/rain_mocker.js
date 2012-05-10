@@ -1,90 +1,68 @@
 "use strict";
 
-var cache = {};
-var fs = require('fs');
-var path = require('path');
-var vm = require('vm');
-var extend = require('node.extend');
+var fs = require('fs'),
+    path = require('path'),
+    vm = require('vm'),
+    extend = require('node.extend');
 
 /**
- * The function loads a module from a path into a new context. It can give access to
- * private functions and uses supplied mocked modules by wrapping the require function.
+ * Cache for module code to avoid reading the file multiple times if the
+ * the same module is requested more than once.
  *
- * @param {String} file the file path
- * @param {Object} [descriptor] if the descriptor does not have the ``context`` and ``mocks`` keys then it is used directly as the mocked modules
- * @param {Object} [descriptor.context] additional object that will be added to the new context
- * @param {Object} [descriptor.mocks] the mocked modules
- * @param {Boolean} all true if all the context should be returned, otherwise only the module's exports.
- * @returns {Object} the original exports from the loaded module
+ * @type {Object}
  */
-module.exports = function (file, descriptor, all) {
-    // The module-level context the file will run under.
-    var context;
+var code = {};
 
-    descriptor = descriptor || {};
+/**
+ * Wraps require() to test if a mocked module has been
+ * provided matching a filename, returning the mock in this case
+ * or defaulting to requiring it in the standard node way otherwise.
+ *
+ * @param {String} file sandboxed module's path needed for loading modules relative to it
+ * @param {Object} mocks an object containing properties with filename keys and
+ * values that will be used in place of the original module's exports object
+ * @param {String} mod the required module's file path
+ */
+function sandboxRequire(file, mocks, mod) {
+    mod = mod || '';
+    mocks = mocks || {};
 
-    // Copy the current global properties into the new context.
-    context = extend(extend, global);
-
-    // Don't load any file more than once. module.exports should be blank ready for exporting.
-    context.module = {
-        exports : {}
-    };
-
-    // Include the exports variable, so user can use this as an alternative to module.exports.
-    context.exports = context.module.exports;
-
-    // Include timer variables.
-    context.setTimeout = setTimeout;
-    context.clearTimeout = clearTimeout;
-    context.setInterval = setInterval;
-    context.clearInterval = clearInterval;
-
-    // Include other globals, which also helps with errors.
-    context.console = console;
-    context.process = process;
-
-    // Sort out the __filename and __dirname.
-    context.__filename = path.resolve(file);
-    context.__dirname = path.dirname(context.__filename);
-
-    // The mock objects.
-    var mocks;
-
-    if (descriptor.context || descriptor.mocks) {
-        for (var key in descriptor.context) {
-            if (descriptor.context.hasOwnProperty(key)) {
-                context[key] = descriptor.context[key];
-            }
-        }
-        mocks = descriptor.mocks || {};
-    } else {
-        mocks = descriptor || {};
+    if (mocks[mod]) {
+        return mocks[mod];
     }
 
-    // Set a wrapper for require. If the user has given a mock, use that.
-    context.require = function (lib) {
-        if (mocks.hasOwnProperty(lib)) {
-            return mocks[lib];
-        }
-        if (lib.indexOf('./') === 0 || lib.indexOf('../') === 0) {
-            return require(path.resolve(path.join(path.dirname(file), lib)));
-        }
-        return require(lib);
-    };
-
-    // This means the user can use include in setup, because it's nice and quick.
-    if (!cache[file]) {
-        // Use sync version because `require` is sync, so that's what the user expects.
-        var data = fs.readFileSync(file, 'utf8');
-        cache[file] = vm.createScript(data, file);
+    if (mod.indexOf('./') === 0 || mod.indexOf('../') === 0) {
+        return require(path.resolve(path.join(path.dirname(file), mod)));
     }
 
-    // Run the included file.
-    cache[file].runInNewContext(context);
+    return require(mod);
+}
 
-    if (all) {
-        return context;
+/**
+ * Loads a module by sandboxing it and making all it's local scope available to the caller.
+ * Mocking private functions for unit testing hasn't been easier.
+ *
+ * @param {String} file the module's file path
+ * @param {Object} mocks an object containing properties with filename keys and
+ * values that will be used in place of the original module's exports object
+ * @param {Object} deps an object containing properties with variable names
+ * and values that will be used for mocked dependencies injected into the loaded module
+ * @returns {Object} the loaded module's context
+ */
+function sandboxModule(file, mocks, deps) {
+    mocks = mocks || {};
+    deps = deps || {};
+
+    if (!code[file]) {
+        // Use sync version because `require` is sync, so that's what the user expects
+        code[file] = fs.readFileSync(file, 'utf8');
     }
-    return context.module.exports;
+
+    var context = vm.createContext(global);
+    // Extend the context with provided mock dependencies and wrapped require
+    extend(context, { require: sandboxRequire.bind(null, file, mocks) }, deps);
+    // Run the module in the the created context
+    vm.runInContext(code[file], context, file);
+
+    return context;
 };

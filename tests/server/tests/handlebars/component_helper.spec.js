@@ -3,7 +3,6 @@
 var cwd = process.cwd();
 var globals = require(cwd + '/lib/globals.js');
 var config = require(cwd + '/lib/configuration');
-var loadFile = require(cwd + '/tests/server/rain_mocker');
 
 describe('Handlebars component helper', function () {
     var componentHelper, Handlebars,
@@ -26,17 +25,17 @@ describe('Handlebars component helper', function () {
                 };
             }
         };
-        mockComponentRegistry = loadFile(cwd + '/lib/component_registry.js', null, true);
+        mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
         var plugins = ['dynamic_conditions'];
         mockComponentRegistry.scanComponentFolder();
         mockComponentRegistry.registerPlugins(plugins);
         mockComponentRegistry.configurePlugins(plugins);
         componentRegistry = new mockComponentRegistry.ComponentRegistry();
-        mockRenderUtils = loadFile(cwd + '/lib/render_utils.js', {
+        mockRenderUtils = loadModuleExports('/lib/render_utils.js', {
             './error_handler': errorHandler,
             './component_registry': componentRegistry
         });
-        mockRenderer = loadFile(cwd + '/lib/renderer.js', {
+        mockRenderer = loadModuleContext('/lib/renderer.js', {
             './error_handler': errorHandler,
             './socket_registry': {
                 register: function () {}
@@ -44,7 +43,7 @@ describe('Handlebars component helper', function () {
             './data_layer': null,
             './component_registry': componentRegistry,
             './render_utils': mockRenderUtils
-        }, true);
+        });
 
         renderer = new mockRenderer.Renderer();
 
@@ -72,7 +71,7 @@ describe('Handlebars component helper', function () {
             childComponent = component;
         };
 
-        componentHelper = loadFile(cwd + '/lib/handlebars/component.js', {
+        componentHelper = loadModuleExports('/lib/handlebars/component.js', {
             '../component_registry': componentRegistry,
             '../renderer': renderer,
             '../render_utils': mockRenderUtils

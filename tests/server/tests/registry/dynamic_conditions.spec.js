@@ -3,14 +3,13 @@
 var cwd = process.cwd();
 var globals = require(cwd + '/lib/globals.js');
 var config = require(cwd + '/lib/configuration.js');
-var loadFile = require(cwd + '/tests/server/rain_mocker');
 var registryPlugin = require(cwd + '/lib/registry/dynamic_conditions');
 
 describe('Registry Plugin: ' + registryPlugin.name, function () {
     var mockComponentRegistry, componentRegistry;
 
     beforeEach(function () {
-        mockComponentRegistry = loadFile(process.cwd() + '/lib/component_registry.js', null, true);
+        mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
         mockComponentRegistry.scanComponentFolder();
         componentRegistry = new mockComponentRegistry.ComponentRegistry();
     });
