@@ -1,19 +1,25 @@
 define(['raintime'], function (Raintime) {
     "use strict";
 
-    function Controller() {}
+    function Dialog() {}
 
-    Controller.prototype.init = $.noop;
-    Controller.prototype.start = function () {
+    Dialog.prototype.init = $.noop;
+    Dialog.prototype.start = function () {
         var close = $('.core-dialog .close');
 
         close.on('click', function () {
             $('.core-dialog').remove();
             $('.core-modal').remove();
-        });
 
-        Raintime.componentRegistry.deregister(this.context.instanceId);
+            Raintime.componentRegistry.deregister(this.context.instanceId);
+        });
     };
 
-    return Controller;
+    Dialog.prototype.destroy = function() {
+        var root = this.context.getRoot();
+
+        root.empty();
+    };
+
+    return Dialog;
 });
