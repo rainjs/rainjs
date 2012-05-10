@@ -157,6 +157,31 @@ jasmine.util.extend(jasmine.getGlobal(), (function () {
     };
 
     /**
+     * Wraps require() to test if a mocked module has been
+     * provided matching a filename, returning the mock in this case
+     * or defaulting to requiring it in the standard node way otherwise.
+     *
+     * @param {String} file sandboxed module's path needed for loading modules relative to it
+     * @param {Object} mocks an object containing properties with filename keys and
+     * values that will be used in place of the original module's exports object
+     * @param {String} mod the required module's file path
+     */
+    function sandboxRequire(file, mocks, mod) {
+        mod = mod || '';
+        mocks = mocks || {};
+
+        if (mocks[mod]) {
+            return mocks[mod];
+        }
+
+        if (mod.indexOf('./') === 0 || mod.indexOf('../') === 0) {
+            return require(path.resolve(path.join(path.dirname(file), mod)));
+        }
+
+        return require(mod);
+    }
+
+    /**
      * Mocks the object passed as parameter. All the methods are replaced with spies that return
      * undefined. The other properties are set to the values specified in props or undefined.
      *
