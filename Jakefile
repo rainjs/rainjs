@@ -226,7 +226,7 @@ namespace('test', function () {
             var useRequireJs = false;
 
             console.log('\nRunning server side tests...');
-            
+
             if (arguments.length == 1) {
                 match = arguments[0];
             } else if (arguments.length > 0) {
@@ -253,6 +253,45 @@ namespace('test', function () {
         task('all', function () {
             jake.Task['test:run:server'].invoke();
             jake.Task['test:run:client'].invoke();
+        });
+    });
+});
+
+namespace('check', function () {
+    desc('Check all the files for the license header');
+    task('license', function () {
+        var root = process.cwd(),
+            hasErrors = false,
+            includedFolders = [
+                'lib'
+            ];
+
+        console.log('Checking for missing headers in the source files.\n');
+
+        for (var i = includedFolders.length; i--;) {
+            var folder = includedFolders[i];
+            util.walkSync(path.join(root, folder), ['.js'], function (file) {
+                fs.readFile(file, 'utf-8', function (err, data) {
+                    if (err) {
+                        return; // something went horribly wrong
+                    }
+
+                    if (/^\/\/(.*)/ig.test(data)) {
+                        return; // nothing to de here
+                    }
+
+                    console.log(file, 'does not contain the license header');
+                    hasErrors = true;
+                });
+            });
+        }
+
+        process.on('exit', function () {
+            if (hasErrors) {
+                process.exit(1);
+            } else {
+                console.log('Everything is good!');
+            }
         });
     });
 });
