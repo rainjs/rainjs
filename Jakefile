@@ -1,3 +1,28 @@
+// Copyright © 2012 rainjs
+//
+// All rights reserved
+//
+// Redistribution and use in source and binary forms, with or without modification, are permitted
+// provided that the following conditions are met:
+//
+//    1. Redistributions of source code must retain the above copyright notice, this list of
+//       conditions and the following disclaimer.
+//    2. Redistributions in binary form must reproduce the above copyright notice, this list of
+//       conditions and the following disclaimer in the documentation and/or other materials
+//       provided with the distribution.
+//    3. Neither the name of The author nor the names of its contributors may be used to endorse or
+//       promote products derived from this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+// IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+// MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+// SHALL THE AUTHOR AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+// OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+// IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 "use strict";
 
 var child = require('child_process');
@@ -201,7 +226,7 @@ namespace('test', function () {
             var useRequireJs = false;
 
             console.log('\nRunning server side tests...');
-            
+
             if (arguments.length == 1) {
                 match = arguments[0];
             } else if (arguments.length > 0) {
@@ -228,6 +253,45 @@ namespace('test', function () {
         task('all', function () {
             jake.Task['test:run:server'].invoke();
             jake.Task['test:run:client'].invoke();
+        });
+    });
+});
+
+namespace('check', function () {
+    desc('Check all the files for the license header');
+    task('license', function () {
+        var root = process.cwd(),
+            hasErrors = false,
+            includedFolders = [
+                'lib'
+            ];
+
+        console.log('Checking for missing headers in the source files.\n');
+
+        for (var i = includedFolders.length; i--;) {
+            var folder = includedFolders[i];
+            util.walkSync(path.join(root, folder), ['.js'], function (file) {
+                fs.readFile(file, 'utf-8', function (err, data) {
+                    if (err) {
+                        return; // something went horribly wrong
+                    }
+
+                    if (/^\/\/(.*)/ig.test(data)) {
+                        return; // nothing to de here
+                    }
+
+                    console.log(file, 'does not contain the license header');
+                    hasErrors = true;
+                });
+            });
+        }
+
+        process.on('exit', function () {
+            if (hasErrors) {
+                process.exit(1);
+            } else {
+                console.log('Everything is good!');
+            }
         });
     });
 });
