@@ -5,7 +5,6 @@ var fs = require('fs'),
     vm = require('vm'),
     extend = require('node.extend');
 
-var cwd = process.cwd();
 require('../../../lib/globals');
 
 jasmine.util.extend(jasmine.getGlobal(), (function () {
@@ -124,7 +123,7 @@ jasmine.util.extend(jasmine.getGlobal(), (function () {
         mocks = mocks || {};
         deps = deps || {};
 
-        var file = cwd + modpath;
+        var file = process.cwd() + modpath;
 
         if (!code[file]) {
             // Use sync version because `require` is sync, so that's what the user expects
