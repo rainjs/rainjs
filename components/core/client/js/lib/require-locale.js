@@ -52,7 +52,7 @@ define(['text'],
          * @param {String} the locale route
          */
         function route(res) {
-            var format = /^(\w+(\/?[\w\.]+))$/;
+            var format = /^[\w-]+\/\d(?:\.\d)?(?:\.\d)?$/;
             return format.test(res) ? '/' + res + '/locale' : '';
         }
 
