@@ -119,6 +119,14 @@ define(function () {
             currentDeps = [];
         }
 
+        //when the order plugin is used the callback parameter is not a function
+        if (typeof currentCallback !== 'function') {
+            oldDefine(name, deps, callback);
+            currentDeps = null;
+            currentCallback = null;
+            return;
+        }
+
         if (!currentDeps.length && usesTranslation(currentCallback)) {
             //this is a dummy dependency used to let RequireJS know that this isn't
             //a CommonJS module
