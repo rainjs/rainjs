@@ -25,7 +25,8 @@
 
 (function (define) {
 define(function (require, exports, module) {
-"use strict";
+
+// Note: strict mode cannot be used because of arguments.callee and related properties
 
 var util = require('util');
 
@@ -55,10 +56,8 @@ var RainError = function (message, args, type, code) {
 
     // generate a stack with the correct message on the first line
     var error = new Error(this.message);
-    // fix stack: remove call to Error() from this constructor
-    var stack = error.stack.split('\n');
-    stack.splice(1, 1);
-    this.stack = stack.join('\n');
+
+    this.stack = new StackTraceFormatter(error).format();
 };
 
 /**
@@ -68,8 +67,101 @@ RainError.ERROR_IO = 0;
 RainError.ERROR_NET = 1;
 RainError.ERROR_PRECONDITION_FAILED = 2;
 RainError.ERROR_HTTP = 3;
+RainError.ERROR_SOCKET = 4;
 
 util.inherits(RainError, Error);
+
+/**
+ * Cross-browser stack trace formatter.
+ * Supports Firefox, Chrome, IE and Safari as well as node.js.
+ *
+ * Note: it currently does not aim to reproduce the same stack trace
+ * for every browser.
+ *
+ * @param {Error} error the thrown error
+ * @property {Error} error
+ * @property {String} implementation the stack formatter implementation used
+ */
+function StackTraceFormatter(error) {
+    this.error = error;
+
+    // determine implementation
+    if (error.stack) {
+        if ('arguments' in error) {
+            this.implementation = 'Chrome'
+        } else {
+            this.implementation = 'Firefox';
+        }
+    } else {
+        this.implementation = 'IE';
+    }
+}
+
+/**
+ * Formats the stack trace for a meaningful inspection.
+ * Removes the inner functions from RAIN that appear at the top of the stack
+ * and ensures cross-browser functionality (e.g. IE support).
+ *
+ * @returns {String} the formatted stack trace
+ */
+StackTraceFormatter.prototype.format = function () {
+    return this['format' + this.implementation]();
+};
+
+/**
+ * Implements the formatter for Chrome(thus V8, including node.js).
+ *
+ * @returns {String} the formatted stack trace
+ */
+StackTraceFormatter.prototype.formatChrome = function () {
+    var stack = this.error.stack.split('\n');
+    stack.splice(1, 1);
+    return stack.join('\n');
+};
+
+/**
+ * Implements the formatter for Firefox.
+ *
+ * @returns {String} the formatted stack trace
+ */
+StackTraceFormatter.prototype.formatFirefox = function () {
+    return this.error.stack;
+};
+
+/**
+ * Implements the formatter for IE.
+ * Since this browser don't support the ``Error.stack`` property,
+ * this is simulated by going up the call stack using the ``callee``
+ * and ``caller`` properties of function objects.
+ *
+ * Note: this does not work in "strict" mode, since ``caller`` isn't available there.
+ *
+ * @returns {String} the formatted stack trace
+ */
+StackTraceFormatter.prototype.formatIE = function () {
+    var re = /function\s*([\w$]+)?\s*\(/i,
+        fn = arguments.callee.caller,
+        stack = ['RainError: ' + this.error.message],
+        maxStackSize = 11,
+        result, name;
+
+    // skip the inner functions until the last useful function
+    for (var i = 3; i--; fn = fn.caller)
+        ;
+
+    while (fn && stack.length < maxStackSize) {
+        // try to obtain the function name
+        result = re.exec(fn.toString());
+
+        name = result && result[1] ? result[1] : 'anonymous';
+
+        stack.push('\tat ' + name);
+
+        fn = fn.caller;
+    }
+
+    return stack.join('\n');
+};
 
 // make RainError global
 (typeof window === 'undefined' ? global : window).RainError = RainError;
