@@ -84,7 +84,7 @@ jasmine.util.extend(jasmine.getGlobal(), (function () {
         }
 
         return loadModule.apply(null, args.concat([true]));
-    }
+    };
 
     /**
      * Loads a module and returns it's exports object.
@@ -105,7 +105,7 @@ jasmine.util.extend(jasmine.getGlobal(), (function () {
         }
 
         return loadModule.apply(null, args.concat([false]));
-    }
+    };
 
     /**
      * Loads a module by sandboxing it and making all it's local scope available to the caller.
