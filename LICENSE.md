@@ -33,7 +33,7 @@ This license applies to all parts of rainjs that are not externally maintained l
 The externally maintained libraries used by rainjs are:
 
 - connect. connect's license follows:
-  """
+
     (The MIT License)
 
     Copyright (c) 2010 Sencha Inc.
@@ -58,10 +58,9 @@ The externally maintained libraries used by rainjs are:
     CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-  """
 
 - handlebars. handlebars license follows:
-  """
+
     Copyright (C) 2011 by Yehuda Katz
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -81,10 +80,9 @@ The externally maintained libraries used by rainjs are:
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
-  """
 
 - jasmine-node. jasmine-node license follows:
-  """
+
     The MIT License
 
     Copyright (c) 2010 Adam Abrons and Misko Hevery http://getangular.com
@@ -106,10 +104,9 @@ The externally maintained libraries used by rainjs are:
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
-  """
 
 - less. less license follows:
-  """
+
                                   Apache License
                             Version 2.0, January 2004
                          http://www.apache.org/licenses/
@@ -288,10 +285,9 @@ The externally maintained libraries used by rainjs are:
     END OF TERMS AND CONDITIONS
 
     Copyright (c) 2009-2010 Alexis Sellier
-  """
 
 - mime. mime license follows:
-  """
+
     Copyright (c) 2010 Benjamin Thomas, Robert Kieffer
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -311,24 +307,21 @@ The externally maintained libraries used by rainjs are:
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
-  """
 
 - node.extend. node.extend license follows:
-  """
+
     Copyright 2011, John Resig
     Dual licensed under the MIT or GPL Version 2 licenses.
     http://jquery.org/license
-  """
 
 - promised-io. promised-io license follows:
-  """
+
     Promised-IO is part of the Persevere project, and therefore is licensed under the
     AFL or BSD license. The Persevere project is administered under the Dojo foundation,
     and all contributions require a Dojo CLA.
-  """
 
 - socket.io. socket.io license follows:
-  """
+
     (The MIT License)
 
     Copyright (c) 2011 Guillermo Rauch &lt;guillermo@learnboost.com&gt;
@@ -351,10 +344,9 @@ The externally maintained libraries used by rainjs are:
     CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-  """
 
 - commander. commander license follows:
-  """
+
     (The MIT License)
 
     Copyright (c) 2011 TJ Holowaychuk &lt;tj@vision-media.ca&gt;
@@ -377,15 +369,10 @@ The externally maintained libraries used by rainjs are:
     CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-  """
 
 - mocks. mocks license follows:
-  """
-    
-  """
-
 - daemon. daemon license follows:
-  """
+
     Copyright (c) 2009 Arthur (Slashed), Pedro Teixeira, James Halliday, Zak Taylor, Charlie Robbins
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -405,10 +392,9 @@ The externally maintained libraries used by rainjs are:
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
-  """
 
 - colors. colors license follows:
-  """
+
     Copyright (c) 2010
 
     Marak Squires
@@ -431,10 +417,9 @@ The externally maintained libraries used by rainjs are:
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
-  """
 
 - wrench. wrench license follows:
-  """
+
     The MIT License
 
     Copyright (c) 2010 Ryan McGrath
@@ -456,10 +441,9 @@ The externally maintained libraries used by rainjs are:
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
-  """
 
 - cli-table. cli-table license follows:
-  """
+
     (The MIT License)
 
     Copyright (c) 2010 LearnBoost &lt;dev@learnboost.com&gt;
@@ -482,11 +466,9 @@ The externally maintained libraries used by rainjs are:
     CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-  """
 
 - jed. jed license follows:
-  """
+
     You may use this software under the WTFPL.
 
     You may contribute to this software under the Dojo CLA - <http://dojofoundation.org/about/cla>
-  """
