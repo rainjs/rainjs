@@ -2,6 +2,12 @@
 Changelog
 =========
 
+------
+v 0.10
+------
+
++ Changed licensing model from MIT to BSD
+
 -----
 v 0.9
 -----
