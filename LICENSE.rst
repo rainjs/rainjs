@@ -32,7 +32,7 @@ IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY O
 This license applies to all parts of rainjs that are not externally maintained libraries.
 The externally maintained libraries used by rainjs are:
 
-- connect. connect's license follows:
+- connect. connect's license follows::
 
     (The MIT License)
 
@@ -59,7 +59,7 @@ The externally maintained libraries used by rainjs are:
     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-- handlebars. handlebars license follows:
+- handlebars. handlebars license follows::
 
     Copyright (C) 2011 by Yehuda Katz
 
@@ -81,7 +81,7 @@ The externally maintained libraries used by rainjs are:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
 
-- jasmine-node. jasmine-node license follows:
+- jasmine-node. jasmine-node license follows::
 
     The MIT License
 
@@ -105,7 +105,7 @@ The externally maintained libraries used by rainjs are:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
 
-- less. less license follows:
+- less. less license follows::
 
                                   Apache License
                             Version 2.0, January 2004
@@ -286,7 +286,7 @@ The externally maintained libraries used by rainjs are:
 
     Copyright (c) 2009-2010 Alexis Sellier
 
-- mime. mime license follows:
+- mime. mime license follows::
 
     Copyright (c) 2010 Benjamin Thomas, Robert Kieffer
 
@@ -308,19 +308,19 @@ The externally maintained libraries used by rainjs are:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
 
-- node.extend. node.extend license follows:
+- node.extend. node.extend license follows::
 
     Copyright 2011, John Resig
     Dual licensed under the MIT or GPL Version 2 licenses.
     http://jquery.org/license
 
-- promised-io. promised-io license follows:
+- promised-io. promised-io license follows::
 
     Promised-IO is part of the Persevere project, and therefore is licensed under the
     AFL or BSD license. The Persevere project is administered under the Dojo foundation,
     and all contributions require a Dojo CLA.
 
-- socket.io. socket.io license follows:
+- socket.io. socket.io license follows::
 
     (The MIT License)
 
@@ -345,7 +345,7 @@ The externally maintained libraries used by rainjs are:
     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-- commander. commander license follows:
+- commander. commander license follows::
 
     (The MIT License)
 
@@ -370,8 +370,8 @@ The externally maintained libraries used by rainjs are:
     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-- mocks. mocks license follows:
-- daemon. daemon license follows:
+- mocks has no license
+- daemon. daemon license follows::
 
     Copyright (c) 2009 Arthur (Slashed), Pedro Teixeira, James Halliday, Zak Taylor, Charlie Robbins
 
@@ -393,7 +393,7 @@ The externally maintained libraries used by rainjs are:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
 
-- colors. colors license follows:
+- colors. colors license follows::
 
     Copyright (c) 2010
 
@@ -418,7 +418,7 @@ The externally maintained libraries used by rainjs are:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
 
-- wrench. wrench license follows:
+- wrench. wrench license follows::
 
     The MIT License
 
@@ -442,7 +442,7 @@ The externally maintained libraries used by rainjs are:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
 
-- cli-table. cli-table license follows:
+- cli-table. cli-table license follows::
 
     (The MIT License)
 
@@ -467,7 +467,7 @@ The externally maintained libraries used by rainjs are:
     TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-- jed. jed license follows:
+- jed. jed license follows::
 
     You may use this software under the WTFPL.
 
