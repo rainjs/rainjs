@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.10.0
+
+* Changed licensing model from MIT to BSD
+
 ## 0.9.0
 
 * Added support for client-side text localization.
