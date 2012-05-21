@@ -123,7 +123,7 @@ jasmine.util.extend(jasmine.getGlobal(), (function () {
         mocks = mocks || {};
         deps = deps || {};
 
-        var file = process.cwd() + modpath;
+        var file = path.join(process.cwd(), modpath);
 
         if (!code[file]) {
             // Use sync version because `require` is sync, so that's what the user expects
