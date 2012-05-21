@@ -215,7 +215,7 @@ jasmine.util.extend(jasmine.getGlobal(), (function () {
                 if (saveInitialValues) {
                     obj.__initialValues[key] = obj[key];
                 }
-                obj[key] = props ? props[key] : undefined;
+                obj[key] = props ? props[key] : obj[key];
             }
         }
     };
