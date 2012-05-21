@@ -39,37 +39,6 @@ Constructor
 
 
 
-Methods
--------
-
-..
-   class-methods
-
-
-initialize
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-.. js:function:: Server#initialize()
-
-
-
-
-
-Starts the server.
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
     
 
 Attributes
