@@ -8,12 +8,12 @@ This document describes the coding conventions used in the source code.
 Identifiers
 -----------
 
-- Identifiers are in camel case.
-- Constructor functions start with a capital letter.
-- Variable and normal function names start with a lower case letter.
-- Function names always start with a verb, e.g.: *lock*, *openFile*, *parseUsersList* etc.
-- Variable names never start with a verb, except for booleans: *isLocked*, *hasFeature* etc.
-- File names use only lower case letters and underscores for spaces, e.g.: view_manager.js.
+- Identifiers are in camel case
+- Constructor functions start with a capital letter
+- Variable and normal function names start with a lower case letter
+- Function names always start with a verb, e.g.: ``lock``, ``openFile``, ``parseUsersList``
+- Variable names never start with a verb, except for booleans: ``isLocked``, ``hasFeature``
+- File names use only lower case letters and underscores for spaces, e.g.: ``view_manager.js``
 
 -----
 Style
@@ -34,7 +34,7 @@ Style
         function ajax(options) { /* ... */ }
         ajax({success: function (response) { /* ... */ });
 - Always use braces to surround the body of flow control statements, even when the body consists of a single statement
-- Put a semicolon after every statement, except for *for*, *function*, *if*, *try*, *switch*, but including after a function expression, e.g.:
+- Put a semicolon after every statement, except for ``for``, ``function``, ``if``, ``try``, ``switch``, but including after a function expression, e.g.:
     .. code-block:: javascript
         :linenos:
 
@@ -67,7 +67,7 @@ Best Practices
             dnaSequence.push(nucleotides[Math.random() * 3]);
         }
         console.log(dnaSequence.join(""));
-- Use the bitwise negation operator to optimize string *indexOf* calls when checking for the existence of a substring, e.g.:
+- Use the bitwise negation operator to optimize string ``indexOf`` calls when checking for the existence of a substring, e.g.:
     .. code-block:: javascript
         :linenos:
 
@@ -75,14 +75,7 @@ Best Practices
             /* Same as: dnaSequence.indexOf("GATTACA") !== -1 */
         }
 - Usually try to accept an object as a single input argument for a function instead of a long list of arguments.
-- Use a comma at the end of the line when declaring multiple variables and also align equal signs e.g.:
-    .. code-block:: javascript
-        :linenos:
-
-        var div      = document.createElement("div"),
-            fragment = document.createDocumentFragment(),
-            email    = "rain@cloud.net";
-- Always provide a *default* case to switch statements.
+- Always provide a ``default`` case to switch statements.
 
 -------
 Classes
@@ -90,31 +83,50 @@ Classes
 
 - Always use the prototype pattern for classes
 
-- Private functions are scoped to the node/requirejs module and always receive as the first argument
-  a *self* object, which is the object instance the function is called on:
+- We use a naming convention for private functions of putting an underscore as the first character
+  of the function name. We also make these functions public on the prototype. Avoid declaring private
+  functions hidden in closures or on the top level of node.js modules as these cannot be mocked
+  in unit tests (code coverage is the main criteria behind choosing this naming convention and having
+  only public functions):
 
     .. code-block:: javascript
         :linenos:
 
-        function privateMethod(self, val) {
-            // self is the object instance, other arguments follow afterwards
+        // WRONG
+        function privateMethod(self) {
         }
+
+        // CORRECT
+        myClass.prototype._privateMethod = function () {
+        };
 
         // Example of calling the private method ...
         myClass.prototype.publicMethod = function () {
 
             // ... from the object instance context
-            privateMethod(this, val);
+            this._privateMethod(val);
 
-            // ... and from an asynchronous context, by using a reference to this
+            // ... and from an asynchronous context, by using a reference
+            // to this
             var self = this;
             setTimeout(function (val) {
-                privateMethod(self, val);
+                self._privateMethod(val);
             }, 1000);
         };
 
 - Caution: if you declare a property that is scoped to the node/requirejs module, it will be a
   static property, and all instances of the class will have access to the same value.
+- Private properties follow the same naming convention:
+
+    .. code-block:: javascript
+        :linenos:
+
+        // private properties are made public but with a leading underscore
+        // in their names
+        function MyClass() {
+            this._root = this.context.getRoot();
+            this._element = this._root.find('.element');
+        }
 
 --------
 Patterns
@@ -146,45 +158,11 @@ Singleton
 Errors
 ------
 
-- All **error objects** that are to be returned have the following structure:
-
-    .. code-block:: javascript
-        :linenos:
-
-        {
-            type: {String | undefined},
-            message: {String},
-            code: {String | Number | undefined}
-            ...
-        }
-
-  Only the ``message`` property is mandatory. The meaning of the error object properties is:
-
-  ``type`` (String | undefined)
-    The type of the error, e.g.: io, net etc.
-
-  ``message`` (String)
-    The detailed message of the error.
-
-  ``code`` (String | Number | undefined)
-    The optional code of the error.
-
-  Any other properties may be added to the error object if they are of concern to the respective
-  error.
-
-- *Errors should never be thrown* since all code needs to be asynchronous.
-- Usually, **promises** should be used that are rejected with the error object described above.
+- Errors should be thrown only using the globaly available ``RainError`` class.
 - If a function needs to accept a **callback**, the callback must also accept as the first argument an
   error object, which might be null or undefined in case the call was successful.
 - In node, classes may inherit from **``EventEmitter``** and emit an ``error`` event when an error
   condition occurs, passing it the error object described above. [#node-error-event]_
-
---------
-Comments
---------
-
-- Use `jsdoc-toolkit <http://code.google.com/p/jsdoc-toolkit/>`_ for code comments.
-- Avoid redundant or obvious comments.
 
 .. rubric:: Footnotes
 
