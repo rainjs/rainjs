@@ -67,9 +67,9 @@ jasmine.util.extend(jasmine.getGlobal(), (function () {
 
     /**
      * Loads a module and returns it's entire context.
-     * Convenience method for :js:func`#loadModule` with the last parameter set to true.
+     * Convenience method for :js:func`JasmineRain#loadModule` with the last parameter set to true.
      *
-     * @see :js:func:`#loadModule`
+     * @see :js:func:`JasmineRain#loadModule`
      */
     JasmineRain.prototype.loadModuleContext = function () {
         var args = [];
@@ -88,9 +88,9 @@ jasmine.util.extend(jasmine.getGlobal(), (function () {
 
     /**
      * Loads a module and returns it's exports object.
-     * Convenience method for :js:func`#loadModule` with the last parameter set to false.
+     * Convenience method for :js:func`JasmineRain#loadModule` with the last parameter set to false.
      *
-     * @see :js:func:`#loadModule`
+     * @see :js:func:`JasmineRain#loadModule`
      */
     JasmineRain.prototype.loadModuleExports = function () {
         var args = [];
