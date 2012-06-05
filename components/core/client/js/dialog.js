@@ -43,6 +43,7 @@ define(['raintime'], function (Raintime) {
     Dialog.prototype.destroy = function() {
         var root = this.context.getRoot();
 
+        // clear the contents of the dialog
         root.empty();
     };
 
