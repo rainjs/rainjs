@@ -21,6 +21,7 @@ Getting started
     server/component_descriptor
     getting_started/coding_guidelines
     getting_started/documenting
+    getting_started/node_programming_best_practices
 
 -------------------
 Client side modules
