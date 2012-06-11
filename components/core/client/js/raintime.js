@@ -387,7 +387,9 @@ define(['raintime/lib/promise',
             return;
         }
 
-        controller.emit(eventName, data);
+        if (typeof controller[eventName] == 'function') {
+            controller.emit(eventName, data);
+        }
     }
 
     /**
