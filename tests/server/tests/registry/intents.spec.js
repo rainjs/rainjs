@@ -28,8 +28,7 @@
 var cwd = process.cwd();
 var fs = require('fs');
 var config = require(cwd + '/lib/configuration');
-var loadFile = require(cwd + '/tests/server/rain_mocker');
-var registryPlugin = loadFile(cwd + '/lib/registry/intents.js', {
+var registryPlugin = loadModuleExports('/lib/registry/intents.js', {
     '../intent_registry': {}
 });
 
@@ -38,7 +37,7 @@ describe('Registry Plugin: ' + registryPlugin.name, function () {
         registeredIntents = null;
     beforeEach(function(){
         registeredIntents = [];
-        registryPlugin = loadFile(cwd + '/lib/registry/intents.js', {
+        registryPlugin = loadModuleExports('/lib/registry/intents.js', {
             '../intent_registry': {
                 register: function(component, intent){
                     registeredIntents.push({

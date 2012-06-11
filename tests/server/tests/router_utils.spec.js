@@ -29,7 +29,6 @@ var cwd = process.cwd();
 var path = require('path');
 var globals = require(process.cwd() + '/lib/globals');
 var fs = require('fs');
-var loadFile = require(cwd + '/tests/server/rain_mocker');
 var http = require('mocks').http;
 var connectUtils = require('connect/lib/utils');
 var errorComponent = JSON.parse(
@@ -40,7 +39,7 @@ var configuration = JSON.parse(
     fs.readFileSync(cwd +'/tests/server/fixtures/server.conf')
 );
 
-var routerUtils = loadFile(cwd + '/lib/router_utils.js', {
+var routerUtils = loadModuleContext('/lib/router_utils.js', {
     './renderer': {
         renderBootstrap: function (component, view, req, res) {
             return "bootstrap with " + component.id + " " + component.version + " " + view;
@@ -197,8 +196,7 @@ describe('Router Utilities', function () {
         });
 
         it('must return an error', function () {
-            var mockComponentRegistry = loadFile(process.cwd() + '/lib/component_registry.js',
-                                                 null, true);
+            var mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
             mockComponentRegistry.scanComponentFolder();
             var componentRegistry = new mockComponentRegistry.ComponentRegistry();
             var maxAge = 150000000;
@@ -223,8 +221,7 @@ describe('Router Utilities', function () {
         });
 
         it('must return the resource', function () {
-            var mockComponentRegistry = loadFile(process.cwd() + '/lib/component_registry.js',
-                                                 null, true);
+            var mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
             mockComponentRegistry.scanComponentFolder();
             var componentRegistry = new mockComponentRegistry.ComponentRegistry();
             var maxAge = 150000000;
@@ -270,8 +267,7 @@ describe('Router Utilities', function () {
          * @param {Boolean} notFound true when the file should be missing
          */
         function localize(filePath, expectedPath, notFound) {
-            var mockComponentRegistry = loadFile(process.cwd() + '/lib/component_registry.js',
-                                                 null, true);
+            var mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
             mockComponentRegistry.scanComponentFolder();
             var componentRegistry = new mockComponentRegistry.ComponentRegistry();
             var maxAge = 150000000;

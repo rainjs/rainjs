@@ -28,7 +28,6 @@
 var cwd = process.cwd();
 var globals = require(cwd + '/lib/globals.js');
 var config = require(cwd + '/lib/configuration.js');
-var loadFile = require(cwd + '/tests/server/rain_mocker');
 var routerUtils = require(cwd + '/lib/router_utils');
 
 var http = require('mocks').http;
@@ -43,7 +42,7 @@ describe('Router Plugin: CSS Route', function () {
     beforeEach(function() {
         response = new http.ServerResponse();
         request = new http.ServerRequest();
-        mockComponentRegistry = loadFile(process.cwd() + '/lib/component_registry.js', null, true);
+        mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
         mockComponentRegistry.scanComponentFolder();
 
         componentRegistry = new mockComponentRegistry.ComponentRegistry();
@@ -54,7 +53,7 @@ describe('Router Plugin: CSS Route', function () {
             }
         };
 
-        routerPlugin = loadFile(cwd + '/lib/routes/css.js', {
+        routerPlugin = loadModuleExports('/lib/routes/css.js', {
             "../router_utils": {
                 handleError: function (error, request, response) {
                     response._body = 'error|' + error.message + '|' + error.code;

@@ -27,7 +27,6 @@
 
 var cwd = process.cwd();
 var globals = require(cwd + '/lib/globals.js');
-var loadFile = require(cwd + '/tests/server/rain_mocker');
 var Handlebars = require('handlebars');
 
 var configuration = {};
@@ -36,11 +35,11 @@ describe('Registry Plugin: Precompile Templates Plugin', function () {
     var mockComponentRegistry, componentRegistry, registryPlugin;
 
     beforeEach(function () {
-        mockComponentRegistry = loadFile(process.cwd() + '/lib/component_registry.js', null, true);
+        mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
         mockComponentRegistry.scanComponentFolder();
         componentRegistry = new mockComponentRegistry.ComponentRegistry();
 
-        registryPlugin = loadFile(cwd + '/lib/registry/precompile_templates.js', {
+        registryPlugin = loadModuleExports('/lib/registry/precompile_templates.js', {
             '../handlebars': Handlebars,
             '../configuration': configuration
         });
