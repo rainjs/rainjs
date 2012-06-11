@@ -14,12 +14,8 @@ Class ProxyStore
    class-title
 
 
-Proxy store implementation for connect. Uses dependency injection to aggregate implementations
-for local and remote stores. By default, a :js:class:`MemoryStore` is used for the local store
-and a :js:class:`MemoryStore` is used for the remote store. It uses lazy instantiation of stores.
-
-It exposes the :js:func:`ProxyStore#authorize` method for switching the store implementation at
-runtime, i.e. providing a way to switch the store at runtime after login.
+Proxy store implementation for connect. Uses dependency injection to set the store implementation.
+By default, a :js:class:`MemoryStore` is used. It uses lazy instantiation.
 
 
 
@@ -34,16 +30,22 @@ runtime, i.e. providing a way to switch the store at runtime after login.
 Constructor
 -----------
 
-.. js:class:: ProxyStore([LocalStore], [RemoteStore])
+.. js:class:: ProxyStore([Store], cookie)
 
 
 
     
-    :param connect.session.Store LocalStore: 
-        store class to use for local storage (*Default*: MemoryStore)
+    :param connect.session.Store Store: 
+        store implementation (*Default*: MemoryStore)
     
-    :param connect.session.Store RemoteStore: 
-        store class to use for remote storage (*Default*: MemoryStore)
+    :param Object cookie: 
+        the cookie configuration for the session store 
+    
+    :param String cookie.path: 
+        the path to be set to the cookies 
+    
+    :param Boolean cookie.httpOnly: 
+        wether the cookie is http only or not 
     
 
 
@@ -57,42 +59,6 @@ Methods
 
 ..
    class-methods
-
-
-authorize
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-.. js:function:: ProxyStore#authorize(sid, remotesid, sess)
-
-
-    
-    :param String sid: 
-        the session id to be authorized 
-    
-    :param String remotesid: 
-        the remote session id 
-    
-    :param connect.session.Session sess: 
-        the session to authorize 
-    
-
-
-
-
-Authorizes a session.
-
-Stores the session id in the list of authorized sessions that use the remote store.
-
-
-
-
-
-
-
-
-
-    
-
 
 
 destroy
@@ -113,8 +79,6 @@ destroy
 
 
 Destroys the session with a given session id.
-
-Destroys the session both on the remote and on the local stores.
 
 
 
@@ -146,39 +110,6 @@ get
 
 
 Get the session from the store with a given session id.
-
-
-
-
-
-
-
-
-
-    
-
-
-
-getRemoteSid
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-.. js:function:: ProxyStore#getRemoteSid(sid)
-
-
-    
-    :param String sid: 
-        the session id 
-    
-
-
-
-    
-    :returns String:
-        the remote session id 
-    
-
-
-Gets the remote session id.
 
 
 
@@ -236,13 +167,13 @@ Attributes
    class-attributes
 
 
-authorizedSessions
+sessionCache
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:attribute:: authorizedSessions   
+.. js:attribute:: sessionCache   
 
 
-the object associating authorized sids with remote sids
+cache for session objects for concurrent access control to the store
 
 
 
@@ -255,32 +186,13 @@ the object associating authorized sids with remote sids
 
 
 
-localStore
+store
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:attribute:: localStore   
+.. js:attribute:: store   
 
 
-the local store instance
-
-
-
-
-
-
-
-
-    
-
-
-
-remoteStore
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-.. js:attribute:: remoteStore   
-
-
-the remote store instance
+the store instance
 
 
 

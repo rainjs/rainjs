@@ -3,20 +3,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Hijax introduction &mdash; Rain 0.10.0 documentation</title>
-    
+    <title>Hijax introduction &mdash; Rain v0.11.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.10.0',
+        VERSION:     '0.11.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +22,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain 0.10.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.11.0 documentation" href="../index.html" />
     <link rel="next" title="View Instances" href="Features-proposal-instances.html" />
     <link rel="prev" title="Fragments Configuration Introduction" href="Features-proposal-fragments-configuration.html" /> 
   </head>
@@ -42,7 +39,7 @@
         <li class="right" >
           <a href="Features-proposal-fragments-configuration.html" title="Fragments Configuration Introduction"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain 0.10.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.11.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -57,13 +54,13 @@
 <div class="section" id="functional-requirements">
 <h2>Functional requirements<a class="headerlink" href="#functional-requirements" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li>RAIN must support smooth transitions beetween pages.</li>
 <li>RAIN must not break links when hijax is enabled.</li>
 <li>RAIN must provide enable / disable mechanism for hijax.</li>
 <li>RAIN must provide transition configuration at application level.</li>
 </ol>
-</div></blockquote>
+</blockquote>
 </div>
 <div class="section" id="architecture">
 <h2>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h2>
@@ -74,11 +71,11 @@
 <p>In the above example you can see how a hijax request is processed into RAIN. Initially when a request is done to RAIN server it determines if the requested view has hijax enabled. If it has the parser behaves differently in sense that all hyperlinks will have some actions added automatically by the parser. After this the page is displayed in the client browser. Now each of the internal hyperlinks within the markup are guaranteed to be displayed correctly and transitions to be executed.</p>
 <p>Using this approach you will benefit from:</p>
 <blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li>Browser history.</li>
 <li>Great user experience.</li>
 </ol>
-</div></blockquote>
+</blockquote>
 <div class="section" id="example-1-android-l-f">
 <h3>Example 1: Android L&amp;F<a class="headerlink" href="#example-1-android-l-f" title="Permalink to this headline">¶</a></h3>
 <p>If you want to make you site behave like an Android application you can use hijax support provided by RAIN.</p>
@@ -116,10 +113,10 @@
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
 <p>For history management similar to html5 we use SWFAddress framework.</p>
 <blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li><a class="reference external" href="http://www.asual.com/swfaddress/">http://www.asual.com/swfaddress/</a></li>
 </ul>
-</div></blockquote>
+</blockquote>
 </div>
 </div>
 
@@ -155,7 +152,7 @@
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" size="18" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -181,11 +178,11 @@
         <li class="right" >
           <a href="Features-proposal-fragments-configuration.html" title="Fragments Configuration Introduction"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain 0.10.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.11.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

@@ -3,20 +3,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Coding Guidelines &mdash; Rain 0.10.0 documentation</title>
-    
+    <title>Coding Guidelines &mdash; Rain v0.11.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.10.0',
+        VERSION:     '0.11.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +22,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain 0.10.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.11.0 documentation" href="../index.html" />
     <link rel="next" title="Documenting Rain" href="documenting.html" />
     <link rel="prev" title="RAIN component descriptor" href="../server/component_descriptor.html" /> 
   </head>
@@ -42,7 +39,7 @@
         <li class="right" >
           <a href="../server/component_descriptor.html" title="RAIN component descriptor"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain 0.10.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.11.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -57,12 +54,12 @@
 <div class="section" id="identifiers">
 <h2>Identifiers<a class="headerlink" href="#identifiers" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Identifiers are in camel case.</li>
-<li>Constructor functions start with a capital letter.</li>
-<li>Variable and normal function names start with a lower case letter.</li>
-<li>Function names always start with a verb, e.g.: <em>lock</em>, <em>openFile</em>, <em>parseUsersList</em> etc.</li>
-<li>Variable names never start with a verb, except for booleans: <em>isLocked</em>, <em>hasFeature</em> etc.</li>
-<li>File names use only lower case letters and underscores for spaces, e.g.: view_manager.js.</li>
+<li>Identifiers are in camel case</li>
+<li>Constructor functions start with a capital letter</li>
+<li>Variable and normal function names start with a lower case letter</li>
+<li>Function names always start with a verb, e.g.: <tt class="docutils literal"><span class="pre">lock</span></tt>, <tt class="docutils literal"><span class="pre">openFile</span></tt>, <tt class="docutils literal"><span class="pre">parseUsersList</span></tt></li>
+<li>Variable names never start with a verb, except for booleans: <tt class="docutils literal"><span class="pre">isLocked</span></tt>, <tt class="docutils literal"><span class="pre">hasFeature</span></tt></li>
+<li>File names use only lower case letters and underscores for spaces, e.g.: <tt class="docutils literal"><span class="pre">view_manager.js</span></tt></li>
 </ul>
 </div>
 <div class="section" id="style">
@@ -95,7 +92,7 @@
 <li><p class="first">Always use braces to surround the body of flow control statements, even when the body consists of a single statement</p>
 </li>
 <li><dl class="first docutils">
-<dt>Put a semicolon after every statement, except for <em>for</em>, <em>function</em>, <em>if</em>, <em>try</em>, <em>switch</em>, but including after a function expression, e.g.:</dt>
+<dt>Put a semicolon after every statement, except for <tt class="docutils literal"><span class="pre">for</span></tt>, <tt class="docutils literal"><span class="pre">function</span></tt>, <tt class="docutils literal"><span class="pre">if</span></tt>, <tt class="docutils literal"><span class="pre">try</span></tt>, <tt class="docutils literal"><span class="pre">switch</span></tt>, but including after a function expression, e.g.:</dt>
 <dd><div class="first last highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">return</span> <span class="kd">function</span> <span class="p">{</span>
@@ -148,7 +145,7 @@
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt>Use the bitwise negation operator to optimize string <em>indexOf</em> calls when checking for the existence of a substring, e.g.:</dt>
+<dt>Use the bitwise negation operator to optimize string <tt class="docutils literal"><span class="pre">indexOf</span></tt> calls when checking for the existence of a substring, e.g.:</dt>
 <dd><div class="first last highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">if</span> <span class="p">(</span><span class="o">~</span><span class="nx">dnaSequence</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;GATTACA&quot;</span><span class="p">))</span> <span class="p">{</span>
@@ -161,19 +158,7 @@
 </li>
 <li><p class="first">Usually try to accept an object as a single input argument for a function instead of a long list of arguments.</p>
 </li>
-<li><dl class="first docutils">
-<dt>Use a comma at the end of the line when declaring multiple variables and also align equal signs e.g.:</dt>
-<dd><div class="first last highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3</pre></div></td><td class="code"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">div</span>      <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">),</span>
-    <span class="nx">fragment</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createDocumentFragment</span><span class="p">(),</span>
-    <span class="nx">email</span>    <span class="o">=</span> <span class="s2">&quot;rain@cloud.net&quot;</span><span class="p">;</span>
-</pre></div>
-</td></tr></table></div>
-</dd>
-</dl>
-</li>
-<li><p class="first">Always provide a <em>default</em> case to switch statements.</p>
+<li><p class="first">Always provide a <tt class="docutils literal"><span class="pre">default</span></tt> case to switch statements.</p>
 </li>
 </ul>
 </div>
@@ -182,10 +167,13 @@
 <ul>
 <li><p class="first">Always use the prototype pattern for classes</p>
 </li>
-<li><p class="first">Private functions are scoped to the node/requirejs module and always receive as the first argument
-a <em>self</em> object, which is the object instance the function is called on:</p>
+<li><p class="first">We use a naming convention for private functions of putting an underscore as the first character
+of the function name. We also make these functions public on the prototype. Avoid declaring private
+functions hidden in closures or on the top level of node.js modules as these cannot be mocked
+in unit tests (code coverage is the main criteria behind choosing this naming convention and having
+only public functions):</p>
 <blockquote>
-<div><div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -200,28 +188,55 @@ a <em>self</em> object, which is the object instance the function is called on:<
 13
 14
 15
-16</pre></div></td><td class="code"><div class="highlight"><pre><span class="kd">function</span> <span class="nx">privateMethod</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// self is the object instance, other arguments follow afterwards</span>
+16
+17
+18
+19
+20
+21</pre></div></td><td class="code"><div class="highlight"><pre><span class="c1">// WRONG</span>
+<span class="kd">function</span> <span class="nx">privateMethod</span><span class="p">(</span><span class="nx">self</span><span class="p">)</span> <span class="p">{</span>
 <span class="p">}</span>
+
+<span class="c1">// CORRECT</span>
+<span class="nx">myClass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">_privateMethod</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+<span class="p">};</span>
 
 <span class="c1">// Example of calling the private method ...</span>
 <span class="nx">myClass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">publicMethod</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
 
     <span class="c1">// ... from the object instance context</span>
-    <span class="nx">privateMethod</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">val</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">_privateMethod</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span>
 
-    <span class="c1">// ... and from an asynchronous context, by using a reference to this</span>
+    <span class="c1">// ... and from an asynchronous context, by using a reference</span>
+    <span class="c1">// to this</span>
     <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
     <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">privateMethod</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">val</span><span class="p">);</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">_privateMethod</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span>
     <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
 <span class="p">};</span>
 </pre></div>
 </td></tr></table></div>
-</div></blockquote>
+</blockquote>
 </li>
 <li><p class="first">Caution: if you declare a property that is scoped to the node/requirejs module, it will be a
 static property, and all instances of the class will have access to the same value.</p>
+</li>
+<li><p class="first">Private properties follow the same naming convention:</p>
+<blockquote>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span class="c1">// private properties are made public but with a leading underscore</span>
+<span class="c1">// in their names</span>
+<span class="kd">function</span> <span class="nx">MyClass</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">_root</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">getRoot</span><span class="p">();</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">_element</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_root</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.element&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</blockquote>
 </li>
 </ul>
 </div>
@@ -232,7 +247,7 @@ static property, and all instances of the class will have access to the same val
 <ul>
 <li><p class="first">When defining singletons, we use the following simple pattern</p>
 <blockquote>
-<div><div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3
 4
@@ -251,7 +266,7 @@ static property, and all instances of the class will have access to the same val
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">A</span><span class="p">;</span>
 </pre></div>
 </td></tr></table></div>
-</div></blockquote>
+</blockquote>
 </li>
 <li><p class="first">This avoids running code at require time</p>
 </li>
@@ -262,55 +277,12 @@ static property, and all instances of the class will have access to the same val
 </div>
 <div class="section" id="errors">
 <h2>Errors<a class="headerlink" href="#errors" title="Permalink to this headline">¶</a></h2>
-<ul>
-<li><p class="first">All <strong>error objects</strong> that are to be returned have the following structure:</p>
-<blockquote>
-<div><div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4
-5
-6</pre></div></td><td class="code"><div class="highlight"><pre><span class="p">{</span>
-    <span class="nx">type</span><span class="o">:</span> <span class="p">{</span><span class="nb">String</span> <span class="o">|</span> <span class="kc">undefined</span><span class="p">},</span>
-    <span class="nx">message</span><span class="o">:</span> <span class="p">{</span><span class="nb">String</span><span class="p">},</span>
-    <span class="nx">code</span><span class="o">:</span> <span class="p">{</span><span class="nb">String</span> <span class="o">|</span> <span class="nb">Number</span> <span class="o">|</span> <span class="kc">undefined</span><span class="p">}</span>
-    <span class="p">...</span>
-<span class="p">}</span>
-</pre></div>
-</td></tr></table></div>
-</div></blockquote>
-<p>Only the <tt class="docutils literal"><span class="pre">message</span></tt> property is mandatory. The meaning of the error object properties is:</p>
-<dl class="docutils">
-<dt><tt class="docutils literal"><span class="pre">type</span></tt> (String | undefined)</dt>
-<dd><p class="first last">The type of the error, e.g.: io, net etc.</p>
-</dd>
-<dt><tt class="docutils literal"><span class="pre">message</span></tt> (String)</dt>
-<dd><p class="first last">The detailed message of the error.</p>
-</dd>
-<dt><tt class="docutils literal"><span class="pre">code</span></tt> (String | Number | undefined)</dt>
-<dd><p class="first last">The optional code of the error.</p>
-</dd>
-</dl>
-<p>Any other properties may be added to the error object if they are of concern to the respective
-error.</p>
-</li>
-<li><p class="first"><em>Errors should never be thrown</em> since all code needs to be asynchronous.</p>
-</li>
-<li><p class="first">Usually, <strong>promises</strong> should be used that are rejected with the error object described above.</p>
-</li>
-<li><p class="first">If a function needs to accept a <strong>callback</strong>, the callback must also accept as the first argument an
-error object, which might be null or undefined in case the call was successful.</p>
-</li>
-<li><p class="first">In node, classes may inherit from <strong>``EventEmitter``</strong> and emit an <tt class="docutils literal"><span class="pre">error</span></tt> event when an error
-condition occurs, passing it the error object described above. <a class="footnote-reference" href="#node-error-event" id="id1">[1]</a></p>
-</li>
-</ul>
-</div>
-<div class="section" id="comments">
-<h2>Comments<a class="headerlink" href="#comments" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Use <a class="reference external" href="http://code.google.com/p/jsdoc-toolkit/">jsdoc-toolkit</a> for code comments.</li>
-<li>Avoid redundant or obvious comments.</li>
+<li>Errors should be thrown only using the globaly available <tt class="docutils literal"><span class="pre">RainError</span></tt> class.</li>
+<li>If a function needs to accept a <strong>callback</strong>, the callback must also accept as the first argument an
+error object, which might be null or undefined in case the call was successful.</li>
+<li>In node, classes may inherit from <strong>``EventEmitter``</strong> and emit an <tt class="docutils literal"><span class="pre">error</span></tt> event when an error
+condition occurs, passing it the error object described above. <a class="footnote-reference" href="#node-error-event" id="id1">[1]</a></li>
 </ul>
 <p class="rubric">Footnotes</p>
 <table class="docutils footnote" frame="void" id="node-error-event" rules="none">
@@ -340,7 +312,6 @@ condition occurs, passing it the error object described above. <a class="footnot
 </ul>
 </li>
 <li><a class="reference internal" href="#errors">Errors</a></li>
-<li><a class="reference internal" href="#comments">Comments</a></li>
 </ul>
 </li>
 </ul>
@@ -354,7 +325,7 @@ condition occurs, passing it the error object described above. <a class="footnot
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" size="18" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -380,11 +351,11 @@ condition occurs, passing it the error object described above. <a class="footnot
         <li class="right" >
           <a href="../server/component_descriptor.html" title="RAIN component descriptor"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain 0.10.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.11.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

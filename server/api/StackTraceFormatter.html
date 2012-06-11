@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Namespace Authorization &mdash; Rain v0.11.0 documentation</title>
+    <title>Class StackTraceFormatter &mdash; Rain v0.11.0 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -23,8 +23,8 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="Rain v0.11.0 documentation" href="../../index.html" />
-    <link rel="next" title="Class ComponentHelper" href="ComponentHelper.html" />
-    <link rel="prev" title="RAIN Localization" href="../localization.html" /> 
+    <link rel="next" title="Class Translation" href="Translation.html" />
+    <link rel="prev" title="Class Server" href="Server.html" /> 
   </head>
   <body>
     <div class="related">
@@ -34,10 +34,10 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="ComponentHelper.html" title="Class ComponentHelper"
+          <a href="Translation.html" title="Class Translation"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../localization.html" title="RAIN Localization"
+          <a href="Server.html" title="Class Server"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Rain v0.11.0 documentation</a> &raquo;</li> 
       </ul>
@@ -48,45 +48,71 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="namespace-authorization">
-<h1>Namespace Authorization<a class="headerlink" href="#namespace-authorization" title="Permalink to this headline">¶</a></h1>
-<p>Provides methods that validate the user&#8217;s permissions against the defined authorization rules</p>
+  <div class="section" id="class-stacktraceformatter">
+<h1>Class StackTraceFormatter<a class="headerlink" href="#class-stacktraceformatter" title="Permalink to this headline">¶</a></h1>
+<p>Cross-browser stack trace formatter.
+Supports Firefox, Chrome, IE and Safari as well as node.js.</p>
+<p>Note: it currently does not aim to reproduce the same stack trace
+for every browser.</p>
 <div class="section" id="constructor">
 <h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="Authorization">
-<em class="property">class </em><tt class="descname">Authorization</tt><big>(</big><big>)</big><a class="headerlink" href="#Authorization" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="methods">
-<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="authorize">
-<h3>authorize<a class="headerlink" href="#authorize" title="Permalink to this headline">¶</a></h3>
-<dl class="function">
-<dt id="Authorization.authorize">
-<tt class="descclassname">Authorization.</tt><tt class="descname">authorize</tt><big>(</big><em>securityContext</em>, <em>permissions</em>, <em>dynamicConditions</em><big>)</big><a class="headerlink" href="#Authorization.authorize" title="Permalink to this definition">¶</a></dt>
+<dt id="StackTraceFormatter">
+<em class="property">class </em><tt class="descname">StackTraceFormatter</tt><big>(</big><em>error</em><big>)</big><a class="headerlink" href="#StackTraceFormatter" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>securityContext</strong> (<em>Object</em>) &#8211; the security context</li>
-<li><strong>securityContext.user</strong> (<em>Object</em>) &#8211; the user to authorize</li>
-<li><strong>permissions</strong> (<em>Array</em>) &#8211; the permissions required to access a resource</li>
-<li><strong>dynamicConditions</strong> (<em>Array</em>) &#8211; the dynamic conditions to execute</li>
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>error</strong> (<em>Error</em>) &#8211; the thrown error</li>
 </ul>
-</td>
-</tr>
-<tr class="field"><th class="field-name" colspan="2">Returns Boolean:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><p class="first last">the result of the authorization checks</p>
 </td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<p>Checks if an user is allowed to access a resource.</p>
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="format">
+<h3>format<a class="headerlink" href="#format" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="StackTraceFormatter#format">
+<tt class="descname">StackTraceFormatter#format</tt><big>(</big><big>)</big><a class="headerlink" href="#StackTraceFormatter#format" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns String:</th><td class="field-body">the formatted stack trace</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Formats the stack trace for a meaningful inspection.
+Removes the inner functions from RAIN that appear at the top of the stack
+and ensures cross-browser functionality (e.g. IE support).</p>
+</div>
+</div>
+<div class="section" id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="error">
+<h3>error<a class="headerlink" href="#error" title="Permalink to this headline">¶</a></h3>
+<dl class="attribute">
+<dt>
+<tt class="descname">error</tt></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="implementation">
+<h3>implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h3>
+<dl class="attribute">
+<dt>
+<tt class="descname">implementation</tt></dt>
+<dd></dd></dl>
+
+<p>the stack formatter implementation used</p>
 </div>
 </div>
 </div>
@@ -99,10 +125,15 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Namespace Authorization</a><ul>
+<li><a class="reference internal" href="#">Class StackTraceFormatter</a><ul>
 <li><a class="reference internal" href="#constructor">Constructor</a></li>
 <li><a class="reference internal" href="#methods">Methods</a><ul>
-<li><a class="reference internal" href="#authorize">authorize</a></li>
+<li><a class="reference internal" href="#format">format</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#attributes">Attributes</a><ul>
+<li><a class="reference internal" href="#error">error</a></li>
+<li><a class="reference internal" href="#implementation">implementation</a></li>
 </ul>
 </li>
 </ul>
@@ -110,11 +141,11 @@
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../localization.html"
-                        title="previous chapter">RAIN Localization</a></p>
+  <p class="topless"><a href="Server.html"
+                        title="previous chapter">Class Server</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="ComponentHelper.html"
-                        title="next chapter">Class ComponentHelper</a></p>
+  <p class="topless"><a href="Translation.html"
+                        title="next chapter">Class Translation</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -139,10 +170,10 @@
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="ComponentHelper.html" title="Class ComponentHelper"
+          <a href="Translation.html" title="Class Translation"
              >next</a> |</li>
         <li class="right" >
-          <a href="../localization.html" title="RAIN Localization"
+          <a href="Server.html" title="Class Server"
              >previous</a> |</li>
         <li><a href="../../index.html">Rain v0.11.0 documentation</a> &raquo;</li> 
       </ul>
