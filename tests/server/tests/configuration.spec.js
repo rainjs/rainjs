@@ -28,7 +28,6 @@
 var cwd = process.cwd();
 var path = require('path');
 var globals = require(cwd + '/lib/globals');
-var loadFile = require(cwd + '/tests/server/rain_mocker');
 
 var configurationsFolder = cwd + '/tests/server/fixtures/';
 
@@ -40,11 +39,11 @@ describe('Server configuration and validation', function () {
      * @param {String} configPath the configuration file path
      */
     function loadConfiguration(configPath) {
-        var mockConfiguration = loadFile(cwd + '/lib/configuration.js', {
+        var mockConfiguration = loadModuleContext('/lib/configuration.js', {
             'commander': {
                 'conf': configPath
             }
-        }, true);
+        });
         return new mockConfiguration.Configuration();
     }
 

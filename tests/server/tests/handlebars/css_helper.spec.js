@@ -28,13 +28,12 @@
 var cwd = process.cwd();
 var globals = require(cwd + '/lib/globals.js');
 var config = require(cwd + '/lib/configuration');
-var loadFile = require(cwd + '/tests/server/rain_mocker');
 
 describe('Handlebars css helper', function () {
     var cssHelper, Handlebars, mockComponentRegistry, componentRegistry, rainContext;
 
     beforeEach(function () {
-        mockComponentRegistry = loadFile(process.cwd() + '/lib/component_registry.js', null, true);
+        mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
         mockComponentRegistry.scanComponentFolder();
         componentRegistry = new mockComponentRegistry.ComponentRegistry();
         rainContext = {
@@ -45,7 +44,7 @@ describe('Handlebars css helper', function () {
             }
         };
 
-        cssHelper = loadFile(cwd + '/lib/handlebars/css.js', {
+        cssHelper = loadModuleExports('/lib/handlebars/css.js', {
             '../component_registry': componentRegistry,
             '../renderer': {
                 rain: rainContext

@@ -27,7 +27,6 @@
 
 var cwd = process.cwd();
 var globals = require(cwd + '/lib/globals');
-var loadFile = require(cwd + '/tests/server/rain_mocker');
 var configuration = require(cwd + '/lib/configuration');
 
 describe('Error handler', function () {
@@ -36,17 +35,17 @@ describe('Error handler', function () {
         mockConfiguration;
 
     beforeEach(function () {
-        mockComponentRegistry = loadFile(process.cwd() + '/lib/component_registry.js', null, true);
+        mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
         mockComponentRegistry.scanComponentFolder();
         componentRegistry = new mockComponentRegistry.ComponentRegistry();
 
         mockConfiguration = {
             errorComponent: configuration.errorComponent
         };
-        mockErrorHandler = loadFile(cwd + '/lib/error_handler.js', {
+        mockErrorHandler = loadModuleContext('/lib/error_handler.js', {
             './component_registry': componentRegistry,
             './configuration': mockConfiguration
-        }, true);
+        });
     });
 
     it('must throw an error when the error component is not found', function () {
