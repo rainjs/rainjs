@@ -11,7 +11,7 @@
         { "name": "Razvan Mocanu", "email": "razvan.mocanu@1and1.ro" }
     ],
     "dependencies": {
-        "connect": ">= 2.0.2",
+        "connect": "2.0.x",
         "handlebars": "1.0.4beta",
         "jasmine-node": "= 1.0.20",
         "less": ">= 1.1.4",
