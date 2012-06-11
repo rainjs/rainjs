@@ -3,10 +3,16 @@ Changelog
 =========
 
 ------
+v 0.11
+------
+
++ Added an article about Node's best programming practices.
+
+------
 v 0.10
 ------
 
-+ Changed licensing model from MIT to BSD
++ Changed licensing model from MIT to BSD.
 
 -----
 v 0.9
