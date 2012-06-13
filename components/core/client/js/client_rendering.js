@@ -177,7 +177,7 @@ define([
         var head = $('head');
         var loadedFiles = 0;
         for (var i = 0, len = css.length; i < len; i++) {
-            if (head.find("link[href='" + css[i] + "']").length > 0) {
+            if (head.find("link[href='" + css[i].path + "']").length > 0) {
                 if (++loadedFiles == css.length) {
                     callback();
                 }
@@ -185,12 +185,16 @@ define([
                 var link = null;
 
                 if (document.createStyleSheet) {
-                    link = document.createStyleSheet(css[i]);
+                    link = document.createStyleSheet(css[i].path);
                 } else {
                     link = document.createElement('link');
                     link.type = 'text/css';
                     link.rel = 'stylesheet';
-                    link.href = css[i];
+                    link.href = css[i].path;
+                }
+
+                if (css[i].media) {
+                    link.media = css[i].media;
                 }
 
                 var loader = new Image();
