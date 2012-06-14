@@ -87,7 +87,7 @@ describe('Client Renderer', function () {
                     ],
                     insertFinished = false;
 
-                head.append('<link href="/example/3.0/css/index.css" >');
+                head.append('<link href="/example/3.0/css/index.css">');
                 linksLength = head.find('link').length;
 
                 runs(function () {
@@ -122,7 +122,7 @@ describe('Client Renderer', function () {
                     ],
                     insertFinished = false;
 
-                head.append('<link href="/example/3.0/css/index.css" >');
+                head.append('<link href="/example/3.0/css/index.css">');
                 linksLength = head.find('link').length;
 
                 runs(function () {
