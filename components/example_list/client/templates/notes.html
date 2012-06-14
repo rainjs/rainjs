@@ -1,0 +1,10 @@
+{{css path="notes.css"}}
+
+<div class="board">
+    {{#each notes}}
+        <div class="{{class}} ">
+            <textarea>{{content}}</textarea>
+        </div>
+    {{/each}}
+</div>
+<div class="add-note" title="Click to add a new note!">+</div>

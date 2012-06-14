@@ -1,0 +1,121 @@
+.note {
+    float: left;
+
+    width: 200px;
+    height: 200px;
+
+    padding: 10px;
+    margin: 50px 50px 50px 0;
+
+    box-shadow: 5px 2px 5px 3px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 5px 2px 5px 3px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 5px 2px 5px 3px rgba(0, 0, 0, 0.3);
+    -ms-box-shadow: 5px 2px 5px 3px rgba(0, 0, 0, 0.3);
+
+    transition-property: transform;
+    transition-duration: 200ms;
+    -moz-transition-property: -moz-transform;
+    -moz-transition-duration: 200ms;
+    -webkit-transition-property: -webkit-transform;
+    -webkit-transition-duration: 200ms;
+    -ms-transition-property: -ms-transform;
+    -ms-transition-duration: 200ms;
+}
+
+.note.yellow {
+    background-color: #e0d406;
+    background: linear-gradient(#e0d406, #cdb21a);
+    background: -moz-linear-gradient(#e0d406, #cdb21a);
+    background: -webkit-linear-gradient(#e0d406, #cdb21a);
+    background: -ms-linear-gradient(#e0d406, #cdb21a);
+    filter: progid:DXImageTransform.Microsoft.Gradient(
+                GradientType=0, startColorStr="#e0d406",endColorStr="#cdb21a");
+}
+
+.note.pink {
+    background-color: #e76abf;
+    background: linear-gradient(#e76abf, #e7009e);
+    background: -moz-linear-gradient(#e76abf, #e7009e);
+    background: -webkit-linear-gradient(#e76abf, #e7009e);
+    background: -ms-linear-gradient(#e76abf, #e7009e);
+    filter: progid:DXImageTransform.Microsoft.Gradient(
+                GradientType=0, startColorStr="#e76abf",endColorStr="#e7009e");
+}
+
+.note.blue {
+    background-color: #4f9aff;
+    background: linear-gradient(#4f9aff, #006cff);
+    background: -moz-linear-gradient(#4f9aff, #006cff);
+    background: -webkit-linear-gradient(#4f9aff, #006cff);
+    background: -ms-linear-gradient(#4f9aff, #006cff);
+    filter: progid:DXImageTransform.Microsoft.Gradient(
+                GradientType=0, startColorStr="#4f9aff",endColorStr="#006cff");
+}
+
+.note.angle-minus-5 {
+    transform: rotate(-5deg);
+    -webkit-transform: rotate(-5deg);
+    -moz-transform: rotate(-5deg);
+    -ms-transform: rotate(-5deg);
+}
+
+.note.angle-minus-10 {
+    transform: rotate(-10deg);
+    -webkit-transform: rotate(-10deg);
+    -moz-transform: rotate(-10deg);
+    -ms-transform: rotate(-10deg);
+}
+
+.note.angle-plus-5 {
+    transform: rotate(5deg);
+    -webkit-transform: rotate(5deg);
+    -moz-transform: rotate(5deg);
+    -ms-transform: rotate(5deg);
+}
+
+.note.angle-plus-10 {
+    transform: rotate(10deg);
+    -webkit-transform: rotate(10deg);
+    -moz-transform: rotate(10deg);
+    -ms-transform: rotate(10deg);
+}
+
+.note:hover {
+    transform: none;
+    -webkit-transform: none;
+    -moz-transform: none;
+    -ms-transform: none;
+}
+
+.note textarea {
+    width: 200px;
+    height: 200px;
+
+    border-width: 0;
+
+    background-color: transparent;
+
+    resize: none;
+    outline: none;
+    overflow: hidden;
+
+    font-size: 14px;
+    font-family: "Ubuntu Light", Ubuntu, sans-serif;
+}
+
+.add-note {
+    float: left;
+
+    width: 100px;
+    height: 100px;
+
+    padding: 50px;
+
+    font-size: 120px;
+    font-weight: bold;
+    font-family: "Ubuntu Bold", sans-serif;
+
+    color: #91bdff;
+
+    cursor: pointer;
+}

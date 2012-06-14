@@ -3,9 +3,7 @@
     "version": "3.0",
     "views": {
         "index" : {},
-        "data_layer": {
-            "view": "data_layer.html"
-        },
+        "notes": {},
         "event_emitter": {
             "view": "event_emitter.html",
             "controller": {
