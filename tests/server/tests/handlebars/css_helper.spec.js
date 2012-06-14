@@ -73,7 +73,7 @@ describe('Handlebars css helper', function () {
         it('must create correct css dependencies for the same component', function () {
             Handlebars.compile('{{css path="index.css"}}')();
             expect(rainContext.css.length).toEqual(1);
-            expect(rainContext.css[0]).toEqual('/example/1.0/css/index.css');
+            expect(rainContext.css[0].path).toEqual('/example/1.0/css/index.css');
         });
 
         it('must throw error if the version is specified but the component is not', function () {
@@ -85,17 +85,17 @@ describe('Handlebars css helper', function () {
 
         it('must create correct dependency css with latest version', function() {
             Handlebars.compile('{{css name="example" path="index.css"}}')();
-            expect(rainContext.css[0]).toEqual('/example/4.5.2/css/index.css?component=example&version=1.0');
+            expect(rainContext.css[0].path).toEqual('/example/4.5.2/css/index.css?component=example&version=1.0');
         });
 
         it('must create correct css dependency for external components', function() {
             // Test external resource with latest version.
             Handlebars.compile('{{css name="error" path="index.css"}}')();
-            expect(rainContext.css[0]).toEqual('/error/1.0/css/index.css?component=example&version=1.0');
+            expect(rainContext.css[0].path).toEqual('/error/1.0/css/index.css?component=example&version=1.0');
 
             // Test external resource with given version.
             Handlebars.compile('{{css name="example" version="1.3.5" path="index.css"}}')();
-            expect(rainContext.css[1]).toEqual('/example/1.3.5/css/index.css?component=example&version=1.0');
+            expect(rainContext.css[1].path).toEqual('/example/1.3.5/css/index.css?component=example&version=1.0');
         });
     });
 });
