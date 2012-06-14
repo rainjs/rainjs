@@ -115,7 +115,7 @@ describe('Data layer', function() {
 
             waitsFor(function () {
                 return cb.calls.length !== 0;
-            }, 'callback to be called.');
+            }, 'data layer method to finish and invoke the callback.');
 
             runs(function () {
                 expect(requireWithContext.mostRecentCall.args[0])
@@ -133,7 +133,7 @@ describe('Data layer', function() {
 
             waitsFor(function () {
                 return cb.calls.length !== 0;
-            }, 'callback to be called.');
+            }, 'data layer method to finish and invoke the callback.');
 
             runs(function () {
                 var args = fn.mostRecentCall.args;
