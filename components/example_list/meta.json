@@ -29,7 +29,8 @@
         },
         "image_localization": {},
         "text_localization": {},
-        "client_side_text_localization": {}
+        "client_side_text_localization": {},
+        "media_queries": {}
     },
     "intents": [
         {

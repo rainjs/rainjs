@@ -25,17 +25,14 @@
 
 "use strict";
 
-var cwd = process.cwd();
-var globals = require(cwd + '/lib/globals.js');
-var config = require(cwd + '/lib/configuration');
+var cwd = process.cwd(),
+    globals = require(cwd + '/lib/globals.js');
 
 describe('Handlebars css helper', function () {
-    var cssHelper, Handlebars, mockComponentRegistry, componentRegistry, rainContext;
+    var cssHelper, Handlebars, rainContext, version;
 
     beforeEach(function () {
-        mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
-        mockComponentRegistry.scanComponentFolder();
-        componentRegistry = new mockComponentRegistry.ComponentRegistry();
+
         rainContext = {
             css: [],
             component: {
@@ -43,59 +40,82 @@ describe('Handlebars css helper', function () {
                 version: '1.0'
             }
         };
+        version = '1.0';
 
-        cssHelper = loadModuleExports('/lib/handlebars/css.js', {
-            '../component_registry': componentRegistry,
-            '../renderer': {
-                rain: rainContext
+        var mocks = {};
+        mocks['../renderer'] = {
+            rain: rainContext
+        };
+        mocks['../component_registry'] = {
+            getLatestVersion: function () {
+                return version;
             }
-        });
-        Handlebars = require('handlebars');
+        };
 
+        cssHelper = loadModule('/lib/handlebars/css.js', mocks);
+
+        Handlebars = require('handlebars');
         Handlebars.registerHelper(cssHelper.name, cssHelper.helper);
     });
 
     describe('register plugin to handlebars', function () {
-        it('must register the css helper to handlebars', function () {
+        it('should register the css helper to handlebars', function () {
             expect(cssHelper.name).toEqual('css');
             expect(typeof cssHelper.helper).toEqual('function');
         });
     });
 
     describe('test required and optional options', function () {
-        it('must throw error if path is missing', function () {
+        it('should throw error if path is missing', function () {
             var template = Handlebars.compile('{{css version="1.0"}}');
             expect(function() {
                 template();
             }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'css');
         });
 
-        it('must create correct css dependencies for the same component', function () {
-            Handlebars.compile('{{css path="index.css"}}')();
-            expect(rainContext.css.length).toEqual(1);
-            expect(rainContext.css[0]).toEqual('/example/1.0/css/index.css');
-        });
-
-        it('must throw error if the version is specified but the component is not', function () {
+        it('should throw error if the version is specified but the component is not', function () {
             var template = Handlebars.compile('{{css path="index.css" version="2.4"}}');
             expect(function() {
                 template();
             }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'name missing');
         });
 
-        it('must create correct dependency css with latest version', function() {
-            Handlebars.compile('{{css name="example" path="index.css"}}')();
-            expect(rainContext.css[0]).toEqual('/example/4.5.2/css/index.css?component=example&version=1.0');
+        it('should create correct css dependencies for the same component', function () {
+            Handlebars.compile('{{css path="index.css"}}')();
+            expect(rainContext.css.length).toEqual(1);
+            expect(rainContext.css[0].path).toEqual('/example/1.0/css/index.css');
         });
 
-        it('must create correct css dependency for external components', function() {
+        it('should generate a link without version when the version could not be found', function () {
+            version = undefined;
+            Handlebars.compile('{{css name="other" path="index.css"}}')();
+            expect(rainContext.css.length).toEqual(1);
+            expect(rainContext.css[0].path).toEqual('/other/css/index.css');
+        });
+
+        it('should create correct dependency css with latest version', function () {
+            version = '4.5.2';
+            Handlebars.compile('{{css name="example" path="index.css"}}')();
+            expect(rainContext.css[0].path).toEqual('/example/4.5.2/css/index.css?component=example&version=1.0');
+        });
+
+        it('should create correct css dependency for external components', function () {
             // Test external resource with latest version.
             Handlebars.compile('{{css name="error" path="index.css"}}')();
-            expect(rainContext.css[0]).toEqual('/error/1.0/css/index.css?component=example&version=1.0');
+            expect(rainContext.css[0].path).toEqual('/error/1.0/css/index.css?component=example&version=1.0');
 
             // Test external resource with given version.
+            version = '1.3.5';
             Handlebars.compile('{{css name="example" version="1.3.5" path="index.css"}}')();
-            expect(rainContext.css[1]).toEqual('/example/1.3.5/css/index.css?component=example&version=1.0');
+            expect(rainContext.css[1].path).toEqual('/example/1.3.5/css/index.css?component=example&version=1.0');
+        });
+
+        it('should add the media query string', function () {
+            var media = 'max-width: 800px';
+            Handlebars.compile('{{css path="index.css" media="' + media + '"}}')();
+            expect(rainContext.css.length).toEqual(1);
+            expect(rainContext.css[0].path).toEqual('/example/1.0/css/index.css');
+            expect(rainContext.css[0].media).toEqual(media);
         });
     });
 });

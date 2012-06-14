@@ -1,0 +1,21 @@
+.landscape {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: #000 url(images/chameleon2.jpg) 50% 100% no-repeat;
+    color: #ffffff;
+}
+
+.portrait {
+    width: 100%;
+    height: 100%;
+    background: url(images/chameleon.jpg) 50% 100% no-repeat;
+    -moz-transition: opacity 1s ease;  /* FF3.7+ */
+    -o-transition: opacity 1s ease;  /* Opera 10.5 */
+    -webkit-transition: opacity 1s ease;  /* Saf3.2+, Chrome */
+    transition: opacity 1s ease;
+}
