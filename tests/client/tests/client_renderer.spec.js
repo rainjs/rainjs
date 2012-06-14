@@ -27,26 +27,27 @@ describe('Client Renderer', function () {
 
     describe('Load CSS', function () {
 
+        var head;
+
         beforeEach(function () {
-            var head = $('head');
+            head = $('head');
             head.find('link').remove();
         });
 
-        it('must not call the callback if there aren\'t any CSS files',
+        it('should not call the callback if there aren\'t any CSS files',
            ['core/js/client_rendering'],
            function (clientRenderer) {
+                var callback = jasmine.createSpy();
                 clientRenderer._loadCSS.andCallThrough();
-                clientRenderer._loadCSS([], function () {
-                    expect(true).toBe(false);
-                });
+                clientRenderer._loadCSS([], callback);
+                expect(callback).not.toHaveBeenCalled();
            }
         );
 
-        it('must insert the CSS files into the page as link tags',
+        it('should insert the CSS files into the page as link tags',
            ['core/js/client_rendering'],
            function (clientRenderer) {
-                var head = $('head'),
-                    linksLength = head.find('link').length,
+                var linksLength = head.find('link').length,
                     cssFiles = [
                         {
                             path: '/example/3.0/css/index.css'
@@ -66,20 +67,19 @@ describe('Client Renderer', function () {
 
                 waitsFor(function () {
                     return insertFinished;
-                });
+                }, 'link tags to be inserted in the page head');
 
                 runs(function () {
                     var newCssFilesLength = head.find('link').length;
-                    expect(linksLength + cssFiles.length).toBe(newCssFilesLength);
+                    expect(linksLength + cssFiles.length).toEqual(newCssFilesLength);
                 });
            }
         );
 
-        it('must not insert the CSS files because they are already there',
+        it('should not insert the CSS files because they are already there',
            ['core/js/client_rendering'],
            function (clientRenderer) {
-                var head = $('head'),
-                    linksLength,
+                var linksLength,
                     cssFiles = [
                         {
                             path: '/example/3.0/css/index.css'
@@ -87,9 +87,8 @@ describe('Client Renderer', function () {
                     ],
                     insertFinished = false;
 
-                head.append('<link href="/example/3.0/css/index.css" />');
+                head.append('<link href="/example/3.0/css/index.css" >');
                 linksLength = head.find('link').length;
-                console.log(linksLength);
 
                 runs(function () {
                     clientRenderer._loadCSS.andCallThrough();
@@ -100,20 +99,19 @@ describe('Client Renderer', function () {
 
                 waitsFor(function () {
                     return insertFinished;
-                });
+                }, 'link tags to be inserted in the page head');
 
                 runs(function () {
                     var newCssFilesLength = head.find('link').length;
-                    expect(linksLength).toBe(newCssFilesLength);
+                    expect(linksLength).toEqual(newCssFilesLength);
                 });
            }
         );
 
-        it('must insert only the CSS files that aren\'t already there',
+        it('should insert only the CSS files that aren\'t already there',
            ['core/js/client_rendering'],
            function (clientRenderer) {
-                var head = $('head'),
-                    linksLength,
+                var linksLength,
                     cssFiles = [
                         {
                             path: '/example/3.0/css/index.css'
@@ -124,9 +122,8 @@ describe('Client Renderer', function () {
                     ],
                     insertFinished = false;
 
-                head.append('<link href="/example/3.0/css/index.css" />');
+                head.append('<link href="/example/3.0/css/index.css" >');
                 linksLength = head.find('link').length;
-                console.log(linksLength, head);
 
                 runs(function () {
                     clientRenderer._loadCSS.andCallThrough();
@@ -137,20 +134,19 @@ describe('Client Renderer', function () {
 
                 waitsFor(function () {
                     return insertFinished;
-                });
+                }, 'link tags to be inserted in the page head');
 
                 runs(function () {
                     var newCssFilesLength = head.find('link').length;
-                    expect(linksLength + 1).toBe(newCssFilesLength);
+                    expect(linksLength + 1).toEqual(newCssFilesLength);
                 });
            }
         );
 
-        it('must add the media attribute to the link tags',
+        it('should add the media attribute to the link tags',
            ['core/js/client_rendering'],
            function (clientRenderer) {
-                var head = $('head'),
-                    media = 'max-width: 800px',
+                var media = 'max-width: 800px',
                     cssFiles = [
                         {
                             path: '/example/3.0/css/index.css',
@@ -168,10 +164,10 @@ describe('Client Renderer', function () {
 
                 waitsFor(function () {
                     return insertFinished;
-                });
+                }, 'link tags to be inserted in the page head');
 
                 runs(function () {
-                    expect(head.find('link[media="' + media + '"]').length).toBe(1);
+                    expect(head.find('link[media="' + media + '"]').length).toEqual(1);
                 });
            }
         );

@@ -121,9 +121,7 @@ define([
         if (!component.css || component.css.length == 0) {
             showHTML(component, domElement);
         } else {
-            this._loadCSS(component.css, function () {
-                showHTML(component, domElement);
-            });
+            this._loadCSS(component.css, showHTML.bind(null, component, domElement));
         }
     };
 
