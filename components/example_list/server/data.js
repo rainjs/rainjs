@@ -39,12 +39,12 @@ function index(environment, callback, context) {
     callback(error, customData);
 }
 
-function notes(env, cb, ctx, req) {
+function notes(environment, callback, context, request) {
     var data = {
-        notes: req.session.notes || []
+        notes: request.session.notes || []
     };
 
-    cb(null, data);
+    callback(null, data);
 }
 
 function level1(environment, callback, data) {
