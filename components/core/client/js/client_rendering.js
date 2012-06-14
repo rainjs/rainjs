@@ -121,9 +121,7 @@ define([
         if (!component.css || component.css.length == 0) {
             showHTML(component, domElement);
         } else {
-            loadCSS(this, component.css, function () {
-                showHTML(component, domElement);
-            });
+            this._loadCSS(component.css, showHTML.bind(null, component, domElement));
         }
     };
 
@@ -167,17 +165,16 @@ define([
      * Load css files and insert html after the css files are completely loaded.
      * Maybe there is a better way. This works on IE8+, Chrome, FF, Safari.
      *
-     * @param {ClientRenderer} self the class instance
      * @param {Array} css CSS dependencies
      * @param {Function} callback is invoked after all css dependencies are loaded
      * @private
      * @memberOf ClientRenderer#
      */
-    function loadCSS(self, css, callback) {
+    ClientRenderer.prototype._loadCSS = function (css, callback) {
         var head = $('head');
         var loadedFiles = 0;
         for (var i = 0, len = css.length; i < len; i++) {
-            if (head.find("link[href='" + css[i] + "']").length > 0) {
+            if (head.find("link[href='" + css[i].path + "']").length > 0) {
                 if (++loadedFiles == css.length) {
                     callback();
                 }
@@ -185,25 +182,29 @@ define([
                 var link = null;
 
                 if (document.createStyleSheet) {
-                    link = document.createStyleSheet(css[i]);
+                    link = document.createStyleSheet(css[i].path);
                 } else {
                     link = document.createElement('link');
                     link.type = 'text/css';
                     link.rel = 'stylesheet';
-                    link.href = css[i];
+                    link.href = css[i].path;
+                }
+
+                if (css[i].media) {
+                    link.media = css[i].media;
                 }
 
                 var loader = new Image();
-                loader.onerror = function(e) {
+                loader.onerror = function (e) {
                     if (++loadedFiles == css.length) {
                         callback();
                     }
                 };
                 head.append(link);
-                loader.src = css[i];
+                loader.src = css[i].path;
             }
         }
-    }
+    };
 
     /**
      * Export as a global.
