@@ -34,7 +34,7 @@ var root = path.dirname(__dirname);
 program
     .version(require(path.join(root, 'package.json')).version)
     .usage('[options] <command>')
-    .option('-c, --conf <path>', 'start the server with a custom configuration file', 'server.conf.default')
+    .option('-c, --conf <path>', 'start the server with a custom configuration file', path.join(program.dir, 'conf', 'server.conf.default'))
     .option('-D, --dir <path>', 'the server working directory', root);
 
 util.walkSync(path.join(__dirname, 'commands'), ['.js'], function(file, folder) {

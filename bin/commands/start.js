@@ -1,3 +1,6 @@
+var daemon = require('daemon'),
+    path = require('path');
+
 function register(program) {
     program
         .command('start')
@@ -8,7 +11,11 @@ function register(program) {
 }
 
 function start(options) {
-    var workingDir = options.parent.dir;
+    var workingDir = options.parent.dir,
+        name = require(path.join(workingDir, 'package.json')).name;
+
+    var server = require(path.join(workingDir, 'lib', 'server'));
+    server.initialize();
 }
 
 module.exports = register;
