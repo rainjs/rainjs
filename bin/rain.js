@@ -35,7 +35,7 @@ program
     .version(require(path.join(root, 'package.json')).version)
     .usage('[options] <command>')
     .option('-c, --conf <path>', 'start the server with a custom configuration file', path.join(program.dir, 'conf', 'server.conf.default'))
-    .option('-D, --dir <path>', 'the server working directory', root);
+    .option('-D, --dir <path>', 'the server working directory', process.cwd());
 
 util.walkSync(path.join(__dirname, 'commands'), ['.js'], function(file, folder) {
     var command = require(file);
@@ -44,3 +44,7 @@ util.walkSync(path.join(__dirname, 'commands'), ['.js'], function(file, folder) 
 });
 
 program.parse(process.argv);
+
+if (process.argv.length < 3) {
+    process.stdout.write(program.helpInformation());
+}
