@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * Resolves the GET HTTP verb.
  *

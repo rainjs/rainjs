@@ -1,5 +1,5 @@
 {
-    "id": "{{application_name}}",
+    "id": "{{component_name}}",
     "version": "1.0",
     "views": {
         "index" : {
