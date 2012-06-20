@@ -65,13 +65,14 @@ function createProject(projectPath, projectName) {
         setupProject(projectPath);
         setupDefaultComponent(projectPath, 'hello_world');
         utils.log(
-            'Project created'.green
-            ,''
-            ,'Go to the root directory of the project and start the server.'
-            ,'  $ cd '+ projectPath + ' | rain start'
-            ,''
-            ,'Happy developing ;-)'.rainbow
-            ,''
+            'Project created'.green,
+            '',
+            'Go to the root directory of the project and start the server.',
+            '  $ ' + ('cd ' + projectPath + ' | rain start').green,
+            '',
+            'Open ' + 'http://localhost:1337/hello_world/index'.blue
+                    + ' to see the default component.',
+            ''
         );
     } catch (ex) {
         utils.log('An error occurred during project setup!'.red, ex);
