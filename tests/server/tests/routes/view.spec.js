@@ -47,7 +47,7 @@ describe('Router Plugin: ' + routerPlugin.name, function() {
         response = new http.ServerResponse();
         request = new http.ServerRequest();
         mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
-        mockComponentRegistry.scanComponentFolder();
+        mockComponentRegistry.registerConfigComponents();
         componentRegistry = new mockComponentRegistry.ComponentRegistry();
         response.write = function(text){
             if(!this._body){

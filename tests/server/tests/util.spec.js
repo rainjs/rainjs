@@ -37,7 +37,7 @@ describe('Util module', function () {
 
     var mockComponentRegistry, componentRegistry;
     mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
-    mockComponentRegistry.scanComponentFolder();
+    mockComponentRegistry.registerConfigComponents();
     componentRegistry = new mockComponentRegistry.ComponentRegistry();
 
     var config = componentRegistry.getConfig('button', '1.0');

@@ -36,7 +36,7 @@ describe('Registry Plugin: Precompile Templates Plugin', function () {
 
     beforeEach(function () {
         mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
-        mockComponentRegistry.scanComponentFolder();
+        mockComponentRegistry.registerConfigComponents();
         componentRegistry = new mockComponentRegistry.ComponentRegistry();
 
         registryPlugin = loadModuleExports('/lib/registry/precompile_templates.js', {
