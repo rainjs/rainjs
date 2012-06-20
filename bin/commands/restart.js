@@ -11,8 +11,14 @@ function register(program) {
 }
 
 function restart(options) {
-    var workingDir = options.parent.dir,
-        pid = fs.readFileSync(path.join(workingDir, '.server'), 'utf-8');
+    try {
+        var projectRoot = sdkUtil.getProjectRoot(options.parent.dir);
+    } catch (e) {
+        console.log(options.parent.dir, 'is not located inside a valid rain project.');
+        process.exit(1);
+    }
+
+    var pid = fs.readFileSync(path.join(projectRoot, '.server'), 'utf-8');
 
     try {
         process.kill(pid, 'SIGTERM');

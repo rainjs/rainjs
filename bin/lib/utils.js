@@ -31,20 +31,19 @@ var path = require('path'),
 var root = path.resolve(__dirname, '..', '..');
 
 /**
- * Start the server.
+ * Utility method that starts the server
  *
  * @param {Object} options the server startup options
  */
 function startServer(options) {
-    var workingDir = options.parent.dir,
-        pidFile = path.join(workingDir, '.server');
-
     try {
-        fs.statSync(path.join(workingDir, '.rain'));
+        var projectRoot = getProjectRoot(options.parent.dir);
     } catch (e) {
-        console.log(workingDir, 'is not a valid rain project');
+        console.log(options.parent.dir, 'is not located inside a valid rain project.');
         process.exit(1);
     }
+
+    var pidFile = path.join(projectRoot, '.server');
 
     if (options.debug && 'win32' != process.platform) {
         process.kill(process.pid, 'SIGUSR1');
@@ -56,7 +55,7 @@ function startServer(options) {
         process.exit();
     });
 
-    process.chdir(workingDir);
+    process.chdir(projectRoot);
     require(path.join(root, 'lib', 'server')).initialize();
 }
 
@@ -71,7 +70,30 @@ function log() {
     console.log(lines.join('\n'));
 }
 
+/**
+ * Gets the project root by doing a bottom up search from a directory recived as a parameter
+ *
+ * @param {String} cwd the directory to start searching from
+ * @returns {String} the project root path
+ * @throws {Error} if it reaches /
+ */
+function getProjectRoot(cwd) {
+    return (function getRoot(dir) {
+        if ('/' == dir) {
+            throw new Error('The specified path is not a rain project.');
+        }
+
+        try {
+            fs.statSync(path.join(dir, '.rain'));
+            return dir;
+        } catch (e) {
+            return getRoot(path.dirname(dir));
+        }
+    })(cwd);
+}
+
 module.exports = {
     startServer: startServer,
-    log: log
+    log: log,
+    getProjectRoot: getProjectRoot
 };
