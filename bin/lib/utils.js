@@ -5,10 +5,10 @@ var root = path.resolve(__dirname, '..', '..');
 
 module.exports.startServer = function (options) {
     var workingDir = options.parent.dir,
-        rainFile = path.join(workingDir, '.rain');
+        pidFile = path.join(workingDir, '.server');
 
     try {
-        fs.statSync(rainFile);
+        fs.statSync(path.join(workingDir, '.rain'));
     } catch (e) {
         console.log(workingDir, 'is not a valid rain project');
         process.exit(1);
@@ -18,9 +18,9 @@ module.exports.startServer = function (options) {
         process.kill(process.pid, 'SIGUSR1');
     }
 
-    fs.writeFileSync(rainFile, process.pid);
+    fs.writeFileSync(pidFile, process.pid);
     process.on('SIGTERM', function () {
-        fs.truncateSync(fs.openSync(rainFile, 'w+'), 0);
+        fs.truncateSync(fs.openSync(pidFile, 'w+'), 0);
         process.exit();
     });
 

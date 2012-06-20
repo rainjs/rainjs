@@ -12,7 +12,7 @@ function register(program) {
 
 function restart(options) {
     var workingDir = options.parent.dir,
-        pid = fs.readFileSync(path.join(workingDir, '.rain'), 'utf-8');
+        pid = fs.readFileSync(path.join(workingDir, '.server'), 'utf-8');
 
     try {
         process.kill(pid, 'SIGTERM');

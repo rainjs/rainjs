@@ -33,7 +33,7 @@ var root = path.dirname(__dirname);
 
 program
     .version(require(path.join(root, 'package.json')).version)
-    .usage('[options] <command>')
+    .usage('<command> [options]')
     .option('-c, --conf <path>', 'start the server with a custom configuration file', path.join(program.dir, 'conf', 'server.conf.default'))
     .option('-D, --dir <path>', 'the server working directory', process.cwd());
 
