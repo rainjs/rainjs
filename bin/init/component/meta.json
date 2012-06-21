@@ -1,6 +1,6 @@
 {
     "id": "{{component_name}}",
-    "version": "1.0",
+    "version": "{{component_version}}",
     "views": {
         "index" : {
             "view": "index.html",

@@ -26,6 +26,7 @@
 "use strict";
 
 var path = require('path'),
+    wrench = require('wrench'),
     fs = require('fs');
 
 var root = path.resolve(__dirname, '..', '..');
@@ -71,7 +72,7 @@ function log() {
 }
 
 /**
- * Gets the project root by doing a bottom up search from a directory recived as a parameter
+ * Gets the project root by doing a bottom up search from a directory received as a parameter.
  *
  * @param {String} cwd the directory to start searching from
  * @returns {String} the project root path
@@ -80,7 +81,7 @@ function log() {
 function getProjectRoot(cwd) {
     return (function getRoot(dir) {
         if ('/' == dir) {
-            throw new Error('The specified path is not a rain project.');
+            throw new Error('The specified path is not a RAIN project.');
         }
 
         try {
@@ -92,8 +93,84 @@ function getProjectRoot(cwd) {
     })(cwd);
 }
 
+/**
+ * Destroy the console process.
+ */
+function destroyStdin() {
+   process.stdin.destroy();
+}
+
+/**
+ * Create the folder structure for a component.
+ *
+ * @param {String} projectPath the project path
+ * @param {String} name the component name
+ * @param {String} [version] the component version
+ */
+function setupComponent(projectPath, name, version) {
+    var componentPath = path.join(projectPath, 'components', name);
+    if (version) {
+        componentPath = componentPath + '_' + version;
+    }
+
+    if (existsComponent(componentPath)) {
+        utils.log('Component folder already exists!'.red);
+        return utils.destroyStdin();
+    }
+
+    var initComponentFolder = path.resolve(path.join(__dirname, '../init/component'));
+
+    // Create component directory.
+    fs.mkdirSync(componentPath, '0755');
+
+    // Copy the contents of the init component folder to the new component path.
+    wrench.copyDirSyncRecursive(initComponentFolder, componentPath);
+
+    // Update the placeholders with actual component information.
+    updatePlaceholders(path.join(componentPath, 'meta.json'), {
+        'component_name': name,
+        'component_version': version || '1.0'
+    });
+    updatePlaceholders(path.join(componentPath, 'client', 'templates', 'index.html'), {
+        'component_name': name
+    });
+}
+
+/**
+ * Update placeholders in a specific file.
+ *
+ * @param {String} filePath the file path
+ * @param {Object} placeholders the placeholder map
+ */
+function updatePlaceholders(filePath, placeholders) {
+    var fileContent = fs.readFileSync(filePath, 'utf8'),
+        regExp,
+        key;
+
+    for (key in placeholders) {
+        if (placeholders.hasOwnProperty(key)) {
+            regExp = new RegExp('\{\{' + key + '\}\}', 'g');
+            fileContent = fileContent.replace(regExp, placeholders[key]);
+        }
+    }
+
+    fs.writeFileSync(filePath, fileContent, 'utf8');
+}
+
+/**
+ * Checks is a component path exists.
+ *
+ * @param {String} componentPath the component path
+ * @returns {Boolean} true is the folder exists
+ */
+function existsComponent(componentPath) {
+    return path.existsSync(componentPath);
+}
+
 module.exports = {
     startServer: startServer,
     log: log,
-    getProjectRoot: getProjectRoot
+    getProjectRoot: getProjectRoot,
+    destroyStdin: destroyStdin,
+    setupComponent: setupComponent
 };

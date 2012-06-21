@@ -51,19 +51,26 @@ function register(program) {
  */
 function createProject(projectPath, projectName) {
     projectPath = path.join(path.resolve(projectPath), projectName);
+
+    try {
+        var root = utils.getProjectRoot(projectPath);
+        utils.log('Directory ' + projectPath.blue + ' is already part of a project located here: "'
+                               + root + '"!');
+        return utils.destroyStdin();
+    } catch (err) {}
+
     if (path.existsSync(projectPath)) {
         if (!fs.statSync(projectPath).isDirectory()) {
             utils.log('Invalid location: ' + projectPath.blue + ' is not a directory!');
-            return destroyStdin();
+            return utils.destroyStdin();
         }
         utils.log('Directory ' + projectPath.blue + ' already exists!');
-        return destroyStdin();
+        return utils.destroyStdin();
     }
-
 
     try {
         setupProject(projectPath);
-        setupDefaultComponent(projectPath, 'hello_world');
+        utils.setupComponent(projectPath, 'hello_world', '1.0');
         utils.log(
             'Project created'.green,
             '',
@@ -74,13 +81,18 @@ function createProject(projectPath, projectName) {
                     + ' to see the default component.',
             ''
         );
-    } catch (ex) {
-        utils.log('An error occurred during project setup!'.red, ex);
+    } catch (err) {
+        utils.log('An error occurred during project setup!'.red, err);
     }
 
-    destroyStdin();
+    utils.destroyStdin();
 }
 
+/**
+ * Create the project folder structure.
+ *
+ * @param {String} projectPath the project path
+ */
 function setupProject(projectPath) {
     var paths = {
         conf: path.join(projectPath, 'conf'),
@@ -113,7 +125,7 @@ function setupProject(projectPath) {
         '{',
         '    "name": "' + projectName + '",',
         '    "version": "0.0.1",',
-        '    "dependencies": []',
+        '    "dependencies": [],',
         '    "keywords": ["' + projectName + '"]',
         '}\n'
     ];
@@ -121,46 +133,6 @@ function setupProject(projectPath) {
 
     // Mark the folder as a RAIN project by writing a ghost file.
     fs.writeFileSync(path.join(projectPath, '.rain'), '');
-}
-
-/**
- * Copy and configure the default RAIN component into the new project.
- *
- * @param {String} projectPath the project path
- * @param {String} componentName the name of the component
- */
-function setupDefaultComponent(projectPath, componentName) {
-    var componentPath = path.join(projectPath, 'components', componentName),
-        defaultComponentFolder = path.resolve(path.join(__dirname, '../init/component'));
-
-    // Create component directory.
-    fs.mkdirSync(componentPath, '0755');
-
-    // Copy the contents of the default component folder to the new component path.
-    wrench.copyDirSyncRecursive(defaultComponentFolder, componentPath);
-
-    // Update the component name in all places.
-    updatePlaceholders(path.join(componentPath, 'meta.json'), componentName);
-    updatePlaceholders(path.join(componentPath, 'client', 'templates', 'index.html'), componentName);
-}
-
-/**
- * Update the component name placeholder in a specific file that is part of the component.
- *
- * @param {String} filePath the file path
- * @param {String} componentName the component name
- */
-function updatePlaceholders(filePath, componentName) {
-    var fileContent = fs.readFileSync(filePath, 'utf8')
-                        .replace(/\{\{component_name\}\}/g, componentName);
-    fs.writeFileSync(filePath, fileContent, 'utf8');
-}
-
-/**
- * Destroy the console process.
- */
-function destroyStdin() {
-    process.stdin.destroy();
 }
 
 module.exports = register;
