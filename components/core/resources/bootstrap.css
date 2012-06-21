@@ -7,4 +7,6 @@ html, body {
 
 .app-container {
     /* display: inline !important; */
+    width: 100%;
+    height: 100%;
 }
