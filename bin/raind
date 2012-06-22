@@ -27,6 +27,7 @@
 
 var program = require('commander'),
     path = require('path'),
+    fs = require('fs'),
     sdkUtils = require('./lib/utils');
 
 var root = path.dirname(__dirname);
@@ -40,4 +41,25 @@ program
     .option('-D, --dir <path>', 'the server working directory', process.env.RAIN_CWD || process.cwd());
 
 program.parse(process.argv);
-sdkUtils.startServer(program.dir, program.debug);
+
+try {
+    var projectRoot = sdkUtils.getProjectRoot(program.dir);
+} catch (e) {
+    console.log(program.dir, 'is not a valid rain project.');
+    process.exit(1);
+}
+
+var pidFile = path.join('/tmp/rain.pid');
+
+if (program.debug && 'win32' != process.platform) {
+    process.kill(process.pid, 'SIGUSR1');
+}
+
+fs.writeFileSync(pidFile, process.pid);
+process.on('SIGTERM', function () {
+    fs.truncateSync(fs.openSync(pidFile, 'w+'), 0);
+    process.exit();
+});
+
+process.chdir(projectRoot);
+require(path.join(root, 'lib', 'server')).initialize();

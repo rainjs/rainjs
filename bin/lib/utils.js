@@ -32,35 +32,6 @@ var path = require('path'),
 var root = path.resolve(__dirname, '..', '..');
 
 /**
- * Utility method that starts the server
- *
- * @param {Object} options the server startup options
- */
-function startServer(cwd, debug) {
-    try {
-        var projectRoot = getProjectRoot(cwd);
-    } catch (e) {
-        console.log(cwd, 'is not a valid rain project.');
-        process.exit(1);
-    }
-
-    var pidFile = path.join('/tmp/rain.pid');
-
-    if (debug && 'win32' != process.platform) {
-        process.kill(process.pid, 'SIGUSR1');
-    }
-
-    fs.writeFileSync(pidFile, process.pid);
-    process.on('SIGTERM', function () {
-        fs.truncateSync(fs.openSync(pidFile, 'w+'), 0);
-        process.exit();
-    });
-
-    process.chdir(projectRoot);
-    require(path.join(root, 'lib', 'server')).initialize();
-}
-
-/**
  * Log a message to the console.
  */
 function log() {
@@ -168,7 +139,6 @@ function existsComponent(componentPath) {
 }
 
 module.exports = {
-    startServer: startServer,
     log: log,
     getProjectRoot: getProjectRoot,
     destroyStdin: destroyStdin,

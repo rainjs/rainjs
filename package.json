@@ -21,10 +21,8 @@
         "socket.io": ">= 0.7.7",
         "commander": "",
         "mocks": "",
-        "daemon": "git://github.com/arcade/daemon.node.git",
         "colors": "",
         "wrench": "",
-        "cli-table": "",
         "jed": ""
     },
     "keywords": ["framework", "rain"],
