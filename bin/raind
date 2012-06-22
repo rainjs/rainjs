@@ -32,24 +32,27 @@ var program = require('commander'),
 
 var root = path.dirname(__dirname);
 
+function getProjectRoot(dir) {
+    try {
+         return sdkUtils.getProjectRoot(program.dir);
+    } catch (e) {
+        console.log(program.dir, 'is not a valid rain project.');
+        process.exit(1);
+    }
+}
+
 program
     .version(require(path.join(root, 'package.json')).version)
     .usage('[options]')
-    .option('-c, --conf <path>', 'start the server with a custom configuration file',
+    .option('-c, --conf <path>', 'start the server with a custom configuration file', getProjectRoot,
                                  path.join(program.dir, 'conf', 'server.conf.default'))
     .option('-d, --debug', 'start the server in debug mode')
     .option('-D, --dir <path>', 'the server working directory', process.env.RAIN_CWD || process.cwd());
 
 program.parse(process.argv);
 
-try {
-    var projectRoot = sdkUtils.getProjectRoot(program.dir);
-} catch (e) {
-    console.log(program.dir, 'is not a valid rain project.');
-    process.exit(1);
-}
-
-var pidFile = path.join('/tmp/rain.pid');
+var pidFile = path.join('/tmp/rain.pid'),
+    projectRoot = getProjectRoot(program.dir);
 
 if (program.debug && 'win32' != process.platform) {
     process.kill(process.pid, 'SIGUSR1');
@@ -61,5 +64,6 @@ process.on('SIGTERM', function () {
     process.exit();
 });
 
+process.title = 'rain-server';
 process.chdir(projectRoot);
 require(path.join(root, 'lib', 'server')).initialize();
