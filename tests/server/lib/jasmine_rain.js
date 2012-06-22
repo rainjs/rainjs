@@ -174,6 +174,7 @@ jasmine.util.extend(jasmine.getGlobal(), (function () {
         context.exports = context.module.exports;
         context.__dirname = path.dirname(context.__filename);
 
+        code[file] = code[file].replace(/^\#\!.*/, ''); // strip shebang
         // Run the module in the the created context
         vm.runInContext(code[file], context, file);
 
