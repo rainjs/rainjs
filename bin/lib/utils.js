@@ -36,17 +36,17 @@ var root = path.resolve(__dirname, '..', '..');
  *
  * @param {Object} options the server startup options
  */
-function startServer(options) {
+function startServer(cwd, debug) {
     try {
-        var projectRoot = getProjectRoot(options.parent.dir);
+        var projectRoot = getProjectRoot(cwd);
     } catch (e) {
-        console.log(options.parent.dir, 'is not located inside a valid rain project.');
+        console.log(cwd, 'is not a valid rain project.');
         process.exit(1);
     }
 
-    var pidFile = path.join(projectRoot, '.server');
+    var pidFile = path.join('/tmp/rain.pid');
 
-    if (options.debug && 'win32' != process.platform) {
+    if (debug && 'win32' != process.platform) {
         process.kill(process.pid, 'SIGUSR1');
     }
 

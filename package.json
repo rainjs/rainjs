@@ -29,7 +29,9 @@
     },
     "keywords": ["framework", "rain"],
     "repository": "git://github.com/rainjs/rainjs",
-    "main": "./start",
-    "bin": { "rain": "./bin/rain.js" },
+    "bin": {
+        "rain": "./bin/rain",
+        "raind": "./bin/raind"
+    },
     "engines": { "node": "0.6.x" }
 }
