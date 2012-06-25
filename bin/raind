@@ -51,14 +51,12 @@ program
 
 program.parse(process.argv);
 
-var pidFile = path.join('/tmp/rain.pid'),
-    projectRoot = getProjectRoot(program.dir);
+var projectRoot = getProjectRoot(program.dir);
 
 if (program.debug && 'win32' != process.platform) {
     process.kill(process.pid, 'SIGUSR1');
 }
 
-fs.writeFileSync(pidFile, process.pid);
 process.on('SIGTERM', function () {
     fs.truncateSync(fs.openSync(pidFile, 'w+'), 0);
     process.exit();
