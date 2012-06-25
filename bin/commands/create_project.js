@@ -32,13 +32,13 @@ var path = require('path'),
     utils = require('../lib/utils');
 
 /**
- * Register the create project command.
+ * Registers the create project command.
  *
  * @param {Program} program
  */
 function register(program) {
     program
-        .command('create-project <path> <project-name>')
+        .command('create-project <project-name> [path]')
         .description('Create a new RAIN project.')
         .action(createProject);
 }
@@ -46,46 +46,41 @@ function register(program) {
 /**
  * Creates a new RAIN project.
  *
- * @param {String} projectPath the project path
  * @param {String} projectName the project name
+ * @param {String} [projectPath] the project path
  */
-function createProject(projectPath, projectName) {
+function createProject(projectName, projectPath) {
+    projectPath = typeof projectPath !== 'undefined' ? projectPath : '.';
     projectPath = path.join(path.resolve(projectPath), projectName);
 
     try {
+        // getProjectRoot throws an exception when no project is found
         var root = utils.getProjectRoot(projectPath);
-        utils.log('Directory ' + projectPath.blue + ' is already part of a project located here: "'
-                               + root + '"!');
-        return utils.destroyStdin();
+
+        // if a project exists warn the user and exit
+        console.log('Directory %s is already part of a project located here: %s!',
+            projectPath.blue, root.blue);
+        process.exit(1);
     } catch (err) {}
 
     if (path.existsSync(projectPath)) {
-        if (!fs.statSync(projectPath).isDirectory()) {
-            utils.log('Invalid location: ' + projectPath.blue + ' is not a directory!');
-            return utils.destroyStdin();
-        }
-        utils.log('Directory ' + projectPath.blue + ' already exists!');
-        return utils.destroyStdin();
+        console.log('The file or directory %s already exists!', projectPath.blue);
+        process.exit(1);
     }
 
     try {
         setupProject(projectPath);
         utils.setupComponent(projectPath, 'hello_world', '1.0');
-        utils.log(
-            'Project created'.green,
-            '',
-            'Go to the root directory of the project and start the server.',
-            '  $ ' + ('cd ' + projectPath + ' | rain start').green,
-            '',
-            'Open ' + 'http://localhost:1337/hello_world/index'.blue
-                    + ' to see the default component.',
-            ''
-        );
-    } catch (err) {
-        utils.log('An error occurred during project setup!'.red, err);
-    }
 
-    utils.destroyStdin();
+        console.log('Project created'.green);
+        console.log('Go to the root directory of the project and start the server.');
+        console.log('  $ cd %s && raind'.green, projectPath);
+        console.log('Open %s to see the default component.',
+            'http://localhost:1337/hello_world/index'.blue);
+    } catch (err) {
+       console.log('An error occurred during project setup!'.red, err.message);
+       process.exit(1);
+    }
 }
 
 /**
@@ -94,24 +89,20 @@ function createProject(projectPath, projectName) {
  * @param {String} projectPath the project path
  */
 function setupProject(projectPath) {
+    var permissions = '0755';
     var paths = {
-        conf: path.join(projectPath, 'conf'),
         components: path.join(projectPath, 'components'),
-        'public': path.join(projectPath, 'public'),
+        conf: path.join(projectPath, 'conf'),
         log: path.join(projectPath, 'log')
     };
 
     // Create project directory.
-    fs.mkdirSync(projectPath, '0755');
+    wrench.mkdirSyncRecursive(projectPath, permissions);
 
-    // Create components directory.
-    fs.mkdirSync(paths.components, '0755');
-
-    // Create conf directory.
-    fs.mkdirSync(paths.conf, '0755');
-
-    // Create log directory.
-    fs.mkdirSync(paths.log, '0755');
+    // Create components, conf and log directories.
+    fs.mkdirSync(paths.components, permissions);
+    fs.mkdirSync(paths.conf, permissions);
+    fs.mkdirSync(paths.log, permissions);
 
     // Copy default configurations.
     wrench.copyDirSyncRecursive(
@@ -120,16 +111,15 @@ function setupProject(projectPath) {
     );
 
     // Create a package.json file for the project.
-    var projectName = projectPath.split('/').splice(-1);
-    var json = [
-        '{',
-        '    "name": "' + projectName + '",',
-        '    "version": "0.0.1",',
-        '    "dependencies": [],',
-        '    "keywords": ["' + projectName + '"]',
-        '}\n'
-    ];
-    fs.writeFileSync(path.join(projectPath, 'package.json'), json.join('\n'));
+    var projectName = path.basename(projectPath);
+    var json = {
+        name: projectName,
+        version: '0.0.1',
+        dependencies: [],
+        keywords: [projectName]
+    };
+    json = JSON.stringify(json, null, 4) + '\n';
+    fs.writeFileSync(path.join(projectPath, 'package.json'), json);
 
     // Mark the folder as a RAIN project by writing a ghost file.
     fs.writeFileSync(path.join(projectPath, '.rain'), '');
