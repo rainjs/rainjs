@@ -50,7 +50,7 @@ function register(program) {
  */
 function createComponent(name, version) {
     try {
-        var cmp = component.create(name, version);
+        var cmp = component.create(utils.getProjectRoot(process.cwd()), name, version);
     } catch (e) {
         console.log(e.message);
         process.exit(1);

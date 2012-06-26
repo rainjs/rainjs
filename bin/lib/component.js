@@ -1,5 +1,4 @@
-var utils = require('./utils'),
-    path = require('path'),
+var path = require('path'),
     fs = require('fs'),
     wrench = require('wrench');
     semver = require('semver');
@@ -23,9 +22,8 @@ function Component(id, version) {
  * @param {String} [version] the component version
  * @returns {Component|undefiend} the component instance
  */
-Component.get = function (id, version) {
-    var componentsDir = path.join(utils.getProjectRoot(process.cwd()), 'components'),
-        files = fs.readdirSync(componentsDir),
+Component.get = function (componentsDir, id, version) {
+    var files = fs.readdirSync(componentsDir),
         versions = [];
 
     for (var i = files.length; i--;) {
@@ -79,9 +77,9 @@ Component.get = function (id, version) {
  * @throws {Error} if the component already exists
  * @throws {Error} if the component path already exists
  */
-Component.create = function (id, version) {
-    var cmp = this.get(id, version),
-        componentsDir = path.join(utils.getProjectRoot(process.cwd()), 'components'),
+Component.create = function (projectRoot, id, version) {
+    var componentsDir = path.join(projectRoot, 'components'),
+        cmp = this.get(componentsDir, id, version),
         skeleton = path.resolve(path.join(__dirname, '../init/component'));
 
     if (cmp && version) {

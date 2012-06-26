@@ -26,7 +26,7 @@
 "use strict";
 
 describe('RAIN create project', function () {
-    var module, program, mocks, path, fs, wrench, utils, createProject;
+    var module, program, mocks, path, fs, wrench, utils, createProject, component;
     var projectName = 'test',
         projectPath = '/home/user';
     var json = {
@@ -41,7 +41,8 @@ describe('RAIN create project', function () {
         path = mocks['path'] = jasmine.createSpyObj('path', ['join', 'resolve', 'existsSync', 'basename']);
         fs = mocks['fs'] = jasmine.createSpyObj('fs', ['mkdirSync', 'writeFileSync']);
         wrench = mocks['wrench'] = jasmine.createSpyObj('wrench', ['mkdirSyncRecursive', 'copyDirSyncRecursive']);
-        utils = mocks['../lib/utils'] = jasmine.createSpyObj('utils', ['getProjectRoot', 'setupComponent']);
+        utils = mocks['../lib/utils'] = jasmine.createSpyObj('utils', ['getProjectRoot']);
+        component = mocks['../lib/component'] = jasmine.createSpyObj('component', ['create']);
 
         spyOn(console, 'log');
         spyOn(process, 'exit');
@@ -147,7 +148,8 @@ describe('RAIN create project', function () {
 
         expect(fs.writeFileSync).toHaveBeenCalledWith(path.join(projectPath, projectName, '.rain'), '');
 
-        expect(utils.setupComponent)
+        expect(component.create)
             .toHaveBeenCalledWith(path.join(projectPath, projectName), 'hello_world', '1.0');
     }
 });
+

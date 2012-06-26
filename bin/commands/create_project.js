@@ -29,6 +29,7 @@ var path = require('path'),
     fs = require('fs'),
     wrench = require('wrench'),
     color = require('colors'),
+    component = require('../lib/component'),
     utils = require('../lib/utils');
 
 /**
@@ -70,7 +71,7 @@ function createProject(projectName, projectPath) {
 
     try {
         setupProject(projectPath);
-        utils.setupComponent(projectPath, 'hello_world', '1.0');
+        component.create(projectPath, 'hello_world', '1.0');
 
         console.log('Project created'.green);
         console.log('Go to the root directory of the project and start the server.');
