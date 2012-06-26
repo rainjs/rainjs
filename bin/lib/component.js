@@ -46,7 +46,7 @@ Component.get = function (componentsDir, id, version) {
         }
 
         component.version = this._normalizeVersion(component.version);
-        version = this._normalizeVersion(version);
+        version && (version = this._normalizeVersion(version));
         if (component.id == id) {
             versions.push(component.version);
         }
@@ -83,9 +83,8 @@ Component.create = function (projectRoot, id, version) {
 
     if (!cmp && !version) {
         version = '1.0.0';
-    } else {
-        version = this._normalizeVersion(version);
     }
+    version = this._normalizeVersion(version);
 
     var componentPath = path.join(componentsDir, id + '_' + version);
 
