@@ -45,6 +45,10 @@ Component.get = function (componentsDir, id, version) {
             continue;
         }
 
+        if (!component.version) {
+            continue;
+        }
+
         component.version = this._normalizeVersion(component.version);
         version && (version = this._normalizeVersion(version));
         if (component.id == id) {
