@@ -45,6 +45,7 @@ Component.get = function (componentsDir, id, version) {
             continue;
         }
 
+        console.log(component);
         if (!component.version) {
             continue;
         }
