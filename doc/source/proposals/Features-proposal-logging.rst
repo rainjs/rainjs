@@ -137,11 +137,11 @@ The *logger* configuration object supports the following properties:
 =============  ====================================================================================
   Property      Description
 =============  ====================================================================================
-  level         Log level value that will be inherited by all appenders that don't specify a
-                level. Only valid for the platform logger definition.
+  level         Optional property. Log level value that will be inherited by all appenders that
+                don't specify a level. Only valid for the platform logger definition.
 
-  appenders     Array of appenders. For component loggers, these are added to the list provided
-                by the platform logger.
+  appenders     Optional property. Array of appenders. For component loggers, these are added to
+                the list provided by the platform logger.
 =============  ====================================================================================
 
 .........
