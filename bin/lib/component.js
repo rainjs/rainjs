@@ -45,23 +45,16 @@ Component.get = function (componentsDir, id, version) {
             continue;
         }
 
-        // normalize component version
-        var matches = /^([0-9]*)\.?([0-9]*)\.?([0-9]*)?$/.exec(component.version);
-        if (!matches[3]) {
-            component.version += '.0';
-        }
-        var matches = /^([0-9]*)\.?([0-9]*)\.?([0-9]*)?$/.exec(version);
-        if (version && !matches[3]) {
-            version += '.0';
-        }
-
+        component.version = this._normalizeVersion(component.version);
+        version = this._normalizeVersion(version);
         if (component.id == id) {
             versions.push(component.version);
         }
     }
 
     var v = semver.maxSatisfying(versions);
-    if (version && semver.neq(version, v)) {
+
+    if (!v || (version && semver.neq(version, v))) {
         return;
     }
 
@@ -86,8 +79,12 @@ Component.create = function (projectRoot, id, version) {
         throw new Error('Component ' + id + ' version ' + version + ' already exists.');
     } else if (cmp) {
         version = semver.inc(cmp.version, 'minor');
-    } else if (!cmp && !version) {
+    }
+
+    if (!cmp && !version) {
         version = '1.0.0';
+    } else {
+        version = this._normalizeVersion(version);
     }
 
     var componentPath = path.join(componentsDir, id + '_' + version);
@@ -128,6 +125,25 @@ Component._updatePlaceholders = function (filePath, placeholders) {
     }
 
     fs.writeFileSync(filePath, fileContent, 'utf8');
+}
+
+/**
+ * Normalizes component version to major.minor.patch format
+ *
+ * @param {String} version the version to normalize
+ * @returns {String} the normalized version
+ */
+Component._normalizeVersion = function (version) {
+    var matches = /^([0-9]*)\.?([0-9]*)\.?([0-9]*)?$/.exec(version);
+    matches.shift();
+
+    for (var i = matches.length; i--;) {
+        if (!matches[i]) {
+            version += '.0';
+        }
+    }
+
+    return version;
 }
 
 module.exports = Component;

@@ -28,6 +28,7 @@
 var path = require('path'),
     fs = require('fs'),
     color = require('colors'),
+    utils = require('../lib/utils'),
     component = require('../lib/component');
 
 /**
