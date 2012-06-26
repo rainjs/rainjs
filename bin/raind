@@ -44,8 +44,6 @@ function getProjectRoot(dir) {
 program
     .version(require(path.join(root, 'package.json')).version)
     .usage('[options]')
-    .option('-c, --conf <path>', 'start the server with a custom configuration file', getProjectRoot,
-                                 path.join(program.dir, 'conf', 'server.conf.default'))
     .option('-d, --debug', 'start the server in debug mode')
     .option('-D, --dir <path>', 'the server working directory', process.env.RAIN_CWD || process.cwd());
 
