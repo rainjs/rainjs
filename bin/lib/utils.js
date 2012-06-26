@@ -32,17 +32,6 @@ var path = require('path'),
 var root = path.resolve(__dirname, '..', '..');
 
 /**
- * Log a message to the console.
- */
-function log() {
-    var lines = [''];
-    for (var str in arguments){
-        lines.push(arguments[str]);
-    }
-    console.log(lines.join('\n'));
-}
-
-/**
  * Gets the project root by doing a bottom up search from a directory received as a parameter.
  *
  * @param {String} cwd the directory to start searching from
@@ -65,13 +54,6 @@ function getProjectRoot(cwd) {
 }
 
 /**
- * Destroy the console process.
- */
-function destroyStdin() {
-   process.stdin.destroy();
-}
-
-/**
  * Create the folder structure for a component.
  *
  * @param {String} projectPath the project path
@@ -84,7 +66,7 @@ function setupComponent(projectPath, name, version) {
         componentPath = componentPath + '_' + version;
     }
 
-    if (existsComponent(componentPath)) {
+    if (componentExists(componentPath)) {
         utils.log('Component folder already exists!'.red);
         return utils.destroyStdin();
     }
@@ -134,13 +116,11 @@ function updatePlaceholders(filePath, placeholders) {
  * @param {String} componentPath the component path
  * @returns {Boolean} true is the folder exists
  */
-function existsComponent(componentPath) {
+function componentExists(componentPath) {
     return path.existsSync(componentPath);
 }
 
 module.exports = {
-    log: log,
     getProjectRoot: getProjectRoot,
-    destroyStdin: destroyStdin,
     setupComponent: setupComponent
 };

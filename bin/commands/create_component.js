@@ -28,7 +28,7 @@
 var path = require('path'),
     fs = require('fs'),
     color = require('colors'),
-    utils = require('../lib/utils');
+    component = require('../lib/component');
 
 /**
  * Register the create component command.
@@ -49,28 +49,24 @@ function register(program) {
  * @param {String} version the component version
  */
 function createComponent(name, version) {
-    var root;
-
     try {
-        root = utils.getProjectRoot(process.cwd());
-    } catch (err) {
-        utils.log('The current directory is not part of a RAIN project!'.red);
-        return utils.destroyStdin();
+        var cmp = component.create(name, version);
+    } catch (e) {
+        console.log(e.message);
+        process.exit(1);
     }
 
-    utils.setupComponent(root, name, version);
-
-    utils.log(
-        'Component created'.green,
+    console.log([
+        ('Component ' + cmp.id + ' version ' + cmp.version + ' created').green,
         '',
-        'Go to the root directory of the project and (re)start the server.',
-        '  $ ' + ('cd ' + root + ' | rain start').green,
+        'Go to the projectRoot directory of the project and start the server.',
+        '  $ ' + ('raind').green,
         '',
         'Open ' + ('http://localhost:1337/' + name
                 + (version ? ('/' + version) : '') + '/index').blue
                 + ' to see the component.',
         ''
-    );
+    ].join('\n'));
 }
 
 module.exports = register;

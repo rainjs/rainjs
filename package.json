@@ -23,6 +23,7 @@
         "mocks": "",
         "colors": "",
         "wrench": "",
+        "semver": "1.0.x",
         "jed": ""
     },
     "keywords": ["framework", "rain"],
