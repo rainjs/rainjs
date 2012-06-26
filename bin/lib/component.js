@@ -94,7 +94,7 @@ Component.create = function (id, version) {
 
     var componentPath = path.join(componentsDir, id + '_' + version);
 
-    if (fs.existsSync(componentPath)) {
+    if (path.existsSync(componentPath)) {
         throw new Error('Path ' + componentPath + ' already exists.');
     }
 
