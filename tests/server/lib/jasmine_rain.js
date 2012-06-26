@@ -166,13 +166,15 @@ jasmine.util.extend(jasmine.getGlobal(), (function () {
                 require: sandboxRequire.bind(null, file, mocks),
                 module: { exports: {} },
                 __filename: path.resolve(file)
-            },
-            deps
+            }
         );
 
         // Some more augmentation
         context.exports = context.module.exports;
         context.__dirname = path.dirname(context.__filename);
+
+        //add deps at the end in order to be able to override properties like __dirname and __filename
+        extend(context, deps);
 
         code[file] = code[file].replace(/^\#\!.*/, ''); // strip shebang
         // Run the module in the the created context
