@@ -30,10 +30,11 @@ location.
 Fatal
 .....
 
-This means something **really really bad happened** and it crashed the server. You can't recover
-from the error and you have to restart the server. In this case the error has to be investigated
-yesterday. This is the case when you wake up the system administrator. This level should be used
-very rarely.
+This is the worst case scenario. In RAIN it means you can't recover from the error and you have to
+restart the server. These errors have to be fixed very fast because they might make the server
+unusable.
+
+This logging level should not be used in RAIN components or third party developers.
 
 When to use:
 
@@ -45,7 +46,7 @@ When to use:
 Error
 .....
 
-This means something bad happened. This has to be investigated as soon as possible. The server
+This means that some unexpected behavior appeared in the application's workflow. The server
 still works but the error can cause unexpected behavior to the application's functionality.
 
 When to use:
@@ -53,10 +54,10 @@ When to use:
 - When a subcomponent cannot be found. This could mean the component wasn't deployed or the exact
   requested version was replaced by a newer version. Do not use it for the main component because
   the user could have mistyped the address.
-- When a core backend service becomes unavailable or responds very slowly, like an external service
+- When a core backend service becomes unavailable, like an external service
   or a database connection.
 - When some expected and required resources are missing.
-- When internal functions receive unexpected or malformed input parameters.
+- When public API functions receive unexpected or malformed input parameters.
 
 ....
 Warn
@@ -72,6 +73,7 @@ When to use:
 - When configuration or input parameters are missing but you can determine default values for them.
 - When user input parameters might indicate security problems, like introducing the wrong password
   multiple times.
+- When some core services are responding slowly.
 
 ....
 Info
