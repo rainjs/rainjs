@@ -35,7 +35,7 @@ describe('testing locale routing', function () {
         };
     }
 
-    beforeEach(function() {
+    beforeEach(function () {
         locale = loadModuleContext('/lib/routes/locale.js');
 
         request = { component: true };
@@ -47,18 +47,18 @@ describe('testing locale routing', function () {
         });
     });
 
-    it('must response only a part of of the content', function() {
+    it('must response only a part of of the content', function () {
         var opt = {
             sendBody: true,
-            start: 0,
-            end: 1
+            start: 1,
+            end: 10
         };
         spyOn(locale.routerUtils, 'setResourceHeaders').andReturn(opt);
         locale.handle(request, response);
-        expect(localeContent).toEqual('{');
+        expect(localeContent).toEqual('"language"');
     });
 
-    it('must response with the whole content', function() {
+    it('must response with the whole content', function () {
         var opt = {
             sendBody: true
         };
