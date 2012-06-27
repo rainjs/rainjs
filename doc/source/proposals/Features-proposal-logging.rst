@@ -239,6 +239,16 @@ in the following table:
   pattern              Supports a comprehensive list of placeholders that can be combined to
                        assemble a message containing information exposed by the platform,
                        by the environment or by the logging event.
+                       
+                       Some possible placeholders are: ``%date``, ``%level``, ``%logger``,
+                       ``%message``, ``%newline``, ``%exception``, ``%stacktrace``,
+                       ``%session{key}``, ``%sid``, ``%request{key}``.
+                       
+                       Format modifiers like justification, minimum and maximum width are also
+                       supported. For example, ``%-5level`` specifies right padding with spaces if
+                       width is less than 5 characters, ``%20.20logger`` specifies default (left)
+                       padding with spaces if logger name is shorter than 20 characters, and a
+                       truncation of the name if it is larger than 20 characters.
 ===================  ==============================================================================
 
 -----------
