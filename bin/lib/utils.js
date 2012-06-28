@@ -41,12 +41,12 @@ function getProjectRoot(cwd) {
     var dir = cwd;
 
     while ('/' !== dir && !dir.match(/^\w:\\\\$/)) {
-        try {
-            fs.statSync(path.join(dir, '.rain'));
-            return dir;
-        } catch (e) {
+        if (!path.existsSync(path.join(dir, '.rain')) {
             dir = path.dirname(dir);
+            continue;
         }
+
+        return dir;
     }
 
     throw new Error('The specified path is not a RAIN project.');
