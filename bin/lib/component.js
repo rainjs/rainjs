@@ -34,7 +34,7 @@ Component.create = function (projectRoot, id, version) {
     if (path.existsSync(componentPath)) {
         componentPath +=  '_' + version;
 
-        if(path.existsSync(componentPath)) {
+        if (path.existsSync(componentPath)) {
             throw new Error('Component ' + id + ' version ' + version + ' already exists.');
         }
     }
