@@ -50,6 +50,5 @@ describe('RAIN create component', function () {
         }
 
         expect(process.exit).toHaveBeenCalledWith(1);
-        expect(console.log).toHaveBeenCalledWith('Some funky error');
     });
 });

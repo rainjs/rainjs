@@ -42,7 +42,7 @@ function getProjectRoot(dir) {
 }
 
 program
-    .version(require(path.join(root, 'package.json')).version)
+    .version(require(path.join(root, 'package.json')).version || '0.1.0')
     .usage('[options]')
     .option('-d, --debug', 'start the server in debug mode')
     .option('-D, --dir <path>', 'the server working directory', process.env.RAIN_CWD || process.cwd());
@@ -51,10 +51,17 @@ program.parse(process.argv);
 
 var projectRoot = getProjectRoot(program.dir);
 
-if (program.debug && 'win32' != process.platform) {
+if (program.debug && 'win32' !== process.platform) {
+    // notify the node process that it needs to attach a debug server to itself
     process.kill(process.pid, 'SIGUSR1');
 }
 
 process.title = 'rain-server';
-process.chdir(projectRoot);
+
+try {
+    process.chdir(projectRoot);
+} catch (e) {
+    console.log('Could not start server in', projectRoot);
+    process.exit(0);
+}
 require(path.join(root, 'lib', 'server')).initialize();

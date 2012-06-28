@@ -16,57 +16,6 @@ function Component(id, version) {
 }
 
 /**
- * Gets a component specified by ``id`` and ``version`` or the latest version specified by ``id``
- *
- * @param {String} id the component name
- * @param {String} [version] the component version
- * @returns {Component|undefiend} the component instance
- */
-Component.get = function (componentsDir, id, version) {
-    var files = fs.readdirSync(componentsDir),
-        versions = [];
-
-    for (var i = files.length; i--;) {
-        var file = path.join(componentsDir, files[i]);
-
-        try {
-            var stat = fs.statSync(file);
-        } catch (e) {
-            continue;
-        }
-
-        if (!stat.isDirectory()) {
-            continue;
-        }
-
-        try {
-            var component = require(path.join(file, 'meta.json'));
-        } catch (e) {
-            continue;
-        }
-
-        console.log(component);
-        if (!component.version) {
-            continue;
-        }
-
-        component.version = this._normalizeVersion(component.version);
-        version && (version = this._normalizeVersion(version));
-        if (component.id == id) {
-            versions.push(component.version);
-        }
-    }
-
-    var v = semver.maxSatisfying(versions);
-
-    if (!v || (version && semver.neq(version, v))) {
-        return;
-    }
-
-    return new Component(id, v);
-};
-
-/**
  * Create a new component
  *
  * @param {String} id the component name
@@ -77,24 +26,14 @@ Component.get = function (componentsDir, id, version) {
  */
 Component.create = function (projectRoot, id, version) {
     var componentsDir = path.join(projectRoot, 'components'),
-        cmp = this.get(componentsDir, id, version),
         skeleton = path.resolve(path.join(__dirname, '../init/component'));
 
-    if (cmp && version) {
-        throw new Error('Component ' + id + ' version ' + version + ' already exists.');
-    } else if (cmp) {
-        version = semver.inc(cmp.version, 'minor');
-    }
-
-    if (!cmp && !version) {
-        version = '1.0.0';
-    }
-    version = this._normalizeVersion(version);
+    version = version || '1.0';
 
     var componentPath = path.join(componentsDir, id + '_' + version);
 
     if (path.existsSync(componentPath)) {
-        throw new Error('Path ' + componentPath + ' already exists.');
+        throw new Error('Component ' + id + ' version ' + version + ' already exists.');
     }
 
     fs.mkdirSync(componentPath, '0755');
@@ -129,25 +68,6 @@ Component._updatePlaceholders = function (filePath, placeholders) {
     }
 
     fs.writeFileSync(filePath, fileContent, 'utf8');
-}
-
-/**
- * Normalizes component version to major.minor.patch format
- *
- * @param {String} version the version to normalize
- * @returns {String} the normalized version
- */
-Component._normalizeVersion = function (version) {
-    var matches = /^([0-9]*)\.?([0-9]*)\.?([0-9]*)?$/.exec(version);
-    matches.shift();
-
-    for (var i = matches.length; i--;) {
-        if (!matches[i]) {
-            version += '.0';
-        }
-    }
-
-    return version;
 }
 
 module.exports = Component;

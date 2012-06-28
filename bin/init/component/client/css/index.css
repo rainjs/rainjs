@@ -1,6 +1,12 @@
-.css {
-  background:-moz-linear-gradient(top, #88F, #FFF) no-repeat;
-  background:-webkit-linear-gradient(top, #88F, #FFF) no-repeat;
-  padding: 50px;
-  font-size: 2em;
+.my-class {
+    padding: 50px;
+    font-size: 2em;
+
+    background: linear-gradient(to top, #88f, #fff);
+    background: -moz-linear-gradient(to top, #88f, #fff);
+    background: -webkit-linear-gradient(to top, #88f, #fff);
+    background: -ms-linear-gradient(to top, #88f, #fff);
+    background-color: #fff;
+    filter: progid:DXImageTransform.Microsoft.Gradient(
+                GradientType=0, startColorStr="#ffffff", endColorStr="#8888ff");
 }

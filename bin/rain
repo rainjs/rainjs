@@ -32,7 +32,8 @@ var program = require('commander'),
 var root = path.dirname(__dirname);
 
 program
-    .version(require(path.join(root, 'package.json')).version)
+    .version(require(path.join(root, 'package.json') || '0.1.0').version)
+    .option('-v, --verbose', 'display verbose output', false)
     .usage('<command> [options]');
 
 util.walkSync(path.join(__dirname, 'commands'), ['.js'], function (file, folder) {

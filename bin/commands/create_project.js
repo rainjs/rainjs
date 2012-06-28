@@ -50,8 +50,8 @@ function register(program) {
  * @param {String} projectName the project name
  * @param {String} [projectPath] the project path
  */
-function createProject(projectName, projectPath) {
-    projectPath = typeof projectPath !== 'undefined' ? projectPath : '.';
+function createProject(projectName, projectPath, options) {
+    projectPath = projectPath || '.';
     projectPath = path.join(path.resolve(projectPath), projectName);
 
     try {
@@ -73,13 +73,24 @@ function createProject(projectName, projectPath) {
         setupProject(projectPath);
         component.create(projectPath, 'hello_world', '1.0');
 
-        console.log('Project created'.green);
-        console.log('Go to the root directory of the project and start the server.');
-        console.log('  $ cd %s && raind'.green, projectPath);
-        console.log('Open %s to see the default component.',
-            'http://localhost:1337/hello_world/index'.blue);
+        if (options.parent.verbose) {
+
+        console.log([
+            'Project created'.green,
+            '',
+            'Go to the root directory of the project and start the server.',
+            ('  $ cd ' + projectPath + ' && raind').green,
+            '',
+            'Open ' + 'http://localhost:1337/hello_world/index'.blue + ' to see the default component.'
+            ].join('\n'));
+        }
     } catch (err) {
-       console.log('An error occurred during project setup!'.red, err.message);
+       console.log('Failed to setup project:', err.message);
+       try {
+           fs.unlinkSync(projectPath);
+       } catch (e) {
+           // nothing to remove
+       }
        process.exit(1);
     }
 }
@@ -88,6 +99,7 @@ function createProject(projectName, projectPath) {
  * Create the project folder structure.
  *
  * @param {String} projectPath the project path
+ * @throws {Error} if it cannot create the project structure
  */
 function setupProject(projectPath) {
     var permissions = '0755';

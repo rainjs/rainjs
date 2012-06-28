@@ -26,31 +26,30 @@
 "use strict";
 
 var path = require('path'),
-    wrench = require('wrench'),
     fs = require('fs');
-
-var root = path.resolve(__dirname, '..', '..');
 
 /**
  * Gets the project root by doing a bottom up search from a directory received as a parameter.
+ * This works by recursively going up the directory hierarchy until it reaches root (/) at which time
+ * it stops and throws an error.
  *
  * @param {String} cwd the directory to start searching from
  * @returns {String} the project root path
  * @throws {Error} if it reaches /
  */
 function getProjectRoot(cwd) {
-    return (function getRoot(dir) {
-        if ('/' == dir) {
-            throw new Error('The specified path is not a RAIN project.');
-        }
+    var dir = cwd;
 
+    while ('/' !== dir && !dir.match(/^\w:\\\\$/)) {
         try {
             fs.statSync(path.join(dir, '.rain'));
             return dir;
         } catch (e) {
-            return getRoot(path.dirname(dir));
+            dir = path.dirname(dir);
         }
-    })(cwd);
+    }
+
+    throw new Error('The specified path is not a RAIN project.');
 }
 
 module.exports = {
