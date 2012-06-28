@@ -1,7 +1,6 @@
 var path = require('path'),
     fs = require('fs'),
     wrench = require('wrench');
-    semver = require('semver');
 
 /**
  * RAIN component
@@ -30,10 +29,14 @@ Component.create = function (projectRoot, id, version) {
 
     version = version || '1.0';
 
-    var componentPath = path.join(componentsDir, id + '_' + version);
+    var componentPath = path.join(componentsDir, id);
 
     if (path.existsSync(componentPath)) {
-        throw new Error('Component ' + id + ' version ' + version + ' already exists.');
+        componentPath +=  '_' + version;
+
+        if(path.existsSync(componentPath)) {
+            throw new Error('Component ' + id + ' version ' + version + ' already exists.');
+        }
     }
 
     fs.mkdirSync(componentPath, '0755');

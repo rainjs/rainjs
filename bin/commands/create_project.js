@@ -76,7 +76,7 @@ function createProject(projectName, projectPath, options) {
         if (options.parent.verbose) {
 
         console.log([
-            'Project created'.green,
+            'Project created.'.green,
             '',
             'Go to the root directory of the project and start the server.',
             ('  $ cd ' + projectPath + ' && raind').green,
@@ -89,7 +89,7 @@ function createProject(projectName, projectPath, options) {
        try {
            fs.unlinkSync(projectPath);
        } catch (e) {
-           // nothing to remove
+           // nothing else we can do
        }
        process.exit(1);
     }

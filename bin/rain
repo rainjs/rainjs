@@ -29,10 +29,17 @@ var program = require('commander'),
     path = require('path'),
     util = require('../lib/util');
 
-var root = path.dirname(__dirname);
+var root = path.dirname(__dirname),
+    version;
+
+try {
+    version = require(path.join(root, 'package.json')).version;
+} catch (e) {
+    version = '0.1.0';
+}
 
 program
-    .version(require(path.join(root, 'package.json') || '0.1.0').version)
+    .version(version)
     .option('-v, --verbose', 'display verbose output', false)
     .usage('<command> [options]');
 

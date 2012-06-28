@@ -49,23 +49,23 @@ function register(program) {
  * @param {String} name the component name
  * @param {String} version the component version
  */
-function createComponent(name, version, options) {
+function createComponent(id, version, options) {
     try {
-        var cmp = component.create(utils.getProjectRoot(process.cwd()), name, version);
+        var cmp = component.create(utils.getProjectRoot(process.cwd()), id, version);
     } catch (e) {
         console.log(e.message);
         process.exit(1);
     }
 
-    if (options.parent.verbose) {
+    if (options && options.parent.verbose) {
         console.log([
             ('Component ' + cmp.id + ' version ' + cmp.version + ' created').green,
             '',
             'Go to the projectRoot directory of the project and start the server.',
             '  $ ' + ('raind').green,
             '',
-            'Open ' + ('http://localhost:1337/' + name
-                    + (version ? ('/' + version) : '') + '/index').blue
+            'Open ' + ('http://localhost:1337/' + cmp.id
+                    + (cmp.version ? ('/' + cmp.version) : '') + '/index').blue
                     + ' to see the component.',
             ''
         ].join('\n'));

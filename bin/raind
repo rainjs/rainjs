@@ -30,7 +30,8 @@ var program = require('commander'),
     fs = require('fs'),
     sdkUtils = require('./lib/utils');
 
-var root = path.dirname(__dirname);
+var root = path.dirname(__dirname),
+    version;
 
 function getProjectRoot(dir) {
     try {
@@ -41,8 +42,13 @@ function getProjectRoot(dir) {
     }
 }
 
+try {
+    version = require(path.join(root, 'package.json')).version;
+} catch (e) {
+    version = '0.1.0';
+}
 program
-    .version(require(path.join(root, 'package.json')).version || '0.1.0')
+    .version(version)
     .usage('[options]')
     .option('-d, --debug', 'start the server in debug mode')
     .option('-D, --dir <path>', 'the server working directory', process.env.RAIN_CWD || process.cwd());
@@ -61,7 +67,7 @@ process.title = 'rain-server';
 try {
     process.chdir(projectRoot);
 } catch (e) {
-    console.log('Could not start server in', projectRoot);
+    console.log('Failed to change directory to', projectRoot, 'error:', e.message);
     process.exit(0);
 }
 require(path.join(root, 'lib', 'server')).initialize();
