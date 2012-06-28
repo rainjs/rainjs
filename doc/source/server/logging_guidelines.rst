@@ -34,7 +34,7 @@ This is the worst case scenario. In RAIN it means you can't recover from the err
 restart the server. These errors have to be fixed very fast because they might make the server
 unusable.
 
-This logging level should not be used in RAIN components or third party developers.
+This logging level should not be used in RAIN components or by third party developers.
 
 When to use:
 
@@ -89,12 +89,12 @@ When to use:
 - When the server's or component's state changed or to show the lifecycle of different rendering
   processes.
 
------
+.....
 Debug
------
+.....
 
-This is helpful information used by developers / IT department / system administrator to identity
-problems. It's used primarily in the development stage. Be careful not to overdue it because you can
+This is helpful information used by developers / IT department / system administrator to identify
+problems. It's used primarily in the development stage. Be careful not to overdo it because you can
 make the code harder to read.
 
 When to use:
@@ -143,7 +143,7 @@ your component. You can add an extra file appender that writes only the ``error`
 a specific layout pattern in a specific file. The logging level is optional for each appender and
 inherited from the platform if it's not specified.
 
-As a third party developer you may want enhance the default logging settings if:
+As a third party developer you may want to enhance the default logging settings if:
 
 - You want to log the messages in a custom storage / format.
 - You want to change the logging level / layout / parameters for a specific appender.

@@ -256,11 +256,10 @@ Client Side
 -----------
 
 The logging system was built with the objective that logging should be centralized. In this regard,
-client side specific appenders aren't supported. However, client side code is as important to the
-server and components as much as server side code, so it is important to give developers access
-to the logging system on the client side, too. The solution is to log all messages to the server
-side, regardless of their origin.
+client side specific appenders aren’t supported. However, client side code is as important as server
+side code, so it is useful to give developers access to the logging system on the client side. The
+solution is to log all messages to the server side, regardless of their origin.
 
-RAIN should open a websocket channel for  sending logging events originating on the client to the
+RAIN should open a websocket channel for sending logging events originating on the client to the
 server. The pattern layout makes it easy to separate messages from the client and server by
 providing a placeholder for this use.
