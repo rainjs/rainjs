@@ -21,15 +21,16 @@
         "socket.io": ">= 0.7.7",
         "commander": "",
         "mocks": "",
-        "daemon": "git://github.com/arcade/daemon.node.git",
         "colors": "",
         "wrench": "",
-        "cli-table": "",
+        "semver": "1.0.x",
         "jed": ""
     },
     "keywords": ["framework", "rain"],
     "repository": "git://github.com/rainjs/rainjs",
-    "main": "./start",
-    "bin": { "rain": "./bin/rain.js" },
+    "bin": {
+        "rain": "./bin/rain",
+        "raind": "./bin/raind"
+    },
     "engines": { "node": "0.6.x" }
 }

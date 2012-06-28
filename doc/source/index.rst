@@ -66,6 +66,7 @@ Server side modules
     server/data_layer
     server/platform_language
     server/localization
+    server/sdk_architecture
 
 ....
 APIs

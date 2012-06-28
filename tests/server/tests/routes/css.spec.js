@@ -43,7 +43,7 @@ describe('Router Plugin: CSS Route', function () {
         response = new http.ServerResponse();
         request = new http.ServerRequest();
         mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
-        mockComponentRegistry.scanComponentFolder();
+        mockComponentRegistry.registerConfigComponents();
 
         componentRegistry = new mockComponentRegistry.ComponentRegistry();
 

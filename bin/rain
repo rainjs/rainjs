@@ -1,4 +1,6 @@
-// Copyright © 2012 rainjs
+#!/usr/bin/env node
+
+//Copyright © 2012 rainjs
 //
 // All rights reserved
 //
@@ -23,45 +25,25 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-"use strict";
+var program = require('commander'),
+    path = require('path'),
+    util = require('../lib/util');
 
-var cwd = process.cwd();
-var globals = require(cwd + '/lib/globals.js');
-var config = require(cwd + '/lib/configuration.js');
-var routerPlugin = loadModuleExports('/lib/routes/view.js', {
-    "../renderer": {
-        renderBootstrap: function(component, viewId, request, response){
-            return "bootstrap with "+component.id+" "+component.version+" "+viewId;
-        }
-    }
+var root = path.dirname(__dirname);
+
+program
+    .version(require(path.join(root, 'package.json') || '0.1.0').version)
+    .option('-v, --verbose', 'display verbose output', false)
+    .usage('<command> [options]');
+
+util.walkSync(path.join(__dirname, 'commands'), ['.js'], function (file, folder) {
+    var command = require(file);
+
+    command(program);
 });
 
-var http = require('mocks').http;
+program.parse(process.argv);
 
-describe('Router Plugin: ' + routerPlugin.name, function() {
-    var mockComponentRegistry = null;
-    var componentRegistry = null;
-    var response = null;
-    var request = null;
-    beforeEach(function() {
-        response = new http.ServerResponse();
-        request = new http.ServerRequest();
-        mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
-        mockComponentRegistry.registerConfigComponents();
-        componentRegistry = new mockComponentRegistry.ComponentRegistry();
-        response.write = function(text){
-            if(!this._body){
-                this._body = "";
-            }
-            this._body += text;
-        };
-    });
-
-    it('must return the bootstrap html', function() {
-        request.path = "index";
-        request.component = componentRegistry.getConfig("example", "0.0.1");
-        routerPlugin.handle(request, response);
-        expect(response._body).toEqual("bootstrap with example 0.0.1 index");
-        response.finished = true;
-    });
-});
+if (process.argv.length < 3) {
+    process.stdout.write(program.helpInformation());
+}

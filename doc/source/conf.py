@@ -255,3 +255,4 @@ epub_copyright = u'2012, Rain Team'
 # Allow duplicate toc entries.
 #epub_tocdup = True
 primary_domain = 'js'
+highlight_language = 'js'

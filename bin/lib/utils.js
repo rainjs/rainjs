@@ -23,53 +23,35 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-var mod_path = require('path')
-  , fs = require('fs');
+"use strict";
 
-exports.checkValidProject = function(path){
-  return mod_path.existsSync(mod_path.join(path, '.rain'));
-};
+var path = require('path'),
+    fs = require('fs');
 
-exports.checkPidDirectory = function(){
-  //create process directories
-  if(mod_path.existsSync(this.getPidDir()))
-      return true;
-  return false;
-};
+/**
+ * Gets the project root by doing a bottom up search from a directory received as a parameter.
+ * This works by recursively going up the directory hierarchy until it reaches root (/) at which time
+ * it stops and throws an error.
+ *
+ * @param {String} cwd the directory to start searching from
+ * @returns {String} the project root path
+ * @throws {Error} if it reaches /
+ */
+function getProjectRoot(cwd) {
+    var dir = cwd;
 
-exports.componentExists = function(component_path){
-  return mod_path.existsSync(component_path);
-};
+    while ('/' !== dir && !dir.match(/^\w:\\\\$/)) {
+        try {
+            fs.statSync(path.join(dir, '.rain'));
+            return dir;
+        } catch (e) {
+            dir = path.dirname(dir);
+        }
+    }
 
-exports.createPidDirectory = function(){
-  //create process id directory
-  fs.mkdirSync(this.getPidDir(), 0775);
-};
+    throw new Error('The specified path is not a RAIN project.');
+}
 
-exports.getPidDir = function(){
-  return mod_path.resolve(process.env.HOME || process.env.UserProfile, '.rain');
-};
-
-exports.serverIsUp = function(project_path){
-  if(mod_path.existsSync(mod_path.join(project_path, '.server'))){
-    return true;
-  }
-  
-  return false;
-};
-
-exports.getServerPIDContent = function(path){
-  var result = fs.readFileSync(path).toString().match(/^([0-9]+) (.+)/);
-  return [result[1], result[2]];
-};
-
-exports.getServerList = function(){
-  var files = fs.readdirSync(this.getPidDir()),
-      serverfiles = [];
-  
-  for(var i = files.length; i--;){
-    if(~files[i].indexOf('RAINSERVER'))
-      serverfiles.push(files[i]);
-  }
-  return serverfiles;
+module.exports = {
+    getProjectRoot: getProjectRoot
 };

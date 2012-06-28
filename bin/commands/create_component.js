@@ -23,18 +23,53 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-var wrench = require('wrench');
-var fs = require('fs');
-var path = require('path');
+"use strict";
 
-module.exports = function (options) {
-    wrench.copyDirSyncRecursive(path.resolve(path.join(__dirname, '../../../init/skeletons/nodejs')), options.path);
+var path = require('path'),
+    fs = require('fs'),
+    color = require('colors'),
+    utils = require('../lib/utils'),
+    component = require('../lib/component');
 
-    // Manipulate meta.json.
-    var metajs = fs.readFileSync(options.path + '/meta.json', 'utf8').replace(/\{\{application_name\}\}/g, options.name);
-    fs.writeFileSync(options.path+'/meta.json', metajs, 'utf8');
+/**
+ * Register the create component command.
+ *
+ * @param {Program} program
+ */
+function register(program) {
+    program
+        .command('create-component <component-name> [component-version]')
+        .description('Create a new RAIN component in the current project.')
+        .action(createComponent);
+}
 
-    // Manipulate client-side controller.
-    var metajs = fs.readFileSync(options.path + '/client/js/index.js', 'utf8').replace(/\{\{application_name\}\}/g, options.name);
-    fs.writeFileSync(options.path+'/client/js/index.js', metajs, 'utf8');
-};
+/**
+ * Create a new RAIN component in the current RAIN project.
+ *
+ * @param {String} name the component name
+ * @param {String} version the component version
+ */
+function createComponent(name, version, options) {
+    try {
+        var cmp = component.create(utils.getProjectRoot(process.cwd()), name, version);
+    } catch (e) {
+        console.log(e.message);
+        process.exit(1);
+    }
+
+    if (options.parent.verbose) {
+        console.log([
+            ('Component ' + cmp.id + ' version ' + cmp.version + ' created').green,
+            '',
+            'Go to the projectRoot directory of the project and start the server.',
+            '  $ ' + ('raind').green,
+            '',
+            'Open ' + ('http://localhost:1337/' + name
+                    + (version ? ('/' + version) : '') + '/index').blue
+                    + ' to see the component.',
+            ''
+        ].join('\n'));
+    }
+}
+
+module.exports = register;

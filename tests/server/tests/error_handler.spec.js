@@ -36,7 +36,7 @@ describe('Error handler', function () {
 
     beforeEach(function () {
         mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
-        mockComponentRegistry.scanComponentFolder();
+        mockComponentRegistry.registerConfigComponents();
         componentRegistry = new mockComponentRegistry.ComponentRegistry();
 
         mockConfiguration = {
