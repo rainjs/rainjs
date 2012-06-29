@@ -38,15 +38,13 @@ var path = require('path'),
  * @throws {Error} if it reaches /
  */
 function getProjectRoot(cwd) {
-    var dir = cwd;
-
-    while ('/' !== dir && !dir.match(/^\w:\\\\$/)) {
-        if (!path.existsSync(path.join(dir, '.rain'))) {
-            dir = path.dirname(dir);
+    while ('/' !== cwd && !cwd.match(/^\w:\\\\$/)) {
+        if (!path.existsSync(path.join(cwd, '.rain'))) {
+            cwd = path.dirname(cwd);
             continue;
         }
 
-        return dir;
+        return cwd;
     }
 
     throw new Error('The specified path is not a RAIN project.');
