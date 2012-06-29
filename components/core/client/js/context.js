@@ -119,7 +119,7 @@ define(['raintime/client_storage',
      * @param {String} component.id The component id
      * @param {String} component.view The component view id
      * @param {String} component.sid The component staticId id
-     * @param {Object} component.data Custom data for the template
+     * @param {Object} component.context Custom data for the template
      * @param {Boolean} component.placeholder Enable / Disable placeholder
      * @param {jQueryDom} dom The dom object where the component is inserted
      * @param {Function} [callback] the function to be called after the controller was loaded
@@ -147,7 +147,7 @@ define(['raintime/client_storage',
      * @param {String} component.id The component id
      * @param {String} component.view The component view id
      * @param {String} component.sid The component staticId id
-     * @param {Object} component.data Custom data for the template
+     * @param {Object} component.context Custom data for the template
      * @param {Boolean} component.placeholder Enable / Disable placeholder
      * @param {Function} [callback] the function to be called after the controller was loaded
      */
