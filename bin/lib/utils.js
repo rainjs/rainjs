@@ -23,22 +23,22 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-var mod_path = require('path')
-  , fs = require('fs');
+var path = require('path'),
+    fs = require('fs');
 
-exports.checkValidProject = function(path){
-  return mod_path.existsSync(mod_path.join(path, '.rain'));
+exports.checkValidProject = function (projectPath) {
+  return fs.existsSync(path.join(projectPath, '.rain'));
 };
 
 exports.checkPidDirectory = function(){
   //create process directories
-  if(mod_path.existsSync(this.getPidDir()))
+  if(fs.existsSync(this.getPidDir()))
       return true;
   return false;
 };
 
 exports.componentExists = function(component_path){
-  return mod_path.existsSync(component_path);
+  return fs.existsSync(component_path);
 };
 
 exports.createPidDirectory = function(){
@@ -47,26 +47,26 @@ exports.createPidDirectory = function(){
 };
 
 exports.getPidDir = function(){
-  return mod_path.resolve(process.env.HOME || process.env.UserProfile, '.rain');
+  return path.resolve(process.env.HOME || process.env.UserProfile, '.rain');
 };
 
 exports.serverIsUp = function(project_path){
-  if(mod_path.existsSync(mod_path.join(project_path, '.server'))){
+  if (fs.existsSync(path.join(project_path, '.server'))) {
     return true;
   }
-  
+
   return false;
 };
 
-exports.getServerPIDContent = function(path){
-  var result = fs.readFileSync(path).toString().match(/^([0-9]+) (.+)/);
+exports.getServerPIDContent = function (filePath) {
+  var result = fs.readFileSync(filePath).toString().match(/^([0-9]+) (.+)/);
   return [result[1], result[2]];
 };
 
 exports.getServerList = function(){
   var files = fs.readdirSync(this.getPidDir()),
       serverfiles = [];
-  
+
   for(var i = files.length; i--;){
     if(~files[i].indexOf('RAINSERVER'))
       serverfiles.push(files[i]);

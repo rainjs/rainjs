@@ -58,11 +58,12 @@ describe('Data layer', function() {
 
         var mocks = {
             './component_registry': jasmine.createSpyObj('component_registry', ['getConfig']),
-            path: jasmine.createSpyObj('component_registry', ['exists', 'join'])
+            path: jasmine.createSpyObj('path', ['join']),
+            fs: jasmine.createSpyObj('fs', ['exists'])
         };
         dataLayer = loadModuleExports('/lib/data_layer.js', mocks);
 
-        mocks.path.exists.andCallFake(function (path, callback) {
+        mocks.fs.exists.andCallFake(function (path, callback) {
             callback(true);
         });
         mocks.path.join.andCallFake(path.join);
@@ -161,7 +162,7 @@ describe('Data layer', function() {
             delete componentOpt.request;
             var req = dataLayer._createCustomRequest(componentOpt);
 
-            expect(req.session).toBe(componentOpt.session);;
+            expect(req.session).toBe(componentOpt.session);
             expect(req.query).toBeUndefined();
             expect(req.headers).toBeUndefined();
             expect(req.url).toBeUndefined();

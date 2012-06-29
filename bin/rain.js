@@ -26,7 +26,7 @@
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 var fs = require('fs'),
-    mod_path = require('path'),
+    path = require('path'),
     color = require('colors'),
     exec = require('child_process').exec,
     wrench = require('wrench'),
@@ -38,7 +38,7 @@ var fs = require('fs'),
 
 process.title = 'rain';
 program
-    .version(JSON.parse(fs.readFileSync(mod_path.join(mod_path.dirname(__dirname), 'package.json'), 'utf8')).version)
+    .version(JSON.parse(fs.readFileSync(path.join(path.dirname(__dirname), 'package.json'), 'utf8')).version)
     .usage('<options> <command>')
     .option('-d, --debug', 'start the server with the node debugger\n'+
             '\t\t\t       server is NOT restarting on uncaught exceptions\n'+
@@ -111,8 +111,8 @@ if (!program.debug && program.rawArgs.length <= 2) {
  * create new application
  */
 function createProject(path, project_name) {
-    var project_path = mod_path.join(mod_path.resolve(path), project_name);
-    if (!mod_path.existsSync(project_path) && !utils.checkValidProject(project_path)) {
+    var project_path = path.join(path.resolve(path), project_name);
+    if (!fs.existsSync(project_path) && !utils.checkValidProject(project_path)) {
         log('Directory '+project_path.blue+' does not exist!');
         program.confirm('Create Directory?  -  yes/no: ', function(yes) {
             if (yes && setupProject(project_path)) {
@@ -177,10 +177,10 @@ function setupProject(project_path) {
         errorComponentName = 'error',
         placeholderComponentName = 'placeholder',
         paths = {
-             conf: mod_path.join(project_path, 'conf'),
-             components: mod_path.join(project_path, 'components'),
-             'public': mod_path.join(project_path, 'public'),
-             log: mod_path.join(project_path, 'log')
+             conf: path.join(project_path, 'conf'),
+             components: path.join(project_path, 'components'),
+             'public': path.join(project_path, 'public'),
+             log: path.join(project_path, 'log')
         };
 
     //create project directory
@@ -193,23 +193,23 @@ function setupProject(project_path) {
     fs.mkdirSync(paths.log, 0755);
     //copy default configurations
     wrench.copyDirSyncRecursive(
-        mod_path.resolve(mod_path.join(__dirname, '../init/conf')),
+        path.resolve(path.join(__dirname, '../init/conf')),
         paths.conf
     );
     //copy core-component
     wrench.copyDirSyncRecursive(
-        mod_path.resolve(mod_path.join(__dirname, '../components/'+coreComponentsName)),
-        mod_path.join(paths.components, coreComponentsName)
+        path.resolve(path.join(__dirname, '../components/'+coreComponentsName)),
+        path.join(paths.components, coreComponentsName)
     );
     //copy error-component
     wrench.copyDirSyncRecursive(
-        mod_path.resolve(mod_path.join(__dirname, '../components/'+errorComponentName)),
-        mod_path.join(paths.components, errorComponentName)
+        path.resolve(path.join(__dirname, '../components/'+errorComponentName)),
+        path.join(paths.components, errorComponentName)
     );
     //copy placeholder-component
     wrench.copyDirSyncRecursive(
-        mod_path.resolve(mod_path.join(__dirname, '../components/'+placeholderComponentName)),
-        mod_path.join(paths.components, placeholderComponentName)
+        path.resolve(path.join(__dirname, '../components/'+placeholderComponentName)),
+        path.join(paths.components, placeholderComponentName)
     );
 
     // create a package.json file for the project
@@ -229,7 +229,7 @@ function setupProject(project_path) {
 
 function setupComponent(project_path, component_name, callback) {
 
-    var component_path = mod_path.join(project_path, 'components', component_name);
+    var component_path = path.join(project_path, 'components', component_name);
     if (utils.componentExists(component_path)) {
         console.log('Component already exists'.red);
         return false;
@@ -291,78 +291,78 @@ function start(conf){
     if (utils.serverIsUp(actPath)) {
         console.log('Server is still running!'.yellow);
         return false;
-    } else {
-        //===========START RAIN SERVER===========
-        var conf_path = program.conf ||
-                        process.env.RAIN_CONF ||
-                        mod_path.join(actPath, 'conf', 'server.conf.default'),
-            pid_path = utils.getPidDir(),
-            withDaemon = program.daemon && process.platform != 'darwin' && process.platform != 'win32';
-
-        process.title = 'rain-server';
-
-        if (withDaemon) {
-            var daemon = require('daemon');
-            var watcher = null;
-            //start daemon
-            daemon.start();
-
-            //create configurationfile
-            var server_prop_file = process.pid+' '+conf_path,
-            conf_spid    = mod_path.join(pid_path, actPath.replace(/\//gi, '._.')+'RAINSERVER'+process.pid),
-            conf_project = mod_path.join(actPath, '.server');
-
-            //write server config
-            fs.writeFileSync(conf_spid, server_prop_file);
-            fs.writeFileSync(conf_project, server_prop_file);
-
-            //lock pidfile
-            daemon.lock(conf_spid);
-
-            //clear conf files if server shutting down
-            process.on('SIGTERM', function() {
-                try {
-                    watcher.closeWatchers();
-                } catch(ex) {
-                    console.error("Can't close all watching files: " + ex.stack);
-                }
-
-                try {
-                    fs.unlinkSync(conf_project);
-                    fs.unlinkSync(conf_spid);
-                } catch(ex) {
-
-                }
-                process.exit(0);
-            });
-
-            process.on('uncaughtException', function (err) {
-                console.error('Uncaught exception: ' + err.stack);
-                if (!program.debug) {
-                    watcher.closeWatchers();
-                    require('child_process').exec('cd ' + actPath +' && rain restart');
-                }
-            });
-        }
-
-        if (process.platform != 'win32') {
-            process.on('SIGINT', function () {
-                console.log('\nServer is stopping...'.green);
-                watcher.closeWatchers();
-                process.exit(0);
-            });
-        }
-
-        if (program.debug && process.platform != 'win32') {
-            process.kill(process.pid, 'SIGUSR1');
-        }
-
-        require('../lib/server').initialize();
-        watcher = require('../lib/watcher.js');
-
-        //===========RAIN SERVER STARTED===========
-        return true;
     }
+
+    //===========START RAIN SERVER===========
+    var conf_path = program.conf ||
+                    process.env.RAIN_CONF ||
+                    path.join(actPath, 'conf', 'server.conf.default'),
+        pid_path = utils.getPidDir(),
+        withDaemon = program.daemon && process.platform != 'darwin' && process.platform != 'win32';
+
+    process.title = 'rain-server';
+
+    if (withDaemon) {
+        var daemon = require('daemon');
+        var watcher = null;
+        //start daemon
+        daemon.start();
+
+        //create configurationfile
+        var server_prop_file = process.pid+' '+conf_path,
+        conf_spid    = path.join(pid_path, actPath.replace(/\//gi, '._.')+'RAINSERVER'+process.pid),
+        conf_project = path.join(actPath, '.server');
+
+        //write server config
+        fs.writeFileSync(conf_spid, server_prop_file);
+        fs.writeFileSync(conf_project, server_prop_file);
+
+        //lock pidfile
+        daemon.lock(conf_spid);
+
+        //clear conf files if server shutting down
+        process.on('SIGTERM', function() {
+            try {
+                watcher.closeWatchers();
+            } catch(ex) {
+                console.error("Can't close all watching files: " + ex.stack);
+            }
+
+            try {
+                fs.unlinkSync(conf_project);
+                fs.unlinkSync(conf_spid);
+            } catch(ex) {
+
+            }
+            process.exit(0);
+        });
+
+        process.on('uncaughtException', function (err) {
+            console.error('Uncaught exception: ' + err.stack);
+            if (!program.debug) {
+                watcher.closeWatchers();
+                require('child_process').exec('cd ' + actPath +' && rain restart');
+            }
+        });
+    }
+
+    if (process.platform != 'win32') {
+        process.on('SIGINT', function () {
+            console.log('\nServer is stopping...'.green);
+            watcher.closeWatchers();
+            process.exit(0);
+        });
+    }
+
+    if (program.debug && process.platform != 'win32') {
+        process.kill(process.pid, 'SIGUSR1');
+    }
+
+    require('../lib/server').initialize();
+    watcher = require('../lib/watcher.js');
+
+    //===========RAIN SERVER STARTED===========
+    return true;
 }
 
 function stop(pid){
@@ -370,7 +370,7 @@ function stop(pid){
         var actPath = process.cwd();
         if (utils.checkValidProject(actPath)) {
             if(utils.serverIsUp(actPath)) {
-                var result = utils.getServerPIDContent(mod_path.join(actPath, '.server'));
+                var result = utils.getServerPIDContent(path.join(actPath, '.server'));
                 pid = result[0];
             } else {
                 console.log('No running server for this project');
@@ -388,10 +388,10 @@ function stop(pid){
         while(utils.serverIsUp(actPath)) {}
     } catch (ev) {
         try {
-            fs.unlinkSync(mod_path.join(actPath, '.server'));
+            fs.unlinkSync(path.join(actPath, '.server'));
         } catch (ev) {}
         try {
-            fs.unlinkSync(mod_path.join(utils.getPidDir(), 'rain.server.' + pid));
+            fs.unlinkSync(path.join(utils.getPidDir(), 'rain.server.' + pid));
         } catch (ev) {}
         console.log('No running server for this project');
     }
@@ -428,7 +428,7 @@ function restart(){
         var actPath = process.cwd();
         if(utils.checkValidProject(actPath)){
             if(utils.serverIsUp(actPath)){
-                var result = utils.getServerPIDContent(mod_path.join(actPath, '.server'));
+                var result = utils.getServerPIDContent(path.join(actPath, '.server'));
                 pid = result[0];
                 conf = result[1];
             }
@@ -465,7 +465,7 @@ function list(type){
 
         var files = utils.getServerList();
         for (var i = files.length; i--;) {
-            var s_file = utils.getServerPIDContent(mod_path.join(utils.getPidDir() ,files[i]));
+            var s_file = utils.getServerPIDContent(path.join(utils.getPidDir() ,files[i]));
             var server_conf = JSON.parse(fs.readFileSync(s_file[1]));
             table_s.push([s_file[0], s_file[1], server_conf.server.port]);
         }
