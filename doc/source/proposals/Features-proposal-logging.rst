@@ -14,7 +14,7 @@ and layouts, complete JSON-based configuration.
 Overview
 --------
 
-The logging system is comprised of *loggers*, *appenders* and *layouts*. Connecting these togheter
+The logging system is comprised of *loggers*, *appenders* and *layouts*. Connecting these together
 through configuration gives developers great flexibility in specifying their output targets. Mixins
 are provided that developers can use for creating custom implementations for appenders or layouts.
 In addition, several implementations are provided by the platform. RAIN provides one **platform
