@@ -41,7 +41,7 @@ function getProjectRoot(cwd) {
     var dir = cwd;
 
     while ('/' !== dir && !dir.match(/^\w:\\\\$/)) {
-        if (!path.existsSync(path.join(dir, '.rain')) {
+        if (!path.existsSync(path.join(dir, '.rain'))) {
             dir = path.dirname(dir);
             continue;
         }
