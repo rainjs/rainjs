@@ -38,7 +38,7 @@ var path = require('path'),
  * @throws {Error} if it reaches /
  */
 function getProjectRoot(cwd) {
-    while ('/' !== cwd && !/^\w:\\\\$/.test(cwd)) {
+    while ('/' !== cwd && !/^[A-Za-z]:\\\\$/.test(cwd)) {
         if (!path.existsSync(path.join(cwd, '.rain'))) {
             cwd = path.dirname(cwd);
             continue;
