@@ -3,6 +3,15 @@ Changelog
 =========
 
 ------
+v 0.12
+------
+
++ Added session / request objects in the data layer.
++ Added support for CSS media queries in the CSS Handlebars helper.
++ Added RAIN logger feature proposal.
++ Refactored the RAIN SDK and made it modular.
+
+------
 v 0.11
 ------
 

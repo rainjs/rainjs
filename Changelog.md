@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.12.0
+
+* Added session / request objects in the data layer.
+* Added support for CSS media queries in the CSS Handlebars helper.
+* Added RAIN logger feature proposal.
+* Refactored the RAIN SDK and made it modular.
+
 ## 0.11.0
 
 * Added an article about Node's best programming practices.
