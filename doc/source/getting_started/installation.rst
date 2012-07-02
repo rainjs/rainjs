@@ -91,10 +91,10 @@ Linux / Unix / Mac OS
    #. ``sudo npm install node-gyp -g``
    #. ``npm install -d``
    #. ``sudo npm link``
-   #. ``rain start``
+   #. ``raind``
 
 In windows npm link is not working. You have to install the package globally
-but this means it not takes all changes automatically.
+but this means it does not get all changes automatically.
 Go to rainjs and type ``sudo npm install -g``
 
 .................
