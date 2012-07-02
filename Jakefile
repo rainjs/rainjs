@@ -128,11 +128,7 @@ namespace('test', function () {
     namespace('server', function () {
         desc('Start the JS test driver server.');
         task('start', function () {
-            var daemon = require('daemon');
             console.log('JSTD server started. Now capture your browser by going to http://localhost:9876');
-
-            daemon.start('jstd.log');
-            daemon.lock('/tmp/jstd.pid')
 
             var jstdPath = './tests/client/bin/JsTestDriver-1.3.3d.jar';
             var jstdPort = 9876;
