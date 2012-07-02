@@ -23,9 +23,9 @@ Before you start to install node make sure you have the following tools installe
 
 Now you can start installing node.
 
-   #. ``wget http://nodejs.org/dist/v0.6.13/node-v0.6.13.tar.gz``
-   #. ``tar -zxvf node-v0.6.13.tar.gz``
-   #. ``cd node-v0.6.13``
+   #. ``wget http://nodejs.org/dist/v0.6.19/node-v0.6.19.tar.gz``
+   #. ``tar -zxvf node-v0.6.19.tar.gz``
+   #. ``cd node-v0.6.19``
    #. ``chmod u+x configure``
    #. ``chmod u+x tools/waf-light``
    #. ``./configure && make && sudo make install``
@@ -41,7 +41,7 @@ Installing via package manager:
 Windows OS
 ..........
 
-   #. Download http://nodejs.org/dist/v0.6.15/node-v0.6.15.msi
+   #. Download http://nodejs.org/dist/v0.6.19/node-v0.6.19.msi
    #. Install the msi package
    #. That's all :)
    #. NPM is in the bundle too ;)
@@ -52,7 +52,7 @@ Mac OS
 
 On Mac OS operating systems you need to execute the following commands:
 
-   #. Download http://nodejs.org/dist/v0.6.15/node-v0.6.15.pkg
+   #. Download http://nodejs.org/dist/v0.6.19/node-v0.6.19.pkg
    #. Install the package
    #. That's all :)
    #. NPM is in the bundle too ;)
