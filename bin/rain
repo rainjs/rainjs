@@ -1,4 +1,6 @@
-// Copyright © 2012 rainjs
+#!/usr/bin/env node
+
+//Copyright © 2012 rainjs
 //
 // All rights reserved
 //
@@ -23,18 +25,32 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-var wrench = require('wrench');
-var fs = require('fs');
-var path = require('path');
+var program = require('commander'),
+    path = require('path'),
+    util = require('../lib/util');
 
-module.exports = function (options) {
-    wrench.copyDirSyncRecursive(path.resolve(path.join(__dirname, '../../../init/skeletons/nodejs')), options.path);
+var root = path.dirname(__dirname),
+    version;
 
-    // Manipulate meta.json.
-    var metajs = fs.readFileSync(options.path + '/meta.json', 'utf8').replace(/\{\{application_name\}\}/g, options.name);
-    fs.writeFileSync(options.path+'/meta.json', metajs, 'utf8');
+try {
+    version = require(path.join(root, 'package.json')).version;
+} catch (e) {
+    version = '0.1.0';
+}
 
-    // Manipulate client-side controller.
-    var metajs = fs.readFileSync(options.path + '/client/js/index.js', 'utf8').replace(/\{\{application_name\}\}/g, options.name);
-    fs.writeFileSync(options.path+'/client/js/index.js', metajs, 'utf8');
-};
+program
+    .version(version)
+    .option('-v, --verbose', 'display verbose output', false)
+    .usage('<command> [options]');
+
+util.walkSync(path.join(__dirname, 'commands'), ['.js'], function (file, folder) {
+    var command = require(file);
+
+    command(program);
+});
+
+program.parse(process.argv);
+
+if (process.argv.length < 3) {
+    process.stdout.write(program.helpInformation());
+}

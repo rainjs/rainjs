@@ -52,7 +52,7 @@ describe('Handlebars component helper', function () {
         };
         mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
         var plugins = ['dynamic_conditions'];
-        mockComponentRegistry.scanComponentFolder();
+        mockComponentRegistry.registerConfigComponents();
         mockComponentRegistry.registerPlugins(plugins);
         mockComponentRegistry.configurePlugins(plugins);
         componentRegistry = new mockComponentRegistry.ComponentRegistry();

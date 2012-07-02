@@ -25,43 +25,51 @@
 
 "use strict";
 
-var cwd = process.cwd();
-var globals = require(cwd + '/lib/globals.js');
-var config = require(cwd + '/lib/configuration.js');
-var routerPlugin = loadModuleExports('/lib/routes/view.js', {
-    "../renderer": {
-        renderBootstrap: function(component, viewId, request, response){
-            return "bootstrap with "+component.id+" "+component.version+" "+viewId;
-        }
+var path = require('path'),
+    fs = require('fs'),
+    color = require('colors'),
+    utils = require('../lib/utils'),
+    component = require('../lib/component');
+
+/**
+ * Register the create component command.
+ *
+ * @param {Program} program
+ */
+function register(program) {
+    program
+        .command('create-component <component-name> [component-version]')
+        .description('Create a new RAIN component in the current project.')
+        .action(createComponent);
+}
+
+/**
+ * Create a new RAIN component in the current RAIN project.
+ *
+ * @param {String} name the component name
+ * @param {String} version the component version
+ */
+function createComponent(id, version, options) {
+    try {
+        var cmp = component.create(utils.getProjectRoot(process.cwd()), id, version);
+    } catch (e) {
+        console.log(e.message);
+        process.exit(1);
     }
-});
 
-var http = require('mocks').http;
+    if (options && options.parent.verbose) {
+        console.log([
+            ('Component ' + cmp.id + ' version ' + cmp.version + ' created').green,
+            '',
+            'Go to the projectRoot directory of the project and start the server.',
+            '  $ ' + ('raind').green,
+            '',
+            'Open ' + ('http://localhost:1337/' + cmp.id
+                    + (cmp.version ? ('/' + cmp.version) : '') + '/index').blue
+                    + ' to see the component.',
+            ''
+        ].join('\n'));
+    }
+}
 
-describe('Router Plugin: ' + routerPlugin.name, function() {
-    var mockComponentRegistry = null;
-    var componentRegistry = null;
-    var response = null;
-    var request = null;
-    beforeEach(function() {
-        response = new http.ServerResponse();
-        request = new http.ServerRequest();
-        mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
-        mockComponentRegistry.registerConfigComponents();
-        componentRegistry = new mockComponentRegistry.ComponentRegistry();
-        response.write = function(text){
-            if(!this._body){
-                this._body = "";
-            }
-            this._body += text;
-        };
-    });
-
-    it('must return the bootstrap html', function() {
-        request.path = "index";
-        request.component = componentRegistry.getConfig("example", "0.0.1");
-        routerPlugin.handle(request, response);
-        expect(response._body).toEqual("bootstrap with example 0.0.1 index");
-        response.finished = true;
-    });
-});
+module.exports = register;

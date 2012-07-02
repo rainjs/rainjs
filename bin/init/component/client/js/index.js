@@ -1,28 +1,29 @@
-define([], function() {
+define([], function () {
+
     /**
-     * Example controller class.
+     * This is the client-side controller for the 'index' page.
      *
      * @name Controller
-     * @class a controller instance
+     * @class
      * @constructor
      */
     function Controller() {
-        // constructor logic here
+        // Add constructor logic here.
     }
 
     /**
      * Initialization lifecycle step that happens immediately after the controller is loaded.
-     *
-     * @function
      */
-    Controller.prototype.init = $.noop;
+    Controller.prototype.init = function () {
+        // Add initialization logic here.
+    };
 
     /**
      * Startup lifecycle step that happens right after the markup is in place.
-     *
-     * @function
      */
-    Controller.prototype.start = $.noop;
+    Controller.prototype.start = function () {
+        // Add start logic here.
+    };
 
     return Controller;
 });

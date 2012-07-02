@@ -197,7 +197,7 @@ describe('Router Utilities', function () {
 
         it('must return an error', function () {
             var mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
-            mockComponentRegistry.scanComponentFolder();
+            mockComponentRegistry.registerConfigComponents();
             var componentRegistry = new mockComponentRegistry.ComponentRegistry();
             var maxAge = 150000000;
             var type = 'resources';
@@ -222,7 +222,7 @@ describe('Router Utilities', function () {
 
         it('must return the resource', function () {
             var mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
-            mockComponentRegistry.scanComponentFolder();
+            mockComponentRegistry.registerConfigComponents();
             var componentRegistry = new mockComponentRegistry.ComponentRegistry();
             var maxAge = 150000000;
             var type = 'resources';
@@ -268,7 +268,7 @@ describe('Router Utilities', function () {
          */
         function localize(filePath, expectedPath, notFound) {
             var mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
-            mockComponentRegistry.scanComponentFolder();
+            mockComponentRegistry.registerConfigComponents();
             var componentRegistry = new mockComponentRegistry.ComponentRegistry();
             var maxAge = 150000000;
             var type = 'resources';

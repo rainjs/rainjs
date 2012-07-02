@@ -67,6 +67,7 @@ Server side modules
     server/platform_language
     server/localization
     server/logging_guidelines
+    server/sdk_architecture
 
 ....
 APIs

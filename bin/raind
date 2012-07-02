@@ -1,4 +1,6 @@
-// Copyright © 2012 rainjs
+#!/usr/bin/env node
+
+//Copyright © 2012 rainjs
 //
 // All rights reserved
 //
@@ -23,45 +25,49 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-"use strict";
+var program = require('commander'),
+    path = require('path'),
+    fs = require('fs'),
+    sdkUtils = require('./lib/utils');
 
-var cwd = process.cwd();
-var globals = require(cwd + '/lib/globals.js');
-var config = require(cwd + '/lib/configuration.js');
-var routerPlugin = loadModuleExports('/lib/routes/view.js', {
-    "../renderer": {
-        renderBootstrap: function(component, viewId, request, response){
-            return "bootstrap with "+component.id+" "+component.version+" "+viewId;
-        }
+var root = path.dirname(__dirname),
+    version;
+
+function getProjectRoot(dir) {
+    try {
+         return sdkUtils.getProjectRoot(program.dir);
+    } catch (e) {
+        console.log(program.dir, 'is not a valid rain project.');
+        process.exit(1);
     }
-});
+}
 
-var http = require('mocks').http;
+try {
+    version = require(path.join(root, 'package.json')).version;
+} catch (e) {
+    version = '0.1.0';
+}
+program
+    .version(version)
+    .usage('[options]')
+    .option('-d, --debug', 'start the server in debug mode')
+    .option('-D, --dir <path>', 'the server working directory', process.env.RAIN_CWD || process.cwd());
 
-describe('Router Plugin: ' + routerPlugin.name, function() {
-    var mockComponentRegistry = null;
-    var componentRegistry = null;
-    var response = null;
-    var request = null;
-    beforeEach(function() {
-        response = new http.ServerResponse();
-        request = new http.ServerRequest();
-        mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
-        mockComponentRegistry.registerConfigComponents();
-        componentRegistry = new mockComponentRegistry.ComponentRegistry();
-        response.write = function(text){
-            if(!this._body){
-                this._body = "";
-            }
-            this._body += text;
-        };
-    });
+program.parse(process.argv);
 
-    it('must return the bootstrap html', function() {
-        request.path = "index";
-        request.component = componentRegistry.getConfig("example", "0.0.1");
-        routerPlugin.handle(request, response);
-        expect(response._body).toEqual("bootstrap with example 0.0.1 index");
-        response.finished = true;
-    });
-});
+var projectRoot = getProjectRoot(program.dir);
+
+if (program.debug && 'win32' !== process.platform) {
+    // notify the node process that it needs to attach a debug server to itself
+    process.kill(process.pid, 'SIGUSR1');
+}
+
+process.title = 'rain-server';
+
+try {
+    process.chdir(projectRoot);
+} catch (e) {
+    console.log('Failed to change directory to', projectRoot, 'error:', e.message);
+    process.exit(0);
+}
+require(path.join(root, 'lib', 'server')).initialize();
