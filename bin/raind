@@ -62,7 +62,7 @@ if (program.debug && 'win32' !== process.platform) {
     process.kill(process.pid, 'SIGUSR1');
 }
 
-process.title = 'rain-server';
+process.title = 'raind';
 
 try {
     process.chdir(projectRoot);
