@@ -10,6 +10,7 @@ RAIN SDK Basic usage
 --------------------
 
 RAIN gives the developer two commands:
+
 - ``rain`` - used to create projects, components
 - ``raind`` - used to start the server
 
@@ -21,14 +22,6 @@ Below you can find a bunch of useful commands to use::
     Usage: rain <command> <options>
            raind <options>
 
-Examples:
-
-    // Creates a new project in the current location.
-    $ rain create-project my_project
-
-    // Start the RAIN server for the current project.
-    $ raind
-
 -----------------------
 RAIN SDK Create project
 -----------------------
@@ -36,10 +29,10 @@ RAIN SDK Create project
 You can easily use RAIN SDK to create projects and components. To create a new project
 execute the following commands:
 
-   #. Go to you workspace folder
-   #. rain create-project <project-name>
-   #. cd <project-name>
-   #. raind
+#. Go to you workspace folder
+#. rain create-project <project-name>
+#. cd <project-name>
+#. raind
 
 Now you have your first RAIN project.
 Try the following url in your browser: http://localhost:1337/hello_world/index.
