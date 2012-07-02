@@ -5,11 +5,11 @@ Automatic Deployment
 Whenever a new release is ready it should be deployed so that the interested persons are able to
 access the application. Right now, the deployment is a manual, error prone process. This proposal
 shows how this process can be automated. The deployment process must easy support rollback to
-previous versions is something goes wrong.
+previous versions if something goes wrong.
 
----
-Git
----
+--------
+Why Git?
+--------
 
 Git is an open source distributed version control system designed to handle everything from small to
 very large projects with speed and efficiency. The data model that Git uses ensures the cryptographic
