@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Text localization &mdash; Rain v0.11.0 documentation</title>
+    <title>Text localization &mdash; Rain v0.12.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.11.0',
+        VERSION:     '0.12.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.11.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.12.0 documentation" href="../index.html" />
     <link rel="next" title="Class ClientRenderer" href="api/ClientRenderer.html" />
     <link rel="prev" title="Rendering" href="rendering.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="rendering.html" title="Rendering"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.11.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.12.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -61,9 +61,10 @@ module system.</p>
 <p>Localization on the client side is done through the <tt class="docutils literal"><span class="pre">t</span></tt> and <tt class="docutils literal"><span class="pre">nt</span></tt> functions provided by the
 framework, and the only thing you need to do is to include them as the last two paramaters of the
 callback passed to <tt class="docutils literal"><span class="pre">define</span></tt> or <tt class="docutils literal"><span class="pre">require</span></tt> like so:</p>
-<div class="highlight-python"><pre>define(['mycomp/js/lib/myModule'], function (myModule, t, nt) {
-    t('my string')
-});</pre>
+<div class="highlight-js"><div class="highlight"><pre><span class="nx">define</span><span class="p">([</span><span class="s1">&#39;mycomp/js/lib/myModule&#39;</span><span class="p">],</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">myModule</span><span class="p">,</span> <span class="nx">t</span><span class="p">,</span> <span class="nx">nt</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">t</span><span class="p">(</span><span class="s1">&#39;my string&#39;</span><span class="p">)</span>
+<span class="p">});</span>
+</pre></div>
 </div>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -140,7 +141,7 @@ function will be returned.</p>
         <li class="right" >
           <a href="rendering.html" title="Rendering"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.11.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.12.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

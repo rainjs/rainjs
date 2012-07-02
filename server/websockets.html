@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>RAIN Websockets &mdash; Rain v0.11.0 documentation</title>
+    <title>RAIN Websockets &mdash; Rain v0.12.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.11.0',
+        VERSION:     '0.12.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.11.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.12.0 documentation" href="../index.html" />
     <link rel="next" title="RAIN component descriptor" href="component_descriptor.html" />
     <link rel="prev" title="Intents" href="messaging_intents.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="messaging_intents.html" title="Intents"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.11.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.12.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -61,28 +61,30 @@ really easy to use websockets.</p>
 <p>In RAIN is really easy to use websockets. You don&#8217;t even have to care about browser compatibility
 because this is automatically provided by socket.io (the underlining framework used for websockets).</p>
 <p>Each websocket you define must provide a handle method:</p>
-<div class="highlight-python"><pre>function handle(socket) {
-    socket.emit('hello', {message: 'Hello Sockets!'});
-};</pre>
+<div class="highlight-js"><div class="highlight"><pre><span class="kd">function</span> <span class="nx">handle</span><span class="p">(</span><span class="nx">socket</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">message</span><span class="o">:</span> <span class="s1">&#39;Hello Sockets!&#39;</span><span class="p">});</span>
+<span class="p">};</span>
+</pre></div>
 </div>
 <p>In RAIN websockets are autodiscovered for each registered component. All you have to do
 is to place your socket handlers under websockets folder of your component root.</p>
 <p>Lets take a really simple example from example component:</p>
-<div class="highlight-python"><pre>/intents_example
+<div class="highlight-js"><pre>/intents_example
     /server
         /websockets
             /dummy_socket_handler.js
     /client</pre>
 </div>
 <p>And now the dummy_socket_handler code:</p>
-<div class="highlight-python"><pre>function handle(socket) {
-    socket.emit('hello', {message: 'Hello Sockets!'});
-};
+<div class="highlight-js"><div class="highlight"><pre><span class="kd">function</span> <span class="nx">handle</span><span class="p">(</span><span class="nx">socket</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">message</span><span class="o">:</span> <span class="s1">&#39;Hello Sockets!&#39;</span><span class="p">});</span>
+<span class="p">};</span>
 
-module.exports = {
-    channel: 'example',
-    handle: handle
-};</pre>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">channel</span><span class="o">:</span> <span class="s1">&#39;example&#39;</span><span class="p">,</span>
+    <span class="nx">handle</span><span class="o">:</span> <span class="nx">handle</span>
+<span class="p">};</span>
+</pre></div>
 </div>
 <p>At registration time, RAIN will map the socket handler automatically. This will become accesible
 to: <a class="reference external" href="http:/">http:/</a>/&lt;rain_server&gt;:&lt;sockets_port&gt;/example;1.0/example</p>
@@ -140,7 +142,7 @@ while value returned by getSocketName is used as the real name of the socket.</p
         <li class="right" >
           <a href="messaging_intents.html" title="Intents"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.11.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.12.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

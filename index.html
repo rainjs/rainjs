@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Rain 0.11.0 Documentation &mdash; Rain v0.11.0 documentation</title>
+    <title>Rain 0.12.0 Documentation &mdash; Rain v0.12.0 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.11.0',
+        VERSION:     '0.12.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.11.0 documentation" href="#" />
+    <link rel="top" title="Rain v0.12.0 documentation" href="#" />
     <link rel="next" title="RAIN Installation" href="getting_started/installation.html" /> 
   </head>
   <body>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="getting_started/installation.html" title="RAIN Installation"
              accesskey="N">next</a> |</li>
-        <li><a href="#">Rain v0.11.0 documentation</a> &raquo;</li> 
+        <li><a href="#">Rain v0.12.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -45,8 +45,8 @@
           <div class="body">
             
   <div class="section" id="rain-release-documentation">
-<h1>Rain 0.11.0 Documentation<a class="headerlink" href="#rain-release-documentation" title="Permalink to this headline">¶</a></h1>
-<p>Welcome! This is the documentation for Rain 0.11.0</p>
+<h1>Rain 0.12.0 Documentation<a class="headerlink" href="#rain-release-documentation" title="Permalink to this headline">¶</a></h1>
+<p>Welcome! This is the documentation for Rain 0.12.0</p>
 <div class="section" id="getting-started">
 <h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
@@ -196,10 +196,6 @@
 <li class="toctree-l2"><a class="reference internal" href="server/authorization.html#dynamic-conditions">Dynamic Conditions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="server/data_layer.html">Data Layer</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="server/data_layer.html#usage">Usage</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="server/platform_language.html">Platform language</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="server/platform_language.html#configuration">Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="server/platform_language.html#using-the-language">Using the language</a></li>
@@ -211,6 +207,13 @@
 <li class="toctree-l2"><a class="reference internal" href="server/localization.html#views-localization">Views localization</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="server/logging_guidelines.html">Logging guidelines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server/logging_guidelines.html#logging-levels">Logging levels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/logging_guidelines.html#what-to-log">What to log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/logging_guidelines.html#component-logging">Component logging</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="server/sdk_architecture.html">RAIN SDK Architecture</a></li>
 </ul>
 </div>
 <div class="section" id="id1">
@@ -266,12 +269,14 @@
 <li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-client-storage.html">Client Runtime Storage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-css-transformation.html">CSS Transformation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-dashboard-component-model.html">Dashboard Component Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-deployment.html">Automatic Deployment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-elastic-architecture.html">Elastic architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-error-handling.html">Error Handling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-feature-template.html">Features proposal template</a></li>
 <li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-fragments-configuration.html">Fragments Configuration Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-hijax-strategy.html">Hijax introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-instances.html">View Instances</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-rain-authorization.html">RAIN authorization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-rain-cloud-action.html">RAIN Cloud In Action</a></li>
 <li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-remote-aggregation.html">Remote aggregation</a></li>
@@ -301,7 +306,7 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Rain 0.11.0 Documentation</a><ul>
+<li><a class="reference internal" href="#">Rain 0.12.0 Documentation</a><ul>
 <li><a class="reference internal" href="#getting-started">Getting started</a><ul>
 </ul>
 </li>
@@ -359,7 +364,7 @@
         <li class="right" >
           <a href="getting_started/installation.html" title="RAIN Installation"
              >next</a> |</li>
-        <li><a href="#">Rain v0.11.0 documentation</a> &raquo;</li> 
+        <li><a href="#">Rain v0.12.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

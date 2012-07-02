@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class CssHelper &mdash; Rain v0.11.0 documentation</title>
+    <title>Class CssHelper &mdash; Rain v0.12.0 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.11.0',
+        VERSION:     '0.12.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.11.0 documentation" href="../../index.html" />
+    <link rel="top" title="Rain v0.12.0 documentation" href="../../index.html" />
     <link rel="next" title="Class DataLayer" href="DataLayer.html" />
     <link rel="prev" title="Class Configuration" href="Configuration.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="Configuration.html" title="Class Configuration"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.11.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.12.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -50,9 +50,11 @@
             
   <div class="section" id="class-csshelper">
 <h1>Class CssHelper<a class="headerlink" href="#class-csshelper" title="Permalink to this headline">¶</a></h1>
-<p>This Handlebars helper collects the css dependencies of a view and provides it to the renderer</p>
+<p>This Handlebars helper collects the css dependencies of a view and provides it to the renderer.
+The helper has support for CSS media queries.</p>
 <p>Syntax:</p>
-<div class="highlight-python"><pre>{{css path="cssPath" [name="componentId" [version="versionNumber"]]}}</pre>
+<div class="highlight-js"><div class="highlight"><pre><span class="p">{{</span><span class="nx">css</span> <span class="nx">path</span><span class="o">=</span><span class="s2">&quot;cssPath&quot;</span> <span class="p">[</span><span class="nx">name</span><span class="o">=</span><span class="s2">&quot;componentId&quot;</span> <span class="p">[</span><span class="nx">version</span><span class="o">=</span><span class="s2">&quot;versionNumber&quot;</span><span class="p">]</span> <span class="p">[</span><span class="nx">media</span><span class="o">=</span><span class="s2">&quot;query&quot;</span><span class="p">]]}}</span>
+</pre></div>
 </div>
 <div class="section" id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
@@ -63,6 +65,11 @@
 <div class="highlight-javascript"><pre>Collects the ``roundDiv.css`` of the component external_theming  with the latest version.
 
  {{css name="external_theming" path="roundDiv.css"}}</pre>
+</div>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">Uses</span> <span class="nx">a</span> <span class="nx">media</span> <span class="nx">query</span> <span class="nx">to</span> <span class="nx">specify</span> <span class="nx">that</span> <span class="nx">the</span> <span class="nx">style</span> <span class="nx">sheet</span> <span class="nx">is</span> <span class="nx">usable</span> <span class="nx">when</span> <span class="nx">the</span> <span class="nx">viewport</span> <span class="nx">is</span> <span class="nx">between</span> <span class="mi">500</span> <span class="nx">and</span> <span class="mi">800</span> <span class="nx">pixels</span> <span class="nx">wide</span><span class="p">.</span>
+
+ <span class="p">{{</span><span class="nx">css</span> <span class="nx">path</span><span class="o">=</span><span class="s2">&quot;index.css&quot;</span> <span class="nx">media</span><span class="o">=</span><span class="s2">&quot;screen and (min-width: 500px) and (max-width: 800px)&quot;</span><span class="p">}}</span>
+</pre></div>
 </div>
 </div>
 <div class="section" id="constructor">
@@ -89,6 +96,7 @@
 <li><strong>options.name</strong> (<em>String</em>) &#8211; the component id</li>
 <li><strong>options.version</strong> (<em>String</em>) &#8211; the component version</li>
 <li><strong>options.path</strong> (<em>String</em>) &#8211; the path to the css file. E.g. index.css</li>
+<li><strong>options.media</strong> (<em>String</em>) &#8211; the CSS media query.</li>
 </ul>
 </td>
 </tr>
@@ -107,7 +115,8 @@
 <p>To determine the path for the css file, the following steps are performed:</p>
 <ol class="arabic simple">
 <li>if the component key is not specified, the current component id will be used.</li>
-<li>if the version is not specified and the component key is present, the latest version for the component at step 1 is found and used.</li>
+<li>if the version is not specified and the component key is present, the latest version for the
+component at step 1 is found and used.</li>
 <li>The file has to be located in <tt class="docutils literal"><span class="pre">client/css/</span></tt>.</li>
 </ol>
 </div>
@@ -168,7 +177,7 @@
         <li class="right" >
           <a href="Configuration.html" title="Class Configuration"
              >previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.11.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.12.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

@@ -103,7 +103,7 @@ insert
     :param String component.sid: 
         The component staticId id 
     
-    :param Object component.data: 
+    :param Object component.context: 
         Custom data for the template 
     
     :param Boolean component.placeholder: 
@@ -155,7 +155,7 @@ replace
     :param String component.sid: 
         The component staticId id 
     
-    :param Object component.data: 
+    :param Object component.context: 
         Custom data for the template 
     
     :param Boolean component.placeholder: 

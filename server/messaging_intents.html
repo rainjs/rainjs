@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Intents &mdash; Rain v0.11.0 documentation</title>
+    <title>Intents &mdash; Rain v0.12.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.11.0',
+        VERSION:     '0.12.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.11.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.12.0 documentation" href="../index.html" />
     <link rel="next" title="RAIN Websockets" href="websockets.html" />
     <link rel="prev" title="Class Util" href="../client/api/Util.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="../client/api/Util.html" title="Class Util"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.11.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.12.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -64,29 +64,31 @@ within the same component.</p>
 </ul>
 </blockquote>
 <p>In meta.json file each component can use the following format to define intents:</p>
-<div class="highlight-python"><pre>"intents": [...
-{"action": "...",
- "category": "...",
- "provider": "..."
-...]</pre>
+<div class="highlight-js"><div class="highlight"><pre><span class="s2">&quot;intents&quot;</span><span class="o">:</span> <span class="p">[...</span>
+<span class="p">{</span><span class="s2">&quot;action&quot;</span><span class="o">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+ <span class="s2">&quot;category&quot;</span><span class="o">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
+ <span class="s2">&quot;provider&quot;</span><span class="o">:</span> <span class="s2">&quot;...&quot;</span>
+<span class="p">...]</span>
+</pre></div>
 </div>
 <p>Optional attributes are defined only for certain types of intents.</p>
 <div class="section" id="intents-mapped-on-views">
 <h3>Intents mapped on views<a class="headerlink" href="#intents-mapped-on-views" title="Permalink to this headline">¶</a></h3>
 <p>This intent always return a json object that describes a view. Below you can find how
 intents mapped on views are defined:</p>
-<div class="highlight-python"><pre>...
-"views": [
-    {"viewid": "missing_intent",
-     "view": "/htdocs/missing_intent_example.html",
-     "controller": "/htdocs/scripts/missing_intent_example.js"}
-],
-"intents": [{
-    "action": "SHOW_CHAT",
-    "category": "com.rain.test.general",
-    "provider": "missing_intent"
-},
-....</pre>
+<div class="highlight-js"><div class="highlight"><pre><span class="p">...</span>
+<span class="s2">&quot;views&quot;</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;viewid&quot;</span><span class="o">:</span> <span class="s2">&quot;missing_intent&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;view&quot;</span><span class="o">:</span> <span class="s2">&quot;/htdocs/missing_intent_example.html&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;controller&quot;</span><span class="o">:</span> <span class="s2">&quot;/htdocs/scripts/missing_intent_example.js&quot;</span><span class="p">}</span>
+<span class="p">],</span>
+<span class="s2">&quot;intents&quot;</span><span class="o">:</span> <span class="p">[{</span>
+    <span class="s2">&quot;action&quot;</span><span class="o">:</span> <span class="s2">&quot;SHOW_CHAT&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;category&quot;</span><span class="o">:</span> <span class="s2">&quot;com.rain.test.general&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;provider&quot;</span><span class="o">:</span> <span class="s2">&quot;missing_intent&quot;</span>
+<span class="p">},</span>
+<span class="p">....</span>
+</pre></div>
 </div>
 <p>For this kind of intents view is matched against a component viewId. If the viewId
 is not found than the registration process will throw an error.</p>
@@ -97,28 +99,31 @@ is not found than the registration process will throw an error.</p>
 use cases for this type of intent. For instance, imagine you want to implement a shopping
 cart that is not always displayed on screen. In RAIN you can easily use intents for this.
 Below you can find a simple example of how to use this intent (extracted from components/intents_example):</p>
-<div class="highlight-python"><pre>intents: [....
-{"action": "com.rain.test.serverside.INLINE_LOGGING",
-  "category": "com.rain.test.general",
-  "provider": "inline_logging.js#doLogging"
- ...]</pre>
+<div class="highlight-js"><div class="highlight"><pre><span class="nx">intents</span><span class="o">:</span> <span class="p">[....</span>
+<span class="p">{</span><span class="s2">&quot;action&quot;</span><span class="o">:</span> <span class="s2">&quot;com.rain.test.serverside.INLINE_LOGGING&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;category&quot;</span><span class="o">:</span> <span class="s2">&quot;com.rain.test.general&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;provider&quot;</span><span class="o">:</span> <span class="s2">&quot;inline_logging.js#doLogging&quot;</span>
+ <span class="p">...]</span>
+</pre></div>
 </div>
 <p>As you can see in the code snippet above the provider contains the controller name and the method to
 be execute separated by a <em>hash</em>. The method must have the following signature:</p>
-<div class="highlight-python"><pre>function myFunction(intentContext) {
-    // code here
-}</pre>
+<div class="highlight-js"><div class="highlight"><pre><span class="kd">function</span> <span class="nx">myFunction</span><span class="p">(</span><span class="nx">intentContext</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// code here</span>
+<span class="p">}</span>
+</pre></div>
 </div>
 <p>The intent context will contain the data sent from the client that might be necessary for running the
 bsiness logic.</p>
 <p>Below you can find a complete server side intent handler implementation:</p>
-<div class="highlight-python"><pre>exports.doLogging = function(intentContext) {
-    var msg = "doLogging method: " + intentContext.message || "No message specified";
+<div class="highlight-js"><div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">doLogging</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">intentContext</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> <span class="s2">&quot;doLogging method: &quot;</span> <span class="o">+</span> <span class="nx">intentContext</span><span class="p">.</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;No message specified&quot;</span><span class="p">;</span>
 
-    console.log(msg);
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
 
-    return {"data": msg};
-}</pre>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="o">:</span> <span class="nx">msg</span><span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
 </div>
 <p>Internally, RAIN knows how to handle this kind of return (promise) and the behavior is predictable.</p>
 </div>
@@ -126,21 +131,22 @@ bsiness logic.</p>
 <h3>Intents mapped on views<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>This intent will display the provided view to the client abstracting away the logic of displaying it
 yourself:</p>
-<div class="highlight-python"><pre>{
-   ...
-    "views": [
-        {"viewid": "missing_intent",
-         "view": "/htdocs/missing_intent_example.html",
-         "controller": "/htdocs/scripts/missing_intent_example.js"}
-    ],
-    "intents": [{
-        "action": "com.rain.test.general.SHOW_CHAT",
-        "category": "com.rain.test.general",
-        "provider": "missing_intent"
-    }
-    ...
-    ]
-}</pre>
+<div class="highlight-js"><div class="highlight"><pre><span class="p">{</span>
+   <span class="p">...</span>
+    <span class="s2">&quot;views&quot;</span><span class="o">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;viewid&quot;</span><span class="o">:</span> <span class="s2">&quot;missing_intent&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;view&quot;</span><span class="o">:</span> <span class="s2">&quot;/htdocs/missing_intent_example.html&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;controller&quot;</span><span class="o">:</span> <span class="s2">&quot;/htdocs/scripts/missing_intent_example.js&quot;</span><span class="p">}</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;intents&quot;</span><span class="o">:</span> <span class="p">[{</span>
+        <span class="s2">&quot;action&quot;</span><span class="o">:</span> <span class="s2">&quot;com.rain.test.general.SHOW_CHAT&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;category&quot;</span><span class="o">:</span> <span class="s2">&quot;com.rain.test.general&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;provider&quot;</span><span class="o">:</span> <span class="s2">&quot;missing_intent&quot;</span>
+    <span class="p">}</span>
+    <span class="p">...</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
 </div>
 <p>In this case <em>provider</em> identifies a declared view within the component. The intents registry simply
 publishes the intent to a global intents registry. The only constraint here is not to have
@@ -203,7 +209,7 @@ two intents with the same category and intent.</p>
         <li class="right" >
           <a href="../client/api/Util.html" title="Class Util"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.11.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.12.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
