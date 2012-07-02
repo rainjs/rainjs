@@ -54,83 +54,45 @@
 Please read <a class="reference internal" href="installation.html"><em>RAIN Installation</em></a> before this.</p>
 <div class="section" id="rain-sdk-basic-usage">
 <h2>RAIN SDK Basic usage<a class="headerlink" href="#rain-sdk-basic-usage" title="Permalink to this headline">¶</a></h2>
+<p>RAIN gives the developer two commands:
+- <tt class="docutils literal"><span class="pre">rain</span></tt> - used to create projects, components
+- <tt class="docutils literal"><span class="pre">raind</span></tt> - used to start the server</p>
 <p>Below you can find a bunch of useful commands to use:</p>
-<div class="highlight-js"><pre> rain --help
+<div class="highlight-js"><div class="highlight"><pre><span class="nx">rain</span> <span class="o">--</span><span class="nx">help</span>
+<span class="nx">raind</span> <span class="o">--</span><span class="nx">help</span>
 
- Usage: rain &lt;options&gt; &lt;command&gt;
-
-Commands:
-
-  create-project &lt;path&gt; &lt;project-name&gt;
-  create a project
-
-  create-component &lt;component-name&gt;
-  create a component
-
-  start [#pid]
-  start the server on project root
-
-  stop [#pid]
-  stop the associated server on project root
-  stop the server with the associated with the process id [#pid]
-
-  restart
-  restarts the associated server on project root
-
-  stopall
-  shutting down all server
-
-Options:
-
-  -h, --help                 output usage information
-  -V, --version              output the version number
-  -d, --debug                start the server with the node debugger
-                             server is NOT restarting on uncaught exceptions
-                             NOT working for windows
-
-  -c, --conf &lt;path_to_conf&gt;  start server with custom configuration
-  -n, --no-daemon            start server without daemon mode
-
-
-
-
-Examples:
-
-  $ rain create-project /home/username/workspace newProject
-
-  $ rain start
-  $ rain start -c /home/username/workspace/custom_confs/server.conf
-
-  $ rain stop
-  $ rain stop 5361
-
- Rain creates the following structure on first start of a server:
-
- /home/user/.rain</pre>
+<span class="nx">Usage</span><span class="o">:</span> <span class="nx">rain</span> <span class="o">&lt;</span><span class="nx">command</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="nx">options</span><span class="o">&gt;</span>
+       <span class="nx">raind</span> <span class="o">&lt;</span><span class="nx">options</span><span class="o">&gt;</span>
+</pre></div>
 </div>
+<p>Examples:</p>
+<blockquote>
+<p>// Creates a new project in the current location.
+$ rain create-project my_project</p>
+<p>// Start the RAIN server for the current project.
+$ raind</p>
+</blockquote>
 </div>
 <div class="section" id="rain-sdk-create-project">
 <h2>RAIN SDK Create project<a class="headerlink" href="#rain-sdk-create-project" title="Permalink to this headline">¶</a></h2>
-<p>You can easily used rain sdk to create projects and components. To create a new project
+<p>You can easily use RAIN SDK to create projects and components. To create a new project
 execute the following commands:</p>
 <blockquote>
 <ol class="arabic simple">
 <li>Go to you workspace folder</li>
-<li>rain create-project . &lt;project-name&gt;</li>
-<li>Just answer the question you are prompted and everything is ready.</li>
+<li>rain create-project &lt;project-name&gt;</li>
 <li>cd &lt;project-name&gt;</li>
-<li>rain start</li>
+<li>raind</li>
 </ol>
 </blockquote>
 <p>Now you have your first RAIN project.
-Try the following url in your browser: <a class="reference external" href="http://localhost:1337">http://localhost:1337</a>/&lt;component-name&gt;/&lt;view-id&gt;.</p>
+Try the following url in your browser: <a class="reference external" href="http://localhost:1337/hello_world/index">http://localhost:1337/hello_world/index</a>.</p>
 </div>
 <div class="section" id="rain-sdk-debug-mode">
 <h2>RAIN SDK Debug mode<a class="headerlink" href="#rain-sdk-debug-mode" title="Permalink to this headline">¶</a></h2>
-<p>Rain provides a debug mode for the server-side. You only have to start / restart the server
-with &#8211;debug. It automatically connects the nodejs native debugger with the port 5858.</p>
-<p>If you want to use a graphical debugger then you can install &#8220;node-inspector&#8221;.
-It&#8217;s a node package manager module.</p>
+<p>RAIN provides a debug mode for the server-side. You only have to start the server with &#8211;debug.
+It automatically connects the Node native debugger with the port 5858.</p>
+<p>If you want to use a graphical debugger then you can install the &#8220;node-inspector&#8221; NPM module.</p>
 <dl class="docutils">
 <dt>For Linux::</dt>
 <dd>sudo npm install node-inspector -g</dd>
