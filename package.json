@@ -11,15 +11,15 @@
         { "name": "Razvan Mocanu", "email": "razvan.mocanu@1and1.ro" }
     ],
     "dependencies": {
-        "connect": "2.0.x",
+        "connect": "2.2.2",
         "handlebars": "1.0.4beta",
-        "jasmine-node": "= 1.0.20",
+        "jasmine-node": "= 1.0.26",
         "less": ">= 1.1.4",
         "mime": "",
         "node.extend": "",
         "promised-io": "git://github.com/kriszyp/promised-io.git",
         "socket.io": ">= 0.7.7",
-        "commander": "",
+        "commander": ">=0.6.x",
         "mocks": "",
         "colors": "",
         "wrench": "",

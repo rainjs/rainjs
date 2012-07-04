@@ -64,7 +64,7 @@ function createProject(projectName, projectPath, options) {
         process.exit(1);
     } catch (err) {}
 
-    if (path.existsSync(projectPath)) {
+    if (fs.existsSync(projectPath)) {
         console.log('The file or directory %s already exists!', projectPath.blue);
         process.exit(1);
     }

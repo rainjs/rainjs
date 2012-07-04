@@ -48,9 +48,9 @@ stage the markup of the component is in place. This method receives the error as
 The ``destroy`` method is invoked when the component is removed from the page.
 
 .. seealso::
-    
-    :doc:`../server/data_layer`
+
+    :doc:`../server/api/DataLayer`
         Documentation describing how the data layer works
-        
+
     :doc:`client_rendering`
         Describes how the Client Rendering works

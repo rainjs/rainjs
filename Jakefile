@@ -201,7 +201,9 @@ namespace('test', function () {
             var specFolder = process.cwd() + '/tests/server/tests/';
 
             for (var key in jasmine) {
-                global[key] = jasmine[key];
+                if (key !== 'undefined') {
+                    global[key] = jasmine[key];
+                }
             }
 
             //extend jasmine with functionality needed by Rain
@@ -236,11 +238,6 @@ namespace('test', function () {
             jasmine.loadHelpersInFolder(specFolder, new RegExp("[-_]helper\\.(" + extentions + ")$"));
             jasmine.executeSpecsInFolder(specFolder, function (runner, log) {
                 util.print('\n');
-                if (runner.results().failedCount == 0) {
-                    exitCode = 0;
-                } else {
-                    exitCode = 1;
-                }
             }, isVerbose, showColors, teamcity, useRequireJs,
                new RegExp(match + "\.spec\\.(" + extentions + ")$", 'i'), junitreport);
         });

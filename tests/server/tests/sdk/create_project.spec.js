@@ -38,17 +38,19 @@ describe('RAIN create project', function () {
 
     beforeEach(function () {
         mocks = {};
-        path = mocks['path'] = jasmine.createSpyObj('path', ['join', 'resolve', 'existsSync', 'basename']);
-        fs = mocks['fs'] = jasmine.createSpyObj('fs', ['mkdirSync', 'writeFileSync']);
-        wrench = mocks['wrench'] = jasmine.createSpyObj('wrench', ['mkdirSyncRecursive', 'copyDirSyncRecursive']);
+        path = mocks['path'] = jasmine.createSpyObj('path', ['join', 'resolve', 'basename']);
+        fs = mocks['fs'] = jasmine.createSpyObj('fs', ['mkdirSync', 'writeFileSync', 'existsSync']);
+        wrench = mocks['wrench'] = jasmine.createSpyObj('wrench',
+                    ['mkdirSyncRecursive', 'copyDirSyncRecursive']);
         utils = mocks['../lib/utils'] = jasmine.createSpyObj('utils', ['getProjectRoot']);
         component = mocks['../lib/component'] = jasmine.createSpyObj('component', ['create']);
 
         spyOn(console, 'log');
         spyOn(process, 'exit');
-        spyOn(JSON, 'stringify')
+        spyOn(JSON, 'stringify');
 
-        var context = loadModuleContext('bin/commands/create_project.js', mocks, { __dirname: '/dir' });
+        var context = loadModuleContext('bin/commands/create_project.js', mocks,
+                                        { __dirname: '/dir' });
         module = context.module.exports;
         createProject = context.createProject;
 
@@ -79,7 +81,7 @@ describe('RAIN create project', function () {
 
     it('should create a new project (default path)', function () {
         utils.getProjectRoot.andThrow(new Error('The specified path is not a RAIN project.'));
-        path.existsSync.andReturn(false);
+        fs.existsSync.andReturn(false);
 
         createProject(projectName);
 
@@ -89,7 +91,7 @@ describe('RAIN create project', function () {
 
     it('should create a new project (specified path)', function () {
         utils.getProjectRoot.andThrow(new Error('The specified path is not a RAIN project.'));
-        path.existsSync.andReturn(false);
+        fs.existsSync.andReturn(false);
 
         createProject(projectName, projectPath);
 
@@ -99,7 +101,7 @@ describe('RAIN create project', function () {
 
     it('should fail if the project directory is inside an existing project', function () {
         utils.getProjectRoot.andReturn('/home');
-        path.existsSync.andReturn(false);
+        fs.existsSync.andReturn(false);
 
         createProject(projectName);
 
@@ -108,7 +110,7 @@ describe('RAIN create project', function () {
 
     it('should fail if the project directory already exists', function () {
         utils.getProjectRoot.andThrow(new Error('The specified path is not a RAIN project.'));
-        path.existsSync.andReturn(true);
+        fs.existsSync.andReturn(true);
 
         createProject(projectName);
 
@@ -117,7 +119,7 @@ describe('RAIN create project', function () {
 
     it('should fail if can not write to disk' , function () {
         utils.getProjectRoot.andThrow(new Error('The specified path is not a RAIN project.'));
-        path.existsSync.andReturn(false);
+        fs.existsSync.andReturn(false);
         fs.mkdirSync.andThrow(new Error('IO error'));
 
         createProject(projectName);
@@ -127,7 +129,7 @@ describe('RAIN create project', function () {
 
     function expectProjectToHaveBeenCreated() {
         expect(utils.getProjectRoot).toHaveBeenCalledWith(path.join(projectPath, projectName));
-        expect(path.existsSync).toHaveBeenCalledWith(path.join(projectPath, projectName));
+        expect(fs.existsSync).toHaveBeenCalledWith(path.join(projectPath, projectName));
 
         expect(wrench.mkdirSyncRecursive)
             .toHaveBeenCalledWith(path.join(projectPath, projectName), '0755');
