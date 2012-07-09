@@ -66,12 +66,17 @@ Below you can find a simple example of how to use this intent (extracted from co
 As you can see in the code snippet above the provider contains the controller name and the method to
 be execute separated by a *hash*. The method must have the following signature::
 
-    function myFunction(intentContext) {
+    function myFunction(intentContext, acknowledge) {
         // code here
     }
 
 The intent context will contain the data sent from the client that might be necessary for running the
 bsiness logic.
+
+The ``acknowledge`` method **must** be called in order to let the client  know that the intent has
+finished. It accepts two parameters:
+    * ``error`` - if an error has occured pass it here, otherwise set it to null
+    * ``data`` - the result data (can be undefined)
 
 Below you can find a complete server side intent handler implementation::
 

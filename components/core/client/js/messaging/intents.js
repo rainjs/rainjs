@@ -42,13 +42,13 @@ define(['raintime/messaging/sockets',
         intent.context = intent.context || {};
         intent.context.instanceId = 'modalDialog';
 
-        socket.emit('request_intent', intent, function(error) {
+        socket.emit('request_intent', intent, function(error, data) {
             if (error) {
                 defer.reject(error);
                 return;
             }
 
-            defer.resolve();
+            defer.resolve(data);
         });
 
         return defer.promise;
