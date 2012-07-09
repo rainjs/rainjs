@@ -26,24 +26,32 @@
 define(['raintime'], function (Raintime) {
     "use strict";
 
+    /**
+     * Client-side controller for the popup window used to display views required through intents.
+     */
     function Dialog() {}
 
-    Dialog.prototype.init = $.noop;
+    /**
+     * Register a handle for the close button click.
+     */
     Dialog.prototype.start = function () {
-        var close = $('.core-dialog .close');
+        var self = this,
+            close = $('.core-dialog .close');
 
         close.on('click', function () {
             $('.core-dialog').remove();
             $('.core-modal').remove();
 
-            Raintime.componentRegistry.deregister(this.context.instanceId);
+            Raintime.componentRegistry.deregister(self.context.instanceId);
         });
     };
 
+
+    /**
+     * Clear the contents of the dialog as a way to close it.
+     */
     Dialog.prototype.destroy = function() {
         var root = this.context.getRoot();
-
-        // clear the contents of the dialog
         root.empty();
     };
 
