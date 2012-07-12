@@ -38,7 +38,7 @@ describe('RequireJS locale plugin', function () {
                     cb(jsonString);
                 });
                 locale.load.andCallThrough();
-                locale.load(null, null, function (data) {
+                locale.load('example/3.0/en_US', null, function (data) {
                     parsed = data;
                 });
             });
@@ -49,6 +49,7 @@ describe('RequireJS locale plugin', function () {
 
             runs(function () {
                 expect(parsed).toEqual(jsonObject);
+                expect(text.get).toHaveBeenCalledWith('/example/3.0/locale/en_US', jasmine.any(Function));
             });
         });
 
