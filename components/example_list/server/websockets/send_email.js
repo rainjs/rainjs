@@ -23,46 +23,17 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-define([], function () {
+"use strict";
 
-    /**
-     * Server-side text localization example controller.
-     *
-     * @name TextLocalization
-     * @class
-     * @constructor
-     */
-    function TextLocalization() {}
-
-    /**
-     * Startup lifecycle step that happens right after the markup is in place.
-     */
-    TextLocalization.prototype.start = function () {
-        var emailResponse = this.context.getRoot().find('.email-response');
-
-        this.context.find('sendEmail', function () {
-            this.on('start', function () {
-                $(this.context.getRoot().children()[0]).click(function () {
-                    $.get("/example/controller/text_localization", function (data) {
-                        emailResponse.html(data);
-                    });
-                });
-            });
+function handle(socket) {
+    socket.on('get_message', function () {
+        socket.emit('message', {
+            value: t('Email was sent successfully through websockets!')
         });
+    });
+}
 
-        var socket = this.context.messaging.getSocket('/example/3.0/send_email');
-        socket.on('message', function (data) {
-            emailResponse.html(data.value);
-        });
-
-        this.context.find('sendEmailWs', function () {
-            this.on('start', function () {
-                $(this.context.getRoot().children()[0]).click(function () {
-                    socket.emit('get_message');
-                });
-            });
-        });
-    };
-
-    return TextLocalization;
-});
+module.exports = {
+    channel: 'send_email',
+    handle: handle
+};

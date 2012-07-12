@@ -23,46 +23,15 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-define([], function () {
+/**
+ * This method translates a simple message. The module is required by the data module and its
+ * purpose is to show that the 't' and 'nt' functions are present in module required by the data
+ * module.
+ */
+function translateSendMail() {
+    return t('Send email');
+}
 
-    /**
-     * Server-side text localization example controller.
-     *
-     * @name TextLocalization
-     * @class
-     * @constructor
-     */
-    function TextLocalization() {}
-
-    /**
-     * Startup lifecycle step that happens right after the markup is in place.
-     */
-    TextLocalization.prototype.start = function () {
-        var emailResponse = this.context.getRoot().find('.email-response');
-
-        this.context.find('sendEmail', function () {
-            this.on('start', function () {
-                $(this.context.getRoot().children()[0]).click(function () {
-                    $.get("/example/controller/text_localization", function (data) {
-                        emailResponse.html(data);
-                    });
-                });
-            });
-        });
-
-        var socket = this.context.messaging.getSocket('/example/3.0/send_email');
-        socket.on('message', function (data) {
-            emailResponse.html(data.value);
-        });
-
-        this.context.find('sendEmailWs', function () {
-            this.on('start', function () {
-                $(this.context.getRoot().children()[0]).click(function () {
-                    socket.emit('get_message');
-                });
-            });
-        });
-    };
-
-    return TextLocalization;
-});
+module.exports = {
+    translateSendMail: translateSendMail
+};
