@@ -1,0 +1,7 @@
+{
+    "id": "language_selector",
+    "version": "1.0",
+    "views": {
+        "index" : {}
+    }
+}
