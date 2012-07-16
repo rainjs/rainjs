@@ -25,8 +25,7 @@
 
 "use strict";
 
-var path = require('path'),
-    Environment = require(process.cwd() + '/lib/environment');
+var path = require('path');
 
 describe('Data layer', function() {
     var dataLayer, cb, fn, componentOpt;
@@ -42,6 +41,9 @@ describe('Data layer', function() {
                 query: {page: 1},
                 url: '/example/index',
                 headers: {}
+            },
+            environment: {
+                language: 'en_US'
             }
         };
 
@@ -139,7 +141,9 @@ describe('Data layer', function() {
             runs(function () {
                 var args = fn.mostRecentCall.args;
                 expect(args.length).toEqual(4);
-                expect(args[0]).toEqual(new Environment());
+                expect(args[0]).toEqual({
+                    language: 'en_US'
+                });
                 expect(typeof args[1]).toEqual('function');
                 expect(args[2]).toEqual(componentOpt.context);
                 expect(args[3]).toEqual({session: 'data'});

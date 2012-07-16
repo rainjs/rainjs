@@ -53,16 +53,18 @@ describe('Translation module', function() {
         });
 
         it('should translate if message id exists', function () {
-            expect(translation.translate(component, 'Send email')).toEqual('Trimite email');
+            expect(translation.translate(component, 'ro_RO', 'Send email'))
+            .toEqual('Trimite email');
         });
 
         it('should return the message id, if translation doesn\'t exist', function () {
-            expect(translation.translate(component, 'No translation')).toEqual('No translation');
+            expect(translation.translate(component, 'en_US', 'No translation'))
+            .toEqual('No translation');
         });
 
         it('should correctly resolve arguments', function () {
             var message = translation.translate(
-                    component, 'Dear %1$s %2$s,', undefined, undefined, ['Jhon', 'Doe']);
+                    component, 'ro_RO', 'Dear %1$s %2$s,', undefined, undefined, ['Jhon', 'Doe']);
             expect(message).toEqual('Bună ziua domnule Doe,');
         });
     });
