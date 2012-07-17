@@ -23,7 +23,7 @@
             "layout": {
                 "type": "pattern",
                 "params": {
-                    "pattern": "app1 %date %level - %message"
+                    "pattern": "%date %level - %message"
                 }
             }
         }]
