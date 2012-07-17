@@ -1,7 +1,6 @@
 {
     "server": {
         "port": 1337,
-        "socketsPort": 1338,
         "timeoutForRequests" : 3,
 
         "serverRoot": ".",
