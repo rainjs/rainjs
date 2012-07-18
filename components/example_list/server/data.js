@@ -25,6 +25,8 @@
 
 "use strict";
 
+var languageUtils = require('./lib/language_utils');
+
 /**
  * Handles the template data for the view index and returns it with invoking the callback function.
  *
@@ -99,7 +101,8 @@ function text_localization(environment, callback, data) {
         lastName: 'Smith',
         email: 'jsmith@abcd.com',
         phone: '(111) 111-1111',
-        sendButtonLabel: t('Send email')
+        sendButtonLabel: languageUtils.translateSendMail(),
+        sendButtonWebSocketsLabel: t('Send email through websockets')
     };
     callback(null, customData);
 }

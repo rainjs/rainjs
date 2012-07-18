@@ -70,15 +70,21 @@ define(['text'],
 
         /**
          * Tests the resource name for validity and assembles a correct
-         * locale route for the given (component, version) pair.
+         * locale route for the given (component, version, locale) combination.
          * It accepts an optional version.
          *
          * @param {String} res the resource name
          * @param {String} the locale route
          */
         function route(res) {
-            var format = /^[\w-]+\/\d(?:\.\d)?(?:\.\d)?$/;
-            return format.test(res) ? '/' + res + '/locale' : '';
+            var format = /^[\w-]+\/\d(?:\.\d)?(?:\.\d)?\/[\w-]+$/;
+            if (format.test(res)) {
+                var parts = res.split('/');
+                parts.splice(parts.length - 1, 0, 'locale');
+                return '/' + parts.join('/');
+            }
+
+            return '';
         }
 
         return {

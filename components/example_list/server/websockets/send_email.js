@@ -25,57 +25,15 @@
 
 "use strict";
 
-var path = require('path'),
-    Translation = require('../translation'),
-    util = require('../util'),
-    fs = require('fs');
-
-/**
- * Load the translation files for all the languages available in the component.
- *
- * @param {Object} componentConfig the meta.json information
- */
-function configure(component) {
-    var localeFolder = component.paths('locale', true);
-
-    try {
-        var files = fs.readdirSync(localeFolder);
-    } catch (ex) {
-        //this component doesn't contain any locales
-        return;
-    }
-
-    for (var i = files.length; i--;) {
-        var locale  = files[i]; //each folder in the locale folder represents a locale
-        try {
-            var stat = fs.statSync(path.join(localeFolder, locale));
-            if (stat.isDirectory()) {
-                loadFiles(component, locale);
-            }
-        } catch (ex) {
-            // ignore this error and continue to load other locales
-            // TODO log a warning message
-        }
-    }
-}
-
-/**
- * Load the translation files for a specific language.
- *
- * @param {Object} component the meta.json information
- * @param {String} language the language
- */
-function loadFiles(component, language) {
-    var translation = Translation.get(),
-        localeFolder = component.paths('locale', true),
-        languageFolder = path.join(localeFolder, language);
-
-    util.walkSync(languageFolder, ['.po'], function (filePath) {
-        translation.loadLanguageFile(filePath, language, component);
+function handle(socket) {
+    socket.on('get_message', function () {
+        socket.emit('message', {
+            value: t('Email was sent successfully through websockets!')
+        });
     });
 }
 
 module.exports = {
-    name: "Load translation files plugin",
-    configure: configure
+    channel: 'send_email',
+    handle: handle
 };

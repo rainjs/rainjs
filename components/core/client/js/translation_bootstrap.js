@@ -99,7 +99,7 @@ define(function () {
                 version: matches[2]
             };
             deps.push('raintime/translation');
-            deps.push('locale!' + component.id + '/' + component.version);
+            deps.push('locale!' + component.id + '/' + component.version + '/' + rainContext.language);
             translatedModules[moduleName] = component;
         }
     }

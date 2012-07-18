@@ -16,6 +16,13 @@
     "defaultLanguage": "en_US",
     "language": "en_US",
 
+    "languages": [
+        {"key": "en_US", "text": "English"},
+        {"key": "de_DE", "text": "Deutsch"},
+        {"key": "ro_RO", "text": "Română"},
+        {"key": "ar_SA", "text": "عربي"}
+    ],
+
     "errorComponent": {
         "id": "error",
         "version": "1.0"

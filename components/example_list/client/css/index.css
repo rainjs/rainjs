@@ -29,3 +29,11 @@
     margin: 10px 30px 10px 40px;
 }
 
+.select_language {
+    width: 200px;
+    text-align: right;
+    float: right;
+    position: absolute;
+    top: 15px;
+    right: 10px;
+}

@@ -1,0 +1,9 @@
+{{css path="index.css"}}
+
+<select class="languages">
+    {{#each languages}}
+        <option value="{{value}}" {{#if selected}} selected="selected"{{/if}}>
+            {{text}}
+        </option>
+    {{/each}}
+</select>

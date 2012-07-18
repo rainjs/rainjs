@@ -29,3 +29,9 @@ msgstr "Email-ul a fost trimis cu succes!"
 
 msgid "Send email"
 msgstr "Trimite email"
+
+msgid "Send email through websockets"
+msgstr "Trimite email prin websockets"
+
+msgid "Email was sent successfully through websockets!"
+msgstr "Email-ul a fost trimis cu succes prin websockets!"

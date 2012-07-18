@@ -23,46 +23,30 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-define([], function () {
+"use strict";
 
-    /**
-     * Server-side text localization example controller.
-     *
-     * @name TextLocalization
-     * @class
-     * @constructor
-     */
-    function TextLocalization() {}
+describe('Environment', function () {
+    var Environment, configuration, session;
+    beforeEach(function () {
+        var mocks = {};
+        configuration = mocks['./configuration'] = {language: 'en_US'};
 
-    /**
-     * Startup lifecycle step that happens right after the markup is in place.
-     */
-    TextLocalization.prototype.start = function () {
-        var emailResponse = this.context.getRoot().find('.email-response');
+        Environment = loadModuleExports('/lib/environment.js', mocks);
 
-        this.context.find('sendEmail', function () {
-            this.on('start', function () {
-                $(this.context.getRoot().children()[0]).click(function () {
-                    $.get("/example/controller/text_localization", function (data) {
-                        emailResponse.html(data);
-                    });
-                });
-            });
-        });
+        session = {};
+   });
 
-        var socket = this.context.messaging.getSocket('/example/3.0/send_email');
-        socket.on('message', function (data) {
-            emailResponse.html(data.value);
-        });
+   it('should set the language to user language', function () {
+       session.userLanguage = 'de_DE';
 
-        this.context.find('sendEmailWs', function () {
-            this.on('start', function () {
-                $(this.context.getRoot().children()[0]).click(function () {
-                    socket.emit('get_message');
-                });
-            });
-        });
-    };
+       var environment = new Environment(session);
 
-    return TextLocalization;
+       expect(environment.language).toEqual('de_DE');
+   });
+
+   it('should set the language to configuration language', function () {
+       var environment = new Environment(session);
+
+       expect(environment.language).toEqual('en_US');
+   });
 });
