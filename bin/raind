@@ -74,7 +74,10 @@ try {
     process.exit(0);
 }
 
-var closeServer = server.close.bind(server);
+var closeServer = function () {
+    server.close();
+    process.nextTick(process.exit);
+};
 
 // intialize shutdown signal handlers
 process.on('SIGTERM', closeServer);
