@@ -66,7 +66,6 @@ function generateLocalizationFiles(sourceLocale, outputLocales, componentId) {
 
             try {
                 var translations = parseComponent(components[i]);
-                console.log(JSON.stringify(translations));
             } catch (ex) {
                 console.log(ex.message.red);
             }
@@ -139,15 +138,64 @@ function parseComponent(component) {
  * @returns {Object} the translation messages indexed by the file path
  */
 function parseTemplateFiles(component) {
-    var templatesFolder = path.join(component.folder, 'client/templates'),
-        templateTranslations = {};
+    var matchString = '(((\\\\")?[^\\\\"]+(\\\\[^"])?(\\\\")?)+)',
+        tPattern = '(?:{{t\\s+")' + matchString + '(?:")',
+        ntPattern = '(?:{{nt\\s+")' + matchString + '(?:"\\s+")' + matchString + '(?:")';
 
-    util.walkSync(templatesFolder, ['.html'], function (filePath) {
+    return parseFiles({
+        folder: path.join(component.folder, 'client/templates'),
+        extensions: ['.html'],
+        tPattern: tPattern,
+        ntPattern: ntPattern
+    });
+}
+
+/**
+ * Extract the translations from a component's .js files.
+ *
+ * @param {Object} component the component configuration
+ * @returns {Object} the translation messages indexed by the file path
+ */
+function parseJsFiles(component) {
+    var matchString = '(((\\\\\')?[^\\\\\']+(\\\\[^\'])?(\\\\\')?)+)',
+        tPattern = '(?:(?:\\s|\\()t\\s*\\(\\s*\')' + matchString + '(?:\')',
+        ntPattern = '(?:(?:\\s|\\()nt\\s*\\(\\s*\')' + matchString + '(?:\'\\s*,\\s*\')' +
+                                                       matchString + '(?:\')';
+
+    var translations = parseFiles({
+        folder: path.join(component.folder, 'client/js'),
+        extensions: ['.js'],
+        tPattern: tPattern,
+        ntPattern: ntPattern
+    });
+
+    extend(translations, parseFiles({
+        folder: path.join(component.folder, 'server'),
+        extensions: ['.js'],
+        tPattern: tPattern,
+        ntPattern: ntPattern
+    }));
+
+    return translations;
+}
+
+/**
+ * Extract the translations from a component's folder.
+ *
+ * @param {Object} options the parse options
+ * @param {String} options.folder the component folder that will be scanned
+ * @param {String} options.extensions the extensions used to filter the folder files
+ * @param {String} options.tPattern the pattern to extract the t translations
+ * @param {String} options.ntPattern the pattern to extract the nt translations
+ * @returns {Object} the translation messages indexed by the file path
+ */
+function parseFiles(options) {
+    var folderTranslations = {};
+
+    util.walkSync(options.folder, options.extensions, function (filePath) {
         try {
-            var matchString = '(((\\\\")?[^\\\\"]+(\\\\[^"])?(\\\\")?)+)',
-                tRegExp = new RegExp('(?:{{t\\s+")' + matchString + '(?:")', 'gm'),
-                ntRegExp = new RegExp('(?:{{nt\\s+")' + matchString + '(?:"\\s+")' +
-                                                        matchString + '(?:")', 'gm'),
+            var tRegExp = new RegExp(options.tPattern, 'gm'),
+                ntRegExp = new RegExp(options.ntPattern, 'gm'),
                 text = fs.readFileSync(filePath, 'utf8'),
                 matches,
                 translations = [];
@@ -169,7 +217,7 @@ function parseTemplateFiles(component) {
             }
 
             if (translations.length > 0) {
-                templateTranslations[filePath] = translations;
+                folderTranslations[filePath] = translations;
             }
         } catch (ex) {
             console.log(('Could not extract the template translations from ' + filePath).red,
@@ -177,17 +225,7 @@ function parseTemplateFiles(component) {
         }
     });
 
-    return templateTranslations;
-}
-
-/**
- * Extract the translations from a component's .js files.
- *
- * @param {Object} component the component configuration
- * @returns {Object} the translation messages indexed by the file path
- */
-function parseJsFiles(component) {
-    return {};
+    return folderTranslations;
 }
 
 module.exports = register;
