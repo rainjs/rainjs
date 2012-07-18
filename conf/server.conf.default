@@ -29,7 +29,9 @@
                 "debug": {
                     "foreground": "green"
                 },
-                "info": {},
+                "info": {
+                    "foreground": "cyan"
+                },
                 "warn": {
                     "foreground": "yellow"
                 },
@@ -37,8 +39,8 @@
                     "foreground": "red"
                 },
                 "fatal": {
-                    "foreground": "red",
-                    "background": "blue"
+                    "foreground": "black",
+                    "background": "red"
                 }
             }
         }]
