@@ -14,11 +14,11 @@
 
     "defaultLanguage": "en_US",
     "language": "en_US",
-    
+
     "logger": {
         "level": "info",
         "appenders": [{
-            "level": "warn",
+            "level": "info",
             "type": "console",
             "layout": {
                 "type": "pattern",
