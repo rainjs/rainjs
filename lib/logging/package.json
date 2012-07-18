@@ -1,0 +1,4 @@
+{ 
+    "name" : "logging",
+    "main" : "./logger.js"
+}
