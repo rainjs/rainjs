@@ -18,12 +18,27 @@
     "logger": {
         "level": "info",
         "appenders": [{
-            "level": "info",
             "type": "console",
             "layout": {
                 "type": "pattern",
                 "params": {
-                    "pattern": "%date %level - %message"
+                    "pattern": "[%level] %date: %message"
+                }
+            },
+            "params": {
+                "debug": {
+                    "foreground": "green"
+                },
+                "info": {},
+                "warn": {
+                    "foreground": "yellow"
+                },
+                "error": {
+                    "foreground": "red"
+                },
+                "fatal": {
+                    "foreground": "red",
+                    "background": "blue"
                 }
             }
         }]
