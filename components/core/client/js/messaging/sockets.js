@@ -69,7 +69,7 @@ define(["raintime/lib/socket.io"], function (io) {
             channel = "/" + channel;
         }
 
-        return sockets[channel] || (sockets[channel] = io.connect(baseUrl + channel));
+        return io.connect(baseUrl + channel);
     };
 
     return new SocketHandler();
