@@ -31,7 +31,8 @@ var path = require('path'),
     utils = require('../lib/utils'),
     extend = require('node.extend'),
     util = require('../../lib/util'),
-    poUtils = require('../../lib/po_utils');
+    poUtils = require('../../lib/po_utils'),
+    wrench = require('wrench');
 
 /**
  * Register the generate localization files command.
@@ -40,7 +41,7 @@ var path = require('path'),
  */
 function register(program) {
     program
-        .command('generate-po-files <source-locale> <output-locales> [component-id]')
+        .command('generate-po-files <output-locales> [component-id]')
         .description('Extract the translation messages from the components\' code and generate ' +
                      'the localization files (.po) in different languages.')
         .action(generateLocalizationFiles);
@@ -49,11 +50,10 @@ function register(program) {
 /**
  * Generate the .po files.
  *
- * @param {String} sourceLocale the locale that is used for the messages (usually this is the same as the 'default_language' in the server's configuration file
  * @param {String} outputLocales a comma separated list of output locales
  * @param {String} [componentId] the component identifier (id;version)
  */
-function generateLocalizationFiles(sourceLocale, outputLocales, componentId) {
+function generateLocalizationFiles(outputLocales, componentId) {
     try {
         var projectRoot = utils.getProjectRoot(process.cwd()),
             componentsFolder = path.join(projectRoot, 'components'),
@@ -70,6 +70,7 @@ function generateLocalizationFiles(sourceLocale, outputLocales, componentId) {
                     poTranslations = loadPoFiles(components[i], outputLocales.split(','));
 
                 compareTranslations(components[i], poTranslations, parsedTranslations);
+                createPoFiles(components[i], poTranslations);
             } catch (ex) {
                 console.log(ex.message.red);
             }
@@ -267,8 +268,8 @@ function loadPoFiles(component, locales) {
         var messagesPath = path.join(localeFolder, locales[i], 'messages.po');
         poTranslations[messagesPath] = {
             '': {
-                'Content-Type': 'text/plain; charset=UTF-8\n',
-                'Plural-Forms': 'nplurals=2; plural=(n != 1);\n'
+                'Content-Type': 'text/plain; charset=UTF-8\\n',
+                'Plural-Forms': 'nplurals=2; plural=(n != 1);\\n'
             }
         };
         extend(poTranslations[messagesPath], uniqueMessages);
@@ -393,6 +394,65 @@ function addNewTranslations(component, poTranslations, parsedTranslations) {
             }
         }
     }
+}
+
+/**
+ * Create or update the .po files.
+ *
+ * @param {Object} component the component configuration
+ * @param {Object} poTranslations the .po translations
+ */
+function createPoFiles(component, poTranslations) {
+    for (var poPath in poTranslations) {
+        var translations = poTranslations[poPath];
+
+        if (Object.keys(translations).length < 2) {
+            continue;
+        }
+
+        wrench.mkdirSyncRecursive(path.dirname(poPath), '0755');
+
+        var content = composePoContent(translations);
+        fs.writeFileSync(poPath, content, 'utf8');
+    }
+}
+
+/**
+ * Create the content of a .po file based on the translations object.
+ *
+ * @param {Object} translations the translations object
+ * @returns {String} the .po content
+ */
+function composePoContent(translations) {
+    var content = '',
+        headers = translations[''];
+    if (headers) {
+        content += 'msgid ""\n' + 'msgstr ""\n';
+        for (var key in headers) {
+            content += '"' + key + ': ' + headers[key] + '"\n';
+        }
+    }
+
+    for (var messageId in translations) {
+        if (messageId == '') {
+            continue;
+        }
+
+        content += '\n';
+        var data = translations[messageId];
+        content += 'msgid "' + messageId + '"\n';
+        if (data[0] != null) {
+            content += 'msgid_plural "' + data[0] + '"\n';
+            data[2] = data[2] || data[0];
+            for (var i = 1, len = data.length; i < len; i++) {
+                content += 'msgstr[' + (i - 1) + '] "' + data[i] + '"\n';
+            }
+        } else {
+            content += 'msgstr "' + data[1] + '"\n';
+        }
+    }
+
+    return content;
 }
 
 module.exports = register;
