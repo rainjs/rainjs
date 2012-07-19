@@ -30,7 +30,8 @@ var path = require('path'),
     color = require('colors'),
     utils = require('../lib/utils'),
     extend = require('node.extend'),
-    util = require('../../lib/util');
+    util = require('../../lib/util'),
+    poUtils = require('../../lib/po_utils');
 
 /**
  * Register the generate localization files command.
@@ -65,9 +66,16 @@ function generateLocalizationFiles(sourceLocale, outputLocales, componentId) {
             }
 
             try {
-                var translations = parseComponent(components[i]);
+                var parsedTranslations = parseComponent(components[i]),
+                    poTranslations = loadPoFiles(components[i], outputLocales.split(','));
+
+                compareTranslations(components[i], poTranslations, parsedTranslations);
             } catch (ex) {
                 console.log(ex.message.red);
+            }
+
+            if (module == componentId) {
+                break;
             }
         }
     } catch (ex) {
@@ -226,6 +234,165 @@ function parseFiles(options) {
     });
 
     return folderTranslations;
+}
+
+/**
+ * Load all the .po files of a component.
+ *
+ * @param {Object} component the component configuration
+ * @param {Array} locales the output locales
+ * @returns {Object} the po messages indexed by the file path
+ */
+function loadPoFiles(component, locales) {
+    var poTranslations = {},
+        localeFolder = path.join(component.folder, 'locale'),
+        uniqueMessages = {};
+
+    util.walkSync(localeFolder, ['.po'], function (filePath) {
+        var poContent = fs.readFileSync(filePath, 'utf8'),
+            po = poUtils.parsePo(poContent);
+
+        poTranslations[filePath] = po;
+        extend(uniqueMessages, po);
+
+        var language = filePath.substring(localeFolder.length + 1).split(path.sep)[0];
+        var index = locales.indexOf(language);
+        if (index > -1) {
+            locales.splice(index, 1);
+        }
+    });
+
+    delete uniqueMessages[''];
+    for (var i = locales.length; i--;) {
+        var messagesPath = path.join(localeFolder, locales[i], 'messages.po');
+        poTranslations[messagesPath] = {
+            '': {
+                'Content-Type': 'text/plain; charset=UTF-8\n',
+                'Plural-Forms': 'nplurals=2; plural=(n != 1);\n'
+            }
+        };
+        extend(poTranslations[messagesPath], uniqueMessages);
+    }
+
+    return poTranslations;
+}
+
+/**
+ * Compare the .po translations with the parsed translations and update the .po translation in
+ * order to be up to date.
+ *
+ * @param {Object} component the component configuration
+ * @param {Object} poTranslations the .po translations
+ * @param {Object} parsedTranslations the parsed translations
+ */
+function compareTranslations(component, poTranslations, parsedTranslations) {
+    updateExistingTranslations(poTranslations, parsedTranslations);
+    addNewTranslations(component, poTranslations, parsedTranslations);
+}
+
+/**
+ * Remove old translations and add the plural form for existing ones (if the plural form is not
+ * found).
+ *
+ * @param {Object} poTranslations the .po translations
+ * @param {Object} parsedTranslations the parsed translations
+ */
+function updateExistingTranslations(poTranslations, parsedTranslations) {
+    for (var path in poTranslations) {
+        var translations = poTranslations[path];
+        for (var messageId in translations) {
+            if (messageId === '') {
+                continue;
+            }
+
+            var parsed = searchParsedTranslation(parsedTranslations, messageId);
+            if (!parsed) {
+                delete translations[messageId];
+                continue;
+            }
+
+            var message = translations[messageId];
+            if (Array.isArray(parsed) && !message[0]) {
+                message[0] = parsed[1];
+            }
+        }
+    }
+}
+
+/**
+ * Search for a parsed message.
+ *
+ * @param {Object} parsedTranslations the parsed translations
+ * @param {String} messageId the message id
+ * @returns {String|Array} the message
+ */
+function searchParsedTranslation(parsedTranslations, messageId) {
+    for (var path in parsedTranslations) {
+        var translations = parsedTranslations[path];
+        for (var i = translations.length; i--;) {
+            if (Array.isArray(translations[i]) && translations[i][0] == messageId) {
+                return translations[i];
+            }
+            if (translations[i] == messageId) {
+                return translations[i];
+            }
+        }
+    }
+}
+
+/**
+ * Search for a .po message.
+ *
+ * @param {Object} poTranslations the .po translations
+ * @param {String} messageId the message id
+ * @returns {Array} the message will all available forms
+ */
+function searchPoTranslation(poTranslations, messageId) {
+    for (var path in poTranslations) {
+        var translations = poTranslations[path];
+        if (translations[messageId]) {
+            return translations[messageId];
+        }
+    }
+}
+
+/**
+ * Add new translations found by parsing the files in the .po translations.
+ *
+ * @param {Object} component the component configuration
+ * @param {Object} poTranslations the .po translations
+ * @param {Object} parsedTranslations the parsed translations
+ */
+function addNewTranslations(component, poTranslations, parsedTranslations) {
+    for (var parsedPath in parsedTranslations) {
+        var translations = parsedTranslations[parsedPath];
+        for (var i = translations.length; i--;) {
+            var messageId, messageIdPlural = null;
+            if (Array.isArray(translations[i])) {
+                messageId = translations[i][0];
+                messageIdPlural = translations[i][1];
+            } else {
+                messageId = translations[i];
+            }
+
+            if (searchPoTranslation(poTranslations, messageId)) {
+                continue;
+            }
+
+            // Add the new translation one time for each language.
+            var locales = [];
+            for (var poPath in poTranslations) {
+                var localeFolder = path.join(component.folder, 'locale'),
+                    language = poPath.substring(localeFolder.length + 1).split(path.sep)[0];
+
+                if (locales.indexOf(language) == -1) {
+                    var translation = poTranslations[poPath];
+                    translation[messageId] = [messageIdPlural, messageId];
+                    locales.push(language);
+                }
+            }
+        }
+    }
 }
 
 module.exports = register;
