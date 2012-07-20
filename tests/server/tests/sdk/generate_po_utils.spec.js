@@ -327,5 +327,34 @@ describe('generate po utils', function () {
 
             });
         });
+
+        describe('search po translations', function () {
+            var found;
+
+            beforeEach(function () {
+                po = {
+                    'ro': { 'hello': [null, 'salut'], 'goodbye': [null, 'la revedere'] },
+                    'en': { 'welcome': [null, 'bine ați venit'] }
+                };
+            });
+
+            it('should find existing message ids', function () {
+                found = utils.searchPoTranslation(po, 'goodbye');
+
+                expect(found).toBe(po.ro.goodbye);
+
+                found = utils.searchPoTranslation(po, 'welcome');
+
+                expect(found).toBe(po.en.welcome);
+            });
+
+            it('should return undefined for missing message ids', function () {
+                found = utils.searchPoTranslation(po, 'hello, world');
+
+                expect(found).toBeUndefined();
+            });
+
+        });
+
     });
 });
