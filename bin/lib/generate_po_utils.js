@@ -150,8 +150,8 @@ GeneratePoUtils.prototype.parseTemplateFiles = function (component) {
     return this.parseFiles({
         folder: path.join(component.folder, 'client/templates'),
         extensions: ['.html'],
-        tPattern: tPattern,
-        ntPattern: ntPattern
+        tPattern: [tPattern],
+        ntPattern: [ntPattern]
     });
 };
 
@@ -162,23 +162,28 @@ GeneratePoUtils.prototype.parseTemplateFiles = function (component) {
  * @returns {Object} the translation messages indexed by the file path
  */
 GeneratePoUtils.prototype.parseJsFiles = function (component) {
-    var matchString = '(((\\\\\')?[^\\\\\']+(\\\\[^\'])?(\\\\\')?)+)',
-        tPattern = '(?:(?:\\s|\\()t\\s*\\(\\s*\')' + matchString + '(?:\')',
-        ntPattern = '(?:(?:\\s|\\()nt\\s*\\(\\s*\')' + matchString + '(?:\'\\s*,\\s*\')' +
-                                                       matchString + '(?:\')';
+    var matchStringSingleQuote = '(((\\\\\')?[^\\\\\']+(\\\\[^\'])?(\\\\\')?)+)',
+        tPatternSingleQuote = '(?:(?:\\s|\\()t\\s*\\(\\s*\')' + matchStringSingleQuote + '(?:\')',
+        ntPatternSingleQuote = '(?:(?:\\s|\\()nt\\s*\\(\\s*\')' + matchStringSingleQuote +
+                               '(?:\'\\s*,\\s*\')' + matchStringSingleQuote + '(?:\')';
+
+    var matchStringDoubleQuote = "(((\\\\\")?[^\\\\\"]+(\\\\[^\"])?(\\\\\")?)+)",
+        tPatternDoubleQuote = "(?:(?:\\s|\\()t\\s*\\(\\s*\")" + matchStringDoubleQuote + "(?:\")",
+        ntPatternDoubleQuote = "(?:(?:\\s|\\()nt\\s*\\(\\s*\")" + matchStringDoubleQuote +
+                               "(?:\"\\s*,\\s*\")" + matchStringDoubleQuote + "(?:\")";
 
     var translations = this.parseFiles({
         folder: path.join(component.folder, 'client/js'),
         extensions: ['.js'],
-        tPattern: tPattern,
-        ntPattern: ntPattern
+        tPattern: [tPatternSingleQuote, tPatternDoubleQuote],
+        ntPattern: [ntPatternSingleQuote, ntPatternDoubleQuote]
     });
 
     extend(translations, this.parseFiles({
         folder: path.join(component.folder, 'server'),
         extensions: ['.js'],
-        tPattern: tPattern,
-        ntPattern: ntPattern
+        tPattern: [tPatternSingleQuote, tPatternDoubleQuote],
+        ntPattern: [ntPatternSingleQuote, ntPatternDoubleQuote]
     }));
 
     return translations;
@@ -190,8 +195,8 @@ GeneratePoUtils.prototype.parseJsFiles = function (component) {
  * @param {Object} options the parse options
  * @param {String} options.folder the component folder that will be scanned
  * @param {String} options.extensions the extensions used to filter the folder files
- * @param {String} options.tPattern the pattern to extract the t translations
- * @param {String} options.ntPattern the pattern to extract the nt translations
+ * @param {Array} options.tPattern the patterns to extract the t translations
+ * @param {Array} options.ntPattern the patterns to extract the nt translations
  * @returns {Object} the translation messages indexed by the file path
  */
 GeneratePoUtils.prototype.parseFiles = function (options) {
@@ -199,26 +204,32 @@ GeneratePoUtils.prototype.parseFiles = function (options) {
 
     util.walkSync(options.folder, options.extensions, function (filePath) {
         try {
-            var tRegExp = new RegExp(options.tPattern, 'gm'),
-                ntRegExp = new RegExp(options.ntPattern, 'gm'),
-                text = fs.readFileSync(filePath, 'utf8'),
+            var text = fs.readFileSync(filePath, 'utf8'),
                 matches,
-                translations = [];
+                translations = [],
+                tRegExp,
+                ntRegExp;
 
-            while ((matches = tRegExp.exec(text)) != null) {
-                if (matches.length < 2 || !matches[1]) {
-                    continue;
+            for (var i = 0, len = options.tPattern.length; i < len; i++) {
+                tRegExp = new RegExp(options.tPattern[i], 'gm');
+                while ((matches = tRegExp.exec(text)) != null) {
+                    if (matches.length < 2 || !matches[1]) {
+                        continue;
+                    }
+
+                    translations.push(matches[1]);
                 }
-
-                translations.push(matches[1]);
             }
 
-            while ((matches = ntRegExp.exec(text)) != null) {
-                if (matches.length < 7 || !matches[1] || !matches[6]) {
-                    continue;
-                }
+            for (var i = 0, len = options.ntPattern.length; i < len; i++) {
+                ntRegExp = new RegExp(options.ntPattern[i], 'gm');
+                while ((matches = ntRegExp.exec(text)) != null) {
+                    if (matches.length < 7 || !matches[1] || !matches[6]) {
+                        continue;
+                    }
 
-                translations.push([matches[1], matches[6]]);
+                    translations.push([matches[1], matches[6]]);
+                }
             }
 
             if (translations.length > 0) {
