@@ -1,6 +1,35 @@
-describe('The console appender', function () {
+// Copyright © 2012 rainjs
+//
+// All rights reserved
+//
+// Redistribution and use in source and binary forms, with or without modification, are permitted
+// provided that the following conditions are met:
+//
+//    1. Redistributions of source code must retain the above copyright notice, this list of
+//       conditions and the following disclaimer.
+//    2. Redistributions in binary form must reproduce the above copyright notice, this list of
+//       conditions and the following disclaimer in the documentation and/or other materials
+//       provided with the distribution.
+//    3. Neither the name of The author nor the names of its contributors may be used to endorse or
+//       promote products derived from this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+// IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+// MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+// SHALL THE AUTHOR AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+// OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+// IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+"use strict";
+
+var path = require('path');
+
+describe('Console appender', function () {
     var Appender, ConsoleAppender, layout, mocks, event, options;
-    beforeEach(function (){
+    beforeEach(function () {
         mocks = {};
         mocks['../appender'] = Appender = jasmine.createSpy('Appender');
         layout = jasmine.createSpyObj('layout', ['format']);
@@ -29,16 +58,17 @@ describe('The console appender', function () {
             }
         };
 
-        ConsoleAppender = loadModuleExports('/lib/logging/appenders/console.js', mocks);
+        ConsoleAppender = loadModuleExports(path.join('lib', 'logging', 'appenders', 'console.js'),
+                                            mocks);
     });
 
     it('should call the parent constructor', function () {
-        var appender = new ConsoleAppender(0, layout, options);
+        new ConsoleAppender(0, layout, options);
 
         expect(Appender).toHaveBeenCalled();
     });
 
-    it("should corectly format a debug message", function() {
+    it("should corectly format a debug message", function () {
         event.level.andReturn('debug');
         var appender = new ConsoleAppender('debug', layout, options);
 
@@ -79,11 +109,15 @@ describe('The console appender', function () {
     });
 
     it("shouldn't color messages on windows", function() {
+        var platform = process.platform;
+
         event.level.andReturn('fatal');
         process.platform = 'win32';
         var appender = new ConsoleAppender('fatal', layout, options);
 
         appender._write('Some message', event);
         expect(console.log).toHaveBeenCalledWith('Some message');
+
+        process.platform = platform;
     });
 });

@@ -27,9 +27,9 @@
 
 var path = require('path');
 
-describe('logger', function () {
+describe('Logger', function () {
     var Logger, logger, error, Event, appender1, appender2, event, config, util,
-    ConsoleAppender, FileAppender;
+        ConsoleAppender, FileAppender;
 
     beforeEach(function () {
         // simulates the exports of an Appender module
@@ -74,7 +74,8 @@ describe('logger', function () {
         appender1 = jasmine.createSpyObj('appender1', ['append', 'destroy']);
         appender2 = jasmine.createSpyObj('appender2', ['append', 'destroy']);
 
-        Logger = loadModuleExports('/lib/logging/logger.js', mocks, {__dirname: '/rain/lib/logging'});
+        Logger = loadModuleExports('/lib/logging/logger.js', mocks,
+                                   {__dirname: '/rain/lib/logging'});
         logger = new Logger([appender1, appender2]);
         createSpies();
 
@@ -96,57 +97,16 @@ describe('logger', function () {
         spyOn(Logger, '_createLayout');
     }
 
-    describe('debug', function () {
-        it('should call _log with level debug', function () {
-            logger.debug.andCallThrough();
-
-            logger.debug('message', error);
-
-            expect(logger._log).toHaveBeenCalledWith('debug', 'message', error);
-        });
-    });
-
-    describe('info', function () {
-        it('should call _log with level info', function () {
-            logger.info.andCallThrough();
-
-            logger.info('message', error);
-
-            expect(logger._log).toHaveBeenCalledWith('info', 'message', error);
-        });
-    });
-
-    describe('warn', function () {
-        it('should call _log with level warn', function () {
-            logger.warn.andCallThrough();
-
-            logger.warn('message', error);
-
-            expect(logger._log).toHaveBeenCalledWith('warn', 'message', error);
-        });
-    });
-
-    describe('error', function () {
-        it('should call _log with level error', function () {
-            logger.error.andCallThrough();
-
-            logger.error('message', error);
-
-            expect(logger._log).toHaveBeenCalledWith('error', 'message', error);
-        });
-    });
-
-    describe('fatal', function () {
-        it('should call _log with level fatal', function () {
-            logger.fatal.andCallThrough();
-
-            logger.fatal('message', error);
-
-            expect(logger._log).toHaveBeenCalledWith('fatal', 'message', error);
-        });
-    });
-
     describe('_log', function () {
+        it('should call _log with the correct level', function () {
+            var levels = ['debug', 'info', 'warn', 'error', 'fatal'];
+            for (var i = 0, len = levels.length; i < len; i++) {
+                logger[levels[i]].andCallThrough();
+                logger[levels[i]]('message', error);
+                expect(logger._log).toHaveBeenCalledWith(levels[i], 'message', error);
+            }
+        });
+
         it ('should call append for all appenders', function () {
             logger._log.andCallThrough();
 
@@ -181,7 +141,7 @@ describe('logger', function () {
             expect(Logger._registerModules).toHaveBeenCalledWith('appenders', jasmine.any(Object));
             expect(Logger._registerModules).toHaveBeenCalledWith('layouts', jasmine.any(Object));
             expect(Logger._createAppender).toHaveBeenCalledWith(config.logger.appenders[0]);
-            expect(Logger._createAppender).toHaveBeenCalledWith(config.logger.appenders[0]);
+            expect(Logger._createAppender).toHaveBeenCalledWith(config.logger.appenders[1]);
             expect(newLogger._appenders.length).toEqual(2);
         });
 

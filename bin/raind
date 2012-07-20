@@ -80,7 +80,7 @@ var closeServer = function (error) {
 };
 
 if ('win32' !== process.platform) {
-    // intialize shutdown signal handlers
+    // initialize shutdown signal handlers
     process.on('SIGTERM', closeServer);
     process.on('SIGQUIT', closeServer);
     process.on('SIGINT', closeServer);
