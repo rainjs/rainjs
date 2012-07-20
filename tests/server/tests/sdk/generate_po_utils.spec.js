@@ -1,10 +1,8 @@
 describe('generate po utils', function () {
-
     var GeneratePoUtils, utils;
 
     beforeEach(function () {
         GeneratePoUtils = loadModuleExports('bin/lib/generate_po_utils.js');
-
         utils = new GeneratePoUtils();
     });
 
@@ -12,6 +10,7 @@ describe('generate po utils', function () {
         var component, po, tr;
 
         describe('compare translations', function () {
+
             beforeEach(function () {
                 spyOn(utils, 'updateExistingTranslations');
                 spyOn(utils, 'addNewTranslations');
@@ -27,9 +26,11 @@ describe('generate po utils', function () {
                 expect(utils.updateExistingTranslations).toHaveBeenCalledWith(po, tr);
                 expect(utils.addNewTranslations).toHaveBeenCalledWith(component, po, tr);
             });
+
         });
 
         describe('update existing translations', function () {
+
             beforeEach(function () {
                 spyOn(utils, 'searchParsedTranslation');
             });
@@ -215,6 +216,7 @@ describe('generate po utils', function () {
                 });
 
             });
+
         });
 
         describe('search parsed translations', function () {
@@ -236,6 +238,7 @@ describe('generate po utils', function () {
                 found = utils.searchParsedTranslation(tr, 'error');
                 expect(found).toBe(tr.one[0]);
             });
+
         });
 
         describe('add new translations', function () {
@@ -357,4 +360,5 @@ describe('generate po utils', function () {
         });
 
     });
+
 });
