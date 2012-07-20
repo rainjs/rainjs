@@ -25,13 +25,11 @@
 
 "use strict";
 
-var cwd = process.cwd();
-
-var path = require('path');
-var Module = require('module');
-var util = require(cwd + '/lib/util');
-var socketRegistry = require(cwd + '/lib/socket_registry');
-var websockets = require(cwd + '/lib/registry/websockets');
+var cwd = process.cwd(),
+    path = require('path'),
+    util = require(cwd + '/lib/util'),
+    socketRegistry = require(cwd + '/lib/socket_registry'),
+    websockets = require(cwd + '/lib/registry/websockets');
 
 var conf = {
     id: 'button',

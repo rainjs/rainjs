@@ -25,36 +25,42 @@
 
 "use strict";
 
-var path = require('path'),
-    fs = require("fs"),
-    Handlebars = require('handlebars'),
-    logger = require('./logging').get();
+var path = require('path');
 
-/**
- * Setup handlebars with all configurations.
- */
-function setup() {
-    autoDiscoverPlugins();
-}
+describe('Event', function () {
+    var Event, evt, error;
 
-/**
- * Register automatically all custom helpers inside the folder RAIN/lib/handlebars.
- */
-function autoDiscoverPlugins() {
-    var dir = fs.readdirSync(__dirname + '/handlebars');
+    beforeEach(function () {
+        Event = loadModuleExports(path.join('lib', 'logging', 'event.js'));
 
-    dir.forEach(function (file) {
-        try {
-            var customHelper = require(path.join(__dirname, 'handlebars', file));
-            Handlebars.registerHelper(customHelper.name, customHelper.helper);
-
-            logger.info("Loaded handlebars helper: " + customHelper.name);
-        } catch(ex) {
-            throw new RainError("Can't load handlebars helper: "+file, ex, RainError.ERROR_IO);
-        }
+        error = new Error('Unit test error');
+        evt = new Event(0, 'Some random event', error);
     });
-}
 
-setup();
+    it('should correctly instantiate', function () {
+        expect(evt._level).toEqual(0);
+        expect(evt._message).toEqual('Some random event');
+        expect(evt._error).toEqual(error);
+    });
 
-module.exports = Handlebars;
+    it('should return the correct message', function () {
+        expect(evt.message()).toEqual('Some random event');
+    });
+
+    it('should return the correct error', function () {
+        expect(evt.error()).toEqual(error);
+    });
+
+    it('should return the correct level', function () {
+        expect(evt.level()).toEqual(0);
+    });
+
+    it('should return the correct logger name', function () {
+        expect(evt.logger()).toEqual('RAIN');
+    });
+
+    it('should return the correct logger name', function () {
+        evt._date = new Date();
+        expect(evt.date()).toEqual(evt._date);
+    });
+});
