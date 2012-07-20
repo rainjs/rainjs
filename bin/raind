@@ -74,16 +74,18 @@ try {
     process.exit(0);
 }
 
-var closeServer = function () {
-    server.close();
+var closeServer = function (error) {
+    server.close(error);
     process.nextTick(process.exit);
 };
 
-// intialize shutdown signal handlers
-process.on('SIGTERM', closeServer);
-process.on('SIGQUIT', closeServer);
-process.on('SIGINT', closeServer);
-process.on('SIGSTOP', closeServer);
+if ('win32' !== process.platform) {
+    // intialize shutdown signal handlers
+    process.on('SIGTERM', closeServer);
+    process.on('SIGQUIT', closeServer);
+    process.on('SIGINT', closeServer);
+    process.on('SIGSTOP', closeServer);
+}
 
 // add an uncaught exception handler to shutdown the server softly
 process.on('uncaughtException', closeServer);
