@@ -216,5 +216,116 @@ describe('generate po utils', function () {
 
             });
         });
+
+        describe('search parsed translations', function () {
+            var found;
+
+            beforeEach(function () {
+                tr = {
+                    'one': [['error', 'errors']],
+                    'two': ['hello, world']
+                };
+            });
+
+            it('should find singular entries', function () {
+                found = utils.searchParsedTranslation(tr, 'hello, world');
+                expect(found).toBe(tr.two[0]);
+            });
+
+            it('should find plural entries', function () {
+                found = utils.searchParsedTranslation(tr, 'error');
+                expect(found).toBe(tr.one[0]);
+            });
+        });
+
+        describe('add new translations', function () {
+            var ro, en;
+
+            beforeEach(function () {
+                component = { folder: 'components' };
+                ro = 'components/locale/ro';
+                en = 'components/locale/en';
+
+                spyOn(utils, 'searchPoTranslation');
+            });
+
+            describe('one-to-one', function () {
+
+                beforeEach(function () {
+                    utils.searchPoTranslation.andReturn(void 0);
+                });
+
+                it('should add one new singular entry', function () {
+                    po = {}; po[ro] = { 'hello': [null, 'salut'] };
+                    tr = { 'one': ['goodbye'] };
+
+                    utils.addNewTranslations(component, po, tr);
+
+                    expect(po[ro]['goodbye'][0]).toBeNull();
+                    expect(po[ro]['goodbye'][1]).toEqual('goodbye');
+                });
+
+                it('should add multiple singular entries', function () {
+                    po = {}; po[ro] = { 'hello': [null, 'salut'] };
+                    tr = { 'one': ['goodbye', 'error'] };
+
+                    utils.addNewTranslations(component, po, tr);
+
+                    expect(po[ro]['goodbye'][0]).toBeNull();
+                    expect(po[ro]['goodbye'][1]).toEqual('goodbye');
+                    expect(po[ro]['error'][0]).toBeNull();
+                    expect(po[ro]['error'][1]).toEqual('error');
+                });
+
+                it('should add one new plural entry', function () {
+                    po = {}; po[ro] = { 'hello': [null, 'salut'] };
+                    tr = { 'one': [['error', 'errors']] };
+
+                    utils.addNewTranslations(component, po, tr);
+
+                    expect(po[ro]['error'][0]).toEqual('errors');
+                    expect(po[ro]['error'][1]).toEqual('error');
+                });
+
+                it('should add multiple plural entries', function () {
+                    po = {}; po[ro] = { 'hello': [null, 'salut'] };
+                    tr = { 'one': [['error', 'errors'], ['event', 'events']] };
+
+                    utils.addNewTranslations(component, po, tr);
+
+                    expect(po[ro]['error'][0]).toEqual('errors');
+                    expect(po[ro]['error'][1]).toEqual('error');
+                    expect(po[ro]['event'][0]).toEqual('events');
+                    expect(po[ro]['event'][1]).toEqual('event');
+                });
+            });
+
+            describe('many-to-many', function () {
+
+                beforeEach(function () {
+                    utils.searchPoTranslation.andCallFake(function (po, id) {
+                        for (var locale in po) {
+                            var entry = po[locale][id];
+                            if (entry) {
+                                return entry;
+                            }
+                        }
+                    });
+                });
+
+                it('should add one new singular entry to multiple locales', function () {
+                    po = {}; po[ro] = {}; po[en] = {};
+                    tr = { 'one': ['hello'] };
+
+                    utils.addNewTranslations(component, po, tr);
+
+                    expect(po[ro]['hello'][0]).toBeNull();
+                    expect(po[ro]['hello'][1]).toEqual('hello');
+                    expect(po[en]['hello'][0]).toBeNull();
+                    expect(po[en]['hello'][1]).toEqual('hello');
+                });
+
+            });
+        });
     });
 });
