@@ -3,6 +3,15 @@ Changelog
 =========
 
 ------
+v 0.13
+------
+
++ Added support for dynamic internationalization.
++ Added language selector component.
++ Implemented the platform logger based on the feature proposal.
++ Added new RAIN SDK command for generating .po files.
+
+------
 v 0.12
 ------
 
