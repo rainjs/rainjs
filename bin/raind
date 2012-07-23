@@ -71,12 +71,11 @@ try {
     process.chdir(projectRoot);
 } catch (e) {
     console.log('Failed to change directory to', projectRoot, 'error:', e.message);
-    process.exit(0);
+    // process.exit(0);
 }
 
 var closeServer = function (error) {
     server.close(error);
-    process.nextTick(process.exit);
 };
 
 if ('win32' !== process.platform) {
