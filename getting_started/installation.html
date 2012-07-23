@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>RAIN Installation &mdash; Rain v0.12.0 documentation</title>
+    <title>RAIN Installation &mdash; Rain v0.13.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.12.0',
+        VERSION:     '0.13.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,9 +22,9 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.12.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.13.0 documentation" href="../index.html" />
     <link rel="next" title="RAIN SDK Tutorial" href="rain_sdk_tutorial.html" />
-    <link rel="prev" title="Rain 0.12.0 Documentation" href="../index.html" /> 
+    <link rel="prev" title="Rain 0.13.0 Documentation" href="../index.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,9 +37,9 @@
           <a href="rain_sdk_tutorial.html" title="RAIN SDK Tutorial"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../index.html" title="Rain 0.12.0 Documentation"
+          <a href="../index.html" title="Rain 0.13.0 Documentation"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.12.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.13.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -71,14 +71,14 @@ development machine.</p>
 <p>Now you can start installing node.</p>
 <blockquote>
 <ol class="arabic simple">
-<li><tt class="docutils literal"><span class="pre">wget</span> <span class="pre">http://nodejs.org/dist/v0.6.13/node-v0.6.13.tar.gz</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">tar</span> <span class="pre">-zxvf</span> <span class="pre">node-v0.6.13.tar.gz</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">cd</span> <span class="pre">node-v0.6.13</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">wget</span> <span class="pre">http://nodejs.org/dist/v0.8.3/node-v0.8.3.tar.gz</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">tar</span> <span class="pre">-zxvf</span> <span class="pre">node-v0.8.3.tar.gz</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">cd</span> <span class="pre">node-v0.8.3</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">chmod</span> <span class="pre">u+x</span> <span class="pre">configure</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">chmod</span> <span class="pre">u+x</span> <span class="pre">tools/waf-light</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">./configure</span> <span class="pre">&amp;&amp;</span> <span class="pre">make</span> <span class="pre">&amp;&amp;</span> <span class="pre">sudo</span> <span class="pre">make</span> <span class="pre">install</span></tt></li>
 <li>Make sure /usr/local/bin is added to your PATH environment variable.</li>
-<li><tt class="docutils literal"><span class="pre">node</span> <span class="pre">-V</span></tt> to make sure node can be run</li>
+<li><tt class="docutils literal"><span class="pre">node</span> <span class="pre">-v</span></tt> to make sure node can be run</li>
 <li><tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">npm</span> <span class="pre">install</span> <span class="pre">node-gyp</span> <span class="pre">-g</span></tt> to install the latest node native module build tool</li>
 </ol>
 </blockquote>
@@ -90,7 +90,7 @@ development machine.</p>
 <h3>Windows OS<a class="headerlink" href="#windows-os" title="Permalink to this headline">¶</a></h3>
 <blockquote>
 <ol class="arabic simple">
-<li>Download <a class="reference external" href="http://nodejs.org/dist/v0.6.15/node-v0.6.15.msi">http://nodejs.org/dist/v0.6.15/node-v0.6.15.msi</a></li>
+<li>Download <a class="reference external" href="http://nodejs.org/dist/v0.8.3/node-v0.8.3-x86.msi">http://nodejs.org/dist/v0.8.3/node-v0.8.3-x86.msi</a> or <a class="reference external" href="http://nodejs.org/dist/v0.8.3/x64/node-v0.8.3-x64.msi">http://nodejs.org/dist/v0.8.3/x64/node-v0.8.3-x64.msi</a></li>
 <li>Install the msi package</li>
 <li>That&#8217;s all :)</li>
 <li>NPM is in the bundle too ;)</li>
@@ -102,7 +102,7 @@ development machine.</p>
 <p>On Mac OS operating systems you need to execute the following commands:</p>
 <blockquote>
 <ol class="arabic simple">
-<li>Download <a class="reference external" href="http://nodejs.org/dist/v0.6.15/node-v0.6.15.pkg">http://nodejs.org/dist/v0.6.15/node-v0.6.15.pkg</a></li>
+<li>Download <a class="reference external" href="http://nodejs.org/dist/v0.8.3/node-v0.8.3.pkg">http://nodejs.org/dist/v0.8.3/node-v0.8.3.pkg</a></li>
 <li>Install the package</li>
 <li>That&#8217;s all :)</li>
 <li>NPM is in the bundle too ;)</li>
@@ -185,7 +185,7 @@ installation try to access: <a class="reference external" href="http://localhost
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="../index.html"
-                        title="previous chapter">Rain 0.12.0 Documentation</a></p>
+                        title="previous chapter">Rain 0.13.0 Documentation</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="rain_sdk_tutorial.html"
                         title="next chapter">RAIN SDK Tutorial</a></p>
@@ -216,9 +216,9 @@ installation try to access: <a class="reference external" href="http://localhost
           <a href="rain_sdk_tutorial.html" title="RAIN SDK Tutorial"
              >next</a> |</li>
         <li class="right" >
-          <a href="../index.html" title="Rain 0.12.0 Documentation"
+          <a href="../index.html" title="Rain 0.13.0 Documentation"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.12.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.13.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

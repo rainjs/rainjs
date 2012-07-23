@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Intents &mdash; Rain v0.12.0 documentation</title>
+    <title>Intents &mdash; Rain v0.13.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.12.0',
+        VERSION:     '0.13.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.12.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.13.0 documentation" href="../index.html" />
     <link rel="next" title="RAIN Websockets" href="websockets.html" />
     <link rel="prev" title="Class Util" href="../client/api/Util.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="../client/api/Util.html" title="Class Util"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.12.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.13.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -108,13 +108,21 @@ Below you can find a simple example of how to use this intent (extracted from co
 </div>
 <p>As you can see in the code snippet above the provider contains the controller name and the method to
 be execute separated by a <em>hash</em>. The method must have the following signature:</p>
-<div class="highlight-js"><div class="highlight"><pre><span class="kd">function</span> <span class="nx">myFunction</span><span class="p">(</span><span class="nx">intentContext</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight-js"><div class="highlight"><pre><span class="kd">function</span> <span class="nx">myFunction</span><span class="p">(</span><span class="nx">intentContext</span><span class="p">,</span> <span class="nx">acknowledge</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// code here</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>The intent context will contain the data sent from the client that might be necessary for running the
 bsiness logic.</p>
+<p>The <tt class="docutils literal"><span class="pre">acknowledge</span></tt> method <strong>must</strong> be called in order to let the client  know that the intent has
+finished. It accepts two parameters:</p>
+<blockquote>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">error</span></tt> - if an error has occured pass it here, otherwise set it to null</li>
+<li><tt class="docutils literal"><span class="pre">data</span></tt> - the result data (can be undefined)</li>
+</ul>
+</blockquote>
 <p>Below you can find a complete server side intent handler implementation:</p>
 <div class="highlight-js"><div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">doLogging</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">intentContext</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> <span class="s2">&quot;doLogging method: &quot;</span> <span class="o">+</span> <span class="nx">intentContext</span><span class="p">.</span><span class="nx">message</span> <span class="o">||</span> <span class="s2">&quot;No message specified&quot;</span><span class="p">;</span>
@@ -209,7 +217,7 @@ two intents with the same category and intent.</p>
         <li class="right" >
           <a href="../client/api/Util.html" title="Class Util"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.12.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.13.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

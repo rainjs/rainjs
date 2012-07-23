@@ -31,9 +31,14 @@ useful information about the RAIN environment.
 Constructor
 -----------
 
-.. js:class:: Environment()
+.. js:class:: Environment(session)
 
 
+
+    
+    :param Session session: 
+        the user session 
+    
 
 
 
@@ -57,6 +62,25 @@ language
 
 
 the platform language
+
+
+
+
+
+
+
+
+    
+
+
+
+languages
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:attribute:: languages   
+
+
+the list of languages
 
 
 

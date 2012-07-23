@@ -1,0 +1,360 @@
+
+
+
+
+
+
+..
+    Classes and methods
+
+Class Logger
+================================================================================
+
+..
+   class-title
+
+
+The logger for the RAIN platform. The logging system is comprised of *loggers*, *appenders*
+and *layouts*. Each logger can use multiple appenders and an appender uses one layout.
+Appenders specify where the log should be written (console, file, database) and layouts specify
+how a message should be formatted. RAIN implements two appenders: ``console`` and ``file`` and
+one layout: ``pattern``.
+
+The platform logger configuration is placed in ``server.conf.default`` under the key ``logger``.
+The following example configures the platform logger to use a console appender and a file
+appender each of them using a pattern layout. The console appender inherits the level from
+the platform level and the file appender specifies its own level, overriding the platform one::
+
+     "logger": {
+         "level": "info",
+         "appenders": [{
+             "type": "console",
+             "layout": {
+                 "type": "pattern",
+                 "params": {
+                     "pattern": "[%level] %date: %message"
+                 }
+             },
+             "params": {
+                 "debug": {
+                     "foreground": "green"
+                 },
+                 "info": {
+                     "foreground": "cyan"
+                 },
+                 "warn": {
+                     "foreground": "yellow"
+                 },
+                 "error": {
+                     "foreground": "red"
+                 },
+                 "fatal": {
+                     "foreground": "black",
+                     "background": "red"
+                 }
+             }
+         },
+         {
+             "level": "debug",
+             "type": "file",
+             "layout": {
+                 "type": "pattern",
+                 "params": {
+                     "pattern": "[%level] %date %logger: %message%newline%stacktrace"
+                 }
+             },
+             "params": {
+                 "file": "/path/to/file"
+             }
+         }]
+     }
+
+RAIN’s logging system defines 5 log levels: ``debug``, ``info``, ``warn``, ``error`` and ``fatal``.
+
+In order to use the platform logger you need to obtain its reference by calling ``Logger.get``
+and then you can write messages by calling one of its methods: ``debug``, ``info``, ``warn``,
+ ``error`` or ``fatal``::
+
+     var logger = require('./logging').get();
+     logger.error('Error reading from file', error);
+     logger.info('some message');
+
+
+
+
+
+
+
+
+    
+
+
+Constructor
+-----------
+
+.. js:class:: Logger(appenders)
+
+
+
+    
+    :param Appender[] appenders: 
+        The appenders used by the logger. 
+    
+
+
+
+
+
+
+
+Methods
+-------
+
+..
+   class-methods
+
+
+debug
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Logger#debug(message, error)
+
+
+    
+    :param String message: 
+        The message to be logged. 
+    
+    :param RainError error: 
+        The associated error, if one exists. 
+    
+
+
+
+
+Logs a debug message.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+destroy
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Logger#destroy()
+
+
+
+
+
+Calls the destroy method for the appenders it uses.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+error
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Logger#error(message, error)
+
+
+    
+    :param String message: 
+        The message to be logged. 
+    
+    :param RainError error: 
+        The associated error, if one exists. 
+    
+
+
+
+
+Logs an error message.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+fatal
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Logger#fatal(message, error)
+
+
+    
+    :param String message: 
+        The message to be logged. 
+    
+    :param RainError error: 
+        The associated error, if one exists. 
+    
+
+
+
+
+Logs a fatal error message. These are errors from which the server can't recover.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+get
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Logger.get()
+
+
+
+    
+    :throws RainError:
+        : when the platform level is invalid.
+    
+
+
+    
+    :returns Logger:
+         
+    
+
+
+Gets the platform logger. At the first call, registers platform appenders and layouts and
+initializes the logger.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+info
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Logger#info(message, error)
+
+
+    
+    :param String message: 
+        The message to be logged. 
+    
+    :param RainError error: 
+        The associated error, if one exists. 
+    
+
+
+
+
+Logs an info message.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+warn
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Logger#warn(message, error)
+
+
+    
+    :param String message: 
+        The message to be logged. 
+    
+    :param RainError error: 
+        The associated error, if one exists. 
+    
+
+
+
+
+Logs a warning message.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    
+
+Attributes
+----------
+
+..
+   class-attributes
+
+
+LEVELS
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:attribute:: LEVELS (static)(constant)  
+
+
+Defines numeric values for the logger levels.
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+

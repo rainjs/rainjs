@@ -46,10 +46,38 @@ Methods
    class-methods
 
 
-initialize
+close
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: Server#initialize()
+.. js:function:: Server#close([error])
+
+
+    
+    :param Error error: 
+        the error that triggered the shutdown (if any) 
+    
+
+
+
+
+Softly shuts down the server closing any open pipes and connections.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+start
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Server#start()
 
 
 

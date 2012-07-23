@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class Server &mdash; Rain v0.12.0 documentation</title>
+    <title>Class Server &mdash; Rain v0.13.0 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.12.0',
+        VERSION:     '0.13.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,8 +22,8 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.12.0 documentation" href="../../index.html" />
-    <link rel="next" title="Class StackTraceFormatter" href="StackTraceFormatter.html" />
+    <link rel="top" title="Rain v0.13.0 documentation" href="../../index.html" />
+    <link rel="next" title="Namespace SocketHandlers" href="SocketHandlers.html" />
     <link rel="prev" title="Class Renderer" href="Renderer.html" /> 
   </head>
   <body>
@@ -34,12 +34,12 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="StackTraceFormatter.html" title="Class StackTraceFormatter"
+          <a href="SocketHandlers.html" title="Namespace SocketHandlers"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="Renderer.html" title="Class Renderer"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.12.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.13.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -61,11 +61,31 @@
 </div>
 <div class="section" id="methods">
 <h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="initialize">
-<h3>initialize<a class="headerlink" href="#initialize" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="close">
+<h3>close<a class="headerlink" href="#close" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="Server#initialize">
-<tt class="descname">Server#initialize</tt><big>(</big><big>)</big><a class="headerlink" href="#Server#initialize" title="Permalink to this definition">¶</a></dt>
+<dt id="Server#close">
+<tt class="descname">Server#close</tt><big>(</big><span class="optional">[</span><em>error</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#Server#close" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>error</strong> (<em>Error</em>) &#8211; the error that triggered the shutdown (if any)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Softly shuts down the server closing any open pipes and connections.</p>
+</div>
+<div class="section" id="start">
+<h3>start<a class="headerlink" href="#start" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Server#start">
+<tt class="descname">Server#start</tt><big>(</big><big>)</big><a class="headerlink" href="#Server#start" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>Starts the server.</p>
@@ -96,7 +116,8 @@
 <li><a class="reference internal" href="#">Class Server</a><ul>
 <li><a class="reference internal" href="#constructor">Constructor</a></li>
 <li><a class="reference internal" href="#methods">Methods</a><ul>
-<li><a class="reference internal" href="#initialize">initialize</a></li>
+<li><a class="reference internal" href="#close">close</a></li>
+<li><a class="reference internal" href="#start">start</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#attributes">Attributes</a><ul>
@@ -111,8 +132,8 @@
   <p class="topless"><a href="Renderer.html"
                         title="previous chapter">Class Renderer</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="StackTraceFormatter.html"
-                        title="next chapter">Class StackTraceFormatter</a></p>
+  <p class="topless"><a href="SocketHandlers.html"
+                        title="next chapter">Namespace SocketHandlers</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -137,12 +158,12 @@
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="StackTraceFormatter.html" title="Class StackTraceFormatter"
+          <a href="SocketHandlers.html" title="Namespace SocketHandlers"
              >next</a> |</li>
         <li class="right" >
           <a href="Renderer.html" title="Class Renderer"
              >previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.12.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.13.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

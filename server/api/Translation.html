@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class Translation &mdash; Rain v0.12.0 documentation</title>
+    <title>Class Translation &mdash; Rain v0.13.0 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.12.0',
+        VERSION:     '0.13.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.12.0 documentation" href="../../index.html" />
+    <link rel="top" title="Rain v0.13.0 documentation" href="../../index.html" />
     <link rel="next" title="Class TranslationHelper" href="TranslationHelper.html" />
     <link rel="prev" title="Class StackTraceFormatter" href="StackTraceFormatter.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="StackTraceFormatter.html" title="Class StackTraceFormatter"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.12.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.13.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -65,13 +65,14 @@
 <h3>generateContext<a class="headerlink" href="#generatecontext" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="Translation#generateContext">
-<tt class="descname">Translation#generateContext</tt><big>(</big><em>component</em><big>)</big><a class="headerlink" href="#Translation#generateContext" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">Translation#generateContext</tt><big>(</big><em>component</em>, <em>language</em><big>)</big><a class="headerlink" href="#Translation#generateContext" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>component</strong> (<em>Object</em>) &#8211; the component configuration for the component</li>
+<li><strong>language</strong> (<em>String</em>) &#8211; the language</li>
 </ul>
 </td>
 </tr>
@@ -137,13 +138,14 @@
 <h3>getLocales<a class="headerlink" href="#getlocales" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="Translation#getLocales">
-<tt class="descname">Translation#getLocales</tt><big>(</big><em>component</em><big>)</big><a class="headerlink" href="#Translation#getLocales" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">Translation#getLocales</tt><big>(</big><em>component</em><span class="optional">[</span>, <em>language</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#Translation#getLocales" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>component</strong> (<em>Object</em>) &#8211; Component object</li>
+<li><strong>language</strong> (<em>String</em>) &#8211; the preferred language. If missing platform language is used</li>
 </ul>
 </td>
 </tr>
@@ -253,13 +255,14 @@ defined for the component in which the code runs.</p>
 <h3>translate<a class="headerlink" href="#translate" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="Translation#translate">
-<tt class="descname">Translation#translate</tt><big>(</big><em>component</em>, <em>msgId</em><span class="optional">[</span>, <em>msgIdPlural</em><span class="optional">]</span><span class="optional">[</span>, <em>count</em><span class="optional">]</span><span class="optional">[</span>, <em>args</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#Translation#translate" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">Translation#translate</tt><big>(</big><em>component</em>, <em>language</em>, <em>msgId</em><span class="optional">[</span>, <em>msgIdPlural</em><span class="optional">]</span><span class="optional">[</span>, <em>count</em><span class="optional">]</span><span class="optional">[</span>, <em>args</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#Translation#translate" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>component</strong> (<em>Object</em>) &#8211; the descriptor of the component for which we do the translation</li>
+<li><strong>language</strong> (<em>String</em>) &#8211; the translation language</li>
 <li><strong>msgId</strong> (<em>String</em>) &#8211; the message to be translated</li>
 <li><strong>msgIdPlural</strong> (<em>String</em>) &#8211; the plural form of the message</li>
 <li><strong>count</strong> (<em>Number</em>) &#8211; determines what form of the translation will be used: singular or plural. In some languages the rules for plurals are more complex</li>
@@ -357,7 +360,7 @@ The last fallback is to return the message passed as parameter.</p>
         <li class="right" >
           <a href="StackTraceFormatter.html" title="Class StackTraceFormatter"
              >previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.12.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.13.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

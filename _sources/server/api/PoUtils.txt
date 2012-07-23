@@ -69,7 +69,7 @@ Parses the po data and creates an object using it. This object has the following
 {
     "": {key1: value1, ..., keyN: valueN}, //headers
     "msgid1": [null, "translation"],
-    "msgid2": [null, "singular", "plural"],
+    "msgid2": ["msgidPlural", "singular", "pluralForm0", "pluralForm1", ...],
     ...
     "msgidN": [null, "translation"]
 }

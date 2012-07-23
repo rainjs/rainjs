@@ -49,12 +49,15 @@ Methods
 generateContext
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: Translation#generateContext(component)
+.. js:function:: Translation#generateContext(component, language)
 
 
     
     :param Object component: 
         the component configuration for the component 
+    
+    :param String language: 
+        the language 
     
 
 
@@ -156,12 +159,15 @@ If there aren't any translations messages for the component an empty Object is r
 getLocales
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: Translation#getLocales(component)
+.. js:function:: Translation#getLocales(component, [language])
 
 
     
     :param Object component: 
         Component object 
+    
+    :param String language: 
+        the preferred language. If missing platform language is used 
     
 
 
@@ -329,12 +335,15 @@ defined for the component in which the code runs.
 translate
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: Translation#translate(component, msgId, [msgIdPlural], [count], [args])
+.. js:function:: Translation#translate(component, language, msgId, [msgIdPlural], [count], [args])
 
 
     
     :param Object component: 
         the descriptor of the component for which we do the translation 
+    
+    :param String language: 
+        the translation language 
     
     :param String msgId: 
         the message to be translated 

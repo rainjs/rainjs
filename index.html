@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Rain 0.12.0 Documentation &mdash; Rain v0.12.0 documentation</title>
+    <title>Rain 0.13.0 Documentation &mdash; Rain v0.13.0 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.12.0',
+        VERSION:     '0.13.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.12.0 documentation" href="#" />
+    <link rel="top" title="Rain v0.13.0 documentation" href="#" />
     <link rel="next" title="RAIN Installation" href="getting_started/installation.html" /> 
   </head>
   <body>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="getting_started/installation.html" title="RAIN Installation"
              accesskey="N">next</a> |</li>
-        <li><a href="#">Rain v0.12.0 documentation</a> &raquo;</li> 
+        <li><a href="#">Rain v0.13.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -45,8 +45,8 @@
           <div class="body">
             
   <div class="section" id="rain-release-documentation">
-<h1>Rain 0.12.0 Documentation<a class="headerlink" href="#rain-release-documentation" title="Permalink to this headline">¶</a></h1>
-<p>Welcome! This is the documentation for Rain 0.12.0</p>
+<h1>Rain 0.13.0 Documentation<a class="headerlink" href="#rain-release-documentation" title="Permalink to this headline">¶</a></h1>
+<p>Welcome! This is the documentation for Rain 0.13.0</p>
 <div class="section" id="getting-started">
 <h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
@@ -61,6 +61,7 @@
 <li class="toctree-l2"><a class="reference internal" href="getting_started/rain_sdk_tutorial.html#rain-sdk-basic-usage">RAIN SDK Basic usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started/rain_sdk_tutorial.html#rain-sdk-create-project">RAIN SDK Create project</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started/rain_sdk_tutorial.html#rain-sdk-debug-mode">RAIN SDK Debug mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/rain_sdk_tutorial.html#rain-sdk-generate-localization-files-from-source">RAIN SDK Generate Localization files from source</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="server/component_descriptor.html">RAIN component descriptor</a><ul>
@@ -141,6 +142,7 @@
 <li class="toctree-l1"><a class="reference internal" href="client/api/ClientStorage.html">Class ClientStorage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="client/api/Context.html">Class Context</a></li>
 <li class="toctree-l1"><a class="reference internal" href="client/api/EventEmitter.html">Class EventEmitter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client/api/LanguageSelector.html">Class LanguageSelector</a></li>
 <li class="toctree-l1"><a class="reference internal" href="client/api/SocketHandler.html">Class SocketHandler</a></li>
 <li class="toctree-l1"><a class="reference internal" href="client/api/Util.html">Class Util</a></li>
 </ul>
@@ -220,19 +222,27 @@
 <h3>APIs<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="server/api/Appender.html">Class Appender</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/Authorization.html">Namespace Authorization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/ComponentHelper.html">Class ComponentHelper</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/ComponentRegistry.html">Class ComponentRegistry</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/Configuration.html">Class Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/ConsoleAppender.html">Class ConsoleAppender</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/CssHelper.html">Class CssHelper</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/DataLayer.html">Class DataLayer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/Environment.html">Class Environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/ErrorHandler.html">Class ErrorHandler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/Event.html">Class Event</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/FileAppender.html">Class FileAppender</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/IntentsRegistry.html">Class IntentsRegistry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/Layout.html">Class Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/Logger.html">Class Logger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/PatternLayout.html">Class PatternLayout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/PoUtils.html">Class PoUtils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/ProxyStore.html">Class ProxyStore</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/Renderer.html">Class Renderer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/Server.html">Class Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/SocketHandlers.html">Namespace SocketHandlers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/StackTraceFormatter.html">Class StackTraceFormatter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/Translation.html">Class Translation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/TranslationHelper.html">Class TranslationHelper</a></li>
@@ -306,7 +316,7 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Rain 0.12.0 Documentation</a><ul>
+<li><a class="reference internal" href="#">Rain 0.13.0 Documentation</a><ul>
 <li><a class="reference internal" href="#getting-started">Getting started</a><ul>
 </ul>
 </li>
@@ -364,7 +374,7 @@
         <li class="right" >
           <a href="getting_started/installation.html" title="RAIN Installation"
              >next</a> |</li>
-        <li><a href="#">Rain v0.12.0 documentation</a> &raquo;</li> 
+        <li><a href="#">Rain v0.13.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

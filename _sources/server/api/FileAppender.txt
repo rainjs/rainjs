@@ -1,0 +1,117 @@
+
+
+
+
+
+
+..
+    Classes and methods
+
+Class FileAppender
+================================================================================
+
+..
+   class-title
+
+
+The file appender class is used for redirecting the log output to a file::
+
+     {
+         "level": "debug",
+         "type": "file",
+         "layout": {
+             "type": "pattern",
+             "params": {
+                 "pattern": "[%level] %date %logger: %message%newline%stacktrace"
+             }
+          },
+          "params": {
+              "file": "/path/to/file",
+              "encoding": "utf-8",
+              "mode": "0644"
+          }
+     }
+
+
+
+
+
+
+
+
+    
+
+
+Constructor
+-----------
+
+.. js:class:: FileAppender(level, layout, options)
+
+
+
+    
+    :param String level: 
+        the log level for this instance 
+    
+    :param Layout layout: 
+        the log layout to use 
+    
+    :param Object options: 
+        the configuration options 
+    
+    :param String options.file: 
+        the file to write to 
+    
+    :param String options.encoding: 
+        the encoding to use for the log file (*Default*: 'utf-8')
+    
+    :param String options.mode: 
+        the permissions to use when creating a new log file (*Default*: '0644')
+    
+
+
+
+
+
+
+
+Methods
+-------
+
+..
+   class-methods
+
+
+destroy
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: FileAppender#destroy(cb)
+
+
+    
+    :param  cb: 
+         
+    
+
+
+
+
+Destroy the appender.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    
+
+
+

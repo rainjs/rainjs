@@ -54,3 +54,23 @@ For Windows::
 
 Now start the node-inspector in the command line with ``node-inspector`` and you can access
 the debugger with http://localhost:8080.
+
+------------------------------------------------
+RAIN SDK Generate Localization files from source
+------------------------------------------------
+
+The **RAIN SDK** provides a method to generate localization files by parsing the sources for
+the components, and generating ``.po`` for the specified locale through the ``rain generate-po-files``
+command.
+
+This command parses the translation ids used inside components and generates apropriate ``.po`` files
+inside the components ``locale`` folders that can be later translated.
+
+Usage::
+
+    $ rain generate-po-files <output-locales> [component-id]
+
+Example::
+
+    $ rain generate-po-files "en_GB,de_DE" # generate en_GB and de_DE po files for all components
+    $ rain generate-po-files en_GB example # generate en_GB .po files for the example component
