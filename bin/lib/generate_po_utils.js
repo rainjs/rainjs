@@ -256,33 +256,34 @@ GeneratePoUtils.prototype.parseFiles = function (options) {
  */
 GeneratePoUtils.prototype.loadPoFiles = function (component, locales) {
     var poTranslations = {},
-        localeFolder = path.join(component.folder, 'locale'),
-        uniqueMessages = {};
+        localeFolder = path.join(component.folder, 'locale');
+
+    var missingLocales = [];
+    for (var i = 0, len = locales.length; i < len; i++) {
+        missingLocales[i] = locales[i];
+    }
 
     util.walkSync(localeFolder, ['.po'], function (filePath) {
-        var poContent = fs.readFileSync(filePath, 'utf8'),
-            po = poUtils.parsePo(poContent);
+        var language = filePath.substring(localeFolder.length + 1).split(path.sep)[0],
+            index = locales.indexOf(language);
 
-        poTranslations[filePath] = po;
-        extend(uniqueMessages, po);
-
-        var language = filePath.substring(localeFolder.length + 1).split(path.sep)[0];
-        var index = locales.indexOf(language);
         if (index > -1) {
-            locales.splice(index, 1);
+            var poContent = fs.readFileSync(filePath, 'utf8'),
+                po = poUtils.parsePo(poContent);
+
+            missingLocales.splice(index, 1);
+            poTranslations[filePath] = po;
         }
     });
 
-    delete uniqueMessages[''];
-    for (var i = locales.length; i--;) {
-        var messagesPath = path.join(localeFolder, locales[i], 'messages.po');
+    for (var i = missingLocales.length; i--;) {
+        var messagesPath = path.join(localeFolder, missingLocales[i], 'messages.po');
         poTranslations[messagesPath] = {
             '': {
                 'Content-Type': 'text/plain; charset=UTF-8\\n',
                 'Plural-Forms': 'nplurals=2; plural=(n != 1);\\n'
             }
         };
-        extend(poTranslations[messagesPath], uniqueMessages);
     }
 
     return poTranslations;
