@@ -49,19 +49,6 @@ define([], function () {
                 });
             });
         });
-
-        var socket = this.context.messaging.getSocket('/example/3.0/send_email');
-        socket.on('message', function (data) {
-            emailResponse.html(data.value);
-        });
-
-        this.context.find('sendEmailWs', function () {
-            this.on('start', function () {
-                $(this.context.getRoot().children()[0]).click(function () {
-                    socket.emit('get_message');
-                });
-            });
-        });
     };
 
     return TextLocalization;

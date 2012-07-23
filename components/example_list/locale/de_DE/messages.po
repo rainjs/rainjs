@@ -29,9 +29,3 @@ msgstr "E-Mail wurde erfolgreich gesendet!"
 
 msgid "Send email"
 msgstr "E-Mail senden"
-
-msgid "Send email through websockets"
-msgstr "E-Mail senden über WebSockets"
-
-msgid "Email was sent successfully through websockets!"
-msgstr "E-Mail wurde erfolgreich durch WebSockets geschickt!"
