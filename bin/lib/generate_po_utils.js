@@ -273,7 +273,7 @@ GeneratePoUtils.prototype.loadPoFiles = function (component, locales) {
                 missingIndex = missingLocales.indexOf(language);
 
             if (missingIndex > -1) {
-                missingLocales.splice(index, 1);
+                missingLocales.splice(missingIndex, 1);
             }
             poTranslations[filePath] = po;
         }
