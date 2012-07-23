@@ -86,12 +86,14 @@ Try the following url in your browser: <a class="reference external" href="http:
 <p>RAIN provides a debug mode for the server-side. You only have to start the server with &#8211;debug.
 It automatically connects the Node native debugger with the port 5858.</p>
 <p>If you want to use a graphical debugger then you can install the &#8220;node-inspector&#8221; NPM module.</p>
-<dl class="docutils">
-<dt>For Linux::</dt>
-<dd>sudo npm install node-inspector -g</dd>
-<dt>For Windows::</dt>
-<dd>npm install node-inspector -g</dd>
-</dl>
+<p>For Linux:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="nx">sudo</span> <span class="nx">npm</span> <span class="nx">install</span> <span class="nx">node</span><span class="o">-</span><span class="nx">inspector</span> <span class="o">-</span><span class="nx">g</span>
+</pre></div>
+</div>
+<p>For Windows:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="nx">npm</span> <span class="nx">install</span> <span class="nx">node</span><span class="o">-</span><span class="nx">inspector</span> <span class="o">-</span><span class="nx">g</span>
+</pre></div>
+</div>
 <p>Now start the node-inspector in the command line with <tt class="docutils literal"><span class="pre">node-inspector</span></tt> and you can access
 the debugger with <a class="reference external" href="http://localhost:8080">http://localhost:8080</a>.</p>
 </div>
@@ -107,8 +109,11 @@ inside the components <tt class="docutils literal"><span class="pre">locale</spa
 </pre></div>
 </div>
 <p>Example:</p>
-<div class="highlight-js"><pre>$ rain generate-po-files "en_GB,de_DE" # generate en_GB and de_DE po files for all components
-$ rain generate-po-files en_GB example # generate en_GB .po files for the example component</pre>
+<div class="highlight-js"><pre># generate en_GB and de_DE po files for all components
+$ rain generate-po-files "en_GB,de_DE"
+
+# generate en_GB .po files for the example component, version 1.0
+$ rain generate-po-files "en_GB" "example;1.0"</pre>
 </div>
 </div>
 </div>
