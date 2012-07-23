@@ -4,6 +4,13 @@ define(['raintime/messaging/sockets'], function (Sockets) {
      * The language selector component provides a way to change the user language.
      * After the drop down list changed the page is refreshed.
      *
+     * In order to use this component you just need to include it in the pages for which
+     * you want to dynamically change the language.
+     *
+     * Example::
+     *
+     *      {{component name="language_selector" version="1.0" view="index"}}
+     *
      * @name LanguageSelector
      * @class
      * @constructor
