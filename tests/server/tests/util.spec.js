@@ -28,7 +28,6 @@
 var cwd = process.cwd();
 var path = require('path');
 var globals = require(cwd + '/lib/globals.js');
-var logger = require(cwd + '/lib/logger.js');
 var configuration = require(cwd + '/lib/configuration.js');
 
 var util = require(cwd + '/lib/util.js');

@@ -1,7 +1,6 @@
 {
     "server": {
         "port": 1337,
-        "socketsPort": 1338,
         "timeoutForRequests" : 3,
 
         "serverRoot": ".",
@@ -15,6 +14,37 @@
 
     "defaultLanguage": "en_US",
     "language": "en_US",
+
+    "logger": {
+        "level": "info",
+        "appenders": [{
+            "type": "console",
+            "layout": {
+                "type": "pattern",
+                "params": {
+                    "pattern": "[%level] %date: %message"
+                }
+            },
+            "params": {
+                "debug": {
+                    "foreground": "green"
+                },
+                "info": {
+                    "foreground": "cyan"
+                },
+                "warn": {
+                    "foreground": "yellow"
+                },
+                "error": {
+                    "foreground": "red"
+                },
+                "fatal": {
+                    "foreground": "black",
+                    "background": "red"
+                }
+            }
+        }]
+    },
 
     "errorComponent": {
         "id": "error",

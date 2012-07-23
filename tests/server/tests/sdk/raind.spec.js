@@ -10,7 +10,7 @@ describe('raind', function () {
 
         program = jasmine.createSpyObj('program', ['option', 'version', 'usage', 'parse']);
         utils = jasmine.createSpyObj('utils', ['getProjectRoot']);
-        server = jasmine.createSpyObj('server', ['initialize']);
+        server = jasmine.createSpyObj('server', ['start']);
         fs = jasmine.createSpyObj('fs', ['writeFileSync']);
 
         program.dir = process.cwd();
@@ -74,6 +74,6 @@ describe('raind', function () {
 
     it('should initialize the server if all went well', function () {
         loadModuleExports(path.join('bin', 'raind'), mocks);
-        expect(server.initialize).toHaveBeenCalled();
+        expect(server.start).toHaveBeenCalled();
     });
 });

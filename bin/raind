@@ -25,13 +25,16 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+"use strict";
+
 var program = require('commander'),
     path = require('path'),
     fs = require('fs'),
     sdkUtils = require('./lib/utils');
 
 var root = path.dirname(__dirname),
-    version;
+    version,
+    server = require(path.join(root, 'lib', 'server'));
 
 function getProjectRoot(dir) {
     try {
@@ -70,4 +73,22 @@ try {
     console.log('Failed to change directory to', projectRoot, 'error:', e.message);
     process.exit(0);
 }
-require(path.join(root, 'lib', 'server')).initialize();
+
+var closeServer = function (error) {
+    server.close(error);
+    process.nextTick(process.exit);
+};
+
+if ('win32' !== process.platform) {
+    // initialize shutdown signal handlers
+    process.on('SIGTERM', closeServer);
+    process.on('SIGQUIT', closeServer);
+    process.on('SIGINT', closeServer);
+    process.on('SIGSTOP', closeServer);
+}
+
+// add an uncaught exception handler to shutdown the server softly
+process.on('uncaughtException', closeServer);
+
+// start the server
+server.start();
