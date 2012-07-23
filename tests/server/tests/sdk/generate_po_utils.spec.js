@@ -1,3 +1,5 @@
+var path = require('path');
+
 describe('generate po utils', function () {
     var GeneratePoUtils, utils;
 
@@ -245,9 +247,9 @@ describe('generate po utils', function () {
             var ro, en;
 
             beforeEach(function () {
-                component = { folder: 'components' };
-                ro = 'components/locale/ro';
-                en = 'components/locale/en';
+                component = { folder: path.join('components', 'x') };
+                ro = path.join('components', 'x', 'locale', 'ro', 'messages.po');
+                en = path.join('components', 'x', 'locale', 'en', 'messages.po');
 
                 spyOn(utils, 'searchPoTranslation');
             });
@@ -326,6 +328,101 @@ describe('generate po utils', function () {
                     expect(po[ro]['hello'][1]).toEqual('hello');
                     expect(po[en]['hello'][0]).toBeNull();
                     expect(po[en]['hello'][1]).toEqual('hello');
+                });
+
+                it('should add multiple singular entries to multiple locales', function () {
+                    po = {}; po[ro] = {}; po[en] = {};
+                    tr = {
+                        'one': ['hello'],
+                        'two': ['error']
+                    };
+
+                    utils.addNewTranslations(component, po, tr);
+
+                    expect(po[ro]['hello'][0]).toBeNull();
+                    expect(po[ro]['hello'][1]).toEqual('hello');
+                    expect(po[en]['hello'][0]).toBeNull();
+                    expect(po[en]['hello'][1]).toEqual('hello');
+
+                    expect(po[ro]['error'][0]).toBeNull();
+                    expect(po[ro]['error'][1]).toEqual('error');
+                    expect(po[en]['error'][0]).toBeNull();
+                    expect(po[en]['error'][1]).toEqual('error');
+
+                });
+
+                it('should add multiple plural entries to multiple locales', function () {
+                    po = {}; po[ro] = {}; po[en] = {};
+                    tr = {
+                        'one': [['error', 'errors']],
+                        'two': [['event', 'events']]
+                    };
+
+                    utils.addNewTranslations(component, po, tr);
+
+                    expect(po[ro]['error'][0]).toEqual('errors');
+                    expect(po[ro]['error'][1]).toEqual('error');
+                    expect(po[en]['error'][0]).toEqual('errors');
+                    expect(po[en]['error'][1]).toEqual('error');
+
+                    expect(po[ro]['event'][0]).toEqual('events');
+                    expect(po[ro]['event'][1]).toEqual('event');
+                    expect(po[en]['event'][0]).toEqual('events');
+                    expect(po[en]['event'][1]).toEqual('event');
+
+                });
+
+                it('should handle a complex case', function () {
+                    var ro_other = path.join('components', 'x', 'locale', 'ro', 'misc.po');
+
+                    po = {};
+                    po[ro] = {
+                        'hello': [null, 'salut'],
+                    };
+                    po[ro_other] = {
+                        'goodbye': [null, 'la revedere']
+                    };
+                    po[en] = {
+                        'hello': [null, 'hello'],
+                        'goodbye': [null, 'goodbye']
+                    };
+                    tr = {
+                        'one': ['error', ['option', 'options']],
+                        'two': ['goodbye', ['event', 'events']],
+                        'three': ['hello']
+                    };
+
+                    utils.addNewTranslations(component, po, tr);
+
+                    expect(po[ro]['hello'][0]).toBeNull();
+                    expect(po[ro]['hello'][1]).toEqual('salut');
+                    expect(po[ro_other]['hello']).not.toBeDefined();
+                    expect(po[en]['hello'][0]).toBeNull();
+                    expect(po[en]['hello'][1]).toEqual('hello');
+
+                    expect(po[ro]['error'][0]).toBeNull();
+                    expect(po[ro]['error'][1]).toEqual('error');
+                    expect(po[ro_other]['error']).not.toBeDefined();
+                    expect(po[en]['error'][0]).toBeNull();
+                    expect(po[en]['error'][1]).toEqual('error');
+
+                    expect(po[ro]['option'][0]).toEqual('options');
+                    expect(po[ro]['option'][1]).toEqual('option');
+                    expect(po[ro_other]['option']).not.toBeDefined();
+                    expect(po[en]['option'][0]).toEqual('options');
+                    expect(po[en]['option'][1]).toEqual('option');
+
+                    expect(po[ro]['goodbye']).not.toBeDefined();
+                    expect(po[ro_other]['goodbye'][0]).toBeNull();
+                    expect(po[ro_other]['goodbye'][1]).toEqual('la revedere');
+                    expect(po[en]['goodbye'][0]).toBeNull();
+                    expect(po[en]['goodbye'][1]).toEqual('goodbye');
+
+                    expect(po[ro]['event'][0]).toEqual('events');
+                    expect(po[ro]['event'][1]).toEqual('event');
+                    expect(po[ro_other]['event']).not.toBeDefined();
+                    expect(po[en]['event'][0]).toEqual('events');
+                    expect(po[en]['event'][1]).toEqual('event');
                 });
 
             });
