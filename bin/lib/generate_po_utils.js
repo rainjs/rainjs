@@ -44,7 +44,10 @@ var path = require('path'),
 function GeneratePoUtils() {}
 
 /**
- * Generate the .po files.
+ * Generates .po files.
+ * Goes through the list of components, extracts messages from the source code, 
+ * merges them with the existing .po messages and generates updated .po files.
+ * Entry point to the utility class' functions.
  *
  * @param {String} outputLocales a comma separated list of output locales
  * @param {String} [componentId] the component identifier (id;version)
@@ -82,10 +85,10 @@ GeneratePoUtils.prototype.generateLocalizationFiles = function (outputLocales, c
 };
 
 /**
- * Scan the components folder and read the meta file.
+ * Scans the components folder and read the meta file.
  *
  * @param {String} componentsFolder the components folder
- * @returns {Array}
+ * @returns {Array} array of component descriptor files (meta.json) with added folder information
  */
 GeneratePoUtils.prototype.scanComponents = function (componentsFolder) {
     var components = [],
@@ -122,7 +125,7 @@ GeneratePoUtils.prototype.scanComponents = function (componentsFolder) {
 };
 
 /**
- * Parse a component's files and extract the translations.
+ * Parses a component's files and extract the translations.
  *
  * @param {Object} component the component configuration
  * @returns {Object} the component's translations found in templates and .js files
@@ -137,7 +140,7 @@ GeneratePoUtils.prototype.parseComponent = function (component) {
 };
 
 /**
- * Extract the translations from a component's templates.
+ * Extracts the translations from a component's templates.
  *
  * @param {Object} component the component configuration
  * @returns {Object} the translation messages indexed by the file path
@@ -156,7 +159,7 @@ GeneratePoUtils.prototype.parseTemplateFiles = function (component) {
 };
 
 /**
- * Extract the translations from a component's .js files.
+ * Extracts the translations from a component's .js files.
  *
  * @param {Object} component the component configuration
  * @returns {Object} the translation messages indexed by the file path
@@ -190,7 +193,7 @@ GeneratePoUtils.prototype.parseJsFiles = function (component) {
 };
 
 /**
- * Extract the translations from a component's folder.
+ * Extracts the translations from a component's folder.
  *
  * @param {Object} options the parse options
  * @param {String} options.folder the component folder that will be scanned
@@ -245,7 +248,7 @@ GeneratePoUtils.prototype.parseFiles = function (options) {
 };
 
 /**
- * Load all the .po files of a component.
+ * Loads all the .po files of a component.
  *
  * @param {Object} component the component configuration
  * @param {Array} locales the output locales
@@ -286,8 +289,8 @@ GeneratePoUtils.prototype.loadPoFiles = function (component, locales) {
 };
 
 /**
- * Compare the .po translations with the parsed translations and update the .po translation in
- * order to be up to date.
+ * Compares the .po translations with the parsed
+ * translations and updates the .po translation.
  *
  * @param {Object} component the component configuration
  * @param {Object} poTranslations the .po translations
@@ -301,8 +304,8 @@ GeneratePoUtils.prototype.compareTranslations = function (component,
 };
 
 /**
- * Remove old translations and add the plural form for existing ones (if the plural form is not
- * found).
+ * Removes old translations and adds the plural form for existing ones
+ * (if the plural form is not found).
  *
  * @param {Object} poTranslations the .po translations
  * @param {Object} parsedTranslations the parsed translations
@@ -331,7 +334,7 @@ GeneratePoUtils.prototype.updateExistingTranslations = function (poTranslations,
 };
 
 /**
- * Search for a parsed message.
+ * Searches for a message id in the list of parsed translations.
  *
  * @param {Object} parsedTranslations the parsed translations
  * @param {String} messageId the message id
@@ -352,11 +355,11 @@ GeneratePoUtils.prototype.searchParsedTranslation = function (parsedTranslations
 };
 
 /**
- * Search for a .po message.
+ * Searches for a message id in the list of translations from .po files.
  *
  * @param {Object} poTranslations the .po translations
  * @param {String} messageId the message id
- * @returns {Array} the message will all available forms
+ * @returns {Array} the message with all available forms
  */
 GeneratePoUtils.prototype.searchPoTranslation = function (poTranslations, messageId) {
     for (var path in poTranslations) {
@@ -368,7 +371,7 @@ GeneratePoUtils.prototype.searchPoTranslation = function (poTranslations, messag
 };
 
 /**
- * Add new translations found by parsing the files in the .po translations.
+ * Adds new translations found by parsing the files in the .po translations.
  *
  * @param {Object} component the component configuration
  * @param {Object} poTranslations the .po translations
@@ -409,7 +412,7 @@ GeneratePoUtils.prototype.addNewTranslations = function (component,
 };
 
 /**
- * Create or update the .po files.
+ * Creates or updates the .po files.
  *
  * @param {Object} component the component configuration
  * @param {Object} poTranslations the .po translations
@@ -430,7 +433,7 @@ GeneratePoUtils.prototype.createPoFiles = function (component, poTranslations) {
 };
 
 /**
- * Create the content of a .po file based on the translations object.
+ * Creates the content of a .po file based on the translations object.
  *
  * @param {Object} translations the translations object
  * @returns {String} the .po content
