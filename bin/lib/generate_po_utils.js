@@ -269,9 +269,12 @@ GeneratePoUtils.prototype.loadPoFiles = function (component, locales) {
 
         if (index > -1) {
             var poContent = fs.readFileSync(filePath, 'utf8'),
-                po = poUtils.parsePo(poContent);
+                po = poUtils.parsePo(poContent),
+                missingIndex = missingLocales.indexOf(language);
 
-            missingLocales.splice(index, 1);
+            if (missingIndex > -1) {
+                missingLocales.splice(index, 1);
+            }
             poTranslations[filePath] = po;
         }
     });
