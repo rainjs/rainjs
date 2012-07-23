@@ -1,5 +1,7 @@
+"use strict";
+
 describe("Localization files", function() {
-    var GeneratePoUtils, fs, wrench, mocks = {},
+    var GeneratePoUtils, fs, mocks = {},
         locale = {
             "": {
                 header1: 'header 1',
@@ -11,7 +13,7 @@ describe("Localization files", function() {
 
     beforeEach(function () {
         mocks['fs'] = fs = jasmine.createSpyObj('fs', ['writeFileSync']);
-        mocks['wrench'] = wrench = jasmine.createSpyObj('wrench', ['mkdirSyncRecursive']);
+        mocks['wrench'] = jasmine.createSpyObj('wrench', ['mkdirSyncRecursive']);
 
         GeneratePoUtils = loadModuleExports('/bin/lib/generate_po_utils.js', mocks);
     });
@@ -22,8 +24,8 @@ describe("Localization files", function() {
         expect(translation.composePoContent(locale)).toEqual(
             'msgid ""\n' +
             'msgstr ""\n' +
-            '"header1: header 1"\n' +
-            '"header2: header 2"\n\n' +
+            '"header1: header 1\\n"\n' +
+            '"header2: header 2\\n"\n\n' +
 
             'msgid "Some translation"\n' +
             'msgstr "Some translation"\n\n' +
@@ -40,8 +42,8 @@ describe("Localization files", function() {
         var generatedText =
             'msgid ""\n' +
             'msgstr ""\n' +
-            '"header1: header 1"\n' +
-            '"header2: header 2"\n\n' +
+            '"header1: header 1\\n"\n' +
+            '"header2: header 2\\n"\n\n' +
 
             'msgid "Some translation"\n' +
             'msgstr "Some translation"\n\n' +
@@ -61,8 +63,8 @@ describe("Localization files", function() {
         var poTranslations = {
             '/some/path': {
                 '': {
-                    'Content-Type': 'text/plain; charset=UTF-8\\n',
-                    'Plural-Forms': 'nplurals=2; plural=(n != 1);\\n'
+                    'Content-Type': 'text/plain; charset=UTF-8',
+                    'Plural-Forms': 'nplurals=2; plural=(n != 1);'
                 },
                 'Some message': [ null, 'Some message' ]
             }
@@ -80,8 +82,8 @@ describe("Localization files", function() {
         var generatedText =
             'msgid ""\n' +
             'msgstr ""\n' +
-            '"header1: header 1"\n' +
-            '"header2: header 2"\n\n' +
+            '"header1: header 1\\n"\n' +
+            '"header2: header 2\\n"\n\n' +
 
             'msgid "Some translation"\n' +
             'msgstr "Some translation"\n\n' +
@@ -101,8 +103,8 @@ describe("Localization files", function() {
         var poTranslations = {
             '/some/path': {
                 '': {
-                    'Content-Type': 'text/plain; charset=UTF-8\\n',
-                    'Plural-Forms': 'nplurals=2; plural=(n != 1);\\n'
+                    'Content-Type': 'text/plain; charset=UTF-8',
+                    'Plural-Forms': 'nplurals=2; plural=(n != 1);'
                 }
             }
         };

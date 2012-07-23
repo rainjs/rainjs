@@ -280,8 +280,8 @@ GeneratePoUtils.prototype.loadPoFiles = function (component, locales) {
         var messagesPath = path.join(localeFolder, missingLocales[i], 'messages.po');
         poTranslations[messagesPath] = {
             '': {
-                'Content-Type': 'text/plain; charset=UTF-8\\n',
-                'Plural-Forms': 'nplurals=2; plural=(n != 1);\\n'
+                'Content-Type': 'text/plain; charset=UTF-8',
+                'Plural-Forms': 'nplurals=2; plural=(n != 1);'
             }
         };
     }
@@ -445,7 +445,7 @@ GeneratePoUtils.prototype.composePoContent = function (translations) {
     if (headers) {
         content += 'msgid ""\n' + 'msgstr ""\n';
         for (var key in headers) {
-            content += '"' + key + ': ' + headers[key] + '"\n';
+            content += '"' + key + ': ' + headers[key] + '\\n"\n';
         }
     }
 
