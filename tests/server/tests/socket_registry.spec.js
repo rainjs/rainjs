@@ -25,9 +25,7 @@
 
 "use strict";
 
-var cwd = process.cwd(),
-    Module = require('module'),
-    socketRegistry;
+var socketRegistry;
 
 var promise = jasmine.createSpyObj('promise', ['resolve', 'reject', 'then']);
 var Promise = {
@@ -76,26 +74,7 @@ var server = {
     sessionStore: sessionStore
 };
 
-var Translation = {
-    get: function () {
-        return {
-            generateContext: function (component, language) {
-                return {component: component,language: language};
-            }
-        };
-    }
-};
-
-var component = {
-    id: 'example',
-    version: '1.0'
-};
-
 var websocket;
-
-var Environment = function (session) {
-    this.language = session.userLanguage;
-};
 
 var dataArgs, errorArgs;
 
@@ -110,8 +89,13 @@ describe('Socket registry', function () {
             'promised-io/promise': Promise,
             'connect': connect,
             './server': server,
-            './translation': Translation,
-            './environment': Environment
+            './logging': {
+                get: function () {
+                    return {
+                        error: function () {}
+                    };
+                }
+            }
         };
         socketRegistry = loadModuleExports('/lib/socket_registry.js', mocks);
     });
@@ -128,7 +112,7 @@ describe('Socket registry', function () {
             promise.then.andCallFake(function (success, error) {
                 if (dataArgs) {
                     success(dataArgs);
-                } else {
+                } else if (errorArgs) {
                     error(errorArgs);
                 }
             });
@@ -148,13 +132,13 @@ describe('Socket registry', function () {
         });
 
         it('should listen to certain events', function () {
-            socketRegistry.register(websocket.channel, websocket.handle, component);
+            socketRegistry.register(websocket.channel, websocket.handle);
 
             expect(events.connection).toBeDefined();
         });
 
         it('should reject the promise if the session id is missing', function () {
-            socketRegistry.register(websocket.channel, websocket.handle, component);
+            socketRegistry.register(websocket.channel, websocket.handle);
             events.connection(socket);
 
             expect(promise.reject.mostRecentCall.args[0].type).toBe(RainError.ERROR_SOCKET);
@@ -163,7 +147,7 @@ describe('Socket registry', function () {
         it('should get the session from the store when the session id is present', function () {
             socket.handshake.headers.cookie = {};
 
-            socketRegistry.register(websocket.channel, websocket.handle, component);
+            socketRegistry.register(websocket.channel, websocket.handle);
             events.connection(socket);
 
             expect(sessionStore.get.mostRecentCall.args[0]).toBe('sid');
@@ -182,7 +166,7 @@ describe('Socket registry', function () {
         it('should save the session in the store on disconnect event', function () {
             socket.handshake.headers.cookie = {};
 
-            socketRegistry.register(websocket.channel, websocket.handle, component);
+            socketRegistry.register(websocket.channel, websocket.handle);
             events.connection(socket);
             events.disconnect(socket);
 
@@ -198,28 +182,8 @@ describe('Socket registry', function () {
 
             socket.handshake.headers.cookie = {};
 
-            socketRegistry.register(websocket.channel, websocket.handle, component);
+            socketRegistry.register(websocket.channel, websocket.handle);
             events.connection(socket);
-
-            expect(websocket.handle).toHaveBeenCalledWith(socket);
-        });
-
-        it('should generate the new context with the correct language', function () {
-            session.userLanguage = 'de_DE';
-
-            spyOn(websocket, 'handle').andReturn(true);
-            sessionStore.get.andCallFake(function (sid, cb) {
-                cb(null, session);
-            });
-
-            socket.handshake.headers.cookie = {};
-
-            socketRegistry.register(websocket.channel, 'path', component);
-            events.connection(socket);
-
-            expect(requireWithContext.mostRecentCall.args[0]).toEqual('path');
-            expect(requireWithContext.mostRecentCall.args[1]).toEqual(
-                Translation.get().generateContext(component, 'de_DE'));
 
             expect(websocket.handle).toHaveBeenCalledWith(socket);
         });
