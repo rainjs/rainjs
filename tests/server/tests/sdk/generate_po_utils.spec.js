@@ -1,10 +1,40 @@
+// Copyright © 2012 rainjs
+//
+// All rights reserved
+//
+// Redistribution and use in source and binary forms, with or without modification, are permitted
+// provided that the following conditions are met:
+//
+//    1. Redistributions of source code must retain the above copyright notice, this list of
+//       conditions and the following disclaimer.
+//    2. Redistributions in binary form must reproduce the above copyright notice, this list of
+//       conditions and the following disclaimer in the documentation and/or other materials
+//       provided with the distribution.
+//    3. Neither the name of The author nor the names of its contributors may be used to endorse or
+//       promote products derived from this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+// IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+// MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+// SHALL THE AUTHOR AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+// OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+// IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+"use strict";
+
 var path = require('path');
 
 describe('generate po utils', function () {
-    var GeneratePoUtils, utils;
+    var GeneratePoUtils, utils, fs, util;
 
     beforeEach(function () {
-        GeneratePoUtils = loadModuleExports('bin/lib/generate_po_utils.js');
+        var mocks = {};
+        fs = mocks['fs'] = jasmine.createSpyObj('fs', ['readdirSync', 'statSync', 'readFileSync']);
+        util = mocks['../../lib/util'] = jasmine.createSpyObj('util', ['walkSync']);
+        GeneratePoUtils = loadModuleExports('bin/lib/generate_po_utils.js', mocks);
         utils = new GeneratePoUtils();
     });
 
@@ -456,6 +486,160 @@ describe('generate po utils', function () {
 
         });
 
+    });
+
+    describe('scanComponents', function () {
+        beforeEach(function () {
+            fs.statSync.andReturn({ isDirectory: function () { return true; } });
+        });
+
+        it('should return a list of component configs', function () {
+            fs.readdirSync.andReturn(['button', 'example']);
+            fs.readFileSync.andCallFake(function (file) {
+                return '{"file": "' + file + '"}';
+            });
+
+            var components = utils.scanComponents('/rain/components');
+
+            var component1 = {
+                file: path.join('/rain/components', 'button', 'meta.json'),
+                folder: path.join('/rain/components', 'button')
+            };
+            var component2 = {
+                file: path.join('/rain/components', 'example', 'meta.json'),
+                folder: path.join('/rain/components', 'example')
+            };
+
+            expect(components).toEqual([component1, component2]);
+            expect(fs.readdirSync).toHaveBeenCalledWith('/rain/components');
+            expect(fs.readFileSync).toHaveBeenCalledWith(
+                path.join('/rain/components', 'button', 'meta.json'), 'utf8');
+            expect(fs.readFileSync).toHaveBeenCalledWith(
+                path.join('/rain/components', 'example', 'meta.json'), 'utf8');
+        });
+
+        it('should throw if the component folder does not exist', function () {
+            fs.readdirSync.andThrow(new Error('some error'));
+
+            expect(function () {
+                utils.scanComponents('/rain/components');
+            }).toThrow();
+        });
+    });
+
+    describe('parseComponent', function () {
+        beforeEach(function () {
+            spyOn(utils, 'parseTemplateFiles');
+            spyOn(utils, 'parseJsFiles');
+        });
+
+        it('should invoke the parse methods and return the result', function () {
+            utils.parseTemplateFiles.andReturn({a: 1, b: 2});
+            utils.parseJsFiles.andReturn({c: 3});
+
+            var translations = utils.parseComponent({});
+
+            expect(translations).toEqual({a: 1, b: 2, c: 3});
+        });
+    });
+
+    describe('parseTemplateFiles', function () {
+        beforeEach(function () {
+            spyOn(utils, 'parseFiles');
+        });
+
+        it('should call parse for template files', function () {
+            utils.parseFiles.andReturn('value');
+
+            expect(utils.parseTemplateFiles({folder: '/components/button'})).toEqual('value');
+
+            expect(utils.parseFiles).toHaveBeenCalledWith({
+                folder: path.join('/components/button', 'client/templates'),
+                extensions: ['.html'],
+                tPattern: jasmine.any(Object),
+                ntPattern: jasmine.any(Object)
+            });
+        });
+    });
+
+    describe('parseJsFiles', function () {
+        beforeEach(function () {
+            spyOn(utils, 'parseFiles');
+        });
+
+        it('should call parse for js files', function () {
+            utils.parseFiles.andReturn('value');
+
+            expect(utils.parseJsFiles({folder: '/components/button'})).toEqual('value');
+
+            expect(utils.parseFiles).toHaveBeenCalledWith({
+                folder: path.join('/components/button', 'client/js'),
+                extensions: ['.js'],
+                tPattern: jasmine.any(Object),
+                ntPattern: jasmine.any(Object)
+            });
+
+            expect(utils.parseFiles).toHaveBeenCalledWith({
+                folder: path.join('/components/button', 'server'),
+                extensions: ['.js'],
+                tPattern: jasmine.any(Object),
+                ntPattern: jasmine.any(Object)
+            });
+        });
+    });
+
+    describe('parseFiles', function () {
+        it('should parse js files', function () {
+            util.walkSync.andCallFake(function (folder, extensions, cb) {
+                cb('file1');
+                cb('file2');
+            });
+
+            fs.readFileSync.andCallFake(function (file) {
+                if (file === 'file1') {
+                    return "for (var i = 0; i < 3; i++) {\n" +
+                            "   console.log(t( \"abc\"));\n" +
+                            "}\n" +
+                            "\n" +
+                            "button.label =nt('new', 'new plural', 2, [1, 3]);";
+                }
+
+                if (file === 'file2') {
+                    return "if (i === 0) {" +
+                            "  return t ('message' );" +
+                            "} else {" +
+                            "  component.text = t(" +
+                            "      'some text');";
+                }
+            });
+
+            var messages = utils.parseJsFiles({folder: '/components/button'});
+
+            expect(messages['file1']).toEqual(['abc', ['new', 'new plural']]);
+            expect(messages['file2']).toEqual(['message', 'some text']);
+        });
+
+        it('should parse template files', function () {
+            util.walkSync.andCallFake(function (folder, extensions, cb) {
+                cb('template1');
+                cb('template2');
+            });
+
+            fs.readFileSync.andCallFake(function (file) {
+                if (file === 'template1') {
+                    return '{{t "some message"}}';
+                }
+
+                if (file === 'template2') {
+                    return '{{nt "singular" "plural" n n var }}';
+                }
+            });
+
+            var messages = utils.parseTemplateFiles({folder: '/components/button'});
+
+            expect(messages['template1']).toEqual(['some message']);
+            expect(messages['template2']).toEqual([['singular', 'plural']]);
+        });
     });
 
 });

@@ -163,13 +163,13 @@ GeneratePoUtils.prototype.parseTemplateFiles = function (component) {
  */
 GeneratePoUtils.prototype.parseJsFiles = function (component) {
     var matchStringSingleQuote = '(((\\\\\')?[^\\\\\']+(\\\\[^\'])?(\\\\\')?)+)',
-        tPatternSingleQuote = '(?:(?:\\s|\\()t\\s*\\(\\s*\')' + matchStringSingleQuote + '(?:\')',
-        ntPatternSingleQuote = '(?:(?:\\s|\\()nt\\s*\\(\\s*\')' + matchStringSingleQuote +
+        tPatternSingleQuote = '(?:(?:\\s|\\(|\\+|=)t\\s*\\(\\s*\')' + matchStringSingleQuote + '(?:\')',
+        ntPatternSingleQuote = '(?:(?:\\s|\\(|\\+|=)nt\\s*\\(\\s*\')' + matchStringSingleQuote +
                                '(?:\'\\s*,\\s*\')' + matchStringSingleQuote + '(?:\')';
 
     var matchStringDoubleQuote = "(((\\\\\")?[^\\\\\"]+(\\\\[^\"])?(\\\\\")?)+)",
-        tPatternDoubleQuote = "(?:(?:\\s|\\()t\\s*\\(\\s*\")" + matchStringDoubleQuote + "(?:\")",
-        ntPatternDoubleQuote = "(?:(?:\\s|\\()nt\\s*\\(\\s*\")" + matchStringDoubleQuote +
+        tPatternDoubleQuote = "(?:(?:\\s|\\(|\\+|=)t\\s*\\(\\s*\")" + matchStringDoubleQuote + "(?:\")",
+        ntPatternDoubleQuote = "(?:(?:\\s|\\(|\\+|=)nt\\s*\\(\\s*\")" + matchStringDoubleQuote +
                                "(?:\"\\s*,\\s*\")" + matchStringDoubleQuote + "(?:\")";
 
     var translations = this.parseFiles({
