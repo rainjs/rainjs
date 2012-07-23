@@ -23,59 +23,15 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-"use strict";
-
-var path = require('path'),
-    Translation = require('../translation'),
-    util = require('../util'),
-    fs = require('fs');
-
 /**
- * Load the translation files for all the languages available in the component.
- *
- * @param {Object} componentConfig the meta.json information
+ * This method translates a simple message. The module is required by the data module and its
+ * purpose is to show that the 't' and 'nt' functions are present in module required by the data
+ * module.
  */
-function configure(component) {
-    var localeFolder = component.paths('locale', true);
-
-    try {
-        var files = fs.readdirSync(localeFolder);
-    } catch (ex) {
-        //this component doesn't contain any locales
-        return;
-    }
-
-    for (var i = files.length; i--;) {
-        var locale  = files[i]; //each folder in the locale folder represents a locale
-        try {
-            var stat = fs.statSync(path.join(localeFolder, locale));
-            if (stat.isDirectory()) {
-                loadFiles(component, locale);
-            }
-        } catch (ex) {
-            // ignore this error and continue to load other locales
-            // TODO log a warning message
-        }
-    }
-}
-
-/**
- * Load the translation files for a specific language.
- *
- * @param {Object} component the meta.json information
- * @param {String} language the language
- */
-function loadFiles(component, language) {
-    var translation = Translation.get(),
-        localeFolder = component.paths('locale', true),
-        languageFolder = path.join(localeFolder, language);
-
-    util.walkSync(languageFolder, ['.po'], function (filePath) {
-        translation.loadLanguageFile(filePath, language, component);
-    });
+function translateSendMail() {
+    return t('Send email');
 }
 
 module.exports = {
-    name: "Load translation files plugin",
-    configure: configure
+    translateSendMail: translateSendMail
 };

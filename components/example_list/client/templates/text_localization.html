@@ -1,4 +1,5 @@
 {{css path="text_localization.css"}}
+
 <div class="reference">
     <p>
         {{t "Dear %1$s %2$s," boss.title boss.lastName}}
@@ -30,5 +31,7 @@
     </p>
     <br />
     {{component name="external_theming" view="button" sid="sendEmail" label=sendButtonLabel}}
+    {{component name="external_theming" view="button" sid="sendEmailWs"
+                label=sendButtonWebSocketsLabel}}
     <div class="email-response"></div>
 </div>

@@ -25,45 +25,82 @@
 
 "use strict";
 
-describe('testing locale routing', function () {
-    var locale, request, response, localeContent;
-
-    function getLocales() {
-        return {
-            language: { 'msgid': 'translation' },
-            defaultLanguage: { 'msgid': 'translation2' }
-        };
-    }
+describe('locale route', function () {
+    var locale, routerUtils, Translation, translation, request, response;
+    var locales =  {
+        language: { 'msgid': 'translation' },
+        defaultLanguage: { 'msgid': 'translation2' }
+    };
 
     beforeEach(function () {
-        locale = loadModuleContext('/lib/routes/locale.js');
+        var mocks = {};
+        routerUtils = mocks['../router_utils'] =
+            jasmine.createSpyObj('routerUtils', ['setResourceHeaders']);
+        Translation = mocks['../translation'] = jasmine.createSpyObj('Translation', ['get']);
+        translation = jasmine.createSpyObj('translation', ['getLocales']);
+        translation.getLocales.andReturn(locales);
+        Translation.get.andReturn(translation);
 
-        request = { component: true };
-        response = { end: function (content) { localeContent = content; } };
+        locale = loadModuleExports('/lib/routes/locale.js', mocks);
 
+        request = {
+            component: {
+                id: 'test',
+                version: '2.0'
+            },
+            path: 'en_US',
+            session: {
+                userLanguage: 'de_DE'
+            }
+        };
 
-        spyOn(locale.translation, 'get').andReturn({
-            'getLocales': getLocales
-        });
+        response = jasmine.createSpyObj('response', ['end']);
     });
 
-    it('must response only a part of of the content', function () {
-        var opt = {
-            sendBody: true,
-            start: 1,
-            end: 10
-        };
-        spyOn(locale.routerUtils, 'setResourceHeaders').andReturn(opt);
+    it('should send the locales as json', function () {
+        routerUtils.setResourceHeaders.andReturn({sendBody: true});
+
         locale.handle(request, response);
-        expect(localeContent).toEqual('"language"');
+
+        expect(response.end).toHaveBeenCalledWith(JSON.stringify(locales));
+        expect(translation.getLocales).toHaveBeenCalledWith(request.component, request.path);
     });
 
-    it('must response with the whole content', function () {
-        var opt = {
-            sendBody: true
-        };
-        spyOn(locale.routerUtils, 'setResourceHeaders').andReturn(opt);
+    it('should send partial content', function () {
+        routerUtils.setResourceHeaders.andReturn({sendBody: true, start: 1, end: 10});
+
         locale.handle(request, response);
-        expect(localeContent).toEqual(JSON.stringify(getLocales()));
+        expect(response.end).toHaveBeenCalledWith('"language"');
+        expect(translation.getLocales).toHaveBeenCalledWith(request.component, request.path);
+    });
+
+    it('should use environment language if path is empty', function () {
+        routerUtils.setResourceHeaders.andReturn({sendBody: true});
+        request.path = null;
+
+        locale.handle(request, response);
+
+        expect(response.end).toHaveBeenCalledWith(JSON.stringify(locales));
+        expect(translation.getLocales).toHaveBeenCalledWith(request.component, 'de_DE');
+    });
+
+    it('should match the paths', function () {
+        expect(locale.route.test('/test/1.0/locale')).toBe(true);
+        expect(locale.route.test('/test/1.0/locale/')).toBe(true);
+        expect(locale.route.test('/test/1.0/locale/en_US')).toBe(true);
+        expect(locale.route.test('/test/1.0/locale/en_US/')).toBe(true);
+        expect(locale.route.test('/test/locale')).toBe(true);
+        expect(locale.route.test('/test/locale/')).toBe(true);
+        expect(locale.route.test('/test/locale/en_US')).toBe(true);
+        expect(locale.route.test('/test/locale/en_US/')).toBe(true);
+    });
+
+    it('should not match the paths', function () {
+        expect(locale.route.test('/test')).toBe(false);
+        expect(locale.route.test('/test/1.0')).toBe(false);
+        expect(locale.route.test('/test/1.0/example')).toBe(false);
+        expect(locale.route.test('/test/1.0/example/')).toBe(false);
+        expect(locale.route.test('/test/1.0/locale/en_US/more')).toBe(false);
+        expect(locale.route.test('/test/locale/en_US/more')).toBe(false);
     });
 });

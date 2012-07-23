@@ -27,6 +27,7 @@
 
 var cwd = process.cwd(),
     path = require('path'),
+    Module = require('module'),
     util = require(cwd + '/lib/util'),
     socketRegistry = require(cwd + '/lib/socket_registry'),
     websockets = require(cwd + '/lib/registry/websockets');
@@ -70,15 +71,18 @@ describe('Registry plugin: Websockets', function () {
     it('must require the websocket module', function () {
         websockets.configure(conf);
 
-        var expectedFolder = path.join('components', 'button2', 'server',
-                                       'websockets', 'socket.js');
+        var expectedPath = path.join('components', 'button2', 'server', 'websockets', 'socket.js');
 
-        expect(global.requireWithContext.mostRecentCall.args[0]).toBe(expectedFolder);
+        expect(global.requireWithContext.mostRecentCall.args[0]).toBe(expectedPath);
     });
 
     it('must register the socket', function () {
         websockets.configure(conf);
 
-        expect(socketRegistry.register).toHaveBeenCalledWith('/button/2.0/example', socket.handle);
+        var expectedPath = path.join('components', 'button2', 'server', 'websockets', 'socket.js');
+
+        expect(socketRegistry.register).toHaveBeenCalledWith('/button/2.0/example',
+                                                             expectedPath,
+                                                             conf);
     });
 });

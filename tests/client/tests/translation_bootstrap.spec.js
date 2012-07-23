@@ -92,7 +92,7 @@ describe('translation bootstrap', function () {
 
     beforeEach(function () {
         if (once) {
-            // running this step only once ensures that 
+            // running this step only once ensures that
             // the original spy.define and test.define are
             // kept
             return;
@@ -280,13 +280,17 @@ describe('translation bootstrap', function () {
                     // pops out dependencies inserted by onScriptLoad()
                     spy.onScriptLoad.reset();
 
+                    window.rainContext = {
+                        language: 'en_US'
+                    };
+
                     // test
                     require();
 
                     expect(fx.deps).toEqual(
                         deps.concat([
                             'raintime/translation',
-                            'locale!' + fx.component.id + '/' + fx.component.version
+                            'locale!' + fx.component.id + '/' + fx.component.version + '/en_US'
                         ]));
             });
 

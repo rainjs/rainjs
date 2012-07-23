@@ -100,6 +100,10 @@ var dataLayer = {
     loadData: function () {}
 };
 
+var Environment = function () {};
+Environment.prototype.language = 'ro_RO';
+var environment = new Environment();
+
 var ServerResponse = function () {};
 ServerResponse.prototype.write = function () {};
 ServerResponse.prototype.end = function () {};
@@ -190,6 +194,10 @@ describe('Renderer', function () {
                 return io;
             }
 
+            if (path === './environment') {
+                return Environment;
+            }
+
             return Module._load(path, this);
         });
 
@@ -223,6 +231,7 @@ describe('Renderer', function () {
                 viewId: 'index',
                 placeholder: '{"html":"<div />"}',
                 placeholderTimeout: 500,
+                language: 'ro_RO',
                 context: {
                     query: 'param=value',
                     body: '{}'
@@ -336,6 +345,7 @@ describe('Renderer', function () {
             comp.view = 'index';
             comp.sid = 'comp1';
             comp.session = request.session;
+            comp.environment = environment;
 
             renderer.loadDataAndSend(comp, response);
 
@@ -354,7 +364,8 @@ describe('Renderer', function () {
                     css: [],
                     childrenInstanceIds: [],
                     transport: response,
-                    session: request.session
+                    session: request.session,
+                    environment: environment
                 }
             });
         });
