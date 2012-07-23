@@ -101,8 +101,7 @@ function text_localization(environment, callback, data) {
         lastName: 'Smith',
         email: 'jsmith@abcd.com',
         phone: '(111) 111-1111',
-        sendButtonLabel: languageUtils.translateSendMail(),
-        sendButtonWebSocketsLabel: t('Send email through websockets')
+        sendButtonLabel: languageUtils.translateSendMail()
     };
     callback(null, customData);
 }
