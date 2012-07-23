@@ -47,10 +47,12 @@ It automatically connects the Node native debugger with the port 5858.
 If you want to use a graphical debugger then you can install the "node-inspector" NPM module.
 
 For Linux::
-  sudo npm install node-inspector -g
+
+    sudo npm install node-inspector -g
 
 For Windows::
-  npm install node-inspector -g
+
+    npm install node-inspector -g
 
 Now start the node-inspector in the command line with ``node-inspector`` and you can access
 the debugger with http://localhost:8080.
@@ -72,5 +74,8 @@ Usage::
 
 Example::
 
-    $ rain generate-po-files "en_GB,de_DE" # generate en_GB and de_DE po files for all components
-    $ rain generate-po-files en_GB example # generate en_GB .po files for the example component
+    # generate en_GB and de_DE po files for all components
+    $ rain generate-po-files "en_GB,de_DE"
+
+    # generate en_GB .po files for the example component, version 1.0
+    $ rain generate-po-files "en_GB" "example;1.0" 
