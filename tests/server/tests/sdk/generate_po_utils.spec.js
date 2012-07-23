@@ -28,12 +28,21 @@
 var path = require('path');
 
 describe('generate po utils', function () {
-    var GeneratePoUtils, utils, fs, util;
+    var GeneratePoUtils, utils, fs, util,
+        locale = {
+            "": {
+                header1: 'header 1',
+                header2: 'header 2'
+            },
+            "Some translation": [null, "Some translation"],
+            "Some other message": ['Plural id', "Some other message", "Plural message"]
+        };
 
     beforeEach(function () {
         var mocks = {};
-        fs = mocks['fs'] = jasmine.createSpyObj('fs', ['readdirSync', 'statSync', 'readFileSync']);
+        fs = mocks['fs'] = jasmine.createSpyObj('fs', ['readdirSync', 'statSync', 'readFileSync', 'writeFileSync']);
         util = mocks['../../lib/util'] = jasmine.createSpyObj('util', ['walkSync']);
+        mocks['wrench'] = jasmine.createSpyObj('wrench', ['mkdirSyncRecursive']);
         GeneratePoUtils = loadModuleExports('bin/lib/generate_po_utils.js', mocks);
         utils = new GeneratePoUtils();
     });
@@ -642,4 +651,102 @@ describe('generate po utils', function () {
         });
     });
 
+    describe("write translation files", function() {
+        it("should corectly generate the translation", function() {
+            var translation = new GeneratePoUtils();
+
+            expect(translation.composePoContent(locale)).toEqual(
+                'msgid ""\n' +
+                'msgstr ""\n' +
+                '"header1: header 1\\n"\n' +
+                '"header2: header 2\\n"\n\n' +
+
+                'msgid "Some translation"\n' +
+                'msgstr "Some translation"\n\n' +
+
+                'msgid "Some other message"\n' +
+                'msgid_plural "Plural id"\n' +
+                'msgstr[0] "Some other message"\n' +
+                'msgstr[1] "Plural message"\n'
+            );
+        });
+
+        it('should try to write the translation to the file', function () {
+            var translation = new GeneratePoUtils();
+            var generatedText =
+                'msgid ""\n' +
+                'msgstr ""\n' +
+                '"header1: header 1\\n"\n' +
+                '"header2: header 2\\n"\n\n' +
+
+                'msgid "Some translation"\n' +
+                'msgstr "Some translation"\n\n' +
+
+                'msgid "Some other message"\n' +
+                'msgid_plural "Plural id"\n' +
+                'msgstr[0] "Some other message"\n' +
+                'msgstr[1] "Plural message"\n';
+
+            var component = {
+                id: 'component',
+                version: '1.0',
+                views: { index: {} },
+                folder: '/component/path'
+            };
+
+            var poTranslations = {
+                '/some/path': {
+                    '': {
+                        'Content-Type': 'text/plain; charset=UTF-8',
+                        'Plural-Forms': 'nplurals=2; plural=(n != 1);'
+                    },
+                    'Some message': [ null, 'Some message' ]
+                }
+            };
+
+            spyOn(translation, 'composePoContent').andReturn(generatedText);
+
+            translation.createPoFiles(component, poTranslations);
+
+            expect(fs.writeFileSync).toHaveBeenCalledWith('/some/path', generatedText, 'utf8');
+        });
+
+        it('shouldn\'t do anything if the file doesn\'t have any messages', function () {
+            var translation = new GeneratePoUtils();
+            var generatedText =
+                'msgid ""\n' +
+                'msgstr ""\n' +
+                '"header1: header 1\\n"\n' +
+                '"header2: header 2\\n"\n\n' +
+
+                'msgid "Some translation"\n' +
+                'msgstr "Some translation"\n\n' +
+
+                'msgid "Some other message"\n' +
+                'msgid_plural "Plural id"\n' +
+                'msgstr[0] "Some other message"\n' +
+                'msgstr[1] "Plural message"\n';
+
+            var component = {
+                id: 'component',
+                version: '1.0',
+                views: { index: {} },
+                folder: '/component/path'
+            };
+
+            var poTranslations = {
+                '/some/path': {
+                    '': {
+                        'Content-Type': 'text/plain; charset=UTF-8',
+                        'Plural-Forms': 'nplurals=2; plural=(n != 1);'
+                    }
+                }
+            };
+
+            spyOn(translation, 'composePoContent').andReturn(generatedText);
+            translation.createPoFiles(component, poTranslations);
+
+            expect(fs.writeFileSync).not.toHaveBeenCalled();
+        });
+    });
 });

@@ -36,8 +36,9 @@ describe('File appender', function () {
         Spy = jasmine.createSpyObj('Spy', ['Appender']);
 
         Spy.Stream = jasmine.createSpyObj('Spy.Stream', ['write', 'end', 'on']);
+        Spy.Stream.writable = true;
 
-        Spy.fs = jasmine.createSpyObj('Spy.fs', ['createWriteStream']);
+        Spy.fs = jasmine.createSpyObj('Spy.fs', ['createWriteStream', 'openSync']);
         Spy.fs.createWriteStream.andReturn(Spy.Stream);
 
         mocks = {};
