@@ -28,7 +28,19 @@
         "image_localization": {},
         "text_localization": {},
         "client_side_text_localization": {},
-        "media_queries": {}
+        "media_queries": {},
+        "simple_notes": {
+            "view": "simple_notes.html",
+            "controller": {
+                "client": "containers.js"
+            }
+        },
+        "contained_notes": {
+            "view": "contained_notes.html",
+            "controller": {
+                "client": "containers.js"
+            }
+        }
     },
     "intents": [
         {

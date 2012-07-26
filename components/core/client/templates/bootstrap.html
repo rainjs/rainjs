@@ -28,10 +28,10 @@
                 language: '{{language}}'
             };
             var renderQueueList = [];
-            function renderQueue(){
+            function renderQueue() {
                 var len = renderQueueList.length;
-                if(len > 0){
-                    for(var i = 0; i < len; i++){
+                if (len > 0) {
+                    for (var i = 0; i < len; i++) {
                         clientRenderer.renderComponent(renderQueueList[i]);
                     }
                     renderQueueList = [];
@@ -51,10 +51,10 @@
                 }
             }
 
-            require(requireConfig, ["raintime/client_rendering"], function(clientRenderer) {
+            require(requireConfig, ["raintime/client_rendering"], function (clientRenderer) {
                 clientRenderer.setPlaceholderTimeout({{placeholderTimeout}});
                 clientRenderer.setPlaceholder({{{placeholder}}});
-                if(renderQueueList.length == 0){
+                if (renderQueueList.length == 0) {
                     clientRenderer.renderPlaceholder($($('body div').get(0)).attr('id'));
                 }
                 renderQueue();
@@ -67,4 +67,3 @@
             {{component name=../id version=../version view=../viewId}}
         {{/with}}
         <div id="modalDialog" class="core_1_0" style="width: 0; height: 0;"></div>
-

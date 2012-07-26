@@ -22,10 +22,10 @@
 // OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-define(['/example/js/note.js'], function(Note) {
-    function Notes() {}
 
-    Notes.prototype.init = $.noop;
+define(['/example/js/note.js'], function (Note) {
+
+    function Notes() {}
 
     Notes.prototype.start = function () {
         var self = this;
@@ -72,6 +72,7 @@ define(['/example/js/note.js'], function(Note) {
 
     /**
      * Binds event handlers for the update event of a note.
+     *
      * @param {Note} note the note to bind events for
      */
     Notes.prototype._bind = function (note) {
@@ -80,6 +81,7 @@ define(['/example/js/note.js'], function(Note) {
 
     /**
      * Saves the note to the session.
+     *
      * @param {Note} note
      * @param {Number} index position in notes list
      */
@@ -90,6 +92,15 @@ define(['/example/js/note.js'], function(Note) {
         };
 
         this._socket.emit('save', data);
+    };
+
+    /**
+     * Get the number of notes.
+     *
+     * @returns {Number}
+     */
+    Notes.prototype.count = function () {
+        return (this._notes ? this._notes.length : 0);
     };
 
     return Notes;

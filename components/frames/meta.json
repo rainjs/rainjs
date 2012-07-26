@@ -1,0 +1,8 @@
+{
+    "id": "frames",
+    "version": "1.0",
+    "type": "container",
+    "views": {
+        "round" : {}
+    }
+}
