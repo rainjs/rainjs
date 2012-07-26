@@ -4,6 +4,5 @@
     "type": "container",
     "views": {
         "round" : {}
-    },
-    "type": "container"
+    }
 }
