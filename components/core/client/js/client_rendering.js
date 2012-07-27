@@ -45,6 +45,12 @@ define([
         this.placeholderComponent = null;
         this.placeholderTimeout = 500;
         this.counter = 0;
+        /**
+         * A map of objects that have been rendered inside a container and are waiting for their
+         * parent container to get rendered.
+         *
+         * @type Object
+         */
         this.orphans = {};
 
         var socket = this.socket = Sockets.getSocket('/core');
@@ -100,6 +106,8 @@ define([
 
     /**
      * Renders the component to the DOM and registers it.
+     * This method takes care of rendering orphaned components (components rendered inside a
+     * a container which get sent to the client before their placeholder div).
      *
      * @param {Object} component the rendered component
      */
