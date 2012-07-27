@@ -45,6 +45,7 @@ define([
         this.placeholderComponent = null;
         this.placeholderTimeout = 500;
         this.counter = 0;
+        this.orphans = {};
 
         var socket = this.socket = Sockets.getSocket('/core');
         socket.on('render', function (component) {
@@ -103,20 +104,38 @@ define([
      * @param {Object} component the rendered component
      */
     ClientRenderer.prototype.renderComponent = function (component) {
-        for (var len = component.children.length, i = 0; i < len; i++) {
-            var childComponent = component.children[i];
-            Raintime.componentRegistry.preRegister(childComponent);
-            if (childComponent.placeholder === true) {
-                placeholderTimeout(this, childComponent);
+        var domElement = $('#' + component.instanceId);
+
+        if (!domElement.length) {
+            if (this.orphans[component.containerId]) {
+                this.orphans[component.containerId = [];
             }
+
+            this.orphans[component.containerId].push(component);
+            return;
         }
 
-        var domElement = $('#' + component.instanceId);
         domElement.hide().html(component.html);
         domElement.attr('id', component.instanceId);
         domElement.attr('class',
                         'app-container ' + component.id + '_' + component.version.replace(/[\.]/g, '_')
         );
+
+        if (this.orphans[component.instanceId]) {
+            this.orphans[component.instanceId].forEach(this.renderComponent, this);
+        }
+
+        if (component.children) {
+            for (var len = component.children.length, i = 0; i < len; i++) {
+                var childComponent = component.children[i];
+
+                Raintime.componentRegistry.preRegister(childComponent);
+
+                if (childComponent.placeholder === true) {
+                    placeholderTimeout(this, childComponent);
+                }
+            }
+        }
 
         if (!component.css || component.css.length == 0) {
             showHTML(component, domElement);
