@@ -21,6 +21,13 @@ function round(environment, callback, context, request) {
     });
 }
 
+function flow(environment, callback, context, request) {
+    context.items.sort(function (a, b) { return a.column - b.column; });
+
+    callback(null, context);
+}
+
 module.exports = {
-    round: round
+    round: round,
+    flow: flow
 };

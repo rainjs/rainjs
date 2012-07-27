@@ -4,6 +4,7 @@
     "type": "container",
     "views": {
         "round" : {},
-        "yellow": {}
+        "yellow": {},
+        "flow": {}
     }
 }
