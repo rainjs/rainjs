@@ -2,7 +2,7 @@ h1 {
     margin: 20px;
 }
 
-.round-corners {
+.round-corners, .yellow-corners {
     @shadow-color: #6683b8;
     @border-radius: 10px;
 
@@ -24,4 +24,9 @@ h1 {
     -moz-box-shadow: 2px 3px 10px @shadow-color;
     -o-box-shadow: 2px 3px 10px @shadow-color;
     box-shadow: 2px 3px 10px @shadow-color;
+}
+
+.yellow-corners {
+    height: 90%;
+    background-color: yellow;
 }

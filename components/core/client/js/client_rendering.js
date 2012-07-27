@@ -107,8 +107,8 @@ define([
         var domElement = $('#' + component.instanceId);
 
         if (!domElement.length) {
-            if (this.orphans[component.containerId]) {
-                this.orphans[component.containerId = [];
+            if (!this.orphans[component.containerId]) {
+                this.orphans[component.containerId] = [];
             }
 
             this.orphans[component.containerId].push(component);

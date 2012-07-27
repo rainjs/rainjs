@@ -1,7 +1,12 @@
-{{#container name="frames" view="round"}}
+{{#container name="frames" view="round" sid="roundContainer"}}
 
-    <div class="containers">
-        {{component name="example" version="3.0" view="notes" sid="notes"}}
-    </div>
+    {{#container name="frames" view="yellow" sid="yellowContainer"}}
+
+        <div class="containers">
+            {{#component name="example" version="3.0" view="notes" sid="notes"}}
+            {{/component}}
+        </div>
+
+    {{/container}}
 
 {{/container}}
