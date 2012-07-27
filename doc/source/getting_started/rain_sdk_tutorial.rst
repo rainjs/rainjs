@@ -3,7 +3,7 @@ RAIN SDK Tutorial
 =================
 
 In this section you can find the tutorial for creating projects with RAIN SDK.
-Please read :doc:`/getting_started/installation` before this.
+Please read :doc:`installation` before this.
 
 --------------------
 RAIN SDK Basic usage
