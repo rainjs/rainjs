@@ -117,6 +117,7 @@ define(['raintime/client_storage',
      *
      * @param {Object} component The component which to be requested
      * @param {String} component.id The component id
+     * @param {String} component.version The component version
      * @param {String} component.view The component view id
      * @param {String} component.sid The component staticId id
      * @param {Object} component.context Custom data for the template

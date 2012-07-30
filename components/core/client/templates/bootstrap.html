@@ -63,8 +63,14 @@
         <link rel="stylesheet" type="text/css" href="/core/resources/bootstrap.css">
     </head>
     <body>
-        {{#with context}}
-            {{component name=../id version=../version view=../viewId}}
-        {{/with}}
+        {{#if isContainer}}
+            {{#with context}}
+                {{container name=../id version=../version view=../viewId}}
+            {{/with}}
+        {{else}}
+            {{#with context}}
+                {{component name=../id version=../version view=../viewId}}
+            {{/with}}
+        {{/if}}
         <div id="modalDialog" class="core_1_0" style="width: 0; height: 0;"></div>
 
