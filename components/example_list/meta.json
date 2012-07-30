@@ -40,7 +40,9 @@
             "controller": {
                 "client": "containers.js"
             }
-        }
+        },
+        "containers_v1": {},
+        "containers_v2": {}
     },
     "intents": [
         {

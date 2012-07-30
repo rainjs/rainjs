@@ -1,0 +1,8 @@
+{
+    "id": "container_example",
+    "version": "2.0",
+    "views": {
+        "index": {},
+        "photo": {}
+    }
+}
