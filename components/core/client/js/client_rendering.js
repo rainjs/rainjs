@@ -146,6 +146,7 @@ define([
 
         if (this.orphans[component.instanceId]) {
             this.orphans[component.instanceId].forEach(this.renderComponent, this);
+            delete this.orphans[component.instanceId];
         }
 
         if (component.children) {
