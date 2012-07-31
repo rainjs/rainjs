@@ -25,46 +25,37 @@
 
 "use strict";
 
-var renderer = require('../renderer'),
-    Handlebars = require('handlebars'),
-    extend = require('node.extend');
+describe('item handlebars helper', function () {
+    var item, renderer, handlebars;
 
-/**
- * This Handlebars helper registers items inside a container, and passes them to it where they
- * will get included.
- *
- * @example
- *      {{#container name="box" version="1.0" view="horizontal" rows="2" sid="my-container"}}
- *          {{#item row="0"}}
- *              {{component name="button" view="index" label="Some buton"}}
- *          {{/item}}
- *
- *          {{#item row="1"}}
- *             {{component name="button" view="index" label="Some other button"}}
- *          {{/item}}
- *      {{/container}}
- *
- * @name ItemHelper
- * @class
- * @constructor
- */
-function ItemHelper() {};
+    beforeEach(function () {
+        var mocks = {};
+        renderer = mocks['../renderer'] = {
+            rain: {
+                items: []
+            }
+        };
+        handlebars = mocks['handlebars'] = jasmine.createSpyObj('handlebars', ['SafeString']);
+        item = loadModuleExports('/lib/handlebars/item.js', mocks);
+    });
 
-/**
- * This helper renders its content and then registeres it to be included inside the parent container
- *
- * @param {Object} options the item options
- */
-ItemHelper.prototype.helper = function(options) {
-    var props = options.hash,
-        context = extend({}, this);
+    it('should add a new item', function () {
+        var fn = jasmine.createSpy('fn'),
+            options = {hash: {row: 1, col: 3}, fn: fn},
+            context = {foo: 'bar'};
 
-    props.content = new Handlebars.SafeString(options.fn(context));
+        fn.andReturn('html');
 
-    renderer.rain.items.push(props);
-};
+        handlebars.SafeString.andReturn({string: 'SafeString'});
 
-module.exports = {
-    name: 'item',
-    helper: new ItemHelper().helper
-};
+        item.helper.call(context, options);
+
+        expect(fn).toHaveBeenCalledWith(context);
+        expect(handlebars.SafeString).toHaveBeenCalledWith('html');
+        expect(renderer.rain.items).toEqual([{
+            row: 1,
+            col: 3,
+            content: {string: 'SafeString'}
+        }]);
+    });
+});
