@@ -67,6 +67,21 @@ define([
     }
 
     /**
+     * The class instance.
+     * @type {ClientRenderer}
+     */
+    ClientRenderer._instance = null;
+
+    /**
+     * Returns the class' singleton instance.
+     * @returns {ClientRenderer} the singleton instance
+     */
+    ClientRenderer.get = function () {
+        return ClientRenderer._instance
+                || (ClientRenderer._instance = new ClientRenderer);
+    };
+
+    /**
      * Sets the placeholder component.
      *
      * @param {Object} component the whole rendered placeholder component
@@ -145,10 +160,10 @@ define([
             }
         }
 
-        if (!component.css || component.css.length == 0) {
-            showHTML(component, domElement);
+        if (!component.css || 0 === component.css.length) {
+            this._showHTML(component, domElement);
         } else {
-            this._loadCSS(component.css, showHTML.bind(null, component, domElement));
+            this._loadCSS(component.css, this._showHTML.bind(this, component, domElement));
         }
     };
 
@@ -156,7 +171,7 @@ define([
      * @param {Object} component the rendered component
      * @param {DomElement} element The wrapper of the component
      */
-    function showHTML(component, element) {
+    ClientRenderer.prototype._showHTML = function (component, element) {
         element.show();
         // Registers the component.
         Raintime.componentRegistry.register(component);
@@ -233,12 +248,5 @@ define([
         }
     };
 
-    /**
-     * Export as a global.
-     *
-     * @private
-     */
-    window.clientRenderer = new ClientRenderer();
-
-    return window.clientRenderer;
+    return window.ClientRenderer = ClientRenderer;
 });
