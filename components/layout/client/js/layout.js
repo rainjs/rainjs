@@ -10,9 +10,9 @@ define(function () {
     function Layout() {}
 
     /**
-     * Add a component to the layout.
+     * Add a component or a string content to the layout.
      *
-     * @param {Object} component the component to add
+     * @param {Object|String} component the component to add or the string to insert
      * @param {String} component.id the component id
      * @param {String} component.version the component version
      * @param {String} component.view the component view id
@@ -25,9 +25,14 @@ define(function () {
     Layout.prototype.add = function (component, options, callback) {
         var container = this._createNewItem(options || {});
 
-        this.context.insert(component, container, function () {
+        if (typeof component === 'string') {
+            container.html(component);
             callback && callback(this);
-        });
+        } else {
+            this.context.insert(component, container, function () {
+                callback && callback(this);
+            });
+        }
     };
 
     /**

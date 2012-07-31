@@ -42,7 +42,8 @@
             }
         },
         "containers_v1": {},
-        "containers_v2": {}
+        "containers_v2": {},
+        "layout/flow": {}
     },
     "intents": [
         {

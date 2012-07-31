@@ -42,7 +42,7 @@ define(['util', 'layout/1.0/js/layout'], function (Util, Layout) {
         }
 
         var index = options.index;
-        if (!index || index < 0 || index > this._items.length) {
+        if (typeof index === 'undefined' || index < 0 || index > this._items.length) {
             if (this.orientation == 'ltr') {
                 index = this._items.length;
             } else {
@@ -61,7 +61,7 @@ define(['util', 'layout/1.0/js/layout'], function (Util, Layout) {
 
         this._items = this._container.find('.item');
 
-        return this._items[index];
+        return $(this._items[index]);
     };
 
     /**
@@ -70,22 +70,37 @@ define(['util', 'layout/1.0/js/layout'], function (Util, Layout) {
      * @param {Object} options parameters to identify what will be removed
      * @throws {RainError} if start wasn't executed when the method was called
      */
-    Layout.prototype._remove = function (options) {
+    FlowLayout.prototype._remove = function (options) {
         if (!this._container) {
             throw new RainError('API methods cannot be called before start is executed',
                                 RainError.ERROR_PRECONDITION_FAILED);
         }
 
         var index = options.index;
-        if (!index) {
+        if (typeof index === 'undefined') {
             throw new RainError('The "index" parameter is missing.',
                                 RainError.ERROR_PRECONDITION_FAILED);
         }
 
         if (index >= 0 && index < this._items.length) {
             $(this._items[index]).remove();
-            delete this._items[index];
+            this._items.splice(index, 1);
         }
+    };
+
+    /**
+     * Get the number of existing items.
+     *
+     * @throws {RainError} if start wasn't executed when the method was called
+     * @returns {Number} the number of items
+     */
+    FlowLayout.prototype.count = function () {
+        if (!this._container) {
+            throw new RainError('API methods cannot be called before start is executed',
+                                RainError.ERROR_PRECONDITION_FAILED);
+        }
+
+        return this._items.length;
     };
 
     return FlowLayout;
