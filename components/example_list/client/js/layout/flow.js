@@ -25,6 +25,9 @@
 
 define(['/example/js/note.js'], function (Note) {
 
+    /**
+     * This controller uses a layout to add and remove notes.
+     */
     function Notes() {}
 
     Notes.prototype.start = function () {
@@ -54,7 +57,7 @@ define(['/example/js/note.js'], function (Note) {
     };
 
     /**
-     * Adds a new note to the board.
+     * Adds a new note to the layout.
      */
     Notes.prototype._addNote = function () {
         var note;
