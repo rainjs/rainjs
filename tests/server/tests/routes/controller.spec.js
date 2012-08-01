@@ -28,22 +28,34 @@
 var cwd = process.cwd();
 var globals = require(cwd + '/lib/globals.js');
 var config = require(cwd + '/lib/configuration.js');
-var routerPlugin = loadModuleExports('/lib/routes/controller.js', {
-    "../router_utils": {
-        handleError: function(error, request, response) {
-            response._body = "error|"+error.message+"|"+error.code;
-        }
-    }
-});
-
 var http = require('mocks').http;
 
-describe('Router Plugin: ' + routerPlugin.name, function() {
-    var mockComponentRegistry = null;
-    var componentRegistry = null;
-    var response = null;
-    var request = null;
+describe('Router Plugin: Controller', function() {
+
+    var mockComponentRegistry, componentRegistry;
+    var response, request;
+    var Spy, Mocks, routerPlugin;
+
     beforeEach(function() {
+        Spy = {};
+
+        Spy.Logging = jasmine.createSpyObj('Spy.Logging', ['get']);
+        Spy.Logger = jasmine.createSpyObj('logger', ['debug', 'info', 'warn', 'error', 'fatal']);
+        Spy.Logging.get.andReturn(Spy.Logger);
+
+        Spy.RouterUtils = jasmine.createSpyObj('Spy.RouterUtils', ['handleError']);
+        Spy.RouterUtils.handleError.andCallFake(
+                function (error, request, response) {
+                    response._body = "error|" + error.message + "|" + error.code;
+                });
+
+        Mocks = {
+            '../logging': Spy.Logging,
+            '../router_utils': Spy.RouterUtils
+        };
+
+        routerPlugin = loadModuleExports('/lib/routes/controller.js', Mocks);
+
         response = new http.ServerResponse();
         request = new http.ServerRequest();
         mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
@@ -99,5 +111,16 @@ describe('Router Plugin: ' + routerPlugin.name, function() {
         runs(function(){
             expect(response._body).toEqual("error|The controller method timed out|504");
         });
+    });
+
+    it('should return an error for containers', function () {
+        request.method = 'GET';
+        request.path = 'index';
+        request.component = componentRegistry.getConfig('container', '1.0');
+
+        routerPlugin.handle(request, response);
+
+        expect(Spy.Logger.warn).toHaveBeenCalled();
+        expect(Spy.RouterUtils.handleError.mostRecentCall.args[0] instanceof RainError).toEqual(true);
     });
 });
