@@ -56,13 +56,15 @@ describe('raind', function () {
         expect(process.exit).toHaveBeenCalledWith(1);
     });
 
-    it('should send a SIGUSR1 to itself to go into debug mode if -d is detected', function () {
-        program.debug = true;
+    if ('win32' !== process.platform) {
+        it('should send a SIGUSR1 to itself to go into debug mode if -d is detected', function () {
+            program.debug = true;
 
-        loadModuleExports(path.join('bin', 'raind'), mocks);
+            loadModuleExports(path.join('bin', 'raind'), mocks);
 
-        expect(process.kill).toHaveBeenCalledWith(process.pid, 'SIGUSR1');
-    });
+            expect(process.kill).toHaveBeenCalledWith(process.pid, 'SIGUSR1');
+        });
+    }
 
     it('should not go into debug mode if -d is not present', function () {
         program.debug = false;
