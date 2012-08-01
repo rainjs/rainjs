@@ -35,20 +35,22 @@ var cwd = process.cwd(),
  * They are done using triple mustache syntax to avoid normal HTML escaping that goes on.
  */
 describe('Handlebars url helper', function () {
-        // some test components
+    // some test components
     var components = {
             example: { id: 'example', version: '1.0' },
             map: { id: 'map', version: '2.0' }
         },
         // the rain context
-        ctx = { component: components.example };
+        ctx = {
+            component: components.example,
+            environment: { language: 'ro_RO' }
+        };
 
     var helper = loadModuleExports(
         '/lib/handlebars/url.js',
         {
             '../renderer': { rain: ctx },
             '../component_registry': {
-                // mocked getLatestVersion for the 'map' example component
                 getLatestVersion: function () { return components.map.version; }
             }
         }
@@ -63,15 +65,17 @@ describe('Handlebars url helper', function () {
      * @param {String} src the resource path
      * @param {String} [name] component name
      * @param {String} [version] component version
+     * @param {Boolean} [localized] whether the resource path is localized
      * @returns {String} the assembled path
      */
-    function assemble(src, name, version) {
+    function assemble(src, name, version, localized) {
         return encodeURI(
             [
                 '/',
                 encodeURIComponent(name),
                 '/',
                 encodeURIComponent(version),
+                localized ? '/' + ctx.environment.language : '',
                 '/resources/',
                 src
             ].join('')
@@ -214,7 +218,7 @@ describe('Handlebars url helper', function () {
 
     describe('test localized urls', function () {
 
-        it('must add a loc query parameter for localized urls', function () {
+        it('must add the current locale to the generated path for localized urls', function () {
             var data = {
                     src: 'path/to/image.jpg',
                     localized: true
@@ -222,23 +226,8 @@ describe('Handlebars url helper', function () {
                 tpl = Handlebars.compile('{{{url path=src localized=localized}}}'),
                 result = tpl(data);
 
-            var q = qs.parse(url.parse(result).query);
-            expect(q.loc).toBeDefined();
-        });
-
-        it('must keep existing query parameters', function () {
-            var data = {
-                    src: 'path/to/image.jpg?w=100&h=100&q=0.8',
-                    localized: true
-                },
-                tpl = Handlebars.compile('{{{url path=src localized=localized}}}'),
-                result = tpl(data);
-
-            var q = qs.parse(url.parse(result).query);
-            expect(q.loc).toBeDefined();
-            expect(q.w).toBeDefined();
-            expect(q.h).toBeDefined();
-            expect(q.q).toBeDefined();
+            expect(result).toEqual(assemble(data.src, ctx.component.id,
+                    ctx.component.version, data.localized));
         });
 
     });
