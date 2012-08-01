@@ -399,7 +399,8 @@ describe('Renderer', function () {
                     childrenInstanceIds: [],
                     transport: response,
                     session: request.session,
-                    environment: environment
+                    environment: environment,
+                    items: []
                 }
             });
         });
