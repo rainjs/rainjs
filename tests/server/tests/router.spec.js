@@ -54,7 +54,7 @@ var routes = {
     },
     'resource': {
         name: "Resource Route",
-        route: /^\/([\w-]+)\/(?:((?:\d\.)?\d\.\d)\/)?resources\/(.+)/,
+        route: /^\/([\w-]+)\/(?:((?:\d\.)?\d\.\d)\/)?(?:([a-z]{2}_[A-Z]{2})\/)?resources\/(.+)/,
         handle: function (req, res) {},
         url: '/button/1.0/resources/image.png'
     },
@@ -128,7 +128,7 @@ describe('Router', function () {
         router = require(cwd + '/lib/router')();
     });
 
-    it('must match the correct route', function () {
+    it('should match the correct route', function () {
         for (var key in routes) {
             var route = routes[key];
             var next = jasmine.createSpy('next');
@@ -138,7 +138,7 @@ describe('Router', function () {
         }
     });
 
-    it('must get the component config', function () {
+    it('should get the component config', function () {
         var route = routes['view'];
         var next = jasmine.createSpy('next');
         request.url = route.url;
@@ -147,16 +147,23 @@ describe('Router', function () {
             {url: route.url, component: componentMap['button'].config['1.0'], path: 'index'}, {});
     });
 
-    it('must call next with a 404 error if the component was not found', function () {
+    it('should call next with a 404 error if the component was not found', function () {
         expectNextToBeCalled('/button1/1.0/index', 404, 'The requested component was not found!');
     });
 
-    it('must call next with a 404 error if no route was found', function () {
+    it('should call next with a 404 error if no route was found', function () {
         expectNextToBeCalled('/invalid', 404, 'No route was found!');
     });
 
-    it('must call next with a 404 error if the url is not valid', function () {
+    it('should call next with a 404 error if the url is not valid', function () {
         expectNextToBeCalled('/button/1.0/js/../index', 404, 'The url is not valid!');
         expectNextToBeCalled('/button/1.0/js/%2E%2E/index', 404, 'The url is not valid!');
+    });
+
+    it('should set the resource language in the request', function () {
+        var next = jasmine.createSpy('next');
+        request.url = '/button/1.0/ro_RO/resources/image.png';
+        router(request, response, next);
+        expect(request.resourceLanguage).toBe('ro_RO');
     });
 });
