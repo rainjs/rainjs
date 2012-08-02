@@ -43,18 +43,18 @@ define(['util', 'layout/1.0/js/layout'], function (Util, Layout) {
             index = this._items.length;
         }
 
-        var item = '<div class="item"></div>';
+        var item = $('<div class="item"></div>');
         if (this._items.length === 0) {
-            this._container.html(item);
+            this._container.append(item);
         } else if (index === 0) {
-            $(item).insertBefore(this._items[0]);
+            item.insertBefore(this._items[0]);
         } else {
-            $(item).insertAfter(this._items[index - 1]);
+            item.insertAfter(this._items[index - 1]);
         }
 
-        this._items = this._container.find('.item');
+        this._items.splice(index, 0, item);
 
-        return $(this._items[index]);
+        return item;
     };
 
     /**
