@@ -25,19 +25,25 @@
 
 define(['/example/js/note.js'], function (Note) {
 
-    function Notes() {}
+    function FloatNotes() {}
 
-    Notes.prototype.start = function () {
-        var self = this;
-        var notes;
+    FloatNotes.prototype.start = function () {
+        this._setup();
+        this._board = this._root.find('.board');
+    };
+
+    /**
+     * Read the notes and bind the update events.
+     */
+    FloatNotes.prototype._setup = function () {
+        var self = this,
+            notes;
 
         this._root = this.context.getRoot();
-        this._board = this._root.find('.board');
-
         this._notes = [];
 
         // find notes loaded from session and re-create them
-        notes = this._board.find('.note');
+        notes = this._root.find('.note');
         notes.each(function () {
             var note = Note.create($(this));
             self._bind(note);
@@ -53,7 +59,7 @@ define(['/example/js/note.js'], function (Note) {
     /**
      * Adds a new note to the board.
      */
-    Notes.prototype._addNote = function () {
+    FloatNotes.prototype._addNote = function () {
         var note;
 
         note = new Note();
@@ -63,11 +69,19 @@ define(['/example/js/note.js'], function (Note) {
         // add it to the internal notes list
         this._notes.push(note);
 
-        // insert it in HTML
-        this._board.append(note.html());
+        this._addNoteInPage(note);
 
         // save it in case others get added and this one isn't written
         this._save(note, this._notes.length - 1);
+    };
+
+    /**
+     * Add the note in the page.
+     *
+     * @param {Note} note the note to add
+     */
+    FloatNotes.prototype._addNoteInPage = function (note) {
+        this._board.append(note.html());
     };
 
     /**
@@ -75,7 +89,7 @@ define(['/example/js/note.js'], function (Note) {
      *
      * @param {Note} note the note to bind events for
      */
-    Notes.prototype._bind = function (note) {
+    FloatNotes.prototype._bind = function (note) {
         note.on('update', this._save.bind(this, note, this._notes.length));
     };
 
@@ -85,7 +99,7 @@ define(['/example/js/note.js'], function (Note) {
      * @param {Note} note
      * @param {Number} index position in notes list
      */
-    Notes.prototype._save = function (note, index) {
+    FloatNotes.prototype._save = function (note, index) {
         var data = {
             index: index,
             note: note.serialize()
@@ -94,14 +108,5 @@ define(['/example/js/note.js'], function (Note) {
         this._socket.emit('save', data);
     };
 
-    /**
-     * Get the number of notes.
-     *
-     * @returns {Number}
-     */
-    Notes.prototype.count = function () {
-        return (this._notes ? this._notes.length : 0);
-    };
-
-    return Notes;
+    return FloatNotes;
 });

@@ -23,65 +23,47 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-define(['/example/js/note.js'], function (Note) {
+define(['util',
+        '/example/js/note.js',
+        '/example/js/notes.js'], function (Util, Note, FloatNotes) {
 
     /**
      * This controller uses a layout to add and remove notes.
      */
-    function Notes() {}
+    function FlowLayoutNotes() {}
 
-    Notes.prototype.start = function () {
-        var self = this,
-            notes;
+    Util.inherits(FlowLayoutNotes, FloatNotes);
 
-        this._root = this.context.getRoot();
-        this._notes = [];
+    /**
+     * Startup lifecycle step that happens right after the markup is in place.
+     */
+    FlowLayoutNotes.prototype.start = function () {
+        var self = this;
 
         this.context.find('flowLayout', function () {
             self._layout = this;
 
-            // Find notes loaded from session and re-create them.
-            notes = self._root.find('.note');
-            notes.each(function () {
-                var note = Note.create($(this));
-                self._bind(note);
-                self._notes.push(note);
-            });
+            FlowLayoutNotes.super_.prototype._setup.call(self);
 
-            self._root.find('.add-note').on('click', self._addNote.bind(self));
             self._root.find('.remove-note').on('click', self._removeNote.bind(self));
-
-            // socket used for saving notes
-            self._socket = self.context.messaging.getSocket('/example/3.0/notes');
         });
     };
 
     /**
      * Adds a new note to the layout.
+     *
+     * @param {Note} note the note to add
      */
-    Notes.prototype._addNote = function () {
-        var note;
-
-        note = new Note();
-        // bind event handlers
-        this._bind(note);
-
-        // add it to the internal notes list
-        this._notes.push(note);
-
-        // insert it in HTML
+    FlowLayoutNotes.prototype._addNoteInPage = function (note) {
         this._layout.add(note.html().prop('outerHTML'), {
             index: this._layout.count() - 1
         });
-
-        // save it in case others get added and this one isn't written
-        this._save(note, this._notes.length - 1);
     };
 
     /**
      * Removes the first note.
      */
-    Notes.prototype._removeNote = function () {
+    FlowLayoutNotes.prototype._removeNote = function () {
         if (!this._notes.length) {
             return;
         }
@@ -97,29 +79,5 @@ define(['/example/js/note.js'], function (Note) {
         });
     };
 
-    /**
-     * Binds event handlers for the update event of a note.
-     *
-     * @param {Note} note the note to bind events for
-     */
-    Notes.prototype._bind = function (note) {
-        note.on('update', this._save.bind(this, note, this._notes.length));
-    };
-
-    /**
-     * Saves the note to the session.
-     *
-     * @param {Note} note
-     * @param {Number} index position in notes list
-     */
-    Notes.prototype._save = function (note, index) {
-        var data = {
-            index: index,
-            note: note.serialize()
-        };
-
-        this._socket.emit('save', data);
-    };
-
-    return Notes;
+    return FlowLayoutNotes;
 });

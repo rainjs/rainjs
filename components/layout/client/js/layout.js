@@ -25,7 +25,9 @@ define(function () {
     Layout.prototype.add = function (component, options, callback) {
         var container = this._createNewItem(options || {});
 
-        if (typeof component === 'string') {
+        if (!container) {
+            return;
+        } else if (typeof component === 'string') {
             container.html(component);
             callback && callback(this);
         } else {
@@ -36,6 +38,14 @@ define(function () {
     };
 
     /**
+     * Create a new item placeholder.
+     *
+     * @param {Object} options parameters needed to know how to configure the place for the component
+     * @returns {jQueryObject} the element where the new component can be inserted
+     */
+    Layout.prototype._createNewItem = function (options) {};
+
+    /**
      * Remove a component from the layout.
      *
      * @param {Object} options parameters to identify what will be removed
@@ -43,6 +53,13 @@ define(function () {
     Layout.prototype.remove = function (options) {
         this._remove(options || {});
     };
+
+    /**
+     * Remove a component from the layout.
+     *
+     * @param {Object} options parameters to identify what will be removed
+     */
+    Layout.prototype._remove = function (options) {};
 
     return Layout;
 });

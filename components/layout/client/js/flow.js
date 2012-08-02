@@ -7,8 +7,6 @@ define(['util', 'layout/1.0/js/layout'], function (Util, Layout) {
      * @name FlowLayout
      * @class
      * @constructor
-     *
-     * @property {String} orientation='ltr' the items orientation: left to right or right to left (rtl)
      */
     function FlowLayout() {
         Layout.call(this);
@@ -35,17 +33,28 @@ define(['util', 'layout/1.0/js/layout'], function (Util, Layout) {
      * @returns {jQueryObject} the element where the new component can be inserted
      */
     FlowLayout.prototype._createNewItem = function (options) {
-        options = options || {};
         if (!this._container) {
             throw new RainError('API methods cannot be called before start is executed',
                                 RainError.ERROR_PRECONDITION_FAILED);
         }
 
-        var item = $('<div class="item"></div>');
-        this._container.append(item);
-        this._items.push(item);
+        var index = options.index;
+        if (typeof index === 'undefined' || index < 0 || index > this._items.length) {
+            index = this._items.length;
+        }
 
-        return item;
+        var item = '<div class="item"></div>';
+        if (this._items.length == 0) {
+            this._container.html(item);
+        } else if (index == 0) {
+            $(item).insertBefore(this._items[0]);
+        } else {
+            $(item).insertAfter(this._items[index - 1]);
+        }
+
+        this._items = this._container.find('.item');
+
+        return $(this._items[index]);
     };
 
     /**
