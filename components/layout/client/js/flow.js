@@ -44,9 +44,9 @@ define(['util', 'layout/1.0/js/layout'], function (Util, Layout) {
         }
 
         var item = '<div class="item"></div>';
-        if (this._items.length == 0) {
+        if (this._items.length === 0) {
             this._container.html(item);
-        } else if (index == 0) {
+        } else if (index === 0) {
             $(item).insertBefore(this._items[0]);
         } else {
             $(item).insertAfter(this._items[index - 1]);
