@@ -111,6 +111,7 @@
 
     padding: 50px;
 
+    text-align: center;
     font-size: 120px;
     font-weight: bold;
     font-family: "Ubuntu Bold", sans-serif;
@@ -127,7 +128,7 @@
 
 .half {
     margin: 0px;
-    padding: 10px 50px 0 70px;
+    padding: 0px;
     float: none;
 }
 
