@@ -29,18 +29,6 @@
         "text_localization": {},
         "client_side_text_localization": {},
         "media_queries": {},
-        "simple_notes": {
-            "view": "simple_notes.html",
-            "controller": {
-                "client": "containers.js"
-            }
-        },
-        "contained_notes": {
-            "view": "contained_notes.html",
-            "controller": {
-                "client": "containers.js"
-            }
-        },
         "containers_v1": {},
         "containers_v2": {},
         "layout/flow": {}
