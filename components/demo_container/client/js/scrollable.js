@@ -1,4 +1,6 @@
 define(['/demo_container/js/lib/jquery-ui-1.8.22.custom.min.js'], function () {
+    "use strict";
+
     function Scrollable() {}
 
     /**
@@ -28,16 +30,16 @@ define(['/demo_container/js/lib/jquery-ui-1.8.22.custom.min.js'], function () {
         this._sliderHandle.wrap('<div class="ui-handle-helper-parent"></div>');
         this._handleHelper = this._sliderHandle.parent();
 
-        this._sliderHandle.mousedown(function() {
+        this._sliderHandle.mousedown(function () {
             self._scrollbar.width(self._handleHelper.width());
         });
-        this._sliderHandle.mouseup(function() {
+        this._sliderHandle.mouseup(function () {
             self._scrollbar.width('100%');
         });
 
         this._computeScrollbarSize();
 
-        $(window).resize(function() {
+        $(window).resize(function () {
             self._resetValue();
             self._computeScrollbarSize();
             self._reflowContent();
@@ -55,16 +57,16 @@ define(['/demo_container/js/lib/jquery-ui-1.8.22.custom.min.js'], function () {
             width: handleSize,
             'margin-left': -handleSize / 2
         });
-        this._handleHelper.width(this._scrollbar.width() - handleSize);
+        this._handleHelper.width(this._scrollPane.width() - handleSize);
     };
 
     /**
-     * reset slider value based on scroll content position
+     * Reset slider value based on scroll content position
      */
     Scrollable.prototype._resetValue = function () {
         var remainder = this._scrollPane.width() - this._scrollContent.width();
         var leftVal = this._scrollContent.css('margin-left') === 'auto' ? 0 :
-            parseInt(this._scrollContent.css('margin-left'));
+            parseInt(this._scrollContent.css('margin-left'), 10);
         var percentage = Math.round(leftVal / remainder * 100);
         this._scrollbar.slider('value', percentage);
     };
@@ -73,13 +75,13 @@ define(['/demo_container/js/lib/jquery-ui-1.8.22.custom.min.js'], function () {
      * if the slider is 100% and window gets larger, reveal content
      */
     Scrollable.prototype._reflowContent = function () {
-            var showing = this._scrollContent.width() +
-                parseInt(this._scrollContent.css('margin-left'), 10);
-            var gap = this._scrollPane.width() - showing;
-            if (gap > 0) {
-                this._scrollContent.css('margin-left',
-                    parseInt(this._scrollContent.css('margin-left'), 10 ) + gap);
-            }
+        var showing = this._scrollContent.width() +
+            parseInt(this._scrollContent.css('margin-right'), 10);
+        var gap = this._scrollPane.width() - showing;
+        if (gap > 0) {
+            this._scrollContent.css('margin-right',
+                parseInt(this._scrollContent.css('margin-right'), 10) + gap);
+        }
     };
 
     return Scrollable;
