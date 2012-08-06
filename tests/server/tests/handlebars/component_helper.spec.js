@@ -60,6 +60,8 @@ describe('Handlebars component helper', function () {
             './error_handler': errorHandler,
             './component_registry': componentRegistry
         });
+        spyOn(mockRenderUtils, 'isAuthorized');
+        mockRenderUtils.isAuthorized.andReturn(true);
         mockRenderer = loadModuleContext('/lib/renderer.js', {
             './error_handler': errorHandler,
             './socket_registry': {
@@ -109,7 +111,7 @@ describe('Handlebars component helper', function () {
 
     describe('register plugin to handlebars', function () {
 
-        it('must register the component helper to Handlebars', function () {
+        it('should register the component helper to Handlebars', function () {
             expect(componentHelper.name).toEqual('component');
             expect(typeof componentHelper.helper).toEqual('function');
         });
@@ -142,18 +144,18 @@ describe('Handlebars component helper', function () {
 
     describe('test required and optional options', function () {
 
-        it('must require "view" to be defined', function () {
+        it('should require "view" to be defined', function () {
             Handlebars.compile('{{component name="button"}}')();
             expect(rainContext.childrenInstanceIds.length).toEqual(1);
             expectError(childComponent, 500);
         });
 
-        it('must require "name" to be defined when "version" is present', function () {
+        it('should require "name" to be defined when "version" is present', function () {
             Handlebars.compile('{{component version="1.1" view="index"}}')();
             expectError(childComponent, 500);
         });
 
-        it('must add all the necessary JSON dependencies', function () {
+        it('should add all the necessary JSON dependencies', function () {
             Handlebars.compile('{{component name="button" version="1.0" view="index"}}')();
             expect(childComponent.instanceId).toBeDefined();
             expect(rainContext.transport.renderCount).toEqual(1);
@@ -169,7 +171,7 @@ describe('Handlebars component helper', function () {
 
     describe('test default options and error cases', function () {
 
-        it('must use the current component when "name" is not defined', function () {
+        it('should use the current component when "name" is not defined', function () {
             rainContext.component.version = "1.3.0";
             Handlebars.compile('{{component view="index"}}')();
             expectComponent(childComponent, {
@@ -179,39 +181,21 @@ describe('Handlebars component helper', function () {
             });
         });
 
-        it('must use the "error" component when the component is not found', function () {
+        it('should use the "error" component when the component is not found', function () {
             Handlebars.compile('{{component name="invalid_name" view="index"}}')();
             expectError(childComponent, 404);
         });
 
-        it('must use the "error" component when the view is not found', function () {
+        it('should use the "error" component when the view is not found', function () {
             Handlebars.compile('{{component name="button" view="invalid_index"}}')();
             expectError(childComponent, 404);
         });
 
     });
 
-    /**
-     * Sets information about the user in the session.
-     *
-     * @param {Object} [user] use this user information instead of some default one
-     */
-    function setUserInSession(user) {
-        rainContext.session = {
-            user: user || {
-                permissions: [
-                    'view_button', 'view_restricted'
-                ],
-                country: 'US',
-                language: 'en_US'
-            }
-        };
-    }
-
     describe('test authorization cases', function () {
 
-        it('must use the required component when the permission cases pass', function () {
-            setUserInSession();
+        it('should use the required component when the authorization succeeds', function () {
             Handlebars.compile('{{component name="button" version="1.0" view="restricted"}}')();
             expectComponent(childComponent, {
                 id: 'button',
@@ -220,13 +204,13 @@ describe('Handlebars component helper', function () {
             });
         });
 
-        it('must use the "error" component when permission cases fail', function () {
+        it('should use the "error" component when authorization fails', function () {
+            mockRenderUtils.isAuthorized.andReturn(false);
             Handlebars.compile('{{component name="button" version="1.0" view="restricted"}}')();
             expectError(childComponent, 401);
         });
 
-        it('must pass component level checks for dynamic conditions', function () {
-            setUserInSession();
+        it('should pass component level checks for dynamic conditions', function () {
             Handlebars.compile('{{component name="button" version="2.0" view="buttons"}}')();
             expectComponent(childComponent, {
                 id: 'button',
@@ -235,16 +219,13 @@ describe('Handlebars component helper', function () {
             });
         });
 
-        it('must use the "error" component when component level dynamic conditions fail', function () {
-            setUserInSession({
-                country: 'RO'
-            });
+        it('should use the "error" component when component level dynamic conditions fail', function () {
+            mockRenderUtils.isAuthorized.andReturn(false);
             Handlebars.compile('{{component name="button" version="2.0" view="buttons"}}')();
             expectError(childComponent, 401);
         });
 
-        it('must pass view level checks for dynamic conditions', function () {
-            setUserInSession();
+        it('should pass view level checks for dynamic conditions', function () {
             Handlebars.compile('{{component name="button" version="2.0" view="index"}}')();
             expectComponent(childComponent, {
                 id: 'button',
@@ -253,11 +234,8 @@ describe('Handlebars component helper', function () {
             });
         });
 
-        it('must use the "error" component when view level dynamic conditions fail', function () {
-            setUserInSession({
-                country: 'US',
-                language: 'ro_RO'
-            });
+        it('should use the "error" component when view level dynamic conditions fail', function () {
+            mockRenderUtils.isAuthorized.andReturn(false);
             Handlebars.compile('{{component name="button" version="2.0" view="index"}}')();
             expectError(childComponent, 401);
         });
