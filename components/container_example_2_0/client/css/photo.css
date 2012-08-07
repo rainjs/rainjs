@@ -1,0 +1,19 @@
+.painting-frame {
+    width: 210px;
+    text-align: center;
+}
+
+.painting-caption {
+    width: 190px;
+    font-size: 10pt;
+    text-align: center;
+    padding: 10px;
+}
+
+.painting {
+    max-height: 200px;
+    max-width: 200px;
+    padding: 2px;
+    border: 1px solid #ccc;
+    margin: 5px;
+}

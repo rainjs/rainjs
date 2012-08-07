@@ -32,11 +32,7 @@ var cwd = process.cwd(),
     socketRegistry = require(cwd + '/lib/socket_registry'),
     websockets = require(cwd + '/lib/registry/websockets');
 
-var conf = {
-    id: 'button',
-    version: '2.0',
-    folder: 'components/button2'
-};
+var conf;
 
 var socket = {
     channel: 'example',
@@ -45,8 +41,6 @@ var socket = {
 
 describe('Registry plugin: Websockets', function () {
     beforeEach(function () {
-        spyOn(console, 'log').andCallFake(function () {});
-
         spyOn(util, 'walkSync').andCallFake(function (folder, callback) {
             callback(path.join(folder, 'socket.js'));
         });
@@ -57,9 +51,15 @@ describe('Registry plugin: Websockets', function () {
         });
 
         spyOn(socketRegistry, 'register').andCallFake(function (channel, handler) {});
+
+        conf = {
+            id: 'button',
+            version: '2.0',
+            folder: 'components/button2'
+        };
     });
 
-    it('must register sockets from the component/server/websockets directory', function () {
+    it('should register sockets from the component/server/websockets directory', function () {
         websockets.configure(conf);
 
         var expectedFolder = path.join('components', 'button2', 'server', 'websockets');
@@ -68,7 +68,7 @@ describe('Registry plugin: Websockets', function () {
         expect(util.walkSync.mostRecentCall.args[0]).toBe(expectedFolder);
     });
 
-    it('must require the websocket module', function () {
+    it('should require the websocket module', function () {
         websockets.configure(conf);
 
         var expectedPath = path.join('components', 'button2', 'server', 'websockets', 'socket.js');
@@ -76,9 +76,17 @@ describe('Registry plugin: Websockets', function () {
         expect(global.requireWithContext.mostRecentCall.args[0]).toBe(expectedPath);
     });
 
-    it('must register the socket', function () {
+    it('should register the socket', function () {
         websockets.configure(conf);
 
         expect(socketRegistry.register).toHaveBeenCalledWith('/button/2.0/example', socket.handle);
+    });
+
+    it('should not register the socket for containers', function () {
+        conf.type = 'container';
+
+        websockets.configure(conf);
+
+        expect(socketRegistry.register).not.toHaveBeenCalled();
     });
 });

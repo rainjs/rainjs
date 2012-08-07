@@ -1,0 +1,19 @@
+{{css path="notes.css"}}
+
+{{#container name="layout" version="1.0" view="flow" sid="flowLayout"}}
+    {{#each notes}}
+        {{#item}}
+            <div class="{{class}}">
+                <textarea>{{text}}</textarea>
+            </div>
+        {{/item}}
+    {{/each}}
+
+    {{#item}}
+        <div>
+            <div class="add-note half" title="Click to add a new note!">+</div>
+            <div class="clear"></div>
+            <div class="remove-note half" title="Click to remove the first note!">-</div>
+        </div>
+    {{/item}}
+{{/container}}

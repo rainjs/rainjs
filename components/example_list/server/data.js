@@ -106,6 +106,13 @@ function text_localization(environment, callback, data) {
     callback(null, customData);
 }
 
+function flowLayout(environment, callback, context, request) {
+    var data = {
+        notes: request.session.notes || []
+    };
+
+    callback(null, data);
+}
 
 module.exports = {
     index: index,
@@ -114,5 +121,6 @@ module.exports = {
     level2: level2,
     level3: level3,
     platform_language: platform_language,
-    text_localization: text_localization
+    text_localization: text_localization,
+    'layout/flow': flowLayout
 };

@@ -1,0 +1,8 @@
+{
+    "id": "layout",
+    "version": "1.0",
+    "type": "container",
+    "views": {
+        "flow": {}
+    }
+}

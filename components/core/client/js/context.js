@@ -117,6 +117,7 @@ define(['raintime/client_storage',
      *
      * @param {Object} component The component which to be requested
      * @param {String} component.id The component id
+     * @param {String} component.version The component version
      * @param {String} component.view The component view id
      * @param {String} component.sid The component staticId id
      * @param {Object} component.context Custom data for the template
@@ -128,13 +129,13 @@ define(['raintime/client_storage',
         var staticId = component.sid || Math.floor(Math.random(0, Date.now()));
         var instanceId = (
                 Date.now().toString() +
-                (++clientRenderer.counter) +
+                (++window.ClientRenderer.get().counter) +
                 staticId + this.instanceId
         );
         $(dom).html('<div id="' + instanceId + '"></div>');
         component.instanceId = instanceId;
         raintime.componentRegistry.setCallback(instanceId, callback);
-        clientRenderer.requestComponent(component);
+        window.ClientRenderer.get().requestComponent(component);
     };
 
     /**
@@ -154,7 +155,7 @@ define(['raintime/client_storage',
     Context.prototype.replace = function (component, callback) {
         component.instanceId = this.instanceId;
         raintime.componentRegistry.setCallback(component.instanceId, callback);
-        clientRenderer.requestComponent(component);
+        window.ClientRenderer.get().requestComponent(component);
     };
 
     return Context;

@@ -32,21 +32,23 @@ define(['raintime/messaging/intents'], function (Intents) {
     Controller.prototype.init = $.noop;
 
     Controller.prototype.start = function () {
-        $('.allowed-view').click(function () {
+        var root = this.context.getRoot();
+
+        root.find('.allowed-view').click(function () {
             Intents.send({
                 category: 'com.rain.example.security',
                 action: 'ALLOWED_VIEW'
             });
         });
 
-        $('.denied-view').click(function () {
+        root.find('.denied-view').click(function () {
             Intents.send({
                 category: 'com.rain.example.security',
                 action: 'DENIED_VIEW'
             });
         });
 
-        $('.allowed-server').click(function () {
+        root.find('.allowed-server').click(function () {
             var promise = Intents.send({
                 category: 'com.rain.example.security',
                 action: 'ALLOWED_SERVER'
@@ -59,7 +61,7 @@ define(['raintime/messaging/intents'], function (Intents) {
             });
         });
 
-        $('.denied-server').click(function () {
+        root.find('.denied-server').click(function () {
             var promise = Intents.send({
                 category: 'com.rain.example.security',
                 action: 'DENIED_SERVER'

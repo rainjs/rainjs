@@ -66,7 +66,8 @@ describe("Pattern layout", function() {
     });
 
     it("should corectly determine the newline format", function () {
-        var layout = new Pattern(params);
+        var layout = new Pattern(params),
+            platform = process.platform;
 
         process.platform = 'linux';
         expect(layout._placeholders.newline()).toEqual('\n');
@@ -82,6 +83,8 @@ describe("Pattern layout", function() {
 
         process.platform = 'freebsd';
         expect(layout._placeholders.newline()).toEqual('\n');
+
+        process.platform = platform;
     });
 
     it("should corectly format the message", function () {

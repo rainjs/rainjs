@@ -26,13 +26,13 @@
 jasmine.util.extend(jasmine.getGlobal(), (function () {
 
     /**
-    * Sets up spies and other useful utilities
-    * for testing Rain with jasmine.
-    *
-    * @name JasmineRain
-    * @class Utility class extending jasmine for testing Rain specific code
-    * @constructor
-    */
+     * Sets up spies and other useful utilities
+     * for testing Rain with jasmine.
+     *
+     * @name JasmineRain
+     * @class Utility class extending jasmine for testing Rain specific code
+     * @constructor
+     */
     function JasmineRain() {
         var self = this;
 
@@ -54,11 +54,11 @@ jasmine.util.extend(jasmine.getGlobal(), (function () {
         this.ajaxCalls.mostRecent = null;
 
         /**
-         * References the modules loaded to jasmine
+         * References by name the modules loaded through jasmine
          *
-         * @type {Array}
+         * @type {Object}
          */
-        jasmine.loadedModules = [];
+        jasmine.loadedModules = {};
 
         // Setup all behavior in a runner beforeEach
         beforeEach(function () {
@@ -158,9 +158,8 @@ jasmine.util.extend(jasmine.getGlobal(), (function () {
            });
 
            runs(function () {
-                for (var i = jasmine.loadedModules.length; i--;) {
-                    var module = jasmine.loadedModules[i];
-                    module = mock(module);
+                for (var name in jasmine.loadedModules) {
+                    mock(jasmine.loadedModules[name]);
                 }
 
                 func.apply(this, deps);

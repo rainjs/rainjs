@@ -1,0 +1,8 @@
+{
+    "id": "demo_container",
+    "version": "1.0",
+    "views": {
+        "scrollable": {}
+    },
+    "type": "container"
+}

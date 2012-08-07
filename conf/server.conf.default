@@ -16,7 +16,7 @@
     "language": "en_US",
 
     "logger": {
-        "level": "info",
+        "level": "debug",
         "appenders": [{
             "type": "console",
             "layout": {

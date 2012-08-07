@@ -31,47 +31,48 @@ var globals = require(cwd + '/lib/globals');
 var pluginFolder = path.join(cwd, '/lib/handlebars/');
 
 describe('Handlebars configuration', function () {
-    var plugins;
+    var plugins, helpers, Mocks, Spy;
 
     beforeEach(function () {
-        spyOn(console, 'log').andCallFake(function () {});
+        // Keep this list updated when adding new helpers
+        helpers = [
+            { name: 'css', file: 'css' },
+            { name: 'component', file: 'component' },
+            { name: 'container', file: 'container' },
+            { name: 't', file: 'translation' },
+            { name: 'nt', file: 'translation_plural' },
+            { name: 'item', file: 'item' }
+        ];
 
         plugins = {};
-        var mocks = {
-            'handlebars': {
-                registerHelper: function (name, helper) {
-                    plugins[name] = helper;
-                }
-            }
-        };
 
-        // Mock the loading of the Handlebars helpers. The helpers are mocked because
-        // they have some dependencies that are not so easy to mock.
-        mocks[path.join(pluginFolder, 'css.js')] = {
-            name: 'css',
-            helper: function () {}
-        };
-        mocks[path.join(pluginFolder, 'component.js')] = {
-            name: 'component',
-            helper: function () {}
-        };
-        mocks[path.join(pluginFolder, 'translation.js')] = {
-            name: 't',
-            helper: function () {}
-        };
-        mocks[path.join(pluginFolder, 'translation_plural.js')] = {
-            name: 'nt',
-            helper: function () {}
-        };
+        Spy = {};
+        Spy.Handlebars = jasmine.createSpyObj('Spy.Handlebars', ['registerHelper']);
+        Spy.Handlebars.registerHelper.andCallFake(function (name, helper) {
+            plugins[name] = helper;
+        });
 
-        loadModuleContext('/lib/handlebars.js', mocks);
+        Mocks = {};
+        Mocks['handlebars'] = Spy.Handlebars;
+
+        // Add a mock for each expected handlebars helper
+        helpers.forEach(function (helper) {
+            Mocks[path.join(pluginFolder, helper.file + '.js')] = {
+                'name': helper.name,
+                'helper': jasmine.createSpy()
+            };
+         });
+
+        loadModuleContext('/lib/handlebars.js', Mocks);
     });
 
     it('must register all Handlebars plugins', function () {
-        expect(typeof plugins['css'] === 'function').toBe(true);
-        expect(typeof plugins['component'] === 'function').toBe(true);
-        expect(typeof plugins['t'] === 'function').toBe(true);
-        expect(typeof plugins['nt'] === 'function').toBe(true);
+        expect(plugins['css']).toEqual(jasmine.any(Function));
+        expect(plugins['component']).toEqual(jasmine.any(Function));
+        expect(plugins['container']).toEqual(jasmine.any(Function));
+        expect(plugins['t']).toEqual(jasmine.any(Function));
+        expect(plugins['nt']).toEqual(jasmine.any(Function));
+        expect(plugins['item']).toEqual(jasmine.any(Function));
     });
 
 });

@@ -238,6 +238,20 @@ namespace('test', function () {
             jasmine.loadHelpersInFolder(specFolder, new RegExp("[-_]helper\\.(" + extentions + ")$"));
             jasmine.executeSpecsInFolder(specFolder, function (runner, log) {
                 util.print('\n');
+
+                var runner = jasmine.getEnv().currentRunner_,
+                    suite, spec;
+
+                for (var i = runner.suites_.length; i--;) {
+                    suite = runner.suites_[i];
+                    for (var j = suite.specs_.length; j--;) {
+                        spec = suite.specs_[j];
+
+                        if (spec.didFail) {
+                            process.exit(1);
+                        }
+                    }
+                }
             }, isVerbose, showColors, teamcity, useRequireJs,
                new RegExp(match + "\.spec\\.(" + extentions + ")$", 'i'), junitreport);
         });
