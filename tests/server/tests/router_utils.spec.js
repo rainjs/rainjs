@@ -265,16 +265,15 @@ describe('Router Utilities', function () {
          * @param {String} filePath the file path
          * @param {String} expectedPath the expected path
          * @param {Boolean} notFound true when the file should be missing
+         * @param {String} language the resource language
          */
-        function localize(filePath, expectedPath, notFound) {
+        function localize(filePath, expectedPath, notFound, language) {
             var mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
             mockComponentRegistry.registerConfigComponents();
             var componentRegistry = new mockComponentRegistry.ComponentRegistry();
             var maxAge = 150000000;
             var type = 'resources';
-            request.query = {
-                'loc': undefined
-            };
+            request.resourceLanguage = language;
             request.path = filePath;
             request.method = 'GET';
             request.component = componentRegistry.getConfig('example', '0.0.1');
@@ -314,28 +313,24 @@ describe('Router Utilities', function () {
             });
         }
 
-        it('must return the current language localized resource', function () {
-            configuration.language = 'de_DE';
+        it('must return the requested language localized resource', function () {
             configuration.defaultLanguage = 'en_US';
-            localize('/info.txt', 'info_de_DE.txt');
+            localize('/info.txt', 'info_de_DE.txt', false, 'de_DE');
         });
 
         it('must return the default language localized resource', function () {
-            configuration.language = 'en_UK';
             configuration.defaultLanguage = 'ro_RO';
-            localize('/info.txt', 'info_ro_RO.txt');
+            localize('/info.txt', 'info_ro_RO.txt', false, 'en_UK');
         });
 
         it('must return the unlocalized resource', function () {
-            configuration.language = 'en_US';
             configuration.defaultLanguage = 'en_US';
-            localize('/info.txt', 'info.txt');
+            localize('/info.txt', 'info.txt', false, 'en_US');
         });
 
         it('must return a 404 when the localized resource is not found', function () {
-            configuration.language = 'en_US';
             configuration.defaultLanguage = 'en_US';
-            localize('/no_file.txt', '', true);
+            localize('/no_file.txt', '', true, 'en_US');
         });
     });
 });

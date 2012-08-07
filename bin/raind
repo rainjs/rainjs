@@ -27,6 +27,8 @@
 
 "use strict";
 
+require('../lib/globals');
+
 var program = require('commander'),
     path = require('path'),
     fs = require('fs'),
