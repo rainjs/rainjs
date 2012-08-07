@@ -75,10 +75,10 @@ or if you want to apply constraints on it must appear in this section:
 Intents definition
 ------------------
 
-Please read :doc:`/server/messaging_intents` for more information.
+Please read :doc:`messaging_intents` for more information.
 
 ----------------------
 Permissions definition
 ----------------------
 
-Please read :doc:`/server/authorization` for more information.
+Please read :doc:`authorization` for more information.
