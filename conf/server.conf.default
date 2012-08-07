@@ -15,6 +15,10 @@
     "defaultLanguage": "en_US",
     "language": "en_US",
 
+    "identity": {
+        "provider": "lib/security/demo_identity_provider.js"
+    },
+
     "logger": {
         "level": "info",
         "appenders": [{
