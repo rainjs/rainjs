@@ -103,7 +103,7 @@
     font-family: "Ubuntu Light", Ubuntu, sans-serif;
 }
 
-.add-note {
+.add-note, .remove-note {
     float: left;
 
     width: 100px;
@@ -111,6 +111,7 @@
 
     padding: 50px;
 
+    text-align: center;
     font-size: 120px;
     font-weight: bold;
     font-family: "Ubuntu Bold", sans-serif;
@@ -118,4 +119,19 @@
     color: #91bdff;
 
     cursor: pointer;
+}
+
+.remove-note {
+    color: red;
+    text-align: center;
+}
+
+.half {
+    margin: 0px;
+    padding: 0px;
+    float: none;
+}
+
+.clear {
+    clear: both;
 }

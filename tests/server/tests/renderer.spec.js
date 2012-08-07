@@ -215,6 +215,7 @@ describe('Renderer', function () {
 
     describe('renderBootstrap', function () {
         beforeEach(function () {
+            delete button.type;
             spyOn(renderer, 'renderComponent').andCallFake(function (opt) {
                 return {
                     html: "<div />"
@@ -232,6 +233,24 @@ describe('Renderer', function () {
                 placeholder: '{"html":"<div />"}',
                 placeholderTimeout: 500,
                 language: 'ro_RO',
+                isContainer: false,
+                context: {
+                    query: 'param=value',
+                    body: '{}'
+                }
+            });
+
+            button.type = 'container';
+            renderer.renderBootstrap(button, 'index', request, response);
+
+            expect(bootstrap.compiledTemplate).toHaveBeenCalledWith({
+                id: 'button',
+                version: '2.0',
+                viewId: 'index',
+                placeholder: '{"html":"<div />"}',
+                placeholderTimeout: 500,
+                language: 'ro_RO',
+                isContainer: true,
                 context: {
                     query: 'param=value',
                     body: '{}'
@@ -249,6 +268,7 @@ describe('Renderer', function () {
 
         it('must render the component', function () {
             var rain = renderer.createRainContext({
+                component: {},
                 transport: response,
                 session: request.session
             });
@@ -257,6 +277,7 @@ describe('Renderer', function () {
                 component: button,
                 viewId: 'index',
                 instanceId: 'id',
+                parentInstanceId: 'pid',
                 context: {
                     key1: 'value1',
                     key2: 'value2'
@@ -264,17 +285,22 @@ describe('Renderer', function () {
                 rain: rain
             };
 
+            renderer.rain = rain;
+
             expect(renderer.renderComponent(opt)).toEqual({
                 css: [],
                 children: [],
                 html: '<div>button</div>',
                 controller: 'index.js',
                 instanceId: 'id',
+                containerId: 'pid',
                 staticId: '',
                 id: 'button',
                 version: '2.0',
                 error: null
             });
+
+            expect(renderer.rain.component.currentView).toBe('index');
         });
 
         it('must call the context function', function () {
@@ -346,6 +372,10 @@ describe('Renderer', function () {
             comp.sid = 'comp1';
             comp.session = request.session;
             comp.environment = environment;
+            comp.context = {
+                html: 'html'
+            };
+            comp.parentInstanceId = 'pid';
 
             renderer.loadDataAndSend(comp, response);
 
@@ -359,13 +389,18 @@ describe('Renderer', function () {
                 component: button,
                 viewId: 'index',
                 staticId: 'comp1',
-                context: { field: 'data' },
+                context: {
+                    field: 'data',
+                    html: 'html'
+                },
+                parentInstanceId: 'pid',
                 rain: {
                     css: [],
                     childrenInstanceIds: [],
                     transport: response,
                     session: request.session,
-                    environment: environment
+                    environment: environment,
+                    items: []
                 }
             });
         });

@@ -24,9 +24,23 @@
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 describe('Client Renderer', function () {
+    var Mocks, cr;
+
+    beforeEach(function () {
+        Mocks = {};
+    });
+
+    function setup(ClientRenderer) {
+        ClientRenderer.get.andCallFake(function () {
+                return new ClientRenderer});
+
+        Mocks.Sockets = jasmine.loadedModules['raintime/messaging/sockets'];
+        Mocks.Sockets.getSocket.andReturn({ on: jasmine.createSpy() });
+
+        cr = ClientRenderer.get();
+    }
 
     describe('Load CSS', function () {
-
         var head;
 
         beforeEach(function () {
@@ -36,33 +50,35 @@ describe('Client Renderer', function () {
 
         it('should not call the callback if there aren\'t any CSS files',
            ['core/js/client_rendering'],
-           function (clientRenderer) {
+           function (ClientRenderer) {
+                setup(ClientRenderer);
+                ClientRenderer.prototype._loadCSS.andCallThrough();
+
                 var callback = jasmine.createSpy();
-                clientRenderer._loadCSS.andCallThrough();
-                clientRenderer._loadCSS([], callback);
+
+                cr._loadCSS([], callback);
+
                 expect(callback).not.toHaveBeenCalled();
            }
         );
 
         it('should insert the CSS files into the page as link tags',
            ['core/js/client_rendering'],
-           function (clientRenderer) {
+           function (ClientRenderer) {
+                setup(ClientRenderer);
+                ClientRenderer.prototype._loadCSS.andCallThrough();
+
                 var linksLength = head.find('link').length,
-                    cssFiles = [
-                        {
+                    cssFiles = [{
                             path: '/example/3.0/css/index.css'
-                        },
-                        {
+                        }, {
                             path: '/example/3.0/css/accordion.css'
-                        }
-                    ],
+                    }],
                     insertFinished = false;
 
                 runs(function () {
-                    clientRenderer._loadCSS.andCallThrough();
-                    clientRenderer._loadCSS(cssFiles, function () {
-                        insertFinished = true;
-                    });
+                    ClientRenderer.get()._loadCSS(cssFiles,
+                            function () { insertFinished = true; });
                 });
 
                 waitsFor(function () {
@@ -78,7 +94,10 @@ describe('Client Renderer', function () {
 
         it('should not insert the CSS files because they are already there',
            ['core/js/client_rendering'],
-           function (clientRenderer) {
+           function (ClientRenderer) {
+                setup(ClientRenderer);
+                ClientRenderer.prototype._loadCSS.andCallThrough();
+
                 var linksLength,
                     cssFiles = [
                         {
@@ -91,8 +110,7 @@ describe('Client Renderer', function () {
                 linksLength = head.find('link').length;
 
                 runs(function () {
-                    clientRenderer._loadCSS.andCallThrough();
-                    clientRenderer._loadCSS(cssFiles, function () {
+                    ClientRenderer.get()._loadCSS(cssFiles, function () {
                         insertFinished = true;
                     });
                 });
@@ -110,7 +128,10 @@ describe('Client Renderer', function () {
 
         it('should insert only the CSS files that aren\'t already there',
            ['core/js/client_rendering'],
-           function (clientRenderer) {
+           function (ClientRenderer) {
+                setup(ClientRenderer);
+                ClientRenderer.prototype._loadCSS.andCallThrough();
+
                 var linksLength,
                     cssFiles = [
                         {
@@ -126,8 +147,7 @@ describe('Client Renderer', function () {
                 linksLength = head.find('link').length;
 
                 runs(function () {
-                    clientRenderer._loadCSS.andCallThrough();
-                    clientRenderer._loadCSS(cssFiles, function () {
+                    ClientRenderer.get()._loadCSS(cssFiles, function () {
                         insertFinished = true;
                     });
                 });
@@ -145,7 +165,10 @@ describe('Client Renderer', function () {
 
         it('should add the media attribute to the link tags',
            ['core/js/client_rendering'],
-           function (clientRenderer) {
+           function (ClientRenderer) {
+                setup(ClientRenderer);
+                ClientRenderer.prototype._loadCSS.andCallThrough();
+
                 var media = 'max-width: 800px',
                     cssFiles = [
                         {
@@ -156,8 +179,7 @@ describe('Client Renderer', function () {
                     insertFinished = false;
 
                 runs(function () {
-                    clientRenderer._loadCSS.andCallThrough();
-                    clientRenderer._loadCSS(cssFiles, function () {
+                    ClientRenderer.get()._loadCSS(cssFiles, function () {
                         insertFinished = true;
                     });
                 });
@@ -171,5 +193,95 @@ describe('Client Renderer', function () {
                 });
            }
         );
+    });
+
+    describe('render component', function () {
+        var dcmp1, dcmp2;
+
+        beforeEach(function () {
+            dcmp1 = {
+                instanceId: 'ff44aa',
+                containerId: 'ec038f',
+                id: 'component',
+                version: '1.0'
+            };
+            dcmp2 = {
+                instanceId: 'ff44bb',
+                containerId: 'ec038f',
+                id: 'component',
+                version: '2.6.89'
+            };
+            dcnt = {
+                instanceId: 'ec038f',
+                id: 'container',
+                version: '1.5.2'
+            };
+        });
+
+        it('should add an orhpan component to its container\'s orphans list',
+                ['core/js/client_rendering'],
+                function (ClientRenderer) {
+
+            setup(ClientRenderer);
+            ClientRenderer.prototype.renderComponent.andCallThrough();
+
+            cr.renderComponent(dcmp1);
+
+            expect(cr.orphans[dcmp1.containerId].length).toEqual(1);
+            expect(cr.orphans[dcmp1.containerId]).toContain(dcmp1);
+        });
+
+        it('should add multiple orhpan components to their container\'s orhpans list',
+                ['core/js/client_rendering'],
+                function (ClientRenderer) {
+
+            setup(ClientRenderer);
+            ClientRenderer.prototype.renderComponent.andCallThrough();
+
+            cr.renderComponent(dcmp1);
+            cr.renderComponent(dcmp2);
+
+            expect(cr.orphans[dcmp1.containerId].length).toEqual(2);
+            expect(cr.orphans[dcmp1.containerId]).toContain(dcmp1);
+            expect(cr.orphans[dcmp1.containerId]).toContain(dcmp2);
+        });
+
+        it('should render the orhpan components when the container arrives',
+                ['core/js/client_rendering'],
+                function (ClientRenderer) {
+
+            setup(ClientRenderer);
+            ClientRenderer.prototype.renderComponent.andCallThrough();
+
+            this.after(function () {
+                $('#' + dcmp1.instanceId
+                    + ',#' + dcmp1.instanceId
+                    + ',#' + dcnt.instanceId).remove();
+            });
+
+            cr.renderComponent(dcmp1);
+            cr.renderComponent(dcmp2);
+
+            expect(cr.orphans[dcnt.instanceId].length).toEqual(2);
+            expect(cr.orphans[dcnt.instanceId]).toContain(dcmp1);
+            expect(cr.orphans[dcnt.instanceId]).toContain(dcmp2);
+
+            var html = [
+                '<div id="' + dcmp1.instanceId + '"></div>',
+                '<div id="' + dcmp2.instanceId + '"></div>',
+                '<div id="' + dcnt.instanceId + '"></div>'
+            ];
+            $('body').append(html.join('\n'));
+
+            cr.renderComponent(dcnt);
+
+            var f = ClientRenderer.prototype.renderComponent;
+
+            expect(f.argsForCall[3][0]).toEqual(dcmp1);
+            expect(f.argsForCall[4][0]).toEqual(dcmp2);
+
+            expect(cr.orphans[dcnt.instanceId]).not.toBeDefined();
+        });
+
     });
 });

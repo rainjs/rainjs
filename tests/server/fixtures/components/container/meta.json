@@ -1,0 +1,8 @@
+{
+    "id": "container",
+    "version": "1.0",
+    "views": {
+        "index": {}
+    },
+    "type": "container"
+}

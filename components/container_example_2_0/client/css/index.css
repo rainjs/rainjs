@@ -1,0 +1,7 @@
+.image-container {
+	display: inline-block;
+}
+
+.title-edit, .image-gallery {
+	margin: 10px;
+}

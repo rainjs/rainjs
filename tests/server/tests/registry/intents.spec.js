@@ -25,36 +25,48 @@
 
 "use strict";
 
-var cwd = process.cwd();
-var fs = require('fs');
-var config = require(cwd + '/lib/configuration');
-var registryPlugin = loadModuleExports('/lib/registry/intents.js', {
-    '../intent_registry': {}
-});
+describe('Registry Plugin: Intents', function () {
+    var component, intentRegistry, registryPlugin;
 
-describe('Registry Plugin: ' + registryPlugin.name, function () {
-    var componentConfig = null,
-        registeredIntents = null;
     beforeEach(function(){
-        registeredIntents = [];
-        registryPlugin = loadModuleExports('/lib/registry/intents.js', {
-            '../intent_registry': {
-                register: function(component, intent){
-                    registeredIntents.push({
-                        component: component.id,
-                        intent: intent
-                    });
-                }
-            }
-        });
-        componentConfig = JSON.parse(fs.readFileSync(cwd +
-                                 '/tests/server/fixtures/components/example_1_3/meta.json'));
+        var mocks = {};
+        intentRegistry = mocks['../intent_registry'] =
+            jasmine.createSpyObj('intentRegistry', ['register']);
+        mocks['../logging'] = jasmine.createSpyObj('logging', ['get']);
+        mocks['../logging'].get.andReturn({warn: function () {}});
+
+        registryPlugin = loadModuleExports('lib/registry/intents.js', mocks);
+
+        component = {
+            id: 'example',
+            version: '1.0',
+            views: {},
+            intents: [{
+                category: 'com.rain.test',
+                action: 'SHOW_CHAT',
+                provider: 'index'
+            },
+            {
+                category: 'com.rain.test',
+                action: 'LOG',
+                provider: 'index.js#log'
+            }]
+        };
     });
 
-    it('must register 2 intents', function () {
-        registryPlugin.configure(componentConfig);
-        expect(registeredIntents.length).toEqual(2);
-        expect(registeredIntents[0].intent.action).toEqual("com.rain.test.serverside.INLINE_LOGGING");
-        expect(registeredIntents[1].intent.action).toEqual("com.rain.test.general.SHOW_CHAT");
+    it('should register 2 intents', function () {
+        registryPlugin.configure(component);
+
+        expect(intentRegistry.register).toHaveBeenCalledWith(component, component.intents[0]);
+        expect(intentRegistry.register).toHaveBeenCalledWith(component, component.intents[1]);
+        expect(intentRegistry.register.calls.length).toEqual(2);
+    });
+
+    it('should not register intents for containers', function () {
+        component.type = 'container';
+
+        registryPlugin.configure(component);
+
+        expect(intentRegistry.register).not.toHaveBeenCalled();
     });
 });

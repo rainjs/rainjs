@@ -505,33 +505,34 @@ describe('generate po utils', function () {
         it('should return a list of component configs', function () {
             fs.readdirSync.andReturn(['button', 'example']);
             fs.readFileSync.andCallFake(function (file) {
-                return '{"file": "' + file + '"}';
+                // on windows, path separators are treated as escape characters in JSON
+                return '{"file": "' + file.replace(/\\/g, '\\\\') + '"}';
             });
 
-            var components = utils.scanComponents('/rain/components');
+            var components = utils.scanComponents('components');
 
             var component1 = {
-                file: path.join('/rain/components', 'button', 'meta.json'),
-                folder: path.join('/rain/components', 'button')
+                file: path.join('components', 'button', 'meta.json'),
+                folder: path.join('components', 'button')
             };
             var component2 = {
-                file: path.join('/rain/components', 'example', 'meta.json'),
-                folder: path.join('/rain/components', 'example')
+                file: path.join('components', 'example', 'meta.json'),
+                folder: path.join('components', 'example')
             };
 
             expect(components).toEqual([component1, component2]);
-            expect(fs.readdirSync).toHaveBeenCalledWith('/rain/components');
+            expect(fs.readdirSync).toHaveBeenCalledWith('components');
             expect(fs.readFileSync).toHaveBeenCalledWith(
-                path.join('/rain/components', 'button', 'meta.json'), 'utf8');
+                path.join('components', 'button', 'meta.json'), 'utf8');
             expect(fs.readFileSync).toHaveBeenCalledWith(
-                path.join('/rain/components', 'example', 'meta.json'), 'utf8');
+                path.join('components', 'example', 'meta.json'), 'utf8');
         });
 
         it('should throw if the component folder does not exist', function () {
             fs.readdirSync.andThrow(new Error('some error'));
 
             expect(function () {
-                utils.scanComponents('/rain/components');
+                utils.scanComponents('components');
             }).toThrow();
         });
     });

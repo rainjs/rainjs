@@ -6,6 +6,12 @@ function handle(socket) {
 
         socket.session.notes[data.index] = data.note;
     });
+
+    socket.on('remove', function (data) {
+        if (socket.session.notes) {
+            socket.session.notes.splice(data.index, 1);
+        }
+    });
 }
 
 module.exports = {

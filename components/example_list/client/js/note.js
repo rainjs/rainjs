@@ -24,6 +24,7 @@
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 define(['util', 'raintime/lib/event_emitter'], function (Util, EventEmitter) {
+
     /**
      * A note. Takes care of updating the content after the user
      * enters characters in the note's textarea. In this case it also
@@ -42,19 +43,21 @@ define(['util', 'raintime/lib/event_emitter'], function (Util, EventEmitter) {
 
     /**
      * Available colors for notes.
+     *
      * @type {Array}
      */
     Note._colors = ['yellow', 'pink', 'blue'];
 
     /**
      * Available rotation angles for notes.
+     *
      * @type {Array}
      */
     Note._angles = [-10, -5, 5, 10];
-    
 
     /**
      * Delay after a keypress event after which an update is triggered.
+     *
      * @type {Number} milliseconds
      */
     Note._delay = 300;
@@ -62,13 +65,14 @@ define(['util', 'raintime/lib/event_emitter'], function (Util, EventEmitter) {
     /**
      * Creates a note from an existing jQuery DIV.
      * Parses the CSS classes and textarea's content.
+     *
      * @returns {Note} a new note
      */
     Note.create = function (div) {
-        var color, angle, content
-        var textarea = div.find('textarea');
-        var cls = div.attr('class');
-        var regexp, result;
+        var color, angle, content,
+            textarea = div.find('textarea'),
+            cls = div.attr('class'),
+            regexp, result;
 
         regexp = new RegExp('\\b(' + Note._colors.join('|') + ')\\b');
 
@@ -95,6 +99,7 @@ define(['util', 'raintime/lib/event_emitter'], function (Util, EventEmitter) {
 
     /**
      * Picks a random item out of a list.
+     *
      * @param {Array} list
      * @returns {Object}
      */
@@ -104,6 +109,7 @@ define(['util', 'raintime/lib/event_emitter'], function (Util, EventEmitter) {
 
     /**
      * Generates and returns the note's HTML.
+     *
      * @returns {jQuery} the generated DIV with event handlers attached
      */
     Note.prototype.html = function () {
@@ -126,6 +132,7 @@ define(['util', 'raintime/lib/event_emitter'], function (Util, EventEmitter) {
 
     /**
      * Assembles the note's CSS classes.
+     *
      * @returns {String} a space separated list of class names
      */
     Note.prototype._classes = function () {
@@ -155,15 +162,16 @@ define(['util', 'raintime/lib/event_emitter'], function (Util, EventEmitter) {
         this._content = this._textarea.val();
 
         this.emit('update');
-    }
+    };
 
     /**
      * Serializes the note.
+     *
      * @returns {Object}
      */
     Note.prototype.serialize = function () {
         return {
-            content: this._content,
+            'text': this._content,
             'class': this._classes()
         };
     };

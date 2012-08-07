@@ -1,0 +1,21 @@
+{{css path="index.css"}}
+
+<div class="title-edit">
+    <select class="image-list">
+        {{#each images}}
+            <option value="{{sid}}">{{sid}}</option>
+        {{/each}}
+    </select>
+    <input type="text" class="title-text">
+    <button class="change-button">Change Title</button>
+</div>
+
+<div class="image-gallery">
+    {{#container name="demo_container" view="scrollable"}}
+        {{#each images}}
+            <div class="image-container">
+                {{component view="photo" image=image title=title sid=sid}}
+            </div>
+        {{/each}}
+    {{/container}}
+</div>

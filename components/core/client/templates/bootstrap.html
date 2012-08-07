@@ -28,43 +28,53 @@
                 language: '{{language}}'
             };
             var renderQueueList = [];
-            function renderQueue(){
+            function renderQueue() {
                 var len = renderQueueList.length;
                 if(len > 0){
                     for(var i = 0; i < len; i++){
-                        clientRenderer.renderComponent(renderQueueList[i]);
+                        ClientRenderer.get().renderComponent(renderQueueList[i]);
                     }
                     renderQueueList = [];
                 }
             }
 
             function renderComponent(component) {
-                if (!component){
+                if (!component) {
                     renderQueue();
                     return;
                 }
-                if (window.clientRenderer == undefined) {
+
+                if (!window.ClientRenderer) {
                     renderQueueList.push(component);
                 } else {
                     renderQueue();
-                    clientRenderer.renderComponent(component);
+                    ClientRenderer.get().renderComponent(component);
                 }
             }
 
-            require(requireConfig, ["raintime/client_rendering"], function(clientRenderer) {
-                clientRenderer.setPlaceholderTimeout({{placeholderTimeout}});
-                clientRenderer.setPlaceholder({{{placeholder}}});
-                if(renderQueueList.length == 0){
-                    clientRenderer.renderPlaceholder($($('body div').get(0)).attr('id'));
+            require(requireConfig, ["raintime/client_rendering"],
+                    function(ClientRenderer) {
+                ClientRenderer.get().setPlaceholderTimeout({{placeholderTimeout}});
+                ClientRenderer.get().setPlaceholder({{{placeholder}}});
+
+                if (0 === renderQueueList.length) {
+                    ClientRenderer.get().renderPlaceholder($($('body div').get(0)).attr('id'));
                 }
+
                 renderQueue();
             });
         </script>
         <link rel="stylesheet" type="text/css" href="/core/resources/bootstrap.css">
     </head>
     <body>
-        {{#with context}}
-            {{component name=../id version=../version view=../viewId}}
-        {{/with}}
+        {{#if isContainer}}
+            {{#with context}}
+                {{container name=../id version=../version view=../viewId}}
+            {{/with}}
+        {{else}}
+            {{#with context}}
+                {{component name=../id version=../version view=../viewId}}
+            {{/with}}
+        {{/if}}
         <div id="modalDialog" class="core_1_0" style="width: 0; height: 0;"></div>
 

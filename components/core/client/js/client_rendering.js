@@ -45,6 +45,13 @@ define([
         this.placeholderComponent = null;
         this.placeholderTimeout = 500;
         this.counter = 0;
+        /**
+         * A map of objects that have been rendered inside a container and are waiting for their
+         * parent container to get rendered.
+         *
+         * @type Object
+         */
+        this.orphans = {};
 
         var socket = this.socket = Sockets.getSocket('/core');
         socket.on('render', function (component) {
@@ -58,6 +65,21 @@ define([
             }
         });
     }
+
+    /**
+     * The class instance.
+     * @type {ClientRenderer}
+     */
+    ClientRenderer._instance = null;
+
+    /**
+     * Returns the class' singleton instance.
+     * @returns {ClientRenderer} the singleton instance
+     */
+    ClientRenderer.get = function () {
+        return ClientRenderer._instance
+                || (ClientRenderer._instance = new ClientRenderer);
+    };
 
     /**
      * Sets the placeholder component.
@@ -99,29 +121,50 @@ define([
 
     /**
      * Renders the component to the DOM and registers it.
+     * This method takes care of rendering orphaned components (components rendered inside a
+     * a container which get sent to the client before their placeholder div).
      *
      * @param {Object} component the rendered component
      */
     ClientRenderer.prototype.renderComponent = function (component) {
-        for (var len = component.children.length, i = 0; i < len; i++) {
-            var childComponent = component.children[i];
-            Raintime.componentRegistry.preRegister(childComponent);
-            if (childComponent.placeholder === true) {
-                placeholderTimeout(this, childComponent);
+        var domElement = $('#' + component.instanceId);
+
+        if (!domElement.length) {
+            if (!this.orphans[component.containerId]) {
+                this.orphans[component.containerId] = [];
             }
+
+            this.orphans[component.containerId].push(component);
+            return;
         }
 
-        var domElement = $('#' + component.instanceId);
         domElement.hide().html(component.html);
         domElement.attr('id', component.instanceId);
         domElement.attr('class',
                         'app-container ' + component.id + '_' + component.version.replace(/[\.]/g, '_')
         );
 
-        if (!component.css || component.css.length == 0) {
-            showHTML(component, domElement);
+        if (this.orphans[component.instanceId]) {
+            this.orphans[component.instanceId].forEach(this.renderComponent, this);
+            delete this.orphans[component.instanceId];
+        }
+
+        if (component.children) {
+            for (var len = component.children.length, i = 0; i < len; i++) {
+                var childComponent = component.children[i];
+
+                Raintime.componentRegistry.preRegister(childComponent);
+
+                if (childComponent.placeholder === true) {
+                    placeholderTimeout(this, childComponent);
+                }
+            }
+        }
+
+        if (!component.css || 0 === component.css.length) {
+            this._showHTML(component, domElement);
         } else {
-            this._loadCSS(component.css, showHTML.bind(null, component, domElement));
+            this._loadCSS(component.css, this._showHTML.bind(this, component, domElement));
         }
     };
 
@@ -129,7 +172,7 @@ define([
      * @param {Object} component the rendered component
      * @param {DomElement} element The wrapper of the component
      */
-    function showHTML(component, element) {
+    ClientRenderer.prototype._showHTML = function (component, element) {
         element.show();
         // Registers the component.
         Raintime.componentRegistry.register(component);
@@ -206,12 +249,5 @@ define([
         }
     };
 
-    /**
-     * Export as a global.
-     *
-     * @private
-     */
-    window.clientRenderer = new ClientRenderer();
-
-    return window.clientRenderer;
+    return window.ClientRenderer = ClientRenderer;
 });
