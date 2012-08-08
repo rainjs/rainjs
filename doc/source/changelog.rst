@@ -3,6 +3,14 @@ Changelog
 =========
 
 ------
+v 0.14
+------
+
++ Added support for containers
++ Implemented identity provider for user authentication
++ Cached resources based on locale
+
+------
 v 0.13
 ------
 
