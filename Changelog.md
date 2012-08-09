@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.14.0
+
+* Added support for containers
+* Implemented identity provider for user authentication
+* Cached resources based on locale
+
 ## 0.13.0
 
 * Added support for dynamic internationalization.
