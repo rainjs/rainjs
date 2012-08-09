@@ -2,11 +2,13 @@ define(['util', 'layout/1.0/js/layout'], function (Util, Layout) {
     "use strict";
 
     /**
-     * This is the client-side implementation of the flow layout.
+     * Implements flow layout behavior.
+     * Inside a flow layout, items float from left to right.
      *
      * @name FlowLayout
-     * @class
      * @constructor
+     * @augments Layout
+     * @borrows Layout.add as #add
      */
     function FlowLayout() {
         Layout.call(this);
@@ -16,6 +18,7 @@ define(['util', 'layout/1.0/js/layout'], function (Util, Layout) {
 
     /**
      * Startup lifecycle step that happens right after the markup is in place.
+     * @private
      */
     FlowLayout.prototype.start = function () {
         var root = this.context.getRoot();
@@ -25,12 +28,12 @@ define(['util', 'layout/1.0/js/layout'], function (Util, Layout) {
     };
 
     /**
-     * Create a new item placeholder.
+     * Creates a new item block.
      *
-     * @param {Object} options parameters needed to know how to configure the place for the component
+     * @param {Object} options specific configuration for the content's item block
      * @param {Number} [options.index] the index where the new item will be placed
      * @throws {RainError} if start wasn't executed when the method was called
-     * @returns {jQueryObject} the element where the new component can be inserted
+     * @returns {jQuery} the element where the new component can be inserted
      */
     FlowLayout.prototype._createNewItem = function (options) {
         if (!this._container) {
@@ -58,13 +61,13 @@ define(['util', 'layout/1.0/js/layout'], function (Util, Layout) {
     };
 
     /**
-     * Remove a component from the layout.
+     * Removes an item from the layout.
      *
-     * @param {Object} options parameters to identify what will be removed
-     * @param {Object} options.index the index to remove
+     * @param {Object} options configuration to identify the item block to be removed
+     * @param {Number} options.index the index to remove
      * @throws {RainError} if start wasn't executed when the method was called
      */
-    FlowLayout.prototype._remove = function (options) {
+    FlowLayout.prototype.remove = function (options) {
         options = options || {};
 
         if (!this._container) {
@@ -85,7 +88,7 @@ define(['util', 'layout/1.0/js/layout'], function (Util, Layout) {
     };
 
     /**
-     * Get the number of existing items.
+     * Gets the number of existing items.
      *
      * @throws {RainError} if start wasn't executed when the method was called
      * @returns {Number} the number of items

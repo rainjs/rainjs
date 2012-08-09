@@ -8,7 +8,9 @@
             "./components/core/client/js/context.js",
             "./components/core/client/js/lib/util.js",
             "./components/core/client/js/lib/event_emitter.js",
-            "./components/language_selector/client/js/index.js"
+            "./components/language_selector/client/js/index.js",
+            "./components/layout/client/js/layout.js",
+            "./components/layout/client/js/flow.js"
         ]
     },
 

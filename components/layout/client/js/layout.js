@@ -1,65 +1,61 @@
 define(function () {
+    "use strict";
 
     /**
      * Abstract controller for layout controllers.
      *
+     * Implements functionality to add and remove items to the layout.
+     * Subclass to implement specific client behavior.
+     *
      * @name Layout
-     * @class
      * @constructor
      */
     function Layout() {}
 
     /**
-     * Add a component or a string content to the layout.
+     * Adds content to the layout.
      *
-     * @param {Object|String} component the component to add or the string to insert
-     * @param {String} component.id the component id
-     * @param {String} component.version the component version
-     * @param {String} component.view the component view id
-     * @param {String} [component.sid] the component staticId id
-     * @param {Object} [component.context] custom data for the component
-     * @param {Boolean} [component.placeholder] enable / disable placeholder
-     * @param {Object} options parameters needed to know how to configure the place for the component
-     * @param {Function} [callback] the function that will be called after the component was added
+     * @param {Object|String} content the component or markup to insert
+     * @param {String} content.id the component id
+     * @param {String} content.version the component version
+     * @param {String} content.view the component view id
+     * @param {String} [content.sid] the component staticId id
+     * @param {Object} [content.context] custom data for the component
+     * @param {Boolean} [content.placeholder] enable / disable placeholder
+     * @param {Object} options specific configuration for the content's item block
+     * @param {Function} [callback] a function that will be called after the content was added
      */
-    Layout.prototype.add = function (component, options, callback) {
+    Layout.prototype.add = function (content, options, callback) {
         var container = this._createNewItem(options || {});
 
         if (!container) {
             return;
-        } else if (typeof component === 'string') {
-            container.html(component);
+        } else if (typeof content === 'string') {
+            container.html(content);
             callback && callback(this);
         } else {
-            this.context.insert(component, container, function () {
+            this.context.insert(content, container, function () {
                 callback && callback(this);
             });
         }
     };
 
     /**
-     * Create a new item placeholder.
+     * Creates a new item block.
      *
-     * @param {Object} options parameters needed to know how to configure the place for the component
-     * @returns {jQueryObject} the element where the new component can be inserted
+     * @param {Object} options specific configuration for the content's item block
+     * @function
+     * @returns {jQuery} the element where the new component can be inserted
      */
-    Layout.prototype._createNewItem = function (options) {};
+    Layout.prototype._createNewItem = $.noop;
 
     /**
-     * Remove a component from the layout.
+     * Removes an item from the layout.
      *
-     * @param {Object} options parameters to identify what will be removed
+     * @param {Object} options configuration to identify the item block to be removed
+     * @function
      */
-    Layout.prototype.remove = function (options) {
-        this._remove(options || {});
-    };
-
-    /**
-     * Remove a component from the layout.
-     *
-     * @param {Object} options parameters to identify what will be removed
-     */
-    Layout.prototype._remove = function (options) {};
+    Layout.prototype.remove = $.noop;
 
     return Layout;
 });
