@@ -59,10 +59,10 @@ describe('The flow layout manager', function () {
             ['layout/js/flow'],
             function (FlowLayout) {
                 var layout = new FlowLayout();
-                layout._remove.andCallThrough();
+                layout.remove.andCallThrough();
 
                 expect(function () {
-                    layout._remove({
+                    layout.remove({
                         index: 3
                     });
                 }).toThrow();
@@ -74,10 +74,10 @@ describe('The flow layout manager', function () {
             function (FlowLayout) {
                 var layout = new FlowLayout();
                 layout._container = {};
-                layout._remove.andCallThrough();
+                layout.remove.andCallThrough();
 
                 expect(function () {
-                    layout._remove({});
+                    layout.remove({});
                 }).toThrow();
             }
         );
@@ -89,10 +89,10 @@ describe('The flow layout manager', function () {
                 var item = jasmine.createSpyObj('$', ['remove']);
                 layout._container = {};
                 layout._items = ['Some item'];
-                layout._remove.andCallThrough();
+                layout.remove.andCallThrough();
                 spyOn(window, '$').andReturn(item);
 
-                layout._remove({
+                layout.remove({
                     index: 0
                 });
 

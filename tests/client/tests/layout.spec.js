@@ -70,20 +70,4 @@ describe('Abstract layout', function () {
                                                                jasmine.any(Function));
             expect(callback).toHaveBeenCalledWith(layout);
         });
-
-    it('should call the correct remove sub-methods',
-        ['layout/js/layout'], function (Layout) {
-            var layout = new Layout();
-            layout._remove = function () {};
-            layout.remove.andCallThrough();
-
-            spyOn(layout, '_remove').andCallThrough();
-
-            var options = {
-                index: 1
-            };
-            layout.remove(options);
-
-            expect(layout._remove).toHaveBeenCalledWith(options);
-        });
 });
