@@ -216,35 +216,31 @@ define([
     ClientRenderer.prototype._loadCSS = function (css, callback) {
         var head = $('head');
         var loadedFiles = 0;
+
         for (var i = 0, len = css.length; i < len; i++) {
-            if (head.find("link[href='" + css[i].path + "']").length > 0) {
-                if (++loadedFiles == css.length) {
+
+            var loader = new Image();
+            loader.onerror = function (e) {
+                if (++loadedFiles === css.length) {
+                    console.log('loaded: ' + JSON.stringify(css));
                     callback();
                 }
-            } else {
-                var link = null;
+            };
+            loader.src = css[i].path;
 
-                if (document.createStyleSheet) {
-                    link = document.createStyleSheet(css[i].path);
-                } else {
-                    link = document.createElement('link');
-                    link.type = 'text/css';
-                    link.rel = 'stylesheet';
-                    link.href = css[i].path;
-                }
+            if (0 === head.find("link[href='" + css[i].path + "']").length) {
+                var link;
+
+                link = document.createElement('link');
+                link.type = 'text/css';
+                link.rel = 'stylesheet';
+                link.href = css[i].path;
 
                 if (css[i].media) {
                     link.media = css[i].media;
                 }
 
-                var loader = new Image();
-                loader.onerror = function (e) {
-                    if (++loadedFiles == css.length) {
-                        callback();
-                    }
-                };
                 head.append(link);
-                loader.src = css[i].path;
             }
         }
     };
