@@ -1,15 +1,23 @@
+"use strict";
+
 function handle(socket) {
-    socket.on('save', function (data) {
-        if (!socket.session.notes) {
-            socket.session.notes = [];
+    socket.on('save', function (data, end) {
+        var notes = socket.session.get('notes');
+        if (!notes) {
+            notes = [];
         }
 
-        socket.session.notes[data.index] = data.note;
+        notes[data.index] = data.note;
+        socket.session.set('notes', notes);
+        end();
     });
 
-    socket.on('remove', function (data) {
-        if (socket.session.notes) {
-            socket.session.notes.splice(data.index, 1);
+    socket.on('remove', function (data, end) {
+        var notes = socket.session.get('notes');
+        if (notes) {
+            notes.splice(data.index, 1);
+            socket.session.set('notes', notes);
+            end();
         }
     });
 }

@@ -43,7 +43,7 @@ function index(environment, callback, context) {
 
 function notes(environment, callback, context, request) {
     var data = {
-        notes: request.session.notes || []
+        notes: request.session.get('notes') || []
     };
 
     callback(null, data);
