@@ -28,7 +28,9 @@
 var fs = require('fs'),
     path = require('path'),
     vm = require('vm'),
-    extend = require('node.extend');
+    extend = require('node.extend'),
+    Promise = require('promised-io/promise'),
+    Deferred = Promise.Deferred;
 
 require('../../../lib/globals');
 
@@ -211,3 +213,35 @@ jasmine.util.extend(jasmine.getGlobal(), (function () {
     return new JasmineRain();
 }()));
 
+if (!jasmine.Spy.prototype.andDefer) {
+    /**
+     * Makes the spy asynchronously fulfill a promise.
+     *
+     * The spy returns a promise and fulfills it on next tick with the
+     * user supplied fulfill function that receives the deferred object
+     * that controls the promise.
+     * @param {Function} fulfill the function that fulfills the promise
+     * @returns {jasmine.Spy} the spy
+     * @example
+     *      jasmine.createSpy().andDefer(function (deferred) {
+     *          deferred.resolve({success: true});
+     *      });
+     *
+     *      jasmine.createSpy().andDefer(function (deferred)) {
+     *          deferred.reject({error: true});
+     *      });
+     */
+    jasmine.Spy.prototype.andDefer = function (fulfill) {
+        this.andCallFake(function () {
+            var deferred = new Deferred();
+
+            process.nextTick(function () {
+                fulfill(deferred);
+            });
+
+            return deferred.promise;
+        });
+
+        return this;
+    };
+}
