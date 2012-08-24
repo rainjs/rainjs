@@ -108,7 +108,7 @@ function text_localization(environment, callback, data) {
 
 function flowLayout(environment, callback, context, request) {
     var data = {
-        notes: request.session.notes || []
+        notes: request.session.get('notes') || []
     };
 
     callback(null, data);
