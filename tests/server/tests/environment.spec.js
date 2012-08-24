@@ -26,10 +26,10 @@
 "use strict";
 
 describe('Environment', function () {
-    var Environment, configuration, session;
+    var Environment, session;
     beforeEach(function () {
         var mocks = {};
-        configuration = mocks['./configuration'] = {language: 'en_US'};
+        mocks['./configuration'] = {language: 'en_US'};
 
         Environment = loadModuleExports('/lib/environment.js', mocks);
 

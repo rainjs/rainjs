@@ -37,7 +37,7 @@ describe('The identity provider', function () {
             IdentityProvider = loadModuleExports('/lib/security/identity_provider.js', mocks);
 
             expect(function () {
-                var provider = IdentityProvider.get(session);
+                IdentityProvider.get(session);
             }).toThrow();
         });
 
@@ -51,7 +51,7 @@ describe('The identity provider', function () {
             IdentityProvider = loadModuleExports('/lib/security/identity_provider.js', mocks);
 
             expect(function () {
-                var provider = IdentityProvider.get(session);
+                IdentityProvider.get(session);
             }).toThrow();
         });
     });
