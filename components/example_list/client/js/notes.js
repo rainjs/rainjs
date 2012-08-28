@@ -54,6 +54,13 @@ define(['/example/js/note.js'], function (Note) {
 
         // socket used for saving notes
         this._socket = this.context.messaging.getSocket('/example/3.0/notes');
+
+        this._socket.on('info', function (data) {
+            // When the websocket handle is executed on the server-side it emits information
+            // about the existing notes.
+
+            //console.log(data);
+        });
     };
 
     /**
