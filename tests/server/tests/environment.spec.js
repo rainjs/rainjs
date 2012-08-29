@@ -26,18 +26,25 @@
 "use strict";
 
 describe('Environment', function () {
-    var Environment, session;
+    var Environment, session, userLanguage;
+
     beforeEach(function () {
         var mocks = {};
         mocks['./configuration'] = {language: 'en_US'};
 
         Environment = loadModuleExports('/lib/environment.js', mocks);
 
-        session = {};
+        session = {
+            global: {
+                get: function () {
+                    return userLanguage;
+                }
+            }
+        };
    });
 
    it('should set the language to user language', function () {
-       session.userLanguage = 'de_DE';
+       userLanguage = 'de_DE';
 
        var environment = new Environment(session);
 
@@ -45,6 +52,7 @@ describe('Environment', function () {
    });
 
    it('should set the language to configuration language', function () {
+       userLanguage = undefined;
        var environment = new Environment(session);
 
        expect(environment.language).toEqual('en_US');
