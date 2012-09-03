@@ -37,7 +37,7 @@
         {
             "category": "com.rain.example.security",
             "action": "ALLOWED_VIEW",
-            "provider": "level1"
+            "provider": "notes"
         },
         {
             "category": "com.rain.example.security",

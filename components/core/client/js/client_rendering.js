@@ -222,7 +222,6 @@ define([
             var loader = new Image();
             loader.onerror = function (e) {
                 if (++loadedFiles === css.length) {
-                    console.log('loaded: ' + JSON.stringify(css));
                     callback();
                 }
             };

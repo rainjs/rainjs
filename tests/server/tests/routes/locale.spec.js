@@ -41,6 +41,9 @@ describe('locale route', function () {
         translation.getLocales.andReturn(locales);
         Translation.get.andReturn(translation);
 
+        mocks['../environment'] = function () {
+            this.language = 'de_DE';
+        };
         locale = loadModuleExports('/lib/routes/locale.js', mocks);
 
         request = {

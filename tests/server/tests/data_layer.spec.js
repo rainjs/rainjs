@@ -28,9 +28,21 @@
 var path = require('path');
 
 describe('Data layer', function() {
-    var dataLayer, cb, fn, componentOpt;
+    var dataLayer, cb, fn, componentOpt, sessionStore, session;
 
     beforeEach(function () {
+        session = {
+            a: 1,
+            b: 2
+        };
+        sessionStore = jasmine.createSpyObj('sessionStore', ['get', 'save']);
+        sessionStore.get.andCallFake(function (options, fn) {
+            fn(null, session);
+        });
+        sessionStore.save.andCallFake(function (session, fn) {
+            fn();
+        });
+
         componentOpt = {
             id: 'button',
             version: '1.0',
@@ -38,9 +50,11 @@ describe('Data layer', function() {
             context: 'my_data',
             session: {key: 'value'},
             request: {
+                sessionId: '1234',
                 query: {page: 1},
                 url: '/example/index',
-                headers: {}
+                headers: {},
+                sessionStore: sessionStore
             },
             environment: {
                 language: 'en_US'
@@ -87,31 +101,34 @@ describe('Data layer', function() {
         });
 
         it('should throw an error when required arguments are missing or invalid', function () {
-            dataLayer.loadData(undefined, cb);
-            expect(cb.mostRecentCall.args[0].message)
-                .toBe('Missing componentOptions in function loadData().');
-
-            dataLayer.loadData({}, cb);
-            expect(cb.mostRecentCall.args[0].message).toBe('Missing component id in function loadData().');
-
-            dataLayer.loadData({id: 'button'}, cb);
-            expect(cb.mostRecentCall.args[0].message).toBe('Missing view id in function loadData().');
-
-            dataLayer.loadData({id: 'button', viewId: 'index'}, cb);
-            expect(cb.mostRecentCall.args[0].message).toBe('Missing version in function loadData().');
+            var params = function () {
+                return [cb.mostRecentCall.args[0].type, cb.mostRecentCall.args[0].code];
+            };
 
             expect(function () {
-                dataLayer.loadData({id: 'button', viewId: 'index', version: '1.0'});
-            }).toThrow('Missing callback in function loadData().');
+                dataLayer.loadData();
+            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'cb');
+
+            dataLayer.loadData(undefined, cb);
+            expect(params()).toEqual([RainError.ERROR_PRECONDITION_FAILED, 'co']);
+
+            dataLayer.loadData({}, cb);
+            expect(params()).toEqual([RainError.ERROR_PRECONDITION_FAILED, 'id']);
+
+            dataLayer.loadData({id: 'button'}, cb);
+            expect(params()).toEqual([RainError.ERROR_PRECONDITION_FAILED, 'view']);
+
+            dataLayer.loadData({id: 'button', viewId: 'index'}, cb);
+            expect(params()).toEqual([RainError.ERROR_PRECONDITION_FAILED, 'version']);
 
             dataLayer.loadData({id: 'inexistent', viewId: 'index', version: '1.0'}, cb);
-            expect(cb.mostRecentCall.args[0].message).toBe('Component inexistent-1.0 doesn\'t exist.');
+            expect(params()).toEqual([RainError.ERROR_PRECONDITION_FAILED, 'component']);
 
             dataLayer.loadData({id: 'button', viewId: 'no_view', version: '1.0'}, cb);
-            expect(cb.mostRecentCall.args[0].message).toBe('View no_view doesn\'t exists in meta.json.');
+            expect(params()).toEqual([RainError.ERROR_PRECONDITION_FAILED, 'no view']);
         });
 
-        it('should call the server-side data function for the view', function () {
+        it('should get & save the session and call the view\'s server-side function', function () {
             runs(function () {
                 dataLayer.loadData(componentOpt, cb);
             });
@@ -123,6 +140,16 @@ describe('Data layer', function() {
             runs(function () {
                 expect(requireWithContext.mostRecentCall.args[0])
                     .toEqual(path.join('button', 'server/data.js'));
+
+                expect(sessionStore.get.mostRecentCall.args[0]).toEqual({
+                    sessionId: componentOpt.request.sessionId,
+                    component: {
+                        id: componentOpt.id
+                    }
+                });
+
+                expect(sessionStore.save.mostRecentCall.args[0]).toEqual(session);
+
                 expect(cb.mostRecentCall.args[0]).toBeNull();
                 expect(cb.mostRecentCall.args[1].oldData).toBe('my_data');
                 expect(cb.mostRecentCall.args[1].newData).toBe('my_new_data');
