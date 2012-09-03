@@ -69,8 +69,8 @@ define(['util'], function(ClientUtil) {
             return;
         }
 
-        for(i = 0; i < parent.callbacks.length; i++) {
-            ClientUtil.defer(ClientUtil.bind(parent.callbacks[i], parent, data));
+        for (var i = 0; i < parent.callbacks_keys.length; i++) {
+            ClientUtil.defer(ClientUtil.bind(parent.callbacks[parent.callbacks_keys[i]], parent, data));
         }
     }
 
@@ -83,13 +83,9 @@ define(['util'], function(ClientUtil) {
      *                     a single parameter called data.
      *             Ex: function(data)
      * @param viewContext the ViewContext of the component publishing the event
-     * @param {Boolean} overwriteExisting Flag for overwriting the current callback for the event. True or False. Any other value = False.
+     * @param {String} [contextID] a unique id assigned to the context subscribing to the event (can be undefined)
      */
-    function subscribe(eventName, callback, viewContext, overwriteExisting) {
-    	if (overwriteExisting !== true && overwriteExisting !== false) {
-    		overwriteExisting = false;
-    	}
-
+    function subscribe(eventName, callback, viewContext, contextID) {
         var hierarchy = eventName.split('::');
         var parent = queue;
 
@@ -111,17 +107,24 @@ define(['util'], function(ClientUtil) {
             var child = hierarchy[i];
             if (!parent[child]) {
                 parent[child] = {
-                    callbacks: []
+                    callbacks: [],
+                    callbacks_keys: []
                 };
             }
 
             parent = parent[child];
         }
 
-        if (overwriteExisting) {
-        	parent.callbacks = [callback];
-        } else if (parent.callbacks.indexOf(callback) === -1) {
-            parent.callbacks.push(callback);
+        if (contextID == undefined) {
+            if (parent.callbacks.indexOf(callback) === -1) {
+                parent.callbacks.push(callback);
+                parent.callbacks_keys.push(parent.callbacks.length - 1);
+            }
+        } else {
+            if (parent.callbacks_keys.indexOf(contextID) === -1) {
+                parent.callbacks_keys.push(contextID);
+            }
+            parent.callbacks[contextID] = callback;
         }
     }
 
@@ -145,7 +148,9 @@ define(['util'], function(ClientUtil) {
             hierarchy.slice(1);
         }
 
-        for (var i = 0, len = hierarchy.length; i < len; i++) {
+        var i;
+
+        for (i = 0, len = hierarchy.length; i < len; i++) {
             var child = hierarchy[i];
             if (!parent[child]) {
                 return;
@@ -154,11 +159,13 @@ define(['util'], function(ClientUtil) {
             parent = parent[child];
         }
 
-        var foundIndex = parent.callbacks.indexOf(callback);
-
-        if (foundIndex > -1) {
-            parent.callbacks.splice(foundIndex, 1);
+        var tmp = array();
+        for (i = 0; i < parent.callbacks_keys.length; i++) {
+            if (callback != parent.callbacks[parent.callbacks_keys[i]]) {
+                tmp[parent.callbacks_keys[i]] = parent.callbacks[parent.callbacks_keys[i]];
+            }
         }
+        parent.callbacks = tmp;
     }
 
     /**
