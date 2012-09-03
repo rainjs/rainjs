@@ -176,7 +176,7 @@ define([
         element.show();
         // Registers the component.
         Raintime.componentRegistry.register(component);
-    }
+    };
 
     /**
      * Renders the placeholder.

@@ -129,13 +129,13 @@ define(['raintime/client_storage',
         var staticId = component.sid || Math.floor(Math.random(0, Date.now()));
         var instanceId = (
                 Date.now().toString() +
-                (++clientRenderer.counter) +
+                (++window.ClientRenderer.get().counter) +
                 staticId + this.instanceId
         );
         $(dom).html('<div id="' + instanceId + '"></div>');
         component.instanceId = instanceId;
         raintime.componentRegistry.setCallback(instanceId, callback);
-        clientRenderer.requestComponent(component);
+        window.ClientRenderer.get().requestComponent(component);
     };
 
     /**
@@ -155,7 +155,7 @@ define(['raintime/client_storage',
     Context.prototype.replace = function (component, callback) {
         component.instanceId = this.instanceId;
         raintime.componentRegistry.setCallback(component.instanceId, callback);
-        clientRenderer.requestComponent(component);
+        window.ClientRenderer.get().requestComponent(component);
     };
 
     return Context;
