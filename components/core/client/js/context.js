@@ -66,10 +66,11 @@ define(['raintime/client_storage',
              *
              * @param {String} eventName Event name we want to subscribe to. Can be any string value.
              * @param {Function} callback This is the callback method that will get executed. It must have a single parameter called data. e.g.: function(data)
+             * @param {String} [contextID] a unique id assigned to the context subscribing to the event
              * @memberOf Context.messaging
              */
-            subscribe: function (eventName, callback) {
-                Observer.subscribe(eventName, callback, self);
+            subscribe: function (eventName, callback, contextID) {
+                Observer.subscribe(eventName, callback, self, contextID);
             },
 
             /**
@@ -117,7 +118,6 @@ define(['raintime/client_storage',
      *
      * @param {Object} component The component which to be requested
      * @param {String} component.id The component id
-     * @param {String} component.version The component version
      * @param {String} component.view The component view id
      * @param {String} component.sid The component staticId id
      * @param {Object} component.context Custom data for the template
