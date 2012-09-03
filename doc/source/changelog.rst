@@ -3,12 +3,19 @@ Changelog
 =========
 
 ------
+v 0.15
+------
+
++ Added distributed session support by using mongodb as the session store.
++ Added code coverage proposal.
+
+------
 v 0.14
 ------
 
-+ Added support for containers
-+ Implemented identity provider for user authentication
-+ Cached resources based on locale
++ Added support for containers.
++ Implemented identity provider for user authentication.
++ Cached resources based on locale.
 
 ------
 v 0.13
