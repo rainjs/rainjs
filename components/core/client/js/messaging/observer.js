@@ -83,8 +83,13 @@ define(['util'], function(ClientUtil) {
      *                     a single parameter called data.
      *             Ex: function(data)
      * @param viewContext the ViewContext of the component publishing the event
+     * @param {Boolean} overwriteExisting Flag for overwriting the current callback for the event. True or False. Any other value = False.
      */
-    function subscribe(eventName, callback, viewContext) {
+    function subscribe(eventName, callback, viewContext, overwriteExisting) {
+    	if (overwriteExisting !== true && overwriteExisting !== false) {
+    		overwriteExisting = false;
+    	}
+
         var hierarchy = eventName.split('::');
         var parent = queue;
 
@@ -113,7 +118,9 @@ define(['util'], function(ClientUtil) {
             parent = parent[child];
         }
 
-        if (parent.callbacks.indexOf(callback) === -1) {
+        if (overwriteExisting) {
+        	parent.callbacks = [callback];
+        } else if (parent.callbacks.indexOf(callback) === -1) {
             parent.callbacks.push(callback);
         }
     }

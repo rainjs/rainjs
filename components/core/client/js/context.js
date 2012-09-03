@@ -66,10 +66,11 @@ define(['raintime/client_storage',
              *
              * @param {String} eventName Event name we want to subscribe to. Can be any string value.
              * @param {Function} callback This is the callback method that will get executed. It must have a single parameter called data. e.g.: function(data)
+             * @param {Boolean} overwriteExisting Flag for overwriting the current callback for the event. True or False. Any other value = False.
              * @memberOf Context.messaging
              */
-            subscribe: function (eventName, callback) {
-                Observer.subscribe(eventName, callback, self);
+            subscribe: function (eventName, callback, overwriteExisting) {
+                Observer.subscribe(eventName, callback, self, overwriteExisting);
             },
 
             /**
