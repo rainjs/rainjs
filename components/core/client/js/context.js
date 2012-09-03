@@ -66,11 +66,11 @@ define(['raintime/client_storage',
              *
              * @param {String} eventName Event name we want to subscribe to. Can be any string value.
              * @param {Function} callback This is the callback method that will get executed. It must have a single parameter called data. e.g.: function(data)
-             * @param {Boolean} overwriteExisting Flag for overwriting the current callback for the event. True or False. Any other value = False.
+             * @param {String} [contextID] a unique id assigned to the context subscribing to the event
              * @memberOf Context.messaging
              */
-            subscribe: function (eventName, callback, overwriteExisting) {
-                Observer.subscribe(eventName, callback, self, overwriteExisting);
+            subscribe: function (eventName, callback, contextID) {
+                Observer.subscribe(eventName, callback, self, contextID);
             },
 
             /**
@@ -118,7 +118,6 @@ define(['raintime/client_storage',
      *
      * @param {Object} component The component which to be requested
      * @param {String} component.id The component id
-     * @param {String} component.version The component version
      * @param {String} component.view The component view id
      * @param {String} component.sid The component staticId id
      * @param {Object} component.context Custom data for the template
@@ -130,13 +129,13 @@ define(['raintime/client_storage',
         var staticId = component.sid || Math.floor(Math.random(0, Date.now()));
         var instanceId = (
                 Date.now().toString() +
-                (++window.ClientRenderer.get().counter) +
+                (++clientRenderer.counter) +
                 staticId + this.instanceId
         );
         $(dom).html('<div id="' + instanceId + '"></div>');
         component.instanceId = instanceId;
         raintime.componentRegistry.setCallback(instanceId, callback);
-        window.ClientRenderer.get().requestComponent(component);
+        clientRenderer.requestComponent(component);
     };
 
     /**
@@ -156,7 +155,7 @@ define(['raintime/client_storage',
     Context.prototype.replace = function (component, callback) {
         component.instanceId = this.instanceId;
         raintime.componentRegistry.setCallback(component.instanceId, callback);
-        window.ClientRenderer.get().requestComponent(component);
+        clientRenderer.requestComponent(component);
     };
 
     return Context;
