@@ -159,7 +159,7 @@ define(['util'], function(ClientUtil) {
             parent = parent[child];
         }
 
-        var tmp = array();
+        var tmp = [];
         for (i = 0; i < parent.callbacks_keys.length; i++) {
             if (callback != parent.callbacks[parent.callbacks_keys[i]]) {
                 tmp[parent.callbacks_keys[i]] = parent.callbacks[parent.callbacks_keys[i]];
