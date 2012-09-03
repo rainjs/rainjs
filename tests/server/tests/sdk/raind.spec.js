@@ -3,7 +3,7 @@ var path = require('path');
 var cwd = process.cwd();
 
 describe('raind', function () {
-    var mocks, program, utils, server, fs;
+    var mocks, program, utils, server;
 
     beforeEach(function () {
         mocks = {};
@@ -11,7 +11,6 @@ describe('raind', function () {
         program = jasmine.createSpyObj('program', ['option', 'version', 'usage', 'parse']);
         utils = jasmine.createSpyObj('utils', ['getProjectRoot']);
         server = jasmine.createSpyObj('server', ['start']);
-        fs = jasmine.createSpyObj('fs', ['writeFileSync']);
 
         program.dir = process.cwd();
         program.debug = false;
@@ -30,7 +29,7 @@ describe('raind', function () {
     });
 
     it('should correctly setup the command line options', function () {
-        var raind = loadModuleContext(path.join('bin', 'raind'), mocks);
+        loadModuleContext(path.join('bin', 'raind'), mocks);
 
         expect(program.version).toHaveBeenCalled();
         expect(program.option.calls.length).toBe(2);

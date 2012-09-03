@@ -23,15 +23,38 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-function allowedIntent(ctx, ack) {
+"use strict";
+
+/**
+ * Intent of type 'server'. No permissions are required to run it.
+ *
+ * @param {Object} data the intent's context data
+ * @param {Object} context contains useful properties
+ * @param {Object} context.session the current component's session
+ * @param {Function} ack a callback that tells that the intent was finished, it needs to be called
+ * @returns {Boolean}
+ */
+function allowedIntent(data, context, ack) {
     ack();
     return true;
 }
 
-function deniedIntent(ctx, ack) {
+/**
+ * Intent of type 'server'. The user has to have a specific permission to run it that's defined in
+ * the meta.json file for the current component.
+ *
+ * @param {Object} data the intent's context data
+ * @param {Object} context contains useful properties
+ * @param {Object} context.session the current component's session
+ * @param {Function} ack a callback that tells that the intent was finished, it needs to be called
+ * @returns {Boolean}
+ */
+function deniedIntent(data, context, ack) {
     ack();
     return true;
 }
 
-exports.allowedIntent = allowedIntent;
-exports.deniedIntent = deniedIntent;
+module.exports = {
+    allowedIntent: allowedIntent,
+    deniedIntent: deniedIntent
+};

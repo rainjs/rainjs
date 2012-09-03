@@ -32,7 +32,8 @@ describe('Client Renderer', function () {
 
     function setup(ClientRenderer) {
         ClientRenderer.get.andCallFake(function () {
-                return new ClientRenderer});
+            return new ClientRenderer;
+        });
 
         Mocks.Sockets = jasmine.loadedModules['raintime/messaging/sockets'];
         Mocks.Sockets.getSocket.andReturn({ on: jasmine.createSpy() });

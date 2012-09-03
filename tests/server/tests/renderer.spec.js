@@ -25,9 +25,24 @@
 
 "use strict";
 
-var cwd = process.cwd();
-var Module = require('module');
-var renderer, renderUtils;
+var cwd = process.cwd(),
+    Module = require('module'),
+    renderer, renderHandler,
+    websocket = {
+        on: function (event, callback) {
+            renderHandler = callback;
+        },
+        sessionId: 'sid'
+    },
+    sessionStore, webErr, webSession;
+
+sessionStore = jasmine.createSpyObj('sessionStore', ['get', 'save']);
+sessionStore.get.andCallFake(function (request, fn) {
+    fn(webErr, webSession);
+});
+sessionStore.save.andCallFake(function (session, fn) {
+    fn();
+});
 
 var button = {
     id: 'button',
@@ -117,9 +132,29 @@ var io = {
     Socket: Socket
 };
 
+var renderUtils, isValid, isAuthorized;
+
+renderUtils = jasmine.createSpyObj('renderUtils',
+                                   ['isValidView', 'isAuthorized', 'replaceWithError']);
+renderUtils.isValidView.andCallFake(function () {
+    return isValid;
+});
+renderUtils.isAuthorized.andCallFake(function () {
+    return isAuthorized;
+});
+renderUtils.replaceWithError.andCallFake(function () {});
+
 describe('Renderer', function () {
 
     beforeEach(function () {
+        webErr = null;
+        webSession = {
+            a: 1,
+            b: 2
+        };
+
+        isValid = true;
+        isAuthorized = true;
 
         spyOn(bootstrap, 'compiledTemplate').andCallFake(
             function (context) {
@@ -178,7 +213,9 @@ describe('Renderer', function () {
 
             if (path === './socket_registry') {
                 return {
-                    register: function() {}
+                    register: function (channel, handler) {
+                        handler(websocket);
+                    }
                 };
             }
 
@@ -198,6 +235,16 @@ describe('Renderer', function () {
                 return Environment;
             }
 
+            if (path === './server') {
+                return {
+                    sessionStore: sessionStore
+                };
+            }
+
+            if (path === './render_utils') {
+                return renderUtils;
+            }
+
             return Module._load(path, this);
         });
 
@@ -210,7 +257,6 @@ describe('Renderer', function () {
         socket = new io.Socket();
 
         renderer = require(cwd + '/lib/renderer');
-        renderUtils = require(cwd + '/lib/render_utils');
     });
 
     describe('renderBootstrap', function () {
@@ -406,23 +452,6 @@ describe('Renderer', function () {
         });
     });
 
-    describe('replaceWithError', function () {
-        it('must change the component parameter', function () {
-            var component = {id: 'button', version: '1.1', view: 'index'};
-            var error = new Error('message');
-            renderUtils.replaceWithError(404, component, error);
-
-            expect(component).toEqual({
-                id : 'error',
-                version : '1.0',
-                view : 404,
-                context : {
-                    error : error
-                }
-            });
-        });
-    });
-
     describe('sendComponent', function () {
         beforeEach(function () {
             spyOn(renderer, 'renderComponent').andCallFake(function () {
@@ -464,6 +493,47 @@ describe('Renderer', function () {
             expect(socket.emit).toHaveBeenCalledWith(
                 'render', {html: 'html'}
             );
+        });
+    });
+
+    describe('registerWebsocketLayer', function () {
+
+        it('should get the session', function () {
+            renderHandler(button, function () {});
+
+            expect(sessionStore.get.mostRecentCall.args[0]).toEqual({
+                sessionId: websocket.sessionId,
+                component: {
+                    id: button.id
+                },
+                sessionStore: sessionStore
+            });
+        });
+
+        it('should load the error component with view 500', function () {
+            var load = renderer.loadDataAndSend;
+
+            webErr = {};
+            renderer.loadDataAndSend = jasmine.createSpy();
+
+            renderHandler(button, function () {});
+
+            expect(renderUtils.replaceWithError.mostRecentCall.args[0]).toBe(500);
+            expect(renderer.loadDataAndSend).toHaveBeenCalled();
+            renderer.loadDataAndSend = load;
+        });
+
+        it('should load the error component with view 401', function () {
+            var load = renderer.loadDataAndSend;
+
+            isAuthorized = false;
+            renderer.loadDataAndSend = jasmine.createSpy();
+
+            renderHandler(button, function () {});
+
+            expect(renderUtils.replaceWithError.mostRecentCall.args[0]).toBe(401);
+            expect(renderer.loadDataAndSend).toHaveBeenCalled();
+            renderer.loadDataAndSend = load;
         });
     });
 });

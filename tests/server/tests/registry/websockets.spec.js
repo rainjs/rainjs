@@ -79,7 +79,8 @@ describe('Registry plugin: Websockets', function () {
     it('should register the socket', function () {
         websockets.configure(conf);
 
-        expect(socketRegistry.register).toHaveBeenCalledWith('/button/2.0/example', socket.handle);
+        expect(socketRegistry.register).toHaveBeenCalledWith('/button/2.0/example',
+                                                             socket.handle, conf);
     });
 
     it('should not register the socket for containers', function () {
