@@ -25,167 +25,142 @@
 
 "use strict";
 
-var socketRegistry;
-
-var promise = jasmine.createSpyObj('promise', ['resolve', 'reject', 'then']);
-var Promise = {
-    Deferred: function () {
-        return promise;
-    }
-};
-
-var connect = {
-    utils: {
-        parseCookie: function () {},
-        parseSignedCookies: function () {
-            return {
-                'rain.sid': 'sid'
-            };
-        }
-    }
-};
-
-var session = {
-    userLanguage: 'ro_RO'
-};
-
-var events = {};
-var socket = {
-    session: session,
-    on: function (eventName, callback) {
-        events[eventName] = callback;
-    },
-    handshake: {
-        headers: {
-            cookie: undefined
-        }
-    },
-    disconnect: function () {}
-};
-
-var sessionStore = jasmine.createSpyObj('sessionStore', ['get', 'set']);
-
-var server = {
-    socket: {
-        of: function () {
-            return socket;
-        }
-    },
-    sessionStore: sessionStore
-};
-
-var websocket;
-
-var dataArgs, errorArgs;
-
 describe('Socket registry', function () {
+    var socketRegistry, mockedSocketRegistry;
+    var events, socket, connect, sessionStore, err, session;
 
     beforeEach(function () {
-        spyOn(global, 'requireWithContext').andCallFake(function () {
-            return websocket;
-        });
+        events = {};
+        socket = {
+            on: function (eventName, callback) {
+                events[eventName] = callback;
+            },
+            handshake: {
+                headers: {
+                    cookie: {}
+                }
+            },
+            disconnect: jasmine.createSpy()
+        };
 
-        var mocks = {
-            'promised-io/promise': Promise,
-            'connect': connect,
-            './server': server,
-            './logging': {
-                get: function () {
+        connect = {
+            utils: {
+                parseCookie: function () {},
+                parseSignedCookies: function () {
                     return {
-                        error: function () {}
+                        'rain.sid': 'sid'
                     };
                 }
             }
         };
-        socketRegistry = loadModuleExports('/lib/socket_registry.js', mocks);
+
+        sessionStore = jasmine.createSpyObj('sessionStore', ['get', 'save']);
+        sessionStore.get.andCallFake(function (request, fn) {
+            fn(err, session);
+        });
+        sessionStore.save.andCallFake(function (session, fn) {
+            fn && fn();
+        });
+
+        mockedSocketRegistry = loadModuleContext('/lib/socket_registry.js', {
+            'connect': connect,
+            './server': {
+                sessionStore: sessionStore,
+                socket: {
+                    of: function () {
+                        return socket;
+                    }
+                }
+            },
+            './logging': {
+                get: function () {
+                    return jasmine.createSpyObj('logger',
+                                                ['debug', 'info', 'warn', 'error', 'fatal']);
+                }
+            }
+        });
+        socketRegistry = mockedSocketRegistry.module.exports;
     });
 
-    describe('Register', function () {
+    describe('registration', function () {
+        it('should register correctly multiple handlers', function () {
+            var handler1 = function () {},
+                handler2 = function () {};
+
+            socketRegistry.register('/core', handler1, {id: 'core'});
+            expect(mockedSocketRegistry.handlers).toEqual({'/core': [handler1]});
+
+            socketRegistry.register('/core', handler2, {id: 'core'});
+            expect(mockedSocketRegistry.handlers).toEqual({'/core': [handler1, handler2]});
+
+            socketRegistry.register('/button', handler1, {id: 'button'});
+            expect(mockedSocketRegistry.handlers).toEqual({
+                '/core': [handler1, handler2],
+                '/button': [handler1]
+            });
+        });
+    });
+
+    describe('connection event handler', function () {
+
+        var fn, handler;
+
         beforeEach(function () {
-            events = {};
-            socket.session = session;
-            socket.handshake.headers.cookie = undefined;
-
-            dataArgs = undefined;
-            errorArgs = undefined;
-
-            promise.then.andCallFake(function (success, error) {
-                if (dataArgs) {
-                    success(dataArgs);
-                } else if (errorArgs) {
-                    error(errorArgs);
+            err = null;
+            session = {
+                global: {
+                    get: jasmine.createSpy(),
+                    set: jasmine.createSpy()
                 }
-            });
-
-            promise.resolve.andCallFake(function (data) {
-                dataArgs = data;
-            });
-
-            promise.reject.andCallFake(function (err) {
-                errorArgs = err;
-            });
-
-            websocket = {
-                channel: '/example/1.0',
-                handle: function () {}
             };
+            handler = jasmine.createSpy();
+
+            socketRegistry.register('/core', handler, {id: 'core'});
+            fn = events['connection'];
         });
 
-        it('should listen to certain events', function () {
-            socketRegistry.register(websocket.channel, websocket.handle);
+        it('should call the handlers', function () {
+            socketRegistry.register('/core', handler, {id: 'button'});
+            fn(socket);
 
-            expect(events.connection).toBeDefined();
+            expect(handler).toHaveBeenCalledWith(socket, jasmine.any(Function));
+            expect(handler.callCount).toBe(2);
         });
 
-        it('should reject the promise if the session id is missing', function () {
-            socketRegistry.register(websocket.channel, websocket.handle);
-            events.connection(socket);
+        it('should disconnect the socket if the session id is missing', function () {
+            socket.handshake.headers.cookie = undefined;
+            fn(socket);
 
-            expect(promise.reject.mostRecentCall.args[0].type).toBe(RainError.ERROR_SOCKET);
+            expect(socket.disconnect).toHaveBeenCalled();
         });
 
-        it('should get the session from the store when the session id is present', function () {
-            socket.handshake.headers.cookie = {};
+        it('should disconnect the socket if the session couldn\'t be obtained', function () {
+            err = {};
+            fn(socket);
 
-            socketRegistry.register(websocket.channel, websocket.handle);
-            events.connection(socket);
-
-            expect(sessionStore.get.mostRecentCall.args[0]).toBe('sid');
-
-            var cb = sessionStore.get.mostRecentCall.args[1];
-
-            cb(new RainError('message', RainError.ERROR_NET));
-            expect(promise.reject.mostRecentCall.args[0].type).toBe(RainError.ERROR_NET);
-
-            socket.session = undefined;
-            cb(null, session);
-            expect(promise.resolve.mostRecentCall.args[0]).toEqual(socket);
-            expect(socket.session).toEqual(session);
+            expect(socket.disconnect).toHaveBeenCalled();
         });
 
-        it('should save the session in the store on disconnect event', function () {
-            socket.handshake.headers.cookie = {};
+        it('should get and save the session', function () {
+            fn(socket);
 
-            socketRegistry.register(websocket.channel, websocket.handle);
-            events.connection(socket);
-            events.disconnect(socket);
+            expect(sessionStore.get).toHaveBeenCalled();
+            expect(session.id).toBe(mockedSocketRegistry.getSid(socket));
+            var cb = handler.mostRecentCall.args[1];
 
-            expect(sessionStore.set.mostRecentCall.args[0]).toBe('sid');
-            expect(sessionStore.set.mostRecentCall.args[1]).toEqual(socket.session);
+            expect(sessionStore.save).not.toHaveBeenCalled();
+            cb();
+            expect(sessionStore.save).toHaveBeenCalledWith(session);
         });
 
-        it('should call the handler function', function () {
-            spyOn(websocket, 'handle').andReturn(true);
-            sessionStore.get.andCallFake(function (sid, cb) {
-                cb(null, session);
-            });
+        it('should call the handlers when a new event is emitted', function () {
+            fn(socket);
 
-            socket.handshake.headers.cookie = {};
+            socket.on('message', function () {});
+            events['message'](1, 2, 3);
 
-            socketRegistry.register(websocket.channel, websocket.handle);
-            events.connection(socket);
-
-            expect(websocket.handle).toHaveBeenCalledWith(socket);
+            expect(handler).toHaveBeenCalledWith(socket, jasmine.any(Function));
+            expect(sessionStore.get.callCount).toBe(2);
         });
     });
 });

@@ -23,7 +23,9 @@
         "mocks": "",
         "colors": "",
         "wrench": "",
-        "jed": ""
+        "jed": "",
+        "crc": "0.2.0",
+        "mongodb": ""
     },
     "keywords": ["framework", "rain"],
     "repository": "git://github.com/rainjs/rainjs",

@@ -25,8 +25,8 @@
 
 "use strict";
 
-var cwd = process.cwd();
-var globals = require(cwd + '/lib/globals.js');
+var cwd = process.cwd(),
+    globals = require(cwd + '/lib/globals.js');
 
 var intent = {
     category: 'com.intents.rain.test',
@@ -60,23 +60,64 @@ var intents = {
     }
 };
 
-describe('Intents Registry: ', function () {
+var socket;
+
+describe('Intents Registry', function () {
     var intentRegistry, mockedIntentRegistry;
-    var socketHandlers = {};
+    var socketHandlers = {}, sessionStore, err, session,
+        sendComponent, createRainContext, isAuthorized, logFn;
 
     beforeEach(function () {
+        session = {
+            a: 1,
+            b: 2
+        };
+        err = null;
+
+        sendComponent = jasmine.createSpy();
+        createRainContext = jasmine.createSpy();
+        logFn = jasmine.createSpy();
+        logFn.andCallFake(function (data, context, cb) {
+            cb();
+        });
+
+        isAuthorized = false;
+
+        sessionStore = jasmine.createSpyObj('sessionStore', ['get', 'save']);
+        sessionStore.get.andCallFake(function (request, fn) {
+            fn(err, session);
+        });
+        sessionStore.save.andCallFake(function (session, fn) {
+            fn();
+        });
+
         mockedIntentRegistry = loadModuleContext('/lib/intent_registry.js', {
             './socket_registry': {
                 register: function(channel, handler) {
                     socketHandlers[channel] = handler;
                 }
             },
-            './component_registry': {},
-            './renderer': {},
+            './component_registry': {
+                getLatestVersion: function () {},
+                getConfig: function () {
+                    return component;
+                }
+            },
+            './renderer': {
+                sendComponent: sendComponent,
+                createRainContext: createRainContext
+            },
             './render_utils': {
                 isAuthorized: function () {
-                    return false;
+                    return isAuthorized;
                 }
+            },
+            './server': {
+                sessionStore: sessionStore
+            },
+            './environment': function () {},
+            'index.js': {
+                log: logFn
             }
         });
         intentRegistry = mockedIntentRegistry.module.exports;
@@ -84,17 +125,17 @@ describe('Intents Registry: ', function () {
 
     describe('registration', function () {
 
-        it('must register itself to the socket registry on initialization', function () {
+        it('should register itself to the socket registry on initialization', function () {
             expect(socketHandlers['/core']).toEqual(mockedIntentRegistry.handleIntent);
         });
 
-        it('must register a intent', function () {
+        it('should register an intent', function () {
             intentRegistry.register(component, intent);
 
             expect(mockedIntentRegistry.intents).toEqual(intents);
         });
 
-        it('must throw an error if the intent category is not specified', function () {
+        it('should throw an error if the intent category is not specified', function () {
             expect(function () {
                 intentRegistry.register(component, {
                     action: 'some_action',
@@ -103,7 +144,7 @@ describe('Intents Registry: ', function () {
             }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'category');
         });
 
-        it('must throw an error if the intent action is not specified', function () {
+        it('should throw an error if the intent action is not specified', function () {
             expect(function () {
                 intentRegistry.register(component, {
                     category: 'some_category',
@@ -112,7 +153,7 @@ describe('Intents Registry: ', function () {
             }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'action');
         });
 
-        it('must throw an error if the intent provider is not specified', function () {
+        it('should throw an error if the intent provider is not specified', function () {
             expect(function () {
                 intentRegistry.register(component, {
                     action: 'some_action',
@@ -121,7 +162,7 @@ describe('Intents Registry: ', function () {
             }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'provider');
         });
 
-        it('must throw an error if the intent view does not exist', function () {
+        it('should throw an error if the intent view does not exist', function () {
             expect(function () {
                 intentRegistry.register(component, {
                     category: 'some_category',
@@ -131,7 +172,7 @@ describe('Intents Registry: ', function () {
             }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'view');
         });
 
-        it('must throw an error if the intent controller does not exist', function () {
+        it('should throw an error if the intent controller does not exist', function () {
             expect(function () {
                 intentRegistry.register(component, {
                     category: 'some_category',
@@ -141,7 +182,7 @@ describe('Intents Registry: ', function () {
             }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'controller');
         });
 
-        it('must throw an error if the intent provider is not valid', function () {
+        it('should throw an error if the intent provider is not valid', function () {
             expect(function () {
                 intentRegistry.register(component, {
                     category: 'some_category',
@@ -151,7 +192,7 @@ describe('Intents Registry: ', function () {
             }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'invalid');
         });
 
-        it('must throw an error if the intent is already registered', function () {
+        it('should throw an error if the intent is already registered', function () {
             intentRegistry.register(component, intent);
             expect(function () {
                 intentRegistry.register(component, intent);
@@ -178,14 +219,25 @@ describe('Intents Registry: ', function () {
                             method: 'log'
                         }
                     }
+                },
+                DO_SOMETHING: {
+                    'button_2.0':  {
+                        type: 'view',
+                        provider: {
+                            component: 'button',
+                            version: '2.0',
+                            view: 'some_view'
+                        }
+                    }
                 }
             };
 
             var callbacks = {};
-            var socket = {
+            socket = {
                 on: function (event, callback) {
                     callbacks[event] = callback;
-                }
+                },
+                sessionId: 'sid'
             };
 
             mockedIntentRegistry.handleIntent(socket);
@@ -193,38 +245,104 @@ describe('Intents Registry: ', function () {
             fn = callbacks['request_intent'];
         });
 
-        it('must send error message if the intent category is missing', function () {
+        it('should send error message if the intent category is missing', function () {
             var rainError;
             fn({action: 'DO_SOMETHING', context: {}}, function (err) {
                 rainError = err;
             });
 
-            expect(rainError.type).toBe(RainError.ERROR_PRECONDITION_FAILED, 'category');
+            expect(rainError.code).toBe('category');
         });
 
-        it('must send error message if the intent action is missing', function () {
+        it('should send error message if the intent action is missing', function () {
             var rainError;
             fn({category: 'com.intents.rain.test', context: {}}, function (err) {
                 rainError = err;
             });
-            expect(rainError.type).toBe(RainError.ERROR_PRECONDITION_FAILED, 'action');
+            expect(rainError.code).toBe('action');
         });
 
-        it('must send error message if the intent context is missing', function () {
+        it('should send error message if the intent context is missing', function () {
             var rainError;
             fn({category: 'com.intents.rain.test', action: 'DO_SOMETHING'}, function (err) {
                 rainError = err;
             });
-            expect(rainError.type).toBe(RainError.ERROR_PRECONDITION_FAILED, 'context');
+            expect(rainError.code).toBe('context');
         });
 
-        it('must send error message if the intent is not authorized', function () {
+        it('should send error message if the session could not be retrieved', function () {
+            err = new RainError('Invalid session');
+            session = null;
+
+            var rainError;
+            fn({
+                    category: 'com.rain.test',
+                    action: 'LOG_MESSAGE',
+                    context: {}
+               }, function (err) {
+                    rainError = err;
+               }
+            );
+
+            expect(rainError.code).toBe(500);
+        });
+
+        it('should create the rain context and render the component', function () {
+            fn({
+                    category: 'com.rain.test',
+                    action: 'DO_SOMETHING',
+                    context: {}
+               }
+            );
+
+            expect(createRainContext).toHaveBeenCalledWith({
+                component: undefined,
+                transport: socket,
+                request: {
+                    sessionId: 'sid',
+                    component: {
+                        id: 'button'
+                    },
+                    sessionStore: sessionStore
+                },
+                session: session,
+                environment: {}
+            });
+
+            expect(sessionStore.get).toHaveBeenCalled();
+            expect(sendComponent.mostRecentCall.args[0]).toBe(socket);
+            expect(Object.keys(sendComponent.mostRecentCall.args[1])).toEqual(
+                    ['component', 'viewId', 'instanceId', 'context', 'rain']);
+        });
+
+        it('should send error message if the intent is not authorized', function () {
             var rainError;
             fn({category: 'com.rain.test', action: 'LOG_MESSAGE', context: {}}, function (err) {
                 rainError = err;
             });
             expect(rainError.type).toBe(RainError.ERROR_HTTP);
             expect(rainError.code).toBe(401);
+        });
+
+        it('should execute the server-side controller associated with the intent', function () {
+            var context = {
+                data: 'value'
+            };
+            isAuthorized = true;
+            fn({
+                    category: 'com.rain.test',
+                    action: 'LOG_MESSAGE',
+                    context: context
+               },
+               function () {}
+            );
+
+            expect(logFn.mostRecentCall.args[0]).toEqual(context);
+            expect(logFn.mostRecentCall.args[1]).toEqual({
+                session: session
+            });
+            expect(sessionStore.save).toHaveBeenCalled();
+            expect(sessionStore.save.mostRecentCall.args[0]).toEqual(session);
         });
     });
 });

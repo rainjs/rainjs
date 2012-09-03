@@ -25,11 +25,11 @@
 
 "use strict";
 
-var cwd = process.cwd();
-var Module = require('module');
-var path = require('path');
-var router;
-var request, response;
+var cwd = process.cwd(),
+    Module = require('module'),
+    path = require('path'),
+    router,
+    request, response;
 
 var routesFolder = path.join(__dirname, 'routes');
 
@@ -93,8 +93,6 @@ describe('Router', function () {
         request = {};
         response = {};
 
-        spyOn(console, 'log').andCallFake(function () {});
-
         spyOn(Module.prototype, 'require').andCallFake(function (module) {
             if (module === './component_registry') {
                 return {
@@ -134,17 +132,8 @@ describe('Router', function () {
             var next = jasmine.createSpy('next');
             request.url = route.url;
             router(request, response, next);
-            expect(route.handle).toHaveBeenCalled();
+            expect(route).toBe(request.rainRoute);
         }
-    });
-
-    it('should get the component config', function () {
-        var route = routes['view'];
-        var next = jasmine.createSpy('next');
-        request.url = route.url;
-        router(request, response, next);
-        expect(route.handle).toHaveBeenCalledWith(
-            {url: route.url, component: componentMap['button'].config['1.0'], path: 'index'}, {});
     });
 
     it('should call next with a 404 error if the component was not found', function () {
