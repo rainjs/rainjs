@@ -230,10 +230,14 @@ define([
             if (0 === head.find("link[href='" + css[i].path + "']").length) {
                 var link;
 
-                link = document.createElement('link');
-                link.type = 'text/css';
-                link.rel = 'stylesheet';
-                link.href = css[i].path;
+                if (document.createStyleSheet) {
+                    link = document.createStyleSheet(css[i].path);
+                } else {
+                    link = document.createElement('link');
+                    link.type = 'text/css';
+                    link.rel = 'stylesheet';
+                    link.href = css[i].path;
+                }
 
                 if (css[i].media) {
                     link.media = css[i].media;
