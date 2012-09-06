@@ -41,8 +41,11 @@ define(['raintime/messaging/sockets'], function (Sockets) {
         this._component = component;
         this._logQueue = [];
 
-        var channel = '/' + component.id + (component.version ? '/' + component.version : '') +
-                      '/logging';
+        var channel = '/core/logging';
+        if (component) {
+            channel = '/' + component.id + (component.version ? '/' + component.version : '') +
+                          '/logging';
+        }
         this._socket = Sockets.getSocket(channel);
     }
 
@@ -152,7 +155,11 @@ define(['raintime/messaging/sockets'], function (Sockets) {
      * @returns {Logger}
      */
     Logger.get = function (component) {
-        var id = component.id + ' ' + component.version;
+        var id = 'core';
+        if (component) {
+            id = component.id + ' ' + component.version;
+        }
+
         return instances[id] || (instances[id] = new Logger(component));
     };
 

@@ -30,9 +30,7 @@ define(['raintime/lib/promise',
         'raintime/lib/rain_error'
 ], function (Promise, EventEmitter, Context, Logger) {
 
-    var logger = Logger.get({
-        id: 'core'
-    });
+    var logger = Logger.get();
 
     var raintime = new Raintime();
 
@@ -314,6 +312,8 @@ define(['raintime/lib/promise',
             }
 
             controller.on = function (eventName, callback) {
+                logger.info('Called ' + eventName + ' lifecycle for controller ' +
+                    component.controller);
                 if (eventName === 'start' && newComponent.state === Component.START) {
                     callback.call(controller);
                     return;

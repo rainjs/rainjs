@@ -33,7 +33,7 @@
             "layout": {
                 "type": "pattern",
                 "params": {
-                    "pattern": "[%level] %date: %message %stacktrace"
+                    "pattern": "%logger - [%level] %date: %message %stacktrace"
                 }
             },
             "params": {
