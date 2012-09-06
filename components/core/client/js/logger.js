@@ -40,9 +40,10 @@ define(['raintime/messaging/sockets'], function (Sockets) {
     function Logger(component) {
         this._component = component;
         this._logQueue = [];
-        this._socket = Sockets.getSocket(
-            '/' + component.id + '/' + component.version + '/logging'
-        );
+
+        var channel = '/' + component.id + (component.version ? '/' + component.version : '') +
+                      '/logging';
+        this._socket = Sockets.getSocket(channel);
     }
 
     /**
