@@ -25,7 +25,8 @@
         "wrench": "",
         "jed": "",
         "crc": "0.2.0",
-        "mongodb": ""
+        "mongodb": "",
+        "jscoverage-reporter": ""
     },
     "keywords": ["framework", "rain"],
     "repository": "git://github.com/rainjs/rainjs",
