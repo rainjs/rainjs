@@ -143,7 +143,6 @@ define(['raintime/messaging/sockets'], function (Sockets) {
         } else {
             this._logQueue.push(event);
         }
-
     };
 
     /**
