@@ -31,7 +31,7 @@ define(function () {
         currentDeps,
         currentCallback,
         isDummyDepAdded,
-        translatedModules = {},
+        dependencyModules = {},
         useInteractive = false, //this is only for IE
         currentlyAddingScript,
         interactiveScript = null;
@@ -73,35 +73,69 @@ define(function () {
     }
 
     /**
-     * Determines if the last 2 arguments of a function are t and nt
+     * Check if a controller needs to have inserted special RAIN functions (t, nt, logger).
      *
-     * @param {Function} the function to check
-     * @returns {Boolean} true if the function uses translation
+     * @param {Function} the controller function
+     * @returns {Boolean} true if one of the special parameter names is detected
      */
-    function usesTranslation(fn) {
+    function hasDependencies(fn) {
         var argumentsRegExp = /\(([\s\S]*?)\)/,
-            splitRegExp = /[ ,\n\r\t]+/,
-            matches = argumentsRegExp.exec(fn.toString()),
-            args = matches[1].trim().split(splitRegExp),
-            len = args.length;
+        splitRegExp = /[ ,\n\r\t]+/,
+        callBackMatches = argumentsRegExp.exec(fn.toString());
 
-        return len >= 2 && args[len - 2] === 't' && args[len - 1] === 'nt';
+        if (!callBackMatches || !callBackMatches[1]) {
+            return false;
+        }
+
+        var args = callBackMatches[1].trim().split(splitRegExp);
+        return args.indexOf('t') > -1 || args.indexOf('nt') > -1 || args.indexOf('logger') > -1;
     }
 
-    function addTranslation(moduleName, deps, callback) {
+    /**
+     * Adds special RAIN dependencies like translation and logger.
+     */
+    function addDependencies(moduleName, deps, callback) {
         var moduleRegex = /^\/([\w-]+)\/(?:(\d(?:\.\d)?(?:\.\d)?)\/)(?:js)\/(.+)/,
             matches = moduleName && moduleName.match(moduleRegex);
 
-        //add translation and locale dependencies
-        if (matches && matches[1] && matches[2] && usesTranslation(callback)) {
-            var component = {
-                id: matches[1],
-                version: matches[2]
-            };
+        if (!matches || !matches[1] || !matches[2]) {
+            return;
+        }
+
+        var component = {
+            id: matches[1],
+            version: matches[2]
+        };
+
+        var argumentsRegExp = /\(([\s\S]*?)\)/,
+            splitRegExp = /[ ,\n\r\t]+/,
+            callBackMatches = argumentsRegExp.exec(callback.toString());
+
+        if (!callBackMatches || !callBackMatches[1]) {
+            return;
+        }
+
+        var args = callBackMatches[1].trim().split(splitRegExp);
+
+        var tIndex = args.indexOf('t'),
+            ntIndex = args.indexOf('nt'),
+            loggerIndex = args.indexOf('logger');
+
+        if (tIndex > -1 || ntIndex > -1) {
             deps.push('raintime/translation');
             deps.push('locale!' + component.id + '/' + component.version + '/' + rainContext.language);
-            translatedModules[moduleName] = component;
         }
+
+        if (loggerIndex > -1) {
+            deps.push('raintime/logger');
+        }
+
+        dependencyModules[moduleName] = {
+            component: component,
+            tIndex: tIndex,
+            ntIndex: ntIndex,
+            loggerIndex: loggerIndex
+        };
     }
 
     define = function (name, deps, callback) {
@@ -127,7 +161,7 @@ define(function () {
             return;
         }
 
-        if (!currentDeps.length && usesTranslation(currentCallback)) {
+        if (!currentDeps.length && hasDependencies(currentCallback)) {
             //this is a dummy dependency used to let RequireJS know that this isn't
             //a CommonJS module
             currentDeps.push('dummy');
@@ -155,7 +189,7 @@ define(function () {
                 context = require.s.contexts[node.getAttribute("data-requirecontext")];
                 if (context && context.defQueue.length > 0) {
                     var def = context.defQueue[context.defQueue.length - 1];
-                    addTranslation(def[0], def[1], def[2]);
+                    addDependencies(def[0], def[1], def[2]);
                 }
             }
 
@@ -176,7 +210,7 @@ define(function () {
             //all browsers except IE
             if (currentDeps && currentCallback) {
                 var moduleName = node.getAttribute("data-requiremodule");
-                addTranslation(moduleName, currentDeps, currentCallback);
+                addDependencies(moduleName, currentDeps, currentCallback);
             }
 
             oldOnScriptLoad(evt);
@@ -184,17 +218,36 @@ define(function () {
     };
 
     require.execCb = function (name, callback, args, exports) {
-        var component = translatedModules[name];
-        if (component) {
-            var locale = args.pop(),
-                Translation = args.pop(),
-                translation = Translation.get(component, locale);
+        var module = dependencyModules[name];
+        if (module) {
+            var Logger, Translation, locale, translation,
+                loggerIndex = module.loggerIndex,
+                tIndex = module.tIndex,
+                ntIndex = module.ntIndex;
 
-            var t = function (msgId, args) {
-               return translation.translate(msgId, undefined, undefined, args);
-            };
-            var nt = translation.translate.bind(translation);
-            args.push(t, nt);
+            if (loggerIndex > -1) {
+                Logger = args.pop();
+            }
+
+            if (tIndex > -1 || ntIndex > -1) {
+                locale = args.pop();
+                Translation = args.pop();
+                translation = Translation.get(module.component, locale);
+            }
+
+            if (tIndex > -1) {
+                args[tIndex] = function (msgId, args) {
+                    return translation.translate(msgId, undefined, undefined, args);
+                };
+            }
+
+            if (ntIndex > -1) {
+                args[ntIndex] = translation.translate.bind(translation);
+            }
+
+            if (loggerIndex > -1) {
+                args[loggerIndex] = Logger.get(module.component);
+            }
         }
 
         // invoke the original implementation of the function
