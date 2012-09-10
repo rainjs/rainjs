@@ -34,7 +34,7 @@ describe('Event', function () {
         Event = loadModuleExports(path.join('lib', 'logging', 'event.js'));
 
         error = new Error('Unit test error');
-        evt = new Event(0, 'Some random event', error);
+        evt = new Event('RAIN', 0, 'Some random event', error);
     });
 
     it('should correctly instantiate', function () {

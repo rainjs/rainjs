@@ -154,7 +154,7 @@ describe('Client side dependencies', function () {
         });
 
         waitsFor(function () {
-            return test.define;
+            return !!test.define;
         });
 
         runs(function () {

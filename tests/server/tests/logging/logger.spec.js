@@ -28,230 +28,95 @@
 var path = require('path');
 
 describe('Logger', function () {
-    var Logger, logger, error, Event, appender1, appender2, event, config, util,
-        ConsoleAppender, FileAppender;
+    var Logger, appendersSpy, component;
 
     beforeEach(function () {
-        // simulates the exports of an Appender module
-        ConsoleAppender = jasmine.createSpy('ConsoleAppender');
-        FileAppender = jasmine.createSpy('FileAppender');
-
         var mocks = {};
-        Event = mocks['./event'] = jasmine.createSpy('Event');
-        event = {message: 'some event'};
-        Event.andReturn(event);
-        config = mocks['../configuration'] = {
-            logger: {
-                level: 'info',
-                appenders: [{
-                    type: 'console',
-                    layout: {
-                        type: 'pattern',
-                        params: {
-                            pattern: '[%level] %date: %message'
-                        }
-                    }
-                },
-                {
-                    level: 'debug',
-                    type: 'file',
-                    layout: {
-                        type: 'pattern',
-                        params: {
-                            pattern: '[%level] %date: %message'
-                        }
-                    },
-                    params: {
-                        file: 'logs/error.log'
-                    }
-                }]
+
+        component = {
+            id: 'example',
+            version: '1.0'
+        };
+
+        mocks['./event'] = jasmine.createSpy('Event');
+        appendersSpy = jasmine.createSpyObj('appenders', ['getAppenders']);
+        appendersSpy.getAppenders.andCallFake(function (component) {
+            return component ? ['a1', 'a2'] : ['a3'];
+        });
+        mocks['./configurator'] = {
+            get: function () {
+                return appendersSpy;
             }
         };
-        util = mocks['../util'] = jasmine.createSpyObj('util', ['walkSync']);
-        mocks[path.join('/rain/lib/logging', 'appenders', 'console.js')] = ConsoleAppender;
-        mocks[path.join('/rain/lib/logging', 'appenders', 'file.js')] = FileAppender;
 
-        appender1 = jasmine.createSpyObj('appender1', ['append', 'destroy']);
-        appender2 = jasmine.createSpyObj('appender2', ['append', 'destroy']);
+        mocks['./logger_levels'] = {
+            debug: 0,
+            info: 1,
+            warn: 2,
+            error: 3,
+            fatal: 4
+        };
 
-        Logger = loadModuleExports('/lib/logging/logger.js', mocks,
-                                   {__dirname: '/rain/lib/logging'});
-        logger = new Logger([appender1, appender2]);
-        createSpies();
-
-        error = new RainError('some error');
+        Logger = loadModuleExports('/lib/logging/logger.js', mocks);
     });
 
-    function createSpies() {
-        spyOn(logger, 'debug');
-        spyOn(logger, 'info');
-        spyOn(logger, 'warn');
-        spyOn(logger, 'error');
-        spyOn(logger, 'fatal');
-        spyOn(logger, '_log');
-        spyOn(logger, 'destroy');
+    describe('Get a logger instance', function () {
 
-        spyOn(Logger, 'get');
-        spyOn(Logger, '_registerModules');
-        spyOn(Logger, '_createAppender');
-        spyOn(Logger, '_createLayout');
-    }
+        it('should get the platform logger', function () {
+            var platformLogger = Logger.get();
 
-    describe('_log', function () {
+            expect(platformLogger).toBe(Logger._platformLogger);
+            expect(appendersSpy.getAppenders).toHaveBeenCalledWith();
+            expect(platformLogger._appenders.length).toBe(1);
+        });
+
+        it('should get the component logger', function () {
+            var componentLogger = Logger.get(component),
+                cid = component.id + ';' + component.version;
+
+            expect(Logger._platformLogger).toBeDefined();
+            expect(appendersSpy.getAppenders).toHaveBeenCalledWith(component);
+            expect(componentLogger).toBe(Logger._componentLoggers[cid]);
+            expect(componentLogger._logger).toBe(cid);
+            expect(componentLogger._appenders.length).toBe(2);
+            expect(componentLogger._inheritedAppenders.length).toBe(1);
+            expect(componentLogger._allAppenders.length).toBe(3);
+        });
+    });
+
+    describe('Destroy the loggers', function () {
+
+        it('should destroy all loggers', function () {
+            var componentLogger = Logger.get(component);
+
+            spyOn(componentLogger, '_destroy');
+            spyOn(Logger._platformLogger, '_destroy');
+
+            Logger.destroyAll();
+
+            expect(componentLogger._destroy).toHaveBeenCalled();
+            expect(Logger._platformLogger._destroy).toHaveBeenCalled();
+        });
+    });
+
+    describe('Log methods', function () {
+
         it('should call _log with the correct level', function () {
-            var levels = ['debug', 'info', 'warn', 'error', 'fatal'];
+            var logger = Logger.get(),
+                levels = ['debug', 'info', 'warn', 'error', 'fatal'],
+                error = {
+                    message: 'some error'
+                };
+
+            var appender = jasmine.createSpyObj('appender', ['append']);
+            logger._allAppenders = [appender];
+            spyOn(logger, '_log').andCallThrough();
+
             for (var i = 0, len = levels.length; i < len; i++) {
-                logger[levels[i]].andCallThrough();
                 logger[levels[i]]('message', error);
                 expect(logger._log).toHaveBeenCalledWith(levels[i], 'message', error);
+                expect(appender.append).toHaveBeenCalled();
             }
-        });
-
-        it ('should call append for all appenders', function () {
-            logger._log.andCallThrough();
-
-            logger._log('debug', 'some message', error);
-
-            expect(Event).toHaveBeenCalledWith('debug', 'some message', error);
-            expect(appender1.append).toHaveBeenCalledWith(event);
-            expect(appender2.append).toHaveBeenCalledWith(event);
-        });
-    });
-
-    describe('destroy', function () {
-        it('should call destroy for all appenders', function () {
-            logger.destroy.andCallThrough();
-
-            logger.destroy();
-
-            expect(appender1.destroy).toHaveBeenCalled();
-            expect(appender2.destroy).toHaveBeenCalled();
-        });
-    });
-
-    describe('get', function () {
-        beforeEach(function () {
-            Logger.get.andCallThrough();
-        });
-
-        it('should create a new instance', function () {
-            var newLogger = Logger.get();
-
-            expect(newLogger instanceof Logger).toBe(true);
-            expect(Logger._registerModules).toHaveBeenCalledWith('appenders', jasmine.any(Object));
-            expect(Logger._registerModules).toHaveBeenCalledWith('layouts', jasmine.any(Object));
-            expect(Logger._createAppender).toHaveBeenCalledWith(config.logger.appenders[0]);
-            expect(Logger._createAppender).toHaveBeenCalledWith(config.logger.appenders[1]);
-            expect(newLogger._appenders.length).toEqual(2);
-        });
-
-        it('should return the existing instance', function () {
-            var logger1 = Logger.get();
-            var logger2 = Logger.get();
-
-            expect(logger1).toBe(logger2);
-        });
-
-        it('should throw if the logger level is invalid or missing', function () {
-            delete config.logger.level;
-
-            expect(function () { Logger.get(); }).toThrow();
-
-            config.logger.level = 'invalid';
-
-            expect(function () { Logger.get(); }).toThrow();
-        });
-    });
-
-    describe('_registerModules', function () {
-        it('should register the modules from a given folder', function () {
-            Logger._registerModules.andCallThrough();
-            util.walkSync.andCallFake(function (folder, extensions, callback) {
-                callback(path.join(folder, 'console.js'));
-                callback(path.join(folder, 'file.js'));
-            });
-            var obj = {};
-
-            Logger._registerModules('appenders', obj);
-
-            expect(util.walkSync).toHaveBeenCalledWith(path.join('/rain/lib/logging', 'appenders'),
-                ['.js'], jasmine.any(Function));
-            expect(obj['console']).toBe(ConsoleAppender);
-            expect(obj['file']).toBe(FileAppender);
-        });
-    });
-
-    describe('_createAppender', function () {
-        var createAppender;
-
-        beforeEach(function () {
-            Logger._createAppender.andCallThrough();
-            Logger._appenderConstructors = {
-                'console': ConsoleAppender,
-                'file': FileAppender
-            };
-
-            ConsoleAppender.andReturn(appender1);
-            FileAppender.andReturn(appender2);
-
-            createAppender = function () {
-                Logger._createAppender(config.logger.appenders[0]);
-            };
-        });
-
-        it('should create an appender', function () {
-            var appender = Logger._createAppender(config.logger.appenders[1]);
-
-            expect(appender).toBe(appender2);
-            expect(Logger._createLayout).toHaveBeenCalledWith(config.logger.appenders[1].layout);
-        });
-
-        it('should throw if appender level is invalid', function () {
-            config.logger.appenders[0].level = 'invalid';
-
-            expect(createAppender).toThrow();
-        });
-
-        it('should throw an error if appender type is invalid', function () {
-            config.logger.appenders[0].type = 'invalid';
-
-            expect(createAppender).toThrow();
-        });
-
-        it('should throw an error if layout options are empty', function () {
-            delete config.logger.appenders[0].layout;
-
-            expect(createAppender).toThrow();
-        });
-    });
-
-    describe('_createLayout', function () {
-        var PatternLayout, layout;
-
-        beforeEach(function () {
-            Logger._createLayout.andCallThrough();
-
-            layout = jasmine.createSpyObj('layout', ['format']);
-            PatternLayout = jasmine.createSpy('PatternLayout');
-            PatternLayout.andReturn(layout);
-
-            Logger._layoutConstructors = {
-                'pattern': PatternLayout
-            };
-        });
-
-        it('should create a layout', function () {
-            expect(Logger._createLayout(config.logger.appenders[1].layout)).toBe(layout);
-        });
-
-        it('should throw if layout type is invalid', function () {
-            config.logger.appenders[0].layout.type = 'invalid';
-
-            var createLayout = function () {
-                Logger._createLayout(config.logger.appenders[0].layout);
-            };
-
-            expect(createLayout).toThrow();
         });
     });
 });
