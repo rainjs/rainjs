@@ -26,7 +26,8 @@
         "jed": "",
         "crc": "0.2.0",
         "mongodb": "",
-        "jscoverage-reporter": ""
+        "jscoverage-reporter": "",
+        "js-yaml": ""
     },
     "keywords": ["framework", "rain"],
     "repository": "git://github.com/rainjs/rainjs",

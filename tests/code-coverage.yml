@@ -1,0 +1,6 @@
+target: instrumented
+client:
+    - components/core/client/js
+    - components/layout/client/js
+server:
+    - lib

@@ -29,6 +29,7 @@ var child = require('child_process');
 var fs = require('fs');
 var path = require('path');
 var util = require('./lib/util');
+var yaml = require('js-yaml');
 
 desc('Print the help message');
 task('default', function (params) {
@@ -299,6 +300,103 @@ namespace('check', function () {
             } else {
                 console.log('Everything is good!');
             }
+        });
+    });
+});
+
+namespace('ci', function () {
+    namespace('coverage', function () {
+        namespace('instrument', function () {
+
+            var tool, conf;
+
+            function setup() {
+                if (tool && conf) {
+                    return;
+                }
+
+                tool = path.join('tools', 'jscoverage', 'jscoverage' +
+                        ('win32' === process.platform ? '.exe' : ''));
+
+                // check for tool existence
+                if (!fs.existsSync(tool)) {
+                    jake.logger.error(util.format(
+                            'code coverage tool not found at: %s', toolPath));
+                    process.exit(1);
+                }
+
+                // read configuration
+                try {
+                    conf = fs.readFileSync(path.join('tests',
+                            'code-coverage.yml'));
+                } catch (e) {
+                    jake.logger.error('error reading configuration');
+                    process.exit(1);
+                }
+
+                // parse configuration
+                try {
+                    conf = yaml.load(conf);
+                } catch (e) {
+                    jake.logger.error('error parsing configuration');
+                    process.exit(1);
+                }
+
+                jake.logger.log('configuration loaded ok');
+
+                // validation checks
+                if (!conf.target) {
+                    jake.logger.error('invalid or empty target key in configuration');
+                    process.exit(1);
+                }
+
+                jake.logger.log(util.format('target is: %s', conf.target));
+            }
+
+            function instrument(side) {
+                setup();
+
+                if (!conf[side] || !Array.isArray(conf[side])) {
+                    jake.logger.error(util.format(
+                            'invalid or empty %s key in configuration', side));
+                    process.exit(1);
+                }
+
+                // ensure target instrumentation directory is created
+                try {
+                    jake.mkdirP(conf.target);
+                } catch (e) {
+                    jake.logger.error('error creating target directory');
+                    process.exit(1);
+                }
+
+                // instrument each directory from configuration
+                conf[side].forEach(function (dir) {
+                    var tdir = path.join(conf.target, dir),
+                        cmd = util.format('jscoverage %s %s', dir, tdir);
+
+                    jake.logger.log(util.format('instrumenting: %s', dir));
+
+                    try {
+                        jake.mkdirP(tdir);
+                    } catch (e) {
+                        jake.logger.error(util.format(
+                                'error creating instrumented folder: %s', dir));
+                        process.exit(1);
+                    }
+
+                    jake.exec([cmd], complete, {
+                        printStdout: !jake.program.opts.quiet,
+                        printStderr: !jake.program.opts.quiet
+                    });
+                });
+            }
+
+            desc('Instrument client-side code for coverage report');
+            task('client', instrument.bind(this, 'client'), {async: true});
+
+            desc('Instrument server-side code for coverage report');
+            task('server', instrument.bind(this, 'server'), {async: true});
         });
     });
 });

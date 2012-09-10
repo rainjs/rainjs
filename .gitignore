@@ -9,3 +9,4 @@ jstd.log
 tests/client/reports
 tests/server/reports
 *.conf.local
+instrumented
