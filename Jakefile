@@ -30,6 +30,9 @@ var fs = require('fs');
 var path = require('path');
 var util = require('./lib/util');
 var yaml = require('js-yaml');
+var Promise = require('promised-io/promise'),
+    Deferred = Promise.Deferred,
+    seq = Promise.seq;
 
 desc('Print the help message');
 task('default', function (params) {
@@ -310,19 +313,43 @@ namespace('ci', function () {
 
             var tool, conf;
 
-            function setup() {
-                if (tool && conf) {
-                    return;
+            /**
+             * Checks if the coverage tool is installed and accessible.
+             * @returns {Deferred}
+             */
+            function check() {
+                var deferred = new Deferred();
+
+                if (tool) {
+                    process.nextTick(deferred.resolve);
+                    return deferred.promise;
                 }
 
-                tool = path.join('tools', 'jscoverage', 'jscoverage' +
-                        ('win32' === process.platform ? '.exe' : ''));
+                tool = 'jscoverage';
 
-                // check for tool existence
-                if (!fs.existsSync(tool)) {
-                    jake.logger.error(util.format(
-                            'code coverage tool not found at: %s', toolPath));
-                    process.exit(1);
+                child.execFile(tool, [], {}, function (error) {
+                    if (127 === error.code) {
+                        jake.logger.log(util.format(
+                                'jscoverage tool (%s) not in path', tool));
+                        deferred.reject();
+                    } else {
+                        deferred.resolve();
+                    }
+                });
+
+                return deferred.promise;
+            }
+
+            /**
+             * Reads the coverage configuration.
+             * @returns {Deferred}
+             */
+            function setup() {
+                var deferred = new Deferred();
+
+                if (conf) {
+                    process.nextTick(deferred.resolve);
+                    return deferred.promise;
                 }
 
                 // read configuration
@@ -331,7 +358,8 @@ namespace('ci', function () {
                             'code-coverage.yml'));
                 } catch (e) {
                     jake.logger.error('error reading configuration');
-                    process.exit(1);
+                    process.nextTick(deferred.reject);
+                    return deferred.promise;
                 }
 
                 // parse configuration
@@ -339,7 +367,8 @@ namespace('ci', function () {
                     conf = yaml.load(conf);
                 } catch (e) {
                     jake.logger.error('error parsing configuration');
-                    process.exit(1);
+                    process.nextTick(deferred.reject);
+                    return deferred.promise;
                 }
 
                 jake.logger.log('configuration loaded ok');
@@ -347,19 +376,28 @@ namespace('ci', function () {
                 // validation checks
                 if (!conf.target) {
                     jake.logger.error('invalid or empty target key in configuration');
-                    process.exit(1);
+                    process.nextTick(deferred.reject);
+                    return deferred.promise;
                 }
 
                 jake.logger.log(util.format('target is: %s', conf.target));
+
+                process.nextTick(deferred.resolve);
+                return deferred.promise;
             }
 
-            function instrument(side) {
-                setup();
+            /**
+             * Instruments the configured directories.
+             * @returns {Deferred}
+             */
+            function execute(side) {
+                var deferred = new Deferred();
 
                 if (!conf[side] || !Array.isArray(conf[side])) {
                     jake.logger.error(util.format(
                             'invalid or empty %s key in configuration', side));
-                    process.exit(1);
+                    process.nextTick(deferred.reject);
+                    return deferred.promise;
                 }
 
                 // ensure target instrumentation directory is created
@@ -367,36 +405,76 @@ namespace('ci', function () {
                     jake.mkdirP(conf.target);
                 } catch (e) {
                     jake.logger.error('error creating target directory');
-                    process.exit(1);
+                    process.nextTick(deferred.reject);
+                    return deferred.promise;
                 }
 
-                // instrument each directory from configuration
-                conf[side].forEach(function (dir) {
-                    var tdir = path.join(conf.target, dir),
-                        cmd = util.format('jscoverage %s %s', dir, tdir);
+                // prepare each directory from configuration for instrumentation
+                var cmds = [];
+                for (var i = 0, l = conf[side].length; i < l; i++) {
+                    var dir = conf[side][i],
+                        tdir = path.join(conf.target, dir),
+                        cmd = util.format('%s %s %s', tool, dir, tdir);
 
-                    jake.logger.log(util.format('instrumenting: %s', dir));
+                    jake.logger.log(util.format(
+                            'add to instrumentation queue: %s', dir));
 
                     try {
                         jake.mkdirP(tdir);
                     } catch (e) {
                         jake.logger.error(util.format(
                                 'error creating instrumented folder: %s', dir));
-                        process.exit(1);
+                        process.nextTick(deferred.reject);
+                        return deferred.promise;
                     }
+                }
 
-                    jake.exec([cmd], complete, {
-                        printStdout: !jake.program.opts.quiet,
-                        printStderr: !jake.program.opts.quiet
-                    });
+                jake.logger.log('instrumenting ...');
+
+                // instrument
+                jake.exec([cmd], deferred.resove, {
+                    printStdout: !jake.program.opts.quiet,
+                    printStderr: !jake.program.opts.quiet
                 });
+
+                jake.logger.log('done');
+
+                return deferred.promise;
+            }
+
+            /**
+             * Main function that connects all instrumentation steps:
+             * check, setup & execute.
+             * @returns {Deferred}
+             */
+            function instrument(side) {
+                return seq([
+                    check,
+                    setup,
+                    execute.bind(this, side)
+                ]);
             }
 
             desc('Instrument client-side code for coverage report');
-            task('client', instrument.bind(this, 'client'), {async: true});
+            task('client', function () {
+                instrument('client').then(complete);
+            }, {async: true});
 
             desc('Instrument server-side code for coverage report');
-            task('server', instrument.bind(this, 'server'), {async: true});
+            task('server', function () {
+                instrument('server').then(complete);
+            }, {async: true});
+
+            desc('Instrument all code for coverage report');
+            task('all', function () {
+                var client = jake.Task['ci:coverage:instrument:client'],
+                    server = jake.Task['ci:coverage:instrument:server'];
+
+                client.addListener('complete', server.invoke.bind(server));
+                server.addListener('complete', complete);
+
+                client.invoke();
+            });
         });
     });
 });
