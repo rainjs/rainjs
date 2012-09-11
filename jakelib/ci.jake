@@ -5,7 +5,8 @@ var path = require('path'),
     fs = require('fs'),
     Promise = require('promised-io/promise'),
     Deferred = Promise.Deferred,
-    seq = Promise.seq;
+    seq = Promise.seq,
+    spawn = require('child_process').spawn;
 
 namespace('ci', function () {
     namespace('coverage', function () {
@@ -196,6 +197,30 @@ namespace('ci', function () {
                 server.addListener('complete', complete);
 
                 client.invoke();
+            });
+        });
+
+        namespace('server', function () {
+            desc('Start the JSTD server and the RAIN server using the instrumented code');
+            task('start', function () {
+                var task = jake.Task['test:server:start'];
+                task.invoke();
+
+                console.log('Starting RAIN...');
+
+                var child = spawn('raind', [],
+                    {stdio: 'inherit', env: {RAIN_CONF: './tests/client/conf/server.conf.default'}});
+
+                if (process.platform !== 'win32') {
+                    var stopRain = function () {
+                        child.kill('SIGTERM');
+                    };
+
+                    process.on('SIGTERM', stopRain);
+                    process.on('SIGQUIT', stopRain);
+                    process.on('SIGINT', stopRain);
+                    process.on('SIGSTOP', stopRain);
+                }
             });
         });
     });

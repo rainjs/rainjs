@@ -1,0 +1,78 @@
+{
+    "server": {
+        "port": 1337,
+        "timeoutForRequests" : 3,
+
+        "serverRoot": ".",
+        "components": ["./instrumented/components"],
+
+        "logs": {
+            "error": "log/error.log",
+            "access": "log/access.log"
+        }
+    },
+
+    "defaultLanguage": "en_US",
+    "language": "en_US",
+
+    "session": {
+        "store": {
+            "path": "./lib/mongodb/session_store",
+            "options": {
+                "host": "127.0.0.1",
+                "port": 27017,
+                "database": "rain"
+            }
+        }
+    },
+
+    "logger": {
+        "level": "debug",
+        "appenders": [{
+            "type": "console",
+            "layout": {
+                "type": "pattern",
+                "params": {
+                    "pattern": "[%level] %date: %message"
+                }
+            },
+            "params": {
+                "debug": {
+                    "foreground": "green"
+                },
+                "info": {
+                    "foreground": "cyan"
+                },
+                "warn": {
+                    "foreground": "yellow"
+                },
+                "error": {
+                    "foreground": "red"
+                },
+                "fatal": {
+                    "foreground": "black",
+                    "background": "red"
+                }
+            }
+        }]
+    },
+
+    "languages": [
+        {"key": "en_US", "text": "English"},
+        {"key": "de_DE", "text": "Deutsch"},
+        {"key": "ro_RO", "text": "Română"},
+        {"key": "ar_SA", "text": "عربي"}
+    ],
+
+    "errorComponent": {
+        "id": "error",
+        "version": "1.0"
+    },
+
+    "loadingComponent": {
+        "id": "placeholder",
+        "version": "1.0",
+        "viewId": "index",
+        "timeout": 500
+    }
+}
