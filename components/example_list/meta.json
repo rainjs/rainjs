@@ -31,7 +31,8 @@
         "media_queries": {},
         "containers_v1": {},
         "containers_v2": {},
-        "layout/flow": {}
+        "layout/flow": {},
+        "logging": {}
     },
     "intents": [
         {
