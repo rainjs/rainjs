@@ -151,7 +151,7 @@ jasmine.util.extend(jasmine.getGlobal(), (function () {
         deps = deps || {};
 
         var file;
-        if (process.env.RAIN_COVERAGE === 1) {
+        if (process.env.RAIN_COVERAGE == 1) {
             file = path.join(process.cwd(), 'instrumented', modpath);
         } else {
             file = path.join(process.cwd(), modpath);

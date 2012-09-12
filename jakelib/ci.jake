@@ -1,7 +1,10 @@
+"use strict";
+
 var path = require('path'),
     util = require('util'),
     child = require('child_process'),
     yaml = require('js-yaml'),
+    wrench = require('wrench'),
     fs = require('fs'),
     Promise = require('promised-io/promise'),
     Deferred = Promise.Deferred,
@@ -197,6 +200,52 @@ namespace('ci', function () {
                 server.addListener('complete', complete);
 
                 client.invoke();
+            });
+        });
+
+        namespace('run', function () {
+            desc('Run server tests and generate report');
+            task('server', function () {
+                require('jasmine-node');
+                require('jscoverage-reporter');
+
+                var specList, specs = require('jasmine-node/lib/jasmine-node/spec-collection');
+
+                //extend jasmine with functionality needed by Rain
+                require(process.cwd() + '/tests/server/lib/jasmine_rain');
+
+                process.env.RAIN_CONF = process.cwd() + '/tests/server/fixtures/server.conf';
+                process.env.RAIN_COVERAGE = 1;
+
+                var jasmineEnv = jasmine.getEnv();
+
+                var specFolder = process.cwd() + '/tests/server/tests/';
+                var reportsPath = path.join('tests', 'server', 'coverage');
+
+                for (var key in jasmine) {
+                    if (key !== 'undefined') {
+                        global[key] = jasmine[key];
+                    }
+                }
+
+                wrench.rmdirSyncRecursive(reportsPath, true);
+                wrench.mkdirSyncRecursive(reportsPath);
+
+                //extend jasmine with functionality needed by Rain
+                require(process.cwd() + '/tests/server/lib/jasmine_rain');
+                specs.load(specFolder, /(.*).spec\.js/i);
+                specList = specs.getSpecs();
+
+                for (var i = 0, len = specList.length; i < len; ++i) {
+                  var filename = specList[i];
+                  require(filename.path().replace(/\.\w+$/, ""));
+                }
+
+                jasmineEnv.addReporter(new jasmine.JSCoverageReporter(reportsPath));
+
+                jake.logger.log('generating code coverage report for server code ...');
+                jasmineEnv.execute();
+                jake.logger.log('done.');
             });
         });
 

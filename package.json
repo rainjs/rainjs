@@ -13,7 +13,7 @@
     "dependencies": {
         "connect": "2.2.2",
         "handlebars": "1.0.4beta",
-        "jasmine-node": "= 1.0.26",
+        "jasmine-node": "",
         "less": ">= 1.1.4",
         "mime": "",
         "node.extend": "",
