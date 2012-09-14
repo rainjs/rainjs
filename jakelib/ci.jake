@@ -247,6 +247,38 @@ namespace('ci', function () {
                 jasmineEnv.execute();
                 jake.logger.log('done.');
             });
+
+
+            desc('Run server tests and generate report');
+            task('client', function () {
+                var connect = require('connect');
+                var jstdPath = './tests/client/bin/JsTestDriver-1.3.3d.jar';
+                var reportsPath = path.join('tests', 'client', 'coverage');
+                var report = [];
+
+                connect().use(function (req, res) {
+                    req.on('data', function (chunk) {
+                        report.push(chunk.toString());
+                    });
+
+                    req.on('end', function () {
+                        res.end();
+                    });
+                }).listen(8765);
+
+                console.log('Running client side tests...');
+                var cmd = 'java -jar ' + jstdPath + ' --reset --tests all --config ' +
+                          'tests/client/conf/ClientCoverage.jstd ' +
+                          '--testOutput ./tests/client/reports';
+                child.exec(cmd, function (error, stdout, stderr) {
+                    wrench.rmdirSyncRecursive(reportsPath, true);
+                    wrench.mkdirSyncRecursive(reportsPath);
+
+                    fs.writeFileSync(path.join(reportsPath, 'jscoverage.json'), report.join(''));
+                    jake.logger.log('Wrote coverage report in ' + reportsPath + '/jscoverage.json');
+                    process.exit();
+                });
+            });
         });
 
         namespace('server', function () {
