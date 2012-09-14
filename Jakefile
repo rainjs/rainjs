@@ -237,7 +237,8 @@ namespace('check', function () {
         var root = process.cwd(),
             hasErrors = false,
             includedFolders = [
-                'lib'
+                'lib',
+                'tests/server/tests'
             ];
 
         console.log('Checking for missing headers in the source files.\n');

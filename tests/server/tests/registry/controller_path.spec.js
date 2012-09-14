@@ -25,13 +25,14 @@
 
 "use strict";
 
-var cwd = process.cwd();
-var fs = require('fs');
-var controllerPathPlugin = require(cwd + '/lib/registry/controller_path');
+var cwd = process.cwd(),
+    fs = require('fs'),
+    controllerPathPlugin = loadModuleExports('/lib/registry/controller_path.js');
 
 describe('Registry Plugin: ' + controllerPathPlugin.name, function () {
     var componentConfig = null;
-    beforeEach(function(){
+
+    beforeEach(function () {
         componentConfig = JSON.parse(fs.readFileSync(cwd +
                               '/tests/server/fixtures/components/example/meta.json'));
     });

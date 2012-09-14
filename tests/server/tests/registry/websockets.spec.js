@@ -25,38 +25,54 @@
 
 "use strict";
 
-var cwd = process.cwd(),
-    path = require('path'),
-    Module = require('module'),
-    util = require(cwd + '/lib/util'),
-    socketRegistry = require(cwd + '/lib/socket_registry'),
-    websockets = require(cwd + '/lib/registry/websockets');
-
-var conf;
-
-var socket = {
-    channel: 'example',
-    handle: function () {}
-};
+var path = require('path');
 
 describe('Registry plugin: Websockets', function () {
+
+    var socketRegistry, util, conf, websockets, socket;
+
     beforeEach(function () {
-        spyOn(util, 'walkSync').andCallFake(function (folder, callback) {
+        socket = {
+            channel: 'example',
+            handle: function () {}
+        };
+
+        util = jasmine.createSpyObj('util', ['walkSync']);
+        util.walkSync.andCallFake(function (folder, callback) {
             callback(path.join(folder, 'socket.js'));
         });
+
+        socketRegistry = jasmine.createSpyObj('socketRegistry', ['register']);
+
+        var mocks = {};
+        mocks['../translation'] = {
+            get: function () {
+                return {
+                    generateContext: function () {}
+                };
+            }
+        };
+        mocks['../util'] = util;
+        mocks['../socket_registry'] = socketRegistry;
+        mocks['../logging'] = {
+            get: function () {
+                    return jasmine.createSpyObj('logger',
+                                                ['debug', 'info', 'warn', 'error', 'fatal']);
+            }
+        };
 
         // Mock for requireWithContext
         spyOn(global, 'requireWithContext').andCallFake(function (path) {
             return socket;
         });
 
-        spyOn(socketRegistry, 'register').andCallFake(function (channel, handler) {});
-
         conf = {
             id: 'button',
             version: '2.0',
             folder: 'components/button2'
         };
+
+        websockets = loadModuleExports('/lib/registry/websockets.js', mocks);
     });
 
     it('should register sockets from the component/server/websockets directory', function () {
