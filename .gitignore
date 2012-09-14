@@ -9,5 +9,7 @@ jstd.log
 tests/client/reports
 tests/server/reports
 tests/server/coverage
+tests/client/coverage
+tests/coverage.xml
 *.conf.local
 instrumented
