@@ -56,7 +56,8 @@ describe("Pattern layout", function() {
     it("should be properly constructed", function () {
         var layout = new Pattern(params);
 
-        expect(layout._pattern).toEqual('%date|%level|%logger|%message|%newline|%stacktrace|%%');
+        expect(layout._pattern).toEqual('%date|%level|%logger|%message|' +
+                                        '%newline|%stacktrace|%source|%%');
     });
 
     it("should corectly calculate the date", function () {

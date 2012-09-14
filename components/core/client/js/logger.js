@@ -35,17 +35,20 @@ define(['raintime/messaging/sockets'], function (Sockets) {
      * @class
      * @constructor
      *
-     * @param {Object} component the component properties
+     * @param {Object} [component] the component properties
+     * @param {String} component.id the component id
+     * @param {String} component.version the component version
      */
     function Logger(component) {
         this._component = component;
         this._logQueue = [];
 
         var channel = '/core/logging';
-        if (component) {
-            channel = '/' + component.id + (component.version ? '/' + component.version : '') +
-                          '/logging';
+
+        if (component && component.id && component.version) {
+            channel = '/' + component.id + '/' + component.version + '/logging';
         }
+
         this._socket = Sockets.getSocket(channel);
     }
 
@@ -69,7 +72,7 @@ define(['raintime/messaging/sockets'], function (Sockets) {
      * @type {Object}
      * @private
      */
-    var instances = {};
+    Logger._instances = {};
 
     /**
      * Logs a debug message.
@@ -151,16 +154,19 @@ define(['raintime/messaging/sockets'], function (Sockets) {
     /**
      * Gets the component's logger instance.
      *
-     * @param {Object} component the component properties
+     * @param {Object} [component] the component properties
+     * @param {String} component.id the component id
+     * @param {String} component.version the component version
      * @returns {Logger}
      */
     Logger.get = function (component) {
         var id = 'core';
-        if (component) {
+
+        if (component && component.id && component.version) {
             id = component.id + ' ' + component.version;
         }
 
-        return instances[id] || (instances[id] = new Logger(component));
+        return Logger._instances[id] || (Logger._instances[id] = new Logger(component));
     };
 
     return Logger;
