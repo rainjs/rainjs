@@ -13,6 +13,124 @@ var path = require('path'),
 
 namespace('ci', function () {
     namespace('coverage', function () {
+        function calculateStats(coverage) {
+            var stats = {
+                packagesCovered: 2,
+                packagesTotal: 2,
+                classesCovered: 0,
+                classesTotal: 0,
+                methodsCovered: 1,
+                methodsTotal: 1,
+                srcFilesCovered: 0,
+                srcFilesTotal: 0,
+                srcLinesCovered: 0,
+                srcLinesTotal: 0
+            };
+
+            for (var file in coverage) {
+                if (coverage.hasOwnProperty(file)) {
+                    stats.classesCovered++;
+                    stats.classesTotal++;
+                    stats.srcFilesCovered++;
+                    stats.srcFilesTotal++;
+
+                    var srcLinesTotal = 0;
+                    var srcLinesCovered = 0;
+
+                    for(var i = 0, l = coverage[file].source.length; i < l; i++) {
+                        var covered = coverage[file].coverage[i + 1];
+
+                        if (covered !== null) {
+                            srcLinesTotal++;
+
+                            if (covered > 0) {
+                                srcLinesCovered++;
+                            }
+                        }
+                    }
+
+                    stats.srcLinesTotal += srcLinesTotal;
+                    stats.srcLinesCovered += srcLinesCovered;
+                }
+            }
+
+            return stats;
+        }
+
+        function calculateCoverage(stats, metric) {
+            var covered = stats[metric + 'Covered'];
+            var total = stats[metric + 'Total'];
+            var coverage = Math.round(covered / total * 100);
+
+            return coverage;
+        }
+
+        function calculateFileStats(file) {
+            var stats = {
+                linesCovered: 0,
+                linesTotal: 0,
+                coverage: 0
+            };
+
+            for (var i = 0, l = file.source.length; i < l; i++) {
+                var covered = file.coverage[i + 1];
+
+                if (covered !== null) {
+                    stats.linesTotal++;
+
+                    if (covered > 0) {
+                        stats.linesCovered++;
+                    }
+                }
+            }
+
+            stats.coverage = Math.round(stats.linesCovered / stats.linesTotal * 100);
+
+            return stats;
+        }
+
+        function generateReport(coverage) {
+            var stats = calculateStats(coverage);
+            var xml = [];
+            xml.push('<report>');
+            xml.push('    <stats>');
+            xml.push('        <packages value="' + stats.packagesTotal + '"/>');
+            xml.push('        <classes value="' + stats.classesTotal + '"/>');
+            xml.push('        <methods value="' + stats.methodsTotal + '"/>');
+            xml.push('        <srcfiles value="' + stats.srcFilesTotal + '"/>');
+            xml.push('        <srclines value="' + stats.srcLinesTotal + '"/>');
+            xml.push('    </stats>');
+            xml.push('    <data>');
+            xml.push('        <all name="all classes">');
+            xml.push('            <coverage type="class, %" value="' + calculateCoverage(stats, 'classes') + '"/>');
+            xml.push('            <coverage type="method, %" value="' + calculateCoverage(stats, 'methods') + '"/>');
+            xml.push('            <coverage type="block, %" value="' + calculateCoverage(stats, 'methods') + '"/>');
+            xml.push('            <coverage type="line, %" value="' + calculateCoverage(stats, 'srcLines') + '"/>');
+            xml.push('            <package name="Server">');
+
+            for (var file in coverage) {
+                if (!coverage.hasOwnProperty(file)) {
+                    continue;
+                }
+                var fileStats = calculateFileStats(coverage[file]);
+                xml.push('            <srcfile name="' + file + '">');
+                xml.push('                <coverage type="line, %" value="' + fileStats.coverage + '%   (' + fileStats.linesCovered + '/' + fileStats.linesTotal +')"/>');
+                xml.push('            </srcfile>');
+            }
+
+            xml.push('            </package>');
+            xml.push('        </all>');
+            xml.push('    </data>');
+            xml.push('</report>');
+
+            return xml;
+        }
+
+        desc('Generate coverage report.');
+        task('report', function () {
+            var coverage = JSON.parse(fs.readFileSync('tests/server/coverage/jscoverage.json'));
+            fs.writeFileSync('tests/coverage.xml', generateReport(coverage).join('\n'));
+        });
         namespace('instrument', function () {
 
             var tool, conf;
@@ -212,7 +330,7 @@ namespace('ci', function () {
                 var specList, specs = require('jasmine-node/lib/jasmine-node/spec-collection');
 
                 //extend jasmine with functionality needed by Rain
-                require(process.cwd() + '/tests/server/lib/jasmine_rain');
+                require('../tests/server/lib/jasmine_rain');
 
                 process.env.RAIN_CONF = process.cwd() + '/tests/server/fixtures/server.conf';
                 process.env.RAIN_COVERAGE = 1;
@@ -231,8 +349,6 @@ namespace('ci', function () {
                 wrench.rmdirSyncRecursive(reportsPath, true);
                 wrench.mkdirSyncRecursive(reportsPath);
 
-                //extend jasmine with functionality needed by Rain
-                require(process.cwd() + '/tests/server/lib/jasmine_rain');
                 specs.load(specFolder, /(.*).spec\.js/i);
                 specList = specs.getSpecs();
 
