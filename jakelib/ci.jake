@@ -102,10 +102,7 @@ namespace('ci', function () {
             xml.push('    </stats>');
             xml.push('    <data>');
             xml.push('        <all name="all classes">');
-            xml.push('            <coverage type="class, %" value="' + calculateCoverage(stats, 'classes') + '"/>');
-            xml.push('            <coverage type="method, %" value="' + calculateCoverage(stats, 'methods') + '"/>');
-            xml.push('            <coverage type="block, %" value="' + calculateCoverage(stats, 'methods') + '"/>');
-            xml.push('            <coverage type="line, %" value="' + calculateCoverage(stats, 'srcLines') + '"/>');
+            xml.push('            <coverage type="line, %" value="' + calculateCoverage(stats, 'srcLines') + '%  (' + stats.srcLinesCovered + '/' + stats.srcLinesTotal +')"/>');
             xml.push('            <package name="Server">');
 
             for (var file in coverage) {
