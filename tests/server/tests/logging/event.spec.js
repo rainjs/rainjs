@@ -34,13 +34,15 @@ describe('Event', function () {
         Event = loadModuleExports(path.join('lib', 'logging', 'event.js'));
 
         error = new Error('Unit test error');
-        evt = new Event(0, 'Some random event', error);
+        evt = new Event('debug', 'Some random event', error, 'RAIN', 'CLIENT');
     });
 
     it('should correctly instantiate', function () {
-        expect(evt._level).toEqual(0);
+        expect(evt._level).toEqual('debug');
         expect(evt._message).toEqual('Some random event');
         expect(evt._error).toEqual(error);
+        expect(evt._logger).toEqual('RAIN');
+        expect(evt._source).toEqual('CLIENT');
     });
 
     it('should return the correct message', function () {
@@ -52,15 +54,19 @@ describe('Event', function () {
     });
 
     it('should return the correct level', function () {
-        expect(evt.level()).toEqual(0);
+        expect(evt.level()).toEqual('debug');
     });
 
     it('should return the correct logger name', function () {
         expect(evt.logger()).toEqual('RAIN');
     });
 
-    it('should return the correct logger name', function () {
+    it('should return the correct date', function () {
         evt._date = new Date();
         expect(evt.date()).toEqual(evt._date);
+    });
+
+    it('should return the correct source', function () {
+        expect(evt.source()).toEqual('CLIENT');
     });
 });
