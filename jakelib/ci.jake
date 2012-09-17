@@ -9,6 +9,7 @@ var path = require('path'),
     Promise = require('promised-io/promise'),
     Deferred = Promise.Deferred,
     seq = Promise.seq,
+    extend = require('node.extend'),
     spawn = require('child_process').spawn;
 
 namespace('ci', function () {
@@ -103,10 +104,14 @@ namespace('ci', function () {
             xml.push('    <data>');
             xml.push('        <all name="all classes">');
             xml.push('            <coverage type="line, %" value="' + calculateCoverage(stats, 'srcLines') + '%  (' + stats.srcLinesCovered + '/' + stats.srcLinesTotal +')"/>');
-            xml.push('            <coverage type="block, %" value="100% (1/1)"/>');
-            xml.push('            <coverage type="method, %" value="100% (1/1)"/>');
-            xml.push('            <coverage type="class, %" value="100% (1/1)"/>');
+            xml.push('            <coverage type="block, %" value="100%   (1/1)"/>');
+            xml.push('            <coverage type="method, %" value="100%   (1/1)"/>');
+            xml.push('            <coverage type="class, %" value="100%   (1/1)"/>');
             xml.push('            <package name="Server">');
+            xml.push('                <coverage type="line, %" value="' + calculateCoverage(stats, 'srcLines') + '%  (' + stats.srcLinesCovered + '/' + stats.srcLinesTotal +')"/>');
+            xml.push('                <coverage type="block, %" value="100%   (1/1)"/>');
+            xml.push('                <coverage type="method, %" value="100%   (1/1)"/>');
+            xml.push('                <coverage type="class, %" value="100%   (1/1)"/>');
 
             for (var file in coverage) {
                 if (!coverage.hasOwnProperty(file)) {
@@ -115,9 +120,9 @@ namespace('ci', function () {
                 var fileStats = calculateFileStats(coverage[file]);
                 xml.push('            <srcfile name="' + file + '">');
                 xml.push('                <coverage type="line, %" value="' + fileStats.coverage + '%   (' + fileStats.linesCovered + '/' + fileStats.linesTotal +')"/>');
-                xml.push('                <coverage type="block, %" value="100% (1/1)"/>');
-                xml.push('                <coverage type="method, %" value="100% (1/1)"/>');
-                xml.push('                <coverage type="class, %" value="100% (1/1)"/>');
+                xml.push('                <coverage type="block, %" value="100%   (1/1)"/>');
+                xml.push('                <coverage type="method, %" value="100%   (1/1)"/>');
+                xml.push('                <coverage type="class, %" value="100%   (1/1)"/>');
                 xml.push('            </srcfile>');
             }
 
@@ -131,7 +136,10 @@ namespace('ci', function () {
 
         desc('Generate coverage report.');
         task('report', function () {
-            var coverage = JSON.parse(fs.readFileSync('tests/server/coverage/jscoverage.json'));
+            var coverage = JSON.parse(fs.readFileSync('tests/server/coverage/jscoverage.json')),
+                clientCoverage = JSON.parse(fs.readFileSync('tests/client/coverage/jscoverage.json'));
+            extend(coverage, clientCoverage);
+
             fs.writeFileSync('tests/coverage.xml', generateReport(coverage).join('\n'));
         });
         namespace('instrument', function () {
