@@ -16,12 +16,12 @@ namespace('ci', function () {
     namespace('coverage', function () {
         function calculateStats(coverage) {
             var stats = {
-                packagesCovered: 2,
-                packagesTotal: 2,
+                packagesCovered: 0,
+                packagesTotal: 0,
                 classesCovered: 0,
                 classesTotal: 0,
-                methodsCovered: 1,
-                methodsTotal: 1,
+                methodsCovered: 0,
+                methodsTotal: 0,
                 srcFilesCovered: 0,
                 srcFilesTotal: 0,
                 srcLinesCovered: 0,
@@ -104,14 +104,9 @@ namespace('ci', function () {
             xml.push('    <data>');
             xml.push('        <all name="all classes">');
             xml.push('            <coverage type="line, %" value="' + calculateCoverage(stats, 'srcLines') + '%  (' + stats.srcLinesCovered + '/' + stats.srcLinesTotal +')"/>');
-            xml.push('            <coverage type="block, %" value="100%   (1/1)"/>');
-            xml.push('            <coverage type="method, %" value="100%   (1/1)"/>');
-            xml.push('            <coverage type="class, %" value="100%   (1/1)"/>');
-            xml.push('            <package name="Server">');
-            xml.push('                <coverage type="line, %" value="' + calculateCoverage(stats, 'srcLines') + '%  (' + stats.srcLinesCovered + '/' + stats.srcLinesTotal +')"/>');
-            xml.push('                <coverage type="block, %" value="100%   (1/1)"/>');
-            xml.push('                <coverage type="method, %" value="100%   (1/1)"/>');
-            xml.push('                <coverage type="class, %" value="100%   (1/1)"/>');
+            xml.push('            <coverage type="block, %" value="0%   (0/0)"/>');
+            xml.push('            <coverage type="method, %" value="0%   (0/0)"/>');
+            xml.push('            <coverage type="class, %" value="0%   (0/0)"/>');
 
             for (var file in coverage) {
                 if (!coverage.hasOwnProperty(file)) {
@@ -120,13 +115,12 @@ namespace('ci', function () {
                 var fileStats = calculateFileStats(coverage[file]);
                 xml.push('            <srcfile name="' + file + '">');
                 xml.push('                <coverage type="line, %" value="' + fileStats.coverage + '%   (' + fileStats.linesCovered + '/' + fileStats.linesTotal +')"/>');
-                xml.push('                <coverage type="block, %" value="100%   (1/1)"/>');
-                xml.push('                <coverage type="method, %" value="100%   (1/1)"/>');
-                xml.push('                <coverage type="class, %" value="100%   (1/1)"/>');
+                xml.push('                <coverage type="block, %" value="0%   (1/1)"/>');
+                xml.push('                <coverage type="method, %" value="0%   (1/1)"/>');
+                xml.push('                <coverage type="class, %" value="0%   (1/1)"/>');
                 xml.push('            </srcfile>');
             }
 
-            xml.push('            </package>');
             xml.push('        </all>');
             xml.push('    </data>');
             xml.push('</report>');
@@ -136,12 +130,20 @@ namespace('ci', function () {
 
         desc('Generate coverage report.');
         task('report', function () {
-            var coverage = JSON.parse(fs.readFileSync('tests/server/coverage/jscoverage.json')),
-                clientCoverage = JSON.parse(fs.readFileSync('tests/client/coverage/jscoverage.json'));
-            extend(coverage, clientCoverage);
+            var coverage = {};
+
+            if (fs.existsSync('tests/server/coverage/jscoverage.json')) {
+                extend(coverage, JSON.parse(fs.readFileSync('tests/server/coverage/jscoverage.json')));
+            }
+
+            if (fs.existsSync('tests/client/coverage/jscoverage.json')) {
+                extend(coverage, JSON.parse(fs.readFileSync('tests/client/coverage/jscoverage.json')));
+            }
 
             fs.writeFileSync('tests/coverage.xml', generateReport(coverage).join('\n'));
+            fs.writeFileSync('tests/coverage.json', JSON.stringify(coverage));
         });
+
         namespace('instrument', function () {
 
             var tool, conf;
@@ -401,7 +403,7 @@ namespace('ci', function () {
                     wrench.rmdirSyncRecursive(reportsPath, true);
                     wrench.mkdirSyncRecursive(reportsPath);
 
-                    fs.writeFileSync(path.join(reportsPath, 'jscoverage.json'), report.join(''));
+                    fs.writeFileSync(path.join(reportsPath, 'jscoverage.json'), (report.join('') || '{}'));
                     jake.logger.log('Wrote coverage report in ' + reportsPath + '/jscoverage.json');
                     process.exit();
                 });
@@ -417,7 +419,10 @@ namespace('ci', function () {
                 console.log('Starting RAIN...');
 
                 var child = spawn('raind', [],
-                    {stdio: 'inherit', env: {RAIN_CONF: './tests/client/conf/server.conf.default'}});
+                    {stdio: 'inherit', env: {
+                        RAIN_CONF: './tests/client/conf/server.conf.default',
+                        PATH: process.env.PATH
+                    }});
 
                 if (process.platform !== 'win32') {
                     var stopRain = function () {
