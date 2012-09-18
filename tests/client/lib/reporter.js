@@ -23,6 +23,9 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+"use strict";
+
+// register the coverage reporter with JSTestDriver
 jstestdriver.pluginRegistrar.register({
     name: 'jsCoverage Reporter',
     onTestsFinish: function () {
@@ -31,13 +34,28 @@ jstestdriver.pluginRegistrar.register({
     }
 });
 
+
+/**
+ * Computes global coverage for a specific metric.
+ *
+ * @param {Object} stats the coverage statistics object
+ * @param {String} metric the metric for which to compute the coverage
+ *
+ * @returns {Number} the coverage for the specific metric
+ */
 function calculateCoverage(stats, metric) {
     var covered = stats[metric + 'Covered'];
     var total = stats[metric + 'Total'];
     var coverage = Math.round(covered / total * 100);
     return coverage + '% (' + covered + '/' + total + ')';
 }
-
+/**
+ * Computes global coverage statistics based on the JsCoverage data object
+ *
+ * @param {Object} coverage the JsCoverage data object
+ *
+ * @returns {Object} the computed statistics
+ */
 function calculateStats(coverage) {
     var stats = {
         packagesCovered: 1,
@@ -51,51 +69,57 @@ function calculateStats(coverage) {
         srclinesCovered: 0,
         srclinesTotal: 0
     };
+
     for (var file in coverage) {
-    if (coverage.hasOwnProperty(file)) {
-        stats.classesCovered += 1;
-        stats.classesTotal += 1;
-        stats.srcfilesCovered += 1;
-        stats.srcfilesTotal += 1;
-        var srclinesTotal = 0;
-        var srclinesCovered = 0;
-        for (var i = 0; i < coverage[file].source.length; i += 1) {
-            if (coverage[file][i + 1] !== void 0) {
-                srclinesTotal += 1;
-                if (coverage[file][i + 1] > 0) {
-                    srclinesCovered += 1;
+        if (coverage.hasOwnProperty(file)) {
+            stats.classesCovered += 1;
+            stats.classesTotal += 1;
+            stats.srcfilesCovered += 1;
+            stats.srcfilesTotal += 1;
+            var srclinesTotal = 0;
+            var srclinesCovered = 0;
+            for (var i = 0; i < coverage[file].source.length; i += 1) {
+                if (coverage[file][i + 1] !== void 0) {
+                    srclinesTotal += 1;
+                    if (coverage[file][i + 1] > 0) {
+                        srclinesCovered += 1;
+                    }
                 }
             }
-        }
-        stats.srclinesTotal += srclinesTotal;
-        stats.srclinesCovered += srclinesCovered;
+            stats.srclinesTotal += srclinesTotal;
+            stats.srclinesCovered += srclinesCovered;
         }
     }
     return stats;
 }
 
+/**
+ * Computes global coverage report based on the JsCoverage data object
+ *
+ * @param {Object} coverage the JsCoverage data object
+ *
+ * @returns {Object} the computed report
+ */
 function computeReport(_$jscoverage) {
     var json = {};
     for (var file in _$jscoverage) {
+        var coverage = _$jscoverage[file],
+            length = coverage.length,
+            source = coverage.source,
+            array = [],
+            lines = [],
+            line;
+
         if (! _$jscoverage.hasOwnProperty(file)) {
             continue;
         }
-
-        var coverage = _$jscoverage[file];
-
-        var array = [];
-        var line;
-        var length = coverage.length;
         for (line = 0; line < length; line += 1) {
-        var value = coverage[line];
-            if (value === undefined || value === null) {
+            var value = coverage[line];
+            if (typeof value === 'undefined') {
                 value = null;
             }
             array.push(value);
         }
-
-        var source = coverage.source;
-        var lines = [];
         length = source.length;
         for (line = 0; line < length; line += 1) {
             lines.push(source[line]);
