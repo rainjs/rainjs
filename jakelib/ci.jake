@@ -14,6 +14,13 @@ var path = require('path'),
 
 namespace('ci', function () {
     namespace('coverage', function () {
+        /**
+         * Computes global coverage statistics based on the JsCoverage data object
+         *
+         * @param {Object} coverage the JsCoverage data object
+         *
+         * @returns {Object} the computed statistics
+         */
         function calculateStats(coverage) {
             var stats = {
                 packagesCovered: 0,
@@ -58,6 +65,14 @@ namespace('ci', function () {
             return stats;
         }
 
+        /**
+         * Computes global coverage for a specific metric.
+         *
+         * @param {Object} stats the coverage statistics object
+         * @param {String} metric the metric for which to compute the coverage
+         *
+         * @returns {Number} the coverage for the specific metric
+         */
         function calculateCoverage(stats, metric) {
             var covered = stats[metric + 'Covered'];
             var total = stats[metric + 'Total'];
@@ -66,6 +81,13 @@ namespace('ci', function () {
             return coverage;
         }
 
+        /**
+         * Computes coverage statistics for a file in the JsCoverage data map.
+         *
+         * @param {Object} file the file from the JsCoverage data map
+         *
+         * @returns {Object} the coverage statistics
+         */
         function calculateFileStats(file) {
             var stats = {
                 linesCovered: 0,
@@ -90,7 +112,14 @@ namespace('ci', function () {
             return stats;
         }
 
-        function generateReport(coverage) {
+        /**
+         * Generates an Emma report from the JsCoverage data object
+         *
+         * @param {Object} coverage the JsCoverage data object
+         *
+         * @returns {String} the generated report
+         */
+        function generateEmmaReport(coverage) {
             var stats = calculateStats(coverage);
             var xml = [];
             xml.push('<report>');
@@ -125,7 +154,7 @@ namespace('ci', function () {
             xml.push('    </data>');
             xml.push('</report>');
 
-            return xml;
+            return xml.join('\n');
         }
 
         desc('Generate coverage report.');
@@ -140,8 +169,10 @@ namespace('ci', function () {
                 extend(coverage, JSON.parse(fs.readFileSync('tests/client/coverage/jscoverage.json')));
             }
 
-            fs.writeFileSync('tests/coverage.xml', generateReport(coverage).join('\n'));
+            fs.writeFileSync('tests/coverage.xml', generateEmmaReport(coverage));
+            jake.logger.log('generated unified Emma report at tests/coverage.xml');
             fs.writeFileSync('tests/coverage.json', JSON.stringify(coverage));
+            jake.logger.log('generated unified coverage report at tests/coverage.json');
         });
 
         namespace('instrument', function () {
