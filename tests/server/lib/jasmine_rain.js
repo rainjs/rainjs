@@ -150,7 +150,12 @@ jasmine.util.extend(jasmine.getGlobal(), (function () {
         mocks = mocks || {};
         deps = deps || {};
 
-        var file = path.join(process.cwd(), modpath);
+        var file;
+        if (process.env.RAIN_COVERAGE == 1) {
+            file = path.join(process.cwd(), 'instrumented', modpath);
+        } else {
+            file = path.join(process.cwd(), modpath);
+        }
 
         if (!code[file]) {
             // Use sync version because `require` is sync, so that's what the user expects

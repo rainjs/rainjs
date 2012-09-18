@@ -25,7 +25,7 @@
 
 "use strict";
 
-var BaseSession = require(process.cwd() + '/lib/base_session');
+var BaseSession = loadModuleExports('/lib/base_session.js');
 
 describe('Base session with dirty keys functionality', function () {
 

@@ -133,43 +133,10 @@ namespace('test', function () {
             var jstdPath = './tests/client/bin/JsTestDriver-1.3.3d.jar';
             var jstdPort = 9876;
             var args = [
-                '-jar',
-                jstdPath,
-                '--port',
-                jstdPort,
-                '--runnerMode',
-                'DEBUG'
+                '-jar', jstdPath,
+                '--port', jstdPort
             ];
-
-            var jstd = child.spawn('java', args, {cwd: process.cwd(), env: process.env, setsid: false});
-
-            try {
-                fs.writeFileSync('/tmp/jstd_server.pid', jstd.pid + '');
-            } catch (e) {
-                // For some strange reason we can't write to pid.
-            }
-
-            jstd.on('exit', function () {
-                try {
-                    process.kill(jstd.pid, 'SIGTERM');
-                    fs.unlinkSync('/tmp/jstd_server.pid');
-                } catch (e) {
-                    // can't
-                }
-            });
-        });
-
-        desc('Stop the JS test driver server.');
-        task('stop', function () {
-            console.log('Stopping JSTD server.');
-            var pid = fs.readFileSync('/tmp/jstd.pid');
-            var jstd = fs.readFileSync('/tmp/jstd_server.pid');
-            try {
-                process.kill(pid, 'SIGTERM');
-                process.kill(jstd, 'SIGTERM');
-            } catch (e) {
-                console.log('Couldn\'t kill the JSTD server.');
-            }
+            var jstd = child.spawn('java', args);
         });
     });
 
@@ -270,7 +237,8 @@ namespace('check', function () {
         var root = process.cwd(),
             hasErrors = false,
             includedFolders = [
-                'lib'
+                'lib',
+                'tests/server/tests'
             ];
 
         console.log('Checking for missing headers in the source files.\n');
