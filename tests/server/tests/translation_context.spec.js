@@ -11,8 +11,15 @@ describe('Translation context', function () {
             language: 'en_US'
         });
         mocks['../router_utils'] = jasmine.createSpyObj('routerUtils', ['handleError']);
+        mocks['../logging'] = mocks['./logging'] = {
+            get: function () {
+                return jasmine.createSpyObj('logger', ['debug', 'info', 'warn', 'error', 'fatal']);
+            }
+        };
 
-        translation.get.andReturn(jasmine.createSpyObj('Translation', ['generateContext']));
+        var translationSpy = jasmine.createSpyObj('Translation', ['generateContext']);
+        translationSpy.generateContext.andReturn({});
+        translation.get.andReturn(translationSpy);
         spyOn(global, 'setTimeout');
         spyOn(global, 'requireWithContext');
         requireWithContext.andReturn({

@@ -26,8 +26,14 @@
 define([
     'raintime/lib/promise',
     'raintime/messaging/sockets',
-    'raintime'
-], function (Promise, Sockets, Raintime) {
+    'raintime',
+    'raintime/logger'
+], function (Promise, Sockets, Raintime, Logger) {
+
+    var logger = Logger.get({
+        id: 'core'
+    });
+
     var socketQueue = [];
     /**
      * The ClientRenderer handles the registration and inserting of new components from the server.
@@ -42,9 +48,11 @@ define([
      */
     function ClientRenderer() {
         var self = this;
+
         this.placeholderComponent = null;
         this.placeholderTimeout = 500;
         this.counter = 0;
+
         /**
          * A map of objects that have been rendered inside a container and are waiting for their
          * parent container to get rendered.
@@ -59,7 +67,7 @@ define([
             self.renderComponent(component);
         });
 
-        socket.on('connect', function() {
+        socket.on('connect', function () {
             for (var i = 0, len = socketQueue.length; i < len; i++) {
                 socket.emit('render', socketQueue[i], function (error) {});
             }
@@ -106,14 +114,19 @@ define([
      */
     ClientRenderer.prototype.requestComponent = function (component) {
         if (!component.id || !component.instanceId || !component.view) {
-            console.error('Component id, instance id and view are required!');
+            logger.error('Component id, instance id and view are required: ' +
+                         JSON.stringify(component));
             return;
         }
         if (component.placeholder && component.placeholder === true) {
             placeholderTimeout(this, component);
         }
         if (this.socket.socket.connected) {
-            this.socket.emit('render', component, function (error) {});
+            this.socket.emit('render', component, function (error) {
+                if (error) {
+                    logger.error('An error occurred in ClientRenderer on render emit.', error);
+                }
+            });
         } else {
             socketQueue.push(component);
         }
@@ -197,8 +210,10 @@ define([
      * @memberOf ClientRenderer#
      */
     function placeholderTimeout(self, placeholder) {
-        setTimeout(function() {
+        setTimeout(function () {
             if (!$('#' + placeholder.instanceId).hasClass('app-container')) {
+                logger.warn('The component "' + placeholder.id +
+                            '" exceeded the placeholder timeout.');
                 self.renderPlaceholder(placeholder.instanceId);
             }
         }, self.placeholderTimeout);

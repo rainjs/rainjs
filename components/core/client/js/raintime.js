@@ -26,8 +26,11 @@
 define(['raintime/lib/promise',
         'raintime/lib/event_emitter',
         'raintime/context',
+        'raintime/logger',
         'raintime/lib/rain_error'
-], function (Promise, EventEmitter, Context) {
+], function (Promise, EventEmitter, Context, Logger) {
+
+    var logger = Logger.get();
 
     var raintime = new Raintime();
 
@@ -128,6 +131,8 @@ define(['raintime/lib/promise',
      */
     ComponentRegistry.prototype.register = function (component) {
         if (!component || !component.instanceId) {
+            logger.warn('Trying to register an invalid component: ' +
+                        (component ? JSON.stringify(component) : ''));
             return;
         }
 
@@ -175,7 +180,7 @@ define(['raintime/lib/promise',
     ComponentRegistry.prototype.deregister = function (instanceId) {
         if (instanceId && components[instanceId]) {
             var children = components[instanceId].children;
-            for(var i = children.length; i--;){
+            for (var i = children.length; i--;) {
                 this.deregister(children[i].instanceId);
             }
             components[instanceId].state = Component.DESTROY;
@@ -211,12 +216,15 @@ define(['raintime/lib/promise',
      */
     function find(instanceId, staticIds, callback) {
         if (!instanceId) {
-            throw new Error('ComponentRegistry internal error: instanceId must be defined.');
+            logger.error('ComponentRegistry internal error: instanceId must be defined.');
+            return;
         }
 
         var component = components[instanceId];
         if (!component || !component.children) {
-            throw new Error('The component has no registered children.');
+            logger.error('The component has no registered children: ' +
+                         (component && JSON.stringify(staticIds)));
+            return;
         }
 
         var children = component.children;
@@ -260,6 +268,9 @@ define(['raintime/lib/promise',
                 callback.apply(component.controller, array);
             });
         }
+
+        logger.warn('Components with the following static IDs were not found: ' +
+                    JSON.stringify(staticIds));
     }
 
     /**
@@ -301,6 +312,8 @@ define(['raintime/lib/promise',
             }
 
             controller.on = function (eventName, callback) {
+                logger.info('Called ' + eventName + ' lifecycle for controller ' +
+                    component.controller);
                 if (eventName === 'start' && newComponent.state === Component.START) {
                     callback.call(controller);
                     return;
@@ -327,7 +340,9 @@ define(['raintime/lib/promise',
                     staticIds = [staticIds];
                 }
                 if (typeof callback !== 'function') {
-                    throw new Error('The callback parameter must be a function.');
+                    logger.error('Invalid parameters for context\'s find method',
+                                    new Error('The callback parameter must be a function.'));
+                    return;
                 }
                 return find(newComponent.instanceId, staticIds, callback);
             };
