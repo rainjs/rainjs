@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.16.0
+
+* Fixed CSS files not loading in IE8.
+* Added logger implementation for components and for client side.
+* Added code coverage support as additional Jake commands.
+* Added distributed websockets proposal.
+
 ## 0.15.0
 
 * Added distributed session support by using mongodb as the session store.

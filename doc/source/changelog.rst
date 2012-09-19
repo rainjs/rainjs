@@ -3,6 +3,15 @@ Changelog
 =========
 
 ------
+v 0.16
+------
+
++ Fixed CSS files not loading in IE8.
++ Added logger implementation for components and for client side.
++ Added code coverage support as additional Jake commands.
++ Added distributed websockets proposal.
+
+------
 v 0.15
 ------
 
