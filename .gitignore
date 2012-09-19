@@ -8,4 +8,9 @@ jstd.log
 *_global_.rst
 tests/client/reports
 tests/server/reports
+tests/server/coverage
+tests/client/coverage
+tests/coverage.xml
+tests/coverage.json
 *.conf.local
+instrumented

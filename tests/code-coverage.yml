@@ -1,0 +1,8 @@
+target: instrumented
+client:
+    src:
+        - components
+server:
+    src:
+        - lib
+        - bin

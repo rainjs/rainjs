@@ -28,7 +28,7 @@
 describe('proxy store', function () {
     var proxy;
 
-    var ProxyStore = require(process.cwd() + '/lib/proxy_store');
+    var ProxyStore = loadModuleExports('/lib/proxy_store.js');
     var MockStore = require('../lib/mock_store');
 
     var sid1 = 'alfa';
