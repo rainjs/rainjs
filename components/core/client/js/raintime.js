@@ -267,10 +267,10 @@ define(['raintime/lib/promise',
                 }
                 callback.apply(component.controller, array);
             });
+        } else {
+            logger.warn('Components with the following static IDs were not found: ' +
+                        JSON.stringify(staticIds));
         }
-
-        logger.warn('Components with the following static IDs were not found: ' +
-                    JSON.stringify(staticIds));
     }
 
     /**
@@ -312,7 +312,7 @@ define(['raintime/lib/promise',
             }
 
             controller.on = function (eventName, callback) {
-                logger.info('Called ' + eventName + ' lifecycle for controller ' +
+                logger.info('Called ' + eventName + ' event for controller ' +
                     component.controller);
                 if (eventName === 'start' && newComponent.state === Component.START) {
                     callback.call(controller);
