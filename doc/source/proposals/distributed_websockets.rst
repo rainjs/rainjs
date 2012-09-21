@@ -1,4 +1,3 @@
-
 Distributed Websockets
 ======================
 
@@ -16,8 +15,8 @@ Proposed Architecture
 
     .. figure:: ../images/proposals/websockets.png
 
-In order to resolve the coordination problem the ``Mothership`` was added to the architecture. It
-knows about all the RAIN servers and the components deployed on them. At startup, each RAIN server
+In order to resolve the coordination problem the ``Mothership`` was added to the architecture. It's role 
+is to be aware of all the RAIN servers and the components deployed on them. At startup, each RAIN server
 connects to the ``Mothership`` and registers all the components, websocket channels and intents (a
 persistent TCP connection is used to communicate between the RAIN server and the ``Mothership``).
 
