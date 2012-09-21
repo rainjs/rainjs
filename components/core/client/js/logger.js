@@ -42,6 +42,7 @@ define(['raintime/messaging/sockets'], function (Sockets) {
     function Logger(component) {
         this._component = component;
         this._logQueue = [];
+        this._ready = false;
 
         var channel = '/core/logging';
 
@@ -50,6 +51,16 @@ define(['raintime/messaging/sockets'], function (Sockets) {
         }
 
         this._socket = Sockets.getSocket(channel);
+
+        var self = this;
+
+        this._socket.on('ready', function () {
+            for (var i = 0, len = self._logQueue.length; i < len; i++) {
+                self._socket.emit('log', self._logQueue[i]);
+            }
+            self._logQueue = [];
+            self._ready = true;
+        });
     }
 
     /**
@@ -138,13 +149,7 @@ define(['raintime/messaging/sockets'], function (Sockets) {
             error: error
         };
 
-        if (this._socket.socket.connected) {
-            if (this._logQueue.length) {
-                for (var i = 0, len = this._logQueue.length; i < len; i++) {
-                    this._socket.emit('log', this._logQueue[i]);
-                }
-                this._logQueue = [];
-            }
+        if (this._ready) {
             this._socket.emit('log', event);
         } else {
             this._logQueue.push(event);
