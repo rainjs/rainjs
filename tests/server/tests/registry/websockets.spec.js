@@ -48,7 +48,7 @@ describe('Registry plugin: Websockets', function () {
         mocks['../translation'] = {
             get: function () {
                 return {
-                    generateContext: function () {}
+                    generateContext: function () { return {}; }
                 };
             }
         };

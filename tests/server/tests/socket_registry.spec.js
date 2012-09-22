@@ -40,7 +40,8 @@ describe('Socket registry', function () {
                     cookie: {}
                 }
             },
-            disconnect: jasmine.createSpy()
+            disconnect: jasmine.createSpy(),
+            emit: jasmine.createSpy()
         };
 
         connect = {
