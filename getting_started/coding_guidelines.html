@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Coding Guidelines &mdash; Rain v0.13.0 documentation</title>
+    <title>Coding Guidelines &mdash; Rain v0.16.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.13.0',
+        VERSION:     '0.16.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.13.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.16.0 documentation" href="../index.html" />
     <link rel="next" title="Documenting Rain" href="documenting.html" />
     <link rel="prev" title="RAIN component descriptor" href="../server/component_descriptor.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="../server/component_descriptor.html" title="RAIN component descriptor"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.13.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.16.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -57,108 +57,86 @@
 <li>Identifiers are in camel case</li>
 <li>Constructor functions start with a capital letter</li>
 <li>Variable and normal function names start with a lower case letter</li>
-<li>Function names always start with a verb, e.g.: <tt class="docutils literal"><span class="pre">lock</span></tt>, <tt class="docutils literal"><span class="pre">openFile</span></tt>, <tt class="docutils literal"><span class="pre">parseUsersList</span></tt></li>
-<li>Variable names never start with a verb, except for booleans: <tt class="docutils literal"><span class="pre">isLocked</span></tt>, <tt class="docutils literal"><span class="pre">hasFeature</span></tt></li>
-<li>File names use only lower case letters and underscores for spaces, e.g.: <tt class="docutils literal"><span class="pre">view_manager.js</span></tt></li>
+<li>Function names always start with a verb, e.g.: <tt class="docutils literal"><span class="pre">lock</span></tt>, <tt class="docutils literal"><span class="pre">openFile</span></tt>,
+<tt class="docutils literal"><span class="pre">parseUsersList</span></tt></li>
+<li>Variable names never start with a verb, except for booleans: <tt class="docutils literal"><span class="pre">isLocked</span></tt>,
+<tt class="docutils literal"><span class="pre">hasFeature</span></tt></li>
+<li>File names use only lower case letters and underscores for spaces, e.g.:
+<tt class="docutils literal"><span class="pre">view_manager.js</span></tt></li>
 </ul>
 </div>
 <div class="section" id="style">
 <h2>Style<a class="headerlink" href="#style" title="Permalink to this headline">¶</a></h2>
 <ul>
-<li><p class="first">Indentation is 4 spaces.</p>
+<li><p class="first">Indentation is 4 spaces</p>
 </li>
-<li><p class="first">Lines have a maximum of 100 characters.</p>
+<li><p class="first">Lines have a maximum of 80 characters</p>
 </li>
-<li><p class="first">Always use spaces between operators.</p>
+<li><p class="first">Always use spaces between operators</p>
 </li>
-<li><dl class="first docutils">
-<dt>Object properties have no space between the property name and colon, but have a space between the colon and the value, e.g.:</dt>
-<dd><div class="first last highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="p">{</span><span class="nx">sort</span><span class="o">:</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="nx">direction</span><span class="o">:</span> <span class="s2">&quot;ascending&quot;</span><span class="p">}</span>
+<li><p class="first">Object properties have no space between the property name and colon,
+but have a space between the colon and the value, e.g.:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="p">{</span><span class="nx">sort</span><span class="o">:</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="nx">direction</span><span class="o">:</span> <span class="s2">&quot;ascending&quot;</span><span class="p">};</span>
 </pre></div>
-</td></tr></table></div>
-</dd>
-</dl>
+</div>
 </li>
-<li><dl class="first docutils">
-<dt>Function declarations and expressions have no space between function name and opening parantheses:</dt>
-<dd><div class="first last highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2</pre></div></td><td class="code"><div class="highlight"><pre><span class="kd">function</span> <span class="nx">ajax</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}</span>
+<li><p class="first">Function declarations and expressions have no space between function name
+and opening parantheses:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="kd">function</span> <span class="nx">ajax</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}</span>
 <span class="nx">ajax</span><span class="p">({</span><span class="nx">success</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">});</span>
 </pre></div>
-</td></tr></table></div>
-</dd>
-</dl>
+</div>
 </li>
-<li><p class="first">Always use braces to surround the body of flow control statements, even when the body consists of a single statement</p>
+<li><p class="first">Always use braces to surround the body of flow control statements, even when
+the body consists of a single statement</p>
 </li>
-<li><dl class="first docutils">
-<dt>Put a semicolon after every statement, except for <tt class="docutils literal"><span class="pre">for</span></tt>, <tt class="docutils literal"><span class="pre">function</span></tt>, <tt class="docutils literal"><span class="pre">if</span></tt>, <tt class="docutils literal"><span class="pre">try</span></tt>, <tt class="docutils literal"><span class="pre">switch</span></tt>, but including after a function expression, e.g.:</dt>
-<dd><div class="first last highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">return</span> <span class="kd">function</span> <span class="p">{</span>
+<li><p class="first">Put a semicolon after every statement, except for <tt class="docutils literal"><span class="pre">for</span></tt>, <tt class="docutils literal"><span class="pre">function</span></tt>,
+<tt class="docutils literal"><span class="pre">if</span></tt>, <tt class="docutils literal"><span class="pre">try</span></tt>, <tt class="docutils literal"><span class="pre">switch</span></tt>, but including after a function expression, e.g.:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="k">return</span> <span class="kd">function</span> <span class="p">{</span>
     <span class="cm">/* ... */</span>
 <span class="p">};</span>
 </pre></div>
-</td></tr></table></div>
-</dd>
-</dl>
+</div>
 </li>
 </ul>
 </div>
 <div class="section" id="best-practices">
 <h2>Best Practices<a class="headerlink" href="#best-practices" title="Permalink to this headline">¶</a></h2>
 <ul>
-<li><p class="first">Always use identity operator instead of the equality operator.</p>
+<li><p class="first">Always use identity operator instead of the equality operator</p>
 </li>
-<li><dl class="first docutils">
-<dt>Always cache the length of an array when iterating through it&#8217;s elements, e.g.:</dt>
-<dd><div class="first last highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">l</span> <span class="o">=</span> <span class="nx">a</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">l</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}</span>
+<li><p class="first">Always cache the length of an array when iterating through it&#8217;s elements, e.g.:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">l</span> <span class="o">=</span> <span class="nx">a</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">l</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}</span>
 </pre></div>
-</td></tr></table></div>
-</dd>
-</dl>
+</div>
 </li>
-<li><dl class="first docutils">
-<dt>Use the optimized version of backward loops when possible:</dt>
-<dd><div class="first last highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">a</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">--</span><span class="p">;)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}</span>
+<li><p class="first">Use the optimized version of backward loops when possible:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">a</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">--</span><span class="p">;)</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}</span>
 </pre></div>
-</td></tr></table></div>
-</dd>
-</dl>
+</div>
 </li>
-<li><dl class="first docutils">
-<dt>Use arrays for long string concatenations instead of the + operator, e.g.:</dt>
-<dd><div class="first last highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4
-5
-6</pre></div></td><td class="code"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">nucleotides</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">];</span>
+<li><p class="first">Use arrays for long string concatenations instead of the + operator, e.g.:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">nucleotides</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">];</span>
 <span class="kd">var</span> <span class="nx">dnaSequence</span> <span class="o">=</span> <span class="p">[];</span>
 <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1001</span><span class="p">;</span> <span class="nx">i</span><span class="o">--</span><span class="p">;)</span> <span class="p">{</span>
     <span class="nx">dnaSequence</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">nucleotides</span><span class="p">[</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">3</span><span class="p">]);</span>
 <span class="p">}</span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">dnaSequence</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">));</span>
 </pre></div>
-</td></tr></table></div>
-</dd>
-</dl>
+</div>
 </li>
-<li><dl class="first docutils">
-<dt>Use the bitwise negation operator to optimize string <tt class="docutils literal"><span class="pre">indexOf</span></tt> calls when checking for the existence of a substring, e.g.:</dt>
-<dd><div class="first last highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">if</span> <span class="p">(</span><span class="o">~</span><span class="nx">dnaSequence</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;GATTACA&quot;</span><span class="p">))</span> <span class="p">{</span>
+<li><p class="first">Use the bitwise negation operator to optimize string <tt class="docutils literal"><span class="pre">indexOf</span></tt> calls
+when checking for the existence of a substring, e.g.:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="k">if</span> <span class="p">(</span><span class="o">~</span><span class="nx">dnaSequence</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;GATTACA&quot;</span><span class="p">))</span> <span class="p">{</span>
     <span class="cm">/* Same as: dnaSequence.indexOf(&quot;GATTACA&quot;) !== -1 */</span>
 <span class="p">}</span>
 </pre></div>
-</td></tr></table></div>
-</dd>
-</dl>
+</div>
 </li>
-<li><p class="first">Usually try to accept an object as a single input argument for a function instead of a long list of arguments.</p>
+<li><p class="first">Usually try to accept an object as a single input argument for a function
+instead of a long list of arguments</p>
 </li>
-<li><p class="first">Always provide a <tt class="docutils literal"><span class="pre">default</span></tt> case to switch statements.</p>
+<li><p class="first">Always provide a <tt class="docutils literal"><span class="pre">default</span></tt> case to switch statements</p>
 </li>
 </ul>
 </div>
@@ -167,39 +145,17 @@
 <ul>
 <li><p class="first">Always use the prototype pattern for classes</p>
 </li>
-<li><p class="first">We use a naming convention for private functions of putting an underscore as the first character
-of the function name. We also make these functions public on the prototype. Avoid declaring private
-functions hidden in closures or on the top level of node.js modules as these cannot be mocked
-in unit tests (code coverage is the main criteria behind choosing this naming convention and having
-only public functions):</p>
-<blockquote>
-<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21</pre></div></td><td class="code"><div class="highlight"><pre><span class="c1">// WRONG</span>
-<span class="kd">function</span> <span class="nx">privateMethod</span><span class="p">(</span><span class="nx">self</span><span class="p">)</span> <span class="p">{</span>
-<span class="p">}</span>
+<li><p class="first">We use a naming convention for private functions of putting an underscore as
+the first character of the function name. We also make these functions public
+on the prototype. Avoid declaring private functions hidden in closures or on
+the top level of node.js modules as these cannot be mocked in unit tests
+(code coverage is the main criteria behind choosing this naming convention
+and having only public functions):</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="c1">// WRONG</span>
+<span class="kd">function</span> <span class="nx">privateMethod</span><span class="p">(</span><span class="nx">self</span><span class="p">)</span> <span class="p">{}</span>
 
 <span class="c1">// CORRECT</span>
-<span class="nx">myClass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">_privateMethod</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-<span class="p">};</span>
+<span class="nx">myClass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">_privateMethod</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{};</span>
 
 <span class="c1">// Example of calling the private method ...</span>
 <span class="nx">myClass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">publicMethod</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
@@ -215,74 +171,68 @@ only public functions):</p>
     <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
 <span class="p">};</span>
 </pre></div>
-</td></tr></table></div>
-</blockquote>
+</div>
 </li>
-<li><p class="first">Caution: if you declare a property that is scoped to the node/requirejs module, it will be a
-static property, and all instances of the class will have access to the same value.</p>
+<li><p class="first">Caution: if you declare a property that is scoped to the node / requirejs
+module, it will be a static property, and all instances of the class will
+have access to the same value</p>
 </li>
 <li><p class="first">Private properties follow the same naming convention:</p>
-<blockquote>
-<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4
-5
-6</pre></div></td><td class="code"><div class="highlight"><pre><span class="c1">// private properties are made public but with a leading underscore</span>
+<div class="highlight-js"><div class="highlight"><pre><span class="c1">// private properties are made public but with a leading underscore</span>
 <span class="c1">// in their names</span>
 <span class="kd">function</span> <span class="nx">MyClass</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">_root</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">getRoot</span><span class="p">();</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">_element</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_root</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.element&#39;</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
-</td></tr></table></div>
-</blockquote>
+</div>
 </li>
 </ul>
 </div>
 <div class="section" id="patterns">
 <h2>Patterns<a class="headerlink" href="#patterns" title="Permalink to this headline">¶</a></h2>
+<p>Several patterns are used often in the code base, so they are described here.</p>
+<div class="section" id="promises">
+<h3>Promises<a class="headerlink" href="#promises" title="Permalink to this headline">¶</a></h3>
+<p>Having to write asynchronous code can lead quickly to a code structure that is
+hard to read, maintain and that is prone to bugs.</p>
+</div>
 <div class="section" id="singleton">
 <h3>Singleton<a class="headerlink" href="#singleton" title="Permalink to this headline">¶</a></h3>
 <ul>
-<li><p class="first">When defining singletons, we use the following simple pattern</p>
-<blockquote>
-<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9</pre></div></td><td class="code"><div class="highlight"><pre><span class="kd">function</span> <span class="nx">A</span><span class="p">()</span> <span class="p">{}</span>
-
-<span class="kd">var</span> <span class="nx">instance</span><span class="p">;</span>
+<li><p class="first">When defining singletons, we use the following simple pattern:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="kd">function</span> <span class="nx">A</span><span class="p">()</span> <span class="p">{}</span>
 
 <span class="nx">A</span><span class="p">.</span><span class="nx">get</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">instance</span> <span class="o">||</span> <span class="p">(</span><span class="nx">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">A</span><span class="p">());</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">A</span><span class="p">.</span><span class="nx">_instance</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">A</span><span class="p">.</span><span class="nx">_instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">A</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">A</span><span class="p">.</span><span class="nx">_instance</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">A</span><span class="p">;</span>
 </pre></div>
-</td></tr></table></div>
-</blockquote>
+</div>
 </li>
 <li><p class="first">This avoids running code at require time</p>
 </li>
-<li><p class="first">This means that we always use singletons by calling the <tt class="docutils literal"><span class="pre">get()</span></tt> method, e.g.: <tt class="docutils literal"><span class="pre">A.get().doSomething()</span></tt></p>
+<li><p class="first">This means that we always use singletons by calling the <tt class="docutils literal"><span class="pre">get()</span></tt> method,
+e.g.: <tt class="docutils literal"><span class="pre">A.get().doSomething()</span></tt></p>
 </li>
 </ul>
 </div>
 </div>
-<div class="section" id="errors">
-<h2>Errors<a class="headerlink" href="#errors" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="error-handling">
+<h2>Error Handling<a class="headerlink" href="#error-handling" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Errors should be thrown only using the globaly available <tt class="docutils literal"><span class="pre">RainError</span></tt> class.</li>
-<li>If a function needs to accept a <strong>callback</strong>, the callback must also accept as the first argument an
+<li>Errors should be thrown only using the globaly available <tt class="docutils literal"><span class="pre">RainError</span></tt> class</li>
+<li>If a function needs to accept a <strong>callback</strong>, the callback must also accept
+as the first argument an
 error object, which might be null or undefined in case the call was successful.</li>
-<li>In node, classes may inherit from <strong>``EventEmitter``</strong> and emit an <tt class="docutils literal"><span class="pre">error</span></tt> event when an error
-condition occurs, passing it the error object described above. <a class="footnote-reference" href="#node-error-event" id="id1">[1]</a></li>
+<li>In node, classes may inherit from <strong>``EventEmitter``</strong> and emit an <tt class="docutils literal"><span class="pre">error</span></tt>
+event when an error condition occurs, passing it the error object described
+above. <a class="footnote-reference" href="#node-error-event" id="id1">[1]</a></li>
 </ul>
 <p class="rubric">Footnotes</p>
 <table class="docutils footnote" frame="void" id="node-error-event" rules="none">
@@ -308,10 +258,11 @@ condition occurs, passing it the error object described above. <a class="footnot
 <li><a class="reference internal" href="#best-practices">Best Practices</a></li>
 <li><a class="reference internal" href="#classes">Classes</a></li>
 <li><a class="reference internal" href="#patterns">Patterns</a><ul>
+<li><a class="reference internal" href="#promises">Promises</a></li>
 <li><a class="reference internal" href="#singleton">Singleton</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#errors">Errors</a></li>
+<li><a class="reference internal" href="#error-handling">Error Handling</a></li>
 </ul>
 </li>
 </ul>
@@ -351,7 +302,7 @@ condition occurs, passing it the error object described above. <a class="footnot
         <li class="right" >
           <a href="../server/component_descriptor.html" title="RAIN component descriptor"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.13.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.16.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

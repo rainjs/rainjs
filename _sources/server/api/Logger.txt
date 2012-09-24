@@ -60,7 +60,7 @@ the platform level and the file appender specifies its own level, overriding the
              "layout": {
                  "type": "pattern",
                  "params": {
-                     "pattern": "[%level] %date %logger: %message%newline%stacktrace"
+                     "pattern": "[%source] [%level] %date %logger: %message%newline%stacktrace"
                  }
              },
              "params": {
@@ -69,11 +69,58 @@ the platform level and the file appender specifies its own level, overriding the
          }]
      }
 
+Component specific appenders can also be configured in ``meta.json``. Developers can use custom
+appenders and layout by setting ``type`` to be ``custom`` and ``file`` to point to the JavaScript
+file that implements the custom appender or layout (this path is relative to the ``server`` folder
+of each component. The platform lever can't be set in the component specific configuration::
+
+     "logger": {
+         "appenders": [{
+             "type": "console",
+             "level": "error",
+             "layout": {
+                 "type": "pattern",
+                 "params": {
+                     "pattern": "[%level] %date: %message"
+                 }
+             },
+             "params": {
+                 "debug": {
+                     "foreground": "magenta"
+                 },
+                 "info": {
+                     "foreground": "cyan"
+                 },
+                 "warn": {
+                     "foreground": "yellow"
+                 },
+                 "error": {
+                     "foreground": "red"
+                 },
+                 "fatal": {
+                     "foreground": "black",
+                     "background": "red"
+                 }
+             }
+         },
+         {
+             "type": "custom",
+             "file": "path/to/file.js",
+             "level": "info",
+             "layout": {
+                 "type": "custom",
+                 "file": "path/to/file.js"
+             }
+         }]
+     }
+
+The logger can be used from both the server-side and client-side.
+
 RAIN’s logging system defines 5 log levels: ``debug``, ``info``, ``warn``, ``error`` and ``fatal``.
 
 In order to use the platform logger you need to obtain its reference by calling ``Logger.get``
 and then you can write messages by calling one of its methods: ``debug``, ``info``, ``warn``,
- ``error`` or ``fatal``::
+``error`` or ``fatal``::
 
      var logger = require('./logging').get();
      logger.error('Error reading from file', error);
@@ -92,13 +139,19 @@ and then you can write messages by calling one of its methods: ``debug``, ``info
 Constructor
 -----------
 
-.. js:class:: Logger(appenders)
+.. js:class:: Logger(logger, appenders, [inheritedAppenders])
 
 
 
     
+    :param String logger: 
+        the logger name 
+    
     :param Appender[] appenders: 
         The appenders used by the logger. 
+    
+    :param Appender[] inheritedAppenders: 
+        The appenders inherited by a component logger from the platform logger. 
     
 
 
@@ -145,16 +198,16 @@ Logs a debug message.
 
 
 
-destroy
+destroyAll
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: Logger#destroy()
+.. js:function:: Logger.destroyAll()
 
 
 
 
 
-Calls the destroy method for the appenders it uses.
+Destroys all the loggers.
 
 
 
@@ -233,8 +286,19 @@ Logs a fatal error message. These are errors from which the server can't recover
 get
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: Logger.get()
+.. js:function:: Logger.get([component])
 
+
+    
+    :param  component: 
+        The component for which to create the logger. Creates the platform logger if component is undefined. 
+    
+    :param  component.id: 
+        The component id. 
+    
+    :param  component.version: 
+        The component version. 
+    
 
 
     
@@ -249,8 +313,7 @@ get
     
 
 
-Gets the platform logger. At the first call, registers platform appenders and layouts and
-initializes the logger.
+Initializes and returns a platform or component logger.
 
 
 

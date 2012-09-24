@@ -179,7 +179,7 @@ renderBootstrap
 
 
 Renders the bootstrap for the initialized request.
-This is only used for the HTTP transport layer
+This is only used for the HTTP transport layer.
 
 
 
@@ -285,44 +285,6 @@ Attributes
 
 ..
    class-attributes
-
-
-AUTHORIZATION_TYPE_INTENT
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-.. js:attribute:: AUTHORIZATION_TYPE_INTENT   
-
-
-Constant used when checking if the user can use a server type intent.
-
-
-
-
-
-
-
-
-    
-
-
-
-AUTHORIZATION_TYPE_VIEW
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-.. js:attribute:: AUTHORIZATION_TYPE_VIEW   
-
-
-Constant used when checking if the user can see a view.
-
-
-
-
-
-
-
-
-    
-
 
 
 rain

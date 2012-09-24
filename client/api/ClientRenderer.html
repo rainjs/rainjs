@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class ClientRenderer &mdash; Rain v0.13.0 documentation</title>
+    <title>Class ClientRenderer &mdash; Rain v0.16.0 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.13.0',
+        VERSION:     '0.16.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.13.0 documentation" href="../../index.html" />
+    <link rel="top" title="Rain v0.16.0 documentation" href="../../index.html" />
     <link rel="next" title="Class ClientStorage" href="ClientStorage.html" />
     <link rel="prev" title="Text localization" href="../localization.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="../localization.html" title="Text localization"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.13.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.16.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -64,6 +64,24 @@ that the component is still loading.</p>
 </div>
 <div class="section" id="methods">
 <h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="get">
+<h3>get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ClientRenderer.get">
+<tt class="descclassname">ClientRenderer.</tt><tt class="descname">get</tt><big>(</big><big>)</big><a class="headerlink" href="#ClientRenderer.get" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">Returns ClientRenderer:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body">the singleton instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Returns the class&#8217; singleton instance.</p>
+</div>
 <div class="section" id="rendercomponent">
 <h3>renderComponent<a class="headerlink" href="#rendercomponent" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
@@ -82,7 +100,9 @@ that the component is still loading.</p>
 </table>
 </dd></dl>
 
-<p>Renders the component to the DOM and registers it.</p>
+<p>Renders the component to the DOM and registers it.
+This method takes care of rendering orphaned components (components rendered inside a
+a container which get sent to the client before their placeholder div).</p>
 </div>
 <div class="section" id="renderplaceholder">
 <h3>renderPlaceholder<a class="headerlink" href="#renderplaceholder" title="Permalink to this headline">¶</a></h3>
@@ -178,6 +198,7 @@ that the component is still loading.</p>
 <li><a class="reference internal" href="#">Class ClientRenderer</a><ul>
 <li><a class="reference internal" href="#constructor">Constructor</a></li>
 <li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#get">get</a></li>
 <li><a class="reference internal" href="#rendercomponent">renderComponent</a></li>
 <li><a class="reference internal" href="#renderplaceholder">renderPlaceholder</a></li>
 <li><a class="reference internal" href="#requestcomponent">requestComponent</a></li>
@@ -224,7 +245,7 @@ that the component is still loading.</p>
         <li class="right" >
           <a href="../localization.html" title="Text localization"
              >previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.13.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.16.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

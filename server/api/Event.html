@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class Event &mdash; Rain v0.13.0 documentation</title>
+    <title>Class Event &mdash; Rain v0.16.0 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.13.0',
+        VERSION:     '0.16.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.13.0 documentation" href="../../index.html" />
+    <link rel="top" title="Rain v0.16.0 documentation" href="../../index.html" />
     <link rel="next" title="Class FileAppender" href="FileAppender.html" />
     <link rel="prev" title="Class ErrorHandler" href="ErrorHandler.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="ErrorHandler.html" title="Class ErrorHandler"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.13.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.16.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -55,7 +55,7 @@
 <h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="Event">
-<em class="property">class </em><tt class="descname">Event</tt><big>(</big><em>level</em>, <em>message</em>, <em>error</em><big>)</big><a class="headerlink" href="#Event" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">Event</tt><big>(</big><em>level</em>, <em>message</em>, <em>error</em>, <em>logger</em>, <em>source</em><big>)</big><a class="headerlink" href="#Event" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -64,6 +64,8 @@
 <li><strong>level</strong> (<em>Number</em>) &#8211; The level of the event.</li>
 <li><strong>message</strong> (<em>String</em>) &#8211; The log message.</li>
 <li><strong>error</strong> (<em>RainError</em>) &#8211; The error associated with the log message.</li>
+<li><strong>logger</strong> (<em>String</em>) &#8211; the logger name</li>
+<li><strong>source</strong> (<em>String</em>) &#8211; the log statement location: &#8216;server&#8217; or &#8216;client&#8217;</li>
 </ul>
 </td>
 </tr>
@@ -160,6 +162,23 @@
 
 <p>Gets the event message.</p>
 </div>
+<div class="section" id="source">
+<h3>source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Event#source">
+<tt class="descname">Event#source</tt><big>(</big><big>)</big><a class="headerlink" href="#Event#source" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns String:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Gets the event source.</p>
+</div>
 </div>
 </div>
 
@@ -179,6 +198,7 @@
 <li><a class="reference internal" href="#level">level</a></li>
 <li><a class="reference internal" href="#logger">logger</a></li>
 <li><a class="reference internal" href="#message">message</a></li>
+<li><a class="reference internal" href="#source">source</a></li>
 </ul>
 </li>
 </ul>
@@ -220,7 +240,7 @@
         <li class="right" >
           <a href="ErrorHandler.html" title="Class ErrorHandler"
              >previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.13.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.16.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

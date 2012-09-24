@@ -89,7 +89,7 @@ Components
     server/placeholder
 
 -----------------
-Features Proposal
+Feature Proposals
 -----------------
 
 .. toctree::

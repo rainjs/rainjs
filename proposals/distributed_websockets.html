@@ -1,0 +1,163 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Distributed Websockets &mdash; Rain v0.16.0 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.16.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Rain v0.16.0 documentation" href="../index.html" />
+    <link rel="next" title="Changelog" href="../changelog.html" />
+    <link rel="prev" title="Code Coverage" href="code_coverage.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../changelog.html" title="Changelog"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="code_coverage.html" title="Code Coverage"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain v0.16.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="distributed-websockets">
+<h1>Distributed Websockets<a class="headerlink" href="#distributed-websockets" title="Permalink to this headline">¶</a></h1>
+<p>Currently a RAIN server holds all the components and can decide how to render components or how to
+handle websocket messages. However, in a distributed architecture with multiple servers holding
+different components this is no longer true. The servers need to collaborate in order to serve
+requests. The main problem that appears is how to coordinate the interactions between multiple
+RAIN servers.</p>
+<p>In the websockets case, a persistent connection needs to be maintained between the client and the
+server and the messages have to be dispatched to the appropriate servers.</p>
+<div class="section" id="proposed-architecture">
+<h2>Proposed Architecture<a class="headerlink" href="#proposed-architecture" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div class="figure">
+<img alt="../_images/websockets.png" src="../_images/websockets.png" />
+</div>
+</blockquote>
+<p>In order to resolve the coordination problem the <tt class="docutils literal"><span class="pre">Mothership</span></tt> was added to the architecture. It&#8217;s role
+is to be aware of all the RAIN servers and the components deployed on them. At startup, each RAIN server
+connects to the <tt class="docutils literal"><span class="pre">Mothership</span></tt> and registers all the components, websocket channels and intents (a
+persistent TCP connection is used to communicate between the RAIN server and the <tt class="docutils literal"><span class="pre">Mothership</span></tt>).</p>
+<p>Each RAIN server starts a Socket.IO server to listen for websocket connections. When a client
+initiates a websocket connection, it reaches the load balancer which picks a server and the
+connection is established with the server. The RAIN server sends a message to the <tt class="docutils literal"><span class="pre">Mothership</span></tt>
+specifying that the client is connected to it (the client is identified by session id). This is
+done in order to be able to send messages back to the client.</p>
+<p>When the client sends a message, the server sends a message to <tt class="docutils literal"><span class="pre">Mothership</span></tt> that contains the
+session id of the client, the channel on which the message was sent and the actual message.
+The <tt class="docutils literal"><span class="pre">Mothership</span></tt> picks a server that can handle messages on the specified channel and sends the
+message to it.</p>
+<p>A special case are the events arriving on the core channel (render, log, send_intent, ...). These
+events are handled by the <tt class="docutils literal"><span class="pre">Mothership</span></tt>. This is done in order to avoid redundant communication
+between the <tt class="docutils literal"><span class="pre">Mothership</span></tt> and the server. For example in the render case, if the core events
+were handled by RAIN servers, it is possible to send the message to a server that can handle
+core events, but doesn&#8217;t have the component that needs to be rendered. To resolve this the
+<tt class="docutils literal"><span class="pre">Mothership</span></tt> reads the message and asks a server having the component to render that component.</p>
+<p>Another special case is the log event because the message should be rendered on the same server
+that rendered the component. To resolve this, a server identifier is added to the instance id and
+when a message is logged from the client the instance id is also sent.</p>
+<p>When a RAIN server wants to send a message to a client, it sends a request to the <tt class="docutils literal"><span class="pre">Mothership</span></tt>
+specifying the session id of the client. The <tt class="docutils literal"><span class="pre">Mothership</span></tt> sends the message to the server
+to which that client is connected instructing it to notify the client.</p>
+</div>
+<div class="section" id="load-balancing-strategy">
+<h2>Load Balancing Strategy<a class="headerlink" href="#load-balancing-strategy" title="Permalink to this headline">¶</a></h2>
+<p>The balancing for websocket connections and HTTP requests is done by the load balancer (HAProxy).
+Some issues might appear for browsers that doesn&#8217;t support the websocket protocol and xhr polling
+is used for the transport. The load balancer should be instructed to send all the requests that
+belongs to the same client to the same server.</p>
+<p>The <tt class="docutils literal"><span class="pre">Mothership</span></tt> will also do load balancing when a component is located on multiple servers.
+For each component, it will construct buckets with the servers on which the component is
+deployed. Then it will apply the round robin algorithm for each bucket (to do this it will
+store the last server that handled a request for a specific component).</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Distributed Websockets</a><ul>
+<li><a class="reference internal" href="#proposed-architecture">Proposed Architecture</a></li>
+<li><a class="reference internal" href="#load-balancing-strategy">Load Balancing Strategy</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="code_coverage.html"
+                        title="previous chapter">Code Coverage</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../changelog.html"
+                        title="next chapter">Changelog</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../changelog.html" title="Changelog"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="code_coverage.html" title="Code Coverage"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain v0.16.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

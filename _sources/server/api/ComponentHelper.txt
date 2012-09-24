@@ -17,7 +17,7 @@ Class ComponentHelper
 This Handlebars helper aggregates child components into the parent.
 The helper invokes the renderer to load custom data from the data layer for the template
 and calls the rendering process after the data is received, to render the component.
-The aggregated component receives automatically the context of his parent.
+The aggregated component automatically receives the context of his parent.
 
 Complete syntax::
 
@@ -101,7 +101,7 @@ Methods
 helper
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: ComponentHelper#helper(options)
+.. js:function:: ComponentHelper#helper(options, [type])
 
 
     
@@ -125,6 +125,9 @@ helper
     
     :param Boolean|Number|String|Object|Array options.customAttrN: 
         Sets a custom attribute which is extended to the context 
+    
+    :param String type: 
+        the Handlebars helper type (component or container) (*Default*: 'component')
     
 
 

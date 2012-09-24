@@ -35,20 +35,39 @@ Constructor
 
 
 
-    
-    :throws RainError:
-        : when the server configuration file doesn't exist
-    
-    :throws RainError:
-        : when the server configuration file doesn't contain valid JSON
-    
-
 
 
 
 
 
     
+
+Attributes
+----------
+
+..
+   class-attributes
+
+
+configurationError
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:attribute:: configurationError   
+
+
+is the error that was caught when trying to load an invalid configuration file
+
+
+
+
+
+
+
+
+    
+
+
+
 
 
 

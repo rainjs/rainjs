@@ -29,7 +29,7 @@ Represents a logger event.
 Constructor
 -----------
 
-.. js:class:: Event(level, message, error)
+.. js:class:: Event(level, message, error, logger, source)
 
 
 
@@ -42,6 +42,12 @@ Constructor
     
     :param RainError error: 
         The error associated with the log message. 
+    
+    :param String logger: 
+        the logger name 
+    
+    :param String source: 
+        the log statement location: 'server' or 'client' 
     
 
 
@@ -184,6 +190,34 @@ message
 
 
 Gets the event message.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+source
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Event#source()
+
+
+
+
+    
+    :returns String:
+         
+    
+
+
+Gets the event source.
 
 
 

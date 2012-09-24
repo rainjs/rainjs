@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class ComponentHelper &mdash; Rain v0.13.0 documentation</title>
+    <title>Class ComponentHelper &mdash; Rain v0.16.0 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.13.0',
+        VERSION:     '0.16.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,9 +22,9 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.13.0 documentation" href="../../index.html" />
+    <link rel="top" title="Rain v0.16.0 documentation" href="../../index.html" />
     <link rel="next" title="Class ComponentRegistry" href="ComponentRegistry.html" />
-    <link rel="prev" title="Namespace Authorization" href="Authorization.html" /> 
+    <link rel="prev" title="Class BaseSessionStore" href="BaseSessionStore.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,9 +37,9 @@
           <a href="ComponentRegistry.html" title="Class ComponentRegistry"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="Authorization.html" title="Namespace Authorization"
+          <a href="BaseSessionStore.html" title="Class BaseSessionStore"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.13.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.16.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -53,7 +53,7 @@
 <p>This Handlebars helper aggregates child components into the parent.
 The helper invokes the renderer to load custom data from the data layer for the template
 and calls the rendering process after the data is received, to render the component.
-The aggregated component receives automatically the context of his parent.</p>
+The aggregated component automatically receives the context of his parent.</p>
 <p>Complete syntax:</p>
 <div class="highlight-js"><div class="highlight"><pre><span class="p">{{</span><span class="nx">component</span> <span class="nx">view</span><span class="o">=</span><span class="s2">&quot;viewID&quot;</span> <span class="p">[</span><span class="nx">name</span><span class="o">=</span><span class="s2">&quot;componentId&quot;</span> <span class="p">[</span><span class="nx">version</span><span class="o">=</span><span class="s2">&quot;versionNumber&quot;</span><span class="p">]]</span> <span class="p">[</span><span class="nx">sid</span><span class="o">=</span><span class="s2">&quot;staticId&quot;</span><span class="p">]</span> <span class="p">[</span><span class="nx">placeholder</span><span class="o">=</span><span class="kc">true</span><span class="p">]</span> <span class="p">[</span><span class="nx">customAttr</span><span class="o">=</span><span class="nx">value</span><span class="p">]}}</span>
 </pre></div>
@@ -105,7 +105,7 @@ The aggregated component receives automatically the context of his parent.</p>
 <h3>helper<a class="headerlink" href="#helper" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="ComponentHelper#helper">
-<tt class="descname">ComponentHelper#helper</tt><big>(</big><em>options</em><big>)</big><a class="headerlink" href="#ComponentHelper#helper" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">ComponentHelper#helper</tt><big>(</big><em>options</em><span class="optional">[</span>, <em>type</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#ComponentHelper#helper" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -118,6 +118,7 @@ The aggregated component receives automatically the context of his parent.</p>
 <li><strong>options.sid</strong> (<em>String</em>) &#8211; the component static id, used in the client-side controller (<em>Default</em>: &#8216;undefined&#8217;)</li>
 <li><strong>options.placeholder</strong> (<em>Boolean</em>) &#8211; set the placeholder to be rendered or not (<em>Default</em>: true)</li>
 <li><strong>options.customAttrN</strong> (<em>Boolean|Number|String|Object|Array</em>) &#8211; Sets a custom attribute which is extended to the context</li>
+<li><strong>type</strong> (<em>String</em>) &#8211; the Handlebars helper type (component or container) (<em>Default</em>: &#8216;component&#8217;)</li>
 </ul>
 </td>
 </tr>
@@ -162,8 +163,8 @@ It sends automatically an error component if something went wrong.</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="Authorization.html"
-                        title="previous chapter">Namespace Authorization</a></p>
+  <p class="topless"><a href="BaseSessionStore.html"
+                        title="previous chapter">Class BaseSessionStore</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="ComponentRegistry.html"
                         title="next chapter">Class ComponentRegistry</a></p>
@@ -194,9 +195,9 @@ It sends automatically an error component if something went wrong.</p>
           <a href="ComponentRegistry.html" title="Class ComponentRegistry"
              >next</a> |</li>
         <li class="right" >
-          <a href="Authorization.html" title="Namespace Authorization"
+          <a href="BaseSessionStore.html" title="Class BaseSessionStore"
              >previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.13.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.16.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

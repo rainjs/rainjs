@@ -1,105 +1,111 @@
-=================
-RAIN Installation
-=================
+===============
+Installing RAIN
+===============
 
-In this document you will find all the information required for configuring RAIN
-development machine.
+In this document you will find all the information needed to setup RAIN for development.
 
--------------
-Nodejs server
--------------
+------------------------
+Installing node.js & npm
+------------------------
 
-.....................
-Linux / Unix / Mac OS
-.....................
+RAIN runs on the **node.js** platform. Installing this platform is the first step to developing with RAIN. **NPM** is also needed for package management.
 
-Before you start to install node make sure you have the following tools installed:
-   #. unzip (Ubuntu: ``sudo apt-get install unzip``)
-   #. gcc (Ubuntu: ``sudo apt-get install gcc``)
-   #. g++ (Ubuntu: ``sudo apt-get install g++``)
-   #. openssl (Ubuntu: ``sudo apt-get install openssl``)
-   #. libssl-dev (Ubuntu: ``sudo apt-get install libssl-dev``)
-   #. make (Ubuntu: ``sudo apt-get install make``)
+............
+Ubuntu Linux
+............
 
-Now you can start installing node.
+.. code-block:: bash
 
-   #. ``wget http://nodejs.org/dist/v0.8.3/node-v0.8.3.tar.gz``
-   #. ``tar -zxvf node-v0.8.3.tar.gz``
-   #. ``cd node-v0.8.3``
-   #. ``chmod u+x configure``
-   #. ``chmod u+x tools/waf-light``
-   #. ``./configure && make && sudo make install``
-   #. Make sure /usr/local/bin is added to your PATH environment variable.
-   #. ``node -v`` to make sure node can be run
-   #. ``sudo npm install node-gyp -g`` to install the latest node native module build tool
+   sudo apt-get install python-software-properties
+   sudo apt-add-repository ppa:chris-lea/node.js
+   sudo apt-get update
+   sudo apt-get install nodejs npm
 
-Installing via package manager:
+.......
+Windows
+.......
 
-   https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
+Download and run the official installer from http://nodejs.org/#download.
 
-..........
-Windows OS
-..........
+.......................................
+Other Operating Systems / Distributions
+.......................................
 
-   #. Download http://nodejs.org/dist/v0.8.3/node-v0.8.3-x86.msi or http://nodejs.org/dist/v0.8.3/x64/node-v0.8.3-x64.msi
-   #. Install the msi package
-   #. That's all :)
-   #. NPM is in the bundle too ;)
+Follow the official node.js wiki at https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager and locate the steps for your operating system / distribution.
 
-......
-Mac OS
-......
+....................
+Building from source
+....................
 
-On Mac OS operating systems you need to execute the following commands:
-
-   #. Download http://nodejs.org/dist/v0.8.3/node-v0.8.3.pkg
-   #. Install the package
-   #. That's all :)
-   #. NPM is in the bundle too ;)
+Follow the official node.js wiki at https://github.com/joyent/node/wiki/Installation.
 
 --------
 RAIN SDK
 --------
 
+Installing the RAIN SDK is the easiest way to start developing a new project with RAIN. After
+the installation is done, go ahead and read the :doc:`RAIN SDK Tutorial <rain_sdk_tutorial>` to start developing!
+
 .....................
 Linux / Unix / Mac OS
 .....................
 
-The easiest way to configure your development machine is to use RAIN SDK. The SDK was currently
-tested on Ubuntu Linux and on Mac OS X. Below you can find the commands to get the sdk running on
-Unix / Linux operating systems ( npm is required! ):
+.. code-block:: bash
 
-   #. ``sudo npm install node-gyp -g``
-   #. ``sudo npm install rain -g``
+   sudo npm install -g node-gyp
+   sudo npm install -g rain
 
-If everything went well you should be able to run rain sdk from command line. For more information
-about RAIN sdk creating first project read: :doc:`/getting_started/rain_sdk_tutorial`
+.......
+Windows
+.......
 
----------------------
-RAIN from source code
----------------------
+Running NPM on Windows to install the RAIN package only works from a **MinGW bash** prompt. You can get a MinGW bash installation from two places:
+    * The official git for Windows installer: http://www.git-scm.com/download/win
+    * The GitHub for Windows installer: http://windows.github.com/ [#github]_
+
+Inside a *bash* prompt, you then need to run::
+
+   npm install -g rain
+
+----------------
+RAIN from source
+----------------
 
 This is the way to go if you want to contribute to this project. To get started with this
 you need to execute the following commands:
 
-...............................
+.....................
 Linux / Unix / Mac OS
-...............................
+.....................
 
-   #. ``git clone https://github.com/rainjs/rainjs.git``
-   #. ``cd rainjs``
-   #. ``sudo npm install node-gyp -g``
-   #. ``npm install -d``
-   #. ``sudo npm link``
-   #. ``raind``
+.. code-block:: bash
 
-In windows npm link is not working. You have to install the package globally
-but this means it does not get all changes automatically.
-Go to rainjs and type ``sudo npm install -g``
+   sudo apt-get install git
+   git clone https://github.com/rainjs/rainjs.git
+   cd rainjs
+   sudo npm install -g node-gyp
+   sudo npm link
 
-.................
-Test installation
-.................
+.......
+Windows
+.......
 
-This should give you a running instance of a RAIN server. For testing your
-installation try to access: http://localhost:1337/example/index.
+You first need to install git. You have two equally excellent options:
+    * The official git distribution for Windows: http://www.git-scm.com/download/win
+    * GitHub for Windows: http://windows.github.com/
+
+Inside a *bash* prompt, you then need to run::
+
+   npm link
+
+............
+Running RAIN
+............
+
+Inside the project working directory, running the ``raind`` command will start the server.
+Accessing http://localhost:1337/example/index will load the example component that comes with
+the project's sources.
+
+.. rubric:: Footnotes
+
+.. [#github] Using GitHub for Windows requires a GitHub account

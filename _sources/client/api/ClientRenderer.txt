@@ -50,6 +50,34 @@ Methods
    class-methods
 
 
+get
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: ClientRenderer.get()
+
+
+
+
+    
+    :returns ClientRenderer:
+        the singleton instance 
+    
+
+
+Returns the class' singleton instance.
+
+
+
+
+
+
+
+
+
+    
+
+
+
 renderComponent
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
@@ -65,6 +93,8 @@ renderComponent
 
 
 Renders the component to the DOM and registers it.
+This method takes care of rendering orphaned components (components rendered inside a
+a container which get sent to the client before their placeholder div).
 
 
 
