@@ -2,7 +2,17 @@ target: instrumented
 client:
     src:
         - components
+    exclude:
+        - core/client/js/lib/amplify.store.js
+        - core/client/js/lib/event_emitter.js
+        - core/client/js/lib/jed.js
+        - core/client/js/lib/jquery-cookie.js
+        - core/client/js/lib/promise.js
+        - core/client/js/lib/require-jquery.js
+        - core/client/js/lib/socket.io.js
+        - core/client/js/lib/step.js
 server:
     src:
         - lib
         - bin
+

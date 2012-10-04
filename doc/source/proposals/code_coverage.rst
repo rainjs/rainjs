@@ -1,6 +1,8 @@
+=============
 Code Coverage
 =============
 
+--------------------------------
 Motivation, Criterias & Overview
 --------------------------------
 
@@ -9,9 +11,9 @@ a good tool for this purpose to give feedback for the unit testing process
 both internally (i.e. to developers) and externally (i.e. to stakeholders,
 interested 3rd parties).
 
-The major available code coverage tools for JavaScript have been analysed
-and the one that met most of the criterias outlined below was chosen for a 
-sample scenario. The criterias taken into consideration for choosing a valuable
+The major available code coverage tools for JavaScript have been analyzed
+and the one that met most of the criteria outlined below was chosen for a 
+sample scenario. The criteria taken into consideration for choosing a valuable
 code coverage tool for RAIN were, in descending order of importance:
 
     1. *Working, mature solution*
@@ -22,8 +24,9 @@ code coverage tool for RAIN were, in descending order of importance:
 
 Since JSCoverage (http://siliconforks.com/jscoverage) is the only tool that was
 found that is able to also run on the client side, it was all down to whether
-it fit most of the important criterias above.
+it fit most of the important criteria above.
 
+----------
 JSCoverage
 ----------
 
@@ -44,6 +47,7 @@ Running it inside ``node`` with ``jasmine`` requires some additional modules:
     - JSCoverage for node (**node-jscoverage**)
     - Jasmine reporter for JSCoverage (**jscoverage-reporter**)
 
+-----
 Usage
 -----
 
@@ -74,7 +78,7 @@ to run with the RAIN tool chain:
     - A simple webserver must be used to serve the page that displays
       the code coverage report (one is included with *jscoverage-reporter*)
 
-Here a sample output showing the file statistics and source code statistics:
+Here is a sample output showing the file statistics and source code statistics:
 
     .. figure:: ../images/proposals/coverage-summary.jpg
        :scale: 50 %

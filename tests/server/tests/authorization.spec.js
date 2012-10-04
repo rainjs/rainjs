@@ -25,8 +25,8 @@
 
 "use strict";
 
-var globals = require(process.cwd() + '/lib/globals');
-var authorization = require(process.cwd() + '/lib/authorization');
+var globals = require(process.cwd() + '/lib/globals'),
+    authorization = loadModuleExports('/lib/authorization.js');
 
 describe('Authorization: permissions and dynamic conditions', function () {
     var securityContext = null;

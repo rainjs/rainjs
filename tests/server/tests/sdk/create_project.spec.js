@@ -32,7 +32,9 @@ describe('RAIN create project', function () {
     var json = {
         name: 'test',
         version: '0.0.1',
-        dependencies: [],
+        dependencies: {
+            mongodb: ''
+        },
         keywords: ['test']
     };
 

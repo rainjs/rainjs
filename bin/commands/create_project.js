@@ -78,10 +78,15 @@ function createProject(projectName, projectPath, options) {
         console.log([
             'Project created.'.green,
             '',
-            'Go to the root directory of the project and start the server.',
-            ('  $ cd ' + projectPath + ' && raind').green,
+            'Go to the root directory of the project, install the project dependencies ' +
+                'and start the server.',
+            ('  $ cd ' + projectPath).green,
+            ('  $ npm install -d ').green,
+            ('  $ raind').green,
             '',
-            'Open ' + 'http://localhost:1337/hello_world/index'.blue + ' to see the default component.'
+            'Open ' + 'http://localhost:1337/hello_world/index'.blue +
+                ' to see the default component.',
+            ''
             ].join('\n'));
         }
     } catch (err) {
@@ -128,7 +133,9 @@ function setupProject(projectPath) {
     var json = {
         name: projectName,
         version: '0.0.1',
-        dependencies: [],
+        dependencies: {
+            "mongodb": ""
+        },
         keywords: [projectName]
     };
     json = JSON.stringify(json, null, 4) + '\n';
