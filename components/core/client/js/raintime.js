@@ -103,7 +103,7 @@ define(['raintime/lib/promise',
         this.staticId = component.staticId;
         this.error = undefined;
         this.controller = undefined;
-        this.children = component.children;
+        this.children = component.children || [];
 
         this.state = Component.LOAD;
         this.controllerLoaded = false;
@@ -145,7 +145,8 @@ define(['raintime/lib/promise',
                 return;
             }
 
-            preComponent.children = component.children;
+            var children = preComponent.children;
+            children.push.apply(children, component.children);
             preComponent.error = component.error;
             components[preComponent.instanceId] = preComponent;
 

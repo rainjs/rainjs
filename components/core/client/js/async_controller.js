@@ -119,7 +119,7 @@ define(['util',
         var keys = {};
 
         if (!sids) {
-            var children = self.context.component.children;
+            var children = this.context.component.children;
             for (var i = 0, len = children.length; i < len; i++) {
                 var sid = children[i].staticId;
                 if (sid) {
