@@ -91,3 +91,8 @@ When a server encounters an error while rendering a component or the user isn't 
 access that component, it sends a message to the Mothership containing the reason why the
 component can't be rendered, which sends a render request for the error component (it also
 specifies the appropriate error view).
+
+.. seealso::
+
+        :doc:`./distributed_websockets`
+            Distributed websockets proposal
