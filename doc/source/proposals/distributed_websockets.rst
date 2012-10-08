@@ -1,4 +1,5 @@
 
+======================
 Distributed Websockets
 ======================
 
@@ -11,6 +12,7 @@ RAIN servers.
 In the websockets case, a persistent connection needs to be maintained between the client and the
 server and the messages have to be dispatched to the appropriate servers.
 
+---------------------
 Proposed Architecture
 ---------------------
 
@@ -45,6 +47,7 @@ When a RAIN server wants to send a message to a client, it sends a request to th
 specifying the connection id of the client. The ``Mothership`` sends the message to the server
 to which that client is connected instructing it to notify the client.
 
+-----------------------
 Load Balancing Strategy
 -----------------------
 
