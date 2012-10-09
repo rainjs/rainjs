@@ -33,7 +33,7 @@ describe('AsyncController API', function () {
 
 
     describe('Get Child', function () {
-        it('should get a child', ['core/js/async_controller'],
+        it('should get a child', ['raintime/async_controller'],
            function (AsyncController) {
                 AsyncController.prototype._getChild.andCallThrough();
                 ac = new AsyncController();
@@ -47,7 +47,7 @@ describe('AsyncController API', function () {
     });
 
     describe('_onChild', function () {
-        it('should start the controller first', ['core/js/async_controller'],
+        it('should start the controller first', ['raintime/async_controller'],
            function (AsyncController) {
                 AsyncController.prototype._onChild.andCallThrough();
                 ac = new AsyncController();
@@ -63,7 +63,7 @@ describe('AsyncController API', function () {
     });
 
     describe('_getChildren', function () {
-        it('should call getChild() with sid', ['core/js/async_controller'],
+        it('should call getChild() with sid', ['raintime/async_controller'],
            function (AsyncController) {
                 AsyncController.prototype._getChildren.andCallThrough();
                 ac = new AsyncController();
@@ -77,7 +77,7 @@ describe('AsyncController API', function () {
     });
 
     describe('_getChildren', function () {
-        it('should call getChild() with no sid, should get the component`s children', ['core/js/async_controller'],
+        it('should call getChild() with no sid, should get the component`s children', ['raintime/async_controller'],
            function (AsyncController) {
                 AsyncController.prototype._getChildren.andCallThrough();
                 ac = new AsyncController();
