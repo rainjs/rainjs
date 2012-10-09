@@ -26,9 +26,10 @@
 define(['raintime/lib/promise',
         'raintime/lib/event_emitter',
         'raintime/context',
+        'raintime/async_controller',
         'raintime/logger',
         'raintime/lib/rain_error'
-], function (Promise, EventEmitter, Context, Logger) {
+], function (Promise, EventEmitter, Context, AsyncController, Logger) {
 
     var logger = Logger.get();
 
@@ -102,7 +103,7 @@ define(['raintime/lib/promise',
         this.staticId = component.staticId;
         this.error = undefined;
         this.controller = undefined;
-        this.children = component.children;
+        this.children = component.children || [];
 
         this.state = Component.LOAD;
         this.controllerLoaded = false;
@@ -144,7 +145,8 @@ define(['raintime/lib/promise',
                 return;
             }
 
-            preComponent.children = component.children;
+            var children = preComponent.children;
+            children.push.apply(children, component.children);
             preComponent.error = component.error;
             components[preComponent.instanceId] = preComponent;
 
@@ -178,13 +180,17 @@ define(['raintime/lib/promise',
      * @param {String} instanceId the component's instance id
      */
     ComponentRegistry.prototype.deregister = function (instanceId) {
-        if (instanceId && components[instanceId]) {
-            var children = components[instanceId].children;
+        var component = components[instanceId];
+        if (instanceId && component) {
+            var children = component.children;
             for (var i = children.length; i--;) {
                 this.deregister(children[i].instanceId);
             }
-            components[instanceId].state = Component.DESTROY;
-            invokeLifecycle(components[instanceId]);
+            component.state = Component.DESTROY;
+            invokeLifecycle(component);
+            if (component.controller) {
+                component.controller._clear && component.controller._clear();
+            }
             delete components[instanceId];
         }
     };
@@ -301,6 +307,11 @@ define(['raintime/lib/promise',
                 Controller.prototype[key] = EventEmitter.prototype[key];
             }
 
+            // Extend the controller with AsyncController methods.
+            for (var key in AsyncController.prototype) {
+                Controller.prototype[key] = AsyncController.prototype[key];
+            }
+
             /**
              * The client-side controller.
              *
@@ -309,6 +320,7 @@ define(['raintime/lib/promise',
             var controller = Controller;
             if (typeof Controller === 'function') {
                 controller = new Controller();
+                AsyncController.call(controller);
             }
 
             controller.on = function (eventName, callback) {
@@ -332,6 +344,12 @@ define(['raintime/lib/promise',
              * The context of the controller. It is populated with useful functionality.
              */
             controller.context = new Context(raintime, newComponent);
+            controller.context.component = {
+                id: newComponent.id,
+                version: newComponent.version,
+                sid: newComponent.staticId,
+                children: newComponent.children
+            };
             controller.context.find = function (staticIds, callback) {
                 if (typeof staticIds === 'function') {
                     callback = staticIds;

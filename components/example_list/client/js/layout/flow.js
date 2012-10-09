@@ -40,8 +40,8 @@ define(['util',
     FlowLayoutNotes.prototype.start = function () {
         var self = this;
 
-        this.context.find('flowLayout', function () {
-            self._layout = this;
+        this._getChild('flowLayout').then(function (flowLayout) {
+            self._layout = flowLayout;
 
             FlowLayoutNotes.super_.prototype._setup.call(self);
 
