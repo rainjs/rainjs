@@ -151,7 +151,7 @@ define([
             return;
         }
 
-        domElement.hide().html(component.html);
+        domElement.css('visibility', 'hidden').html(component.html);
         domElement.attr('id', component.instanceId);
         domElement.attr('class',
                         'app-container ' + component.id + '_' + component.version.replace(/[\.]/g, '_')
@@ -186,7 +186,7 @@ define([
      * @param {DomElement} element The wrapper of the component
      */
     ClientRenderer.prototype._showHTML = function (component, element) {
-        element.show();
+        element.css('visibility', 'visible');
         // Registers the component.
         Raintime.componentRegistry.register(component);
     };
