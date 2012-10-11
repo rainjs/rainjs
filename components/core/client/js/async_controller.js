@@ -58,6 +58,8 @@ define(['util',
      * The started controllers are cached. If the controller is found in the cache, the promise
      * is resolved at the next tick.
      *
+     * If the child with the specified sid is not found, the promise is rejected with a RainError.
+     *
      * @public
      *
      * @param {String} sid the child component's static id
@@ -70,7 +72,7 @@ define(['util',
         if (self._controllers[sid]) {
             Util.defer(deferred.resolve.bind(self, self._controllers[sid]));
         } else {
-            self.context.find(sid, function () {
+            var wrongStaticIds = self.context.find(sid, function () {
                 var controller = this;
 
                 controller.on('start', function () {
@@ -78,6 +80,11 @@ define(['util',
                     deferred.resolve(controller);
                 });
             });
+
+            if (Array.isArray(wrongStaticIds)) {
+                var error = new RainError('The static id "' + sid + '" could not be found.');
+                Util.defer(deferred.reject.bind(self, error));
+            }
         }
 
         return deferred.promise;

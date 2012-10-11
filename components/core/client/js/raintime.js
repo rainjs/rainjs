@@ -223,6 +223,8 @@ define(['raintime/lib/promise',
      * @param {String} instanceId the component's instance id
      * @param {Array|String} staticIds an array / string of static ids for children
      * @param {Function} callback the function to be called after the controllers for the requested children were initiated
+     * @returns {undefined|String[]} the list of wrong static ids or undefined
+     *
      * @private
      * @memberOf ComponentRegistry#
      */
@@ -253,20 +255,33 @@ define(['raintime/lib/promise',
                 }
             }
         } else {
+            var wrongStaticIds = [];
             for (var j = 0, len = staticIds.length; j < len; j++) {
-                var staticId = staticIds[j];
+                var staticId = staticIds[j],
+                    found = false;
+
                 for (var i = children.length; i--;) {
                     var childInstanceId = children[i].instanceId;
                     if (components[childInstanceId] &&
                         components[childInstanceId].staticId == staticId) {
                         promises.push(components[childInstanceId].promise);
+                        found = true;
                         break;
                     } else if (preComponents[childInstanceId] &&
                         preComponents[childInstanceId].staticId == staticId) {
                         promises.push(preComponents[childInstanceId].promise);
+                        found = true;
                         break;
                     }
                 }
+
+                if (!found) {
+                    wrongStaticIds.push(staticIds);
+                }
+            }
+
+            if (wrongStaticIds.length > 0) {
+                return wrongStaticIds;
             }
         }
 
