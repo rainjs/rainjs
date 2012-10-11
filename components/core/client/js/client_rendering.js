@@ -165,6 +165,7 @@ define([
         if (component.children) {
             for (var len = component.children.length, i = 0; i < len; i++) {
                 var childComponent = component.children[i];
+                childComponent.parentInstanceId = component.instanceId;
 
                 Raintime.componentRegistry.preRegister(childComponent);
 

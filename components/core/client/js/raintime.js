@@ -87,6 +87,7 @@ define(['raintime/lib/promise',
      * @property {String} id the component id
      * @property {String} version the component version
      * @property {String} instanceId the instance id
+     * @property {String} parentInstanceId the instance id of the direct parent
      * @property {String} staticId the static id
      * @property {Object} error the error object obtained when the server-side data detected an error
      * @property {Object} controller the client-side controller for this component
@@ -99,6 +100,7 @@ define(['raintime/lib/promise',
         this.id = component.id;
         this.version = component.version;
         this.instanceId = component.instanceId;
+        this.parentInstanceId = component.parentInstanceId;
 
         this.staticId = component.staticId;
         this.error = undefined;
@@ -188,8 +190,12 @@ define(['raintime/lib/promise',
             }
             component.state = Component.DESTROY;
             invokeLifecycle(component);
-            if (component.controller) {
-                component.controller._clear && component.controller._clear();
+
+            if (component.parentInstanceId && component.staticId) {
+                var parent = components[component.parentInstanceId];
+                if (parent && parent.controller) {
+                    parent.controller._clear(component.staticId);
+                }
             }
             delete components[instanceId];
         }

@@ -45,10 +45,12 @@ define(['util',
     }
 
     /**
-     * Removes the cached controllers.
+     * Removes a cached controller.
+     *
+     * @param {String} staticId the child's static id
      */
-    AsyncController.prototype._clear = function () {
-        this._controllers = {};
+    AsyncController.prototype._clear = function (staticId) {
+        delete this._controllers[staticId];
     };
 
     /**
