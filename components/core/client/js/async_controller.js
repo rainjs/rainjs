@@ -34,6 +34,15 @@ define(['util',
         allKeys = Promise.allKeys,
         defer = Promise.defer;
 
+    /**
+     * This class contains utility functions that a component's client side controller can use to
+     * get references to the controllers of its direct children. Every controller inherits these
+     * methods by default.
+     *
+     * @name AsyncController
+     * @class
+     * @constructor
+     */
     function AsyncController() {
 
         /**
