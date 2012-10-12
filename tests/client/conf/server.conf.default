@@ -13,18 +13,7 @@
     },
 
     "defaultLanguage": "en_US",
-    "language": "en_US",
-
-    "session": {
-        "store": {
-            "path": "./lib/mongodb/session_store",
-            "options": {
-                "host": "127.0.0.1",
-                "port": 27017,
-                "database": "rain"
-            }
-        }
-    },
+    "language": "en_US",    
 
     "logger": {
         "level": "debug",
