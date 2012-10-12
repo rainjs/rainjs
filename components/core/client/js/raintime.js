@@ -26,9 +26,10 @@
 define(['raintime/lib/promise',
         'raintime/lib/event_emitter',
         'raintime/context',
+        'raintime/async_controller',
         'raintime/logger',
         'raintime/lib/rain_error'
-], function (Promise, EventEmitter, Context, Logger) {
+], function (Promise, EventEmitter, Context, AsyncController, Logger) {
 
     var logger = Logger.get();
 
@@ -86,6 +87,7 @@ define(['raintime/lib/promise',
      * @property {String} id the component id
      * @property {String} version the component version
      * @property {String} instanceId the instance id
+     * @property {String} parentInstanceId the instance id of the direct parent
      * @property {String} staticId the static id
      * @property {Object} error the error object obtained when the server-side data detected an error
      * @property {Object} controller the client-side controller for this component
@@ -98,11 +100,12 @@ define(['raintime/lib/promise',
         this.id = component.id;
         this.version = component.version;
         this.instanceId = component.instanceId;
+        this.parentInstanceId = component.parentInstanceId;
 
         this.staticId = component.staticId;
         this.error = undefined;
         this.controller = undefined;
-        this.children = component.children;
+        this.children = component.children || [];
 
         this.state = Component.LOAD;
         this.controllerLoaded = false;
@@ -144,7 +147,8 @@ define(['raintime/lib/promise',
                 return;
             }
 
-            preComponent.children = component.children;
+            var children = preComponent.children;
+            children.push.apply(children, component.children);
             preComponent.error = component.error;
             components[preComponent.instanceId] = preComponent;
 
@@ -178,13 +182,21 @@ define(['raintime/lib/promise',
      * @param {String} instanceId the component's instance id
      */
     ComponentRegistry.prototype.deregister = function (instanceId) {
-        if (instanceId && components[instanceId]) {
-            var children = components[instanceId].children;
+        var component = components[instanceId];
+        if (instanceId && component) {
+            var children = component.children;
             for (var i = children.length; i--;) {
                 this.deregister(children[i].instanceId);
             }
-            components[instanceId].state = Component.DESTROY;
-            invokeLifecycle(components[instanceId]);
+            component.state = Component.DESTROY;
+            invokeLifecycle(component);
+
+            if (component.parentInstanceId && component.staticId) {
+                var parent = components[component.parentInstanceId];
+                if (parent && parent.controller) {
+                    parent.controller._clear(component.staticId);
+                }
+            }
             delete components[instanceId];
         }
     };
@@ -211,6 +223,8 @@ define(['raintime/lib/promise',
      * @param {String} instanceId the component's instance id
      * @param {Array|String} staticIds an array / string of static ids for children
      * @param {Function} callback the function to be called after the controllers for the requested children were initiated
+     * @returns {undefined|String[]} the list of wrong static ids or undefined
+     *
      * @private
      * @memberOf ComponentRegistry#
      */
@@ -241,20 +255,33 @@ define(['raintime/lib/promise',
                 }
             }
         } else {
+            var wrongStaticIds = [];
             for (var j = 0, len = staticIds.length; j < len; j++) {
-                var staticId = staticIds[j];
+                var staticId = staticIds[j],
+                    found = false;
+
                 for (var i = children.length; i--;) {
                     var childInstanceId = children[i].instanceId;
                     if (components[childInstanceId] &&
                         components[childInstanceId].staticId == staticId) {
                         promises.push(components[childInstanceId].promise);
+                        found = true;
                         break;
                     } else if (preComponents[childInstanceId] &&
                         preComponents[childInstanceId].staticId == staticId) {
                         promises.push(preComponents[childInstanceId].promise);
+                        found = true;
                         break;
                     }
                 }
+
+                if (!found) {
+                    wrongStaticIds.push(staticIds);
+                }
+            }
+
+            if (wrongStaticIds.length > 0) {
+                return wrongStaticIds;
             }
         }
 
@@ -301,6 +328,11 @@ define(['raintime/lib/promise',
                 Controller.prototype[key] = EventEmitter.prototype[key];
             }
 
+            // Extend the controller with AsyncController methods.
+            for (var key in AsyncController.prototype) {
+                Controller.prototype[key] = AsyncController.prototype[key];
+            }
+
             /**
              * The client-side controller.
              *
@@ -309,6 +341,7 @@ define(['raintime/lib/promise',
             var controller = Controller;
             if (typeof Controller === 'function') {
                 controller = new Controller();
+                AsyncController.call(controller);
             }
 
             controller.on = function (eventName, callback) {
@@ -332,6 +365,12 @@ define(['raintime/lib/promise',
              * The context of the controller. It is populated with useful functionality.
              */
             controller.context = new Context(raintime, newComponent);
+            controller.context.component = {
+                id: newComponent.id,
+                version: newComponent.version,
+                sid: newComponent.staticId,
+                children: newComponent.children
+            };
             controller.context.find = function (staticIds, callback) {
                 if (typeof staticIds === 'function') {
                     callback = staticIds;

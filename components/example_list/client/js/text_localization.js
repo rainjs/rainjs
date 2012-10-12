@@ -40,12 +40,10 @@ define([], function () {
     TextLocalization.prototype.start = function () {
         var emailResponse = this.context.getRoot().find('.email-response');
 
-        this.context.find('sendEmail', function () {
-            this.on('start', function () {
-                $(this.context.getRoot().children()[0]).click(function () {
-                    $.get("/example/controller/text_localization", function (data) {
-                        emailResponse.html(data);
-                    });
+        this._getChild('sendEmail').then(function (sendEmail) {
+            $(sendEmail.context.getRoot().children()[0]).click(function () {
+                $.get("/example/controller/text_localization", function (data) {
+                    emailResponse.html(data);
                 });
             });
         });

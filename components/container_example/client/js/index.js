@@ -22,10 +22,8 @@ define([], function () {
         var updateTextbox = function () {
             var sid = select.val();
 
-            self.context.find(sid, function(img) {
-                img.on('start', function () {
-                    textbox.val(img.title());
-                });
+            self._getChild(sid).then(function (img) {
+                textbox.val(img.title());
             });
         };
 
@@ -38,10 +36,8 @@ define([], function () {
         button.on('click', function () {
             var sid = select.val();
 
-            self.context.find(sid, function(img) {
-                img.on('start', function () {
-                    img.title(textbox.val());
-                });
+            self._getChild(sid).then(function (img) {
+                img.title(textbox.val());
             });
         });
     };

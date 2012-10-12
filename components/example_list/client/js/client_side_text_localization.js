@@ -63,13 +63,11 @@ define([], function (t, nt) {
         root.find('.name').html(t('%1$s %2$s', [firstName, lastName]));
 
         var emailResponse = root.find('.email-response');
-        this.context.find('sendEmail', function () {
-            this.on('start', function () {
-                $(this.context.getRoot().children()[0]).button( "option", "label", t('Send email'));
-                $(this.context.getRoot().children()[0]).click(function () {
-                    $.get("/example/controller/text_localization", function (data) {
-                        emailResponse.html(data);
-                    });
+        this._getChild('sendEmail').then(function (sendEmail) {
+            $(sendEmail.context.getRoot().children()[0]).button( "option", "label", t('Send email'));
+            $(sendEmail.context.getRoot().children()[0]).click(function () {
+                $.get("/example/controller/text_localization", function (data) {
+                    emailResponse.html(data);
                 });
             });
         });
