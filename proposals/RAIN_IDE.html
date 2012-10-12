@@ -1,0 +1,243 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>RAIN IDE &mdash; Rain v0.17.0 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.17.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Rain v0.17.0 documentation" href="../index.html" />
+    <link rel="next" title="Code Coverage" href="code_coverage.html" />
+    <link rel="prev" title="View modes" href="Features-proposal-view-modes.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="code_coverage.html" title="Code Coverage"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Features-proposal-view-modes.html" title="View modes"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain v0.17.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="rain-ide">
+<h1>RAIN IDE<a class="headerlink" href="#rain-ide" title="Permalink to this headline">¶</a></h1>
+<p>RAIN is a platform based on JavaScript. It aggregates web components located on multiple servers,
+it has significant implementation code both on server and client side, JavaScript and HTML files.
+It uses the Handlebars template engine in HTML files.</p>
+<p>JavaScript is a language that is very hard to inspect, so that&#8217;s why programming IDE&#8217;s have a hard
+time developing features that work 100%, especially for NodeJS, that&#8217;s a new technology. But these
+features exists and based on them we can add additional features that will make developing RAIN
+faster and easier.</p>
+<p>These features can be implemented in the form of plugins for different existing IDEs. As far as
+possible these should use the commands that are already provided by the RAIN SDK and visually
+enhance their functionality. The plugins must work on Linux, Windows and MacOS.</p>
+<div class="section" id="eclipse-ide">
+<h2>Eclipse IDE<a class="headerlink" href="#eclipse-ide" title="Permalink to this headline">¶</a></h2>
+<p>Eclipse is one of the most used open source IDE. It has a set of plugins for JavaScript Development
+Tools (JSDT) that lets the developer create JavaScript projects and files, has a JavaScript editor
+and many introspection tools. These tools are part of the Web Development Tools (WTP), the latest
+version (3.4.1) being released on September 28th, 2012.</p>
+<p>The best starting point for developing a RAIN plugin for Eclipse would be the JSDT. It should be
+compatible with version 4.x of Eclipse.</p>
+<p>The RAIN plugin will offer multiple features that can be developed progressively and in most cases
+they are independent one from another.</p>
+<div class="section" id="create-project">
+<h3>Create project<a class="headerlink" href="#create-project" title="Permalink to this headline">¶</a></h3>
+<p>This feature will give the developer a new wizard to create a RAIN project. It should extend the
+existing JavaScript project wizard and add some specific RAIN configuration parameters like:</p>
+<ol class="arabic simple">
+<li>The location of the NPM folder or the RAIN SDK installation folder. This will be useful when the
+developer will want to run his project on a specific version of the RAIN SDK.</li>
+<li>The endpoint for the location of the Mothership. This endpoint will be used to determine the
+project configuration file.</li>
+<li>The endpoint to the component registry service. This endpoint will be used to determine what
+available components are there to be used in the current project. The information will be used
+in the RAIN HTML editor with the autocomplete functions to suggest components and to insert
+required parameters.</li>
+</ol>
+<p>The wizard will use the <tt class="docutils literal"><span class="pre">create-project</span></tt> command from the RAIN SDK to generate the project folder
+structure.</p>
+</div>
+<div class="section" id="create-component">
+<h3>Create component<a class="headerlink" href="#create-component" title="Permalink to this headline">¶</a></h3>
+<p>This feature will give the developer a new wizard to create a RAIN component in the existing RAIN
+project. The wizard must have at least the component id and component version configuration
+parameters. Optional parameters that can be later added: <tt class="docutils literal"><span class="pre">views</span></tt>, <tt class="docutils literal"><span class="pre">permissions</span></tt>.</p>
+<p>The wizard will use the <tt class="docutils literal"><span class="pre">create-component</span></tt> command from the RAIN SDK to generate the component
+folder structure.</p>
+</div>
+<div class="section" id="rain-perspective">
+<h3>RAIN perspective<a class="headerlink" href="#rain-perspective" title="Permalink to this headline">¶</a></h3>
+<p>This feature will give the developer an Eclipse perspective customized for RAIN that will be
+associated automatically with RAIN projects and will contain:</p>
+<ol class="arabic">
+<li><p class="first">The <strong>project view navigator</strong> customized to show the additional RAIN commands like:</p>
+<blockquote>
+<ul class="simple">
+<li>New -&gt; RAIN Project</li>
+<li>New -&gt; RAIN Component</li>
+<li>New -&gt; RAIN View</li>
+<li>Run As -&gt; RAIN Application</li>
+<li>Debug As -&gt; RAIN Application</li>
+<li>RAIN -&gt; Generate Translation Files</li>
+<li>RAIN -&gt; Deploy</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first">The <strong>RAIN server console</strong> that displays the server state (started / stopped), the console
+output and additional commands to start / stop / restart the server.</p>
+</li>
+<li><p class="first">The <strong>RAIN HTML editor</strong> that has autocomplete functionality for the available Handlebars
+helpers.</p>
+</li>
+<li><p class="first">The <strong>components view</strong> that shows the available components and additional documentation about
+them.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="run-project">
+<h3>Run project<a class="headerlink" href="#run-project" title="Permalink to this headline">¶</a></h3>
+<p>This feature will give the developer the possibility to start and stop the RAIN server directly
+from Eclipse. To achieve this, a new Eclipse command will be added that will use the <tt class="docutils literal"><span class="pre">raind</span></tt>
+command from the RAIN SDK to start the server.</p>
+<p>This feature will add a new Eclipse View, the RAIN server console, that will capture the output
+coming from the RAIN server. It will have additional commands to start / stop / restart the server.</p>
+</div>
+<div class="section" id="components-view">
+<h3>Components View<a class="headerlink" href="#components-view" title="Permalink to this headline">¶</a></h3>
+<p>This feature will give the developer the possibility to see what components are already available
+to him to use. He will be able to configure the endpoint to a components&#8217; registry service that
+will provide description and documentation about the available components.</p>
+<p>The available components will be shown in an Eclipse View. When the developer clicks a component, a
+Handlebars helper text will be inserted in the current RAIN HTML editor and will populate the
+required parameters with default values.</p>
+</div>
+<div class="section" id="rain-html-editor">
+<h3>RAIN HTML Editor<a class="headerlink" href="#rain-html-editor" title="Permalink to this headline">¶</a></h3>
+<p>This feature will provide autocomplete support for the RAIN template files. An existing HTML editor
+should be extended to detect Handlebars syntax and based on the list of available components and
+autocomplete features to suggest available values for the component attributes.</p>
+<p>The editor should be able to differentiate between different helpers and suggest the appropriate
+parameters. E.g. for the CSS helper it should automatically add the <tt class="docutils literal"><span class="pre">path</span></tt> attribute.</p>
+</div>
+<div class="section" id="generate-localization-files">
+<h3>Generate localization files<a class="headerlink" href="#generate-localization-files" title="Permalink to this headline">¶</a></h3>
+<p>This feature will give the developer the possibility to run the <tt class="docutils literal"><span class="pre">generate-po-files</span></tt> command found
+in the RAIN SDK directly from Eclipse using an Eclipse command. The developer should be able to
+choose from multiple commands, depending if he wants to generate the translation files only for the
+selected component, for all components or for specific languages.</p>
+</div>
+<div class="section" id="debug-project">
+<h3>Debug project<a class="headerlink" href="#debug-project" title="Permalink to this headline">¶</a></h3>
+<p>The debug process is essential to every development process and that&#8217;s why debugging a RAIN project
+in Eclipse will help the developer stay in the same environment that he uses to program. This
+might not be that easy to implement because the JSDT don&#8217;t offer any support for NodeJS, but a
+research has to be done to see how a plugin can extend the existing Eclipse JavaScript debug
+features.</p>
+</div>
+<div class="section" id="component-documentation">
+<h3>Component documentation<a class="headerlink" href="#component-documentation" title="Permalink to this headline">¶</a></h3>
+<p>This feature will integrate the Eclipse help system with the RAIN components articles and JSDoc
+generated for its components. The result will be that the developer will see inside Eclipse
+all he needs to know about each external component that he want to use: its APIs, usage examples.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">RAIN IDE</a><ul>
+<li><a class="reference internal" href="#eclipse-ide">Eclipse IDE</a><ul>
+<li><a class="reference internal" href="#create-project">Create project</a></li>
+<li><a class="reference internal" href="#create-component">Create component</a></li>
+<li><a class="reference internal" href="#rain-perspective">RAIN perspective</a></li>
+<li><a class="reference internal" href="#run-project">Run project</a></li>
+<li><a class="reference internal" href="#components-view">Components View</a></li>
+<li><a class="reference internal" href="#rain-html-editor">RAIN HTML Editor</a></li>
+<li><a class="reference internal" href="#generate-localization-files">Generate localization files</a></li>
+<li><a class="reference internal" href="#debug-project">Debug project</a></li>
+<li><a class="reference internal" href="#component-documentation">Component documentation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Features-proposal-view-modes.html"
+                        title="previous chapter">View modes</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="code_coverage.html"
+                        title="next chapter">Code Coverage</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="code_coverage.html" title="Code Coverage"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Features-proposal-view-modes.html" title="View modes"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain v0.17.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

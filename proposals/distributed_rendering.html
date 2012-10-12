@@ -1,0 +1,206 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Distributed Rendering &mdash; Rain v0.17.0 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.17.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Rain v0.17.0 documentation" href="../index.html" />
+    <link rel="next" title="Distributed Websockets" href="distributed_websockets.html" />
+    <link rel="prev" title="CSS Rendering" href="css_rendering.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="distributed_websockets.html" title="Distributed Websockets"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="css_rendering.html" title="CSS Rendering"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain v0.17.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="distributed-rendering">
+<h1>Distributed Rendering<a class="headerlink" href="#distributed-rendering" title="Permalink to this headline">¶</a></h1>
+<p>The actual rendering engine needs all the components to be on a single server in order to work.
+This proposal describes the changes needed to make RAIN work in a distributed context where
+components are located on different servers. The main advantage of this architecture is that
+a client request can be processed in parallel on multiple servers. <tt class="docutils literal"><span class="pre">Mothership</span></tt> is a central
+piece of this architecture, it knows where all components are located and resolves the requests
+for components located on different servers.</p>
+<blockquote>
+<div class="figure">
+<img alt="../_images/distributed_rendering.png" src="../_images/distributed_rendering.png" />
+</div>
+</blockquote>
+<div class="section" id="rendering-process">
+<h2>Rendering Process<a class="headerlink" href="#rendering-process" title="Permalink to this headline">¶</a></h2>
+<p>At startup, a RAIN server connects to the <tt class="docutils literal"><span class="pre">Mothership</span></tt> and sends a message with what components
+it can handle and the intents associated with each component. Also, the <tt class="docutils literal"><span class="pre">Mothership</span></tt> assigns a
+server id to this server. This server id should be unique and the same id should be assigned
+after a server is restarted (this is useful for tracking log messages that are coming from the
+same server).</p>
+<p>When a client does a HTTP request for a component, the reverse proxy sends the request to a RAIN
+server that can handle requests for that component. The server associates a connection id with this
+connection and stores it in an object from where it can retrieve this connection by using the
+connection id.</p>
+<p>The server starts rendering the requested component and for each child component it finds sends
+a render message to the <tt class="docutils literal"><span class="pre">Mothership</span></tt>. This message contains: server id, connection id, session id,
+component id, component version (version is optional and it can also be a version fragment),
+view id, instance id and the data context for the component.</p>
+<p>The <tt class="docutils literal"><span class="pre">Mothership</span></tt> sends the message to a server that can render the specified component. The
+server renders the component and sends a message to the <tt class="docutils literal"><span class="pre">Mothership</span></tt> containing: server id (this
+is the same id as the one from the render message and not the id of the server that rendered the
+component), connection id and the rendered component JSON. Additionally, for each new component it
+encounters the RAIN server sends a render message to the <tt class="docutils literal"><span class="pre">Mothership</span></tt> (the server id included in
+this message is the id for the initial server, the one that established the connection with the
+client). The <tt class="docutils literal"><span class="pre">Mothership</span></tt> sends the response to the server associated with the server id
+specified in the message and this server sends the rendered component to the client on the
+connection having the id specified in the message.</p>
+<p>Server id is used to identify the server that has the client connection (the only one that can
+communicate with this client) when a render response is sent back to the <tt class="docutils literal"><span class="pre">Mothership</span></tt>. The
+render response is always sent to this server even if the render request was triggered by another
+server (let&#8217;s imagine the following scenario: server1 holds component1, server2 holds component2
+and server3 holds component3. Component1 includes component2 and component2 includes component3.
+A request is made for component1. Server1 renders component1 and sends a render message to the
+<tt class="docutils literal"><span class="pre">Mothership</span></tt> for the component2 which sends the message to server2. Server2 renders component2
+and sends a render message for component3 which is sent to server3. The rendered response from
+server3 is not sent back to server2, it is sent directly to server1 which sends the response to the
+client).</p>
+<p>Connection id is used to identify the client to which the rendered component should be sent.</p>
+<p>The process for rendering on websockets is similar, the only differences being that communication
+is done on websockets and the connection id identifies an websocket connection instead a HTTP
+connection.</p>
+</div>
+<div class="section" id="mothership">
+<h2>Mothership<a class="headerlink" href="#mothership" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="docutils literal"><span class="pre">Mothership</span></tt> holds the component id and version for all the components and the servers on
+which these components are located. It also holds category and action for all the intents and the
+components that can handle these intents.</p>
+<p>The latest version for a component can only be determined in the <tt class="docutils literal"><span class="pre">Mothership</span></tt>. This functionality
+will be moved from the component registry and the component registry will store the component
+metadata for the components located on that server (like views, controllers, permissions etc.).</p>
+<p>The <tt class="docutils literal"><span class="pre">Mothership</span></tt> is able to handle render, websocket and intent messages and resolves them to the
+appropriate servers. Websocket channels also contain the component id and version so it doesn&#8217;t
+need to know all the channels. It just sends the message to a server that holds the specified
+component.</p>
+</div>
+<div class="section" id="ending-http-connections">
+<h2>Ending HTTP Connections<a class="headerlink" href="#ending-http-connections" title="Permalink to this headline">¶</a></h2>
+<p>The rendering engine holds a counter with the number of components that still needs to be sent
+to the client. When this counter reaches 0 the HTTP connection with the client is closed. This
+is done by holding a variable that is incremented when a new component is found and decremented
+when the component is sent to the client.</p>
+<p>In order to keep this counter in a distributed context, when the render response is sent each
+server should also send the number of children for the component that was rendered. The counter
+is kept by the server that holds the connection with the client.</p>
+</div>
+<div class="section" id="error-and-placeholder">
+<h2>Error and Placeholder<a class="headerlink" href="#error-and-placeholder" title="Permalink to this headline">¶</a></h2>
+<p>The configuration for the error and placeholder components should be kept by the <tt class="docutils literal"><span class="pre">Mothership</span></tt>
+because these should be the same for the whole platform. Also, only the <tt class="docutils literal"><span class="pre">Mothership</span></tt> can
+determine that a component doesn&#8217;t exist. When a request for an inexistent component is encountered
+the <tt class="docutils literal"><span class="pre">Mothership</span></tt> sends a message to a server that holds the error component to render the 404
+view.</p>
+<p>When a server encounters an error while rendering a component or the user isn&#8217;t authorized to
+access that component, it sends a message to the <tt class="docutils literal"><span class="pre">Mothership</span></tt> containing the reason why the
+component can&#8217;t be rendered, which sends a render request for the error component (it also
+specifies the appropriate error view).</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="distributed_websockets.html"><em>Distributed Websockets</em></a></dt>
+<dd>Distributed websockets proposal</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Distributed Rendering</a><ul>
+<li><a class="reference internal" href="#rendering-process">Rendering Process</a></li>
+<li><a class="reference internal" href="#mothership">Mothership</a></li>
+<li><a class="reference internal" href="#ending-http-connections">Ending HTTP Connections</a></li>
+<li><a class="reference internal" href="#error-and-placeholder">Error and Placeholder</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="css_rendering.html"
+                        title="previous chapter">CSS Rendering</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="distributed_websockets.html"
+                        title="next chapter">Distributed Websockets</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="distributed_websockets.html" title="Distributed Websockets"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="css_rendering.html" title="CSS Rendering"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain v0.17.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

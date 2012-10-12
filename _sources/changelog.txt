@@ -3,6 +3,14 @@ Changelog
 =========
 
 ------
+v 0.17
+------
+
++ Added distributed rendering research.
++ Added improved CSS rendering research.
++ Improved the AsyncController methods and made all controllers inherit its methods.
+
+------
 v 0.16
 ------
 
