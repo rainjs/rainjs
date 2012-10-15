@@ -54,7 +54,7 @@ define(['raintime/messaging/sockets'], function (Sockets) {
 
         var self = this;
 
-        this._socket.on('ready', function () {
+        this._socket.on('connect', function () {
             for (var i = 0, len = self._logQueue.length; i < len; i++) {
                 self._socket.emit('log', self._logQueue[i]);
             }

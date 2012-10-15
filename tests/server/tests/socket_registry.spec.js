@@ -27,21 +27,30 @@
 
 describe('Socket registry', function () {
     var socketRegistry, mockedSocketRegistry;
-    var events, socket, connect, sessionStore, err, session;
+    var events, socket, connect, sessionStore, err, session, authorizationCallback, handshake;
 
     beforeEach(function () {
+        handshake = {
+            headers: {
+                cookie: {}
+            }
+        };
+
+        authorizationCallback = jasmine.createSpy('authorizationCallback');
+        session = {};
         events = {};
         socket = {
             on: function (eventName, callback) {
                 events[eventName] = callback;
             },
-            handshake: {
-                headers: {
-                    cookie: {}
-                }
-            },
+            handshake: handshake,
             disconnect: jasmine.createSpy(),
-            emit: jasmine.createSpy()
+            emit: jasmine.createSpy(),
+            authorization: function (fn) {
+                fn (handshake, authorizationCallback);
+                socket.session = {};
+                return socket;
+            }
         };
 
         connect = {
@@ -115,12 +124,11 @@ describe('Socket registry', function () {
                 }
             };
             handler = jasmine.createSpy();
-
-            socketRegistry.register('/core', handler, {id: 'core'});
-            fn = events['connection'];
         });
 
         it('should call the handlers', function () {
+            socketRegistry.register('/core', handler, {id: 'core'});
+            fn = events['connection'];
             socketRegistry.register('/core', handler, {id: 'button'});
             fn(socket);
 
@@ -129,24 +137,27 @@ describe('Socket registry', function () {
         });
 
         it('should disconnect the socket if the session id is missing', function () {
-            socket.handshake.headers.cookie = undefined;
-            fn(socket);
+            handshake.headers.cookie = null;
+            socketRegistry.register('/core', handler, {id: 'button'});
 
-            expect(socket.disconnect).toHaveBeenCalled();
+            expect(authorizationCallback).toHaveBeenCalledWith(null, false);
         });
 
         it('should disconnect the socket if the session couldn\'t be obtained', function () {
             err = {};
-            fn(socket);
+            socketRegistry.register('/core', handler, {id: 'core'});
+            fn = events['connection'];
 
-            expect(socket.disconnect).toHaveBeenCalled();
+            expect(authorizationCallback).toHaveBeenCalledWith(jasmine.any(Object), false);
         });
 
         it('should get and save the session', function () {
+            socketRegistry.register('/core', handler, {id: 'core'});
+            fn = events['connection'];
             fn(socket);
 
             expect(sessionStore.get).toHaveBeenCalled();
-            expect(session.id).toBe(mockedSocketRegistry.getSid(socket));
+            expect(session.id).toBe('sid');
             var cb = handler.mostRecentCall.args[1];
 
             expect(sessionStore.save).not.toHaveBeenCalled();
@@ -155,6 +166,8 @@ describe('Socket registry', function () {
         });
 
         it('should call the handlers when a new event is emitted', function () {
+            socketRegistry.register('/core', handler, {id: 'core'});
+            fn = events['connection'];
             fn(socket);
 
             socket.on('message', function () {});

@@ -61,6 +61,8 @@ define([
          */
         this.orphans = {};
 
+        this._isSocketConnected = false;
+
         var socket = this.socket = Sockets.getSocket('/core');
         socket.on('render', function (component) {
             Raintime.componentRegistry.deregister(component.instanceId);
@@ -68,6 +70,7 @@ define([
         });
 
         socket.on('connect', function () {
+            self._isSocketConnected = true;
             for (var i = 0, len = socketQueue.length; i < len; i++) {
                 socket.emit('render', socketQueue[i], function (error) {});
             }
@@ -121,7 +124,7 @@ define([
         if (component.placeholder && component.placeholder === true) {
             placeholderTimeout(this, component);
         }
-        if (this.socket.socket.connected) {
+        if (this._isSocketConnected) {
             this.socket.emit('render', component, function (error) {
                 if (error) {
                     logger.error('An error occurred in ClientRenderer on render emit.', error);
