@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.17.0
+
+* Added distributed rendering research.
+* Added improved CSS rendering research.
+* Improved the AsyncController methods and made all controllers inherit its methods.
+
 ## 0.16.0
 
 * Fixed CSS files not loading in IE8.
