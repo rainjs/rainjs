@@ -1,7 +1,7 @@
 {
     "name": "rain",
     "description": "A component-based and distributed web application framework",
-    "version": "0.17.0",
+    "version": "0.17.1",
     "author": "Rain Team <rain-team@1and1.ro>",
     "contributors": [
         { "name": "Mitko Tschimev", "email": "mitko.tschimev@1und1.de" },
@@ -17,7 +17,7 @@
         "less": ">= 1.1.4",
         "mime": "",
         "node.extend": "",
-        "promised-io": "git://github.com/kriszyp/promised-io.git",
+        "promised-io": "",
         "socket.io": ">= 0.7.7",
         "commander": ">=0.6.x",
         "mocks": "",
