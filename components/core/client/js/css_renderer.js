@@ -120,12 +120,133 @@ define(['raintime/lib/promise'], function (Promise) {
         return deferred.promise;
     };
 
+    
     /**
-     * @returns { styleIndex: 0, start: 0, end: 0 }
+     * Breaks the number of files and takes into account how you could add the rules in 
+     * styles, if the maximum size is reached error is thrown
+     * 
+     * @paramse [{css:<text>, noRules:<Integer>}], styleId:<Integer> 
+     * @returns [{css:<text>, noRules:0, styleIndex: 0, start: 0, end: 0 }]
+     * @throws {RainError}
      */
-    CssRenderer.prototype._insert = function (css, noRules) {
+    function traceCss(cssObjects, styleId){
+        var sum = this._styleTags[styleId].noRules,
+            object,
+            start = 0,
+            computeRules = 0;
 
+        for (var i in cssObjects)
+            computeRules + cssObjects[i].noRules;
+
+        if ((styleId == 30) && 
+                (this._styleTags[styleId].noRules + computedRules > 4095)){
+            throw new RainError('Number of rules excedeed', [componentOpt.viewId],
+                    RainError.ERROR_PRECONDITION_FAILED, 'no view');
+            return ;
+        }
+
+        for(var i in cssObject) {
+            if(sum + cssObjects[i].noRules <= MAX_RULES) {
+                sum += cssObjects[i].noRules;
+                this._styleTags[styleId].noRules = sum;
+                cssObjects[i].styleIndex = 'style'+styleId;
+                cssObjects[i].start = start;
+                cssObjects[i].end = start+cssObjects[i].css.length;
+                start += cssObjects[i].end + 1;
+            }
+            else {
+                sum = 0;
+                start = 0;
+                styleId ++;
+                object = {
+                        id: "style"+styleId,
+                        noRules: 0
+                };
+                this._styleTags.push(object);
+                if(sum + cssObjects[i].noRules <= MAX_RULES) {
+                    sum += cssObjects[i].noRules;
+                    this._styleTags[styleId].noRules = sum;
+                    cssObjects[i].styleIndex = 'style'+styleId;
+                    cssObjects[i].start = start;
+                    cssObjects[i].end = start+cssObjects[i].css.length;
+                    start += cssObjects[i].end + 1;
+                }
+            }
+        }
+        return cssObjects;
+    }
+
+
+    /**
+     * Inserts the recived styles into the html and takes into account about the number of rules
+     * in a <style> tag or the number of <style> tags
+     * 
+     * @paramse [{css:<text>, noRules:<Integer>}]
+     * @returns [{css:<text>, noRules:0, styleIndex: 0, start: 0, end: 0 }]
+     * @throws {RainError}
+     */
+    
+    CssRenderer.prototype._insert = function (cssObjects) {
+        var returnCSSObjects;
+        if (this._styleTags.length === 0) {
+            var styleId = 0,
+                object = {
+                    id: "style"+styleId,
+                    noRules: 0
+                };
+            this._styleTags.push(object);
+            returnCSSObjects = traceCss(cssObjects, styleId);
+        }
+        else if (this._styleTags.length<=30){
+            returnCSSObjects = traceCss(cssObjects, this._styleTags[this._styleTags.length]);
+        }
+        else {
+            throw new RainError('Number of rules excedeed', [componentOpt.viewId],
+                    RainError.ERROR_PRECONDITION_FAILED, 'no view');
+            return;
+        }
+        _append(returnCSSObjects);
+        return returnCSSObjects;  
     };
+
+    /**
+     * The actual append in the html of the tags, the adding is done with the hole number of rules added
+     * to the <style> tag with a specific id
+     * 
+     * @params [{css:<text>, noRules: <Integer>, styleIndex: <Integer>, start: <Integer>, end: <Integer> }]
+     */
+    function _append(CSSObjects){
+        var obj = {
+                what: '',
+                where: CSSObjects[0].styleIndex
+            },
+            appendance = [],
+            newTag=0;
+
+        for(var i in CSSObjects) {
+            if (obj.where === CSSObjects[i].styleIndex)
+                obj.what += CSSObjects[i].css;
+            else {
+                appendance.push(obj);
+                newTag++;
+                obj.where = CSSObjects[i].styleIndex;
+                obj.what = CSSObjects[i].css;
+            }
+        }
+        if (appendance.length !== newTag)
+            appendance.push(obj);
+
+        for(var i in appendance)
+            if( $('#'+appendance[i].where).length !== 0)
+                $('#'+appendance[i].where).html($('#'+appendance[i].where).html()+appendance[i].what);
+            else{
+                _style = document.createElement('style');
+                $(_style).html(appendance[i].css);
+                $(_style).attr('id', appendance[i].where);
+                $('head').append(_style);
+            }
+    };
+
 
     CssRenderer.prototype._getFullId = function (component) {
         return component.id + ';' + component.version;
@@ -144,6 +265,8 @@ define(['raintime/lib/promise'], function (Promise) {
     CssRenderer.get = function () {
         return CssRenderer._instance || (CssRenderer._instance = new CssRenderer());
     };
+    
+
 
     return CssRenderer;
 });
