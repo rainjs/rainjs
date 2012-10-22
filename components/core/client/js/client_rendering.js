@@ -27,8 +27,9 @@ define([
     'raintime/lib/promise',
     'raintime/messaging/sockets',
     'raintime',
-    'raintime/logger'
-], function (Promise, Sockets, Raintime, Logger) {
+    'raintime/logger',
+    'raintime/css_renderer'
+], function (Promise, Sockets, Raintime, Logger, CssRenderer) {
 
     var logger = Logger.get({
         id: 'core'
@@ -143,7 +144,8 @@ define([
      * @param {Object} component the rendered component
      */
     ClientRenderer.prototype.renderComponent = function (component) {
-        var domElement = $('#' + component.instanceId);
+        var domElement = $('#' + component.instanceId),
+            self = this;
 
         if (!domElement.length) {
             if (!this.orphans[component.containerId]) {
@@ -182,6 +184,12 @@ define([
             this._showHTML(component, domElement);
         } else {
             this._loadCSS(component.css, this._showHTML.bind(this, component, domElement));
+
+            CssRenderer.get().loadCss(component).then(function () {
+                self._showHTML(component, domElement);
+            }, function (error) {
+                logger.error('Failed to load CSS......');
+            });
         }
     };
 

@@ -85,9 +85,10 @@ define(['raintime/lib/promise'], function (Promise) {
      * component.id
      * component.version
      */
-    CssRenderer.prototype.loadCSS = function (component) {
+    CssRenderer.prototype.loadCss = function (component) {
         var deferred = defer(),
-            fullId = this._getFullId(component);
+            self = this,
+            fullId = this._getFullId(component.id, component.version);
 
         if(typeof this._cssMap[fullId] === 'undefined') {
             this._cssMap[fullId] = {
@@ -96,36 +97,56 @@ define(['raintime/lib/promise'], function (Promise) {
             };
         }
 
-        var componentCSS = this._cssMap[fullId];
-        componentCSS.noInstances++;
+        var componentCss = this._cssMap[fullId];
+        componentCss.noInstances++;
 
 
-        var dependencies = component.css.map(function (elem) {
+        var newFiles = component.css.filter(function (elem) {
+            return (typeof componentCss.cssFiles[elem.path] === 'undefined');
+        });
+        var dependencies = newFiles.map(function (elem) {
             return 'text!' + elem.path;
         });
 
-        require(dependencies, function () {
-            for (var i = 0, len = arguments.length; i < len; i++) {
-                var pos = this._insert(arguments[i], component.css[i].noRules);
+        // CSS media queries
+        // handle not found dependencies
 
-                componentCSS.cssFiles[component.css[i].path] = {
-                    noRules: component.css[i].noRules,
-                    styleIndex: pos.styleIndex,
-                    start: pos.start,
-                    end: pos.end
-                };
+        require(dependencies, function () {
+            var cssObjects = [];
+            for (var i = 0, len = arguments.length; i < len; i++) {
+                var css = self._addComments(arguments[i], newFiles[i].path);
+                cssObjects.push({
+                    css: css,
+                    noRules: newFiles[i].noRules
+                });
+            }
+
+            try {
+                var positions = self._insert(cssObjects);
+
+                for (var i = 0, len = newFiles.length; i < len; i++) {
+                    componentCss.cssFiles[newFiles[i].path] = {
+                        noRules: newFiles[i].noRules,
+                        styleIndex: positions[i].styleIndex,
+                        start: positions[i].start,
+                        end: positions[i].end
+                    };
+                }
+
+                deferred.resolve();
+            } catch (ex) {
+                deferred.reject(ex);
             }
         });
 
         return deferred.promise;
     };
 
-    
     /**
-     * Breaks the number of files and takes into account how you could add the rules in 
+     * Breaks the number of files and takes into account how you could add the rules in
      * styles, if the maximum size is reached error is thrown
-     * 
-     * @paramse [{css:<text>, noRules:<Integer>}], styleId:<Integer> 
+     *
+     * @paramse [{css:<text>, noRules:<Integer>}], styleId:<Integer>
      * @returns [{css:<text>, noRules:0, styleIndex: 0, start: 0, end: 0 }]
      * @throws {RainError}
      */
@@ -138,7 +159,7 @@ define(['raintime/lib/promise'], function (Promise) {
         for (var i in cssObjects)
             computeRules + cssObjects[i].noRules;
 
-        if ((styleId == 30) && 
+        if ((styleId == 30) &&
                 (this._styleTags[styleId].noRules + computedRules > 4095)){
             throw new RainError('Number of rules excedeed', [componentOpt.viewId],
                     RainError.ERROR_PRECONDITION_FAILED, 'no view');
@@ -180,12 +201,12 @@ define(['raintime/lib/promise'], function (Promise) {
     /**
      * Inserts the recived styles into the html and takes into account about the number of rules
      * in a <style> tag or the number of <style> tags
-     * 
+     *
      * @paramse [{css:<text>, noRules:<Integer>}]
      * @returns [{css:<text>, noRules:0, styleIndex: 0, start: 0, end: 0 }]
      * @throws {RainError}
      */
-    
+
     CssRenderer.prototype._insert = function (cssObjects) {
         var returnCSSObjects;
         if (this._styleTags.length === 0) {
@@ -206,13 +227,13 @@ define(['raintime/lib/promise'], function (Promise) {
             return;
         }
         _append(returnCSSObjects);
-        return returnCSSObjects;  
+        return returnCSSObjects;
     };
 
     /**
      * The actual append in the html of the tags, the adding is done with the hole number of rules added
      * to the <style> tag with a specific id
-     * 
+     *
      * @params [{css:<text>, noRules: <Integer>, styleIndex: <Integer>, start: <Integer>, end: <Integer> }]
      */
     function _append(CSSObjects){
@@ -247,9 +268,26 @@ define(['raintime/lib/promise'], function (Promise) {
             }
     };
 
+    CssRenderer.prototype.unloadCss = function (id, version) {
+        var fullId = this._getFullId(id, version);
+    };
 
-    CssRenderer.prototype._getFullId = function (component) {
-        return component.id + ';' + component.version;
+    /**
+     *
+     * @param {String} fullId identifies the component by concatenating id and version
+     */
+    CssRenderer.prototype._remove = function (fullId) {
+
+    };
+
+    CssRenderer.prototype._getFullId = function (id, version) {
+        return id + ';' + version;
+    };
+
+    CssRenderer.prototype._addComments = function (css, path) {
+        return '/* Start of file ' + path + ' */\n'
+            + css
+            + '\n/* End of file ' + path + ' */';
     };
 
     /**
@@ -265,8 +303,6 @@ define(['raintime/lib/promise'], function (Promise) {
     CssRenderer.get = function () {
         return CssRenderer._instance || (CssRenderer._instance = new CssRenderer());
     };
-    
-
 
     return CssRenderer;
 });
