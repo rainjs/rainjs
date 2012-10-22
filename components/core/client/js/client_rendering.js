@@ -186,7 +186,6 @@ define([
             //this._loadCSS(component.css, this._showHTML.bind(this, component, domElement));
 
             CssRenderer.get().loadCss(component).then(function () {
-                console.log('hellow');self._showHTML(component, domElement);
             }, function (error) {
                 logger.error('Failed to load CSS......');
             });

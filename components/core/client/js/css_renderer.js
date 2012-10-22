@@ -156,7 +156,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
 
                 deferred.resolve();
             } catch (ex) {
-                deferred.reject(ex);
+                console.log(ex);deferred.reject(ex);
             }
         });
 
@@ -196,7 +196,6 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
      */
     CssRenderer.prototype._insert = function (cssObjects) {
         var returnCSSObjects;
-        console.log(cssObjects);
         if (this._styleTags.length === 0) {
             var styleId = 0;
                 var object = {
@@ -206,11 +205,8 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
                 };
             this._styleTags.push(object);
             returnCSSObjects = this._traceCss(cssObjects, styleId);
-            console.log(returnCSSObjects);
         }
         else if (this._styleTags.length < MAX_STYLESHEETS){
-            console.log('ok');
-            console.log(this._styleTags.length-1);
             returnCSSObjects = this._traceCss(cssObjects, parseInt(this._styleTags.length-1,10));
 
         }
@@ -236,45 +232,36 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
             object,
             start = this._styleTags[styleId].nextStartPoint,
             computedRules = 0;
-        console.log("start---->",start);
-        for (var i in cssObjects) {
+        for(var i=0,length=cssObjects.length; i< length; i++) {
             computedRules += cssObjects[i].noRules;
-            //console.log(cssObjects[i].noRules);
         }
 
 
         if ((styleId == MAX_STYLESHEETS - 1) &&
                 (this._styleTags[styleId].noRules + computedRules > MAX_RULES)){
 
-            //_freeSpaceRevize();
+
+            //TODO: _freeSpaceRevize();
+
 
             throw new RainError('Number of rules excedeed', [componentOpt.viewId],
                     RainError.ERROR_PRECONDITION_FAILED, 'no view');
             return ;
         }
 
-        for(var i in cssObjects) {
+
+        for(var i=0,length=cssObjects.length; i< length; i++) {
+
             if(sum + cssObjects[i].noRules <= MAX_RULES) {
-                console.log('am mai putine reguli');
                 sum += cssObjects[i].noRules;
-                console.log('numarul de reguli--->',sum);
                 this._styleTags[styleId].noRules = sum;
-                console.log('numar regulin din ',styleId,' este ',this._styleTags[styleId].noRules);
                 cssObjects[i].styleIndex = 'style'+styleId;
-                console.log('am setat pe cssObjectul primit indexul ',cssObjects[i].styleIndex);
                 cssObjects[i].start = start;
-                console.log('stringul de inceput pentru cssObject ',cssObjects[i].start);
-                console.log('startul --->',start);
-                console.log('lengthul cssului --->',cssObjects[i].css.length);
                 cssObjects[i].end = start+cssObjects[i].css.length;
-                console.log('stringul de final pentru cssObject ',cssObjects[i].end);
                 start = cssObjects[i].end + 1;
-                console.log('noul start --->',start);
                 this._styleTags[styleId].nextStartPoint = start;
-                console.log('nextStartPointul meu din ',styleId,' --->',this._styleTags[styleId].nextStartPoint);
             }
             else if (this._styleTags.length < MAX_RULES-1){
-                console.log('niciodata');
                 sum = 0;
                 start = 0;
                 styleId ++;
@@ -304,7 +291,6 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
      * @params [{css:<text>, noRules: <Integer>, styleIndex: <Integer>, start: <Integer>, end: <Integer> }]
      */
     CssRenderer.prototype._append = function(CSSObjects){
-        //console.log('appending object',CSSObjects);
         if (CSSObjects.length === 0) return;
         var obj = {
                 what: '',
@@ -312,15 +298,12 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
             },
             appendance = [],
             newTag=1;
-        console.log(CSSObjects.length);
         if (CSSObjects.length!=0) {
-            for(var i in CSSObjects) {
+            for(var i=0,length=CSSObjects.length; i< length; i++) {
                 if (obj.where === CSSObjects[i].styleIndex) {
-                    console.log('am gasit un identificator de appenduit');
                     obj.what += CSSObjects[i].css;
                 }
                 else {
-                    console.log('what');
                     appendance.push(obj);
                     newTag++;
                     obj.where = CSSObjects[i].styleIndex;
@@ -331,18 +314,30 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
         if (appendance.length !== newTag)
                 appendance.push(obj);
 
-        console.log(appendance);
-        for(var i in appendance)
-            if( $('#'+appendance[i].where).length !== 0)
-                $('#'+appendance[i].where).text($('#'+appendance[i].where).text()+appendance[i].what);
-            else{
-                console.log('hei');
-                var _style = document.createElement('style');
-                $(_style).text(appendance[i].what);
-                $(_style).attr('id', appendance[i].where);
-                //console.log(_style);
-                $('head').append(_style);
+        for(var i=0,length=appendance.length; i< length; i++) {
+            if(document.getElementById(appendance[i].where)) {
+                var styleElement = document.getElementById(appendance[i].where);
+                if(styleElement.styleSheet){
+                    styleElement.styleSheet.cssText = styleElement.styleSheet.cssText + appendance[i].what;
+                }
+                else {
+                    styleElement.appendChild(document.createTextNode(appendance[i].what));
+                }
             }
+            else{
+                var head = document.getElementsByTagName('head')[0];
+                var _style = document.createElement('style');
+                _style.setAttribute('type', 'text/css');
+                _style.setAttribute('id', appendance[i].where);
+                if(_style.styleSheet) {
+                    _style.styleSheet.cssText = appendance[i].what;
+                }
+                else { 
+                    _style.appendChild(document.createTextNode(appendance[i].what));
+                } 
+                head.appendChild(_style);
+            }
+        }
     };
 
     CssRenderer.prototype.unloadCss = function (id, version) {
