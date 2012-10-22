@@ -156,7 +156,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
 
                 deferred.resolve();
             } catch (ex) {
-                console.log(ex);deferred.reject(ex);
+                deferred.reject(ex);
             }
         });
 

@@ -186,6 +186,7 @@ define([
             //this._loadCSS(component.css, this._showHTML.bind(this, component, domElement));
 
             CssRenderer.get().loadCss(component).then(function () {
+                self._showHTML(component, domElement);
             }, function (error) {
                 logger.error('Failed to load CSS......');
             });
