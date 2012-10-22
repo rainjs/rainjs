@@ -25,7 +25,7 @@
 
 "use strict";
 
-define(['raintime/lib/promise'], function (Promise) {
+define(['raintime/lib/promise', 'util'], function (Promise, util) {
 
     var defer = Promise.defer;
 
@@ -84,6 +84,7 @@ define(['raintime/lib/promise'], function (Promise) {
     /**
      * component.css[0].noRules
      * component.css[0].path
+     * component.css[0].media
      * component.id
      * component.version
      */
@@ -106,17 +107,35 @@ define(['raintime/lib/promise'], function (Promise) {
         var newFiles = component.css.filter(function (elem) {
             return (typeof componentCss.cssFiles[elem.path] === 'undefined');
         });
-        var dependencies = newFiles.map(function (elem) {
-            return 'text!' + elem.path;
-        });
 
-        // CSS media queries
-        // handle not found dependencies
+        if (newFiles.length === 0) {
+            util.defer(function () {
+                deferred.resolve();
+            });
+            return deferred.promise;
+        }
 
-        require(dependencies, function () {
+        this._getFiles(newFiles).then(function (cssTexts) {
+            newFiles = newFiles.filter(function (elem) {
+                return (typeof cssTexts[elem.path] !== 'undefined');
+            });
+
+            if (newFiles.length === 0) {
+                deferred.resolve();
+                return;
+            }
+
             var cssObjects = [];
-            for (var i = 0, len = arguments.length; i < len; i++) {
-                var css = self._addComments(arguments[i], newFiles[i].path);
+
+            for (var i = 0, len = newFiles.length; i < len; i++) {
+                var css = cssTexts[newFiles[i].path];
+
+                if (typeof newFiles[i].media !== 'undefined') {
+                    css = self._addMedia(css, newFiles[i].media);
+                }
+
+                css = self._addComments(css, newFiles[i].path);
+
                 cssObjects.push({
                     css: css,
                     noRules: newFiles[i].noRules
@@ -125,7 +144,6 @@ define(['raintime/lib/promise'], function (Promise) {
 
             try {
                 var positions = self._insert(cssObjects);
-                console.log('am apelat insertul');
 
                 for (var i = 0, len = newFiles.length; i < len; i++) {
                     componentCss.cssFiles[newFiles[i].path] = {
@@ -136,7 +154,7 @@ define(['raintime/lib/promise'], function (Promise) {
                     };
                 }
 
-                setTimeout(function () {deferred.resolve()}, 500);
+                deferred.resolve();
             } catch (ex) {
                 deferred.reject(ex);
             }
@@ -145,7 +163,28 @@ define(['raintime/lib/promise'], function (Promise) {
         return deferred.promise;
     };
 
+    CssRenderer.prototype._getFiles = function (cssFiles) {
+        var deferred = defer(),
+            cssTexts = {},
+            count = 0,
+            len = cssFiles.length;
 
+        cssFiles.forEach(function (cssFile) {
+            var path = cssFile.path;
+            $.get(path).complete(function (xhr) {
+                var text = xhr.responseText;
+                if (text) {
+                    cssTexts[path] = text;
+                }
+                count++;
+                if (count === len) {
+                    deferred.resolve(cssTexts);
+                }
+            });
+        });
+
+        return deferred.promise;
+    };
 
     /**
      * Inserts the recived styles into the html and takes into account about the number of rules
@@ -155,7 +194,6 @@ define(['raintime/lib/promise'], function (Promise) {
      * @returns [{css:<text>, noRules:0, styleIndex: 0, start: 0, end: 0 }]
      * @throws {RainError}
      */
-
     CssRenderer.prototype._insert = function (cssObjects) {
         var returnCSSObjects;
         console.log(cssObjects);
@@ -174,7 +212,7 @@ define(['raintime/lib/promise'], function (Promise) {
             console.log('ok');
             console.log(this._styleTags.length-1);
             returnCSSObjects = this._traceCss(cssObjects, parseInt(this._styleTags.length-1,10));
-            
+
         }
         else {
             throw new RainError('Number of rules excedeed', [componentOpt.viewId],
@@ -184,7 +222,6 @@ define(['raintime/lib/promise'], function (Promise) {
         this._append(returnCSSObjects);
         return returnCSSObjects;
     };
-
 
     /**
      * Breaks the number of files and takes into account how you could add the rules in
@@ -204,18 +241,18 @@ define(['raintime/lib/promise'], function (Promise) {
             computedRules += cssObjects[i].noRules;
             //console.log(cssObjects[i].noRules);
         }
-        
+
 
         if ((styleId == MAX_STYLESHEETS - 1) &&
                 (this._styleTags[styleId].noRules + computedRules > MAX_RULES)){
-            
+
             //_freeSpaceRevize();
-            
+
             throw new RainError('Number of rules excedeed', [componentOpt.viewId],
                     RainError.ERROR_PRECONDITION_FAILED, 'no view');
             return ;
         }
-        
+
         for(var i in cssObjects) {
             if(sum + cssObjects[i].noRules <= MAX_RULES) {
                 console.log('am mai putine reguli');
@@ -324,10 +361,16 @@ define(['raintime/lib/promise'], function (Promise) {
         return id + ';' + version;
     };
 
+    CssRenderer.prototype._addMedia = function (css, media) {
+        return '@media ' + media + ' {\n'
+            + css
+            + '\n}';
+    };
+
     CssRenderer.prototype._addComments = function (css, path) {
         return '/* Start of file ' + path + ' */\n'
             + css
-            + '\n/* End of file ' + path + ' */';
+            + '\n/* End of file ' + path + ' */\n';
     };
 
     /**
