@@ -170,7 +170,7 @@ define(['raintime/lib/promise'], function (Promise) {
             returnCSSObjects = this._traceCss(cssObjects, styleId);
             console.log(returnCSSObjects);
         }
-        else if (this._styleTags.length<=30){
+        else if (this._styleTags.length < MAX_STYLESHEETS){
             console.log('ok');
             console.log(this._styleTags.length-1);
             returnCSSObjects = this._traceCss(cssObjects, parseInt(this._styleTags.length-1,10));
@@ -206,8 +206,11 @@ define(['raintime/lib/promise'], function (Promise) {
         }
         
 
-        if ((styleId == 30) &&
-                (this._styleTags[styleId].noRules + computedRules > 4095)){
+        if ((styleId == MAX_STYLESHEETS - 1) &&
+                (this._styleTags[styleId].noRules + computedRules > MAX_RULES)){
+            
+            //_freeSpaceRevize();
+            
             throw new RainError('Number of rules excedeed', [componentOpt.viewId],
                     RainError.ERROR_PRECONDITION_FAILED, 'no view');
             return ;
@@ -233,7 +236,7 @@ define(['raintime/lib/promise'], function (Promise) {
                 this._styleTags[styleId].nextStartPoint = start;
                 console.log('nextStartPointul meu din ',styleId,' --->',this._styleTags[styleId].nextStartPoint);
             }
-            else {
+            else if (this._styleTags.length < MAX_RULES-1){
                 console.log('niciodata');
                 sum = 0;
                 start = 0;
@@ -255,7 +258,7 @@ define(['raintime/lib/promise'], function (Promise) {
             }
         }
         return cssObjects;
-    }
+    };
 
     /**
      * The actual append in the html of the tags, the adding is done with the hole number of rules added
@@ -287,10 +290,10 @@ define(['raintime/lib/promise'], function (Promise) {
                     obj.what = CSSObjects[i].css;
                 }
             }
-        }   
+        };
         if (appendance.length !== newTag)
                 appendance.push(obj);
-        
+
         console.log(appendance);
         for(var i in appendance)
             if( $('#'+appendance[i].where).length !== 0)
