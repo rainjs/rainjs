@@ -69,11 +69,13 @@ define(['raintime/lib/promise'], function (Promise) {
         /**
          *  [{
          *      id: 'style0',
-         *      noRules: 4000
+         *      noRules: 4000,
+         *      nextStartPoint: 0
          *  },
          *  {
          *      id: 'style1',
-         *      noRules: 2500
+         *      noRules: 2500,
+         *      nextStartPoint: 0
          *  }]
          */
         this._styleTags = [];
@@ -123,6 +125,7 @@ define(['raintime/lib/promise'], function (Promise) {
 
             try {
                 var positions = self._insert(cssObjects);
+                console.log('am apelat insertul');
 
                 for (var i = 0, len = newFiles.length; i < len; i++) {
                     componentCss.cssFiles[newFiles[i].path] = {
@@ -133,7 +136,7 @@ define(['raintime/lib/promise'], function (Promise) {
                     };
                 }
 
-                deferred.resolve();
+                setTimeout(function () {deferred.resolve()}, 500);
             } catch (ex) {
                 deferred.reject(ex);
             }
@@ -141,6 +144,47 @@ define(['raintime/lib/promise'], function (Promise) {
 
         return deferred.promise;
     };
+
+
+
+    /**
+     * Inserts the recived styles into the html and takes into account about the number of rules
+     * in a <style> tag or the number of <style> tags
+     *
+     * @paramse [{css:<text>, noRules:<Integer>}]
+     * @returns [{css:<text>, noRules:0, styleIndex: 0, start: 0, end: 0 }]
+     * @throws {RainError}
+     */
+
+    CssRenderer.prototype._insert = function (cssObjects) {
+        var returnCSSObjects;
+        console.log(cssObjects);
+        if (this._styleTags.length === 0) {
+            var styleId = 0;
+                var object = {
+                    id: "style"+styleId,
+                    noRules: 0,
+                    nextStartPoint: 0
+                };
+            this._styleTags.push(object);
+            returnCSSObjects = this._traceCss(cssObjects, styleId);
+            console.log(returnCSSObjects);
+        }
+        else if (this._styleTags.length<=30){
+            console.log('ok');
+            console.log(this._styleTags.length-1);
+            returnCSSObjects = this._traceCss(cssObjects, parseInt(this._styleTags.length-1,10));
+            
+        }
+        else {
+            throw new RainError('Number of rules excedeed', [componentOpt.viewId],
+                    RainError.ERROR_PRECONDITION_FAILED, 'no view');
+            return;
+        }
+        this._append(returnCSSObjects);
+        return returnCSSObjects;
+    };
+
 
     /**
      * Breaks the number of files and takes into account how you could add the rules in
@@ -150,14 +194,17 @@ define(['raintime/lib/promise'], function (Promise) {
      * @returns [{css:<text>, noRules:0, styleIndex: 0, start: 0, end: 0 }]
      * @throws {RainError}
      */
-    function traceCss(cssObjects, styleId){
+    CssRenderer.prototype._traceCss = function (cssObjects, styleId){
         var sum = this._styleTags[styleId].noRules,
             object,
-            start = 0,
-            computeRules = 0;
-
-        for (var i in cssObjects)
-            computeRules + cssObjects[i].noRules;
+            start = this._styleTags[styleId].nextStartPoint,
+            computedRules = 0;
+        console.log("start---->",start);
+        for (var i in cssObjects) {
+            computedRules += cssObjects[i].noRules;
+            //console.log(cssObjects[i].noRules);
+        }
+        
 
         if ((styleId == 30) &&
                 (this._styleTags[styleId].noRules + computedRules > 4095)){
@@ -165,23 +212,36 @@ define(['raintime/lib/promise'], function (Promise) {
                     RainError.ERROR_PRECONDITION_FAILED, 'no view');
             return ;
         }
-
-        for(var i in cssObject) {
+        
+        for(var i in cssObjects) {
             if(sum + cssObjects[i].noRules <= MAX_RULES) {
+                console.log('am mai putine reguli');
                 sum += cssObjects[i].noRules;
+                console.log('numarul de reguli--->',sum);
                 this._styleTags[styleId].noRules = sum;
+                console.log('numar regulin din ',styleId,' este ',this._styleTags[styleId].noRules);
                 cssObjects[i].styleIndex = 'style'+styleId;
+                console.log('am setat pe cssObjectul primit indexul ',cssObjects[i].styleIndex);
                 cssObjects[i].start = start;
+                console.log('stringul de inceput pentru cssObject ',cssObjects[i].start);
+                console.log('startul --->',start);
+                console.log('lengthul cssului --->',cssObjects[i].css.length);
                 cssObjects[i].end = start+cssObjects[i].css.length;
-                start += cssObjects[i].end + 1;
+                console.log('stringul de final pentru cssObject ',cssObjects[i].end);
+                start = cssObjects[i].end + 1;
+                console.log('noul start --->',start);
+                this._styleTags[styleId].nextStartPoint = start;
+                console.log('nextStartPointul meu din ',styleId,' --->',this._styleTags[styleId].nextStartPoint);
             }
             else {
+                console.log('niciodata');
                 sum = 0;
                 start = 0;
                 styleId ++;
                 object = {
                         id: "style"+styleId,
-                        noRules: 0
+                        noRules: 0,
+                        nextStartPoint: 0
                 };
                 this._styleTags.push(object);
                 if(sum + cssObjects[i].noRules <= MAX_RULES) {
@@ -197,73 +257,50 @@ define(['raintime/lib/promise'], function (Promise) {
         return cssObjects;
     }
 
-
-    /**
-     * Inserts the recived styles into the html and takes into account about the number of rules
-     * in a <style> tag or the number of <style> tags
-     *
-     * @paramse [{css:<text>, noRules:<Integer>}]
-     * @returns [{css:<text>, noRules:0, styleIndex: 0, start: 0, end: 0 }]
-     * @throws {RainError}
-     */
-
-    CssRenderer.prototype._insert = function (cssObjects) {
-        var returnCSSObjects;
-        if (this._styleTags.length === 0) {
-            var styleId = 0,
-                object = {
-                    id: "style"+styleId,
-                    noRules: 0
-                };
-            this._styleTags.push(object);
-            returnCSSObjects = traceCss(cssObjects, styleId);
-        }
-        else if (this._styleTags.length<=30){
-            returnCSSObjects = traceCss(cssObjects, this._styleTags[this._styleTags.length]);
-        }
-        else {
-            throw new RainError('Number of rules excedeed', [componentOpt.viewId],
-                    RainError.ERROR_PRECONDITION_FAILED, 'no view');
-            return;
-        }
-        _append(returnCSSObjects);
-        return returnCSSObjects;
-    };
-
     /**
      * The actual append in the html of the tags, the adding is done with the hole number of rules added
      * to the <style> tag with a specific id
      *
      * @params [{css:<text>, noRules: <Integer>, styleIndex: <Integer>, start: <Integer>, end: <Integer> }]
      */
-    function _append(CSSObjects){
+    CssRenderer.prototype._append = function(CSSObjects){
+        //console.log('appending object',CSSObjects);
+        if (CSSObjects.length === 0) return;
         var obj = {
                 what: '',
                 where: CSSObjects[0].styleIndex
             },
             appendance = [],
-            newTag=0;
-
-        for(var i in CSSObjects) {
-            if (obj.where === CSSObjects[i].styleIndex)
-                obj.what += CSSObjects[i].css;
-            else {
-                appendance.push(obj);
-                newTag++;
-                obj.where = CSSObjects[i].styleIndex;
-                obj.what = CSSObjects[i].css;
+            newTag=1;
+        console.log(CSSObjects.length);
+        if (CSSObjects.length!=0) {
+            for(var i in CSSObjects) {
+                if (obj.where === CSSObjects[i].styleIndex) {
+                    console.log('am gasit un identificator de appenduit');
+                    obj.what += CSSObjects[i].css;
+                }
+                else {
+                    console.log('what');
+                    appendance.push(obj);
+                    newTag++;
+                    obj.where = CSSObjects[i].styleIndex;
+                    obj.what = CSSObjects[i].css;
+                }
             }
-        }
+        }   
         if (appendance.length !== newTag)
-            appendance.push(obj);
-
+                appendance.push(obj);
+        
+        console.log(appendance);
         for(var i in appendance)
             if( $('#'+appendance[i].where).length !== 0)
-                $('#'+appendance[i].where).html($('#'+appendance[i].where).html()+appendance[i].what);
+                $('#'+appendance[i].where).text($('#'+appendance[i].where).text()+appendance[i].what);
             else{
-                _style = document.createElement('style');
-                $(_style).html(appendance[i].css);
+                console.log('hei');
+                var _style = document.createElement('style');
+                $(_style).text(appendance[i].what);
                 $(_style).attr('id', appendance[i].where);
+                //console.log(_style);
                 $('head').append(_style);
             }
     };
