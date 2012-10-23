@@ -346,7 +346,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
         componentCss.noInstances--;
 
         if (componentCss.noInstances === 0) {
-            this._remove(componentCss.cssFiles);
+            //this._remove(componentCss.cssFiles);
 
             var updates = this._computeRemovalUpdates(componentCss);
 
@@ -452,7 +452,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
 
     };
 
-    CSSRenderer.prototype._cleanUpStyle(removeCSSObject) {
+    CssRenderer.prototype._cleanUpStyle = function (removeCSSObject) {
         var _idOfStyleTag = removeCSSObject.idOfStyleTag;
         var newCSSText;
         var _styleTag = document.getElementById(_idOfStyleTag);
@@ -467,7 +467,9 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
         };
     };
 
-    CSSRenderer.prototype._clean(css, startArray, endArray) {
+
+    CssRenderer.prototype._clean = function (css, startArray, endArray) {
+
         var _strips = [];
         //you push the first strip of the css
         _strips.push(css.substring(0,startArray[0]));
@@ -478,12 +480,12 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
                 }
                 else {
                     //if there are no more start end points in this csstext then go to the end of the file
-                    _strips.push(css.substring(endArray[i]))
+                    _strips.push(css.substring(endArray[i]));
                 };
         };
         css = _strips.join('');
         return css;
-    }
+    };
 
     CssRenderer.prototype._getFullId = function (id, version) {
         return id + ';' + version;
