@@ -254,7 +254,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
             if(sum + cssObjects[i].noRules <= MAX_RULES) {
                 sum += cssObjects[i].noRules;
                 this._styleTags[styleId].noRules = sum;
-                cssObjects[i].styleIndex = 'style'+styleId;
+                cssObjects[i].styleIndex = styleId;
                 cssObjects[i].start = start;
                 cssObjects[i].end = start+cssObjects[i].css.length;
                 start = cssObjects[i].end + 1;
@@ -273,7 +273,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
                 if(sum + cssObjects[i].noRules <= MAX_RULES) {
                     sum += cssObjects[i].noRules;
                     this._styleTags[styleId].noRules = sum;
-                    cssObjects[i].styleIndex = 'style'+styleId;
+                    cssObjects[i].styleIndex = styleId;
                     cssObjects[i].start = start;
                     cssObjects[i].end = start+cssObjects[i].css.length;
                     start += cssObjects[i].end + 1;
