@@ -455,7 +455,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
 
         _removeCSS.push(_objectToRemove);
         _removeCSS = _removeCSS.slice(1);
-        for (var i = 0, length = __removeCSS.length; i < length; i++) {
+        for (var i = 0, length = _removeCSS.length; i < length; i++) {
             var idOfStyleTag = _removeCSS[i].idOfStyleTag;
             this._styleTags[idOfStyleTag] -= _removeCSS[i].ruleCountToDelete;
             this._cleanUpStyle(_removeCSS[i]);
@@ -463,10 +463,10 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
         //TODO: if there are 0 left in the _styleTags we should clean that up (algorithm debate)
 
     };
-    
+
     /**
      * CleanupStyle removes the rules passed to the function from the style tags
-     * 
+     *
      * @param {Object} removeCSSObject the rules to be deleted from the style tag
      */
     CssRenderer.prototype._cleanUpStyle = function (removeCSSObject) {
@@ -479,7 +479,8 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
             _styleTag.styleSheet.cssText = newCSSText;
         }
         else {
-            newCSSText = $(_styleTag).text();
+            newCSSText = this._clean($(_styleTag).text(), removeCSSObject.start,
+                    removeCSSObject.end);
             $(_styleTag).text(newCSSText);
         }
     };
@@ -487,7 +488,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
 
     /**
      * Cleans the css from the style tag in the background and returns the cleaned up new set of rules
-     * 
+     *
      * @param {String} css the text from the styleTag
      * @param {Integer[]} startArray
      * @param {Integer[]} endArray
