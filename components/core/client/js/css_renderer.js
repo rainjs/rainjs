@@ -301,7 +301,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
 
         if (CSSObjects.length !== 0) {
             for(var i=0,length=CSSObjects.length; i< length; i++) {
-                if (obj.where === CSSObjects[i].styleIndex) {
+                if (obj.where === 'style'+CSSObjects[i].styleIndex) {
                     obj.what += CSSObjects[i].css;
                 }
                 else {
@@ -312,11 +312,11 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
                 }
             }
         }
-
+        
         if (appendance.length !== newTag) {
             appendance.push(obj);
         }
-
+        
         for(var i = 0, length = appendance.length; i < length; i++) {
             if(document.getElementById(appendance[i].where)) {
                 var styleElement = document.getElementById(appendance[i].where);
