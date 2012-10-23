@@ -338,54 +338,66 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
             }
         }
     };
-    
 
-    /**
-     *  {
-     *      'id;version': {
-     *          cssFiles: {
-     *              'path1': {
-     *                  noRules: 5,
-     *                  styleIndex: 0,
-     *                  start: 34,
-     *                  end: 156
-     *              },
-     *              'path2': {
-     *                  noRules: 25,
-     *                  styleIndex: 0,
-     *                  start: 157,
-     *                  end: 567
-     *              }
-     *          },
-     *          noInstances: 1
-     *      }
-     *  }
-     */
     CssRenderer.prototype.unloadCss = function (id, version) {
         var fullId = this._getFullId(id, version),
             componentCss = this._cssMap[fullId];
+
         componentCss.noInstances--;
+
         if (componentCss.noInstances === 0) {
             this._remove(componentCss.cssFiles);
 
-            /*// see which indexes should be updated after this removal
-            var ranges = {
-                '0': []
-            };
-            // update _cssMap
+            var updates = this._computeRemovalUpdates(componentCss);
+
+            delete this._cssMap[fullId];
+
             for (var id in this._cssMap) {
                 var cssFiles = this._cssMap[id].cssFiles;
 
                 for (var path in cssFiles) {
-                    // update start, end
-                    var obj = cssFiles[path];
-                    var range = ranges[obj.styleIndex];
+                    this._updateCssEntry(cssFiles[path], updates);
                 }
-
             }
-            // remove component entry
-            delete this._cssMap[fullId];*/
         }
+    };
+
+    CssRenderer.prototype._computeRemovalUpdates = function (componentCss) {
+        var updates = {};
+
+        for (var path in componentCss.cssFiles) {
+            var cssEntry = componentCss.cssFiles[path];
+
+            if (typeof updates[cssEntry.styleIndex] === 'undefined') {
+                updates[cssEntry.styleIndex] = [];
+            }
+
+            updates[cssEntry.styleIndex].push({
+                from: cssEntry.end + 1,
+                noChars: cssEntry.end - cssEntry.start + 1
+            });
+        }
+
+        return updates;
+    };
+
+    CssRenderer.prototype._updateCssEntry = function (cssEntry, updates) {
+        var ranges = updates[cssEntry.styleIndex];
+        if (!ranges) {
+            return;
+        }
+
+        var i = 0,
+            len = ranges.length,
+            diff = 0;
+
+        while (i < len && cssEntry.start >= ranges[i].from) {
+            diff += ranges[i].noChars;
+            i++;
+        }
+
+        cssEntry.start -= diff;
+        cssEntry.end -= diff;
     };
 
     /**
@@ -402,7 +414,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
                 noRulesToDelete: cssFiles[0].noRules,
                 idOfStyleTag: parseInt(cssFiles[i].styleIndex.substring(4))
         };
-        
+
         for (var i=1,length = cssFiles.length; i < length; i++) {
             var styleIndex = cssFiles[i].styleIndex;
             if (styleIndex !== _objectToRemove.where) {
@@ -416,7 +428,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
             else {
                 _objectToRemove.noRulesToDelete += cssFiles[i].noRules;
                 var found = false;
-                for (var j = 0,lenghtOfPositions = _objectToRemove.start.length; 
+                for (var j = 0,lenghtOfPositions = _objectToRemove.start.length;
                     j < lenghtOfPositions; j++) {
                     if (_objectToRemove.end[j]+1 === cssFiles[i].start) {
                         _objectToRemove.end[j] = cssFiles[i].end;
@@ -454,7 +466,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
             $(_styleTag).text(newCSSText);
         };
     };
-    
+
     CSSRenderer.prototype._clean(css, startArray, endArray) {
         var _strips = [];
         //you push the first strip of the css
