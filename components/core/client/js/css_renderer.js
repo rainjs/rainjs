@@ -187,43 +187,42 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
     };
 
     /**
-     * Inserts the recived styles into the html and takes into account about the number of rules
-     * in a <style> tag or the number of <style> tags
+     * Inserts the received styles into the html and takes into account about the number of rules
+     * in a style tag or the number of style tags and returns an array of css files with string
+     * starting point in the specific tag and end point.
      *
-     * @paramse [{css:<text>, ruleCount:<Integer>}]
-     * @returns [{css:<text>, ruleCount:0, styleIndex: 0, start: 0, end: 0 }]
-     * @throws {RainError}
+     * @params {Object[]} cssObjects the array of css files to be inserted in the style tag
+     * @returns {Object[]} the array of css files
+     * @throws {RainError} if the maximum number of style tags and rules is reached
      */
     CssRenderer.prototype._insert = function (cssObjects) {
-        var returnCSSObjects;
+        var enhancedCSSObjects;
         if (this._styleTags.length === 0) {
             var styleId = 0;
-                var object = {
-                    id: "style"+styleId,
-                    ruleCount: 0,
-                    nextStartPoint: 0
-                };
+            var object = {
+                id: "style" + styleId,
+                ruleCount: 0,
+                nextStartPoint: 0
+            };
             this._styleTags.push(object);
-            returnCSSObjects = this._traceCss(cssObjects, styleId);
-        }
-        else if (this._styleTags.length < MAX_STYLESHEETS){
-            returnCSSObjects = this._traceCss(cssObjects, parseInt(this._styleTags.length-1,10));
-
-        }
-        else {
+            enhancedCSSObjects = this._traceCss(cssObjects, styleId);
+        } else if (this._styleTags.length < MAX_STYLESHEETS){
+            enhancedCSSObjects = this._traceCss(cssObjects, parseInt(this._styleTags.length - 1, 10));
+        } else {
             throw new RainError('Number of rules excedeed', [componentOpt.viewId],
                     RainError.ERROR_PRECONDITION_FAILED, 'no view');
         }
-        this._append(returnCSSObjects);
-        return returnCSSObjects;
+        this._append(enhancedCSSObjects);
+        return enhancedCSSObjects;
     };
 
     /**
      * Breaks the number of files and takes into account how you could add the rules in
-     * styles, if the maximum size is reached error is thrown
+     * styles. If the maximum size is reached error is thrown.
      *
-     * @paramse [{css:<text>, ruleCount:<Integer>}], styleId:<Integer>
-     * @returns [{css:<text>, ruleCount:0, styleIndex: 0, start: 0, end: 0 }]
+     * @param {Object[]} cssObjects the array of css files to be inserted in the style tag
+     * @param {Integer} styleId the index in the _styleTag array
+     * @returns {Object[]} the array of css files
      * @throws {RainError}
      */
     CssRenderer.prototype._traceCss = function (cssObjects, styleId){
@@ -283,9 +282,9 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
 
     /**
      * The actual append in the html of the tags, the adding is done with the hole number of rules added
-     * to the <style> tag with a specific id
+     * to the style tag with a specific id
      *
-     * @params [{css:<text>, ruleCount: <Integer>, styleIndex: <Integer>, start: <Integer>, end: <Integer> }]
+     * @param {Objects[]} CSSObjects the array of css files to be added in the style tag
      */
     CssRenderer.prototype._append = function(CSSObjects){
         if (CSSObjects.length === 0) {
@@ -350,7 +349,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
         componentCss.instanceCount--;
 
         if (componentCss.instanceCount === 0) {
-            //this._remove(componentCss.cssFiles);
+            this._remove(componentCss.cssFiles);
 
             var updates = this._computeRemovalUpdates(componentCss);
 
@@ -411,21 +410,23 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
     };
 
     /**
-     * Removes styles
+     * Removes styles from the style tag with the specified id in the cssFiles and subtracts
+     * the number of rules from the _styleTag array
      *
-     * @params [{css:<text>, ruleCount: <Integer>, styleIndex: <Integer>, start: <Integer>, end: <Integer> }]
+     * @param {Object[]} cssFiles the array of cssFiles to be removed from the style tag with
+     * a specified id.
      */
     CssRenderer.prototype._remove = function (cssFiles) {
         var _removeCSS = [];
         var _objectToRemove = {
-                where: cssFiles[0].styleIndex,
-                start: [cssFiles[0].start],
-                end: [cssFiles[0].end],
-                ruleCountToDelete: cssFiles[0].ruleCount,
-                idOfStyleTag: parseInt(cssFiles[i].styleIndex.substring(4))
+                where: '',
+                start: [],
+                end: [],
+                ruleCountToDelete: 0,
+                idOfStyleTag: 0
         };
 
-        for (var i=1,length = cssFiles.length; i < length; i++) {
+        for (var i in cssFiles) {
             var styleIndex = cssFiles[i].styleIndex;
             if (styleIndex !== _objectToRemove.where) {
                 _removeCSS.push(_objectToRemove);
@@ -453,6 +454,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
         }
 
         _removeCSS.push(_objectToRemove);
+        _removeCSS = _removeCSS.slice(1);
         for (var i = 0, length = __removeCSS.length; i < length; i++) {
             var idOfStyleTag = _removeCSS[i].idOfStyleTag;
             this._styleTags[idOfStyleTag] -= _removeCSS[i].ruleCountToDelete;
@@ -461,7 +463,12 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
         //TODO: if there are 0 left in the _styleTags we should clean that up (algorithm debate)
 
     };
-
+    
+    /**
+     * CleanupStyle removes the rules passed to the function from the style tags
+     * 
+     * @param {Object} removeCSSObject the rules to be deleted from the style tag
+     */
     CssRenderer.prototype._cleanUpStyle = function (removeCSSObject) {
         var _idOfStyleTag = removeCSSObject.idOfStyleTag;
         var newCSSText;
@@ -478,6 +485,14 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
     };
 
 
+    /**
+     * Cleans the css from the style tag in the background and returns the cleaned up new set of rules
+     * 
+     * @param {String} css the text from the styleTag
+     * @param {Integer[]} startArray
+     * @param {Integer[]} endArray
+     * @returns
+     */
     CssRenderer.prototype._clean = function (css, startArray, endArray) {
 
         var _strips = [];
