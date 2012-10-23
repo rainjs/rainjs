@@ -48,13 +48,13 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
          *      'id;version': {
          *          cssFiles: {
          *              'path1': {
-         *                  noRules: 5,
+         *                  ruleCount: 5,
          *                  styleIndex: 0,
          *                  start: 34,
          *                  end: 156
          *              },
          *              'path2': {
-         *                  noRules: 25,
+         *                  ruleCount: 25,
          *                  styleIndex: 0,
          *                  start: 157,
          *                  end: 567
@@ -69,12 +69,12 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
         /**
          *  [{
          *      id: 'style0',
-         *      noRules: 4000,
+         *      ruleCount: 4000,
          *      nextStartPoint: 0
          *  },
          *  {
          *      id: 'style1',
-         *      noRules: 2500,
+         *      ruleCount: 2500,
          *      nextStartPoint: 0
          *  }]
          */
@@ -82,7 +82,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
     }
 
     /**
-     * component.css[0].noRules
+     * component.css[0].ruleCount
      * component.css[0].path
      * component.css[0].media
      * component.id
@@ -137,7 +137,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
 
                 cssObjects.push({
                     css: css,
-                    noRules: newFiles[i].noRules
+                    ruleCount: newFiles[i].ruleCount
                 });
             }
 
@@ -146,7 +146,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
 
                 for (var i = 0, len = newFiles.length; i < len; i++) {
                     componentCss.cssFiles[newFiles[i].path] = {
-                        noRules: newFiles[i].noRules,
+                        ruleCount: newFiles[i].ruleCount,
                         styleIndex: positions[i].styleIndex,
                         start: positions[i].start,
                         end: positions[i].end
@@ -189,8 +189,8 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
      * Inserts the recived styles into the html and takes into account about the number of rules
      * in a <style> tag or the number of <style> tags
      *
-     * @paramse [{css:<text>, noRules:<Integer>}]
-     * @returns [{css:<text>, noRules:0, styleIndex: 0, start: 0, end: 0 }]
+     * @paramse [{css:<text>, ruleCount:<Integer>}]
+     * @returns [{css:<text>, ruleCount:0, styleIndex: 0, start: 0, end: 0 }]
      * @throws {RainError}
      */
     CssRenderer.prototype._insert = function (cssObjects) {
@@ -199,7 +199,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
             var styleId = 0;
                 var object = {
                     id: "style"+styleId,
-                    noRules: 0,
+                    ruleCount: 0,
                     nextStartPoint: 0
                 };
             this._styleTags.push(object);
@@ -212,7 +212,6 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
         else {
             throw new RainError('Number of rules excedeed', [componentOpt.viewId],
                     RainError.ERROR_PRECONDITION_FAILED, 'no view');
-            return;
         }
         this._append(returnCSSObjects);
         return returnCSSObjects;
@@ -222,22 +221,22 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
      * Breaks the number of files and takes into account how you could add the rules in
      * styles, if the maximum size is reached error is thrown
      *
-     * @paramse [{css:<text>, noRules:<Integer>}], styleId:<Integer>
-     * @returns [{css:<text>, noRules:0, styleIndex: 0, start: 0, end: 0 }]
+     * @paramse [{css:<text>, ruleCount:<Integer>}], styleId:<Integer>
+     * @returns [{css:<text>, ruleCount:0, styleIndex: 0, start: 0, end: 0 }]
      * @throws {RainError}
      */
     CssRenderer.prototype._traceCss = function (cssObjects, styleId){
-        var sum = this._styleTags[styleId].noRules,
+        var sum = this._styleTags[styleId].ruleCount,
             object,
             start = this._styleTags[styleId].nextStartPoint,
             computedRules = 0;
         for(var i=0,length=cssObjects.length; i< length; i++) {
-            computedRules += cssObjects[i].noRules;
+            computedRules += cssObjects[i].ruleCount;
         }
 
 
         if ((styleId == MAX_STYLESHEETS - 1) &&
-                (this._styleTags[styleId].noRules + computedRules > MAX_RULES)){
+                (this._styleTags[styleId].ruleCount + computedRules > MAX_RULES)){
 
 
             //TODO: _freeSpaceRevize();
@@ -245,15 +244,13 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
 
             throw new RainError('Number of rules excedeed', [componentOpt.viewId],
                     RainError.ERROR_PRECONDITION_FAILED, 'no view');
-            return ;
         }
 
 
-        for(var i=0,length=cssObjects.length; i< length; i++) {
-
-            if(sum + cssObjects[i].noRules <= MAX_RULES) {
-                sum += cssObjects[i].noRules;
-                this._styleTags[styleId].noRules = sum;
+        for(var i = 0, length = cssObjects.length; i < length; i++) {
+            if(sum + cssObjects[i].ruleCount <= MAX_RULES) {
+                sum += cssObjects[i].ruleCount;
+                this._styleTags[styleId].ruleCount = sum;
                 cssObjects[i].styleIndex = styleId;
                 cssObjects[i].start = start;
                 cssObjects[i].end = start+cssObjects[i].css.length;
@@ -266,13 +263,13 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
                 styleId ++;
                 object = {
                         id: "style"+styleId,
-                        noRules: 0,
+                        ruleCount: 0,
                         nextStartPoint: 0
                 };
                 this._styleTags.push(object);
-                if(sum + cssObjects[i].noRules <= MAX_RULES) {
-                    sum += cssObjects[i].noRules;
-                    this._styleTags[styleId].noRules = sum;
+                if(sum + cssObjects[i].ruleCount <= MAX_RULES) {
+                    sum += cssObjects[i].ruleCount;
+                    this._styleTags[styleId].ruleCount = sum;
                     cssObjects[i].styleIndex = styleId;
                     cssObjects[i].start = start;
                     cssObjects[i].end = start+cssObjects[i].css.length;
@@ -287,17 +284,21 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
      * The actual append in the html of the tags, the adding is done with the hole number of rules added
      * to the <style> tag with a specific id
      *
-     * @params [{css:<text>, noRules: <Integer>, styleIndex: <Integer>, start: <Integer>, end: <Integer> }]
+     * @params [{css:<text>, ruleCount: <Integer>, styleIndex: <Integer>, start: <Integer>, end: <Integer> }]
      */
     CssRenderer.prototype._append = function(CSSObjects){
-        if (CSSObjects.length === 0) return;
-        var obj = {
+        if (CSSObjects.length === 0) {
+            return;
+        }
+
+        var appendance = [],
+            newTag=1,
+            obj = {
                 what: '',
                 where: CSSObjects[0].styleIndex
-            },
-            appendance = [],
-            newTag=1;
-        if (CSSObjects.length!=0) {
+            };
+
+        if (CSSObjects.length !== 0) {
             for(var i=0,length=CSSObjects.length; i< length; i++) {
                 if (obj.where === CSSObjects[i].styleIndex) {
                     obj.what += CSSObjects[i].css;
@@ -309,11 +310,13 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
                     obj.what = CSSObjects[i].css;
                 }
             }
-        };
-        if (appendance.length !== newTag)
-                appendance.push(obj);
+        }
 
-        for(var i=0,length=appendance.length; i< length; i++) {
+        if (appendance.length !== newTag) {
+            appendance.push(obj);
+        }
+
+        for(var i = 0, length = appendance.length; i < length; i++) {
             if(document.getElementById(appendance[i].where)) {
                 var styleElement = document.getElementById(appendance[i].where);
                 if(styleElement.styleSheet){
@@ -352,11 +355,15 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
 
             delete this._cssMap[fullId];
 
-            for (var id in this._cssMap) {
-                var cssFiles = this._cssMap[id].cssFiles;
+            for (id in this._cssMap) {
+                if (this._cssMap.hasOwnProperty(id)) {
+                    var cssFiles = this._cssMap[id].cssFiles;
 
-                for (var path in cssFiles) {
-                    this._updateCssEntry(cssFiles[path], updates);
+                    for (var path in cssFiles) {
+                        if (cssFiles.hasOwnProperty(path)) {
+                            this._updateCssEntry(cssFiles[path], updates);
+                        }
+                    }
                 }
             }
         }
@@ -366,16 +373,18 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
         var updates = {};
 
         for (var path in componentCss.cssFiles) {
-            var cssEntry = componentCss.cssFiles[path];
+            if (componentCss.cssFiles.hasOwnProperty(path)) {
+                var cssEntry = componentCss.cssFiles[path];
 
-            if (typeof updates[cssEntry.styleIndex] === 'undefined') {
-                updates[cssEntry.styleIndex] = [];
+                if (typeof updates[cssEntry.styleIndex] === 'undefined') {
+                    updates[cssEntry.styleIndex] = [];
+                }
+
+                updates[cssEntry.styleIndex].push({
+                    from: cssEntry.end + 1,
+                    noChars: cssEntry.end - cssEntry.start + 1
+                });
             }
-
-            updates[cssEntry.styleIndex].push({
-                from: cssEntry.end + 1,
-                noChars: cssEntry.end - cssEntry.start + 1
-            });
         }
 
         return updates;
@@ -403,7 +412,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
     /**
      * Removes styles
      *
-     * @params [{css:<text>, noRules: <Integer>, styleIndex: <Integer>, start: <Integer>, end: <Integer> }]
+     * @params [{css:<text>, ruleCount: <Integer>, styleIndex: <Integer>, start: <Integer>, end: <Integer> }]
      */
     CssRenderer.prototype._remove = function (cssFiles) {
         var _removeCSS = [];
@@ -411,7 +420,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
                 where: cssFiles[0].styleIndex,
                 start: [cssFiles[0].start],
                 end: [cssFiles[0].end],
-                noRulesToDelete: cssFiles[0].noRules,
+                ruleCountToDelete: cssFiles[0].ruleCount,
                 idOfStyleTag: parseInt(cssFiles[i].styleIndex.substring(4))
         };
 
@@ -422,11 +431,11 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
                 _objectToRemove.where = cssFiles[i].styleIndex;
                 _objectToRemove.start.push(cssFiles[i].start);
                 _objectToRemove.end.push(cssFiles[i].end);
-                _objectToRemove.noRulesToDelete = cssFiles[i].noRules;
+                _objectToRemove.ruleCountToDelete = cssFiles[i].ruleCount;
                 _objectToRemove.idOfStyleTag = parseInt(cssFiles[i].styleIndex.substring(4));
             }
             else {
-                _objectToRemove.noRulesToDelete += cssFiles[i].noRules;
+                _objectToRemove.ruleCountToDelete += cssFiles[i].ruleCount;
                 var found = false;
                 for (var j = 0,lenghtOfPositions = _objectToRemove.start.length;
                     j < lenghtOfPositions; j++) {
@@ -440,12 +449,12 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
                     _objectToRemove.end.push(cssFiles[i].end);
                 }
             }
-        };
+        }
 
         _removeCSS.push(_objectToRemove);
         for (var i = 0, length = __removeCSS.length; i < length; i++) {
             var idOfStyleTag = _removeCSS[i].idOfStyleTag;
-            this._styleTags[idOfStyleTag] -= _removeCSS[i].noRulesToDelete;
+            this._styleTags[idOfStyleTag] -= _removeCSS[i].ruleCountToDelete;
             this._cleanUpStyle(_removeCSS[i]);
         }
         //TODO: if there are 0 left in the _styleTags we should clean that up (algorithm debate)
@@ -464,7 +473,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
         else {
             newCSSText = $(_styleTag).text();
             $(_styleTag).text(newCSSText);
-        };
+        }
     };
 
 
@@ -481,8 +490,8 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
                 else {
                     //if there are no more start end points in this csstext then go to the end of the file
                     _strips.push(css.substring(endArray[i]));
-                };
-        };
+                }
+        }
         css = _strips.join('');
         return css;
     };
