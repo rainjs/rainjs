@@ -312,11 +312,11 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
                 }
             }
         }
-        
+
         if (appendance.length !== newTag) {
             appendance.push(obj);
         }
-        
+
         for(var i = 0, length = appendance.length; i < length; i++) {
             if(document.getElementById(appendance[i].where)) {
                 var styleElement = document.getElementById(appendance[i].where);
