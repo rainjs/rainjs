@@ -296,7 +296,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
             newTag=1,
             obj = {
                 what: '',
-                where: CSSObjects[0].styleIndex
+                where: 'style'+CSSObjects[0].styleIndex
             };
 
         if (CSSObjects.length !== 0) {
@@ -307,7 +307,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
                 else {
                     appendance.push(obj);
                     newTag++;
-                    obj.where = CSSObjects[i].styleIndex;
+                    obj.where = 'style'+CSSObjects[i].styleIndex;
                     obj.what = CSSObjects[i].css;
                 }
             }
@@ -331,7 +331,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
                 var head = document.getElementsByTagName('head')[0];
                 var _style = document.createElement('style');
                 _style.setAttribute('type', 'text/css');
-                _style.setAttribute('id', 'style'+appendance[i].where);
+                _style.setAttribute('id', appendance[i].where);
                 if(_style.styleSheet) {
                     _style.styleSheet.cssText = appendance[i].what;
                 }
