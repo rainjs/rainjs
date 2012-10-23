@@ -338,6 +338,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
             }
         }
     };
+    
 
     /**
      *  {
@@ -388,12 +389,89 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
     };
 
     /**
+     * Removes styles
      *
-     * @param {String} fullId identifies the component by concatenating id and version
+     * @params [{css:<text>, noRules: <Integer>, styleIndex: <Integer>, start: <Integer>, end: <Integer> }]
      */
     CssRenderer.prototype._remove = function (cssFiles) {
+        var _removeCSS = [];
+        var _objectToRemove = {
+                where: cssFiles[0].styleIndex,
+                start: [cssFiles[0].start],
+                end: [cssFiles[0].end],
+                noRulesToDelete: cssFiles[0].noRules,
+                idOfStyleTag: parseInt(cssFiles[i].styleIndex.substring(4))
+        };
+        
+        for (var i=1,length = cssFiles.length; i < length; i++) {
+            var styleIndex = cssFiles[i].styleIndex;
+            if (styleIndex !== _objectToRemove.where) {
+                _removeCSS.push(_objectToRemove);
+                _objectToRemove.where = cssFiles[i].styleIndex;
+                _objectToRemove.start.push(cssFiles[i].start);
+                _objectToRemove.end.push(cssFiles[i].end);
+                _objectToRemove.noRulesToDelete = cssFiles[i].noRules;
+                _objectToRemove.idOfStyleTag = parseInt(cssFiles[i].styleIndex.substring(4));
+            }
+            else {
+                _objectToRemove.noRulesToDelete += cssFiles[i].noRules;
+                var found = false;
+                for (var j = 0,lenghtOfPositions = _objectToRemove.start.length; 
+                    j < lenghtOfPositions; j++) {
+                    if (_objectToRemove.end[j]+1 === cssFiles[i].start) {
+                        _objectToRemove.end[j] = cssFiles[i].end;
+                        found = true;
+                    }
+                }
+                if (!found) {
+                    _objectToRemove.start.push(cssFiles[i].start);
+                    _objectToRemove.end.push(cssFiles[i].end);
+                }
+            }
+        };
+
+        _removeCSS.push(_objectToRemove);
+        for (var i = 0, length = __removeCSS.length; i < length; i++) {
+            var idOfStyleTag = _removeCSS[i].idOfStyleTag;
+            this._styleTags[idOfStyleTag] -= _removeCSS[i].noRulesToDelete;
+            this._cleanUpStyle(_removeCSS[i]);
+        }
+        //TODO: if there are 0 left in the _styleTags we should clean that up (algorithm debate)
 
     };
+
+    CSSRenderer.prototype._cleanUpStyle(removeCSSObject) {
+        var _idOfStyleTag = removeCSSObject.idOfStyleTag;
+        var newCSSText;
+        var _styleTag = document.getElementById(_idOfStyleTag);
+        if(_styleTag.styleSheet){
+            newCSSText = this._clean(_styleTag.styleSheet.cssText,
+                                        removeCSSObject.start, removeCSSObject.end);
+            _styleTag.styleSheet.cssText = newCSSText;
+        }
+        else {
+            newCSSText = $(_styleTag).text();
+            $(_styleTag).text(newCSSText);
+        };
+    };
+    
+    CSSRenderer.prototype._clean(css, startArray, endArray) {
+        var _strips = [];
+        //you push the first strip of the css
+        _strips.push(css.substring(0,startArray[0]));
+        for(var i=0,length = startArray.length; i < length; i++) {
+                if( i+1 < length ) {
+                    //if there are many start points and end points we push in the strips the in betweens
+                    _strips.push(css.substring(endArray[i],startArray[i+1]));
+                }
+                else {
+                    //if there are no more start end points in this csstext then go to the end of the file
+                    _strips.push(css.substring(endArray[i]))
+                };
+        };
+        css = _strips.join('');
+        return css;
+    }
 
     CssRenderer.prototype._getFullId = function (id, version) {
         return id + ';' + version;
