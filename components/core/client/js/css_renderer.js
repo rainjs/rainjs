@@ -430,11 +430,11 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
             var styleIndex = cssFiles[i].styleIndex;
             if (styleIndex !== _objectToRemove.where) {
                 _removeCSS.push(_objectToRemove);
-                _objectToRemove.where = cssFiles[i].styleIndex;
+                _objectToRemove.where = 'style'+cssFiles[i].styleIndex;
                 _objectToRemove.start.push(cssFiles[i].start);
                 _objectToRemove.end.push(cssFiles[i].end);
                 _objectToRemove.ruleCountToDelete = cssFiles[i].ruleCount;
-                _objectToRemove.idOfStyleTag = parseInt(cssFiles[i].styleIndex.substring(4));
+                _objectToRemove.idOfStyleTag = cssFiles[i].styleIndex;
             }
             else {
                 _objectToRemove.ruleCountToDelete += cssFiles[i].ruleCount;
@@ -470,7 +470,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
      * @param {Object} removeCSSObject the rules to be deleted from the style tag
      */
     CssRenderer.prototype._cleanUpStyle = function (removeCSSObject) {
-        var _idOfStyleTag = removeCSSObject.idOfStyleTag;
+        var _idOfStyleTag = removeCSSObject.where;
         var newCSSText;
         var _styleTag = document.getElementById(_idOfStyleTag);
         if(_styleTag.styleSheet){
