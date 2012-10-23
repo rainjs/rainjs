@@ -156,7 +156,7 @@ describe('Registry Plugin: Precompile Less Plugin', function () {
             expect(precompileLess._computeRules).toHaveBeenCalled();
             expect(componentConfig.compiledCSS['index.css']).toEqual({
                 content: content,
-                noRules: 1,
+                ruleCount: 1,
                 lastModified: time
             });
         });
