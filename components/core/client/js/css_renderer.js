@@ -60,7 +60,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
          *                  end: 567
          *              }
          *          },
-         *          noInstances: 1
+         *          instanceCount: 1
          *      }
          *  }
          */
@@ -72,6 +72,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
          *      ruleCount: 4000,
          *      nextStartPoint: 0
          *  },
+         *  null,
          *  {
          *      id: 'style1',
          *      ruleCount: 2500,
@@ -96,12 +97,12 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
         if(typeof this._cssMap[fullId] === 'undefined') {
             this._cssMap[fullId] = {
                 cssFiles: {},
-                noInstances: 0
+                instanceCount: 0
             };
         }
 
         var componentCss = this._cssMap[fullId];
-        componentCss.noInstances++;
+        componentCss.instanceCount++;
 
         var newFiles = component.css.filter(function (elem) {
             return (typeof componentCss.cssFiles[elem.path] === 'undefined');
@@ -346,9 +347,9 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
         var fullId = this._getFullId(id, version),
             componentCss = this._cssMap[fullId];
 
-        componentCss.noInstances--;
+        componentCss.instanceCount--;
 
-        if (componentCss.noInstances === 0) {
+        if (componentCss.instanceCount === 0) {
             //this._remove(componentCss.cssFiles);
 
             var updates = this._computeRemovalUpdates(componentCss);
