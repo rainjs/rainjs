@@ -327,7 +327,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
                 var head = document.getElementsByTagName('head')[0];
                 var _style = document.createElement('style');
                 _style.setAttribute('type', 'text/css');
-                _style.setAttribute('id', appendance[i].where);
+                _style.setAttribute('id', 'style'+appendance[i].where);
                 if(_style.styleSheet) {
                     _style.styleSheet.cssText = appendance[i].what;
                 }
