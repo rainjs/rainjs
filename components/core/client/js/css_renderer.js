@@ -103,7 +103,6 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
         var componentCss = this._cssMap[fullId];
         componentCss.noInstances++;
 
-
         var newFiles = component.css.filter(function (elem) {
             return (typeof componentCss.cssFiles[elem.path] === 'undefined');
         });
@@ -332,23 +331,67 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
                 if(_style.styleSheet) {
                     _style.styleSheet.cssText = appendance[i].what;
                 }
-                else { 
+                else {
                     _style.appendChild(document.createTextNode(appendance[i].what));
-                } 
+                }
                 head.appendChild(_style);
             }
         }
     };
 
+    /**
+     *  {
+     *      'id;version': {
+     *          cssFiles: {
+     *              'path1': {
+     *                  noRules: 5,
+     *                  styleIndex: 0,
+     *                  start: 34,
+     *                  end: 156
+     *              },
+     *              'path2': {
+     *                  noRules: 25,
+     *                  styleIndex: 0,
+     *                  start: 157,
+     *                  end: 567
+     *              }
+     *          },
+     *          noInstances: 1
+     *      }
+     *  }
+     */
     CssRenderer.prototype.unloadCss = function (id, version) {
-        var fullId = this._getFullId(id, version);
+        var fullId = this._getFullId(id, version),
+            componentCss = this._cssMap[fullId];
+        componentCss.noInstances--;
+        if (componentCss.noInstances === 0) {
+            this._remove(componentCss.cssFiles);
+
+            /*// see which indexes should be updated after this removal
+            var ranges = {
+                '0': []
+            };
+            // update _cssMap
+            for (var id in this._cssMap) {
+                var cssFiles = this._cssMap[id].cssFiles;
+
+                for (var path in cssFiles) {
+                    // update start, end
+                    var obj = cssFiles[path];
+                    var range = ranges[obj.styleIndex];
+                }
+
+            }
+            // remove component entry
+            delete this._cssMap[fullId];*/
+        }
     };
 
     /**
      *
      * @param {String} fullId identifies the component by concatenating id and version
      */
-    CssRenderer.prototype._remove = function (fullId) {
+    CssRenderer.prototype._remove = function (cssFiles) {
 
     };
 
