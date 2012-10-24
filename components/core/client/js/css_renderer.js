@@ -207,7 +207,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
             this._styleTags.push(object);
             enhancedCSSObjects = this._traceCss(cssObjects, styleId);
         } else if (this._styleTags.length < MAX_STYLESHEETS){
-            enhancedCSSObjects = this._traceCss(cssObjects, parseInt(this._styleTags.length - 1, 10));
+            enhancedCSSObjects = this._traceCss(cssObjects, this._styleTags.length-1);
         } else {
             throw new RainError('Number of rules excedeed', [componentOpt.viewId],
                     RainError.ERROR_PRECONDITION_FAILED, 'no view');
@@ -249,6 +249,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
 
         for(var i = 0, length = cssObjects.length; i < length; i++) {
             if(sum + cssObjects[i].ruleCount <= MAX_RULES) {
+                //console.log(MAX_RULES);
                 sum += cssObjects[i].ruleCount;
                 this._styleTags[styleId].ruleCount = sum;
                 cssObjects[i].styleIndex = styleId;
@@ -257,7 +258,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
                 start = cssObjects[i].end + 1;
                 this._styleTags[styleId].nextStartPoint = start;
             }
-            else if (this._styleTags.length < MAX_RULES-1){
+            else if (this._styleTags.length < MAX_STYLESHEETS){
                 sum = 0;
                 start = 0;
                 styleId ++;
@@ -343,6 +344,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
     };
 
     CssRenderer.prototype.unloadCss = function (id, version) {
+        //return ;
         var fullId = this._getFullId(id, version),
             componentCss = this._cssMap[fullId];
 
@@ -457,7 +459,8 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
         _removeCSS = _removeCSS.slice(1);
         for (var i = 0, length = _removeCSS.length; i < length; i++) {
             var idOfStyleTag = _removeCSS[i].idOfStyleTag;
-            this._styleTags[idOfStyleTag] -= _removeCSS[i].ruleCountToDelete;
+            this._styleTags[idOfStyleTag].ruleCount -= _removeCSS[i].ruleCountToDelete;
+            //console.log(_removeCSS[i].ruleCountToDelete,"this is how many");
             this._cleanUpStyle(_removeCSS[i]);
         }
         //TODO: if there are 0 left in the _styleTags we should clean that up (algorithm debate)
