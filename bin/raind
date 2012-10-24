@@ -35,8 +35,7 @@ var program = require('commander'),
     sdkUtils = require('./lib/utils');
 
 var root = path.dirname(__dirname),
-    version,
-    server = require(path.join(root, 'lib', 'server'));
+    version;
 
 function getProjectRoot(dir) {
     try {
@@ -73,8 +72,9 @@ try {
     process.chdir(projectRoot);
 } catch (e) {
     console.log('Failed to change directory to', projectRoot, 'error:', e.message);
-    // process.exit(0);
 }
+
+var server = require(path.join(root, 'lib', 'server'));
 
 var closeServer = function (error) {
     server.close(error);

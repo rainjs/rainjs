@@ -25,9 +25,9 @@
 
 "use strict";
 
-var cwd = process.cwd();
-var path = require('path');
-var globals = require(cwd + '/lib/globals');
+var cwd = process.cwd(),
+    path = require('path'),
+    globals = require(cwd + '/lib/globals');
 
 var configurationsFolder = cwd + '/tests/server/fixtures/';
 
@@ -39,10 +39,9 @@ describe('Server configuration and validation', function () {
      * @param {String} configPath the configuration file path
      */
     function loadConfiguration(configPath) {
+        process.env.RAIN_CONF = configPath;
         var mockConfiguration = loadModuleContext('/lib/configuration.js', {
-            'commander': {
-                'conf': configPath
-            }
+            'commander': {}
         });
         return new mockConfiguration.Configuration();
     }
@@ -53,7 +52,7 @@ describe('Server configuration and validation', function () {
     });
 
     it('must set the language to the one specified in the configuration', function () {
-        var configuration = loadConfiguration();
+        var configuration = loadConfiguration(configurationsFolder + 'server.conf');
         expect(configuration.language).toBe('ro_RO');
     });
 
