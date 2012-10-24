@@ -30,75 +30,100 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
     var defer = Promise.defer;
 
     /**
+     * The maximum number of stylesheets.
      *
+     * @type Number
+     * @constant
      */
     var MAX_STYLESHEETS = 31;
 
     /**
+     * The maximum number of rules per stylesheet.
      *
+     * @type Number
+     * @constant
      */
     var MAX_RULES = 4095;
 
     /**
+     * Handles inserting and removing CSS into the page. The CSS is requested using AJAX and
+     * the received CSS text is added to style tags with no more than 4095 rules. The maximum
+     * number of stylesheets is 31. This is due to the limitations introduced by Internet
+     * Explorer 8 and Internet Explorer 9 browsers.
      *
+     *
+     * @name CssRenderer
+     * @constructor
      */
     function CssRenderer () {
         /**
-         *  {
-         *      'id;version': {
-         *          cssFiles: {
-         *              'path1': {
-         *                  ruleCount: 5,
-         *                  styleIndex: 0,
-         *                  start: 34,
-         *                  end: 156
+         * A map that stores the CSS files loaded for each component (position and rule count)
+         * and the number of instances added to the page for each component. The following
+         * example shows how the data is stored in this object::
+         *
+         *      {
+         *          'example;3.0': {
+         *              cssFiles: {
+         *                  '/example/3.0/css/index.css': {
+         *                      ruleCount: 5,
+         *                      styleIndex: 0,
+         *                      start: 34,
+         *                      end: 156
+         *                  },
+         *                  '/example/3.0/css/accordion.css': {
+         *                      ruleCount: 25,
+         *                      styleIndex: 0,
+         *                      start: 157,
+         *                      end: 567
+         *                  }
          *              },
-         *              'path2': {
-         *                  ruleCount: 25,
-         *                  styleIndex: 0,
-         *                  start: 157,
-         *                  end: 567
-         *              }
-         *          },
-         *          instanceCount: 1
+         *              instanceCount: 1
+         *          }
          *      }
-         *  }
+         *
+         * @type Object
          */
         this._cssMap = {};
 
         /**
-         *  [{
-         *      id: 'style0',
-         *      ruleCount: 4000,
-         *      nextStartPoint: 0
-         *  },
-         *  null,
-         *  {
-         *      id: 'style1',
-         *      ruleCount: 2500,
-         *      nextStartPoint: 0
-         *  }]
+         * Stores the id and number of rules for each style tag added to the head. The
+         * ``styleIndex`` property from the ``_cssMap`` object indicates the position of the
+         * style tag in this array. This array can also contain null elements because when
+         * a style tag ends up with 0 rules, it is replaced with null. These nulls are removed
+         * when the style tags are compacted. This array has the following structure::
+         *
+         *      [{
+         *          id: 'style0',
+         *          ruleCount: 4000,
+         *          nextStartPoint: 1200
+         *      },
+         *      null,
+         *      {
+         *          id: 'style2',
+         *          ruleCount: 2500,
+         *          nextStartPoint: 900
+         *      }]
+         *
+         * @type Object[]
          */
         this._styleTags = [];
     }
 
     /**
-     * component.css[0].ruleCount
-     * component.css[0].path
-     * component.css[0].media
-     * component.id
-     * component.version
+     * Requests the CSS files for the specified component and inserts the CSS into the page. The
+     * promise returned by this method is rejected when there is not enough space to insert
+     * the CSS in the page.
+     *
+     * @param {Object} component the component for which to load the CSS. This is the object sent by the server when a component is rendered.
+     * @returns {Promise} indicates when the loading of the CSS finished.
      */
     CssRenderer.prototype.loadCss = function (component) {
         var deferred = defer(),
             self = this,
             fullId = this._getFullId(component.id, component.version);
 
-        if(typeof this._cssMap[fullId] === 'undefined') {
-            this._cssMap[fullId] = {
-                cssFiles: {},
-                instanceCount: 0
-            };
+        if (typeof this._cssMap[fullId] === 'undefined') {
+            this._cssMap[fullId] = {cssFiles: {}, instanceCount: 0};
         }
 
         var componentCss = this._cssMap[fullId];
@@ -125,22 +150,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
                 return;
             }
 
-            var cssObjects = [];
-
-            for (var i = 0, len = newFiles.length; i < len; i++) {
-                var css = cssTexts[newFiles[i].path];
-
-                if (typeof newFiles[i].media !== 'undefined') {
-                    css = self._addMedia(css, newFiles[i].media);
-                }
-
-                css = self._addComments(css, newFiles[i].path);
-
-                cssObjects.push({
-                    css: css,
-                    ruleCount: newFiles[i].ruleCount
-                });
-            }
+            var cssObjects = self._createCssObjects(newFiles, cssTexts);
 
             try {
                 var positions = self._insert(cssObjects);
@@ -163,6 +173,19 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
         return deferred.promise;
     };
 
+    /**
+     * Requests the CSS files using AJAX. Empty responses are ignored (this indicates that a 404
+     * error occurred; the browser notifies the user about these errors so no special handling is
+     * required here). This method returns the content of the CSS files in the following format::
+     *
+     *      {
+     *          '/example/3.0/css/index.css': 'css text',
+     *          '/example/3.0/css/accordion.css': 'css text'
+     *      }
+     *
+     * @param Object[] cssFiles the files to be requested
+     * @returns {Promise} a promise that is resolved when all the get requests finished
+     */
     CssRenderer.prototype._getFiles = function (cssFiles) {
         var deferred = defer(),
             cssTexts = {},
@@ -184,6 +207,35 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
         });
 
         return deferred.promise;
+    };
+
+    /**
+     * Creates an array of objects containing the CSS text and the number of rules for the
+     * files to be inserted in the page.
+     *
+     * @param {Object[]} cssFiles the CSS files descriptors received in the component JSON object
+     * @param {Object} cssTexts the object returned by the ``_getFiles`` method
+     * @returns {Object[]} the array of CSS objects
+     */
+    CssRenderer.prototype._createCssObjects = function (cssFiles, cssTexts) {
+        var cssObjects = [];
+
+        for (var i = 0, len = cssFiles.length; i < len; i++) {
+            var css = cssTexts[cssFiles[i].path];
+
+            if (typeof cssFiles[i].media !== 'undefined') {
+                css = this._addMedia(css, cssFiles[i].media);
+            }
+
+            css = this._addComments(css, cssFiles[i].path);
+
+            cssObjects.push({
+                css: css,
+                ruleCount: cssFiles[i].ruleCount
+            });
+        }
+
+        return cssObjects;
     };
 
     /**
@@ -343,8 +395,14 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
         }
     };
 
+    /**
+     * Removes the CSS from the page if the number of instances for the specified component
+     * reaches 0.
+     *
+     * @param {String} id the component id
+     * @param {String} version the component version
+     */
     CssRenderer.prototype.unloadCss = function (id, version) {
-        //return ;
         var fullId = this._getFullId(id, version),
             componentCss = this._cssMap[fullId];
 
@@ -357,9 +415,9 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
 
             delete this._cssMap[fullId];
 
-            for (id in this._cssMap) {
-                if (this._cssMap.hasOwnProperty(id)) {
-                    var cssFiles = this._cssMap[id].cssFiles;
+            for (var key in this._cssMap) {
+                if (this._cssMap.hasOwnProperty(key)) {
+                    var cssFiles = this._cssMap[key].cssFiles;
 
                     for (var path in cssFiles) {
                         if (cssFiles.hasOwnProperty(path)) {
@@ -371,6 +429,13 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
         }
     };
 
+    /**
+     * Computes the updates that needs to be applied to the ``_cssMap`` after the CSS files for
+     * a component are removed.
+     *
+     * @param {Object} componentCss the ``_cssMap`` entry for the removed component
+     * @returns {Object} an object containing the updates that needs to be performed
+     */
     CssRenderer.prototype._computeRemovalUpdates = function (componentCss) {
         var updates = {};
 
@@ -392,6 +457,12 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
         return updates;
     };
 
+    /**
+     * Updates the entry for a file in the ``_cssMap``.
+     *
+     * @param {Object} cssEntry the entry to be updated
+     * @param {Object} updates the object containing the updates
+     */
     CssRenderer.prototype._updateCssEntry = function (cssEntry, updates) {
         var ranges = updates[cssEntry.styleIndex];
         if (!ranges) {
@@ -516,16 +587,37 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
         return css;
     };
 
+    /**
+     * Gets the complete component identifier.
+     *
+     * @param {String} id the componenet id
+     * @param {String} version the component version
+     * @returns {String} the complete identifier
+     */
     CssRenderer.prototype._getFullId = function (id, version) {
         return id + ';' + version;
     };
 
+    /**
+     * Adds media queries to a css string.
+     *
+     * @param {String} css the css text
+     * @param {String} media the media query to be added
+     * @returns {String} the CSS text containing media queries
+     */
     CssRenderer.prototype._addMedia = function (css, media) {
         return '@media ' + media + ' {\n'
             + css
             + '\n}';
     };
 
+    /**
+     * Adds comments to the CSS text to indicate the file to which the CSS belongs.
+     *
+     * @param {String} css the CSS text
+     * @param {String} path the CSS path
+     * @returns {String} the CSS text with added comments
+     */
     CssRenderer.prototype._addComments = function (css, path) {
         return '/* Start of file ' + path + ' */\n'
             + css
@@ -539,7 +631,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
     CssRenderer._instance = null;
 
     /**
-     * Returns the class' singleton instance.
+     * Returns the singleton instance.
      * @returns {CssRenderer} the singleton instance
      */
     CssRenderer.get = function () {

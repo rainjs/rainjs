@@ -183,12 +183,10 @@ define([
         if (!component.css || 0 === component.css.length) {
             this._showHTML(component, domElement);
         } else {
-            //this._loadCSS(component.css, this._showHTML.bind(this, component, domElement));
-
             CssRenderer.get().loadCss(component).then(function () {
                 self._showHTML(component, domElement);
             }, function (error) {
-                logger.error('Failed to load CSS......');
+                logger.error('Failed to load CSS for: ' + component.id + ';' + component.version);
             });
         }
     };
@@ -230,50 +228,6 @@ define([
             }
         }, self.placeholderTimeout);
     }
-
-    /**
-     * Load css files and insert html after the css files are completely loaded.
-     * Maybe there is a better way. This works on IE8+, Chrome, FF, Safari.
-     *
-     * @param {Array} css CSS dependencies
-     * @param {Function} callback is invoked after all css dependencies are loaded
-     * @private
-     * @memberOf ClientRenderer#
-     */
-    ClientRenderer.prototype._loadCSS = function (css, callback) {
-        var head = $('head');
-        var loadedFiles = 0;
-
-        for (var i = 0, len = css.length; i < len; i++) {
-
-            var loader = new Image();
-            loader.onerror = function (e) {
-                if (++loadedFiles === css.length) {
-                    callback();
-                }
-            };
-            loader.src = css[i].path;
-
-            if (0 === head.find("link[href='" + css[i].path + "']").length) {
-                var link;
-
-                if (document.createStyleSheet) {
-                    link = document.createStyleSheet(css[i].path);
-                } else {
-                    link = document.createElement('link');
-                    link.type = 'text/css';
-                    link.rel = 'stylesheet';
-                    link.href = css[i].path;
-                }
-
-                if (css[i].media) {
-                    link.media = css[i].media;
-                }
-
-                head.append(link);
-            }
-        }
-    };
 
     return window.ClientRenderer = ClientRenderer;
 });
