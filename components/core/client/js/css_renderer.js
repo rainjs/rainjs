@@ -258,7 +258,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
             };
             this._styleTags.push(object);
             enhancedCSSObjects = this._traceCss(cssObjects, styleId);
-        } else if (this._styleTags.length < MAX_STYLESHEETS){
+        } else if (this._styleTags.length <= MAX_STYLESHEETS){
             enhancedCSSObjects = this._traceCss(cssObjects, this._styleTags.length-1);
         } else {
             throw new RainError('Number of rules excedeed', [componentOpt.viewId],
@@ -301,7 +301,6 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
 
         for(var i = 0, length = cssObjects.length; i < length; i++) {
             if(sum + cssObjects[i].ruleCount <= MAX_RULES) {
-                //console.log(MAX_RULES);
                 sum += cssObjects[i].ruleCount;
                 this._styleTags[styleId].ruleCount = sum;
                 cssObjects[i].styleIndex = styleId;
@@ -310,7 +309,7 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
                 start = cssObjects[i].end + 1;
                 this._styleTags[styleId].nextStartPoint = start;
             }
-            else if (this._styleTags.length < MAX_STYLESHEETS){
+            else if (this._styleTags.length <= MAX_STYLESHEETS){
                 sum = 0;
                 start = 0;
                 styleId ++;
@@ -328,6 +327,10 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
                     cssObjects[i].end = start+cssObjects[i].css.length;
                     start += cssObjects[i].end + 1;
                 }
+                else {
+                    throw new RainError('Number of rules excedeed', [componentOpt.viewId],
+                            RainError.ERROR_PRECONDITION_FAILED, 'no view');
+                }
             }
         }
         return cssObjects;
@@ -343,14 +346,13 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
         if (CSSObjects.length === 0) {
             return;
         }
-
         var appendance = [],
             newTag=1,
             obj = {
                 what: '',
                 where: 'style'+CSSObjects[0].styleIndex
             };
-
+        
         if (CSSObjects.length !== 0) {
             for(var i=0,length=CSSObjects.length; i< length; i++) {
                 if (obj.where === 'style'+CSSObjects[i].styleIndex) {
@@ -359,8 +361,10 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
                 else {
                     appendance.push(obj);
                     newTag++;
-                    obj.where = 'style'+CSSObjects[i].styleIndex;
-                    obj.what = CSSObjects[i].css;
+                    obj = {
+                            what: CSSObjects[i].css,
+                            where: 'style'+CSSObjects[i].styleIndex
+                    };
                 }
             }
         }
@@ -503,6 +507,13 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
             var styleIndex = cssFiles[i].styleIndex;
             if (styleIndex !== _objectToRemove.where) {
                 _removeCSS.push(_objectToRemove);
+                _objectToRemove = {
+                        where: '',
+                        start: [],
+                        end: [],
+                        ruleCountToDelete: 0,
+                        idOfStyleTag: 0
+                }
                 _objectToRemove.where = 'style'+cssFiles[i].styleIndex;
                 _objectToRemove.start.push(cssFiles[i].start);
                 _objectToRemove.end.push(cssFiles[i].end);
@@ -531,7 +542,6 @@ define(['raintime/lib/promise', 'util'], function (Promise, util) {
         for (var i = 0, length = _removeCSS.length; i < length; i++) {
             var idOfStyleTag = _removeCSS[i].idOfStyleTag;
             this._styleTags[idOfStyleTag].ruleCount -= _removeCSS[i].ruleCountToDelete;
-            //console.log(_removeCSS[i].ruleCountToDelete,"this is how many");
             this._cleanUpStyle(_removeCSS[i]);
         }
         //TODO: if there are 0 left in the _styleTags we should clean that up (algorithm debate)
