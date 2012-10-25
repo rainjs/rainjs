@@ -123,7 +123,7 @@ define([
             return;
         }
         if (component.placeholder && component.placeholder === true) {
-            placeholderTimeout(this, component);
+            this._placeholderTimeout(component);
         }
         if (this._isSocketConnected) {
             this.socket.emit('render', component, function (error) {
@@ -175,7 +175,7 @@ define([
                 Raintime.componentRegistry.preRegister(childComponent);
 
                 if (childComponent.placeholder === true) {
-                    placeholderTimeout(this, childComponent);
+                    self._placeholderTimeout(childComponent);
                 }
             }
         }
@@ -214,12 +214,12 @@ define([
     /**
      * Renders the placeholder if the component is not returned in time (placeholderTimeout).
      *
-     * @param {ClientRenderer} self the class instance
      * @param {Object} placeholder the placeholder component
      * @private
-     * @memberOf ClientRenderer#
      */
-    function placeholderTimeout(self, placeholder) {
+    ClientRenderer.prototype._placeholderTimeout = function (placeholder) {
+        var self = this;
+
         setTimeout(function () {
             if (!$('#' + placeholder.instanceId).hasClass('app-container')) {
                 logger.warn('The component "' + placeholder.id +
@@ -227,7 +227,7 @@ define([
                 self.renderPlaceholder(placeholder.instanceId);
             }
         }, self.placeholderTimeout);
-    }
+    };
 
     return window.ClientRenderer = ClientRenderer;
 });
