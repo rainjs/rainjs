@@ -314,6 +314,8 @@ define(['raintime/lib/promise',
         var newComponent = new Component(component);
         map[newComponent.instanceId] = newComponent;
 
+        newComponent.promise = deferred.promise;
+
         if (!component.controller) {
             setTimeout(function () {
                 deferred.resolve();
@@ -389,7 +391,8 @@ define(['raintime/lib/promise',
             newComponent.controller = controller;
 
             if (callbacks[newComponent.instanceId]) {
-                callbacks[newComponent.instanceId].apply(controller);
+                callbacks[newComponent.instanceId].call(controller,
+                        newComponent);
                 delete callbacks[newComponent.instanceId];
             }
 
@@ -398,8 +401,6 @@ define(['raintime/lib/promise',
 
             deferred.resolve(controller);
         });
-
-        newComponent.promise = deferred.promise;
     }
 
     /**

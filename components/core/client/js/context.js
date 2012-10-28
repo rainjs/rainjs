@@ -49,6 +49,7 @@ define(['raintime/client_storage',
         var self = this;
 
         raintime = raintimeInstance;
+        this.component = component;
         this.instanceId = component.instanceId;
         this.storage = new ClientStorage(this);
 
@@ -134,7 +135,15 @@ define(['raintime/client_storage',
         );
         $(dom).html('<div id="' + instanceId + '"></div>');
         component.instanceId = instanceId;
-        raintime.componentRegistry.setCallback(instanceId, callback);
+
+        var self = this;
+
+        raintime.componentRegistry.setCallback(instanceId,
+                function (registeredComponent) {
+                    self.component.children.push(registeredComponent);
+                    callback.call(registeredComponent.controller);
+                });
+
         window.ClientRenderer.get().requestComponent(component);
     };
 
