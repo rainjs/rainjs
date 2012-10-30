@@ -141,7 +141,7 @@ define(['raintime/client_storage',
         raintime.componentRegistry.setCallback(instanceId,
                 function (registeredComponent) {
                     self.component.children.push(registeredComponent);
-                    callback.call(registeredComponent.controller);
+                    callback && callback.call(registeredComponent.controller);
                 });
 
         window.ClientRenderer.get().requestComponent(component);
