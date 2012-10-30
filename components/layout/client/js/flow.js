@@ -1,4 +1,4 @@
-define(['util', 'layout/1.0/js/layout'], function (Util, Layout) {
+define(['raintime/lib/util', 'layout/1.0/js/layout'], function (Util, Layout) {
     "use strict";
 
     /**
