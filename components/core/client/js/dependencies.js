@@ -92,10 +92,15 @@ define(function () {
     }
 
     /**
-     * Adds special RAIN dependencies like translation and logger.
+     * Prefixes component dependencies with component id and version and
+     * adds special RAIN dependencies like translation and logger.
+     *
+     * @param {String} moduleName the module name
+     * @param {String[]} deps the module dependencies
+     * @param {Function} callback a function that is called when the module is loaded
      */
-    function addDependencies(moduleName, deps, callback) {
-        var moduleRegex = /^\/([\w-]+)\/(?:(\d(?:\.\d)?(?:\.\d)?)\/)(?:js)\/(.+)/,
+    function modifyDependencies(moduleName, deps, callback) {
+        var moduleRegex = /^\/?([\w-]+)\/(\d(?:\.\d)?(?:\.\d)?)\/js\/(.+)/,
             matches = moduleName && moduleName.match(moduleRegex);
 
         if (!matches || !matches[1] || !matches[2]) {
@@ -107,9 +112,42 @@ define(function () {
             version: matches[2]
         };
 
+        resolveDependencyPaths(component, deps);
+        addDependencies(component, moduleName, deps, callback);
+    }
+
+    /**
+     * Prefixes dependencies with component id and version. It only modifies relative paths not
+     * ending with .js (RequireJS module id) and starting with js/ like: js/index or js/lib/file.
+     * The path js/lib/file will become id/version/js/lib/file.
+     *
+     * @param {Object} component the component (id, version) for which the module is loaded
+     * @param {String[]} deps the module dependencies
+     */
+    function resolveDependencyPaths(component, deps) {
+        for (var i = 0, len = deps.length; i < len; i++) {
+            var dependency = deps[i];
+
+            // tests that dependency is a requirejs module id (it isn't an absolute path,
+            // doesn't end with .js and doesn't contain query params)
+            if (!require.jsExtRegExp.test(dependency) && dependency.indexOf('js/') === 0) {
+                deps[i] = component.id + '/' + component.version + '/' + dependency;
+            }
+        }
+    }
+
+    /**
+     * Adds special RAIN dependencies like translation and logger.
+     *
+     * @param {Object} component the component for which the module is loaded
+     * @param {String} moduleName the module name
+     * @param {String[]} deps the module dependencies
+     * @param {Function} callback a function that is called when the module is loaded
+     */
+    function addDependencies(component, moduleName, deps, callback) {
         var argumentsRegExp = /\(([\s\S]*?)\)/,
-            splitRegExp = /[ ,\n\r\t]+/,
-            callBackMatches = argumentsRegExp.exec(callback.toString());
+        splitRegExp = /[ ,\n\r\t]+/,
+        callBackMatches = argumentsRegExp.exec(callback.toString());
 
         if (!callBackMatches || !callBackMatches[1]) {
             return;
@@ -189,7 +227,7 @@ define(function () {
                 context = require.s.contexts[node.getAttribute("data-requirecontext")];
                 if (context && context.defQueue.length > 0) {
                     var def = context.defQueue[context.defQueue.length - 1];
-                    addDependencies(def[0], def[1], def[2]);
+                    modifyDependencies(def[0], def[1], def[2]);
                 }
             }
 
@@ -210,7 +248,7 @@ define(function () {
             //all browsers except IE
             if (currentDeps && currentCallback) {
                 var moduleName = node.getAttribute("data-requiremodule");
-                addDependencies(moduleName, currentDeps, currentCallback);
+                modifyDependencies(moduleName, currentDeps, currentCallback);
             }
 
             oldOnScriptLoad(evt);
