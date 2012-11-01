@@ -33,8 +33,26 @@ define(function (require, module, exports) {
     var StyleRegistry = require('raintime/css/registry');
     var registry = StyleRegistry.get();
 
+    /**
+     * Handles inserting and removing CSS into the page. The CSS is requested using AJAX and
+     * the received CSS text is added to style tags with no more than 4095 rules. The maximum
+     * number of stylesheets is 31. This is due to the limitations introduced by Internet
+     * Explorer 8 and Internet Explorer 9 browsers.
+     *
+     *
+     * @name CssRenderer
+     * @constructor
+     */
     function CssRenderer() {}
 
+    /**
+     * Requests the CSS files for the specified component and inserts the CSS into the page. The
+     * promise returned by this method is rejected when there is not enough space to insert
+     * the CSS in the page.
+     *
+     * @param {Object} component the component for which to load the CSS. This is the object sent by the server when a component is rendered.
+     * @returns {Promise} indicates when the loading of the CSS finished.
+     */
     CssRenderer.prototype.load = function (component) {
         var deferred = defer(),
             self = this,
@@ -65,8 +83,12 @@ define(function (require, module, exports) {
                         content: content
                     };
 
-                    registry.register(componentId, css);
+                    if (!registry.register(componentId, css)) {
+                        deferred.reject();
+                        return;
+                    }
                 }
+
                 registry.save();
                 deferred.resolve();
             });
@@ -75,9 +97,15 @@ define(function (require, module, exports) {
         return deferred.promise;
     };
 
+    /**
+     * Removes the CSS from the page if the number of instances for the specified component
+     * reaches 0.
+     *
+     * @param {Object} component the component for which to unload the CSS.
+     */
     CssRenderer.prototype.unload = function (component) {
         var componentId = this._getFullId(component.id, component.version);
-        registry.deregister(componentId);
+        registry.unregister(componentId);
         registry.save();
     };
 

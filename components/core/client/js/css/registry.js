@@ -28,98 +28,191 @@
 define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Stylesheet, RuleSet, logger) {
     var MAX_STYLES = 2;
 
+    /**
+     * Manages the stylesheets inside the page keeping track of where each CSS file is and
+     * cleaning up the remaining whitespace when necessary.
+     *
+     * @name CssRegistry
+     * @constructor
+     */
     function CssRegistry() {
-        this.components = {};
-        this.stylesheets = [];
-        this.unsavedStyles = [];
-        this.currentSheet = 0;
+        /**
+         * A map that stores the CSS files loaded for each component and the number of instances added
+         * to the page for each component. The following example shows how the data is stored in this object::
+         *
+         *      {
+         *          'example;3.0': {
+         *              cssFiles: {
+         *                  '/example/3.0/css/index.css': new RuleSet,
+         *                  '/example/3.0/css/accordion.css': new RuleSet()
+         *              },
+         *              instanceCount: 1
+         *          }
+         *      }
+         *
+         * @type {Object}
+         * @private
+         */
+        this._components = {};
+
+        /**
+         * An array containing all the stylesheets loaded inside the page
+         *
+         * @type {Stylesheet[]}
+         * @private
+         */
+        this._stylesheets = [];
+
+        /**
+         * An array containing the indexes of the stylesheets that need to be saved
+         *
+         * @type {Integer[]}
+         * @private
+         */
+        this._unsavedSheets = [];
+
+        /**
+         * A pointer to the current active stylesheet (the one to which the next css to arive will be written)
+         *
+         * @type {Number}
+         * @private
+         */
+        this._currentSheet = 0;
     }
 
-    CssRegistry.prototype.register = function (component, css, file, rule) {
-        if (!this.components[component]) {
-            this.components[component] = {
+    /**
+     * Register the css of a component to the registry
+     *
+     * @param {String} component the component id for which to register the css
+     * @param {Object} css a CSS data object containing all the information required to create the rules
+     *
+     * @returns {Boolean} weather the insert was successfull or not
+     */
+    CssRegistry.prototype.register = function (component, css) {
+        if (!this._components[component]) {
+            this._components[component] = {
                 instanceCount: 0,
                 files: {}
             };
         }
 
-        this.components[component].instanceCount++;
+        this._components[component].instanceCount++;
 
-        this._insert(component, css);
+        return this._insert(component, css);
     };
 
-    CssRegistry.prototype.deregister = function (component) {
-        this.components[component].instanceCount--;
+    /**
+     * Unregister a component from the registry
+     *
+     * @param {String} component the component id for which to unregister the css
+     */
+    CssRegistry.prototype.unregister = function (component) {
+        this._components[component].instanceCount--;
 
-        if (this.components[component].instanceCount === 0) {
+        if (this._components[component].instanceCount === 0) {
             this._remove(component);
         }
     };
 
+    /**
+     * Filters a list of CSS files for a specific component and returns the files that don't exist
+     * inside the registry
+     *
+     * @param {String} component the component id to which the files belong
+     * @param {Array} files an array containing the file descriptor
+     *
+     * @returns {[type]}  [description]
+     */
     CssRegistry.prototype.getNewFiles = function (component, files) {
         var self = this;
         return files.filter(function (file) {
-            return (!self.components[component] || 'undefined' === typeof self.components[component].files[file.path]);
+            return (!self._components[component] || 'undefined' === typeof self._components[component].files[file.path]);
         });
     };
 
+    /**
+     * Save the changes to the stylesheets
+     */
     CssRegistry.prototype.save = function () {
-        for (var i = 0, len = this.unsavedStyles.length; i < len; i++) {
-            var index = this.unsavedStyles[i];
-            this.stylesheets[index].write();
+        for (var i = 0, len = this._unsavedSheets.length; i < len; i++) {
+            var index = this._unsavedSheets[i];
+            this._stylesheets[index].write();
         }
     };
 
+    /**
+     * Queue a css object to be inserted inside the stylesheets
+     *
+     * @param {String} component the component id to which the CSS belongs
+     * @param {Object} css the CSS data
+     *
+     * @returns {Boolean} weather the operation was successful
+     * @private
+     */
     CssRegistry.prototype._insert = function (component, css) {
-        if (this.stylesheets.length >= MAX_STYLES) {
+        if (this._stylesheets.length >= MAX_STYLES) {
             this._collectWhitespace();
 
-            if (this.stylesheets.indexOf(this.currentSheet) === (this.stylesheets.length -1)) {
+            if (this._stylesheets.indexOf(this._currentSheet) === (this._stylesheets.length -1)) {
                 logger.error('Style Registry: the maximum number of stylesheets has been reached.');
-                return;
+                return false;
             }
         }
 
-        var currentSheet = this.stylesheets[this.currentSheet];
+        var currentSheet = this._stylesheets[this._currentSheet];
         if (!currentSheet) {
-            currentSheet = this.stylesheets[this.currentSheet] = new Stylesheet(this.currentSheet);
+            currentSheet = this._stylesheets[this._currentSheet] = new Stylesheet(this._currentSheet);
         }
 
         for (var file in css) {
             if (css.hasOwnProperty(file)) {
-                if (!this.components[component].files[file]) {
+                if (!this._components[component].files[file]) {
                     var rule = new RuleSet(css[file]);
-                    this.components[component].files[file] = rule;
+                    this._components[component].files[file] = rule;
 
-                    if (!currentSheet.add(rule)) {
+                    if (!currentSheet.add(rule, component, file)) {
                         this.curentSheet++;
                         this._insert(rule);
                     } else {
-                        this.unsavedStyles.push(this.currentSheet);
+                        this._unsavedSheets.push(this._currentSheet);
                     }
                 }
             }
         }
+
+        return true;
     };
 
+    /**
+     * Queue a component to have it's CSS files removed from the stylesheets
+     *
+     * @param {String} component the component id for which to remove the files
+     * @private
+     */
     CssRegistry.prototype._remove = function (component) {
-        for (var file in this.components[component].files) {
-            if (this.components[component].files.hasOwnProperty(file)) {
-                var rule = this.components[component].files[file];
+        for (var file in this._components[component].files) {
+            if (this._components[component].files.hasOwnProperty(file)) {
+                var rule = this._components[component].files[file];
                 rule.style.remove(rule);
 
-                if (this.unsavedStyles.indexOf(rule.style.id) === -1) {
-                    this.unsavedStyles.push(rule.style.id);
+                if (this._unsavedSheets.indexOf(rule.style.id) === -1) {
+                    this._unsavedSheets.push(rule.style.id);
                 }
             }
         }
 
-        this.components[component] = void 0;
+        this._components[component] = void 0;
     };
 
+    /**
+     * Sweep the existing stylesheets and fill up the free whitespace by moving the rules to the first
+     * empty stylesheet.
+     *
+     * @private
+     */
     CssRegistry.prototype._collectWhitespace = function () {
-        for (var i = 0, len = this.stylesheets.length; i < len; i++) {
-            var style = this.stylesheets[i];
+        for (var i = 0, len = this._stylesheets.length; i < len; i++) {
+            var style = this._stylesheets[i];
 
             var rules = this._getRulesWithin(style.getFreeSpace());
 
@@ -139,17 +232,24 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
             }
 
             style.write();
-            this.currentSheet = style.id;
+            this._currentSheet = style.id;
         }
     };
 
+    /**
+     * Get the files that would fit inside a stylesheet.
+     *
+     * @param {Integer} count the available space inside the stylesheet
+     *
+     * @returns {RuleSet[]} an array containing the RuleSets that fit inside the stylesheet
+     */
     CssRegistry.prototype._getRulesWithin = function (count) {
         var left = count,
             rules = [];
 
-        for (var componentId in this.components) {
-            if(this.components.hasOwnProperty(componentId)) {
-                var component = this.components[componentId];
+        for (var componentId in this._components) {
+            if(this._components.hasOwnProperty(componentId)) {
+                var component = this._components[componentId];
 
                 for (var path in component.files) {
                     if (component.files.hasOwnProperty(path)) {

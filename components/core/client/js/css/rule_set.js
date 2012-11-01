@@ -26,6 +26,21 @@
 "use strict";
 
 define(['raintime/css/registry'], function (CssRegistry) {
+    /**
+     * A model defining the structure of an object containing the CSS rules defined in a CSS file
+     *
+     * @param {Object} data the CSS data received from the server
+     * @param {Integer} data.ruleCount the number of rules inside the file
+     * @param {Integer} data.length the length of the content inside the file
+     * @param {String} data.content the content of the CSS file
+     *
+     * @property {Integer} ruleCount the number of rules in the set
+     * @property {Integer} length the length of the content inside the set
+     * @property {String} content the CSS content inside the set
+     *
+     * @name RuleSet
+     * @constructor
+     */
     function RuleSet(data) {
         this.start = 0;
         this.style = null;
