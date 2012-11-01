@@ -199,18 +199,18 @@ define([], function () {
 
         for (i = 0, len = rules.length; i < len; i++) {
             var rule = rules[i];
-            var slice = text.substring(index, rule.start);
 
-            slices.push(slice);
-            index = slice.length + rule.length;
+            slices.push(text.substring(index, rule.start));
+            index = rule.start + rule.length;
+            slices.push(text.substring(index));
+
             this._nextIndex -= rule.length;
 
             for (var idx in this._ruleMap) {
                 if (this._ruleMap.hasOwnProperty(idx)) {
-                    if (this._ruleMap[idx] > rule.start) {
-                        var newIndex = this._ruleMap[idx] -rule.length;
-                        this.ruleMap[idx].start = newIndex;
-                        this._ruleMap[newIndex] = this._ruleMap[idx];
+                    if (idx > rule.start) {
+                        this._ruleMap[idx].start = rule.start;
+                        this._ruleMap[rule.start] = this._ruleMap[idx];
                         delete this._ruleMap[idx];
                     }
                 }

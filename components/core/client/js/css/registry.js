@@ -26,7 +26,7 @@
 "use strict";
 
 define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Stylesheet, RuleSet, logger) {
-    var MAX_STYLES = 2;
+    var MAX_STYLES = 31;
 
     /**
      * Manages the stylesheets inside the page keeping track of where each CSS file is and
@@ -153,7 +153,7 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
         if (this._stylesheets.length >= MAX_STYLES) {
             this._collectWhitespace();
 
-            if (this._stylesheets.indexOf(this._currentSheet) === (this._stylesheets.length -1)) {
+            if (this._stylesheets.indexOf(this._currentSheet) === (this._stylesheets.length - 1)) {
                 logger.error('Style Registry: the maximum number of stylesheets has been reached.');
                 return false;
             }
@@ -166,7 +166,7 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
 
         for (var file in css) {
             if (css.hasOwnProperty(file)) {
-                if (!this._components[component].files[file]) {
+                if ('undefined' === typeof this._components[component].files[file]) {
                     var rule = new RuleSet(css[file]);
                     this._components[component].files[file] = rule;
 
