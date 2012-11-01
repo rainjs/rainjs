@@ -128,8 +128,9 @@ define(function () {
         for (var i = 0, len = deps.length; i < len; i++) {
             var dependency = deps[i];
 
-            // tests that dependency is a requirejs module id (it isn't an absolute path,
-            // doesn't end with .js and doesn't contain query params)
+            // require.jsExtRegExp is defined in RequireJS and tests that a string is a regular
+            // path and not a module ID. See http://requirejs.org/docs/api.html#jsfiles for more
+            // details.
             if (!require.jsExtRegExp.test(dependency) && dependency.indexOf('js/') === 0) {
                 deps[i] = component.id + '/' + component.version + '/' + dependency;
             }
