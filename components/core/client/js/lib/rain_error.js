@@ -28,7 +28,7 @@ define(function (require, exports, module) {
 
 // Note: strict mode cannot be used because of arguments.callee and related properties
 
-var util = require('util');
+var util = require('raintime/lib/util');
 
 /**
  * Global RAIN error.

@@ -23,7 +23,7 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-define(['util',
+define(['raintime/lib/util',
         '/example/js/note.js',
         '/example/js/notes.js'], function (Util, Note, FloatNotes) {
 
