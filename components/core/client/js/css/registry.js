@@ -121,7 +121,7 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
      * @param {String} component the component id to which the files belong
      * @param {Array} files an array containing the file descriptor
      *
-     * @returns {[type]}  [description]
+     * @returns {Array} an array of files that are not loaded
      */
     CssRegistry.prototype.getNewFiles = function (component, files) {
         var self = this;
