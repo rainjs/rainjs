@@ -28,7 +28,7 @@ define(['raintime/lib/promise',
         'raintime/context',
         'raintime/async_controller',
         'raintime/logger',
-        'raintime/css_renderer',
+        'raintime/css/renderer',
         'raintime/lib/rain_error'
 ], function (Promise, EventEmitter, Context, AsyncController, Logger, CssRenderer) {
 
@@ -199,7 +199,7 @@ define(['raintime/lib/promise',
                 }
             }
 
-            CssRenderer.get().unloadCss(component.id, component.version);
+            CssRenderer.get().unload(component, component);
             delete components[instanceId];
         }
     };
