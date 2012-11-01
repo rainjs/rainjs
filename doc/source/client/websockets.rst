@@ -15,7 +15,7 @@ Below you can find a simple example of how to obtain a websocket connection for 
 
 .. code-block:: javascript
 
-   this._socket = this.context.getSocket("/component;version/channel");
+   this._socket = this.context.getSocket("/component/version/channel");
 
 After you obtain a connection to this websocket you can easily start to emit messages and
 react to messages. The obtained socket is obtained from socket.io. For more information
@@ -35,15 +35,13 @@ Below you can find a function client controller example:
         function Controller() {}
 
         Controller.prototype.init = function () {
-            this._socket = this.context.getSocket("/example;1.0/example");
+            this._socket = this.context.messaging.getSocket("/example/1.0/example");
 
             this.configureSocketDummy();
             this.start();
         };
 
         Controller.prototype.start = function () {
-            var messaging = this.context.messaging;
-
             var root = this.context.getRoot();
             var btnDummyTalk = root.find("input[data-itemid='btnCustomHandler']");
 
