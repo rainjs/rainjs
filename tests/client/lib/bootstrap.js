@@ -27,7 +27,6 @@ var requireConfig = {
     "debug": ('{{server.env}}' == 'production'? 'false' : 'true'),
     "baseUrl": "/",
     "paths": {
-        "util": "core/js/lib/util",
         "text": "core/js/lib/require-text",
         "locale": "core/js/lib/require-locale"
     },

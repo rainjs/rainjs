@@ -54,7 +54,7 @@ describe('AsyncController API', function () {
            }
         );
 
-        it ('should get the child from the cache', ['raintime/async_controller' , 'util'],
+        it ('should get the child from the cache', ['raintime/async_controller' , 'raintime/lib/util'],
             function(AsyncController,Util){
                 AsyncController.prototype._getChild.andCallThrough();
                 Util.defer.andCallThrough();
@@ -88,7 +88,7 @@ describe('AsyncController API', function () {
         );
 
         it ('should get an error if no sid found',
-            ['raintime/async_controller', 'util', 'raintime/lib/rain_error'],
+            ['raintime/async_controller', 'raintime/lib/util', 'raintime/lib/rain_error'],
             function(AsyncController,Util,rain_error){
                 AsyncController.prototype._getChild.andCallThrough();
                 Util.defer.andCallThrough();
@@ -165,7 +165,7 @@ describe('AsyncController API', function () {
 
     describe('_getChildren', function () {
         it('should call getChild() with sid',
-            ['raintime/async_controller', 'raintime/lib/promise' , 'util'],
+            ['raintime/async_controller', 'raintime/lib/promise' , 'raintime/lib/util'],
             function (AsyncController, promise, util) {
                 AsyncController.prototype._getChildren.andCallThrough();
                 util.defer.andCallThrough();

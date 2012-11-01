@@ -51,6 +51,13 @@ describe('Client side dependencies', function () {
             args: [],
             component: component
         },
+        component: {
+            name: 'harry potter',
+            deps: ['js/file', 'js/index.js', '/example/1.0/js/index.js', 'raintime/lib/test'],
+            fn: function () {},
+            args: [],
+            component: component
+        },
         translation: {
             name: 'harry potter',
             deps: ['inspiration'],
@@ -150,6 +157,7 @@ describe('Client side dependencies', function () {
                 test.define = define;
                 test.onScriptLoad = require.onScriptLoad;
                 test.execCb = require.execCb;
+                test.jsExtRegExp = require.jsExtRegExp;
             });
         });
 
@@ -244,6 +252,7 @@ describe('Client side dependencies', function () {
             // these functions are restored
             require.onScriptLoad = test.onScriptLoad;
             require.execCb = test.execCb;
+            require.jsExtRegExp = test.jsExtRegExp;
             define = test.define;
         });
 
@@ -288,6 +297,19 @@ describe('Client side dependencies', function () {
 
                 expect(spy.execCb).toHaveBeenCalledWith(
                     fx.component.url, fx.fn, args, {});
+            });
+
+            it('should resolve dependency paths for components', function () {
+                var fx = $.extend(true, {}, fixtures.component);
+                var deps = [].concat(fx.deps);
+                // only the first dependency should be modified
+                deps[0] = fx.component.id + '/' + fx.component.version + '/' + deps[0];
+
+                setupRequireSpy(fx);
+
+                require();
+
+                expect(fx.deps).toEqual(deps);
             });
         });
 
