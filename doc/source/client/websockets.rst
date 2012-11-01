@@ -15,7 +15,7 @@ Below you can find a simple example of how to obtain a websocket connection for 
 
 .. code-block:: javascript
 
-   this._socket = this.context.getSocket("/component/version/channel");
+   this._socket = this.context.messaging.getSocket("/component/version/channel");
 
 After you obtain a connection to this websocket you can easily start to emit messages and
 react to messages. The obtained socket is obtained from socket.io. For more information
