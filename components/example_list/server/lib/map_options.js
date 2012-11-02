@@ -23,7 +23,7 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-var util = require('raintime/lib/util'),
+var util = require('util'),
     qs = require('querystring'),
     extend = require('node.extend'),
     countries = require('./map_countries');
@@ -85,7 +85,7 @@ var options = {
 
 /**
  * Provides HTTP options for calls to the Open MapQuest API.
- * 
+ *
  * @param {String} code ISO-3166-1 alpha2 country code
  * @property {String} code
  * @property {Object} http cache for http options
@@ -97,7 +97,7 @@ function Options(code) {
 
 /**
  * Get the HTTP options for the pois call.
- * 
+ *
  * @returns {Object} HTTP options
  */
 Options.prototype.pois = function () {
@@ -126,7 +126,7 @@ Options.prototype.pois = function () {
 
 /**
  * Get the HTTP options for the static map image call.
- * 
+ *
  * @param {Array} pois an array of POI locations (lat, long)
  * @returns {Object} HTTP options
  */
