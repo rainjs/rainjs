@@ -25,13 +25,13 @@
 
 "use strict";
 
-define(function (require, module, exports) {
-    var util = require('util');
-    var Promise = require('raintime/lib/promise');
-    var defer = Promise.defer;
+define(['raintime/lib/util',
+        'raintime/lib/promise',
+        'raintime/css/registry'], function (util, Promise, StyleRegistry) {
 
-    var StyleRegistry = require('raintime/css/registry');
-    var registry = StyleRegistry.get();
+
+    var defer = Promise.defer,
+        registry = StyleRegistry.get();
 
     /**
      * Handles inserting and removing CSS into the page. The CSS is requested using AJAX and
