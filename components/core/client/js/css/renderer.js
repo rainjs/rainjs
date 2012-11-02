@@ -25,13 +25,12 @@
 
 "use strict";
 
-define(['raintime/lib/util',
+define(['util',
         'raintime/lib/promise',
         'raintime/css/registry'], function (util, Promise, StyleRegistry) {
 
 
-    var defer = Promise.defer,
-        registry = StyleRegistry.get();
+    var defer = Promise.defer;
 
     /**
      * Handles inserting and removing CSS into the page. The CSS is requested using AJAX and
@@ -43,7 +42,9 @@ define(['raintime/lib/util',
      * @name CssRenderer
      * @constructor
      */
-    function CssRenderer() {}
+    function CssRenderer() {
+        this._registry = StyleRegistry.get();
+    }
 
     /**
      * Requests the CSS files for the specified component and inserts the CSS into the page. The
@@ -58,7 +59,7 @@ define(['raintime/lib/util',
             self = this,
             css = {},
             componentId = this._getFullId(component.id, component.version),
-            newFiles = registry.getNewFiles(componentId, component.css);
+            newFiles = this._registry.getNewFiles(componentId, component.css);
 
         if (0 === newFiles.length) {
             util.defer(function () {
@@ -76,20 +77,22 @@ define(['raintime/lib/util',
                 }
 
                 for (var i = 0, len = newFiles.length; i < len; i++) {
-                    var content =  self._decorate(contents[newFiles[i].path], newFiles[i].path, newFiles[i].media);
+                    var content =  self._decorate(contents[newFiles[i].path],
+                        newFiles[i].path, newFiles[i].media);
+
                     css[newFiles[i].path] = {
                         length: content.length,
                         ruleCount: newFiles[i].ruleCount,
                         content: content
                     };
 
-                    if (!registry.register(componentId, css)) {
+                    if (!self._registry.register(componentId, css)) {
                         deferred.reject();
                         return;
                     }
                 }
 
-                registry.save();
+                self._registry.save();
                 deferred.resolve();
             });
         }
@@ -105,8 +108,8 @@ define(['raintime/lib/util',
      */
     CssRenderer.prototype.unload = function (component) {
         var componentId = this._getFullId(component.id, component.version);
-        registry.unregister(componentId);
-        registry.save();
+        this._registry.unregister(componentId);
+        this._registry.save();
     };
 
     CssRenderer.prototype._decorate = function (text, path, media) {
@@ -165,7 +168,7 @@ define(['raintime/lib/util',
     /**
      * Gets the complete component identifier.
      *
-     * @param {String} id the componenet id
+     * @param {String} id the component id
      * @param {String} version the component version
      * @returns {String} the complete identifier
      */

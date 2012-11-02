@@ -50,10 +50,10 @@ describe('Client Renderer', function () {
             error = err;
         });
 
-        mocks.CssRenderer = jasmine.loadedModules['raintime/css_renderer'];
+        mocks.CssRenderer = jasmine.loadedModules['raintime/css/renderer'];
         mocks.CssRenderer.get = function () {
             return {
-                loadCss: function () {
+                load: function () {
                     return loadCss;
                 }
             };
