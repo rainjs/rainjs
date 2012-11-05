@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.18.0
+
+* Client-side component dependencies can be requested using the ``js/path/file_without_extension``
+  convention (example: ``js/file``, ``js/lib/file``). The previous way of requesting js files
+  (``/component/optional_version/js/file.js``) still works but it's not recommended.
+* Removed the ``util`` shortcut from the RequireJS paths. In order to use the ``util`` library you
+  should request it using ``raintime/lib/util``.
+* Fixed a bug where a component added to the page using ``context.insert`` could not be found.
+
 ## 0.17.0
 
 * Added distributed rendering research.
