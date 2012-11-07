@@ -77,7 +77,7 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
          * @type {Number}
          * @private
          */
-        this._currentSheet = 0;
+        this._currentSheetIndex = 0;
     }
 
     /**
@@ -150,31 +150,31 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
      * @private
      */
     CssRegistry.prototype._insert = function (component, css) {
-        if (this._stylesheets.length >= MAX_STYLES) {
+        if (this._currentSheetIndex === MAX_STYLES) {
             this._collectWhitespace();
 
-            if (this._stylesheets.indexOf(this._currentSheet) === (this._stylesheets.length - 1)) {
-                logger.error('Style Registry: the maximum number of stylesheets has been reached.');
+            if (this._currentSheetIndex === MAX_STYLES) {
+                //logger.error('Style Registry: the maximum number of stylesheets has been reached.');
+                console.log('fin');
                 return false;
             }
         }
-
-        var currentSheet = this._stylesheets[this._currentSheet];
+        var currentSheet = this._stylesheets[this._currentSheetIndex];
         if (!currentSheet) {
-            currentSheet = this._stylesheets[this._currentSheet] = new Stylesheet(this._currentSheet);
+            currentSheet = this._stylesheets[this._currentSheetIndex] = new Stylesheet(this._currentSheetIndex);
         }
 
         for (var file in css) {
             if (css.hasOwnProperty(file)) {
                 if ('undefined' === typeof this._components[component].files[file]) {
                     var rule = new RuleSet(css[file]);
-                    this._components[component].files[file] = rule;
 
                     if (!currentSheet.add(rule, component, file)) {
-                        this.curentSheet++;
-                        this._insert(rule);
+                        this._currentSheetIndex++; 
+                        return this._insert(component, css);
                     } else {
-                        this._unsavedSheets.push(this._currentSheet);
+                        this._unsavedSheets.push(this._currentSheetIndex);
+                        this._components[component].files[file] = rule;
                     }
                 }
             }
@@ -215,6 +215,7 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
             var style = this._stylesheets[i];
 
             var rules = this._getRulesWithin(style.getFreeSpace());
+            console.log(rules);
 
             if (rules.length === 0) {
                 continue;
@@ -232,7 +233,8 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
             }
 
             style.write();
-            this._currentSheet = style.id;
+            //console.log(style.id);
+            this._currentSheetIndex = style.id;
         }
     };
 
