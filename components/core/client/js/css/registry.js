@@ -210,7 +210,6 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
      * @private
      */
     CssRegistry.prototype._collectWhitespace = function () {
-        console.log('enter');
         for (var i = 0, len = this._stylesheets.length; i < len; i++) {
             var style = this._stylesheets[i];
 
@@ -222,7 +221,6 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
 
             for (var j = 0, l = rules.length; j < l; j++) {
                 var rule = rules[j];
-                console.log(rule);
                 if (rule.style.id === style.id) {
                     continue;
                 }

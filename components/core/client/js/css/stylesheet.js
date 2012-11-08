@@ -173,8 +173,6 @@ define([], function () {
     Stylesheet.prototype._append = function (rules) {
         var i, len,
             contents = [];
-            console.log('ok');
-            console.log(rules);
         for (i = 0, len = rules.length; i < len; i++) {
             rules[i].start = this._nextIndex;
             this._ruleMap[this._nextIndex] = rules[i];
