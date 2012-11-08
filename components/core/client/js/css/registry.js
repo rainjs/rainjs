@@ -155,7 +155,6 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
 
             if (this._currentSheetIndex === MAX_STYLES) {
                 //logger.error('Style Registry: the maximum number of stylesheets has been reached.');
-                console.log('fin');
                 return false;
             }
         }
@@ -211,11 +210,11 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
      * @private
      */
     CssRegistry.prototype._collectWhitespace = function () {
+        console.log('enter');
         for (var i = 0, len = this._stylesheets.length; i < len; i++) {
             var style = this._stylesheets[i];
 
             var rules = this._getRulesWithin(style.getFreeSpace());
-            console.log(rules);
 
             if (rules.length === 0) {
                 continue;
@@ -223,7 +222,7 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
 
             for (var j = 0, l = rules.length; j < l; j++) {
                 var rule = rules[j];
-
+                console.log(rule);
                 if (rule.style.id === style.id) {
                     continue;
                 }
@@ -233,7 +232,6 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
             }
 
             style.write();
-            //console.log(style.id);
             this._currentSheetIndex = style.id;
         }
     };
