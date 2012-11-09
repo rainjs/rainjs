@@ -136,12 +136,12 @@ define([], function () {
     Stylesheet.prototype.remove = function (rules) {
         this._transaction._remove.push(rules);
     };
-    
+
 
     /**
      * Write the queued modifications to the stylesheet
      */
-    
+
     Stylesheet.prototype.write = function () {
         for (var action in this._transaction) {
             if (this._transaction.hasOwnProperty(action)) {

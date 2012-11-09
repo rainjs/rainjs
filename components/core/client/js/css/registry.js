@@ -84,7 +84,7 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
      * Register the css of a component to the registry
      *
      * @param {String} component the component id for which to register the css
-     * @param {Object} css a CSS data object containing all the information required to create the rules
+     * @param {Array} css CSS contents to be registered
      *
      * @returns {Boolean} weather the insert was successfull or not
      */
@@ -97,6 +97,10 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
         }
 
         this._components[component].instanceCount++;
+
+        if (css.length === 0) {
+            return true;
+        }
 
         return this._insert(component, css);
     };
@@ -133,18 +137,20 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
     /**
      * Save the changes to the stylesheets
      */
-    CssRegistry.prototype.save = function () {
+    CssRegistry.prototype._save = function () {
         for (var i = 0, len = this._unsavedSheets.length; i < len; i++) {
             var index = this._unsavedSheets[i];
             this._stylesheets[index].write();
         }
+
+        this._unsavedSheets.splice(0, this._unsavedSheets.length);
     };
 
     /**
      * Queue a css object to be inserted inside the stylesheets
      *
      * @param {String} component the component id to which the CSS belongs
-     * @param {Object} css the CSS data
+     * @param {Array} css the CSS data
      *
      * @returns {Boolean} weather the operation was successful
      * @private
@@ -163,22 +169,26 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
             currentSheet = this._stylesheets[this._currentSheetIndex] = new Stylesheet(this._currentSheetIndex);
         }
 
-        for (var file in css) {
-            if (css.hasOwnProperty(file)) {
-                if ('undefined' === typeof this._components[component].files[file]) {
-                    var rule = new RuleSet(css[file]);
+        for (var i = 0, len = css.length; i < len; i++) {
+            var item = css[i],
+                rule = new RuleSet({
+                    ruleCount: item.ruleCount,
+                    content: item.content,
+                    length: item.content.length
+                });
 
-                    if (!currentSheet.add(rule, component, file)) {
-                        this._currentSheetIndex++; 
-                        return this._insert(component, css);
-                    } else {
-                        this._unsavedSheets.push(this._currentSheetIndex);
-                        this._components[component].files[file] = rule;
-                    }
-                }
+            if (!currentSheet.add(rule)) {
+                this._currentSheetIndex++;
+                return this._insert(component, css);
             }
+
+            if (this._unsavedSheets.indexOf(this._currentSheetIndex) === -1) {
+                this._unsavedSheets.push(this._currentSheetIndex);
+            }
+            this._components[component].files[item.path] = rule;
         }
 
+        this._save();
         return true;
     };
 
@@ -201,6 +211,7 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
         }
 
         this._components[component] = void 0;
+        this._save();
     };
 
     /**

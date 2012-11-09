@@ -57,45 +57,33 @@ define(['util',
     CssRenderer.prototype.load = function (component) {
         var deferred = defer(),
             self = this,
-            css = {},
+            css = [],
             componentId = this._getFullId(component.id, component.version),
             newFiles = this._registry.getNewFiles(componentId, component.css);
 
-        if (0 === newFiles.length) {
-            util.defer(function () {
-                deferred.resolve();
-            });
-        } else {
-            this._getFiles(newFiles).then(function (contents) {
-                newFiles = newFiles.filter(function (file) {
-                    return ('undefined' !== typeof contents[file.path]);
+        this._getFiles(newFiles).then(function (contents) {
+            for (var i = 0, len = newFiles.length; i < len; i++) {
+                if (!contents[newFiles[i].path]) {
+                    continue;
+                }
+
+                var content =  self._decorate(contents[newFiles[i].path],
+                    newFiles[i].path, newFiles[i].media);
+
+                css.push({
+                    path: newFiles[i].path,
+                    ruleCount: newFiles[i].ruleCount,
+                    content: content
                 });
+            }
 
-                if (0 === newFiles.length) {
-                    deferred.resolve();
-                    return;
-                }
+            if (!self._registry.register(componentId, css)) {
+                deferred.reject();
+                return;
+            }
 
-                for (var i = 0, len = newFiles.length; i < len; i++) {
-                    var content =  self._decorate(contents[newFiles[i].path],
-                        newFiles[i].path, newFiles[i].media);
-
-                    css[newFiles[i].path] = {
-                        length: content.length,
-                        ruleCount: newFiles[i].ruleCount,
-                        content: content
-                    };
-
-                    if (!self._registry.register(componentId, css)) {
-                        deferred.reject();
-                        return;
-                    }
-                }
-
-                self._registry.save();
-                deferred.resolve();
-            });
-        }
+            deferred.resolve();
+        });
 
         return deferred.promise;
     };
@@ -109,16 +97,9 @@ define(['util',
     CssRenderer.prototype.unload = function (component) {
         var componentId = this._getFullId(component.id, component.version);
         this._registry.unregister(componentId);
-        this._registry.save();
     };
 
     CssRenderer.prototype._decorate = function (text, path, media) {
-        text = [
-            '/* Start of file ' + path + ' */',
-            text,
-            '/* End of file ' + path + ' */\n\n'
-        ].join('\n');
-
         if ('undefined' !== typeof media) {
             text = [
                 '@media ' + media + ' {',
@@ -126,6 +107,13 @@ define(['util',
                 '}'
             ].join('\n');
         }
+
+        text = [
+            '/* Start of file ' + path + ' */',
+            text,
+            '/* End of file ' + path + ' */\n\n'
+        ].join('\n');
+
         return text;
     };
 
@@ -147,6 +135,12 @@ define(['util',
             cssTexts = {},
             count = 0,
             len = cssFiles.length;
+
+        if (len === 0) {
+            util.defer(function () {
+                deferred.resolve(cssTexts);
+            });
+        }
 
         cssFiles.forEach(function (cssFile) {
             var path = cssFile.path;
