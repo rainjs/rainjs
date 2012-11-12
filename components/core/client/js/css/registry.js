@@ -176,10 +176,10 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
                     content: item.content,
                     length: item.content.length
                 });
-
             if (!currentSheet.add(rule)) {
                 this._currentSheetIndex++;
-                return this._insert(component, css);
+                css.splice(0, i);
+                return this._insert(component, css);//insert only the remaining css objects
             }
 
             if (this._unsavedSheets.indexOf(this._currentSheetIndex) === -1) {
