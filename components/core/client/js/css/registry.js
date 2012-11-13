@@ -25,7 +25,10 @@
 
 "use strict";
 
-define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Stylesheet, RuleSet, logger) {
+define(['raintime/css/stylesheet',
+        'raintime/css/rule_set'
+], function (Stylesheet, RuleSet, logger) {
+
     var MAX_STYLES = 31;
 
     /**
@@ -33,17 +36,19 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
      * cleaning up the remaining whitespace when necessary.
      *
      * @name CssRegistry
+     * @class
      * @constructor
      */
     function CssRegistry() {
         /**
-         * A map that stores the CSS files loaded for each component and the number of instances added
-         * to the page for each component. The following example shows how the data is stored in this object::
+         * A map that stores the CSS files loaded for each component and the number of instances
+         * added to the page for each component. The following example shows how the data is stored
+         * in this object::
          *
          *      {
          *          'example;3.0': {
          *              cssFiles: {
-         *                  '/example/3.0/css/index.css': new RuleSet,
+         *                  '/example/3.0/css/index.css': new RuleSet(),
          *                  '/example/3.0/css/accordion.css': new RuleSet()
          *              },
          *              instanceCount: 1
@@ -56,7 +61,7 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
         this._components = {};
 
         /**
-         * An array containing all the stylesheets loaded inside the page
+         * An array containing all the stylesheets loaded inside the page.
          *
          * @type {Stylesheet[]}
          * @private
@@ -64,7 +69,7 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
         this._stylesheets = [];
 
         /**
-         * An array containing the indexes of the stylesheets that need to be saved
+         * An array containing the indexes of the stylesheets that need to be saved.
          *
          * @type {Integer[]}
          * @private
@@ -72,7 +77,8 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
         this._unsavedSheets = [];
 
         /**
-         * A pointer to the current active stylesheet (the one to which the next css to arive will be written)
+         * A pointer to the current active stylesheet (the one to which the next css to arrive will
+         * be written).
          *
          * @type {Number}
          * @private
@@ -81,12 +87,12 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
     }
 
     /**
-     * Register the css of a component to the registry
+     * Register the css of a component to the registry.
      *
      * @param {String} component the component id for which to register the css
-     * @param {Array} css CSS contents to be registered
+     * @param {Array} css the CSS contents to be registered
      *
-     * @returns {Boolean} weather the insert was successfull or not
+     * @returns {Boolean} weather the insert was successful or not
      */
     CssRegistry.prototype.register = function (component, css) {
         if (!this._components[component]) {
@@ -106,7 +112,7 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
     };
 
     /**
-     * Unregister a component from the registry
+     * Unregister a component from the registry.
      *
      * @param {String} component the component id for which to unregister the css
      */
@@ -120,7 +126,7 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
 
     /**
      * Filters a list of CSS files for a specific component and returns the files that don't exist
-     * inside the registry
+     * inside the registry.
      *
      * @param {String} component the component id to which the files belong
      * @param {Array} files an array containing the file descriptor
@@ -135,7 +141,7 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
     };
 
     /**
-     * Save the changes to the stylesheets
+     * Save the changes to the stylesheets.
      */
     CssRegistry.prototype._save = function () {
         for (var i = 0, len = this._unsavedSheets.length; i < len; i++) {
@@ -147,12 +153,12 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
     };
 
     /**
-     * Queue a css object to be inserted inside the stylesheets
+     * Queue a css object to be inserted inside the stylesheets.
      *
      * @param {String} component the component id to which the CSS belongs
      * @param {Array} css the CSS data
      *
-     * @returns {Boolean} weather the operation was successful
+     * @returns {Boolean} whether the operation was successful
      * @private
      */
     CssRegistry.prototype._insert = function (component, css) {
@@ -166,7 +172,8 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
         }
         var currentSheet = this._stylesheets[this._currentSheetIndex];
         if (!currentSheet) {
-            currentSheet = this._stylesheets[this._currentSheetIndex] = new Stylesheet(this._currentSheetIndex);
+            currentSheet = this._stylesheets[this._currentSheetIndex]
+                         = new Stylesheet(this._currentSheetIndex);
         }
 
         for (var i = 0, len = css.length; i < len; i++) {
@@ -193,7 +200,7 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
     };
 
     /**
-     * Queue a component to have it's CSS files removed from the stylesheets
+     * Queue a component to have it's CSS files removed from the stylesheets.
      *
      * @param {String} component the component id for which to remove the files
      * @private
@@ -215,8 +222,8 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
     };
 
     /**
-     * Sweep the existing stylesheets and fill up the free whitespace by moving the rules to the first
-     * empty stylesheet.
+     * Sweep the existing stylesheets and fill up the free whitespace by moving the rules to the
+     * first empty stylesheet.
      *
      * @private
      */
@@ -257,7 +264,7 @@ define(['raintime/css/stylesheet', 'raintime/css/rule_set'], function (Styleshee
             rules = [];
 
         for (var componentId in this._components) {
-            if(this._components.hasOwnProperty(componentId)) {
+            if (this._components.hasOwnProperty(componentId)) {
                 var component = this._components[componentId];
 
                 for (var path in component.files) {

@@ -25,9 +25,9 @@
 
 "use strict";
 
-define(['raintime/css/registry'], function (CssRegistry) {
+define([], function () {
     /**
-     * A model defining the structure of an object containing the CSS rules defined in a CSS file
+     * A model defining the structure of an object containing the CSS rules defined in a CSS file.
      *
      * @param {Object} data the CSS data received from the server
      * @param {Integer} data.ruleCount the number of rules inside the file

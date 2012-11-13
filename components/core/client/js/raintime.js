@@ -199,7 +199,7 @@ define(['raintime/lib/promise',
                 }
             }
 
-            CssRenderer.get().unload(component, component);
+            CssRenderer.get().unload(component);
             delete components[instanceId];
         }
     };

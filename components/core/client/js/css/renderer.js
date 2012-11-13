@@ -27,8 +27,8 @@
 
 define(['util',
         'raintime/lib/promise',
-        'raintime/css/registry'], function (util, Promise, StyleRegistry) {
-
+        'raintime/css/registry'
+], function (util, Promise, StyleRegistry) {
 
     var defer = Promise.defer;
 
@@ -38,8 +38,8 @@ define(['util',
      * number of stylesheets is 31. This is due to the limitations introduced by Internet
      * Explorer 8 and Internet Explorer 9 browsers.
      *
-     *
      * @name CssRenderer
+     * @class
      * @constructor
      */
     function CssRenderer() {
@@ -67,8 +67,9 @@ define(['util',
                     continue;
                 }
 
-                var content =  self._decorate(contents[newFiles[i].path],
-                    newFiles[i].path, newFiles[i].media);
+                var content = self._decorate(contents[newFiles[i].path],
+                                             newFiles[i].path,
+                                             newFiles[i].media);
 
                 css.push({
                     path: newFiles[i].path,
@@ -127,7 +128,7 @@ define(['util',
      *          '/example/3.0/css/accordion.css': 'css text'
      *      }
      *
-     * @param Object[] cssFiles the files to be requested
+     * @param {Object[]} cssFiles the files to be requested
      * @returns {Promise} a promise that is resolved when all the get requests finished
      */
     CssRenderer.prototype._getFiles = function (cssFiles) {
@@ -172,12 +173,14 @@ define(['util',
 
     /**
      * The class instance.
+     *
      * @type {CssRenderer}
      */
     CssRenderer._instance = null;
 
     /**
      * Returns the singleton instance.
+     *
      * @returns {CssRenderer} the singleton instance
      */
     CssRenderer.get = function () {

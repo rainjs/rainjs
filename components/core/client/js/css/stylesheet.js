@@ -38,17 +38,18 @@ define([], function () {
      * A representation of the style tags inside the document which allow for the easy addition and
      * manipulation of the rules inside of them.
      *
-     * @param {Int} id the style Id
+     * @param {Number} id the style Id
      *
-     * @property {Integer} id the id of the stylesheet
-     * @property {Integer} ruleCount the number of rules in the stylesheet
+     * @property {Number} id the id of the stylesheet
+     * @property {Number} ruleCount the number of rules in the stylesheet
      *
      * @name Stylesheet
+     * @class
      * @constructor
      */
     function Stylesheet(id) {
         /**
-         * The next index at which to write
+         * The next index at which to write.
          *
          * @type {Number}
          * @private
@@ -56,7 +57,7 @@ define([], function () {
         this._nextIndex = 0;
 
         /**
-         * The number of rules inside the stylesheet
+         * The number of rules inside the stylesheet.
          *
          * @type {Number}
          * @private
@@ -64,8 +65,8 @@ define([], function () {
         this._ruleCount = 0;
 
         /**
-         * An object containing the the rules inside this stylesheet mapped by start index to
-         * ease bulk updates (such as start index update when removing something above)
+         * An object containing the rules inside this stylesheet mapped by start index to
+         * ease bulk updates (such as start index update when removing something above).
          *
          * @type {Object}
          * @private
@@ -73,7 +74,7 @@ define([], function () {
         this._ruleMap = {};
 
         /**
-         * The stylesheet dom element
+         * The stylesheet dom element.
          *
          * @type {DomElement}
          * @private
@@ -81,7 +82,7 @@ define([], function () {
         this._styleSheet = document.getElementById(id);
 
         /**
-         * A queue of actions to be performed on the next write
+         * A queue of actions to be performed on the next write.
          *
          * @type {Object}
          * @private
@@ -112,11 +113,11 @@ define([], function () {
     }
 
     /**
-     * Queue a rule to be added to the stylesheet
+     * Queue a rule to be added to the stylesheet.
      *
      * @param {RuleSet} rule the rule to be added
      *
-     * @returns {Boolean} true if the addition was succesfull false otherwise
+     * @returns {Boolean} true if the addition was successful false otherwise
      */
     Stylesheet.prototype.add = function (rule) {
         if ((this._ruleCount + rule.ruleCount) > MAX_RULES) {
@@ -129,7 +130,7 @@ define([], function () {
     };
 
     /**
-     * Queue a rule to be removed from the stylesheet
+     * Queue a rule to be removed from the stylesheet.
      *
      * @param {RuleSet} rules the rule to delete
      */
@@ -137,11 +138,9 @@ define([], function () {
         this._transaction._remove.push(rules);
     };
 
-
     /**
-     * Write the queued modifications to the stylesheet
+     * Write the queued modifications to the stylesheet.
      */
-
     Stylesheet.prototype.write = function () {
         for (var action in this._transaction) {
             if (this._transaction.hasOwnProperty(action)) {
@@ -156,7 +155,7 @@ define([], function () {
     };
 
     /**
-     * Calculate the free space left inside the stylesheet
+     * Calculate the free space left inside the stylesheet.
      *
      * @returns {Integer} the free space left inside the stylesheet
      */
@@ -165,7 +164,7 @@ define([], function () {
     };
 
     /**
-     * Append some rules to the stylesheet
+     * Append some rules to the stylesheet.
      *
      * @param {RuleSet[]} rule the rules to be appended
      * @private
@@ -186,7 +185,7 @@ define([], function () {
     };
 
     /**
-     * Remove rules from the stylesheet
+     * Remove rules from the stylesheet.
      *
      * @param {RuleSet[]} rules the rules to remove
      * @private
@@ -221,7 +220,7 @@ define([], function () {
     };
 
     /**
-     * Read/Write content to the stylesheet
+     * Read/Write content to the stylesheet.
      *
      * @param {String} text the content to be written
      * @private
@@ -230,9 +229,9 @@ define([], function () {
         if ('undefined' === typeof text) {
             if (this._styleSheet.styleSheet) {
                 return this._styleSheet.styleSheet.cssText;
-            } else {
-                return this._styleSheet.textContent;
             }
+
+            return this._styleSheet.textContent;
         }
 
         if (this._styleSheet.styleSheet) {
