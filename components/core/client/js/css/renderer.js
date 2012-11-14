@@ -63,17 +63,18 @@ define(['util',
 
         this._getFiles(newFiles).then(function (contents) {
             for (var i = 0, len = newFiles.length; i < len; i++) {
-                if (!contents[newFiles[i].path]) {
+                var file = newFiles[i];
+                if (!contents[file.path]) {
                     continue;
                 }
 
-                var content = self._decorate(contents[newFiles[i].path],
-                                             newFiles[i].path,
-                                             newFiles[i].media);
+                var content = self._decorate(contents[file.path],
+                                             file.path,
+                                             file.media);
 
                 css.push({
-                    path: newFiles[i].path,
-                    ruleCount: newFiles[i].ruleCount,
+                    path: file.path,
+                    ruleCount: file.ruleCount,
                     content: content
                 });
             }
@@ -100,6 +101,15 @@ define(['util',
         this._registry.unregister(componentId);
     };
 
+    /**
+     * Decorate the CSS content with start and end of file comments and @media infoormation
+     *
+     * @param {String} text the CSS content
+     * @param {String} path the path to the file containing the CSS data
+     * @param {String} media @media rule content for this file
+     *
+     * @returns {String} the decorated CSS data
+     */
     CssRenderer.prototype._decorate = function (text, path, media) {
         if ('undefined' !== typeof media) {
             text = [
@@ -141,21 +151,21 @@ define(['util',
             util.defer(function () {
                 deferred.resolve(cssTexts);
             });
-        }
-
-        cssFiles.forEach(function (cssFile) {
-            var path = cssFile.path;
-            $.get(path).complete(function (xhr) {
-                var text = xhr.responseText;
-                if (text) {
-                    cssTexts[path] = text;
-                }
-                count++;
-                if (count === len) {
-                    deferred.resolve(cssTexts);
-                }
+        } else {
+            cssFiles.forEach(function (cssFile) {
+                var path = cssFile.path;
+                $.get(path).complete(function (xhr) {
+                    var text = xhr.responseText;
+                    if (text && xhr.status < 400) {
+                        cssTexts[path] = text;
+                    }
+                    count++;
+                    if (count === len) {
+                        deferred.resolve(cssTexts);
+                    }
+                });
             });
-        });
+        }
 
         return deferred.promise;
     };

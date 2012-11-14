@@ -26,9 +26,10 @@
 "use strict";
 
 define(['raintime/css/stylesheet',
-        'raintime/css/rule_set'
-], function (Stylesheet, RuleSet, logger) {
-
+        'raintime/css/rule_set',
+        'raintime/logger'
+], function (Stylesheet, RuleSet, Logger) {
+    var logger = Logger.get();
     var MAX_STYLES = 31;
 
     /**
@@ -95,6 +96,10 @@ define(['raintime/css/stylesheet',
      * @returns {Boolean} weather the insert was successful or not
      */
     CssRegistry.prototype.register = function (component, css) {
+        if (css.length === 0) {
+            return true;
+        }
+
         if (!this._components[component]) {
             this._components[component] = {
                 instanceCount: 0,
@@ -103,10 +108,6 @@ define(['raintime/css/stylesheet',
         }
 
         this._components[component].instanceCount++;
-
-        if (css.length === 0) {
-            return true;
-        }
 
         return this._insert(component, css);
     };
@@ -134,9 +135,10 @@ define(['raintime/css/stylesheet',
      * @returns {Array} an array of files that are not loaded
      */
     CssRegistry.prototype.getNewFiles = function (component, files) {
-        var self = this;
+        var self = this,
+            componentData = self._components[component];
         return files.filter(function (file) {
-            return (!self._components[component] || 'undefined' === typeof self._components[component].files[file.path]);
+            return (!componentData || 'undefined' === typeof componentData.files[file.path]);
         });
     };
 
@@ -149,7 +151,7 @@ define(['raintime/css/stylesheet',
             this._stylesheets[index].write();
         }
 
-        this._unsavedSheets.splice(0, this._unsavedSheets.length);
+        this._unsavedSheets = [];
     };
 
     /**
@@ -166,14 +168,14 @@ define(['raintime/css/stylesheet',
             this._collectWhitespace();
 
             if (this._currentSheetIndex === MAX_STYLES) {
-                //logger.error('Style Registry: the maximum number of stylesheets has been reached.');
+                logger.error('Style Registry: the maximum number of stylesheets has been reached.');
                 return false;
             }
         }
         var currentSheet = this._stylesheets[this._currentSheetIndex];
         if (!currentSheet) {
-            currentSheet = this._stylesheets[this._currentSheetIndex]
-                         = new Stylesheet(this._currentSheetIndex);
+            currentSheet = this._stylesheets[this._currentSheetIndex] =
+                                new Stylesheet(this._currentSheetIndex);
         }
 
         for (var i = 0, len = css.length; i < len; i++) {
@@ -217,7 +219,7 @@ define(['raintime/css/stylesheet',
             }
         }
 
-        this._components[component] = void 0;
+        delete this._components[component];
         this._save();
     };
 
@@ -231,7 +233,7 @@ define(['raintime/css/stylesheet',
         for (var i = 0, len = this._stylesheets.length; i < len; i++) {
             var style = this._stylesheets[i];
 
-            var rules = this._getRulesWithin(style.getFreeSpace());
+            var rules = this._getRulesWithin(style.getFreeSpace(), i + 1);
 
             if (rules.length === 0) {
                 continue;
@@ -259,27 +261,14 @@ define(['raintime/css/stylesheet',
      *
      * @returns {RuleSet[]} an array containing the RuleSets that fit inside the stylesheet
      */
-    CssRegistry.prototype._getRulesWithin = function (count) {
+    CssRegistry.prototype._getRulesWithin = function (count, startSheet) {
         var left = count,
             rules = [];
 
-        for (var componentId in this._components) {
-            if (this._components.hasOwnProperty(componentId)) {
-                var component = this._components[componentId];
+        for (var i = startSheet, len = this._stylesheets.length; i < len; i++) {
+            var style = this._stylesheets[i];
 
-                for (var path in component.files) {
-                    if (component.files.hasOwnProperty(path)) {
-                        var rule = component.files[path];
-
-                        if ((left - rule.ruleCount) < 0) {
-                            break;
-                        }
-
-                        left = left - rule.ruleCount;
-                        rules.push(rule);
-                    }
-                }
-            }
+            rules = rules.concat(style.getRulesWithin(count));
         }
 
         return rules;

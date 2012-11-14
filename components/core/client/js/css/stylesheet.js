@@ -79,7 +79,7 @@ define([], function () {
          * @type {DomElement}
          * @private
          */
-        this._styleSheet = document.getElementById(id);
+        this._styleSheet = null;
 
         /**
          * A queue of actions to be performed on the next write.
@@ -92,13 +92,10 @@ define([], function () {
             '_remove': []
         };
 
-        // stylesheet does not exist, create it;
-        if (!this._styleSheet) {
-            this._styleSheet = document.createElement('style');
-            this._styleSheet.setAttribute('id', 'style' + id);
-
-            document.getElementsByTagName('head')[0].appendChild(this._styleSheet);
-        }
+        // create the stylesheet
+        this._styleSheet = document.createElement('style');
+        this._styleSheet.setAttribute('id', 'style' + id);
+        document.getElementsByTagName('head')[0].appendChild(this._styleSheet);
 
         Object.defineProperties(this, {
             'id': {
@@ -164,6 +161,32 @@ define([], function () {
     };
 
     /**
+     * Find the rules inside this stylesheet that fit in a designated amount of space
+     *
+     * @param {Number} space the space to fit the rules inside of
+     *
+     * @returns {RuleSet[]} the identified rules
+     */
+    Stylesheet.prototype.getRulesWithin = function (space) {
+        var rules = [];
+
+        for (var idx in this._ruleMap) {
+            if (this._ruleMap.hasOwnProperty(idx)) {
+                var rule = this._rulesMap[idx];
+
+                if (space >= rule.ruleCount) {
+                    break;
+                }
+
+                space -= rule.ruleCount;
+                rules.push(rule);
+            }
+        }
+
+        return rules;
+    };
+
+    /**
      * Append some rules to the stylesheet.
      *
      * @param {RuleSet[]} rule the rules to be appended
@@ -205,11 +228,14 @@ define([], function () {
 
             this._nextIndex -= rule.length;
 
+            var nextStartPoint = rule.start;
             for (var idx in this._ruleMap) {
                 if (this._ruleMap.hasOwnProperty(idx)) {
                     if (idx > rule.start) {
-                        this._ruleMap[idx].start = rule.start;
-                        this._ruleMap[rule.start] = this._ruleMap[idx];
+                        this._ruleMap[idx].start = nextStartPoint;
+                        this._ruleMap[nextStartPoint] = this._ruleMap[idx];
+                        nextStartPoint += this._ruleMap[idx].length;
+
                         delete this._ruleMap[idx];
                     }
                 }

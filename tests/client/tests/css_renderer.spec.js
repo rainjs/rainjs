@@ -284,7 +284,7 @@ describe('CSS Renderer', function () {
             return {
                 complete: function (fn) {
                     util.defer(function () {
-                        fn({ responseText: fileContents[path] });
+                        fn({ responseText: fileContents[path], status: 200 });
                     });
                 }
             };

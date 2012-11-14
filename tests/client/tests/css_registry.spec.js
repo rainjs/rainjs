@@ -32,7 +32,7 @@ describe ('registry API', function (){
             });
             var fakeRegistry = new Registry();
             fakeRegistry.register(component, css);
-            var rules = new RuleSet(css); 
+            var rules = new RuleSet(css);
             expect(fakeRegistry.register).toHaveBeenCalledWith(component, css);
             expect(StyleSheet.prototype.add).toHaveBeenCalledWith(rules);
             expect(StyleSheet.prototype.add).toHaveBeenCalledWith(rules);
@@ -42,7 +42,7 @@ describe ('registry API', function (){
 
         });
 
-        it ('should generate another styletag if the actual styletag is full', 
+        it ('should generate another styletag if the actual styletag is full',
                                                 ['raintime/css/registry', 'raintime/css/stylesheet',
                                                  'raintime/css/rule_set'],function(Registry, StyleSheet, RuleSet){
 
@@ -71,14 +71,15 @@ describe ('registry API', function (){
             expect(fakeRegistry._unsavedSheets.length).toEqual(2);
         });
 
-        it ('should generate an error message if the max style tags is reached', 
-                                    ['raintime/css/registry', 'raintime/css/stylesheet', 
+        it ('should generate an error message if the max style tags is reached',
+                                    ['raintime/css/registry', 'raintime/css/stylesheet',
                                      'raintime/css/rule_set'],function (Registry, StyleSheet, RuleSet){
 
             Registry.prototype.register.andCallThrough();
             Registry.prototype._insert.andCallThrough();
             Registry.prototype._getRulesWithin.andCallThrough();
             Registry.prototype._collectWhitespace.andCallThrough();
+            StyleSheet.prototype.getRulesWithin.andReturn([]);
             StyleSheet.prototype.add.andCallFake(function (rule, css, file) {
                     adding++;
                     return false;
@@ -132,7 +133,7 @@ describe ('registry API', function (){
             fakeRegistry.register(component, css);
             var resp;
             var filterFunction = function () {
-                return (!fakeRegistry._components[component] || 'undefined' === typeof fakeRegistry._components[component].files[file.path]); 
+                return (!fakeRegistry._components[component] || 'undefined' === typeof fakeRegistry._components[component].files[file.path]);
             };
             resp = filterFunction();
             var response = fakeRegistry.getNewFiles(component,file);
@@ -158,7 +159,7 @@ describe ('registry API', function (){
             fakeRegistry.register(component, css);
             var resp;
             var filterFunction = function () {
-                return (!fakeRegistry._components[component] || 'undefined' === typeof fakeRegistry._components[component].files[file2.path]); 
+                return (!fakeRegistry._components[component] || 'undefined' === typeof fakeRegistry._components[component].files[file2.path]);
             };
             resp = filterFunction();
             var response = fakeRegistry.getNewFiles(component, file2);
