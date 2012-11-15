@@ -31,17 +31,17 @@ describe ('registry API', function (){
         css,
         file;
     beforeEach(function () {
-    component = "style0";
-    adding = 0;
-    css = [{ path: 'path1',
-            ruleCount: 1,
-            content: '.rule1{}',
-            },
-           { path: 'path2',
-             ruleCount: 1,
-             content: '.rule2{}',
-            }];
-    file = [{path: 'path1'},{path: 'path2'}];
+        component = "style0";
+        adding = 0;
+        css = [{ path: 'path1',
+                ruleCount: 1,
+                content: '.rule1{}',
+                },
+               { path: 'path2',
+                 ruleCount: 1,
+                 content: '.rule2{}',
+                }];
+        file = [{path: 'path1'},{path: 'path2'}];
     });
 
     describe('register method', function () {
