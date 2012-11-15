@@ -61,7 +61,7 @@ function create31Components() {
                     });
                 ++k;
                 });
-            })(i);
+        })(i);
     }
 
     fs.writeFileSync(filePath, '');
