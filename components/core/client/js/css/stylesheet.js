@@ -168,9 +168,11 @@ define([], function () {
      * @returns {RuleSet[]} the identified rules
      */
     Stylesheet.prototype.getRulesWithin = function (space) {
-        var rules = [];
+        var rules = [],
+            keys = Object.keys(this._ruleMap).sort();
 
-        for (var idx in this._ruleMap) {
+        for (var i = 0, len = keys.length; i < len; i++) {
+            var idx = keys[i];
             if (this._ruleMap.hasOwnProperty(idx)) {
                 var rule = this._rulesMap[idx];
 
