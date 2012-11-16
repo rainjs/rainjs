@@ -97,16 +97,21 @@ define([], function () {
         this._styleSheet.setAttribute('id', 'style' + id);
         document.getElementsByTagName('head')[0].appendChild(this._styleSheet);
 
-        Object.defineProperties(this, {
-            'id': {
-                value: id,
-                writable: false
-            },
-            'ruleCount': {
-                value: this._ruleCount,
-                writable: false
-            }
-        });
+        if ('undefined' !== typeof Object.defineProperties) {
+            Object.defineProperties(this, {
+                'id': {
+                    value: id,
+                    writable: false
+                },
+                'ruleCount': {
+                    value: this._ruleCount,
+                    writable: false
+                }
+            });
+        } else {
+            this.id = id;
+            this.ruleCount = this._ruleCount;
+        }
     }
 
     /**
@@ -227,11 +232,14 @@ define([], function () {
             slices.push(text.substring(index, rule.start));
             index = rule.start + rule.length;
             slices.push(text.substring(index));
+            text = slices.join('');
 
             this._nextIndex -= rule.length;
 
             var nextStartPoint = rule.start;
-            for (var idx in this._ruleMap) {
+            var keys = Object.keys(this._ruleMap).sort();
+            for (var j = 0, length = keys.length; j < length; j++) {
+                var idx = keys[j];
                 if (this._ruleMap.hasOwnProperty(idx)) {
                     if (idx > rule.start) {
                         this._ruleMap[idx].start = nextStartPoint;
@@ -244,7 +252,7 @@ define([], function () {
             }
         }
 
-        this._text(slices.join(''));
+        this._text(text);
     };
 
     /**
