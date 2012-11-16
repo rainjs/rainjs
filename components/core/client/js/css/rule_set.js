@@ -45,7 +45,7 @@ define([], function () {
         this.start = 0;
         this.style = null;
 
-        if ('undefined' !== typeof Object.defineProperties) {
+        try {
             Object.defineProperties(this, {
                 'ruleCount': {
                     value: data.ruleCount,
@@ -60,7 +60,7 @@ define([], function () {
                     writable: false
                 }
             });
-        } else {
+        } catch (e) {
             this.ruleCount = data.ruleCount;
             this.length = data.length;
             this.content = data.content;

@@ -97,7 +97,7 @@ define([], function () {
         this._styleSheet.setAttribute('id', 'style' + id);
         document.getElementsByTagName('head')[0].appendChild(this._styleSheet);
 
-        if ('undefined' !== typeof Object.defineProperties) {
+        try {
             Object.defineProperties(this, {
                 'id': {
                     value: id,
@@ -108,7 +108,7 @@ define([], function () {
                     writable: false
                 }
             });
-        } else {
+        } catch (e) {
             this.id = id;
             this.ruleCount = this._ruleCount;
         }
