@@ -45,20 +45,26 @@ define([], function () {
         this.start = 0;
         this.style = null;
 
-        Object.defineProperties(this, {
-            'ruleCount': {
-                value: data.ruleCount,
-                writable: false
-            },
-            'length': {
-                value: data.length,
-                writable: false
-            },
-            'content': {
-                value: data.content,
-                writable: false
-            }
-        });
+        if ('undefined' !== typeof Object.defineProperties) {
+            Object.defineProperties(this, {
+                'ruleCount': {
+                    value: data.ruleCount,
+                    writable: false
+                },
+                'length': {
+                    value: data.length,
+                    writable: false
+                },
+                'content': {
+                    value: data.content,
+                    writable: false
+                }
+            });
+        } else {
+            this.ruleCount = data.ruleCount;
+            this.length = data.length;
+            this.content = data.content;
+        }
     }
 
     return RuleSet;
