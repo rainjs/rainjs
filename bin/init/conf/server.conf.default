@@ -2,8 +2,6 @@
     "server": {
         "port": 1337,
         "timeoutForRequests" : 3,
-
-        "serverRoot": ".",
         "components": ["./components"]
     },
 
