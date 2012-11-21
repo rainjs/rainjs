@@ -24,9 +24,10 @@
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 define(function () {
-    var oldExecCb = require.execCb,
-        oldOnScriptLoad = require.onScriptLoad,
+    var oldExecCb,
+        oldOnScriptLoad,
         oldDefine = define,
+        oldLoad = require.load,
         oldAddScriptToDom = require.addScriptToDom,
         currentDeps,
         currentCallback,
@@ -41,6 +42,72 @@ define(function () {
         isOpera = typeof opera !== "undefined" && opera.toString() === "[object Opera]",
         readyRegExp = isBrowser && navigator.platform === 'PLAYSTATION 3' ?
             /^complete$/ : /^(complete|loaded)$/;
+
+    require.load = function (context, moduleName, url) {
+        oldExecCb = oldExecCb || context.execCb;
+        oldOnScriptLoad = oldOnScriptLoad || context.onScriptLoad;
+
+        function onScriptLoad(evt) {
+            var node = evt.currentTarget || evt.srcElement;
+
+            if (evt.type === "load" || (node && readyRegExp.test(node.readyState))) {
+                interactiveScript = null;
+                //all browsers except IE
+                if (currentDeps && currentCallback) {
+                    var moduleName = node.getAttribute("data-requiremodule");
+                    modifyDependencies(moduleName, currentDeps, currentCallback);
+                }
+
+                oldOnScriptLoad(evt);
+            }
+        }
+
+        function execCb(name, callback, args, exports) {
+            var module = dependencyModules[name];
+            if (module) {
+                console.log(name);
+                for (var k in args) {
+                    console.log(k, args[k])
+                }
+                var Logger, Translation, locale, translation,
+                    loggerIndex = module.loggerIndex,
+                    tIndex = module.tIndex,
+                    ntIndex = module.ntIndex;
+
+                if (loggerIndex > -1) {
+                    Logger = args.pop();
+                }
+
+                if (tIndex > -1 || ntIndex > -1) {
+                    locale = args.pop();
+                    Translation = args.pop();
+                    translation = Translation.get(module.component, locale);
+                }
+
+                if (tIndex > -1) {
+                    args[tIndex] = function (msgId, args) {
+                        return translation.translate(msgId, undefined, undefined, args);
+                    };
+                }
+
+                if (ntIndex > -1) {
+                    args[ntIndex] = translation.translate.bind(translation);
+                }
+
+                if (loggerIndex > -1) {
+                    args[loggerIndex] = Logger.get(module.component);
+                }
+            }
+// console.log(oldExecCb);
+            // invoke the original implementation of the function
+            return oldExecCb(name, callback, args, exports);
+        }
+
+        context.onScriptLoad = onScriptLoad;
+        context.execCb = execCb;
+
+        oldLoad(context, moduleName, url);
+    };
 
     require.addScriptToDom = function (node) {
         currentlyAddingScript = node;
@@ -155,6 +222,7 @@ define(function () {
         }
 
         var args = callBackMatches[1].trim().split(splitRegExp);
+        // console.log(args)
 
         var tIndex = args.indexOf('t'),
             ntIndex = args.indexOf('nt'),
@@ -254,42 +322,5 @@ define(function () {
 
             oldOnScriptLoad(evt);
         }
-    };
-
-    require.execCb = function (name, callback, args, exports) {
-        var module = dependencyModules[name];
-        if (module) {
-            var Logger, Translation, locale, translation,
-                loggerIndex = module.loggerIndex,
-                tIndex = module.tIndex,
-                ntIndex = module.ntIndex;
-
-            if (loggerIndex > -1) {
-                Logger = args.pop();
-            }
-
-            if (tIndex > -1 || ntIndex > -1) {
-                locale = args.pop();
-                Translation = args.pop();
-                translation = Translation.get(module.component, locale);
-            }
-
-            if (tIndex > -1) {
-                args[tIndex] = function (msgId, args) {
-                    return translation.translate(msgId, undefined, undefined, args);
-                };
-            }
-
-            if (ntIndex > -1) {
-                args[ntIndex] = translation.translate.bind(translation);
-            }
-
-            if (loggerIndex > -1) {
-                args[loggerIndex] = Logger.get(module.component);
-            }
-        }
-
-        // invoke the original implementation of the function
-        return oldExecCb(name, callback, args, exports);
     };
 });
