@@ -32,7 +32,9 @@
         "containers_v1": {},
         "containers_v2": {},
         "layout/flow": {},
-        "logging": {}
+        "logging": {},
+        "promise": {},
+        "promise_use": {}
     },
     "intents": [
         {
