@@ -313,7 +313,9 @@ define(['raintime/lib/promise',
      */
     function registerComponent(map, component) {
         var deferred = new Promise.Deferred();
-
+        if (!component.staticId) {
+            component.staticId = component.instanceId;
+        }
         var newComponent = new Component(component);
         map[newComponent.instanceId] = newComponent;
 
