@@ -104,6 +104,86 @@ access that component, it sends a message to the ``Mothership`` containing the r
 component can't be rendered, which sends a render request for the error component (it also
 specifies the appropriate error view).
 
+-----------------------
+Mothership Architecture
+-----------------------
+
+.. figure:: ../images/proposals/mothership/Use_Case_Diagram__MotherShip__MotherShip_Use_Case.png
+    :scale: 70%
+    :align: center
+
+    Use Case Diagram
+
+
+
+.. figure:: ../images/proposals/mothership/Class_Diagram__MotherShip__Mothership.png
+    :scale: 70%
+    :align: center
+
+    Class Diagram
+
+
+
+.. figure:: ../images/proposals/mothership/Sequence_Diagram__Overview__Overview.png
+    :scale: 70%
+    :align: center
+
+    Overview Sequence Diagram
+
+
+
+.. figure:: ../images/proposals/mothership/Sequence_Diagram__Start_Mothership__Start_Mothership.png
+    :scale: 70%
+    :align: center
+
+    Start Mothership Sequence Diagram
+
+.. figure:: ../images/proposals/mothership/Sequence_Diagram__Register__Register.png
+    :scale: 70%
+    :align: center
+
+    Register Server Sequence Diagram
+
+
+
+.. figure:: ../images/proposals/mothership/Sequence_Diagram__Unregister__Unregister.png
+    :scale: 70%
+    :align: center
+
+    Unregister Server Sequence Diagram
+
+
+
+.. figure:: ../images/proposals/mothership/Sequence_Diagram__View_Request__View_Request.png
+    :scale: 70%
+    :align: center
+
+    View Request Sequence Diagram
+
+.. figure:: ../images/proposals/mothership/Sequence_Diagram__WebSocket_Connect__WebSocket_Connect.png
+    :scale: 70%
+    :align: center
+
+    WebSocket Connect Sequence Diagram
+
+
+
+.. figure:: ../images/proposals/mothership/Sequence_Diagram__Intent_Request__Intent_Request.png
+    :scale: 70%
+    :align: center
+
+    Intent Request Sequence Diagram
+
+
+
+.. figure:: ../images/proposals/mothership/Deployment_Diagram__MotherShip__Mothership.png
+    :scale: 70%
+    :align: center
+
+    Deployment Diagram
+
+
+
 .. seealso::
 
         :doc:`./distributed_websockets`
