@@ -2,14 +2,7 @@
     "server": {
         "port": 1337,
         "timeoutForRequests" : 3,
-
-        "serverRoot": ".",
-        "components": ["./instrumented/components"],
-
-        "logs": {
-            "error": "log/error.log",
-            "access": "log/access.log"
-        }
+        "components": ["./instrumented/components"]
     },
 
     "defaultLanguage": "en_US",

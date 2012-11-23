@@ -2,14 +2,7 @@
     "server": {
         "port": 1337,
         "timeoutForRequests" : 3,
-
-        "serverRoot": ".",
-        "components": ["./components"],
-
-        "logs": {
-            "error": "log/error.log",
-            "access": "log/access.log"
-        }
+        "components": ["./components"]
     },
 
     "defaultLanguage": "en_US",
