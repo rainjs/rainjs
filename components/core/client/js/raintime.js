@@ -117,6 +117,8 @@ define(['raintime/lib/promise',
     Component.ERROR = 4;
     Component.START = 8;
     Component.DESTROY = 16;
+    Component.DESTROYED = 32;
+    Component.PENDING = 64;
 
     /**
      * Creates a new component registry.
@@ -305,12 +307,15 @@ define(['raintime/lib/promise',
      *
      * @param {Object} map the components map where the new component will be put
      * @param {Object} component the component properties
+     *
      * @private
      * @memberOf ComponentRegistry#
      */
     function registerComponent(map, component) {
         var deferred = new Promise.Deferred();
-
+        if (!component.staticId) {
+            component.staticId = component.instanceId;
+        }
         var newComponent = new Component(component);
         map[newComponent.instanceId] = newComponent;
 
@@ -348,19 +353,13 @@ define(['raintime/lib/promise',
 
             controller.on = function (eventName, callback) {
                 logger.info('Called ' + eventName + ' event for controller ' +
-                    component.controller);
+                            component.controller);
                 if (eventName === 'start' && newComponent.state === Component.START) {
                     callback.call(controller);
                     return;
                 }
                 Controller.prototype.on.apply(controller, arguments);
             };
-
-            // Bind lifecycle events to methods found in the controller.
-            onControllerEvent(controller, 'init');
-            onControllerEvent(controller, 'error');
-            onControllerEvent(controller, 'start');
-            onControllerEvent(controller, 'destroy');
 
             // Attach modules to the controller.
             /**
@@ -391,8 +390,7 @@ define(['raintime/lib/promise',
             newComponent.controller = controller;
 
             if (callbacks[newComponent.instanceId]) {
-                callbacks[newComponent.instanceId].call(controller,
-                        newComponent);
+                callbacks[newComponent.instanceId].call(controller, newComponent);
                 delete callbacks[newComponent.instanceId];
             }
 
@@ -407,61 +405,72 @@ define(['raintime/lib/promise',
      * Invokes the component's lifecycle in the following order: init, error, start.
      *
      * @param {Object} component the component properties
+     *
      * @private
      * @memberOf ComponentRegistry#
      */
     function invokeLifecycle(component) {
-        if (component.controllerLoaded && component.state < Component.INIT) {
-            emitControllerEvent(component.controller, 'init');
-            component.state = Component.INIT;
+        if (component.state === Component.PENDING) {
+            return;
         }
+
+        if (component.controllerLoaded && component.state < Component.INIT) {
+            emitControllerEvent(component, 'init', undefined, Component.INIT);
+            return;
+        }
+
         if (component.htmlLoaded && component.state === Component.INIT) {
             if (component.error) {
-                emitControllerEvent(component.controller, 'error', component.error);
-                component.state = Component.ERROR;
+                emitControllerEvent(component, 'error', component.error, Component.ERROR);
+                return;
             }
-            emitControllerEvent(component.controller, 'start');
-            component.state = Component.START;
+            emitControllerEvent(component, 'start', undefined, Component.START);
+            return;
         }
-        if(component.state === Component.DESTROY){
-            emitControllerEvent(component.controller, 'destroy');
+
+        if (component.state === Component.DESTROY) {
+            emitControllerEvent(component, 'destroy', undefined, Component.DESTROYED);
         }
     }
 
     /**
      * Emits an event from the controller.
      *
-     * @param {Object} controller the component client-side controller
+     * @param {Object} component the component properties
      * @param {String} eventName the event name
      * @param {Object} data the emitted data
-     * @private
-     * @memberOf ComponentRegistry#
-     */
-    function emitControllerEvent(controller, eventName, data) {
-        if (!controller) {
-            return;
-        }
-
-        if (typeof controller[eventName] == 'function') {
-            controller.emit(eventName, data);
-        }
-    }
-
-    /**
-     * Listens for an event.
+     * @param {Number} nextState the next state for the component
      *
-     * @param {Object} controller the component client-side controller
-     * @param {String} eventName the event name
      * @private
      * @memberOf ComponentRegistry#
      */
-    function onControllerEvent(controller, eventName) {
+    function emitControllerEvent(component, eventName, data, nextState) {
+        var controller = component.controller;
+
         if (!controller) {
             return;
         }
 
-        if (typeof controller[eventName] == 'function') {
-            controller.on(eventName, controller[eventName]);
+        var isPromise = false;
+
+        if (typeof controller[eventName] === 'function') {
+            var result = controller[eventName](data);
+
+            if (result && result.then && typeof result.then === 'function') {
+                isPromise = true;
+                component.state = Component.PENDING;
+                result.then(function () {
+                    component.state = nextState;
+                    controller.emit(eventName, data);
+                    invokeLifecycle(component);
+                }, function () {});
+            }
+        }
+
+        if (!isPromise) {
+            controller.emit(eventName, data);
+            component.state = nextState;
+            invokeLifecycle(component);
         }
     }
 
