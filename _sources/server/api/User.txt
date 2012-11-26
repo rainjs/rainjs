@@ -44,7 +44,7 @@ Constructor
     :param String obj.username: 
         the username 
     
-    :param String[] obj.permission: 
+    :param String[] obj.permissions: 
         the permissions associated with this user 
     
 

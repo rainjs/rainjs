@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Changelog &mdash; Rain v0.17.0 documentation</title>
+    <title>Changelog &mdash; Rain v0.19.0 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.17.0',
+        VERSION:     '0.19.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.17.0 documentation" href="index.html" />
+    <link rel="top" title="Rain v0.19.0 documentation" href="index.html" />
     <link rel="prev" title="Distributed Websockets" href="proposals/distributed_websockets.html" /> 
   </head>
   <body>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="proposals/distributed_websockets.html" title="Distributed Websockets"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Rain v0.17.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Rain v0.19.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -46,6 +46,29 @@
             
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="v-0-19">
+<h2>v 0.19<a class="headerlink" href="#v-0-19" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Improved the CSS Renderer: now it can load more than 31 stylesheets and the loading process is
+more efficient. This change is transparent for the developers. Warning: IE8 and IE9 can&#8217;t load
+more than 32000 CSS rules.</li>
+<li>Raintime was modified to generate static ids for the components with undefined static ids.</li>
+<li>The init and start methods of a client side controller can return a promise to delay the init
+and start events until the component is ready. Example: a component can wait for its children to
+load before emitting the start event.</li>
+</ul>
+</div>
+<div class="section" id="v-0-18">
+<h2>v 0.18<a class="headerlink" href="#v-0-18" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Client-side component dependencies can be requested using the <tt class="docutils literal"><span class="pre">js/path/file_without_extension</span></tt>
+convention (example: <tt class="docutils literal"><span class="pre">js/file</span></tt>, <tt class="docutils literal"><span class="pre">js/lib/file</span></tt>). The previous way of requesting js files
+(<tt class="docutils literal"><span class="pre">/component/optional_version/js/file.js</span></tt>) still works but it&#8217;s not recommended.</li>
+<li>Removed the <tt class="docutils literal"><span class="pre">util</span></tt> shortcut from the RequireJS paths. In order to use the <tt class="docutils literal"><span class="pre">util</span></tt> library you
+should request it using <tt class="docutils literal"><span class="pre">raintime/lib/util</span></tt>.</li>
+<li>Fixed a bug where a component added to the page using <tt class="docutils literal"><span class="pre">context.insert</span></tt> could not be found.</li>
+</ul>
+</div>
 <div class="section" id="v-0-17">
 <h2>v 0.17<a class="headerlink" href="#v-0-17" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -164,6 +187,8 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Changelog</a><ul>
+<li><a class="reference internal" href="#v-0-19">v 0.19</a></li>
+<li><a class="reference internal" href="#v-0-18">v 0.18</a></li>
 <li><a class="reference internal" href="#v-0-17">v 0.17</a></li>
 <li><a class="reference internal" href="#v-0-16">v 0.16</a></li>
 <li><a class="reference internal" href="#v-0-15">v 0.15</a></li>
@@ -210,7 +235,7 @@
         <li class="right" >
           <a href="proposals/distributed_websockets.html" title="Distributed Websockets"
              >previous</a> |</li>
-        <li><a href="index.html">Rain v0.17.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Rain v0.19.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Rain 0.17.0 Documentation &mdash; Rain v0.17.0 documentation</title>
+    <title>Rain 0.19.0 Documentation &mdash; Rain v0.19.0 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.17.0',
+        VERSION:     '0.19.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.17.0 documentation" href="#" />
+    <link rel="top" title="Rain v0.19.0 documentation" href="#" />
     <link rel="next" title="Installing RAIN" href="getting_started/installation.html" /> 
   </head>
   <body>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="getting_started/installation.html" title="Installing RAIN"
              accesskey="N">next</a> |</li>
-        <li><a href="#">Rain v0.17.0 documentation</a> &raquo;</li> 
+        <li><a href="#">Rain v0.19.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -45,8 +45,8 @@
           <div class="body">
             
   <div class="section" id="rain-release-documentation">
-<h1>Rain 0.17.0 Documentation<a class="headerlink" href="#rain-release-documentation" title="Permalink to this headline">¶</a></h1>
-<p>Welcome! This is the documentation for Rain 0.17.0</p>
+<h1>Rain 0.19.0 Documentation<a class="headerlink" href="#rain-release-documentation" title="Permalink to this headline">¶</a></h1>
+<p>Welcome! This is the documentation for Rain 0.19.0</p>
 <div class="section" id="getting-started">
 <h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
@@ -62,6 +62,11 @@
 <li class="toctree-l2"><a class="reference internal" href="getting_started/rain_sdk_tutorial.html#rain-sdk-create-project">RAIN SDK Create project</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started/rain_sdk_tutorial.html#rain-sdk-debug-mode">RAIN SDK Debug mode</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started/rain_sdk_tutorial.html#rain-sdk-generate-localization-files-from-source">RAIN SDK Generate Localization files from source</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started/configuration.html">Server and component configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/configuration.html#server-configuration">Server configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/configuration.html#component-configuration">Component configuration</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="server/component_descriptor.html">RAIN component descriptor</a><ul>
@@ -125,7 +130,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="client/rendering.html">Rendering</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="client/rendering.html#transport-layer">Transport Layer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="client/rendering.html#life-cycle">Life Cycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client/rendering.html#component-lifecycle">Component lifecycle</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="client/localization.html">Text localization</a><ul>
@@ -158,6 +163,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="server/messaging_intents.html">Intents</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="server/messaging_intents.html#defining-intents">Defining intents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/messaging_intents.html#intents-mapped-on-views">Intents mapped on views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/messaging_intents.html#intents-mapped-on-server-side-code">Intents mapped on server side code</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="server/websockets.html">RAIN Websockets</a><ul>
@@ -249,6 +256,7 @@
 <li class="toctree-l1"><a class="reference internal" href="server/api/Logger.html">Class Logger</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/PatternLayout.html">Class PatternLayout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/PoUtils.html">Class PoUtils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/PrecompileLess.html">Class PrecompileLess</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/ProxyStore.html">Class ProxyStore</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/Renderer.html">Class Renderer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server/api/Server.html">Class Server</a></li>
@@ -332,7 +340,7 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Rain 0.17.0 Documentation</a><ul>
+<li><a class="reference internal" href="#">Rain 0.19.0 Documentation</a><ul>
 <li><a class="reference internal" href="#getting-started">Getting started</a><ul>
 </ul>
 </li>
@@ -390,7 +398,7 @@
         <li class="right" >
           <a href="getting_started/installation.html" title="Installing RAIN"
              >next</a> |</li>
-        <li><a href="#">Rain v0.17.0 documentation</a> &raquo;</li> 
+        <li><a href="#">Rain v0.19.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

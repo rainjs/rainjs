@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Distributed Rendering &mdash; Rain v0.17.0 documentation</title>
+    <title>Distributed Rendering &mdash; Rain v0.19.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.17.0',
+        VERSION:     '0.19.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.17.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.19.0 documentation" href="../index.html" />
     <link rel="next" title="Distributed Websockets" href="distributed_websockets.html" />
     <link rel="prev" title="CSS Rendering" href="css_rendering.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="css_rendering.html" title="CSS Rendering"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.17.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.19.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -134,6 +134,49 @@ view.</p>
 access that component, it sends a message to the <tt class="docutils literal"><span class="pre">Mothership</span></tt> containing the reason why the
 component can&#8217;t be rendered, which sends a render request for the error component (it also
 specifies the appropriate error view).</p>
+</div>
+<div class="section" id="mothership-architecture">
+<h2>Mothership Architecture<a class="headerlink" href="#mothership-architecture" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/Use_Case_Diagram__MotherShip__MotherShip_Use_Case.png"><img alt="../_images/Use_Case_Diagram__MotherShip__MotherShip_Use_Case.png" src="../_images/Use_Case_Diagram__MotherShip__MotherShip_Use_Case.png" style="width: 813.4px; height: 914.2px;" /></a>
+<p class="caption">Use Case Diagram</p>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/Class_Diagram__MotherShip__Mothership.png"><img alt="../_images/Class_Diagram__MotherShip__Mothership.png" src="../_images/Class_Diagram__MotherShip__Mothership.png" style="width: 774.9px; height: 980.7px;" /></a>
+<p class="caption">Class Diagram</p>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/Sequence_Diagram__Overview__Overview.png"><img alt="../_images/Sequence_Diagram__Overview__Overview.png" src="../_images/Sequence_Diagram__Overview__Overview.png" style="width: 704.2px; height: 567.0px;" /></a>
+<p class="caption">Overview Sequence Diagram</p>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/Sequence_Diagram__Start_Mothership__Start_Mothership.png"><img alt="../_images/Sequence_Diagram__Start_Mothership__Start_Mothership.png" src="../_images/Sequence_Diagram__Start_Mothership__Start_Mothership.png" style="width: 728.7px; height: 592.2px;" /></a>
+<p class="caption">Start Mothership Sequence Diagram</p>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/Sequence_Diagram__Register__Register.png"><img alt="../_images/Sequence_Diagram__Register__Register.png" src="../_images/Sequence_Diagram__Register__Register.png" style="width: 867.3px; height: 622.3px;" /></a>
+<p class="caption">Register Server Sequence Diagram</p>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/Sequence_Diagram__Unregister__Unregister.png"><img alt="../_images/Sequence_Diagram__Unregister__Unregister.png" src="../_images/Sequence_Diagram__Unregister__Unregister.png" style="width: 779.8px; height: 594.3px;" /></a>
+<p class="caption">Unregister Server Sequence Diagram</p>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/Sequence_Diagram__View_Request__View_Request.png"><img alt="../_images/Sequence_Diagram__View_Request__View_Request.png" src="../_images/Sequence_Diagram__View_Request__View_Request.png" style="width: 705.6px; height: 991.2px;" /></a>
+<p class="caption">View Request Sequence Diagram</p>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/Sequence_Diagram__WebSocket_Connect__WebSocket_Connect.png"><img alt="../_images/Sequence_Diagram__WebSocket_Connect__WebSocket_Connect.png" src="../_images/Sequence_Diagram__WebSocket_Connect__WebSocket_Connect.png" style="width: 665.0px; height: 473.2px;" /></a>
+<p class="caption">WebSocket Connect Sequence Diagram</p>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/Sequence_Diagram__Intent_Request__Intent_Request.png"><img alt="../_images/Sequence_Diagram__Intent_Request__Intent_Request.png" src="../_images/Sequence_Diagram__Intent_Request__Intent_Request.png" style="width: 665.0px; height: 632.8px;" /></a>
+<p class="caption">Intent Request Sequence Diagram</p>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/Deployment_Diagram__MotherShip__Mothership.png"><img alt="../_images/Deployment_Diagram__MotherShip__Mothership.png" src="../_images/Deployment_Diagram__MotherShip__Mothership.png" style="width: 779.8px; height: 590.8px;" /></a>
+<p class="caption">Deployment Diagram</p>
+</div>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
@@ -157,6 +200,7 @@ specifies the appropriate error view).</p>
 <li><a class="reference internal" href="#mothership">Mothership</a></li>
 <li><a class="reference internal" href="#ending-http-connections">Ending HTTP Connections</a></li>
 <li><a class="reference internal" href="#error-and-placeholder">Error and Placeholder</a></li>
+<li><a class="reference internal" href="#mothership-architecture">Mothership Architecture</a></li>
 </ul>
 </li>
 </ul>
@@ -196,7 +240,7 @@ specifies the appropriate error view).</p>
         <li class="right" >
           <a href="css_rendering.html" title="CSS Rendering"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.17.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.19.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

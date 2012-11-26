@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>RAIN component descriptor &mdash; Rain v0.17.0 documentation</title>
+    <title>RAIN component descriptor &mdash; Rain v0.19.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.17.0',
+        VERSION:     '0.19.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.17.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.19.0 documentation" href="../index.html" />
     <link rel="next" title="Component Versioning" href="component_versioning.html" />
     <link rel="prev" title="RAIN Websockets" href="websockets.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="websockets.html" title="RAIN Websockets"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.17.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.19.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -64,6 +64,8 @@ supported by RAIN):</p>
 <div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span>
     <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="s2">&quot;intents-example&quot;</span><span class="p">,</span>
     <span class="s2">&quot;version&quot;</span><span class="o">:</span> <span class="s2">&quot;1.0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;component&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;permissions&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;example&quot;</span><span class="p">],</span>
     <span class="s2">&quot;views&quot;</span><span class="o">:</span> <span class="p">{</span>
         <span class="s2">&quot;missing_intent&quot;</span> <span class="o">:</span> <span class="p">{</span>
             <span class="s2">&quot;view&quot;</span><span class="o">:</span> <span class="s2">&quot;missing_intent_example.html&quot;</span><span class="p">,</span>
@@ -77,15 +79,20 @@ supported by RAIN):</p>
             <span class="s2">&quot;controller&quot;</span><span class="o">:</span> <span class="p">{</span>
                 <span class="s2">&quot;client&quot;</span><span class="o">:</span> <span class="s2">&quot;need_permissions.js&quot;</span>
             <span class="p">},</span>
-            <span class="s2">&quot;permissions&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;need_permissions&quot;</span><span class="p">]</span>
+            <span class="s2">&quot;permissions&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;admin&quot;</span><span class="p">]</span>
         <span class="p">}</span>
     <span class="p">},</span>
     <span class="s2">&quot;intents&quot;</span><span class="o">:</span> <span class="p">[</span>
         <span class="p">{</span>
-            <span class="s2">&quot;category&quot;</span><span class="o">:</span> <span class="s2">&quot;com.rain.test.general.SHOW_CHAT&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;action&quot;</span><span class="o">:</span> <span class="s2">&quot;com.rain.test.general&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;view&quot;</span><span class="o">:</span> <span class="s2">&quot;missing_intent&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;view&quot;</span>
+            <span class="s2">&quot;category&quot;</span><span class="o">:</span> <span class="s2">&quot;com.rain.test.general&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;action&quot;</span><span class="o">:</span> <span class="s2">&quot;com.rain.test.general.SHOW_CHAT&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;view&quot;</span><span class="o">:</span> <span class="s2">&quot;missing_intent&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;category&quot;</span><span class="o">:</span> <span class="s2">&quot;com.rain.test.general&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;action&quot;</span><span class="o">:</span> <span class="s2">&quot;com.rain.test.serverside.INLINE_LOGGING&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;provider&quot;</span><span class="o">:</span> <span class="s2">&quot;inline_logging.js#doLogging&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;permissions&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;log&quot;</span><span class="p">]</span>
         <span class="p">}</span>
     <span class="p">]</span>
 <span class="p">}</span>
@@ -95,37 +102,30 @@ supported by RAIN):</p>
 <div class="section" id="module-definition">
 <h2>Module definition<a class="headerlink" href="#module-definition" title="Permalink to this headline">¶</a></h2>
 <p>Here you define the module attributes:</p>
-<blockquote>
 <ul class="simple">
 <li>id - this is the module identifier</li>
 <li>version - this is the current module version</li>
+<li>type - <tt class="docutils literal"><span class="pre">component</span></tt> (default value) or <tt class="docutils literal"><span class="pre">container</span></tt>. This field is optional.</li>
 </ul>
-</blockquote>
 </div>
 <div class="section" id="views-definition">
 <h2>Views definition<a class="headerlink" href="#views-definition" title="Permalink to this headline">¶</a></h2>
 <p>Here you define your module views. Each view you need accessible outside your component
 or if you want to apply constraints on it must appear in this section:</p>
-<blockquote>
-<ul>
-<li><p class="first">viewId - the keys in the <tt class="docutils literal"><span class="pre">views</span></tt> object; this is the unique identifier for this view</p>
-</li>
-<li><p class="first">view - the path to the view, relative to <tt class="docutils literal"><span class="pre">&lt;component_folder&gt;/client/templates/</span></tt></p>
-</li>
-<li><dl class="first docutils">
-<dt>controller - can have two keys: <tt class="docutils literal"><span class="pre">client</span></tt> and <tt class="docutils literal"><span class="pre">server</span></tt>; the values represent the paths</dt>
-<dd><p class="first last">to the client and server-side controllers; the client-side controllers are
-located in <tt class="docutils literal"><span class="pre">&lt;component_folder&gt;/client/js</span></tt> and the server-side controllers
-are located in <tt class="docutils literal"><span class="pre">&lt;component_folder&gt;/server/controller</span></tt></p>
-</dd>
-</dl>
-</li>
+<ul class="simple">
+<li>viewId - the keys in the <tt class="docutils literal"><span class="pre">views</span></tt> object; this is the unique identifier for this view</li>
+<li>view - the path to the view, relative to <tt class="docutils literal"><span class="pre">&lt;component_folder&gt;/client/templates/</span></tt></li>
+<li>controller - can have two keys: <tt class="docutils literal"><span class="pre">client</span></tt> and <tt class="docutils literal"><span class="pre">server</span></tt>; the values represent the paths
+to the client and server-side controllers; the client-side controllers are located in
+<tt class="docutils literal"><span class="pre">&lt;component_folder&gt;/client/js</span></tt> and the server-side controllers are located in
+<tt class="docutils literal"><span class="pre">&lt;component_folder&gt;/server/controller</span></tt>.</li>
 </ul>
-</blockquote>
 </div>
 <div class="section" id="intents-definition">
 <h2>Intents definition<a class="headerlink" href="#intents-definition" title="Permalink to this headline">¶</a></h2>
-<p>Please read <a class="reference internal" href="messaging_intents.html"><em>Intents</em></a> for more information.</p>
+<p>The intents definition and implementation is on the server side, but they are called from the
+client side. Please read <a class="reference internal" href="messaging_intents.html"><em>Intents configuration</em></a> for details about
+configuration and <a class="reference internal" href="../client/intents.html"><em>How to use intents on the client side</em></a> for usage.</p>
 </div>
 <div class="section" id="permissions-definition">
 <h2>Permissions definition<a class="headerlink" href="#permissions-definition" title="Permalink to this headline">¶</a></h2>
@@ -186,7 +186,7 @@ are located in <tt class="docutils literal"><span class="pre">&lt;component_fold
         <li class="right" >
           <a href="websockets.html" title="RAIN Websockets"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.17.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.19.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
