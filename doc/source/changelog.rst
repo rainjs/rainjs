@@ -3,6 +3,19 @@ Changelog
 =========
 
 ------
+v 0.19
+------
+
++ Improved the CSS Renderer: now it can load more than 31 stylesheets and the loading process is
+  more efficient. This change is transparent for the developers. Warning: IE8 and IE9 can't load
+  more than 32000 CSS rules.
++ Raintime was modified to generate static ids for the components with undefined static ids.
++ The init and start methods of a client side controller can return a promise to delay the init
+  and start events until the component is ready. Example: a component can wait for its children to
+  load before emitting the start event.
++ RAIN Issue #97 (datagrid remote model: the rows are not displayed in some cases) was fixed.
+
+------
 v 0.18
 ------
 
