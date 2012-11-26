@@ -27,8 +27,9 @@ define([
     'raintime/lib/promise',
     'raintime/messaging/sockets',
     'raintime',
-    'raintime/logger'
-], function (Promise, Sockets, Raintime, Logger) {
+    'raintime/logger',
+    'raintime/css/renderer'
+], function (Promise, Sockets, Raintime, Logger, CssRenderer) {
 
     var logger = Logger.get({
         id: 'core'
@@ -50,7 +51,7 @@ define([
         var self = this;
 
         this.placeholderComponent = null;
-        this.placeholderTimeout = 500;
+        this.placeholderTimeout = 20000;
         this.counter = 0;
 
         /**
@@ -122,7 +123,7 @@ define([
             return;
         }
         if (component.placeholder && component.placeholder === true) {
-            placeholderTimeout(this, component);
+            this._placeholderTimeout(component);
         }
         if (this._isSocketConnected) {
             this.socket.emit('render', component, function (error) {
@@ -143,7 +144,8 @@ define([
      * @param {Object} component the rendered component
      */
     ClientRenderer.prototype.renderComponent = function (component) {
-        var domElement = $('#' + component.instanceId);
+        var domElement = $('#' + component.instanceId),
+            self = this;
 
         if (!domElement.length) {
             if (!this.orphans[component.containerId]) {
@@ -173,16 +175,16 @@ define([
                 Raintime.componentRegistry.preRegister(childComponent);
 
                 if (childComponent.placeholder === true) {
-                    placeholderTimeout(this, childComponent);
+                    self._placeholderTimeout(childComponent);
                 }
             }
         }
 
-        if (!component.css || 0 === component.css.length) {
-            this._showHTML(component, domElement);
-        } else {
-            this._loadCSS(component.css, this._showHTML.bind(this, component, domElement));
-        }
+        CssRenderer.get().load(component).then(function () {
+            self._showHTML(component, domElement);
+        }, function (error) {
+            logger.error('Failed to load CSS for: ' + component.id + ';' + component.version);
+        });
     };
 
     /**
@@ -208,12 +210,12 @@ define([
     /**
      * Renders the placeholder if the component is not returned in time (placeholderTimeout).
      *
-     * @param {ClientRenderer} self the class instance
      * @param {Object} placeholder the placeholder component
      * @private
-     * @memberOf ClientRenderer#
      */
-    function placeholderTimeout(self, placeholder) {
+    ClientRenderer.prototype._placeholderTimeout = function (placeholder) {
+        var self = this;
+
         setTimeout(function () {
             if (!$('#' + placeholder.instanceId).hasClass('app-container')) {
                 logger.warn('The component "' + placeholder.id +
@@ -221,50 +223,6 @@ define([
                 self.renderPlaceholder(placeholder.instanceId);
             }
         }, self.placeholderTimeout);
-    }
-
-    /**
-     * Load css files and insert html after the css files are completely loaded.
-     * Maybe there is a better way. This works on IE8+, Chrome, FF, Safari.
-     *
-     * @param {Array} css CSS dependencies
-     * @param {Function} callback is invoked after all css dependencies are loaded
-     * @private
-     * @memberOf ClientRenderer#
-     */
-    ClientRenderer.prototype._loadCSS = function (css, callback) {
-        var head = $('head');
-        var loadedFiles = 0;
-
-        for (var i = 0, len = css.length; i < len; i++) {
-
-            var loader = new Image();
-            loader.onerror = function (e) {
-                if (++loadedFiles === css.length) {
-                    callback();
-                }
-            };
-            loader.src = css[i].path;
-
-            if (0 === head.find("link[href='" + css[i].path + "']").length) {
-                var link;
-
-                if (document.createStyleSheet) {
-                    link = document.createStyleSheet(css[i].path);
-                } else {
-                    link = document.createElement('link');
-                    link.type = 'text/css';
-                    link.rel = 'stylesheet';
-                    link.href = css[i].path;
-                }
-
-                if (css[i].media) {
-                    link.media = css[i].media;
-                }
-
-                head.append(link);
-            }
-        }
     };
 
     return window.ClientRenderer = ClientRenderer;

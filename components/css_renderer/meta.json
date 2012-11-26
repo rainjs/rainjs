@@ -1,0 +1,7 @@
+{
+    "id": "css-renderer",
+    "version": "1.0",
+    "views": {
+        "stylesheets" : {}
+    }
+}
