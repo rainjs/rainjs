@@ -180,15 +180,11 @@ define([
             }
         }
 
-        if (!component.css || 0 === component.css.length) {
-            this._showHTML(component, domElement);
-        } else {
-            CssRenderer.get().load(component).then(function () {
-                self._showHTML(component, domElement);
-            }, function (error) {
-                logger.error('Failed to load CSS for: ' + component.id + ';' + component.version);
-            });
-        }
+        CssRenderer.get().load(component).then(function () {
+            self._showHTML(component, domElement);
+        }, function (error) {
+            logger.error('Failed to load CSS for: ' + component.id + ';' + component.version);
+        });
     };
 
     /**

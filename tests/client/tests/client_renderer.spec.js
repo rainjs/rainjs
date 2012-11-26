@@ -190,24 +190,6 @@ describe('Client Renderer', function () {
             expect(clientRenderer._placeholderTimeout).toHaveBeenCalledWith(child2);
        });
 
-        it('should show the component html when it doesn\'t have any css files',
-                ['raintime/client_rendering'],
-                function (ClientRenderer) {
-
-            setup(ClientRenderer);
-            ClientRenderer.prototype.renderComponent.andCallThrough();
-
-            var html = [
-                '<div id="' + component3.instanceId + '"></div>'
-            ];
-            $('body').append(html.join('\n'));
-            var domElement = $('#' + component3.instanceId);
-
-            clientRenderer.renderComponent(component3);
-
-            expect(clientRenderer._showHTML).toHaveBeenCalledWith(component3, domElement);
-        });
-
         it('should load the css file before showing the html content',
                 ['raintime/client_rendering'],
                 function (ClientRenderer) {

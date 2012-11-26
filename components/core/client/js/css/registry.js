@@ -96,10 +96,6 @@ define(['raintime/css/stylesheet',
      * @returns {Boolean} weather the insert was successful or not
      */
     CssRegistry.prototype.register = function (component, css) {
-        if (css.length === 0) {
-            return true;
-        }
-
         if (!this._components[component]) {
             this._components[component] = {
                 instanceCount: 0,
