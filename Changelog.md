@@ -9,7 +9,6 @@
 * The init and start methods of a client side controller can return a promise to delay the init
   and start events until the component is ready. Example: a component can wait for its children to
   load before emitting the start event.
-* RAIN Issue #97 (datagrid remote model: the rows are not displayed in some cases) was fixed.
 
 ## 0.18.0
 
