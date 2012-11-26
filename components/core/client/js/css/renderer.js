@@ -25,7 +25,7 @@
 
 "use strict";
 
-define(['util',
+define(['raintime/lib/util',
         'raintime/lib/promise',
         'raintime/css/registry'
 ], function (util, Promise, StyleRegistry) {
