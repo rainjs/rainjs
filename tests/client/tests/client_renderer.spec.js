@@ -23,11 +23,13 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+"use strict";
+
 describe('Client Renderer', function () {
-    var Mocks, cr;
+    var mocks, clientRenderer, success, error;
 
     beforeEach(function () {
-        Mocks = {};
+        mocks = {};
     });
 
     function setup(ClientRenderer) {
@@ -35,254 +37,188 @@ describe('Client Renderer', function () {
             return new ClientRenderer;
         });
 
-        Mocks.Sockets = jasmine.loadedModules['raintime/messaging/sockets'];
-        Mocks.Sockets.getSocket.andReturn({ on: jasmine.createSpy() });
+        mocks.Sockets = jasmine.loadedModules['raintime/messaging/sockets'];
+        mocks.Sockets.getSocket.andReturn({ on: jasmine.createSpy() });
 
-        cr = ClientRenderer.get();
-    }
+        mocks.Raintime = jasmine.loadedModules['raintime'];
+        mocks.Raintime.componentRegistry = jasmine.createSpyObj('componentRegistry',
+                                                                ['preRegister']);
 
-    describe('Load CSS', function () {
-        var head;
-
-        beforeEach(function () {
-            head = $('head');
-            head.find('link').remove();
+        var loadCss = jasmine.createSpyObj('cssRenderer', ['then']);
+        loadCss.then.andCallFake(function (resolve, err) {
+            success = resolve;
+            error = err;
         });
 
-        it('should not call the callback if there aren\'t any CSS files',
-           ['core/js/client_rendering'],
-           function (ClientRenderer) {
-                setup(ClientRenderer);
-                ClientRenderer.prototype._loadCSS.andCallThrough();
+        mocks.CssRenderer = jasmine.loadedModules['raintime/css/renderer'];
+        mocks.CssRenderer.get = function () {
+            return {
+                load: function () {
+                    return loadCss;
+                }
+            };
+        };
 
-                var callback = jasmine.createSpy();
-
-                cr._loadCSS([], callback);
-
-                expect(callback).not.toHaveBeenCalled();
-           }
-        );
-
-        it('should insert the CSS files into the page as link tags',
-           ['core/js/client_rendering'],
-           function (ClientRenderer) {
-                setup(ClientRenderer);
-                ClientRenderer.prototype._loadCSS.andCallThrough();
-
-                var linksLength = head.find('link').length,
-                    cssFiles = [{
-                            path: '/example/3.0/css/index.css'
-                        }, {
-                            path: '/example/3.0/css/accordion.css'
-                    }],
-                    insertFinished = false;
-
-                runs(function () {
-                    ClientRenderer.get()._loadCSS(cssFiles,
-                            function () { insertFinished = true; });
-                });
-
-                waitsFor(function () {
-                    return insertFinished;
-                }, 'link tags to be inserted in the page head');
-
-                runs(function () {
-                    var newCssFilesLength = head.find('link').length;
-                    expect(linksLength + cssFiles.length).toEqual(newCssFilesLength);
-                });
-           }
-        );
-
-        it('should not insert the CSS files because they are already there',
-           ['core/js/client_rendering'],
-           function (ClientRenderer) {
-                setup(ClientRenderer);
-                ClientRenderer.prototype._loadCSS.andCallThrough();
-
-                var linksLength,
-                    cssFiles = [
-                        {
-                            path: '/example/3.0/css/index.css'
-                        }
-                    ],
-                    insertFinished = false;
-
-                head.append('<link href="/example/3.0/css/index.css">');
-                linksLength = head.find('link').length;
-
-                runs(function () {
-                    ClientRenderer.get()._loadCSS(cssFiles, function () {
-                        insertFinished = true;
-                    });
-                });
-
-                waitsFor(function () {
-                    return insertFinished;
-                }, 'link tags to be inserted in the page head');
-
-                runs(function () {
-                    var newCssFilesLength = head.find('link').length;
-                    expect(linksLength).toEqual(newCssFilesLength);
-                });
-           }
-        );
-
-        it('should insert only the CSS files that aren\'t already there',
-           ['core/js/client_rendering'],
-           function (ClientRenderer) {
-                setup(ClientRenderer);
-                ClientRenderer.prototype._loadCSS.andCallThrough();
-
-                var linksLength,
-                    cssFiles = [
-                        {
-                            path: '/example/3.0/css/index.css'
-                        },
-                        {
-                            path: '/example/3.0/css/accordion.css'
-                        }
-                    ],
-                    insertFinished = false;
-
-                head.append('<link href="/example/3.0/css/index.css">');
-                linksLength = head.find('link').length;
-
-                runs(function () {
-                    ClientRenderer.get()._loadCSS(cssFiles, function () {
-                        insertFinished = true;
-                    });
-                });
-
-                waitsFor(function () {
-                    return insertFinished;
-                }, 'link tags to be inserted in the page head');
-
-                runs(function () {
-                    var newCssFilesLength = head.find('link').length;
-                    expect(linksLength + 1).toEqual(newCssFilesLength);
-                });
-           }
-        );
-
-        it('should add the media attribute to the link tags',
-           ['core/js/client_rendering'],
-           function (ClientRenderer) {
-                setup(ClientRenderer);
-                ClientRenderer.prototype._loadCSS.andCallThrough();
-
-                var media = 'max-width: 800px',
-                    cssFiles = [
-                        {
-                            path: '/example/3.0/css/index.css',
-                            media: media
-                        }
-                    ],
-                    insertFinished = false;
-
-                runs(function () {
-                    ClientRenderer.get()._loadCSS(cssFiles, function () {
-                        insertFinished = true;
-                    });
-                });
-
-                waitsFor(function () {
-                    return insertFinished;
-                }, 'link tags to be inserted in the page head');
-
-                runs(function () {
-                    expect(head.find('link[media="' + media + '"]').length).toEqual(1);
-                });
-           }
-        );
-    });
+        clientRenderer = ClientRenderer.get();
+    }
 
     describe('render component', function () {
-        var dcmp1, dcmp2;
+        var component1, component2, container,
+            component3, child1, child2;
 
         beforeEach(function () {
-            dcmp1 = {
+            component1 = {
                 instanceId: 'ff44aa',
                 containerId: 'ec038f',
                 id: 'component',
                 version: '1.0'
             };
-            dcmp2 = {
+            component2 = {
                 instanceId: 'ff44bb',
                 containerId: 'ec038f',
                 id: 'component',
                 version: '2.6.89'
             };
-            dcnt = {
+            container = {
                 instanceId: 'ec038f',
                 id: 'container',
                 version: '1.5.2'
             };
+
+            child1 = {
+                instanceId: 'c1',
+                id: 'selector',
+                version: '1.0'
+            };
+            child2 = {
+                instanceId: 'c2',
+                id: 'selector',
+                version: '2.0',
+                placeholder: true
+            };
+            component3 = {
+                instanceId: 'cc9922',
+                id: 'example',
+                version: '2.6.89',
+                children: [child1, child2]
+            };
         });
 
-        it('should add an orhpan component to its container\'s orphans list',
-                ['core/js/client_rendering'],
+        it('should add an orphan component to its container\'s orphans list',
+                ['raintime/client_rendering'],
                 function (ClientRenderer) {
 
             setup(ClientRenderer);
             ClientRenderer.prototype.renderComponent.andCallThrough();
 
-            cr.renderComponent(dcmp1);
+            clientRenderer.renderComponent(component1);
 
-            expect(cr.orphans[dcmp1.containerId].length).toEqual(1);
-            expect(cr.orphans[dcmp1.containerId]).toContain(dcmp1);
+            expect(clientRenderer.orphans[component1.containerId].length).toEqual(1);
+            expect(clientRenderer.orphans[component1.containerId]).toContain(component1);
         });
 
-        it('should add multiple orhpan components to their container\'s orhpans list',
-                ['core/js/client_rendering'],
+        it('should add multiple orphan components to their container\'s orphans list',
+                ['raintime/client_rendering'],
                 function (ClientRenderer) {
 
             setup(ClientRenderer);
             ClientRenderer.prototype.renderComponent.andCallThrough();
 
-            cr.renderComponent(dcmp1);
-            cr.renderComponent(dcmp2);
+            clientRenderer.renderComponent(component1);
+            clientRenderer.renderComponent(component2);
 
-            expect(cr.orphans[dcmp1.containerId].length).toEqual(2);
-            expect(cr.orphans[dcmp1.containerId]).toContain(dcmp1);
-            expect(cr.orphans[dcmp1.containerId]).toContain(dcmp2);
+            expect(clientRenderer.orphans[component1.containerId].length).toEqual(2);
+            expect(clientRenderer.orphans[component1.containerId]).toContain(component1);
+            expect(clientRenderer.orphans[component1.containerId]).toContain(component2);
         });
 
-        it('should render the orhpan components when the container arrives',
-                ['core/js/client_rendering'],
+        it('should render the orphan components when the container arrives',
+                ['raintime/client_rendering'],
                 function (ClientRenderer) {
 
             setup(ClientRenderer);
             ClientRenderer.prototype.renderComponent.andCallThrough();
 
             this.after(function () {
-                $('#' + dcmp1.instanceId
-                    + ',#' + dcmp1.instanceId
-                    + ',#' + dcnt.instanceId).remove();
+                $('#' + component1.instanceId
+                    + ',#' + component1.instanceId
+                    + ',#' + container.instanceId).remove();
             });
 
-            cr.renderComponent(dcmp1);
-            cr.renderComponent(dcmp2);
+            clientRenderer.renderComponent(component1);
+            clientRenderer.renderComponent(component2);
 
-            expect(cr.orphans[dcnt.instanceId].length).toEqual(2);
-            expect(cr.orphans[dcnt.instanceId]).toContain(dcmp1);
-            expect(cr.orphans[dcnt.instanceId]).toContain(dcmp2);
+            expect(clientRenderer.orphans[container.instanceId].length).toEqual(2);
+            expect(clientRenderer.orphans[container.instanceId]).toContain(component1);
+            expect(clientRenderer.orphans[container.instanceId]).toContain(component2);
 
             var html = [
-                '<div id="' + dcmp1.instanceId + '"></div>',
-                '<div id="' + dcmp2.instanceId + '"></div>',
-                '<div id="' + dcnt.instanceId + '"></div>'
+                '<div id="' + component1.instanceId + '"></div>',
+                '<div id="' + component2.instanceId + '"></div>',
+                '<div id="' + container.instanceId + '"></div>'
             ];
             $('body').append(html.join('\n'));
 
-            cr.renderComponent(dcnt);
+            clientRenderer.renderComponent(container);
 
             var f = ClientRenderer.prototype.renderComponent;
 
-            expect(f.argsForCall[3][0]).toEqual(dcmp1);
-            expect(f.argsForCall[4][0]).toEqual(dcmp2);
+            expect(f.argsForCall[3][0]).toEqual(component1);
+            expect(f.argsForCall[4][0]).toEqual(component2);
 
-            expect(cr.orphans[dcnt.instanceId]).not.toBeDefined();
+            expect(clientRenderer.orphans[container.instanceId]).not.toBeDefined();
         });
 
+        it('should pre-register a component\'s children',
+                ['raintime/client_rendering'],
+                function (ClientRenderer) {
+
+            setup(ClientRenderer);
+            ClientRenderer.prototype.renderComponent.andCallThrough();
+
+            var html = [
+                '<div id="' + component3.instanceId + '"></div>'
+            ];
+            $('body').append(html.join('\n'));
+
+            clientRenderer.renderComponent(component3);
+
+            expect(mocks.Raintime.componentRegistry.preRegister.callCount).toEqual(2);
+            expect(child1.parentInstanceId).toEqual(component3.instanceId);
+            expect(child2.parentInstanceId).toEqual(component3.instanceId);
+            expect(clientRenderer._placeholderTimeout.callCount).toEqual(1);
+            expect(clientRenderer._placeholderTimeout).toHaveBeenCalledWith(child2);
+       });
+
+        it('should load the css file before showing the html content',
+                ['raintime/client_rendering'],
+                function (ClientRenderer) {
+
+            setup(ClientRenderer);
+            ClientRenderer.prototype.renderComponent.andCallThrough();
+
+            component3.css = [
+                {
+                    'path': 'p1'
+                },
+                {
+                    'path': 'p2'
+                }
+            ];
+
+            var html = [
+                '<div id="' + component3.instanceId + '"></div>'
+            ];
+            $('body').append(html.join('\n'));
+
+            clientRenderer.renderComponent(component3);
+
+            expect(success).toBeDefined();
+            expect(error).toBeDefined();
+
+            expect(clientRenderer._showHTML).not.toHaveBeenCalled();
+            success();
+            expect(clientRenderer._showHTML).toHaveBeenCalled();
+        });
     });
 });

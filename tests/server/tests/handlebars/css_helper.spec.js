@@ -49,6 +49,9 @@ describe('Handlebars css helper', function () {
         mocks['../component_registry'] = {
             getLatestVersion: function () {
                 return version;
+            },
+            getConfig: function () {
+                return;
             }
         };
 
