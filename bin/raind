@@ -39,9 +39,8 @@ var root = path.dirname(__dirname),
 
 function getProjectRoot(dir) {
     try {
-         return sdkUtils.getProjectRoot(program.dir);
+        return sdkUtils.getProjectRoot(dir);
     } catch (e) {
-        console.log(program.dir, 'is not a valid rain project.');
         process.exit(1);
     }
 }
@@ -55,11 +54,9 @@ program
     .version(version)
     .usage('[options]')
     .option('-d, --debug', 'start the server in debug mode')
-    .option('-D, --dir <path>', 'the server working directory', process.env.RAIN_CWD || process.cwd());
+    .option('-D, --dir <path>', 'the server working directory', getProjectRoot(process.env.RAIN_CWD || process.cwd()));
 
 program.parse(process.argv);
-
-var projectRoot = getProjectRoot(program.dir);
 
 if (program.debug && 'win32' !== process.platform) {
     // notify the node process that it needs to attach a debug server to itself
@@ -69,9 +66,8 @@ if (program.debug && 'win32' !== process.platform) {
 process.title = 'raind';
 
 try {
-    process.chdir(projectRoot);
+    process.chdir(program.dir);
 } catch (e) {
-    console.log('Failed to change directory to', projectRoot, 'error:', e.message);
 }
 
 var server = require(path.join(root, 'lib', 'server'));
