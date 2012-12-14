@@ -101,7 +101,7 @@ describe('CSS Renderer', function () {
 
     describe('load', function () {
         it('should register the CSS files for a component',
-            ['raintime/css/renderer', 'raintime/css/registry', 'util'],
+            ['raintime/css/renderer', 'raintime/css/registry', 'raintime/lib/util'],
             function (CssRenderer, StyleRegistry, util) {
                 var options = {
                     component: components.withCss,
@@ -113,7 +113,7 @@ describe('CSS Renderer', function () {
         );
 
         it('should register only the new CSS files',
-            ['raintime/css/renderer', 'raintime/css/registry', 'util'],
+            ['raintime/css/renderer', 'raintime/css/registry', 'raintime/lib/util'],
             function (CssRenderer, StyleRegistry, util) {
                 var options = {
                     component: components.withCss,
@@ -129,7 +129,7 @@ describe('CSS Renderer', function () {
         );
 
         it('should succeed for a component with no CSS files',
-            ['raintime/css/renderer', 'raintime/css/registry', 'util'],
+            ['raintime/css/renderer', 'raintime/css/registry', 'raintime/lib/util'],
             function (CssRenderer, StyleRegistry, util) {
                 var options = {
                     component: components.noCss,
@@ -140,7 +140,7 @@ describe('CSS Renderer', function () {
             }
         );
         it('should ignore the CSS files that aren\'t found',
-            ['raintime/css/renderer', 'raintime/css/registry', 'util'],
+            ['raintime/css/renderer', 'raintime/css/registry', 'raintime/lib/util'],
             function (CssRenderer, StyleRegistry, util) {
                 var options = {
                     component: components.someNotFoundCss,
@@ -152,7 +152,7 @@ describe('CSS Renderer', function () {
             }
         );
         it('should succeed when all the CSS files are already loaded',
-            ['raintime/css/renderer', 'raintime/css/registry', 'util'],
+            ['raintime/css/renderer', 'raintime/css/registry', 'raintime/lib/util'],
             function (CssRenderer, StyleRegistry, util) {
                 var options = {
                     component: components.withCss,
@@ -167,7 +167,7 @@ describe('CSS Renderer', function () {
             }
         );
         it('should succeed when all the CSS files for a component aren\'t found',
-            ['raintime/css/renderer', 'raintime/css/registry', 'util'],
+            ['raintime/css/renderer', 'raintime/css/registry', 'raintime/lib/util'],
             function (CssRenderer, StyleRegistry, util) {
                 var options = {
                     component: components.allNotFoundCss,
@@ -180,7 +180,7 @@ describe('CSS Renderer', function () {
         );
 
         it('should fail when there is no space left to register the CSS',
-            ['raintime/css/renderer', 'raintime/css/registry', 'util'],
+            ['raintime/css/renderer', 'raintime/css/registry', 'raintime/lib/util'],
             function (CssRenderer, StyleRegistry, util) {
                 var options = {
                     component: components.withCss,
@@ -197,7 +197,7 @@ describe('CSS Renderer', function () {
 
     describe('unload', function () {
         it('should unregister the CSS for the specified component',
-            ['raintime/css/renderer', 'raintime/css/registry', 'util'],
+            ['raintime/css/renderer', 'raintime/css/registry', 'raintime/lib/util'],
             function (CssRenderer, StyleRegistry, util) {
                 mockDependencies(StyleRegistry, util);
 
