@@ -47,6 +47,8 @@ define(function () {
         oldExecCb = oldExecCb || context.execCb;
         oldOnScriptLoad = oldOnScriptLoad || context.onScriptLoad;
 
+        // onScriptLoad executes immediately after define, so currentDeps and
+        // currentCallback refer to the same module as moduleName
         function onScriptLoad(evt) {
             var node = evt.currentTarget || evt.srcElement;
 
@@ -65,10 +67,10 @@ define(function () {
         function execCb(name, callback, args, exports) {
             var module = dependencyModules[name];
             if (module) {
-                console.log(name);
-                for (var k in args) {
-                    console.log(k, args[k])
-                }
+                //console.log(name);
+                //for (var k in args) {
+                //    console.log(k, args[k]);
+                //}
                 var Logger, Translation, locale, translation,
                     loggerIndex = module.loggerIndex,
                     tIndex = module.tIndex,
@@ -98,7 +100,7 @@ define(function () {
                     args[loggerIndex] = Logger.get(module.component);
                 }
             }
-// console.log(oldExecCb);
+            // console.log(oldExecCb);
             // invoke the original implementation of the function
             return oldExecCb(name, callback, args, exports);
         }
@@ -306,21 +308,4 @@ define(function () {
     };
 
     define.amd = oldDefine.amd;
-
-    // onScriptLoad executes immediately after define, so currentDeps and
-    // currentCallback refer to the same module as moduleName
-    require.onScriptLoad = function (evt) {
-        var node = evt.currentTarget || evt.srcElement;
-
-        if (evt.type === "load" || (node && readyRegExp.test(node.readyState))) {
-            interactiveScript = null;
-            //all browsers except IE
-            if (currentDeps && currentCallback) {
-                var moduleName = node.getAttribute("data-requiremodule");
-                modifyDependencies(moduleName, currentDeps, currentCallback);
-            }
-
-            oldOnScriptLoad(evt);
-        }
-    };
 });

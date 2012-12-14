@@ -39,12 +39,20 @@ var requireConfig = {
 
 require.config(requireConfig);
 
-require.execCb = function (name, callback, args, exports) {
-    var module = callback.apply(exports, args);
+var oldLoad = require.load;
 
-    if (!jasmine.loadedModules[name]) {
-        jasmine.loadedModules[name] = module;
-    }
+require.load = function (context, moduleName, url) {
+    context.execCb = function (name, callback, args, exports) {
+        var module = callback.apply(exports, args);
 
-    return module;
+        if (!jasmine.loadedModules[name]) {
+            jasmine.loadedModules[name] = module;
+        }
+
+        return module;
+    };
+
+    oldLoad(context, moduleName, url);
 };
+
+

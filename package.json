@@ -28,7 +28,7 @@
     },
     "devDependencies": {
         "js-yaml": "",
-        "jasmine-node": "",
+        "jasmine-node": "= 1.0.26",
         "jscoverage-reporter": ""
     },
     "keywords": ["framework", "rain"],
