@@ -108,10 +108,18 @@ define(function () {
         context.onScriptLoad = onScriptLoad;
         context.execCb = execCb;
 
-        oldLoad(context, moduleName, url);
+        var node = oldLoad(context, moduleName, url);
+
+        if (node.attachEvent
+            && !(node.attachEvent.toString && node.attachEvent.toString().indexOf('[native code') < 0)
+            && !isOpera) {
+            useInteractive = true;
+        }
+
+        return node;
     };
 
-    require.addScriptToDom = function (node) {
+    /*require.addScriptToDom = function (node) {
         currentlyAddingScript = node;
 
         if (node.attachEvent
@@ -123,7 +131,7 @@ define(function () {
         oldAddScriptToDom(node);
 
         currentlyAddingScript = null;
-    };
+    };*/
 
     function getInteractiveScript() {
         var scripts, i, script;
