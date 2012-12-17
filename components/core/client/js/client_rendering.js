@@ -23,6 +23,8 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+"use strict";
+
 define([
     'raintime/lib/promise',
     'raintime/messaging/sockets',
@@ -68,16 +70,12 @@ define([
             self.renderComponent(component);
         });
 
-        function renderQueue() {
-            for (var i = 0, len = socketQueue.length; i < len; i++) {
-                socket.emit('render', socketQueue[i], function (error) {});
-            }
-        }
-
-        if (socket.isConnected) {
-            renderQueue();
-        } else {
-            socket.on('connect', renderQueue);
+        if (!socket.isConnected) {
+            socket.on('connect', function () {
+                for (var i = 0, len = socketQueue.length; i < len; i++) {
+                    socket.emit('render', socketQueue[i]);
+                }
+            });
         }
     }
 
@@ -92,8 +90,8 @@ define([
      * @returns {ClientRenderer} the singleton instance
      */
     ClientRenderer.get = function () {
-        return ClientRenderer._instance
-                || (ClientRenderer._instance = new ClientRenderer);
+        return ClientRenderer._instance ||
+                (ClientRenderer._instance = new ClientRenderer());
     };
 
     /**

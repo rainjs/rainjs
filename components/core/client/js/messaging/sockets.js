@@ -69,6 +69,7 @@ define(["raintime/lib/socket.io"], function (io) {
         }
 
         var socket = io.connect(baseUrl + channel);
+        socket.isConnected = false;
 
         socket.on('connect', function () {
             socket.isConnected = true;
