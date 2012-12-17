@@ -148,8 +148,8 @@ describe('Client side dependencies', function () {
             // just spy it because it needs to be called so that dependencies for it()
             // still work
             spy.define = spyOn(window, 'define').andCallThrough();
-            spy.onScriptLoad = spyOn(require, 'onScriptLoad').andCallThrough();
-            spy.execCb = spyOn(require, 'execCb').andCallThrough();
+            //spy.onScriptLoad = spyOn(require, 'onScriptLoad').andCallThrough();
+            //spy.execCb = spyOn(require, 'execCb').andCallThrough();
         });
 
         runs(function () {

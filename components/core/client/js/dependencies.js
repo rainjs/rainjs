@@ -28,13 +28,11 @@ define(function () {
         oldOnScriptLoad,
         oldDefine = define,
         oldLoad = require.load,
-        oldAddScriptToDom = require.addScriptToDom,
         currentDeps,
         currentCallback,
         isDummyDepAdded,
         dependencyModules = {},
         useInteractive = false, //this is only for IE
-        currentlyAddingScript,
         interactiveScript = null;
 
     // used by RequireJS for browser detection
@@ -46,64 +44,6 @@ define(function () {
     require.load = function (context, moduleName, url) {
         oldExecCb = oldExecCb || context.execCb;
         oldOnScriptLoad = oldOnScriptLoad || context.onScriptLoad;
-
-        // onScriptLoad executes immediately after define, so currentDeps and
-        // currentCallback refer to the same module as moduleName
-        function onScriptLoad(evt) {
-            var node = evt.currentTarget || evt.srcElement;
-
-            if (evt.type === "load" || (node && readyRegExp.test(node.readyState))) {
-                interactiveScript = null;
-                //all browsers except IE
-                if (currentDeps && currentCallback) {
-                    var moduleName = node.getAttribute("data-requiremodule");
-                    modifyDependencies(moduleName, currentDeps, currentCallback);
-                }
-
-                oldOnScriptLoad(evt);
-            }
-        }
-
-        function execCb(name, callback, args, exports) {
-            var module = dependencyModules[name];
-            if (module) {
-                //console.log(name);
-                //for (var k in args) {
-                //    console.log(k, args[k]);
-                //}
-                var Logger, Translation, locale, translation,
-                    loggerIndex = module.loggerIndex,
-                    tIndex = module.tIndex,
-                    ntIndex = module.ntIndex;
-
-                if (loggerIndex > -1) {
-                    Logger = args.pop();
-                }
-
-                if (tIndex > -1 || ntIndex > -1) {
-                    locale = args.pop();
-                    Translation = args.pop();
-                    translation = Translation.get(module.component, locale);
-                }
-
-                if (tIndex > -1) {
-                    args[tIndex] = function (msgId, args) {
-                        return translation.translate(msgId, undefined, undefined, args);
-                    };
-                }
-
-                if (ntIndex > -1) {
-                    args[ntIndex] = translation.translate.bind(translation);
-                }
-
-                if (loggerIndex > -1) {
-                    args[loggerIndex] = Logger.get(module.component);
-                }
-            }
-            // console.log(oldExecCb);
-            // invoke the original implementation of the function
-            return oldExecCb(name, callback, args, exports);
-        }
 
         context.onScriptLoad = onScriptLoad;
         context.execCb = execCb;
@@ -119,19 +59,59 @@ define(function () {
         return node;
     };
 
-    /*require.addScriptToDom = function (node) {
-        currentlyAddingScript = node;
+    // onScriptLoad executes immediately after define, so currentDeps and
+    // currentCallback refer to the same module as moduleName
+    function onScriptLoad(evt) {
+        var node = evt.currentTarget || evt.srcElement;
 
-        if (node.attachEvent
-            && !(node.attachEvent.toString && node.attachEvent.toString().indexOf('[native code]') < 0)
-            && !isOpera) {
-            useInteractive = true;
+        if (evt.type === "load" || (node && readyRegExp.test(node.readyState))) {
+            interactiveScript = null;
+            //all browsers except IE
+            if (currentDeps && currentCallback) {
+                var moduleName = node.getAttribute("data-requiremodule");
+                modifyDependencies(moduleName, currentDeps, currentCallback);
+            }
+
+            oldOnScriptLoad(evt);
+        }
+    }
+
+    function execCb(name, callback, args, exports) {
+        var module = dependencyModules[name];
+        if (module) {
+            var Logger, Translation, locale, translation,
+                loggerIndex = module.loggerIndex,
+                tIndex = module.tIndex,
+                ntIndex = module.ntIndex;
+
+            if (loggerIndex > -1) {
+                Logger = args.pop();
+            }
+
+            if (tIndex > -1 || ntIndex > -1) {
+                locale = args.pop();
+                Translation = args.pop();
+                translation = Translation.get(module.component, locale);
+            }
+
+            if (tIndex > -1) {
+                args[tIndex] = function (msgId, args) {
+                    return translation.translate(msgId, undefined, undefined, args);
+                };
+            }
+
+            if (ntIndex > -1) {
+                args[ntIndex] = translation.translate.bind(translation);
+            }
+
+            if (loggerIndex > -1) {
+                args[loggerIndex] = Logger.get(module.component);
+            }
         }
 
-        oldAddScriptToDom(node);
-
-        currentlyAddingScript = null;
-    };*/
+        // invoke the original implementation of the function
+        return oldExecCb(name, callback, args, exports);
+    }
 
     function getInteractiveScript() {
         var scripts, i, script;
@@ -298,7 +278,7 @@ define(function () {
 
         //IE
         if (useInteractive) {
-            var node = currentlyAddingScript || getInteractiveScript();
+            var node = getInteractiveScript();
             if (node) {
                 if (!name) {
                     name = node.getAttribute("data-requiremodule");
