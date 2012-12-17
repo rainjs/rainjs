@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.20.0
+
+* Fixed a "raind" bug and updated the project dependencies.
+
 ## 0.19.0
 
 * Improved the CSS Renderer: now it can load more than 31 stylesheets and the loading process is
