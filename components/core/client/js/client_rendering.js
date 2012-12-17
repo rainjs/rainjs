@@ -62,20 +62,23 @@ define([
          */
         this.orphans = {};
 
-        this._isSocketConnected = false;
-
         var socket = this.socket = Sockets.getSocket('/core');
         socket.on('render', function (component) {
             Raintime.componentRegistry.deregister(component.instanceId);
             self.renderComponent(component);
         });
 
-        socket.on('connect', function () {
-            self._isSocketConnected = true;
+        function renderQueue() {
             for (var i = 0, len = socketQueue.length; i < len; i++) {
                 socket.emit('render', socketQueue[i], function (error) {});
             }
-        });
+        }
+
+        if (socket.isConnected) {
+            renderQueue();
+        } else {
+            socket.on('connect', renderQueue);
+        }
     }
 
     /**
@@ -125,7 +128,7 @@ define([
         if (component.placeholder && component.placeholder === true) {
             this._placeholderTimeout(component);
         }
-        if (this._isSocketConnected) {
+        if (this.socket.isConnected) {
             this.socket.emit('render', component, function (error) {
                 if (error) {
                     logger.error('An error occurred in ClientRenderer on render emit.', error);
