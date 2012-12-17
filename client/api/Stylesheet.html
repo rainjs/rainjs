@@ -1,0 +1,264 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class Stylesheet &mdash; Rain v0.20.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.20.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Rain v0.20.0 documentation" href="../../index.html" />
+    <link rel="next" title="Class Util" href="Util.html" />
+    <link rel="prev" title="Class SocketHandler" href="SocketHandler.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Util.html" title="Class Util"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SocketHandler.html" title="Class SocketHandler"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Rain v0.20.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="class-stylesheet">
+<h1>Class Stylesheet<a class="headerlink" href="#class-stylesheet" title="Permalink to this headline">¶</a></h1>
+<p>A representation of the style tags inside the document which allow for the easy addition and
+manipulation of the rules inside of them.</p>
+<div class="section" id="constructor">
+<h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Stylesheet">
+<em class="property">class </em><tt class="descname">Stylesheet</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#Stylesheet" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>id</strong> (<em>Number</em>) &#8211; the style Id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="add">
+<h3>add<a class="headerlink" href="#add" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Stylesheet#add">
+<tt class="descname">Stylesheet#add</tt><big>(</big><em>rule</em><big>)</big><a class="headerlink" href="#Stylesheet#add" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>rule</strong> (<a class="reference internal" href="RuleSet.html#RuleSet" title="RuleSet"><em>RuleSet</em></a>) &#8211; the rule to be added</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Returns Boolean:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"><p class="first last">true if the addition was successful false otherwise</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Queue a rule to be added to the stylesheet.</p>
+</div>
+<div class="section" id="getfreespace">
+<h3>getFreeSpace<a class="headerlink" href="#getfreespace" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Stylesheet#getFreeSpace">
+<tt class="descname">Stylesheet#getFreeSpace</tt><big>(</big><big>)</big><a class="headerlink" href="#Stylesheet#getFreeSpace" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">Returns Integer:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body">the free space left inside the stylesheet</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Calculate the free space left inside the stylesheet.</p>
+</div>
+<div class="section" id="getruleswithin">
+<h3>getRulesWithin<a class="headerlink" href="#getruleswithin" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Stylesheet#getRulesWithin">
+<tt class="descname">Stylesheet#getRulesWithin</tt><big>(</big><em>space</em><big>)</big><a class="headerlink" href="#Stylesheet#getRulesWithin" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>space</strong> (<em>Number</em>) &#8211; the space to fit the rules inside of</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Returns RuleSet[]:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"><p class="first last">the identified rules</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Find the rules inside this stylesheet that fit in a designated amount of space</p>
+</div>
+<div class="section" id="remove">
+<h3>remove<a class="headerlink" href="#remove" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Stylesheet#remove">
+<tt class="descname">Stylesheet#remove</tt><big>(</big><em>rules</em><big>)</big><a class="headerlink" href="#Stylesheet#remove" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>rules</strong> (<a class="reference internal" href="RuleSet.html#RuleSet" title="RuleSet"><em>RuleSet</em></a>) &#8211; the rule to delete</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Queue a rule to be removed from the stylesheet.</p>
+</div>
+<div class="section" id="write">
+<h3>write<a class="headerlink" href="#write" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Stylesheet#write">
+<tt class="descname">Stylesheet#write</tt><big>(</big><big>)</big><a class="headerlink" href="#Stylesheet#write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Write the queued modifications to the stylesheet.</p>
+</div>
+</div>
+<div class="section" id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id">
+<h3>id<a class="headerlink" href="#id" title="Permalink to this headline">¶</a></h3>
+<dl class="attribute">
+<dt>
+<tt class="descname">id</tt></dt>
+<dd></dd></dl>
+
+<p>the id of the stylesheet</p>
+</div>
+<div class="section" id="rulecount">
+<h3>ruleCount<a class="headerlink" href="#rulecount" title="Permalink to this headline">¶</a></h3>
+<dl class="attribute">
+<dt id="ruleCount">
+<tt class="descname">ruleCount</tt><a class="headerlink" href="#ruleCount" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>the number of rules in the stylesheet</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class Stylesheet</a><ul>
+<li><a class="reference internal" href="#constructor">Constructor</a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#add">add</a></li>
+<li><a class="reference internal" href="#getfreespace">getFreeSpace</a></li>
+<li><a class="reference internal" href="#getruleswithin">getRulesWithin</a></li>
+<li><a class="reference internal" href="#remove">remove</a></li>
+<li><a class="reference internal" href="#write">write</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#attributes">Attributes</a><ul>
+<li><a class="reference internal" href="#id">id</a></li>
+<li><a class="reference internal" href="#rulecount">ruleCount</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SocketHandler.html"
+                        title="previous chapter">Class SocketHandler</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Util.html"
+                        title="next chapter">Class Util</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Util.html" title="Class Util"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SocketHandler.html" title="Class SocketHandler"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Rain v0.20.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class AsyncController &mdash; Rain v0.20.0 documentation</title>
+    <title>Class CssRegistry &mdash; Rain v0.20.0 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -23,8 +23,8 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="Rain v0.20.0 documentation" href="../../index.html" />
-    <link rel="next" title="Class ClientRenderer" href="ClientRenderer.html" />
-    <link rel="prev" title="Text localization" href="../localization.html" /> 
+    <link rel="next" title="Class CssRenderer" href="CssRenderer.html" />
+    <link rel="prev" title="Class Context" href="Context.html" /> 
   </head>
   <body>
     <div class="related">
@@ -34,10 +34,10 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="ClientRenderer.html" title="Class ClientRenderer"
+          <a href="CssRenderer.html" title="Class CssRenderer"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../localization.html" title="Text localization"
+          <a href="Context.html" title="Class Context"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Rain v0.20.0 documentation</a> &raquo;</li> 
       </ul>
@@ -48,89 +48,99 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="class-asynccontroller">
-<h1>Class AsyncController<a class="headerlink" href="#class-asynccontroller" title="Permalink to this headline">¶</a></h1>
-<p>This class contains utility functions that a component&#8217;s client side controller can use to
-get references to the controllers of its direct children. Every controller inherits these
-methods by default.</p>
+  <div class="section" id="class-cssregistry">
+<h1>Class CssRegistry<a class="headerlink" href="#class-cssregistry" title="Permalink to this headline">¶</a></h1>
+<p>Manages the stylesheets inside the page keeping track of where each CSS file is and
+cleaning up the remaining whitespace when necessary.</p>
 <div class="section" id="constructor">
 <h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="AsyncController">
-<em class="property">class </em><tt class="descname">AsyncController</tt><big>(</big><big>)</big><a class="headerlink" href="#AsyncController" title="Permalink to this definition">¶</a></dt>
+<dt id="CssRegistry">
+<em class="property">class </em><tt class="descname">CssRegistry</tt><big>(</big><big>)</big><a class="headerlink" href="#CssRegistry" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
 <div class="section" id="methods">
 <h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="getchild">
-<h3>_getChild<a class="headerlink" href="#getchild" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="get">
+<h3>get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="AsyncController#_getChild">
-<tt class="descname">AsyncController#_getChild</tt><big>(</big><em>sid</em><big>)</big><a class="headerlink" href="#AsyncController#_getChild" title="Permalink to this definition">¶</a></dt>
+<dt id="CssRegistry.get">
+<tt class="descclassname">CssRegistry.</tt><tt class="descname">get</tt><big>(</big><big>)</big><a class="headerlink" href="#CssRegistry.get" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">Returns CssRenderer:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body">the singleton instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Returns the singleton instance.</p>
+</div>
+<div class="section" id="getnewfiles">
+<h3>getNewFiles<a class="headerlink" href="#getnewfiles" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="CssRegistry#getNewFiles">
+<tt class="descname">CssRegistry#getNewFiles</tt><big>(</big><em>component</em>, <em>files</em><big>)</big><a class="headerlink" href="#CssRegistry#getNewFiles" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>sid</strong> (<em>String</em>) &#8211; the child component&#8217;s static id</li>
+<li><strong>component</strong> (<em>String</em>) &#8211; the component id to which the files belong</li>
+<li><strong>files</strong> (<em>Array</em>) &#8211; an array containing the file descriptor</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Returns Promise:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><p class="first last">a promise to return the child controller after it has started</p>
+<tr class="field"><th class="field-name">Returns Array:</th><td class="field-body"><p class="first last">an array of files that are not loaded</p>
 </td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<p>Asynchronously waits for a child controller to become available and start.
-The started controllers are cached. If the controller is found in the cache, the promise
-is resolved at the next tick.</p>
-<p>If the child with the specified sid is not found, the promise is rejected with a RainError.</p>
+<p>Filters a list of CSS files for a specific component and returns the files that don&#8217;t exist
+inside the registry.</p>
 </div>
-<div class="section" id="getchildren">
-<h3>_getChildren<a class="headerlink" href="#getchildren" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="register">
+<h3>register<a class="headerlink" href="#register" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="AsyncController#_getChildren">
-<tt class="descname">AsyncController#_getChildren</tt><big>(</big><span class="optional">[</span><em>sids</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#AsyncController#_getChildren" title="Permalink to this definition">¶</a></dt>
+<dt id="CssRegistry#register">
+<tt class="descname">CssRegistry#register</tt><big>(</big><em>component</em>, <em>css</em><big>)</big><a class="headerlink" href="#CssRegistry#register" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>sids</strong> (<em>Array</em>) &#8211; the static ids of the controllers that needed to be started</li>
+<li><strong>component</strong> (<em>String</em>) &#8211; the component id for which to register the css</li>
+<li><strong>css</strong> (<em>Array</em>) &#8211; the CSS contents to be registered</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Returns Promise:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><p class="first last">a promise to load and start the controllers</p>
+<tr class="field"><th class="field-name" colspan="2">Returns Boolean:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"><p class="first last">weather the insert was successful or not</p>
 </td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<p>Asynchronously loads multiple started controllers. If the &#8216;sids&#8217; argument is missing, then
-the method waits for all children (with a sid value non-empty) of the current component to
-start.</p>
-<p>The promise will be resolved with an object where the keys are the controllers&#8217; sids and
-the values are the controller objects.</p>
+<p>Register the css of a component to the registry.</p>
 </div>
-<div class="section" id="onchild">
-<h3>_onChild<a class="headerlink" href="#onchild" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="unregister">
+<h3>unregister<a class="headerlink" href="#unregister" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="AsyncController#_onChild">
-<tt class="descname">AsyncController#_onChild</tt><big>(</big><em>sid</em>, <em>eventName</em>, <em>eventHandler</em><big>)</big><a class="headerlink" href="#AsyncController#_onChild" title="Permalink to this definition">¶</a></dt>
+<dt id="CssRegistry#unregister">
+<tt class="descname">CssRegistry#unregister</tt><big>(</big><em>component</em><big>)</big><a class="headerlink" href="#CssRegistry#unregister" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>sid</strong> (<em>String</em>) &#8211; the component&#8217;s static id</li>
-<li><strong>eventName</strong> (<em>String</em>) &#8211; the event&#8217;s name</li>
-<li><strong>eventHandler</strong> (<em>Function</em>) &#8211; the event handler function</li>
+<li><strong>component</strong> (<em>String</em>) &#8211; the component id for which to unregister the css</li>
 </ul>
 </td>
 </tr>
@@ -138,8 +148,7 @@ the values are the controller objects.</p>
 </table>
 </dd></dl>
 
-<p>Convenience method to bind an event handler to a controller and make sure the controller
-is started first.</p>
+<p>Unregister a component from the registry.</p>
 </div>
 </div>
 </div>
@@ -152,12 +161,13 @@ is started first.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Class AsyncController</a><ul>
+<li><a class="reference internal" href="#">Class CssRegistry</a><ul>
 <li><a class="reference internal" href="#constructor">Constructor</a></li>
 <li><a class="reference internal" href="#methods">Methods</a><ul>
-<li><a class="reference internal" href="#getchild">_getChild</a></li>
-<li><a class="reference internal" href="#getchildren">_getChildren</a></li>
-<li><a class="reference internal" href="#onchild">_onChild</a></li>
+<li><a class="reference internal" href="#get">get</a></li>
+<li><a class="reference internal" href="#getnewfiles">getNewFiles</a></li>
+<li><a class="reference internal" href="#register">register</a></li>
+<li><a class="reference internal" href="#unregister">unregister</a></li>
 </ul>
 </li>
 </ul>
@@ -165,11 +175,11 @@ is started first.</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../localization.html"
-                        title="previous chapter">Text localization</a></p>
+  <p class="topless"><a href="Context.html"
+                        title="previous chapter">Class Context</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="ClientRenderer.html"
-                        title="next chapter">Class ClientRenderer</a></p>
+  <p class="topless"><a href="CssRenderer.html"
+                        title="next chapter">Class CssRenderer</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -194,10 +204,10 @@ is started first.</p>
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="ClientRenderer.html" title="Class ClientRenderer"
+          <a href="CssRenderer.html" title="Class CssRenderer"
              >next</a> |</li>
         <li class="right" >
-          <a href="../localization.html" title="Text localization"
+          <a href="Context.html" title="Class Context"
              >previous</a> |</li>
         <li><a href="../../index.html">Rain v0.20.0 documentation</a> &raquo;</li> 
       </ul>

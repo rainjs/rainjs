@@ -3,6 +3,12 @@ Changelog
 =========
 
 ------
+v 0.20
+------
+
++ Fixed a "raind" bug and updated the project dependencies.
+
+------
 v 0.19
 ------
 
