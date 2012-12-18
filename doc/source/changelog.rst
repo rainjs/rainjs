@@ -6,7 +6,10 @@ Changelog
 v 0.20
 ------
 
-+ Fixed a "raind" bug and updated the project dependencies.
++ Fixed a "raind" bug: RAIN_CONF environment variable was ignored.
++ Fixed an issue where calling raind from a sub-directory of the project would cause RAIN to crash.
++ Fixed a bug where a socket would not be flagged as connected in client rendering and no
+  components were rendered via websockets.
 
 ------
 v 0.19
