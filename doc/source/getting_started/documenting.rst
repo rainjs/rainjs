@@ -5,37 +5,6 @@ Documenting Rain
 This document describes the recomanded way of writing code docblocks for rain using JSDoc Toolkit. All the common
 annotations work but there are some special cases that need to be treated and they are explained below.
 
-Document all the *var* statements inside the module giving them a description and marking them with
-the *@private* anotation.
-
-.. code-block:: javascript
-        :linenos:
-
-        /**
-         * Stores the queue of events
-         * @private
-         */
-        var queue = [];
-
-
-Add the *@private* annotation to all the private methods in the module
-
-
-.. code-block:: javascript
-        :linenos:
-
-        /**
-         * This is a private method
-         *
-         * @param {Dictionary} data the input data
-         * @param {Boolean} [isTrue] optional parameters should be enclosed in brackets
-         * @return {Dictionary}
-         * @private
-         */
-        function privateMethod(data) {
-            return data;
-        }
-
 ------------------------
 Revealing module pattern
 ------------------------
@@ -51,24 +20,6 @@ Add a comment at the beginning of your module describing it and giving it an *@n
          * @name MyModule
          */
 
-Use the *@memberOf <module>* annotation to explicitly define a method as being a public member of your module
-
-
-.. code-block:: javascript
-        :linenos:
-
-        /**
-         * This is a public method
-         *
-         * @param {Dictionary} data
-         * @return {Dictionary}
-         * @memberOf MyModule
-         */
-        function publicMethod(data) {
-            return data;
-        }
-
-*Please note that the revealing module pattern should only be used for server side code*
 
 -----------------------
 The constructor pattern
@@ -91,23 +42,124 @@ Instead we add that to the description of the constructor, also adding the *@con
             // constructor code here
         }
 
-There is no need for an @memberOf annotation here since the parser figures out that methods defined under the *prototype*
-property of your function are public members with one exception, private methods for which we should add a *@memberOf
-<Class_Name>#* (don't forget the **#** at the end because it specifies that it's an instance method).
+------------------
+Document your code
+------------------
+
+Keep in mind that *you must always document your code*. You must document every method of your code.
+Do not write your whole documentation at the begining of the code, it is not recomended:
+
+When you start documenting you must add a short description of the method, and what it does than you 
+leave a new line and you continue to the specifics of that method.
+
+
 
 .. code-block:: javascript
-        :linenos:
-
-        /**
-         * This is a private method
-         *
-         * @param {MyClas} self the class instance
-         * @param {Dictionary} data the input data
-         * @param {Boolean} [isTrue] optional parameters should be enclosed in brackets
-         * @return {Dictionary}
-         * @private
-         * @memberOf MyClass#
-         */
-        function privateMethod(self, data) {
-            return data;
+    :linenos:
+    
+    /**
+     * This is the Person Class.
+     * 
+     * @name Person
+     * @param {String} age - the age of the person
+     */
+     
+     function Person(age) {
+        this.age = age;
+    }
+    
+    /**
+     * This is the getter/setter of the age of the person.
+     *
+     * @param [{String} age] - the age that you want to set for the person
+     * @returns {Person|Number}
+     */
+     
+     Person.prototype.age = function(age) {
+        if (typeof age == undefined) {
+            return this.age;
+        } else {
+            this.age = age;
         }
+        
+        return this;
+     }
+     
+ ----------------------
+ Documenting parameters
+ ----------------------
+ 
+ When you have a method that recieves parameters you must always document that parameters: 
+ 
+ *. Optional parameter : @param {type} ["name"] - short description
+ *. Required parameter : @param {type} "name" - short description
+ *. Multiple parameters : 
+    .. code-block:: javascript
+        :linenos:
+        
+        /**
+         * @param {type} param1 - description
+         * @param {type} param2 - description
+         * @param {type} param3 - description
+         */
+ *. Array of parameters : @param {type[]} "name" - short description
+ 
+ 
+ ------------------
+ Documenting errors
+ ------------------
+ 
+When a method throws an error you must always document it, and you do it like this:
+
+.. code-block: javascript
+    
+    /**
+     * @throws {ErrorType} - describe when it is thrown
+     */
+     
+ ----------------------
+ Document return values
+ ----------------------
+ 
+When your method returns a value you must document it like this:
+ 
+.. code-block: javascript
+ 
+    /**
+     * @returns {type} - description of the returned value
+     */
+     
+If your method returns multiple value types depending on the logic than you want to document it like this:
+ 
+.. code-block: javascript
+ 
+    /**
+     * @returns {type1|type2|type3} - description of the returned values
+     */
+     
+----------------------
+Adding ussage examples
+----------------------
+
+If your method is not that simple, and it's not that obvious how a developer should use your API
+you should add an example:
+
+.. code-block: javascript
+
+    /**
+     * @example
+     *      var Andrew = new Person(12);
+     *      //get the age of the Person
+     *      var value = Andrew.age();
+     *
+     *      //set the age of the Person 
+     *      Andrew.age(13);
+     */      
+
+
+ 
+ 
+            
+
+     
+ 
