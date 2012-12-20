@@ -38,7 +38,6 @@ adding the *@constructor* annotation.
          *
          * @name MyClass
          * @class this is an instance of my class
-         * @constructor
          */
         function MyClass() {
             // constructor code here
@@ -63,7 +62,7 @@ leave a new line and you continue to the specifics of that method.
      * This is the Person Class.
      * 
      * @name Person
-     * @class Person
+     * @constructor
      * @param {String} age - the age of the person
      */
      
