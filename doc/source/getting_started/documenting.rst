@@ -171,11 +171,4 @@ API you should add an example:
      *      //set the age of the Person 
      *      Andrew.age(13);
      */      
-
-
- 
- 
-            
-
-     
  
