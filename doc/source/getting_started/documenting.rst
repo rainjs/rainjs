@@ -3,7 +3,7 @@ Documenting Rain
 ================
 
 This document describes the recommended way of writing code docblocks for rain using JSDoc
-Toolkit. All the common annotations work but there are some special cases that need to be 
+Toolkit. All the common annotations work but there are some special cases that need to be
 treated and they are explained below.
 
 ------------------------
@@ -47,114 +47,108 @@ adding the *@constructor* annotation.
 Document your code
 ------------------
 
-Keep in mind that *you must always document your code*. You must document every method of your code.
-Do not write your whole documentation at the beginning of the code, it is not recommended:
+Keep in mind that **you must always document your code**. You must document every method of your code.
+Do not write your whole documentation at the beginning of the code, it is not recommended.
 
-When you start documenting you must add a short description of the method, and what it does than you 
-leave a new line and you continue to the specifics of that method.
-
-
+When you start documenting you must add a short description of the method.
 
 .. code-block:: javascript
     :linenos:
-    
+
     /**
      * This is the Person Class.
-     * 
+     *
      * @name Person
      * @constructor
      * @param {String} age - the age of the person
      */
-     
      function Person(age) {
-        this.age = age;
+        this._age = age;
     }
-    
+
     /**
      * This is the getter/setter of the age of the person.
      *
-     * @param {String} [age] - the age that you want to set for the person
+     * @param {String} [age] the age that you want to set for the person
      * @returns {Person|Number}
      */
-     
      Person.prototype.age = function(age) {
-        if (typeof age == undefined) {
+        if (typeof age === 'undefined') {
             return this.age;
-        } else {
-            this.age = age;
         }
-        
+
+        this.age = age;
+
         return this;
      }
-     
+
 ----------------------
 Documenting parameters
 ----------------------
- 
-When you have a method that receives parameters you must always document that parameters: 
- 
-* Optional parameter : 
+
+When you have a method that receives parameters you must always document that parameters:
+
+* Optional parameter :
     .. code-block:: javascript
-    
-        @param {type} ["name"] - short description
-        
-* Required parameter : 
+
+        @param {type} [name] short description
+
+* Required parameter :
     .. code-block:: javascript
-    
-        @param {type} "name" - short description
-        
-* Multiple parameters : 
+
+        @param {type} name short description
+
+* Multiple parameters :
     .. code-block:: javascript
         :linenos:
-        
+
         /**
-         * @param {type} param1 - description
-         * @param {type} param2 - description
-         * @param {type} param3 - description
+         * @param {type} param1 description
+         * @param {type} param2 description
+         * @param {type} param3 description
          */
-         
-* Array of parameters : 
+
+* Array of parameters :
     .. code-block:: javascript
-    
-        @param {type[]} "name" - short description
- 
- 
+
+        @param {type[]} name short description
+
 ------------------
 Documenting errors
 ------------------
- 
+
 When a method throws an error you must always document it, and you do it like this:
 
 .. code-block:: javascript
-    
+
     /**
-     * @throws {ErrorType} - describe when it is thrown
+     * @throws {ErrorType} describe when it is thrown
      */
-     
+
 ----------------------
 Document return values
 ----------------------
- 
+
 When your method returns a value you must document it like this:
- 
+
 .. code-block:: javascript
- 
+
     /**
-     * @returns {type} - description of the returned value
+     * @returns {type} description of the returned value
      */
-     
+
 If your method returns multiple value types depending on the logic than you want to document
 it like this:
- 
+
 .. code-block: javascript
  
     /**
-     * @returns {type1|type2|type3} - description of the returned values
+     * @returns {type1|type2|type3} description of the returned values
      */
-     
-----------------------
+
+---------------------
 Adding usage examples
-----------------------
+---------------------
 
 If your method is not that simple, and it's not that obvious how a developer should use your
 API you should add an example:
@@ -163,11 +157,11 @@ API you should add an example:
 
     /**
      * @example
-     *      var Andrew = new Person(12);
+     *      var person = new Person(12);
      *      //get the age of the Person
-     *      var value = Andrew.age();
+     *      var value = person.age();
      *
      *      //set the age of the Person 
-     *      Andrew.age(13);
-     */      
+     *      person.age(13);
+     */
  
