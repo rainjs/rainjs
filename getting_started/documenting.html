@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Documenting Rain &mdash; Rain v0.20.0 documentation</title>
+    <title>Documenting Rain &mdash; Rain v0.20.1 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.20.0',
+        VERSION:     '0.20.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.20.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.20.1 documentation" href="../index.html" />
     <link rel="next" title="Node programming best practices" href="node_programming_best_practices.html" />
     <link rel="prev" title="Coding Guidelines" href="coding_guidelines.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="coding_guidelines.html" title="Coding Guidelines"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.20.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.20.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -50,45 +50,9 @@
             
   <div class="section" id="documenting-rain">
 <h1>Documenting Rain<a class="headerlink" href="#documenting-rain" title="Permalink to this headline">¶</a></h1>
-<p>This document describes the recomanded way of writing code docblocks for rain using JSDoc Toolkit. All the common
-annotations work but there are some special cases that need to be treated and they are explained below.</p>
-<p>Document all the <em>var</em> statements inside the module giving them a description and marking them with
-the <em>&#64;private</em> anotation.</p>
-<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3
-4
-5</pre></div></td><td class="code"><div class="highlight"><pre><span class="cm">/**</span>
-<span class="cm"> * Stores the queue of events</span>
-<span class="cm"> * @private</span>
-<span class="cm"> */</span>
-<span class="kd">var</span> <span class="nx">queue</span> <span class="o">=</span> <span class="p">[];</span>
-</pre></div>
-</td></tr></table></div>
-<p>Add the <em>&#64;private</em> annotation to all the private methods in the module</p>
-<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11</pre></div></td><td class="code"><div class="highlight"><pre><span class="cm">/**</span>
-<span class="cm"> * This is a private method</span>
-<span class="cm"> *</span>
-<span class="cm"> * @param {Dictionary} data the input data</span>
-<span class="cm"> * @param {Boolean} [isTrue] optional parameters should be enclosed in brackets</span>
-<span class="cm"> * @return {Dictionary}</span>
-<span class="cm"> * @private</span>
-<span class="cm"> */</span>
-<span class="kd">function</span> <span class="nx">privateMethod</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">data</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
-</td></tr></table></div>
+<p>This document describes the recommended way of writing code docblocks for rain using JSDoc
+Toolkit. All the common annotations work but there are some special cases that need to be
+treated and they are explained below.</p>
 <div class="section" id="revealing-module-pattern">
 <h2>Revealing module pattern<a class="headerlink" href="#revealing-module-pattern" title="Permalink to this headline">¶</a></h2>
 <p>Add a comment at the beginning of your module describing it and giving it an <em>&#64;name</em></p>
@@ -103,58 +67,37 @@ the <em>&#64;private</em> anotation.</p>
 <span class="cm"> */</span>
 </pre></div>
 </td></tr></table></div>
-<p>Use the <em>&#64;memberOf &lt;module&gt;</em> annotation to explicitly define a method as being a public member of your module</p>
-<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10</pre></div></td><td class="code"><div class="highlight"><pre><span class="cm">/**</span>
-<span class="cm"> * This is a public method</span>
-<span class="cm"> *</span>
-<span class="cm"> * @param {Dictionary} data</span>
-<span class="cm"> * @return {Dictionary}</span>
-<span class="cm"> * @memberOf MyModule</span>
-<span class="cm"> */</span>
-<span class="kd">function</span> <span class="nx">publicMethod</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">data</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
-</td></tr></table></div>
-<p><em>Please note that the revealing module pattern should only be used for server side code</em></p>
 </div>
 <div class="section" id="the-constructor-pattern">
 <h2>The constructor pattern<a class="headerlink" href="#the-constructor-pattern" title="Permalink to this headline">¶</a></h2>
-<p>If you&#8217;re going to be using a constructor, there&#8217;s no need to add a <em>&#64;name</em> annotation in the description of the module.
-Instead we add that to the description of the constructor, also adding the <em>&#64;constructor</em> annotation.</p>
-<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10</pre></div></td><td class="code"><div class="highlight"><pre><span class="cm">/**</span>
+<p>If you&#8217;re going to be using a constructor, there&#8217;s no need to add a <em>&#64;name</em> annotation in the
+description of the module. Instead we add that to the description of the constructor, also
+adding the <em>&#64;constructor</em> annotation.</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="highlight"><pre><span class="cm">/**</span>
 <span class="cm"> * This is an example constructor</span>
 <span class="cm"> *</span>
 <span class="cm"> * @name MyClass</span>
 <span class="cm"> * @class this is an instance of my class</span>
-<span class="cm"> * @constructor</span>
 <span class="cm"> */</span>
 <span class="kd">function</span> <span class="nx">MyClass</span><span class="p">()</span> <span class="p">{</span>
     <span class="c1">// constructor code here</span>
 <span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
-<p>There is no need for an &#64;memberOf annotation here since the parser figures out that methods defined under the <em>prototype</em>
-property of your function are public members with one exception, private methods for which we should add a <em>&#64;memberOf
-&lt;Class_Name&gt;#</em> (don&#8217;t forget the <strong>#</strong> at the end because it specifies that it&#8217;s an instance method).</p>
+</div>
+<div class="section" id="document-your-code">
+<h2>Document your code<a class="headerlink" href="#document-your-code" title="Permalink to this headline">¶</a></h2>
+<p>Keep in mind that <strong>you must always document your code</strong>. You must document every method of your code.
+Do not write your whole documentation at the beginning of the code, it is not recommended.</p>
+<p>When you start documenting you must add a short description of the method.</p>
 <div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
@@ -167,21 +110,126 @@ property of your function are public members with one exception, private methods
 10
 11
 12
-13</pre></div></td><td class="code"><div class="highlight"><pre><span class="cm">/**</span>
-<span class="cm"> * This is a private method</span>
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26</pre></div></td><td class="code"><div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm"> * This is the Person Class.</span>
 <span class="cm"> *</span>
-<span class="cm"> * @param {MyClas} self the class instance</span>
-<span class="cm"> * @param {Dictionary} data the input data</span>
-<span class="cm"> * @param {Boolean} [isTrue] optional parameters should be enclosed in brackets</span>
-<span class="cm"> * @return {Dictionary}</span>
-<span class="cm"> * @private</span>
-<span class="cm"> * @memberOf MyClass#</span>
+<span class="cm"> * @name Person</span>
+<span class="cm"> * @constructor</span>
+<span class="cm"> * @param {String} age - the age of the person</span>
 <span class="cm"> */</span>
-<span class="kd">function</span> <span class="nx">privateMethod</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">data</span><span class="p">;</span>
+ <span class="kd">function</span> <span class="nx">Person</span><span class="p">(</span><span class="nx">age</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">_age</span> <span class="o">=</span> <span class="nx">age</span><span class="p">;</span>
 <span class="p">}</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * This is the getter/setter of the age of the person.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param {String} [age] the age that you want to set for the person</span>
+<span class="cm"> * @returns {Person|Number}</span>
+<span class="cm"> */</span>
+ <span class="nx">Person</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">age</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">age</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">age</span> <span class="o">===</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">age</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">age</span> <span class="o">=</span> <span class="nx">age</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+ <span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
+</div>
+<div class="section" id="documenting-parameters">
+<h2>Documenting parameters<a class="headerlink" href="#documenting-parameters" title="Permalink to this headline">¶</a></h2>
+<p>When you have a method that receives parameters you must always document that parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>Optional parameter :</dt>
+<dd><div class="first last highlight-javascript"><pre>@param {type} [name] short description</pre>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Required parameter :</dt>
+<dd><div class="first last highlight-javascript"><pre>@param {type} name short description</pre>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Multiple parameters :</dt>
+<dd><div class="first last highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm"> * @param {type} param1 description</span>
+<span class="cm"> * @param {type} param2 description</span>
+<span class="cm"> * @param {type} param3 description</span>
+<span class="cm"> */</span>
+</pre></div>
+</td></tr></table></div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Array of parameters :</dt>
+<dd><div class="first last highlight-javascript"><pre>@param {type[]} name short description</pre>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="documenting-errors">
+<h2>Documenting errors<a class="headerlink" href="#documenting-errors" title="Permalink to this headline">¶</a></h2>
+<p>When a method throws an error you must always document it, and you do it like this:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm"> * @throws {ErrorType} describe when it is thrown</span>
+<span class="cm"> */</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="document-return-values">
+<h2>Document return values<a class="headerlink" href="#document-return-values" title="Permalink to this headline">¶</a></h2>
+<p>When your method returns a value you must document it like this:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm"> * @returns {type} description of the returned value</span>
+<span class="cm"> */</span>
+</pre></div>
+</div>
+<p>If your method returns multiple value types depending on the logic than you want to document
+it like this:</p>
+</div>
+<div class="section" id="adding-usage-examples">
+<h2>Adding usage examples<a class="headerlink" href="#adding-usage-examples" title="Permalink to this headline">¶</a></h2>
+<p>If your method is not that simple, and it&#8217;s not that obvious how a developer should use your
+API you should add an example:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm"> * @example</span>
+<span class="cm"> *      var person = new Person(12);</span>
+<span class="cm"> *      //get the age of the Person</span>
+<span class="cm"> *      var value = person.age();</span>
+<span class="cm"> *</span>
+<span class="cm"> *      //set the age of the Person</span>
+<span class="cm"> *      person.age(13);</span>
+<span class="cm"> */</span>
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -196,6 +244,11 @@ property of your function are public members with one exception, private methods
 <li><a class="reference internal" href="#">Documenting Rain</a><ul>
 <li><a class="reference internal" href="#revealing-module-pattern">Revealing module pattern</a></li>
 <li><a class="reference internal" href="#the-constructor-pattern">The constructor pattern</a></li>
+<li><a class="reference internal" href="#document-your-code">Document your code</a></li>
+<li><a class="reference internal" href="#documenting-parameters">Documenting parameters</a></li>
+<li><a class="reference internal" href="#documenting-errors">Documenting errors</a></li>
+<li><a class="reference internal" href="#document-return-values">Document return values</a></li>
+<li><a class="reference internal" href="#adding-usage-examples">Adding usage examples</a></li>
 </ul>
 </li>
 </ul>
@@ -235,7 +288,7 @@ property of your function are public members with one exception, private methods
         <li class="right" >
           <a href="coding_guidelines.html" title="Coding Guidelines"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.20.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.20.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

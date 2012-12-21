@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Changelog &mdash; Rain v0.20.0 documentation</title>
+    <title>Changelog &mdash; Rain v0.20.1 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.20.0',
+        VERSION:     '0.20.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.20.0 documentation" href="index.html" />
+    <link rel="top" title="Rain v0.20.1 documentation" href="index.html" />
     <link rel="prev" title="Distributed Websockets" href="proposals/distributed_websockets.html" /> 
   </head>
   <body>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="proposals/distributed_websockets.html" title="Distributed Websockets"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Rain v0.20.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Rain v0.20.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -49,7 +49,10 @@
 <div class="section" id="v-0-20">
 <h2>v 0.20<a class="headerlink" href="#v-0-20" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Fixed a &#8220;raind&#8221; bug and updated the project dependencies.</li>
+<li>Fixed a &#8220;raind&#8221; bug: RAIN_CONF environment variable was ignored.</li>
+<li>Fixed an issue where calling raind from a sub-directory of the project would cause RAIN to crash.</li>
+<li>Fixed a bug where a socket would not be flagged as connected in client rendering and no
+components were rendered via websockets.</li>
 </ul>
 </div>
 <div class="section" id="v-0-19">
@@ -242,7 +245,7 @@ should request it using <tt class="docutils literal"><span class="pre">raintime/
         <li class="right" >
           <a href="proposals/distributed_websockets.html" title="Distributed Websockets"
              >previous</a> |</li>
-        <li><a href="index.html">Rain v0.20.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Rain v0.20.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
