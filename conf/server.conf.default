@@ -8,8 +8,45 @@
     "defaultLanguage": "en_US",
     "language": "en_US",
 
+    "languages": [
+        {"key": "en_US", "text": "English"},
+        {"key": "de_DE", "text": "Deutsch"},
+        {"key": "ro_RO", "text": "Română"},
+        {"key": "ar_SA", "text": "عربي"}
+    ],
+
+    "errorComponent": {
+        "id": "error",
+        "version": "1.0"
+    },
+
+    "loadingComponent": {
+        "id": "placeholder",
+        "version": "1.0",
+        "viewId": "index",
+        "timeout": 500
+    },
+
+    "viewModes": {
+        "modes": [
+            {
+                "key": "normal",
+                "text": "Normal View Mode"
+            },
+            {
+                "key": "edit",
+                "text": "Edit View Mode",
+                "permissions": ["editor"],
+                "config": {
+                    "languagePermissionPrefix": "editor_"
+                }
+            }
+        ],
+        "permissions": ["user", "view_mode"]
+    },
+
     "logger": {
-        "level": "debug",
+        "level": "info",
         "appenders": [{
             "type": "console",
             "layout": {
@@ -37,24 +74,5 @@
                 }
             }
         }]
-    },
-
-    "languages": [
-        {"key": "en_US", "text": "English"},
-        {"key": "de_DE", "text": "Deutsch"},
-        {"key": "ro_RO", "text": "Română"},
-        {"key": "ar_SA", "text": "عربي"}
-    ],
-
-    "errorComponent": {
-        "id": "error",
-        "version": "1.0"
-    },
-
-    "loadingComponent": {
-        "id": "placeholder",
-        "version": "1.0",
-        "viewId": "index",
-        "timeout": 500
     }
 }

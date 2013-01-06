@@ -1,0 +1,17 @@
+{{css path="index.css"}}
+
+<div class="modes-selector">
+    <select class="modes">
+        {{#each modes}}
+            <option value="{{value}}" {{#if selected}} selected="selected"{{/if}}>
+                {{text}}
+            </option>
+        {{/each}}
+    </select>
+</div>
+
+{{#if showEditControls}}
+    <div class="edit-controls">
+        {{component name="view_modes_edit" view="index"}}
+    </div>
+{{/if}}

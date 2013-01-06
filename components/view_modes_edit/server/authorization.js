@@ -25,42 +25,25 @@
 
 "use strict";
 
-var IdentityProvider = require('./identity_provider'),
-    demoPermissions = require('./demo_permissions.json'),
-    Deferred = require('promised-io/promise').Deferred,
-    util = require('util');
+var configuration = require('rain/lib/configuration'),
+    ViewModeUtils = require('rain/lib/view_mode_utils'),
+    viewModePermissions = configuration.viewModes && configuration.viewModes.permissions;
 
 /**
- * Demo implementation of the Identity Provider class
+ * The access is granted for the users that have the view modes permissions.
  *
- * @name DemoIdentityProvider
- * @param {Session} session the session for which to create the identity provider instance
- * @constructor
+ * @param {Object} securityContext the security context
+ * @returns {Boolean} true if user is allowed to access the component
  */
-function DemoIdentityProvider(session) {
-    DemoIdentityProvider.super_.call(this, session);
+function _component(securityContext) {
+    if (!viewModePermissions || viewModePermissions.length === 0) {
+        return false;
+    }
+
+    return securityContext.user.hasPermissions(viewModePermissions) &&
+           securityContext.user.hasPermissions(ViewModeUtils.getViewModePermissions('edit') || []);
 }
 
-util.inherits(DemoIdentityProvider, IdentityProvider);
-
-/**
- * Authenticates the user.
- *
- * @param {String} username the username
- * @param {String} password the password
- * @returns {Promise} a promise that resolves with the user object
- */
-DemoIdentityProvider.prototype._authenticate = function (username, password) {
-    var deferred = new Deferred();
-
-    var user = demoPermissions[username] || demoPermissions['guest'];
-    user.username = username;
-
-    process.nextTick(function () {
-        deferred.resolve(user);
-    });
-
-    return deferred;
+module.exports = {
+    _component: _component
 };
-
-module.exports = DemoIdentityProvider;

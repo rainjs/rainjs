@@ -28,6 +28,9 @@
  * purpose is to show that the 't' and 'nt' functions are present in module required by the data
  * module.
  */
+
+"use strict";
+
 function translateSendMail() {
     return t('Send email');
 }

@@ -1,0 +1,14 @@
+.modes-selector {
+    display: inline-block;
+
+    .modes {
+        margin: 0px;
+        padding: 2px 3px 2px 2px;
+        background-color: #ddd;
+    }
+}
+
+.edit-controls {
+    display: inline-block;
+    padding: 0px 5px;
+}

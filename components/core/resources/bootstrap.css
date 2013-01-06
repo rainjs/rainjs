@@ -10,3 +10,74 @@ html, body {
     width: 100%;
     height: 100%;
 }
+
+.view-modes {
+    width: 100%;
+    height: 34px;
+    font: 12px Arial;
+    padding: 2px 5px 0px 5px;
+    margin-top: 2px;
+
+    border: 2px dashed #ccc;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -ms-border-radius: 3px;
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    text-align: right;
+}
+
+.rain-inline-editing {
+    display: none;
+}
+
+.rain-edit-message {
+    background: #ddd;
+}
+
+.rain-edit-message .singular {
+    background: #eaeaea;
+}
+
+.rain-edit-message .plural {
+    background: #999;
+}
+
+.rain-edit-actions-save, .rain-edit-actions-cancel {
+    margin: 0px 5px;
+    padding: 3px 6px;
+    display: inline-block;
+
+    cursor: pointer;
+    text-align: center;
+    font: 12px Arial;
+
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+
+    color: #606060;
+    border: solid 1px #b7b7b7;
+    background: #fff;
+
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.rain-edit-actions-save:hover, .rain-edit-actions-cancel:hover {
+    background: #ededed;
+}
+
+.rain-edit-actions-cancel {
+    background: #bbb;
+}
+
+.rain-edit-actions-cancel:hover {
+    background: #ddd;
+}

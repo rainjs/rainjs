@@ -1,0 +1,25 @@
+{{css path="index.css"}}
+
+<div class="edit-modes">
+    <span class="arrow">&#8594;</span>
+
+    <select class="languages">
+        {{#each languages}}
+            <option value="{{value}}" {{#if selected}} selected="selected"{{/if}}>
+                {{text}}
+            </option>
+        {{/each}}
+    </select>
+
+    <select class="actions">
+        <option value="" selected="selected">Select action ...</option>
+        <option value="1">Refresh editable regions</option>
+        <option value="2">Disable edit actions</option>
+        <option value="3">Enable edit actions</option>
+        <option value="4">Remove current translations</option>
+    </select>
+
+    <a class="export" target="_blank" href="/view_modes_edit/controller/translations.json">
+        Export translations
+    </a>
+</div>

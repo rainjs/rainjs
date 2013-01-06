@@ -29,8 +29,9 @@ define(['raintime/lib/promise',
         'raintime/async_controller',
         'raintime/logger',
         'raintime/css/renderer',
+        'raintime/inline_editing',
         'raintime/lib/rain_error'
-], function (Promise, EventEmitter, Context, AsyncController, Logger, CssRenderer) {
+], function (Promise, EventEmitter, Context, AsyncController, Logger, CssRenderer, InlineEditing) {
 
     var logger = Logger.get();
 
@@ -464,6 +465,9 @@ define(['raintime/lib/promise',
                 component.state = Component.PENDING;
                 result.then(function () {
                     component.state = nextState;
+                    if (component.state === Component.START && rainContext.viewMode === 'edit') {
+                        InlineEditing.refreshTranslationPlaceholders();
+                    }
                     controller.emit(eventName, data);
                     invokeLifecycle(component);
                 }, function () {});
@@ -473,6 +477,9 @@ define(['raintime/lib/promise',
         if (!isPromise) {
             controller.emit(eventName, data);
             component.state = nextState;
+            if (component.state === Component.START && rainContext.viewMode === 'edit') {
+                InlineEditing.refreshTranslationPlaceholders();
+            }
             invokeLifecycle(component);
         }
     }

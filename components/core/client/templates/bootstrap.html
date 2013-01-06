@@ -25,13 +25,15 @@
                 ]
             };
             var rainContext = {
-                language: '{{language}}'
+                language: '{{language}}',
+                defaultLanguage: '{{defaultLanguage}}',
+                viewMode: '{{viewMode}}'
             };
             var renderQueueList = [];
             function renderQueue() {
                 var len = renderQueueList.length;
-                if(len > 0){
-                    for(var i = 0; i < len; i++){
+                if (len > 0) {
+                    for (var i = 0; i < len; i++) {
                         ClientRenderer.get().renderComponent(renderQueueList[i]);
                     }
                     renderQueueList = [];
@@ -67,6 +69,12 @@
         <link rel="stylesheet" type="text/css" href="/core/resources/bootstrap.css">
     </head>
     <body>
+        {{#if showViewModes}}
+            <div class="view-modes">
+                {{component name="view_modes" view="index"}}
+            </div>
+        {{/if}}
+
         {{#if isContainer}}
             {{#with context}}
                 {{container name=../id version=../version view=../viewId}}
@@ -76,5 +84,5 @@
                 {{component name=../id version=../version view=../viewId}}
             {{/with}}
         {{/if}}
-        <div id="modalDialog" class="core_1_0" style="width: 0; height: 0;"></div>
 
+        <div id="modalDialog" class="core_1_0" style="width: 0; height: 0;"></div>

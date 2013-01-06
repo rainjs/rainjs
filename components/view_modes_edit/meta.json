@@ -1,0 +1,7 @@
+{
+    "id": "view_modes_edit",
+    "version": "1.0",
+    "views": {
+        "index" : {}
+    }
+}

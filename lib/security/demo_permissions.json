@@ -1,0 +1,27 @@
+{
+    "guest": {
+        "id": 0,
+        "permissions": []
+    },
+
+    "user": {
+        "id": 1,
+        "permissions": ["user"]
+    },
+
+    "admin": {
+        "id": 2,
+        "permissions": ["user", "view_mode"]
+    },
+
+    "editor": {
+        "id": 3,
+        "permissions": ["user", "view_mode", "editor", "editor_en_US", "editor_en_UK"]
+    },
+
+    "editor_all": {
+        "id": 4,
+        "permissions": ["user", "view_mode", "editor", "editor_en_US", "editor_en_UK",
+                        "editor_de_DE", "editor_ro_RO", "editor_ar_SA"]
+    }
+}

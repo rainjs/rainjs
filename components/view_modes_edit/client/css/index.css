@@ -1,0 +1,16 @@
+.edit-modes {
+    display: inline-block;
+}
+
+.arrow {
+    font-size: 18px;
+}
+
+.languages, .actions {
+    margin: 0px 0px 0px 5px;
+    padding: 2px 4px 2px 2px;
+}
+
+.export {
+    padding: 0px 0px 0px 5px;
+}

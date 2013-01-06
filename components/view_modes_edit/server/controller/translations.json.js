@@ -25,42 +25,19 @@
 
 "use strict";
 
-var IdentityProvider = require('./identity_provider'),
-    demoPermissions = require('./demo_permissions.json'),
-    Deferred = require('promised-io/promise').Deferred,
-    util = require('util');
-
 /**
- * Demo implementation of the Identity Provider class
+ * Exports the inline translations for the current user.
  *
- * @name DemoIdentityProvider
- * @param {Session} session the session for which to create the identity provider instance
- * @constructor
+ * @param {Request} request the http request
+ * @param {Response} response the http response
  */
-function DemoIdentityProvider(session) {
-    DemoIdentityProvider.super_.call(this, session);
-}
+function doGet(request, response) {
+    var translations = (request.session && request.session.global.get('translations')) || {};
 
-util.inherits(DemoIdentityProvider, IdentityProvider);
-
-/**
- * Authenticates the user.
- *
- * @param {String} username the username
- * @param {String} password the password
- * @returns {Promise} a promise that resolves with the user object
- */
-DemoIdentityProvider.prototype._authenticate = function (username, password) {
-    var deferred = new Deferred();
-
-    var user = demoPermissions[username] || demoPermissions['guest'];
-    user.username = username;
-
-    process.nextTick(function () {
-        deferred.resolve(user);
-    });
-
-    return deferred;
+    response.writeHead(200, { "Content-Type": "application/octet-stream" });
+    response.end(JSON.stringify(translations));
 };
 
-module.exports = DemoIdentityProvider;
+module.exports = {
+    get: doGet
+};

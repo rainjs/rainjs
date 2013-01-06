@@ -34,7 +34,7 @@
 function doGet(request, response) {
     response.statusCode = 200;
     response.setHeader('Content-Type', 'text/html');
-    response.end(t("Email was sent successfully!"));
+    response.end(t('Email was sent successfully!'));
 }
 
 /**
@@ -43,7 +43,7 @@ function doGet(request, response) {
  * @param {Object} context an object containing a message
  */
 function log(context) {
-    console.log("A message was received: " + context.message);
+    console.log('A message was received: ' + context.message);
 }
 
 exports.get = doGet;

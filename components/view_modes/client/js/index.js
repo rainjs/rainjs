@@ -25,42 +25,40 @@
 
 "use strict";
 
-var IdentityProvider = require('./identity_provider'),
-    demoPermissions = require('./demo_permissions.json'),
-    Deferred = require('promised-io/promise').Deferred,
-    util = require('util');
+define(['raintime/messaging/sockets'], function (Sockets) {
 
-/**
- * Demo implementation of the Identity Provider class
- *
- * @name DemoIdentityProvider
- * @param {Session} session the session for which to create the identity provider instance
- * @constructor
- */
-function DemoIdentityProvider(session) {
-    DemoIdentityProvider.super_.call(this, session);
-}
+    /**
+     * The view modes component provides a way to change the view mode state. Currently
+     * there are only two modes available: the "normal" view mode and the "edit" translations view
+     * mode (used for inline editing).
+     *
+     * The page is refreshed after the view mode changed.
+     *
+     * To make the "edit" mode available, the server configuration file has to have the proper
+     * settings for the "view_modes" parameter.
+     *
+     * @name ViewModes
+     * @class
+     * @constructor
+     */
+    function ViewModes() {}
 
-util.inherits(DemoIdentityProvider, IdentityProvider);
+    /**
+     * Startup lifecycle step that happens right after the markup is in place.
+     */
+    ViewModes.prototype.start = function () {
+        var modesSelector = this.context.getRoot().find('.modes'),
+            socket = Sockets.getSocket('/core');
 
-/**
- * Authenticates the user.
- *
- * @param {String} username the username
- * @param {String} password the password
- * @returns {Promise} a promise that resolves with the user object
- */
-DemoIdentityProvider.prototype._authenticate = function (username, password) {
-    var deferred = new Deferred();
+        modesSelector.change(function (event) {
+            if (socket.socket.connected) {
+                var viewMode = modesSelector.val();
+                socket.emit('change_view_mode', viewMode, function (error) {
+                    window.location.href = window.location.href;
+                });
+            }
+        });
+    };
 
-    var user = demoPermissions[username] || demoPermissions['guest'];
-    user.username = username;
-
-    process.nextTick(function () {
-        deferred.resolve(user);
-    });
-
-    return deferred;
-};
-
-module.exports = DemoIdentityProvider;
+    return ViewModes;
+});
