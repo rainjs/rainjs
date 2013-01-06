@@ -1,0 +1,38 @@
+.login-example {
+    width: 100%;
+    margin: 30px;
+    font: 14px Arial;
+
+    .title {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    .element {
+        margin-bottom: 10px;
+
+        div {
+            width: 40%;
+            max-width: 100px;
+            white-space: nowrap;
+            vertical-align: middle;
+            font: 14px Arial;
+            display: inline-block;
+        }
+
+        input {
+            width: 60%;
+            max-width: 200px;
+            padding: 4px;
+            font: 14px Arial;
+        }
+
+        button {
+            width: 60%;
+            max-width: 100px;
+            padding: 4px;
+            font: 14px Arial;
+        }
+    }
+}
