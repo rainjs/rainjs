@@ -212,7 +212,6 @@ define(function () {
         }
 
         var args = callBackMatches[1].trim().split(splitRegExp);
-        // console.log(args)
 
         var tIndex = args.indexOf('t'),
             ntIndex = args.indexOf('nt'),
