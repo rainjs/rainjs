@@ -24,7 +24,6 @@
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 define(['raintime/lib/util', 'raintime/lib/event_emitter'], function (Util, EventEmitter, t, nt) {
-    console.log(t)
     /**
      * A note. Takes care of updating the content after the user
      * enters characters in the note's textarea. In this case it also
