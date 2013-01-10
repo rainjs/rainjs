@@ -25,6 +25,8 @@
 
 "use strict";
 
+var IdentityProvider = require('rain/lib/security').IdentityProvider;
+
 function handle(socket, end) {
     socket.on('save', function (data, end) {
         var notes = socket.session.get('notes');
@@ -50,6 +52,12 @@ function handle(socket, end) {
     socket.emit('info', {
         size: notes ? notes.length : 0
     });
+
+    var idp = IdentityProvider.get(socket.session),
+        user = idp.getUser();
+
+    logger.info(t('The user "%1$s" connected to the notes websocket.',
+                  user && user.username || 'Guest'));
 
     end();
 }

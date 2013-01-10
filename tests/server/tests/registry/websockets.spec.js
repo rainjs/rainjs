@@ -95,8 +95,10 @@ describe('Registry plugin: Websockets', function () {
     it('should register the socket', function () {
         websockets.configure(conf);
 
+        var filePath = path.join('components', 'button2', 'server', 'websockets', 'socket.js');
+
         expect(socketRegistry.register).toHaveBeenCalledWith('/button/2.0/example',
-                                                             socket.handle, conf);
+                                                             filePath, conf);
     });
 
     it('should not register the socket for containers', function () {
