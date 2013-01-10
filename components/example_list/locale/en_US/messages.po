@@ -29,3 +29,6 @@ msgstr "Email was sent successfully!"
 
 msgid "Send email"
 msgstr "Send email"
+
+msgid "The user \"%1$s\" connected to the notes websocket."
+msgstr "The user \"%1$s\" connected to the notes websocket."
