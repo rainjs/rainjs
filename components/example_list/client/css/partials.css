@@ -1,0 +1,23 @@
+.header-content {
+    height: 100px;
+    background-color: #eee;
+    text-align: center;
+    padding-top: 20px;
+    font-size: 40px;
+}
+
+.left-content {
+    float: left;
+    padding: 10px;
+}
+
+.right-content {
+    float: right;
+    width: 260px;
+}
+
+.title {
+    color: #999;
+    font-size: 20px;
+    padding-bottom: 10px;
+}

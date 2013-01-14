@@ -34,7 +34,8 @@
         "layout/flow": {},
         "logging": {},
         "promise": {},
-        "promise_use": {}
+        "promise_use": {},
+        "partials": {}
     },
     "intents": [
         {
