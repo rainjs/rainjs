@@ -41,7 +41,8 @@ describe('Handlebars configuration', function () {
             { name: 'container', file: 'container' },
             { name: 't', file: 'translation' },
             { name: 'nt', file: 'translation_plural' },
-            { name: 'item', file: 'item' }
+            { name: 'item', file: 'item' },
+            { name: 'partial', file: 'partial' }
         ];
 
         plugins = {};
@@ -73,6 +74,7 @@ describe('Handlebars configuration', function () {
         expect(plugins['t']).toEqual(jasmine.any(Function));
         expect(plugins['nt']).toEqual(jasmine.any(Function));
         expect(plugins['item']).toEqual(jasmine.any(Function));
+        expect(plugins['partial']).toEqual(jasmine.any(Function));
     });
 
 });
