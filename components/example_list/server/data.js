@@ -114,6 +114,26 @@ function flowLayout(environment, callback, context, request) {
     callback(null, data);
 }
 
+function partials(environment, callback, context, request) {
+    var adsPartials = request.partials.filter(function (path) {
+        return path.indexOf('ads/') === 0;
+    });
+
+    var index = Math.floor(Math.random() * adsPartials.length);
+
+    var data = {
+        user: {
+            name: 'John doe',
+            email: 'john.doe@example.com',
+            phone: '+40729555999',
+            template: 'user'
+        },
+        adsPath: adsPartials[index]
+    };
+
+    callback(null, data);
+}
+
 module.exports = {
     index: index,
     notes: notes,
@@ -122,5 +142,6 @@ module.exports = {
     level3: level3,
     platform_language: platform_language,
     text_localization: text_localization,
-    'layout/flow': flowLayout
+    'layout/flow': flowLayout,
+    partials: partials
 };

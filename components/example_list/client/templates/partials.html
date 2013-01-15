@@ -1,0 +1,15 @@
+{{css path="partials.css"}}
+
+<div class="header-content">
+    {{partial "header"}}
+</div>
+
+<div class="left-content">
+    {{#with user}}
+        {{partial template}}
+    {{/with}}
+</div>
+
+<div class="right-content">
+    {{partial adsPath}}
+</div>
