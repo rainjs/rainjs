@@ -53,7 +53,7 @@ define(['js/note'], function (Note) {
         this._root.find('.add-note').on('click', this._addNote.bind(this));
 
         // socket used for saving notes
-        this._socket = this.context.messaging.getSocket('/example/3.0/notes');
+        this._socket = this.context.messaging.getSocket('notes');
     };
 
     /**
