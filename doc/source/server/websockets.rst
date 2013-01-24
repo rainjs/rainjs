@@ -6,9 +6,6 @@ RAIN aims to make new HTML5 specification accessible to user and also to provide
 degradation where necessary. Websockets are one of the coolest addition of HTML 5 and opens
 a new perspective in web development.
 
-Do not understand this wrong: P2P connections are still not possible. Also it is worth
-mentioning that work on websocket from HTML 5 is not finalized yet.
-
 -------------------------
 RAIN Websockets Interface
 -------------------------
@@ -40,6 +37,7 @@ And now the chat handler code::
 
         socket.on('new-message', function (data) {
             console.log(data.text);
+            socket.session.set('data', data);
         });
     };
 
@@ -50,3 +48,25 @@ And now the chat handler code::
 
 At registration time, RAIN will map the socket handler automatically. To see how to use the sockets
 on the client side see: :doc:`/client/websockets`.
+
+This module will send and receive messages on the ``chat`` channel. Multiple components can
+safely use the same channel name because the channel name is also prefixed with the component
+id and version.
+
+The session is exposed using the ``session`` property of the socket object both in the handle
+method and in each event listener. The session is automatically saved after you code executes.
+You can delay the session save by returning a promise and resolving it after you set the needed
+data on the session::
+
+    function handle(socket) {
+        socket.on('data', function (data) {
+            var deferred = defer();
+
+            process.nextTick(function () {
+                socket.session.set('data', data);
+                deferred.resolve();
+            });
+
+            return deferred.promise;
+        });
+    }

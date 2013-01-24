@@ -132,7 +132,7 @@ describe('Socket registry', function () {
             socketRegistry.register('/core', handler, {id: 'button'});
             fn(socket);
 
-            expect(handler).toHaveBeenCalledWith(socket, jasmine.any(Function));
+            expect(handler).toHaveBeenCalledWith(socket);
             expect(handler.callCount).toBe(2);
         });
 
@@ -158,11 +158,30 @@ describe('Socket registry', function () {
 
             expect(sessionStore.get).toHaveBeenCalled();
             expect(session.id).toBe('sid');
-            var cb = handler.mostRecentCall.args[1];
-
-            expect(sessionStore.save).not.toHaveBeenCalled();
-            cb();
             expect(sessionStore.save).toHaveBeenCalledWith(session);
+        });
+
+        it('should save the session after the promise is resolved', function () {
+            var isResolved = false;
+
+            handler.andDefer(function (deferred) {
+                deferred.resolve();
+                isResolved = true;
+            });
+
+            socketRegistry.register('/core', handler, {id: 'core'});
+            fn = events['connection'];
+            fn(socket);
+
+            expect(sessionStore.save).not.toHaveBeenCalledWith(session);
+
+            waitsFor(function () {
+                return isResolved;
+            });
+
+            runs(function () {
+                expect(sessionStore.save).toHaveBeenCalledWith(session);
+            });
         });
 
         it('should call the handlers when a new event is emitted', function () {
@@ -173,7 +192,7 @@ describe('Socket registry', function () {
             socket.on('message', function () {});
             events['message'](1, 2, 3);
 
-            expect(handler).toHaveBeenCalledWith(socket, jasmine.any(Function));
+            expect(handler).toHaveBeenCalledWith(socket);
             expect(sessionStore.get.callCount).toBe(2);
         });
     });
