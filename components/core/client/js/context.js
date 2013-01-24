@@ -97,7 +97,14 @@ define(['raintime/client_storage',
             },
 
             sendIntent: Intents.send,
-            getSocket: Sockets.getSocket
+
+            getSocket: function (channel) {
+                if (channel.charAt(0) != '/') {
+                    channel = '/' + self.component.id + '/' + self.component.version + '/' + channel;
+                }
+
+                return Sockets.getSocket(channel);
+            }
         };
     }
 

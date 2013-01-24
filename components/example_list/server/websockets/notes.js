@@ -26,9 +26,11 @@
 "use strict";
 
 var IdentityProvider = require('rain/lib/security').IdentityProvider;
+var Promise = require('promised-io/promise');
+var defer = Promise.defer;
 
-function handle(socket, end) {
-    socket.on('save', function (data, end) {
+function handle(socket) {
+    socket.on('save', function (data) {
         var notes = socket.session.get('notes');
         if (!notes) {
             notes = [];
@@ -36,15 +38,13 @@ function handle(socket, end) {
 
         notes[data.index] = data.note;
         socket.session.set('notes', notes);
-        end();
     });
 
-    socket.on('remove', function (data, end) {
+    socket.on('remove', function (data) {
         var notes = socket.session.get('notes');
         if (notes) {
             notes.splice(data.index, 1);
             socket.session.set('notes', notes);
-            end();
         }
     });
 
@@ -58,8 +58,6 @@ function handle(socket, end) {
 
     logger.info(t('The user "%1$s" connected to the notes websocket.',
                   user && user.username || 'Guest'));
-
-    end();
 }
 
 module.exports = {
