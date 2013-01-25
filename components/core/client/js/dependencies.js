@@ -188,7 +188,7 @@ define(function () {
             // require.jsExtRegExp is defined in RequireJS and tests that a string is a regular
             // path and not a module ID. See http://requirejs.org/docs/api.html#jsfiles for more
             // details.
-            if (!require.jsExtRegExp.test(dependency) && dependency.indexOf('js/') === 0) {
+            if (typeof dependency !== 'undefined' && !require.jsExtRegExp.test(dependency) && dependency.indexOf('js/') === 0) {
                 deps[i] = component.id + '/' + component.version + '/' + dependency;
             }
         }
