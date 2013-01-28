@@ -1,5 +1,13 @@
 # Changelog
 
+## v 0.22.0
+
+* The partial templates feature was implemented: the ``partial`` Handlebars helper was added.
+* The ``end`` callback that was passed to WebSocket handlers was removed. Now you can return a
+  promise in order to delay the session save.
+* The method ``context.messaging.getSocket`` changed to accept channel name as parameter. The
+  old form ``/component-id/version/channel`` still works, but it isn't recommended.
+
 ## 0.20.0
 
 * Fixed a "raind" bug: RAIN_CONF environment variable was ignored.
