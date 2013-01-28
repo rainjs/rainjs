@@ -57,6 +57,13 @@ fields are formatted with **bold**.
   what component to be used while the client side waits for other components to be rendered. The
   default value is the ``placeholder`` component provided in the RAIN SDK. The ``timeout``
   parameter set how much to wait for a render response before showing the loading component.
+  
+- loginComponent - an Object with ``id``, ``version`` and ``viewId`` keys that specify where the
+  client should be redirected after an unsuccessful authentication attempt.
+  
+- mainComponent - an Object with ``id``, ``version`` and ``viewId`` keys that specify where the
+  client should be redirected after a successful authentication attempt if nothing else is
+  specified after the login attempt as a redirect url.
 
 - session - an Object used to configure the session store. It has a ``store`` key that represents
   the path to the store implementation. If the store implementation also needs configuration
@@ -132,6 +139,18 @@ Example
             "viewId": "index",
             "timeout": 500
         },
+        
+         "loginComponent": {
+            "id": "user",
+            "version": "1.0",
+            "viewId": "login"
+        },
+
+        "mainComponent": {
+            "id": "sprint_example_list",
+            "version": "1.0",
+            "viewId": "index"
+        },
 
         "session": {
             "store": "./configuration/custom_session_store"
@@ -140,6 +159,7 @@ Example
         "identity": {
             "provider": "./configuration/custom_identity_provider"
         }
+        
     }
 
 -----------------------
