@@ -375,6 +375,12 @@ define(['raintime/lib/promise',
                 sid: newComponent.staticId,
                 children: newComponent.children
             };
+
+            controller.context.getParent = function () {
+                var parentComponent = components[this.parentInstanceId];
+                return parentComponent && parentComponent.controller;
+            };
+
             controller.context.find = function (staticIds, callback) {
                 if (typeof staticIds === 'function') {
                     callback = staticIds;
