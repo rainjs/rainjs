@@ -187,16 +187,18 @@ namespace('ci', function () {
             var coverage = {};
 
             if (fs.existsSync('tests/server/coverage/jscoverage.json')) {
-                extend(coverage, JSON.parse(fs.readFileSync('tests/server/coverage/jscoverage.json')));
+                extend(coverage, JSON.parse(fs.readFileSync('tests/server/coverage/jscoverage.json',
+                'utf-8')));
             }
 
             if (fs.existsSync('tests/client/coverage/jscoverage.json')) {
-                extend(coverage, JSON.parse(fs.readFileSync('tests/client/coverage/jscoverage.json')));
+                extend(coverage, JSON.parse(fs.readFileSync('tests/client/coverage/jscoverage.json',
+                'utf-8')));
             }
 
-            fs.writeFileSync('tests/coverage.xml', generateEmmaReport(coverage));
+            fs.writeFileSync('tests/coverage.xml', generateEmmaReport(coverage), 'utf-8');
             jake.logger.log('generated unified Emma report at tests/coverage.xml');
-            fs.writeFileSync('tests/coverage.json', JSON.stringify(coverage));
+            fs.writeFileSync('tests/coverage.json', JSON.stringify(coverage), 'utf-8');
             jake.logger.log('generated unified coverage report at tests/coverage.json');
         });
 
@@ -246,7 +248,7 @@ namespace('ci', function () {
                 // read configuration
                 try {
                     conf = fs.readFileSync(path.join('tests',
-                            'code-coverage.yml'));
+                            'code-coverage.yml'), 'utf-8');
                 } catch (e) {
                     jake.logger.error('error reading configuration');
                     process.nextTick(deferred.reject);
@@ -459,7 +461,8 @@ namespace('ci', function () {
                     wrench.rmdirSyncRecursive(reportsPath, true);
                     wrench.mkdirSyncRecursive(reportsPath);
 
-                    fs.writeFileSync(path.join(reportsPath, 'jscoverage.json'), (report.join('') || '{}'));
+                    fs.writeFileSync(path.join(reportsPath, 'jscoverage.json'), (report.join('') || '{}'),
+                                     'utf-8');
                     jake.logger.log('Wrote coverage report in ' + reportsPath + '/jscoverage.json');
                     process.exit();
                 });
