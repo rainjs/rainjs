@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Changelog &mdash; Rain v0.20.1 documentation</title>
+    <title>Changelog &mdash; Rain v0.22.0 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.20.1',
+        VERSION:     '0.22.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.20.1 documentation" href="index.html" />
+    <link rel="top" title="Rain v0.22.0 documentation" href="index.html" />
     <link rel="prev" title="Distributed Websockets" href="proposals/distributed_websockets.html" /> 
   </head>
   <body>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="proposals/distributed_websockets.html" title="Distributed Websockets"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Rain v0.20.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Rain v0.22.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -46,6 +46,16 @@
             
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="v-0-22">
+<h2>v 0.22<a class="headerlink" href="#v-0-22" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>The partial templates feature was implemented: the <tt class="docutils literal"><span class="pre">partial</span></tt> Handlebars helper was added.</li>
+<li>The <tt class="docutils literal"><span class="pre">end</span></tt> callback that was passed to WebSocket handlers was removed. Now you can return a
+promise in order to delay the session save.</li>
+<li>The method <tt class="docutils literal"><span class="pre">context.messaging.getSocket</span></tt> changed to accept channel name as parameter. The
+old form <tt class="docutils literal"><span class="pre">/component-id/version/channel</span></tt> still works, but it isn&#8217;t recommended.</li>
+</ul>
+</div>
 <div class="section" id="v-0-20">
 <h2>v 0.20<a class="headerlink" href="#v-0-20" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -196,6 +206,7 @@ should request it using <tt class="docutils literal"><span class="pre">raintime/
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Changelog</a><ul>
+<li><a class="reference internal" href="#v-0-22">v 0.22</a></li>
 <li><a class="reference internal" href="#v-0-20">v 0.20</a></li>
 <li><a class="reference internal" href="#v-0-19">v 0.19</a></li>
 <li><a class="reference internal" href="#v-0-18">v 0.18</a></li>
@@ -245,7 +256,7 @@ should request it using <tt class="docutils literal"><span class="pre">raintime/
         <li class="right" >
           <a href="proposals/distributed_websockets.html" title="Distributed Websockets"
              >previous</a> |</li>
-        <li><a href="index.html">Rain v0.20.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Rain v0.22.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

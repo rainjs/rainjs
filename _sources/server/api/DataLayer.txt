@@ -36,8 +36,10 @@ This method receives four parameters:
    accepts two parameters: an error (or ``null`` if no error occurred) and the custom data;
  - ``context`` contains the Handlebars context in which the component was aggregated and the
    options that were passed to the component helper;
- - ``request`` has five properties:
+ - ``request`` has multiple properties:
      - ``session``: the session for the current request;
+     - ``partials``: an array with the component's partial templates
+       (e.g. ['file1', 'file2']; the extension for the file is not included);
      - ``query``: the query parameters for the current page;
      - ``headers``: the request headers;
      - ``url``: the URL of the current page;

@@ -14,7 +14,8 @@ Class Context
    class-title
 
 
-The context reflects a component's client-side state. It gives access to otherimportant libraries like client storage, messaging and web sockets.
+The context reflects a component's client-side state. It gives access to other
+important libraries like client storage, messaging and web sockets.
 
 
 
@@ -68,7 +69,8 @@ getRoot
     
 
 
-Returns the DOM container element for the component associated with thisview context.
+Returns the DOM container element for the component associated with this
+view context.
 
 
 
@@ -117,7 +119,10 @@ insert
 
 
 
-Insert a new component into the given DOM Element and set a function that will be calledafter the controller for the new controller was loaded.The context for the callback function will be the component's controller.
+Insert a new component into the given DOM Element and set a function that will be called
+after the controller for the new controller was loaded.
+
+The context for the callback function will be the component's controller.
 
 
 
@@ -163,7 +168,10 @@ replace
 
 
 
-Replaces the component from where it is called with the given component and set afunction that will be called after the controller for the new component was loaded.The context for the callback function will be the component's controller.
+Replaces the component from where it is called with the given component and set a
+function that will be called after the controller for the new component was loaded.
+
+The context for the callback function will be the component's controller.
 
 
 

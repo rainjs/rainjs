@@ -68,6 +68,7 @@ Server side modules
     server/localization
     server/logging_guidelines
     server/sdk_architecture
+    server/cluster
 
 ....
 APIs

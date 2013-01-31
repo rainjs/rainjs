@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>RAIN Websockets &mdash; Rain v0.20.1 documentation</title>
+    <title>RAIN Websockets &mdash; Rain v0.22.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.20.1',
+        VERSION:     '0.22.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.20.1 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.22.0 documentation" href="../index.html" />
     <link rel="next" title="RAIN component descriptor" href="component_descriptor.html" />
     <link rel="prev" title="Intents" href="messaging_intents.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="messaging_intents.html" title="Intents"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.20.1 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.22.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -51,11 +51,8 @@
   <div class="section" id="rain-websockets">
 <h1>RAIN Websockets<a class="headerlink" href="#rain-websockets" title="Permalink to this headline">¶</a></h1>
 <p>RAIN aims to make new HTML5 specification accessible to user and also to provide graceful
-degradation where necessary. Websockets are one of the coolest addition of HTML 5 and open
+degradation where necessary. Websockets are one of the coolest addition of HTML 5 and opens
 a new perspective in web development.</p>
-<p>Do not understand this wrong: P2P connections are still not possible. Also it is worth
-mentioning that work on websocket from HTML 5 is not finalized yet. In RAIN it is
-really easy to use websockets.</p>
 <div class="section" id="rain-websockets-interface">
 <h2>RAIN Websockets Interface<a class="headerlink" href="#rain-websockets-interface" title="Permalink to this headline">¶</a></h2>
 <p>In RAIN is really easy to use websockets. You don&#8217;t even have to care about browser compatibility
@@ -66,30 +63,54 @@ because this is automatically provided by socket.io (the underlining framework u
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>In RAIN websockets are autodiscovered for each registered component. All you have to do
-is to place your socket handlers under websockets folder of your component root.</p>
-<p>Lets take a really simple example from example component:</p>
-<div class="highlight-js"><pre>/intents_example
+<p>In RAIN websockets are auto-discovered for each registered component. All you have to do is place
+your socket handlers under the <tt class="docutils literal"><span class="pre">websockets</span></tt> folder of your component root.</p>
+<p>Lets take a really simple example from the chat component:</p>
+<div class="highlight-js"><pre>/chat
     /server
         /websockets
-            /dummy_socket_handler.js
+            /chat.js
     /client</pre>
 </div>
-<p>And now the dummy_socket_handler code:</p>
+<p>And now the chat handler code:</p>
 <div class="highlight-js"><div class="highlight"><pre><span class="kd">function</span> <span class="nx">handle</span><span class="p">(</span><span class="nx">socket</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">message</span><span class="o">:</span> <span class="s1">&#39;Hello Sockets!&#39;</span><span class="p">});</span>
+
+    <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;new-message&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">text</span><span class="p">);</span>
+        <span class="nx">socket</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+    <span class="p">});</span>
 <span class="p">};</span>
 
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">channel</span><span class="o">:</span> <span class="s1">&#39;example&#39;</span><span class="p">,</span>
+    <span class="nx">channel</span><span class="o">:</span> <span class="s1">&#39;chat&#39;</span><span class="p">,</span>
     <span class="nx">handle</span><span class="o">:</span> <span class="nx">handle</span>
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>At registration time, RAIN will map the socket handler automatically. This will become accesible
-to: <a class="reference external" href="http:/">http:/</a>/&lt;rain_server&gt;:&lt;sockets_port&gt;/example;1.0/example</p>
-<p>As you can see subfolders are used to create a namespace for the websocket within the module
-while value returned by getSocketName is used as the real name of the socket.</p>
+<p>At registration time, RAIN will map the socket handler automatically. To see how to use the sockets
+on the client side see: <a class="reference internal" href="../client/websockets.html"><em>Client side websockets API</em></a>.</p>
+<p>This module will send and receive messages on the <tt class="docutils literal"><span class="pre">chat</span></tt> channel. Multiple components can
+safely use the same channel name because the channel name is also prefixed with the component
+id and version.</p>
+<p>The session is exposed using the <tt class="docutils literal"><span class="pre">session</span></tt> property of the socket object both in the handle
+method and in each event listener. The session is automatically saved after you code executes.
+You can delay the session save by returning a promise and resolving it after you set the needed
+data on the session:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="kd">function</span> <span class="nx">handle</span><span class="p">(</span><span class="nx">socket</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">defer</span><span class="p">();</span>
+
+        <span class="nx">process</span><span class="p">.</span><span class="nx">nextTick</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="nx">socket</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+            <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">();</span>
+        <span class="p">});</span>
+
+        <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -142,7 +163,7 @@ while value returned by getSocketName is used as the real name of the socket.</p
         <li class="right" >
           <a href="messaging_intents.html" title="Intents"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.20.1 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.22.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
