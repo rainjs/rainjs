@@ -2,8 +2,8 @@
 Server and component configuration
 ==================================
 
-A RAIN application has two major configuration points: the server configuration and the component
-level configuration.
+A RAIN application has three major configuration points: the server configuration, the component
+level configuration and the sensitive information configuration.
 
 --------------------
 Server configuration
@@ -139,7 +139,7 @@ Example
             "viewId": "index",
             "timeout": 500
         },
-        
+
          "loginComponent": {
             "id": "user",
             "version": "1.0",
@@ -167,3 +167,34 @@ Component configuration
 -----------------------
 
 Please read :doc:`Component configuration </server/component_descriptor>` for more information.
+
+-----------------------------------
+Sensitive information configuration
+-----------------------------------
+
+The sensitive information configuration file must be placed in the conf folder
+and has only required parameters that are described below.
+
+.......
+Example
+.......
+
+{
+     "oauth": {
+        "clientId": "hip-rain",
+        "clientSecret": "mysecret"
+    },
+
+    "cookieSecret": "let it rain ;)",
+
+    "contracts": {
+        "bundle": "bss-contract-mgmt-bundle",
+        "service": "pss-contract-mgmt",
+        "oauth": {
+            "clientId": "rain-contract",
+            "clientSecret": "pssSecretPassword",
+            "scope": "rain-contract"
+        }
+    }
+
+}
