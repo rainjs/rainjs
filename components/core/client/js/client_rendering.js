@@ -77,6 +77,13 @@ define([
                 }
             });
         }
+
+        /**
+         * A flag to indicate the first component being rendered (main component).
+         *
+         * @type Boolean
+         */
+        this._isFirstComponent = true;
     }
 
     /**
@@ -155,6 +162,14 @@ define([
 
             this.orphans[component.containerId].push(component);
             return;
+        }
+
+        // Preregistering the main component in order to avoid the scenario where the start event
+        // is invoked for a child component and the main component is not even registered
+        // in Raintime's component registry.
+        if (this._isFirstComponent) {
+            Raintime.componentRegistry.preRegister(component);
+            this._isFirstComponent = false;
         }
 
         domElement.css('visibility', 'hidden').html(component.html);
