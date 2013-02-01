@@ -78,7 +78,7 @@ describe('Server configuration and validation', function () {
         //mock the fs
         fs = jasmine.createSpyObj('session', ['readdirSync', 'readFileSync']);
         fs.readdirSync = function () {
-            var files=['default', 'credentials'];
+            var files=['default.conf', 'credentials.conf'];
             return files;
         };
         fs.readFileSync = function (file) {
@@ -90,7 +90,7 @@ describe('Server configuration and validation', function () {
         };
 
         loadConfiguration = function(configPath) {
-            process.env.RAIN_CONF_DIR = configPath;
+            process.env.RAIN_CONF = configPath;
             var mockConfiguration = loadModuleContext('/lib/configuration.js', {
                 'commander': {}, 'fs': fs
             });

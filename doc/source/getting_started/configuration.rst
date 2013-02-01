@@ -5,6 +5,13 @@ Server and component configuration
 A RAIN application has three major configuration points: the server configuration, the component
 level configuration and the sensitive information configuration.
 
+.. warning::
+    - You must have a conf folder or setup a conf folder for your project
+    - Do not keep your credentials inside code, put them inside a credentials.conf file the ``credentials``
+      name is not mandatory
+    - All the configuration files must be named <name>.conf.[default], ``default`` can be ommited,
+      any other files will be ignored.
+
 --------------------
 Server configuration
 --------------------
@@ -159,7 +166,7 @@ Example
         "identity": {
             "provider": "./configuration/custom_identity_provider"
         }
-        
+
     }
 
 -----------------------
@@ -172,29 +179,22 @@ Please read :doc:`Component configuration </server/component_descriptor>` for mo
 Sensitive information configuration
 -----------------------------------
 
-The sensitive information configuration file must be placed in the conf folder
-and has only required parameters that are described below.
+The sensitive information configuration file must be placed in the conf folder.
 
 .......
 Example
 .......
 
-{
-     "oauth": {
-        "clientId": "hip-rain",
-        "clientSecret": "mysecret"
-    },
+.. code-block:: javascript
+    :linenos:
 
-    "cookieSecret": "let it rain ;)",
+    {
 
-    "contracts": {
-        "bundle": "bss-contract-mgmt-bundle",
-        "service": "pss-contract-mgmt",
-        "oauth": {
-            "clientId": "rain-contract",
-            "clientSecret": "pssSecretPassword",
-            "scope": "rain-contract"
-        }
+        "cookieSecret": "custom secret",
+        "custom_sensitivekey": "custom sensitive value"
+
     }
 
-}
+The only required parameter is the *"cookieSecret"*
+
+
