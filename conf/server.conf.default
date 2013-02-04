@@ -56,5 +56,15 @@
         "version": "1.0",
         "viewId": "index",
         "timeout": 500
+    },
+
+     "net": {
+        "defaultLanguage": "en_US",
+        "supportedLanguages": ["en_US", "ro_RO", "en_UK"]
+     },
+
+    "com": {
+        "defaultLanguage": "en_US",
+        "supportedLanguages": ["en_US", "ro_RO", "en_UK"]
     }
 }
