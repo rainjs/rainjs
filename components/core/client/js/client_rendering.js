@@ -208,7 +208,7 @@ define([
      * @param {DomElement} element The wrapper of the component
      */
     ClientRenderer.prototype._showHTML = function (component, element) {
-        element.css('visibility', 'visible');
+        element.css('visibility', '');
         // Registers the component.
         Raintime.componentRegistry.register(component);
     };
