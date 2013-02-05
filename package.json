@@ -9,22 +9,23 @@
         { "name": "Ciprian Roman", "email": "ciprian.roman@1and1.ro" },
         { "name": "Daniel Uzunu", "email": "daniel.uzunu@1and1.ro" },
         { "name": "Razvan Mocanu", "email": "razvan.mocanu@1and1.ro" }
+        { "name": "Alexandru Trifan", "email": "alexandru.trifan@1and1.ro"}
     ],
     "dependencies": {
         "connect": "2.2.2",
-        "handlebars": "1.0.4beta",
-        "less": ">= 1.1.4",
-        "mime": "",
+        "handlebars": "1.0.8",
+        "less": "1.3.x",
+        "mime": "1.2.x",
         "node.extend": "",
         "promised-io": "https://github.com/kriszyp/promised-io/archive/master.tar.gz",
-        "socket.io": ">= 0.7.7",
-        "commander": ">=0.6.x",
-        "mocks": "",
-        "colors": "",
-        "wrench": "",
-        "jed": "",
+        "socket.io": "0.9.13",
+        "commander": "1.1.1",
+        "mocks": "0.0.10",
+        "colors": "0.6.0",
+        "wrench": "1.4.4",
+        "jed": "0.5.2",
         "crc": "0.2.0",
-        "mongodb": ""
+        "mongodb": "1.2.11"
     },
     "devDependencies": {
         "js-yaml": "",
