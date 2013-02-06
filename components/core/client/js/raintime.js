@@ -376,7 +376,7 @@ define(['raintime/lib/promise',
                 children: newComponent.children
             };
 
-            controller.context.getParent = function () {
+            controller.context._getParent = function () {
                 var parentComponent = components[this.parentInstanceId];
 
                 // return a promise if the controller isn't loaded yet

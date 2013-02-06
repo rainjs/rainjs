@@ -180,5 +180,15 @@ define(['raintime/client_storage',
         window.ClientRenderer.get().requestComponent(component);
     };
 
+    /**
+     * Gets the controller of the parent component. It returns a promise if the parent isn't loaded
+     * yet. This is an internal framework method.
+     *
+     * @name _getParent
+     * @memberOf Context#
+     * @private
+     * @returns {Controller|Promise}
+     */
+
     return Context;
 });
