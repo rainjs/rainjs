@@ -377,10 +377,11 @@ define(['raintime/lib/promise',
             };
 
             controller.context._getParent = function () {
-                var parentComponent = components[this.parentInstanceId];
+                var parentInstanceId = this.parentInstanceId,
+                    parent = components[parentInstanceId] || preComponents[parentInstanceId];
 
                 // return a promise if the controller isn't loaded yet
-                return parentComponent && (parentComponent.controller || parentComponent.promise);
+                return parent && (parent.controller || parent.promise);
             };
 
             controller.context.find = function (staticIds, callback) {
