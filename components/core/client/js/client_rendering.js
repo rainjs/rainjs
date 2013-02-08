@@ -77,13 +77,6 @@ define([
                 }
             });
         }
-
-        /**
-         * A flag to indicate the first component being rendered (main component).
-         *
-         * @type Boolean
-         */
-        this._isFirstComponent = true;
     }
 
     /**
@@ -164,12 +157,12 @@ define([
             return;
         }
 
-        // Preregistering the main component in order to avoid the scenario where the start event
+        // Pre-registering the main component in order to avoid the scenario where the start event
         // is invoked for a child component and the main component is not even registered
-        // in Raintime's component registry.
-        if (this._isFirstComponent) {
+        // in Raintime's component registry. This also applies for components requested using
+        // context.insert.
+        if (!Raintime.componentRegistry.isPreRegistered(component)) {
             Raintime.componentRegistry.preRegister(component);
-            this._isFirstComponent = false;
         }
 
         domElement.css('visibility', 'hidden').html(component.html);
