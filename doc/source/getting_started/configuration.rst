@@ -7,25 +7,25 @@ level configuration and the sensitive information configuration.
 
 .. warning::
     - You must have a conf folder or setup a conf folder for your project
-    - Do not keep your credentials inside code, put them inside a credentials.conf file the ``credentials``
-      name is not mandatory
-    - All the configuration files must be named <name>.conf.[default], ``default`` can be ommited,
-      any other files will be ignored.
+    - Do not keep your credentials inside code, as a recomandation you can put them inside 
+      a credentials.conf file the ``credentials`` name is not mandatory
+    - All the configuration files must be named <name>.conf any other files will be ignored.
 
 --------------------
 Server configuration
 --------------------
 
-The RAIN server has a set of configuration options that are located in a configuration file. This
-file has to be in a valid JSON object and when the RAIN server starts it is looked up in the
+The RAIN server has a set of configuration files that are located in a configuration folder. This
+files have to be in a valid JSON object and when the RAIN server starts it is looked up in the
 following order:
 
 - if the ``dir`` parameter of the ``raind`` process is set, then the location is
-  ``<dir>/conf/server.conf.default``
-- the RAIN_CONF environment variable that has the full path to the configuration file
-- the default configuration that is ``<project-root>/conf/server.conf.default``
+  ``<dir>/conf``
+- the RAIN_CONF environment variable that has the configuration directory
+- the default configuration that is ``<project-root>/conf``
+- all the .conf files are read from the specified folder and the conf can be splitted in any way; 
 
-If the configuration file is not found or the format is invalid then the server won't start.
+If no configuration files are found or the format is invalid then the server won't start.
 
 ..........
 Parameters
