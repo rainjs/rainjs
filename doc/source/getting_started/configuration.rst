@@ -173,21 +173,22 @@ Language configuration
 ----------------------
 
 The rain server can support configuration for individual domains. It is advisable that you set 
-this configuration in another <filanema>.conf in your conf folder. For example "language.conf".
+this configuration in another <filename>.conf in your conf folder. For example "language.conf".
 
 A valid example of this configuration must look like this:
 
 .. code-block:: javascript
     :linenos:
 
-     {
-        "net": {
-            "defaultLanguage": "en_US",
-            "supportedLanguages": ["en_US", "ro_RO", "en_UK"]
-        },
-        "com": {
-            "defaultLanguage": "en_US",
-            "supportedLanguages": ["en_US", "ro_RO", "en_UK"]
+     {  "tlds": {
+            "net": {
+                "defaultLanguage": "en_US",
+                "supportedLanguages": ["en_US", "ro_RO", "en_UK"]
+            },
+            "com": {
+                "defaultLanguage": "en_US",
+                "supportedLanguages": ["en_US", "ro_RO", "en_UK"]
+            }
         }
     }
 

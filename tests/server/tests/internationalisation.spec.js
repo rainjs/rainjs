@@ -44,7 +44,7 @@ describe('iternationalisation module', function () {
                 '/lib/internationalisation.js', mocks);
     });
 
-    it('must set the user language to the Accepted-Language header if is supported' +
+    it('should set the user language to the Accepted-Language header if is supported' +
             'in the domain', function () {
         var finished = false,
             next = function () {
@@ -52,18 +52,20 @@ describe('iternationalisation module', function () {
             },
             response = {};
 
-        fakeConfig["net"] = {
-                defaultLanguage: 'ro_RO',
-                supportedLanguages: ['ro_RO', 'en_US']
+        fakeConfig["tlds"] = {
+                "net": {
+                    defaultLanguage: 'ro_RO',
+                    supportedLanguages: ['ro_RO', 'en_US']
+                }
         };
 
         internationalisationMock()(request, response, next);
 
-        expect(fakeSession["userLanguage"]).not.toEqual(fakeConfig["net"].defaultLanguage);
+        expect(fakeSession["userLanguage"]).not.toEqual(fakeConfig["tlds"]["net"].defaultLanguage);
         expect(finished).toBe(true);
     });
 
-    it('must set the user language to the default language of the domain if it is supported' +
+    it('should set the user language to the default language of the domain if it is supported' +
             'and the Accepted-Language is not accepted by the domain', function () {
         var finished = false,
             next = function () {
@@ -71,18 +73,20 @@ describe('iternationalisation module', function () {
             },
             response = {};
 
-        fakeConfig["net"] = {
-                defaultLanguage: 'ar_AR',
-                supportedLanguages: ['ar_AR', 'ro_RO']
+        fakeConfig["tlds"] = {
+                net: {
+                    defaultLanguage: 'ar_AR',
+                    supportedLanguages: ['ar_AR', 'ro_RO']
+                }
         };
 
         internationalisationMock()(request, response, next);
 
-        expect(fakeSession["userLanguage"]).toEqual(fakeConfig["net"].defaultLanguage);
+        expect(fakeSession["userLanguage"]).toEqual(fakeConfig["tlds"]["net"].defaultLanguage);
         expect(finished).toBe(true);
     });
 
-    it('must set the user language from the config if Accepted-Language is not supported' + 
+    it('should set the user language from the config if Accepted-Language is not supported ' + 
             'and domain is not existing', function () {
         var finished = false,
             next = function () {
@@ -92,11 +96,13 @@ describe('iternationalisation module', function () {
 
         request.headers = {
                 'host': 'atrifan.ro.schlund.net',
-                'accept-language': 'jp-JP,en;q=0.7'
+                'accept-language': 'jp-JP,jp;q=0.7'
         };
-        fakeConfig["com"] = {
-                defaultLanguage: 'ar_AR',
-                supportedLanguages: ['ar_AR', 'ro_RO']
+        fakeConfig["tlds"] = {
+                com: {
+                    defaultLanguage: 'ar_AR',
+                    supportedLanguages: ['ar_AR', 'ro_RO']
+                }
         };
 
         internationalisationMock()(request, response, next);
@@ -105,7 +111,7 @@ describe('iternationalisation module', function () {
         expect(finished).toBe(true);
     });
 
-    it('must set the default language to the Accepted-Language header if is supported and' +
+    it('should set the default language to the Accepted-Language header if is supported and' +
             'the domain is not set', function () {
         var finished = false,
             next = function () {
@@ -115,11 +121,13 @@ describe('iternationalisation module', function () {
 
         request.headers = {
                 'host': 'atrifan.ro.schlund.net',
-                'accept-language': 'de-DE,en;q=0.7'
+                'accept-language': 'en-US,de;q=0.7'
         };
-        fakeConfig["com"] = {
-                defaultLanguage: 'ar_AR',
-                supportedLanguages: ['ar_AR', 'ro_RO']
+        fakeConfig["tlds"] = {
+                com: {
+                    defaultLanguage: 'ar_AR',
+                    supportedLanguages: ['ar_AR', 'ro_RO']
+                }
         };
 
         internationalisationMock()(request, response, next);
@@ -128,16 +136,18 @@ describe('iternationalisation module', function () {
         expect(finished).toBe(true);
     });
 
-    it('must set in the session the accepted languages regarding the base config', function () {
+    it('should set in the session the accepted languages regarding the base config', function () {
         var finished = false,
             next = function () {
                 finished = true;
             },
             response = {};
 
-        fakeConfig["net"] = {
-                defaultLanguage: 'ar_AR',
-                supportedLanguages: ['ar_AR', 'ro_RO']
+        fakeConfig["tlds"] = {
+                net: {
+                    defaultLanguage: 'ar_AR',
+                    supportedLanguages: ['ar_AR', 'ro_RO']
+                }
         };
 
         internationalisationMock()(request, response, next);
