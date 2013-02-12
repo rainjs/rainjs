@@ -180,6 +180,18 @@ define(['raintime/lib/promise',
     };
 
     /**
+     * Checks if a component is preregistered.
+     *
+     * @param {Component} component the component to register
+     */
+    ComponentRegistry.prototype.isPreRegistered = function (component) {
+        if (!component || !component.instanceId) {
+            return;
+        }
+        return typeof preComponents[component.instanceId] !== 'undefined';
+    };
+
+    /**
      * De-registers a component.
      *
      * @param {String} instanceId the component's instance id
@@ -375,6 +387,15 @@ define(['raintime/lib/promise',
                 sid: newComponent.staticId,
                 children: newComponent.children
             };
+
+            controller.context._getParent = function () {
+                var parentInstanceId = this.parentInstanceId,
+                    parent = components[parentInstanceId] || preComponents[parentInstanceId];
+
+                // return a promise if the controller isn't loaded yet
+                return parent && (parent.controller || parent.promise);
+            };
+
             controller.context.find = function (staticIds, callback) {
                 if (typeof staticIds === 'function') {
                     callback = staticIds;
