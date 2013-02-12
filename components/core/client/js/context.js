@@ -51,6 +51,7 @@ define(['raintime/client_storage',
         raintime = raintimeInstance;
         this.component = component;
         this.instanceId = component.instanceId;
+        this.parentInstanceId = component.parentInstanceId;
         this.storage = new ClientStorage(this);
 
         /**
@@ -145,11 +146,11 @@ define(['raintime/client_storage',
 
         var self = this;
 
-        raintime.componentRegistry.setCallback(instanceId,
-                function (registeredComponent) {
-                    self.component.children.push(registeredComponent);
-                    callback && callback.call(registeredComponent.controller);
-                });
+        raintime.componentRegistry.setCallback(instanceId, function (registeredComponent) {
+            self.component.children.push(registeredComponent);
+            registeredComponent.controller.context.parentInstanceId = self.instanceId;
+            callback && callback.call(registeredComponent.controller, registeredComponent);
+        });
 
         window.ClientRenderer.get().requestComponent(component);
     };
@@ -170,9 +171,24 @@ define(['raintime/client_storage',
      */
     Context.prototype.replace = function (component, callback) {
         component.instanceId = this.instanceId;
-        raintime.componentRegistry.setCallback(component.instanceId, callback);
+
+        raintime.componentRegistry.setCallback(this.instanceId, function (registeredComponent) {
+            registeredComponent.controller.context.parentInstanceId = self.instanceId;
+            callback && callback.call(registeredComponent.controller, registeredComponent);
+        });
+
         window.ClientRenderer.get().requestComponent(component);
     };
+
+    /**
+     * Gets the controller of the parent component. It returns a promise if the parent isn't loaded
+     * yet. This is an internal framework method.
+     *
+     * @name _getParent
+     * @memberOf Context#
+     * @private
+     * @returns {Controller|Promise}
+     */
 
     return Context;
 });

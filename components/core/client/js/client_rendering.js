@@ -157,6 +157,14 @@ define([
             return;
         }
 
+        // Pre-registering the main component in order to avoid the scenario where the start event
+        // is invoked for a child component and the main component is not even registered
+        // in Raintime's component registry. This also applies for components requested using
+        // context.insert.
+        if (!Raintime.componentRegistry.isPreRegistered(component)) {
+            Raintime.componentRegistry.preRegister(component);
+        }
+
         domElement.css('visibility', 'hidden').html(component.html);
         domElement.attr('id', component.instanceId);
         domElement.attr('class',
@@ -193,7 +201,7 @@ define([
      * @param {DomElement} element The wrapper of the component
      */
     ClientRenderer.prototype._showHTML = function (component, element) {
-        element.css('visibility', 'visible');
+        element.css('visibility', '');
         // Registers the component.
         Raintime.componentRegistry.register(component);
     };
