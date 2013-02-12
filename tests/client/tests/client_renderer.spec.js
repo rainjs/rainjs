@@ -42,7 +42,8 @@ describe('Client Renderer', function () {
 
         mocks.Raintime = jasmine.loadedModules['raintime'];
         mocks.Raintime.componentRegistry = jasmine.createSpyObj('componentRegistry',
-                                                                ['preRegister']);
+                                                            ['preRegister', 'isPreRegistered']);
+        mocks.Raintime.componentRegistry.isPreRegistered.andReturn(true);
 
         var loadCss = jasmine.createSpyObj('cssRenderer', ['then']);
         loadCss.then.andCallFake(function (resolve, err) {
