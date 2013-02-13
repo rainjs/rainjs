@@ -31,6 +31,9 @@ define(['raintime/lib/util',
 ], function (util, Promise, StyleRegistry) {
 
     var defer = Promise.defer;
+    var processing = {
+            "path": ''
+    };
 
     /**
      * Handles inserting and removing CSS into the page. The CSS is requested using AJAX and
@@ -63,20 +66,23 @@ define(['raintime/lib/util',
 
         this._getFiles(newFiles).then(function (contents) {
             for (var i = 0, len = newFiles.length; i < len; i++) {
-                var file = newFiles[i];
-                if (!contents[file.path]) {
-                    continue;
+                if(processing.path !== newFiles[i].path) { 
+                    var file = newFiles[i];
+                    processing.path = newFiles[i].path;
+                    if (!contents[file.path]) {
+                        continue;
+                    }
+
+                    var content = self._decorate(contents[file.path],
+                                                 file.path,
+                                                 file.media);
+
+                    css.push({
+                        path: file.path,
+                        ruleCount: file.ruleCount,
+                        content: content
+                    });
                 }
-
-                var content = self._decorate(contents[file.path],
-                                             file.path,
-                                             file.media);
-
-                css.push({
-                    path: file.path,
-                    ruleCount: file.ruleCount,
-                    content: content
-                });
             }
 
             if (!self._registry.register(componentId, css)) {
@@ -86,6 +92,8 @@ define(['raintime/lib/util',
 
             deferred.resolve();
         });
+
+        processing.path = undefined;
 
         return deferred.promise;
     };

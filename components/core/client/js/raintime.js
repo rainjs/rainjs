@@ -367,8 +367,6 @@ define(['raintime/lib/promise',
             }
 
             controller.on = function (eventName, callback) {
-                logger.info('Called ' + eventName + ' event for controller ' +
-                            component.controller);
                 if (eventName === 'start' && newComponent.state === Component.START) {
                     callback.call(controller);
                     return;
