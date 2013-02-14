@@ -174,5 +174,39 @@ define(['raintime/client_storage',
         window.ClientRenderer.get().requestComponent(component);
     };
 
+    /**
+     * Removes a child component.
+     *
+     * @param {String} staticId the child static id
+     */
+    Context.prototype.remove = function (staticId) {
+        var children = this.component.children,
+            childInstanceId;
+
+        if (!children) {
+            return;
+        }
+
+        for (var i = 0, len = children.length; i < len; i++) {
+            if (children[i].staticId === staticId) {
+                childInstanceId = children[i].instanceId;
+                raintime.componentRegistry.deregister(childInstanceId);
+                children.splice(i, 1);
+                $("#" + childInstanceId).remove();
+                break;
+            }
+        }
+    };
+
+    /**
+     * Gets the controller of the parent component. It returns a promise if the parent isn't loaded
+     * yet. This is an internal framework method.
+     *
+     * @name _getParent
+     * @memberOf Context#
+     * @private
+     * @returns {Controller|Promise}
+     */
+
     return Context;
 });
