@@ -213,7 +213,8 @@ define(['raintime/lib/promise',
                 }
             }
 
-            CssRenderer.get().unload(component);
+            //TODO: this commented line does not work because of the css renderer logic
+            //CssRenderer.get().unload(component);
             delete components[instanceId];
         }
     };
