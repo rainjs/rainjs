@@ -144,10 +144,16 @@ describe('Handlebars component helper', function () {
 
     describe('test required and optional options', function () {
 
-        it('should require "view" to be defined', function () {
+        it('should require "name" to be defined if neither "name" or "view" is defined', function () {
+            Handlebars.compile('{{component}}')();
+            expect(rainContext.childrenInstanceIds.length).toEqual(1);
+            expect(childComponent, 500);
+        });
+
+        it('should set "view" to "index" if "view" is not defined', function () {
             Handlebars.compile('{{component name="button"}}')();
             expect(rainContext.childrenInstanceIds.length).toEqual(1);
-            expectError(childComponent, 500);
+            expect(childComponent.view).toEqual('index');
         });
 
         it('should require "name" to be defined when "version" is present', function () {
