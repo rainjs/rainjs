@@ -139,7 +139,7 @@ Example
             "viewId": "index",
             "timeout": 500
         },
-        
+
          "loginComponent": {
             "id": "user",
             "version": "1.0",
@@ -159,7 +159,7 @@ Example
         "identity": {
             "provider": "./configuration/custom_identity_provider"
         }
-        
+
     }
 
 -----------------------
@@ -167,3 +167,46 @@ Component configuration
 -----------------------
 
 Please read :doc:`Component configuration </server/component_descriptor>` for more information.
+
+----------------------
+Language configuration
+----------------------
+
+The rain server can support configuration for individual domains. It is advisable that you set 
+this configuration in another <filename>.conf in your conf folder. For example "language.conf".
+
+A valid example of this configuration must look like this:
+
+.. code-block:: javascript
+    :linenos:
+
+     {  "tlds": {
+            "net": {
+                "defaultLanguage": "en_US",
+                "supportedLanguages": ["en_US", "ro_RO", "en_UK"]
+            },
+            "com": {
+                "defaultLanguage": "en_US",
+                "supportedLanguages": ["en_US", "ro_RO", "en_UK"]
+            }
+        }
+    }
+
+As you can see in this example the first key is the domain than you have a defaultLanguage and
+an array of supportedLanguages. Both of this parameters ``defaultLanguage`` and ``supportedLanguages``
+are mandatory.
+
+The userLanguage is set from the start depending on the browser accepted-language if it's accepted
+or the defaultLanguage.
+
+All the text for the selectLanguage menu must be set in the ``server.conf`` at the ``languages`` key.
+
+..................
+Expected behavior:
+..................
+
+- If there is a supported language on a domain that has no text for the select language component,
+  it will not be included.
+- If the browsers Accepted-Language header is not supported than the userLanguage will be set to 
+  the defaultLanguage
+- If domain does not exist it will use the preset languages with default language in the server.conf
