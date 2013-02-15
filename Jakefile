@@ -164,7 +164,7 @@ namespace('test', function () {
                 return;
             }
 
-            process.env.RAIN_CONF = process.cwd() + '/tests/server/fixtures/server.conf';
+            process.env.RAIN_CONF = process.cwd() + '/tests/server/fixtures';
             var specFolder = process.cwd() + '/tests/server/tests/';
 
             for (var key in jasmine) {

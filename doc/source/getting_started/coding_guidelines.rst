@@ -140,6 +140,9 @@ Best Practices
 - Don't modify the prototypes of built-in objects, like ``Object``, ``Array``, ``Function`` etc.
 - In server side code, whenever possible, place all the ``require`` calls at the beginning of the
   file. Remove the ``require`` calls that are no longer needed.
+- Do not put sensitive information inside your code, you can put this type of information inside
+  a .conf file.
+
 
 -------
 Classes
