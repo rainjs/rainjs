@@ -5,27 +5,32 @@ Server and component configuration
 A RAIN application has two major configuration points: the server configuration and the component
 level configuration.
 
+.. warning::
+    - You must have a conf folder or setup a conf folder for your project
+    - Do not keep your credentials inside code, as a recommendation you can put them inside 
+      a credentials.conf file the ``credentials`` name is not mandatory
+    - All the configuration files must be named <name>.conf any other files will be ignored.
+
 --------------------
 Server configuration
 --------------------
 
-The RAIN server has a set of configuration options that are located in a configuration file. This
-file has to be in a valid JSON object and when the RAIN server starts it is looked up in the
-following order:
+The RAIN server has a set of configuration files that are located in a configuration folder. These
+files have to be in JSON format. When the RAIN server starts it reads all the files with the
+``.conf`` extension from the configuration folder which is determined in the following order:
 
-- if the ``dir`` parameter of the ``raind`` process is set, then the location is
-  ``<dir>/conf/server.conf.default``
-- the RAIN_CONF environment variable that has the full path to the configuration file
-- the default configuration that is ``<project-root>/conf/server.conf.default``
+ - if the RAIN_CONF environment variable is set, this value is used
+ - if the ``dir`` parameter of the ``raind`` process is set, the location is ``<dir>/conf``
+ - the default configuration that is ``<project-root>/conf``
 
-If the configuration file is not found or the format is invalid then the server won't start.
+If no configuration files are found or the format is invalid then the server won't start.
 
 ..........
 Parameters
 ..........
 
 The server configuration file has required and optional parameters described below. The required
-fields are formatted with **bold**. 
+fields are formatted with **bold**.
 
 - **server** - an Object with the following keys:
 
@@ -57,10 +62,10 @@ fields are formatted with **bold**.
   what component to be used while the client side waits for other components to be rendered. The
   default value is the ``placeholder`` component provided in the RAIN SDK. The ``timeout``
   parameter set how much to wait for a render response before showing the loading component.
-  
+
 - loginComponent - an Object with ``id``, ``version`` and ``viewId`` keys that specify where the
   client should be redirected after an unsuccessful authentication attempt.
-  
+
 - mainComponent - an Object with ``id``, ``version`` and ``viewId`` keys that specify where the
   client should be redirected after a successful authentication attempt if nothing else is
   specified after the login attempt as a redirect url.
@@ -139,7 +144,7 @@ Example
             "viewId": "index",
             "timeout": 500
         },
-        
+
          "loginComponent": {
             "id": "user",
             "version": "1.0",
@@ -159,7 +164,7 @@ Example
         "identity": {
             "provider": "./configuration/custom_identity_provider"
         }
-        
+
     }
 
 -----------------------
@@ -167,3 +172,27 @@ Component configuration
 -----------------------
 
 Please read :doc:`Component configuration </server/component_descriptor>` for more information.
+
+-----------------------------------
+Sensitive information configuration
+-----------------------------------
+
+The sensitive information configuration file must be placed in the conf folder.
+
+.......
+Example
+.......
+
+.. code-block:: javascript
+    :linenos:
+
+    {
+
+        "cookieSecret": "custom secret",
+        "custom_sensitivekey": "custom sensitive value"
+
+    }
+
+The only required parameter is the *"cookieSecret"*
+
+

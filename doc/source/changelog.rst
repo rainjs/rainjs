@@ -3,6 +3,15 @@ Changelog
 =========
 
 ------
+v 0.23
+------
+
++ The server configuration can be split in multiple files and the server reads all the ``.conf``
+  files from the specified directory. The environment variable ``RAIN_CONF`` accepts a folder,
+  not the path to the configuration files. This allows storing sensitive information in a separate
+  file.
+
+------
 v 0.22
 ------
 
