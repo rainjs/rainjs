@@ -8,7 +8,7 @@
         { "name": "Alexandru Bularca", "email": "alexandru.bularca@1and1.ro" },
         { "name": "Ciprian Roman", "email": "ciprian.roman@1and1.ro" },
         { "name": "Daniel Uzunu", "email": "daniel.uzunu@1and1.ro" },
-        { "name": "Razvan Mocanu", "email": "razvan.mocanu@1and1.ro" }
+        { "name": "Razvan Mocanu", "email": "razvan.mocanu@1and1.ro" },
         { "name": "Alexandru Trifan", "email": "alexandru.trifan@1and1.ro"}
     ],
     "dependencies": {
