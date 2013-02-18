@@ -112,7 +112,7 @@ describe('iternationalisation module', function () {
     });
 
     it('should set the default language to the Accepted-Language header if is supported and' +
-            'the domain is not set', function () {
+            ' the domain is not set', function () {
         var finished = false,
             next = function () {
                 finished = true;
@@ -132,7 +132,7 @@ describe('iternationalisation module', function () {
 
         internationalisationMock()(request, response, next);
 
-        expect(fakeSession["userLanguage"]).toEqual('de_DE');
+        expect(fakeSession["userLanguage"]).toEqual('en_US');
         expect(finished).toBe(true);
     });
 
