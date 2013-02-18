@@ -313,7 +313,7 @@ get
     
 
 
-Initializes and returns a platform or component logger.
+Initializes and returns the platform or component logger.
 
 
 

@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Server and component configuration &mdash; Rain v0.22.0 documentation</title>
+    <title>Server and component configuration &mdash; Rain v0.23.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.22.0',
+        VERSION:     '0.23.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.22.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.23.0 documentation" href="../index.html" />
     <link rel="next" title="RAIN component descriptor" href="../server/component_descriptor.html" />
     <link rel="prev" title="RAIN SDK Tutorial" href="rain_sdk_tutorial.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="rain_sdk_tutorial.html" title="RAIN SDK Tutorial"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.22.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.23.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -52,18 +52,28 @@
 <h1>Server and component configuration<a class="headerlink" href="#server-and-component-configuration" title="Permalink to this headline">¶</a></h1>
 <p>A RAIN application has two major configuration points: the server configuration and the component
 level configuration.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<ul class="last simple">
+<li>You must have a conf folder or setup a conf folder for your project</li>
+<li>Do not keep your credentials inside code, as a recommendation you can put them inside
+a credentials.conf file the <tt class="docutils literal"><span class="pre">credentials</span></tt> name is not mandatory</li>
+<li>All the configuration files must be named &lt;name&gt;.conf any other files will be ignored.</li>
+</ul>
+</div>
 <div class="section" id="server-configuration">
 <h2>Server configuration<a class="headerlink" href="#server-configuration" title="Permalink to this headline">¶</a></h2>
-<p>The RAIN server has a set of configuration options that are located in a configuration file. This
-file has to be in a valid JSON object and when the RAIN server starts it is looked up in the
-following order:</p>
+<p>The RAIN server has a set of configuration files that are located in a configuration folder. These
+files have to be in JSON format. When the RAIN server starts it reads all the files with the
+<tt class="docutils literal"><span class="pre">.conf</span></tt> extension from the configuration folder which is determined in the following order:</p>
+<blockquote>
 <ul class="simple">
-<li>if the <tt class="docutils literal"><span class="pre">dir</span></tt> parameter of the <tt class="docutils literal"><span class="pre">raind</span></tt> process is set, then the location is
-<tt class="docutils literal"><span class="pre">&lt;dir&gt;/conf/server.conf.default</span></tt></li>
-<li>the RAIN_CONF environment variable that has the full path to the configuration file</li>
-<li>the default configuration that is <tt class="docutils literal"><span class="pre">&lt;project-root&gt;/conf/server.conf.default</span></tt></li>
+<li>if the RAIN_CONF environment variable is set, this value is used</li>
+<li>if the <tt class="docutils literal"><span class="pre">dir</span></tt> parameter of the <tt class="docutils literal"><span class="pre">raind</span></tt> process is set, the location is <tt class="docutils literal"><span class="pre">&lt;dir&gt;/conf</span></tt></li>
+<li>the default configuration that is <tt class="docutils literal"><span class="pre">&lt;project-root&gt;/conf</span></tt></li>
 </ul>
-<p>If the configuration file is not found or the format is invalid then the server won&#8217;t start.</p>
+</blockquote>
+<p>If no configuration files are found or the format is invalid then the server won&#8217;t start.</p>
 <div class="section" id="parameters">
 <h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
 <p>The server configuration file has required and optional parameters described below. The required
@@ -278,6 +288,74 @@ implementation. It has a <tt class="docutils literal"><span class="pre">provider
 <h2>Component configuration<a class="headerlink" href="#component-configuration" title="Permalink to this headline">¶</a></h2>
 <p>Please read <a class="reference internal" href="../server/component_descriptor.html"><em>Component configuration</em></a> for more information.</p>
 </div>
+<div class="section" id="sensitive-information-configuration">
+<h2>Sensitive information configuration<a class="headerlink" href="#sensitive-information-configuration" title="Permalink to this headline">¶</a></h2>
+<p>The sensitive information configuration file must be placed in the conf folder.</p>
+<div class="section" id="id1">
+<h3>Example<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span class="p">{</span>
+
+    <span class="s2">&quot;cookieSecret&quot;</span><span class="o">:</span> <span class="s2">&quot;custom secret&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;custom_sensitivekey&quot;</span><span class="o">:</span> <span class="s2">&quot;custom sensitive value&quot;</span>
+
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>The only required parameter is the <em>&#8220;cookieSecret&#8221;</em></p>
+</div>
+</div>
+<div class="section" id="language-configuration">
+<h2>Language configuration<a class="headerlink" href="#language-configuration" title="Permalink to this headline">¶</a></h2>
+<p>The rain server can support configuration for individual domains. It is advisable that you set
+this configuration in another &lt;filename&gt;.conf in your conf folder. For example &#8220;language.conf&#8221;.</p>
+<p>A valid example of this configuration must look like this:</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre> <span class="p">{</span>
+    <span class="s2">&quot;tlds&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;net&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;defaultLanguage&quot;</span><span class="o">:</span> <span class="s2">&quot;en_US&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;supportedLanguages&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;en_US&quot;</span><span class="p">,</span> <span class="s2">&quot;ro_RO&quot;</span><span class="p">,</span> <span class="s2">&quot;en_UK&quot;</span><span class="p">]</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;com&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;defaultLanguage&quot;</span><span class="o">:</span> <span class="s2">&quot;en_US&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;supportedLanguages&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;en_US&quot;</span><span class="p">,</span> <span class="s2">&quot;ro_RO&quot;</span><span class="p">,</span> <span class="s2">&quot;en_UK&quot;</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>As you can see in this example the first key is the domain than you have a defaultLanguage and
+an array of supportedLanguages. Both of this parameters <tt class="docutils literal"><span class="pre">defaultLanguage</span></tt> and <tt class="docutils literal"><span class="pre">supportedLanguages</span></tt>
+are mandatory.</p>
+<p>The userLanguage is set from the start depending on the browser accepted-language if it&#8217;s accepted
+or the defaultLanguage.</p>
+<p>All the text for the selectLanguage menu must be set in the <tt class="docutils literal"><span class="pre">server.conf</span></tt> at the <tt class="docutils literal"><span class="pre">languages</span></tt> key.</p>
+<div class="section" id="expected-behavior">
+<h3>Expected behavior:<a class="headerlink" href="#expected-behavior" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>If there is a supported language on a domain that has no text for the select language component,
+it will not be included.</li>
+<li>If the browsers Accepted-Language header is not supported than the userLanguage will be set to
+the defaultLanguage</li>
+<li>If domain does not exist it will use the preset languages with default language in the server.conf</li>
+</ul>
+</div>
+</div>
 </div>
 
 
@@ -295,6 +373,14 @@ implementation. It has a <tt class="docutils literal"><span class="pre">provider
 </ul>
 </li>
 <li><a class="reference internal" href="#component-configuration">Component configuration</a></li>
+<li><a class="reference internal" href="#sensitive-information-configuration">Sensitive information configuration</a><ul>
+<li><a class="reference internal" href="#id1">Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#language-configuration">Language configuration</a><ul>
+<li><a class="reference internal" href="#expected-behavior">Expected behavior:</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -334,7 +420,7 @@ implementation. It has a <tt class="docutils literal"><span class="pre">provider
         <li class="right" >
           <a href="rain_sdk_tutorial.html" title="RAIN SDK Tutorial"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.22.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.23.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

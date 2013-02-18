@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Changelog &mdash; Rain v0.22.0 documentation</title>
+    <title>Changelog &mdash; Rain v0.23.0 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.22.0',
+        VERSION:     '0.23.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.22.0 documentation" href="index.html" />
+    <link rel="top" title="Rain v0.23.0 documentation" href="index.html" />
     <link rel="prev" title="Distributed Websockets" href="proposals/distributed_websockets.html" /> 
   </head>
   <body>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="proposals/distributed_websockets.html" title="Distributed Websockets"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Rain v0.22.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Rain v0.23.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -46,6 +46,22 @@
             
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="v-0-23">
+<h2>v 0.23<a class="headerlink" href="#v-0-23" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Improved log messages.</li>
+<li>The server configuration can be split in multiple files and the server reads all the <tt class="docutils literal"><span class="pre">.conf</span></tt>
+files from the specified directory. The environment variable <tt class="docutils literal"><span class="pre">RAIN_CONF</span></tt> accepts a folder,
+not the path to the configuration files. This allows storing sensitive information in a separate
+file.</li>
+<li>Added support for language configuration for multiple domains. The <tt class="docutils literal"><span class="pre">accept-language</span></tt> header
+is also considered when choosing a language.</li>
+<li>The <tt class="docutils literal"><span class="pre">view</span></tt> parameter of the component helper is now optional. The default value is <tt class="docutils literal"><span class="pre">index</span></tt>.</li>
+<li>Fixed a CSS renderer bug where the same CSS file is added multiple times.</li>
+<li>A new method was added to <tt class="docutils literal"><span class="pre">controller.context</span></tt> called <tt class="docutils literal"><span class="pre">delete</span></tt>. It deletes a component.</li>
+<li>Updated Handlebars to the 1.0.8.</li>
+</ul>
+</div>
 <div class="section" id="v-0-22">
 <h2>v 0.22<a class="headerlink" href="#v-0-22" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -206,6 +222,7 @@ should request it using <tt class="docutils literal"><span class="pre">raintime/
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Changelog</a><ul>
+<li><a class="reference internal" href="#v-0-23">v 0.23</a></li>
 <li><a class="reference internal" href="#v-0-22">v 0.22</a></li>
 <li><a class="reference internal" href="#v-0-20">v 0.20</a></li>
 <li><a class="reference internal" href="#v-0-19">v 0.19</a></li>
@@ -256,7 +273,7 @@ should request it using <tt class="docutils literal"><span class="pre">raintime/
         <li class="right" >
           <a href="proposals/distributed_websockets.html" title="Distributed Websockets"
              >previous</a> |</li>
-        <li><a href="index.html">Rain v0.22.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Rain v0.23.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

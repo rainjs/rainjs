@@ -136,6 +136,34 @@ The context for the callback function will be the component's controller.
 
 
 
+remove
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Context#remove(staticId)
+
+
+    
+    :param String staticId: 
+        the child static id 
+    
+
+
+
+
+Removes a child component.
+
+
+
+
+
+
+
+
+
+    
+
+
+
 replace
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 

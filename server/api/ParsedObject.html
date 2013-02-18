@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class BaseSession &mdash; Rain v0.23.0 documentation</title>
+    <title>Class ParsedObject &mdash; Rain v0.23.0 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -23,8 +23,8 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="Rain v0.23.0 documentation" href="../../index.html" />
-    <link rel="next" title="Class BaseSessionStore" href="BaseSessionStore.html" />
-    <link rel="prev" title="Namespace Authorization" href="Authorization.html" /> 
+    <link rel="next" title="Class PartialHelper" href="PartialHelper.html" />
+    <link rel="prev" title="Class Logger" href="Logger.html" /> 
   </head>
   <body>
     <div class="related">
@@ -34,10 +34,10 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="BaseSessionStore.html" title="Class BaseSessionStore"
+          <a href="PartialHelper.html" title="Class PartialHelper"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="Authorization.html" title="Namespace Authorization"
+          <a href="Logger.html" title="Class Logger"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Rain v0.23.0 documentation</a> &raquo;</li> 
       </ul>
@@ -48,23 +48,23 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="class-basesession">
-<h1>Class BaseSession<a class="headerlink" href="#class-basesession" title="Permalink to this headline">¶</a></h1>
-<p>Get / set and remove session keys from / to the session store.
-It keeps track of the updated and removed keys, information that is used by the session store
-to make partial updates.</p>
+  <div class="section" id="class-parsedobject">
+<h1>Class ParsedObject<a class="headerlink" href="#class-parsedobject" title="Permalink to this headline">¶</a></h1>
+<p>The constructor of the ParsedObject</p>
 <div class="section" id="constructor">
 <h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="BaseSession">
-<em class="property">class </em><tt class="descname">BaseSession</tt><big>(</big><em>session</em>, <em>component</em><big>)</big><a class="headerlink" href="#BaseSession" title="Permalink to this definition">¶</a></dt>
+<dt id="ParsedObject">
+<em class="property">class </em><tt class="descname">ParsedObject</tt><big>(</big><em>values</em><big>)</big><a class="headerlink" href="#ParsedObject" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>session</strong> (<em>Object</em>) &#8211; the session objects for the specified component</li>
-<li><strong>component</strong> (<em>Object</em>) &#8211; the component configuration</li>
+<li><strong>values</strong> (<em>[String]</em>) &#8211; <ul>
+<li>the values resulting from the parsed header</li>
+</ul>
+</li>
 </ul>
 </td>
 </tr>
@@ -75,40 +75,52 @@ to make partial updates.</p>
 </div>
 <div class="section" id="methods">
 <h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="get">
-<h3>get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="getbestlanguagematch">
+<h3>getBestLanguageMatch<a class="headerlink" href="#getbestlanguagematch" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="BaseSession#get">
-<tt class="descname">BaseSession#get</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#BaseSession#get" title="Permalink to this definition">¶</a></dt>
+<dt id="ParsedObject#getBestLanguageMatch">
+<tt class="descname">ParsedObject#getBestLanguageMatch</tt><big>(</big><em>candidates</em><big>)</big><a class="headerlink" href="#ParsedObject#getBestLanguageMatch" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>key</strong> (<em>String</em>) &#8211; the key</li>
+<li><strong>candidates</strong> (<em>[String]</em>) &#8211; <ul>
+<li>the array of predefined languages</li>
+</ul>
+</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns Object:</th><td class="field-body"><p class="first last">the value</p>
+<tr class="field"><th class="field-name" colspan="2">Returns String | undefined:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li>the best language match from the candidates</li>
+</ul>
 </td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<p>Get the value associated with the specified key.</p>
+<p>Get the best language match from an array of candidates.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">parsedHeader</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ParsedObject</span><span class="p">([</span><span class="s1">&#39;en&#39;</span><span class="p">,</span> <span class="s1">&#39;en_US&#39;</span><span class="p">]);</span>
+ <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">getBestLanguage</span><span class="p">([</span><span class="s1">&#39;ar_AR&#39;</span><span class="p">,</span> <span class="s1">&#39;en_UK&#39;</span><span class="p">]);</span>
+ <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">);</span>
+</pre></div>
 </div>
-<div class="section" id="remove">
-<h3>remove<a class="headerlink" href="#remove" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="getvalues">
+<h3>getValues<a class="headerlink" href="#getvalues" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="BaseSession#remove">
-<tt class="descname">BaseSession#remove</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#BaseSession#remove" title="Permalink to this definition">¶</a></dt>
+<dt id="ParsedObject#getValues">
+<tt class="descname">ParsedObject#getValues</tt><big>(</big><big>)</big><a class="headerlink" href="#ParsedObject#getValues" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>key</strong> (<em>String</em>) &#8211; the key</li>
+<tr class="field"><th class="field-name" colspan="2">Returns [String]:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"><ul class="first last simple">
+<li>the values of the ParsedObject.</li>
 </ul>
 </td>
 </tr>
@@ -116,37 +128,7 @@ to make partial updates.</p>
 </table>
 </dd></dl>
 
-<p>Remove the specified key from the session.</p>
-</div>
-<div class="section" id="removeall">
-<h3>removeAll<a class="headerlink" href="#removeall" title="Permalink to this headline">¶</a></h3>
-<dl class="function">
-<dt id="BaseSession#removeAll">
-<tt class="descname">BaseSession#removeAll</tt><big>(</big><big>)</big><a class="headerlink" href="#BaseSession#removeAll" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<p>Remove all keys.</p>
-</div>
-<div class="section" id="set">
-<h3>set<a class="headerlink" href="#set" title="Permalink to this headline">¶</a></h3>
-<dl class="function">
-<dt id="BaseSession#set">
-<tt class="descname">BaseSession#set</tt><big>(</big><em>key</em>, <em>the</em><big>)</big><a class="headerlink" href="#BaseSession#set" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>key</strong> (<em>String</em>) &#8211; the key to save</li>
-<li><strong>the</strong> (<em>Object</em>) &#8211; key&#8217;s value</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<p>Sets a value for the specified key.</p>
+<p>Returns the values of the ParsedObject.</p>
 </div>
 </div>
 </div>
@@ -159,13 +141,11 @@ to make partial updates.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Class BaseSession</a><ul>
+<li><a class="reference internal" href="#">Class ParsedObject</a><ul>
 <li><a class="reference internal" href="#constructor">Constructor</a></li>
 <li><a class="reference internal" href="#methods">Methods</a><ul>
-<li><a class="reference internal" href="#get">get</a></li>
-<li><a class="reference internal" href="#remove">remove</a></li>
-<li><a class="reference internal" href="#removeall">removeAll</a></li>
-<li><a class="reference internal" href="#set">set</a></li>
+<li><a class="reference internal" href="#getbestlanguagematch">getBestLanguageMatch</a></li>
+<li><a class="reference internal" href="#getvalues">getValues</a></li>
 </ul>
 </li>
 </ul>
@@ -173,11 +153,11 @@ to make partial updates.</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="Authorization.html"
-                        title="previous chapter">Namespace Authorization</a></p>
+  <p class="topless"><a href="Logger.html"
+                        title="previous chapter">Class Logger</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="BaseSessionStore.html"
-                        title="next chapter">Class BaseSessionStore</a></p>
+  <p class="topless"><a href="PartialHelper.html"
+                        title="next chapter">Class PartialHelper</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -202,10 +182,10 @@ to make partial updates.</p>
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="BaseSessionStore.html" title="Class BaseSessionStore"
+          <a href="PartialHelper.html" title="Class PartialHelper"
              >next</a> |</li>
         <li class="right" >
-          <a href="Authorization.html" title="Namespace Authorization"
+          <a href="Logger.html" title="Class Logger"
              >previous</a> |</li>
         <li><a href="../../index.html">Rain v0.23.0 documentation</a> &raquo;</li> 
       </ul>
