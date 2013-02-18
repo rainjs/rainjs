@@ -64,25 +64,32 @@ define(['raintime/lib/util',
             componentId = this._getFullId(component.id, component.version),
             newFiles = this._registry.getNewFiles(componentId, component.css);
 
+        newFiles = newFiles.filter(function (file) {
+            return typeof processing[file.path] === 'undefined';
+        });
+
+        for(var i = 0, len = newFiles.length; i < len; i++) {
+            processing[newFiles[i].path] = '';
+        }
+
         this._getFiles(newFiles).then(function (contents) {
             for (var i = 0, len = newFiles.length; i < len; i++) {
-                if(processing.path !== newFiles[i].path) { 
-                    var file = newFiles[i];
-                    processing.path = newFiles[i].path;
-                    if (!contents[file.path]) {
-                        continue;
-                    }
-
-                    var content = self._decorate(contents[file.path],
-                                                 file.path,
-                                                 file.media);
-
-                    css.push({
-                        path: file.path,
-                        ruleCount: file.ruleCount,
-                        content: content
-                    });
+                var file = newFiles[i];
+                if (!contents[file.path]) {
+                    continue;
                 }
+
+                var content = self._decorate(contents[file.path],
+                                             file.path,
+                                             file.media);
+
+                css.push({
+                    path: file.path,
+                    ruleCount: file.ruleCount,
+                    content: content
+                });
+
+                processing[file.path] = void(0);
             }
 
             if (!self._registry.register(componentId, css)) {
@@ -93,7 +100,6 @@ define(['raintime/lib/util',
             deferred.resolve();
         });
 
-        processing.path = undefined;
 
         return deferred.promise;
     };
