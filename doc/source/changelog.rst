@@ -6,10 +6,17 @@ Changelog
 v 0.23
 ------
 
++ Improved log messages.
 + The server configuration can be split in multiple files and the server reads all the ``.conf``
   files from the specified directory. The environment variable ``RAIN_CONF`` accepts a folder,
   not the path to the configuration files. This allows storing sensitive information in a separate
   file.
++ Added support for language configuration for multiple domains. The ``accept-language`` header
+  is also considered when choosing a language.
++ The ``view`` parameter of the component helper is now optional. The default value is ``index``.
++ Fixed a CSS renderer bug where the same CSS file is added multiple times.
++ A new method was added to ``controller.context`` called ``delete``. It deletes a component.
++ Updated Handlebars to the 1.0.8.
 
 ------
 v 0.22
