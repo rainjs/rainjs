@@ -171,7 +171,7 @@ Example
 Component configuration
 -----------------------
 
-Please read :doc:`Component configuration </server/component_descriptor>` for more information.
+Please read :doc:`Component configuration <../server/component_descriptor>` for more information.
 
 -----------------------------------
 Sensitive information configuration
