@@ -141,7 +141,7 @@ describe('Router', function () {
     });
 
     it('should call next with a 404 error if no route was found', function () {
-        expectNextToBeCalled('/invalid', 404, 'No route was found!');
+        expectNextToBeCalled('/invalid', 404, 'No route was found for: /invalid');
     });
 
     it('should call next with a 404 error if the url is not valid', function () {
