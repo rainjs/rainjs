@@ -2,6 +2,13 @@
 Changelog
 =========
 
+--------
+v 0.23.1
+--------
+
++ Fixed ``rain create project`` command and added credentials.conf
++ Fixed internationalisation module - crashing on no ``tlds`` key with domains.
+
 ------
 v 0.23
 ------
