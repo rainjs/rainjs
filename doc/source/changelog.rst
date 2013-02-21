@@ -3,6 +3,18 @@ Changelog
 =========
 
 --------
+v 0.23.3
+--------
+
++ Removed logger from po_utils because the rain terminal commands were not working anymore.
+
+--------
+v 0.23.2
+--------
+
++ Fixed a typo in controller_path module.
+
+--------
 v 0.23.1
 --------
 

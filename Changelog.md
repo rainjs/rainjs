@@ -1,11 +1,19 @@
 # Changelog
 
-## v 0.23.1
+## 0.23.3
 
-* Fixed ``rain create project`` command and added credentials.conf
+* Removed logger from po_utils because the rain terminal commands were not working anymore.
+
+## 0.23.2
+
+* Fixed a typo in controller_path module.
+
+## 0.23.1
+
+* Fixed ``rain create project`` command and added credentials.conf.
 * Fixed internationalisation module - crashing on no ``tlds`` key with domains.
 
-## v 0.23.0
+## 0.23.0
 
 * Improved log messages.
 * The server configuration can be split in multiple files and the server reads all the ``.conf``
@@ -19,7 +27,7 @@
 * A new method was added to ``controller.context`` called ``delete``. It deletes a component.
 * Updated Handlebars to the 1.0.8.
 
-## v 0.22.0
+## 0.22.0
 
 * The partial templates feature was implemented: the ``partial`` Handlebars helper was added.
 * The ``end`` callback that was passed to WebSocket handlers was removed. Now you can return a
