@@ -403,7 +403,7 @@ namespace('ci', function () {
                 //extend jasmine with functionality needed by Rain
                 require('../tests/server/lib/jasmine_rain');
 
-                process.env.RAIN_CONF = process.cwd() + '/tests/server/fixtures/server.conf';
+                process.env.RAIN_CONF = process.cwd() + '/tests/server/fixtures';
                 process.env.RAIN_COVERAGE = 1;
 
                 var jasmineEnv = jasmine.getEnv();

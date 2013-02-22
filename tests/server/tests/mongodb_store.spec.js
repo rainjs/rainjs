@@ -118,7 +118,7 @@ describe('MongoDB session store', function () {
             expect(Spy.MongoDB.Server).toHaveBeenCalledWith(config.host,
                     config.port, {});
             expect(Spy.MongoDB.Db).toHaveBeenCalledWith(config.database,
-                    Spy.MongoDB.ServerInstance, {});
+                    Spy.MongoDB.ServerInstance, {w: 1});
             expect(Spy.MongoDB.Collection).toHaveBeenCalledWith(
                     Spy.MongoDB.DbInstance, 'sessions');
         });

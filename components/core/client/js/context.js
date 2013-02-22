@@ -51,6 +51,7 @@ define(['raintime/client_storage',
         raintime = raintimeInstance;
         this.component = component;
         this.instanceId = component.instanceId;
+        this.parentInstanceId = component.parentInstanceId;
         this.storage = new ClientStorage(this);
 
         /**
@@ -145,11 +146,11 @@ define(['raintime/client_storage',
 
         var self = this;
 
-        raintime.componentRegistry.setCallback(instanceId,
-                function (registeredComponent) {
-                    self.component.children.push(registeredComponent);
-                    callback && callback.call(registeredComponent.controller);
-                });
+        raintime.componentRegistry.setCallback(instanceId, function (registeredComponent) {
+            self.component.children.push(registeredComponent);
+            registeredComponent.controller.context.parentInstanceId = self.instanceId;
+            callback && callback.call(registeredComponent.controller, registeredComponent);
+        });
 
         window.ClientRenderer.get().requestComponent(component);
     };
@@ -170,9 +171,48 @@ define(['raintime/client_storage',
      */
     Context.prototype.replace = function (component, callback) {
         component.instanceId = this.instanceId;
-        raintime.componentRegistry.setCallback(component.instanceId, callback);
+
+        raintime.componentRegistry.setCallback(this.instanceId, function (registeredComponent) {
+            registeredComponent.controller.context.parentInstanceId = self.instanceId;
+            callback && callback.call(registeredComponent.controller, registeredComponent);
+        });
+
         window.ClientRenderer.get().requestComponent(component);
     };
+
+    /**
+     * Removes a child component.
+     *
+     * @param {String} staticId the child static id
+     */
+    Context.prototype.remove = function (staticId) {
+        var children = this.component.children,
+            childInstanceId;
+
+        if (!children) {
+            return;
+        }
+
+        for (var i = 0, len = children.length; i < len; i++) {
+            if (children[i].staticId === staticId) {
+                childInstanceId = children[i].instanceId;
+                raintime.componentRegistry.deregister(childInstanceId);
+                children.splice(i, 1);
+                $("#" + childInstanceId).remove();
+                break;
+            }
+        }
+    };
+
+    /**
+     * Gets the controller of the parent component. It returns a promise if the parent isn't loaded
+     * yet. This is an internal framework method.
+     *
+     * @name _getParent
+     * @memberOf Context#
+     * @private
+     * @returns {Controller|Promise}
+     */
 
     return Context;
 });
