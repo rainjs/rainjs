@@ -57,6 +57,9 @@ define(['raintime/lib/jed'], function (Jed) {
         if (localeJson.defaultLanguage) {
             createJed(this, localeJson, 'defaultLanguage');
         }
+
+        this.t = this.t.bind(this);
+        this.tn = this.tn.bind(this);
     }
 
     /**
@@ -109,7 +112,8 @@ define(['raintime/lib/jed'], function (Jed) {
      * @param {Array} args the message parameters
      * @returns {String} the translated text or empty string if an error occurred
      */
-    ClientTranslation.prototype.translate = function (msgId, msgIdPlural, count, args) {
+    ClientTranslation.prototype.translate = 
+    ClientTranslation.prototype.tn = function (msgId, msgIdPlural, count, args) {
         var jed = this.locales['language'];
 
         if (!jed || !msgIdExists(jed, msgId, count)) {
@@ -126,6 +130,10 @@ define(['raintime/lib/jed'], function (Jed) {
         } catch (ex) {
             return '';
         }
+    };
+
+    ClientTranslation.prototype.t = function(msgId, args) {
+        return this.translate(msgId, undefined, undefined, args);
     };
 
     /**
