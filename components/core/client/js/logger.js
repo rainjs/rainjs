@@ -61,6 +61,10 @@ define(['raintime/messaging/sockets'], function (Sockets) {
             self._logQueue = [];
             self._ready = true;
         });
+        
+        Object.keys(Logger.LEVELS).forEach(function(level) {
+            this[level] = this[level].bind(this);
+        }, this);
     }
 
     /**

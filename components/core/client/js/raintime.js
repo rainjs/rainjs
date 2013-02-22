@@ -345,8 +345,10 @@ define(['raintime/lib/promise',
             return;
         }
 
-        require([component.controller], function (Controller) {
-            // Extend the controller with EventEmitter methods.
+        var localeDependency = 'locale!' + component.id + '/' + component.version + '/' + rainContext.language;
+
+        require([component.controller, 'raintime/translation', localeDependency], function (Controller, Translation, locale) {
+        // Extend the controller with EventEmitter methods.
             for (var key in EventEmitter.prototype) {
                 Controller.prototype[key] = EventEmitter.prototype[key];
             }
@@ -366,6 +368,10 @@ define(['raintime/lib/promise',
                 controller = new Controller();
                 AsyncController.call(controller);
             }
+   
+            var translation = Translation.get(component, locale);
+            controller.t = translation.t;
+            controller.tn = translation.tn;
 
             controller.on = function (eventName, callback) {
                 if (eventName === 'start' && newComponent.state === Component.START) {
@@ -386,6 +392,11 @@ define(['raintime/lib/promise',
                 sid: newComponent.staticId,
                 children: newComponent.children
             };
+
+            var logger = Logger.get(component);
+            Object.keys(Logger.LEVELS).forEach(function(level) {
+                controller.context[level] = this[level];
+            }, logger);
 
             controller.context._getParent = function () {
                 var parentInstanceId = this.parentInstanceId,
