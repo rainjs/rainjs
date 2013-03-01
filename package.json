@@ -25,7 +25,8 @@
         "wrench": "1.4.4",
         "jed": "0.5.2",
         "crc": "0.2.0",
-        "mongodb": "1.2.11"
+        "mongodb": "1.2.11",
+        "node-uuid" : "1.4.x"
     },
     "devDependencies": {
         "js-yaml": "",
