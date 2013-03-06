@@ -1,6 +1,7 @@
 {
     "id": "example",
     "version": "3.0",
+    "useSession": true,
     "views": {
         "index" : {},
         "notes": {},
