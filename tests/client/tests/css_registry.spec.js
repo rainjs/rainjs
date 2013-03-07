@@ -107,8 +107,9 @@ describe ('registry API', function (){
                                      'raintime/css/rule_set'],function (Registry, StyleSheet, RuleSet){
 
             var fakeRegistry = new Registry(),
-                rules = new RuleSet(css),
                 success;
+
+            new RuleSet(css);
 
             Registry.prototype.register.andCallThrough();
             Registry.prototype._insert.andCallThrough();

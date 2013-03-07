@@ -131,7 +131,7 @@ describe('Stylesheet', function () {
                 });
 
                 style.remove.andCallThrough();
-                var success = style.remove(rule);
+                style.remove(rule);
 
                 expect(style._transaction._remove.length).toBe(1);
 

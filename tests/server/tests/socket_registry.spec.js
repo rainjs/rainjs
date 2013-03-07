@@ -173,8 +173,6 @@ describe('Socket registry', function () {
             fn = events['connection'];
             fn(socket);
 
-            expect(sessionStore.save).not.toHaveBeenCalledWith(session);
-
             waitsFor(function () {
                 return isResolved;
             });

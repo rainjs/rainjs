@@ -26,7 +26,7 @@
 "use strict";
 
 describe('partial handlebars helper', function () {
-    var helper, renderer, componentRegistry, Handlebars, logger, componentConfig;
+    var helper, componentRegistry, Handlebars, logger, componentConfig;
 
     beforeEach(function () {
         componentConfig = {
@@ -41,7 +41,7 @@ describe('partial handlebars helper', function () {
             jasmine.createSpyObj('componentRegistry', ['getConfig']);
         componentRegistry.getConfig.andReturn(componentConfig);
 
-        renderer = mocks['../renderer'] = {
+        mocks['../renderer'] = {
             rain: {
                 component: {
                     id: 'example',

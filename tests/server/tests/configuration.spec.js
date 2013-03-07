@@ -52,7 +52,6 @@ describe('Server configuration and validation', function () {
         defaultconf = {
                 "server": {
                     "port": 1337,
-                    "socketsPort": 1338,
                     "timeoutForRequests" : 60,
 
                     "serverRoot": ".",
@@ -82,11 +81,11 @@ describe('Server configuration and validation', function () {
             return files;
         };
         fs.readFileSync = function (file) {
-            if(file.indexOf('default') !== -1) {
+            if (file.indexOf('default') !== -1) {
                 return JSON.stringify(defaultconf);
-            } else {
-                return JSON.stringify(credentials);
             }
+
+            return JSON.stringify(credentials);
         };
 
         loadConfiguration = function(configPath) {
@@ -97,8 +96,6 @@ describe('Server configuration and validation', function () {
             return new mockConfiguration.Configuration();
         };
     });
-    
-    
 
     it('must set the language to the default one', function () {
         var configuration = loadConfiguration(configurationsFolder);
@@ -115,7 +112,6 @@ describe('Server configuration and validation', function () {
         defaultconf = {
                 "server": {
                     "port": 1337,
-                    "socketsPort": 1338,
                     "timeoutForRequests" : 60,
 
                     "serverRoot": ".",
@@ -185,5 +181,4 @@ describe('Server configuration and validation', function () {
         expect(configuration.errorComponent).toEqual(defaultconf["errorComponent"]);
         expect(configuration.errorComponent).toEqual(defaultconf["loadingComponent"]);
     });
-
 });

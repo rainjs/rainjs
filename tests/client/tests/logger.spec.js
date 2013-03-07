@@ -30,7 +30,7 @@ describe('Client-side logger', function () {
         it('should create the core logger',
             ['raintime/logger', 'raintime/messaging/sockets'], function (Logger, Sockets) {
                 Sockets.getSocket.andReturn({on: jasmine.createSpy()});
-                var logger = new Logger();
+                new Logger();
                 expect(Sockets.getSocket).toHaveBeenCalledWith('/core/logging');
             }
         );
@@ -38,7 +38,7 @@ describe('Client-side logger', function () {
         it('should create a comoonent logger',
             ['raintime/logger', 'raintime/messaging/sockets'], function (Logger, Sockets) {
                 Sockets.getSocket.andReturn({on: jasmine.createSpy()});
-                var logger = new Logger({id: 'example', version: '1.0'});
+                new Logger({id: 'example', version: '1.0'});
                 expect(Sockets.getSocket).toHaveBeenCalledWith('/example/1.0/logging');
             }
         );
