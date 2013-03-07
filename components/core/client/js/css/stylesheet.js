@@ -141,7 +141,7 @@ define([], function () {
     };
 
     /**
-     * Write the queued modifications to the stylesheet.
+     * Write the queued modifications to the stylesheet object than to the html.
      */
     Stylesheet.prototype.write = function () {
         for (var action in this._transaction) {
@@ -210,8 +210,8 @@ define([], function () {
             rules[i].style = this;
             this._nextIndex += rules[i].length;
         }
-
-        this._text(this._text() + contents.join(''));
+        //get the text from the map rather from your css inside
+        this._text(this._getMapText());
     };
 
     /**
@@ -224,7 +224,7 @@ define([], function () {
         var i, len,
             index = 0,
             slices = [],
-            text = this._text();
+            text = this._getMapText();
 
         for (i = 0, len = rules.length; i < len; i++) {
             var rule = rules[i];
@@ -235,11 +235,11 @@ define([], function () {
             text = slices.join('');
 
             this._nextIndex -= rule.length;
-
             var nextStartPoint = rule.start;
             var keys = Object.keys(this._ruleMap).sort();
             for (var j = 0, length = keys.length; j < length; j++) {
                 var idx = keys[j];
+
                 if (this._ruleMap.hasOwnProperty(idx)) {
                     if (idx > rule.start) {
                         this._ruleMap[idx].start = nextStartPoint;
@@ -275,6 +275,16 @@ define([], function () {
         } else {
             this._styleSheet.textContent = text;
         }
+    };
+
+    Stylesheet.prototype._getMapText = function () {
+        var cssText = [];
+        for (var i in this._ruleMap) {
+            cssText.push(this._ruleMap[i].content);
+        }
+        var text = cssText.join('');
+
+        return text;
     };
 
     return Stylesheet;
