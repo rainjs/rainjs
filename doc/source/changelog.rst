@@ -14,8 +14,8 @@ v 0.24
   session cookie will be used if this value is missing.
 + Added ``idp`` (the identity provider instance for the current request) and ``user`` (the
   current user) on the custom request passed to the data layer method.
-+ Added ``idp``, ``user`` and ``environment`` on the HTTP request object.
-+ Added ``idp``, ``user`` and ``environment`` on the socket object for websockets.
++ Added ``idp``, ``user`` and ``environment`` on the HTTP request object for controllers.
++ Added ``idp``, ``user`` and ``environment`` on the ``socket`` object for websockets.
 + ``IdentityProvider.get(request.session)`` is no longer working since the global and component
   session are now separated. Use ``request.idp`` or ``request.user`` instead (applies to
   controller and data layer methods).
