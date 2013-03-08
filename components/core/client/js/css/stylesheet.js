@@ -236,7 +236,10 @@ define([], function () {
 
             this._nextIndex -= rule.length;
             var nextStartPoint = rule.start;
-            var keys = Object.keys(this._ruleMap).sort();
+            var keys = Object.keys(this._ruleMap).sort(function (key1, key2) {
+                return parseInt(key1, 10) - parseInt(key2, 10);
+            });
+
             for (var j = 0, length = keys.length; j < length; j++) {
                 var idx = keys[j];
 
@@ -279,8 +282,12 @@ define([], function () {
 
     Stylesheet.prototype._getMapText = function () {
         var cssText = [];
-        for (var i in this._ruleMap) {
-            cssText.push(this._ruleMap[i].content);
+        var keys = Object.keys(this._ruleMap).sort(function (key1, key2) {
+            return parseInt(key1, 10) - parseInt(key2, 10);
+        });
+
+        for (var i = 0, length = keys.length; i < length; i++) {
+            cssText.push(this._ruleMap[keys[i]].content);
         }
         var text = cssText.join('');
 
