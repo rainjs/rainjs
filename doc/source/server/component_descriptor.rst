@@ -78,6 +78,7 @@ or if you want to apply constraints on it must appear in this section:
   to the client and server-side controllers; the client-side controllers are located in
   ``<component_folder>/client/js`` and the server-side controllers are located in
   ``<component_folder>/server/controller``.
+- useSession - indicates if the component needs session. The default value is ``false``.
 
 ------------------
 Intents definition
