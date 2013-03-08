@@ -33,18 +33,29 @@ describe('Session', function () {
 
     beforeEach(function () {
         sessionStore = jasmine.createSpyObj('sessionStore', ['get', 'save', 'createNewSession']);
-        sessionStore.get.andCallFake(function (request, fn) {
-            fn && fn(storeErr, storeSession);
+        sessionStore.get.andDefer(function (deferred) {
+            session = {
+                    isEmpty: function () {
+                        return false;
+                    }
+            };
+            deferred.resolve(session);
         });
-        sessionStore.save.andCallFake(function (session, fn) {
-            fn && fn();
+        sessionStore.save.andDefer(function () {
+            deferred.resolve();
         });
-        sessionStore.createNewSession.andCallFake(function (request, next) {
-            next();
+
+        sessionStore.createNewSession.andDefer(function(deferred) {
+            deferred.resolve();
         });
 
         options = {
-            store: sessionStore
+            store: sessionStore,
+            cookie: {
+                path: '/',
+                httpOnly: true,
+                maxAge: 2000
+            }
         };
 
         request = {
@@ -52,7 +63,10 @@ describe('Session', function () {
                 'rain.sid': sid
             },
             headers: {},
-            connection: {}
+            connection: {},
+            rainRoute: {
+                routeName: 'controller'
+            }
         };
 
         response = {
@@ -76,12 +90,13 @@ describe('Session', function () {
             }
         };
 
-        mockedSession = loadModuleContext('/lib/session.js', mocks);
+        mockedSession = loadModuleContext('/lib/middleware/session.js', mocks);
         session = mockedSession.module.exports;
     });
 
     it('should call the next middleware if the session is found', function () {
         request.session = {};
+        request.globalSession = {};
         session.getHandle(options)(request, response, next);
         expect(next).toHaveBeenCalled();
         expect(request.sessionStore).toBeUndefined();
@@ -107,16 +122,33 @@ describe('Session', function () {
 
     it('should create a new session if the session id is missing', function () {
         session.getHandle(options)(request, response, next);
-        expect(sessionStore.createNewSession).toHaveBeenCalledWith(request, next);
+        waitsFor(function () {
+            return next.wasCalled;
+        });
+
+        runs(function () {
+            expect(sessionStore.createNewSession).toHaveBeenCalledWith(request.sessionId);
+        });
     });
 
     it('should get the session if the session id is found', function () {
         request.signedCookies['rain.sid'] = '1234';
+        sessionStore.get.andDefer(function (deferred) {
+            var sess = {
+                    isEmpty: function () {return false;}
+            };
+            deferred.resolve(sess);
+        });
         session.getHandle(options)(request, response, next);
-        expect(request.sessionId).toBe('1234');
-        expect(pauseFn).toHaveBeenCalled();
-        expect(sessionStore.get).toHaveBeenCalledWith(request, jasmine.any(Function));
-        expect(next).toHaveBeenCalledWith(undefined);
+        waitsFor(function () {
+            return next.wasCalled;
+        });
+        runs(function () {
+            expect(request.sessionId).toBe('1234');
+            expect(pauseFn).toHaveBeenCalled();
+            expect(sessionStore.get).toHaveBeenCalledWith('1234');
+            expect(next).toHaveBeenCalled();
+        });
     });
 
     it('should get the session and call next with the session error', function () {
@@ -124,16 +156,40 @@ describe('Session', function () {
             message: 'some error'
         };
         request.signedCookies['rain.sid'] = '1234';
+        sessionStore.get.andDefer(function (deferred) {
+            deferred.reject(storeErr);
+        });
         session.getHandle(options)(request, response, next);
-        expect(request.sessionId).toBe('1234');
-        expect(pauseFn).toHaveBeenCalled();
-        expect(sessionStore.get).toHaveBeenCalledWith(request, jasmine.any(Function));
-        expect(next).toHaveBeenCalledWith(storeErr);
-        expect(pause.resume).toHaveBeenCalled();
+        
+        waitsFor(function () {
+            return next.wasCalled;
+        });
+        
+        runs(function () {
+            expect(request.sessionId).toBe('1234');
+            expect(pauseFn).toHaveBeenCalled();
+            expect(sessionStore.get).toHaveBeenCalledWith('1234');
+            expect(next).toHaveBeenCalledWith(storeErr);
+            expect(pause.resume).toHaveBeenCalled();
+        });
     });
 
     it('should save the session on request end', function () {
         request.signedCookies['rain.sid'] = '1234';
+        
+        sessionStore.get.andDefer(function (deferred) {
+            var sess = {
+                    isEmpty: function () {return false;}
+            };
+            deferred.resolve(sess);
+        });
+        sessionStore.createNewSession.andDefer(function (deferred) {
+            var sess = {
+                        a: 1
+            };
+            deferred.resolve(sess);
+        });
+        
         session.getHandle(options)(request, response, next);
 
         request.session = undefined;
@@ -142,13 +198,18 @@ describe('Session', function () {
         expect(sessionStore.save).not.toHaveBeenCalled();
 
         request.sessionId = undefined;
+        
         session.getHandle(options)(request, response, next);
-        request.session = {
-            a: 1
-        };
         response.end();
-        expect(sessionStore.save).toHaveBeenCalledWith(request.session, jasmine.any(Function));
-        expect(response.end).toHaveBeenCalled();
+        
+        waitsFor(function () {
+            return next.wasCalled;
+        });
+        
+        runs(function () {
+            expect(sessionStore.save).toHaveBeenCalledWith(request.session);
+            expect(response.end).toHaveBeenCalled();
+        });
     });
 
     it('should not set the cookie is session is missing', function () {
@@ -189,11 +250,12 @@ describe('Session', function () {
     it('should set the cookie header', function () {
         request.signedCookies['rain.sid'] = '1234';
         session.getHandle(options)(request, response, next);
-        request.session = {
+        request.globalSession = {
             cookie: {
-                serialize: jasmine.createSpy()
+                serialize: jasmine.createSpy('serialize')
             }
         };
+
         headerFn();
         expect(response.setHeader).toHaveBeenCalled();
     });

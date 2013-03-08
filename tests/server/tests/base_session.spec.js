@@ -44,15 +44,15 @@ describe('Base session with dirty keys functionality', function () {
     });
 
     it('should set the default data', function () {
-        var session = new BaseSession(sessionData, component);
+        var session = new BaseSession(sessionData, component.id);
         expect(session._session).toEqual(sessionData);
-        expect(session._component).toEqual(component);
+        expect(session._componentId).toEqual(component.id);
         expect(session._updatedKeys).toEqual([]);
         expect(session._removedKeys).toEqual([]);
     });
 
     it('should get the key value', function () {
-        var session = new BaseSession(sessionData, component);
+        var session = new BaseSession(sessionData, component.id);
 
         expect(session.get('a')).toBe(1);
         expect(session._updatedKeys).toEqual([]);
@@ -60,7 +60,7 @@ describe('Base session with dirty keys functionality', function () {
     });
 
     it('should set a new key', function () {
-        var session = new BaseSession(sessionData, component);
+        var session = new BaseSession(sessionData, component.id);
         session.set('z', 10);
 
         expect(session._session['z']).toBe(10);
@@ -78,7 +78,7 @@ describe('Base session with dirty keys functionality', function () {
     });
 
     it('should remove a key', function () {
-        var session = new BaseSession(sessionData, component);
+        var session = new BaseSession(sessionData, component.id);
         session.remove('c');
         session.remove('d');
         session.remove('z');
@@ -92,7 +92,7 @@ describe('Base session with dirty keys functionality', function () {
     });
 
     it('should remove all keys', function () {
-        var session = new BaseSession(sessionData, component);
+        var session = new BaseSession(sessionData, component.id);
         session.set('z', 10);
         session.removeAll();
 

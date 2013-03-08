@@ -36,11 +36,12 @@ describe('Data layer', function() {
             b: 2
         };
         sessionStore = jasmine.createSpyObj('sessionStore', ['get', 'save']);
-        sessionStore.get.andCallFake(function (options, fn) {
-            fn(null, session);
+        sessionStore.get.andDefer(function (defer) {
+           defer.resolve(session);
         });
-        sessionStore.save.andCallFake(function (session, fn) {
-            fn();
+
+        sessionStore.save.andDefer(function (defer) {
+            defer.resolve();
         });
 
         componentOpt = {
@@ -89,7 +90,8 @@ describe('Data layer', function() {
                     views: {
                         index: {}
                     },
-                    folder: 'button'
+                    folder: 'button',
+                    useSession: true
                 };
             }
         });
@@ -141,14 +143,10 @@ describe('Data layer', function() {
                 expect(requireWithContext.mostRecentCall.args[0])
                     .toEqual(path.join('button', 'server/data.js'));
 
-                expect(sessionStore.get.mostRecentCall.args[0]).toEqual({
-                    sessionId: componentOpt.request.sessionId,
-                    component: {
-                        id: componentOpt.id
-                    }
-                });
+                expect(sessionStore.get).toHaveBeenCalledWith(componentOpt.request.sessionId,
+                        componentOpt.id);
 
-                expect(sessionStore.save.mostRecentCall.args[0]).toEqual(session);
+                expect(sessionStore.save).toHaveBeenCalled();
 
                 expect(cb.mostRecentCall.args[0]).toBeNull();
                 expect(cb.mostRecentCall.args[1].oldData).toBe('my_data');
@@ -175,29 +173,6 @@ describe('Data layer', function() {
                 expect(args[2]).toEqual(componentOpt.context);
                 expect(args[3]).toEqual({session: 'data'});
             });
-        });
-    });
-
-    describe('_createCustomRequest', function () {
-        it('should create a custom request object (HTTP case)', function () {
-            var req = dataLayer._createCustomRequest(componentOpt);
-
-            expect(req.session).toBe(componentOpt.session);
-            expect(req.query).toBe(componentOpt.request.query);
-            expect(req.headers).toBe(componentOpt.request.headers);
-            expect(req.url).toBe(componentOpt.request.url);
-            expect(req.type).toEqual('HTTP');
-        });
-
-        it('should create a custom request object (WebSocket case)', function () {
-            delete componentOpt.request;
-            var req = dataLayer._createCustomRequest(componentOpt);
-
-            expect(req.session).toBe(componentOpt.session);
-            expect(req.query).toBeUndefined();
-            expect(req.headers).toBeUndefined();
-            expect(req.url).toBeUndefined();
-            expect(req.type).toEqual('WebSocket');
         });
     });
 });
