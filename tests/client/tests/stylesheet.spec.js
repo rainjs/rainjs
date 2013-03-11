@@ -188,6 +188,7 @@ describe('Stylesheet', function () {
                 style.write.andCallThrough();
                 style._append.andCallThrough();
                 style._text.andCallThrough();
+                style._getMapText.andCallThrough();
                 style.write();
 
                 expect(style._styleSheet.textContent).toBe(".first-div { background: red; }\n.second-div { background: red; }\n");
@@ -224,6 +225,7 @@ describe('Stylesheet', function () {
                 style.write.andCallThrough();
                 style._append.andCallThrough();
                 style._text.andCallThrough();
+                style._getMapText.andCallThrough();
                 style.write();
 
                 expect(style._styleSheet.styleSheet.cssText).toBe(".first-div { background: red; }\n.second-div { background: red; }\n");
@@ -253,6 +255,9 @@ describe('Stylesheet', function () {
 
                 style.write.andCallThrough();
                 style._remove.andCallThrough();
+                style._getMapText.andCallFake(function () {
+                    return '.first-div { background: red; }\n.second-div { background: red; }\n';
+                });
                 style._text.andCallThrough();
                 style.write();
 
@@ -284,6 +289,9 @@ describe('Stylesheet', function () {
 
                 style.write.andCallThrough();
                 style._remove.andCallThrough();
+                style._getMapText.andCallFake(function () {
+                    return '.first-div { background: red; }\n.second-div { background: red; }\n';
+                });
                 style._text.andCallThrough();
                 style.write();
 
