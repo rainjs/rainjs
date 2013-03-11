@@ -19,6 +19,7 @@ v 0.24
 + ``IdentityProvider.get(request.session)`` is no longer working since the global and component
   session are now separated. Use ``request.idp`` or ``request.user`` instead (applies to
   controller and data layer methods).
++ Fixed a CSS renderer bug where wrong CSS was removed.
 
 --------
 v 0.23.3

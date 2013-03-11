@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.24.0
+
++ Reduced the number of session requests.
++ Added ``useSession`` configuration option for the component's ``meta.json`` file. It indicates
+  if the component needs session. The default value is ``false``. The global session is still
+  retrieved for every request as it is needed for translation and identity provider.
++ Added ``cookieMaxAge`` option to the server configuration (the value is in seconds). A browser
+  session cookie will be used if this value is missing.
++ Added ``idp`` (the identity provider instance for the current request), ``user`` (the
+  current user) and ``environment`` on the custom request passed to the data layer method.
++ Added ``idp``, ``user`` and ``environment`` on the HTTP request object for controllers.
++ Added ``idp``, ``user`` and ``environment`` on the ``socket`` object for websockets.
++ ``IdentityProvider.get(request.session)`` is no longer working since the global and component
+  session are now separated. Use ``request.idp`` or ``request.user`` instead (applies to
+  controller and data layer methods).
++ Fixed a CSS renderer bug where wrong CSS was removed.
+
 ## 0.23.3
 
 * Removed logger from po_utils because the rain terminal commands were not working anymore.
