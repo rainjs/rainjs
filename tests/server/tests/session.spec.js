@@ -41,7 +41,7 @@ describe('Session', function () {
             };
             deferred.resolve(session);
         });
-        sessionStore.save.andDefer(function () {
+        sessionStore.save.andDefer(function (deferred) {
             deferred.resolve();
         });
 
@@ -160,11 +160,11 @@ describe('Session', function () {
             deferred.reject(storeErr);
         });
         session.getHandle(options)(request, response, next);
-        
+
         waitsFor(function () {
             return next.wasCalled;
         });
-        
+
         runs(function () {
             expect(request.sessionId).toBe('1234');
             expect(pauseFn).toHaveBeenCalled();
@@ -174,41 +174,35 @@ describe('Session', function () {
         });
     });
 
-    it('should save the session on request end', function () {
+    it('should save the session on response end', function () {
         request.signedCookies['rain.sid'] = '1234';
-        
+
         sessionStore.get.andDefer(function (deferred) {
             var sess = {
-                    isEmpty: function () {return false;}
+                isEmpty: function () {return false;}
             };
             deferred.resolve(sess);
         });
         sessionStore.createNewSession.andDefer(function (deferred) {
             var sess = {
-                        a: 1
+                a: 1
             };
             deferred.resolve(sess);
         });
-        
-        session.getHandle(options)(request, response, next);
 
-        request.session = undefined;
-        response.end();
-        expect(response.end).toHaveBeenCalled();
-        expect(sessionStore.save).not.toHaveBeenCalled();
-
+        request.globalSession = undefined;
         request.sessionId = undefined;
-        
+
         session.getHandle(options)(request, response, next);
-        response.end();
-        
+
         waitsFor(function () {
             return next.wasCalled;
         });
-        
+
         runs(function () {
-            expect(sessionStore.save).toHaveBeenCalledWith(request.session);
-            expect(response.end).toHaveBeenCalled();
+            response.end();
+
+            expect(sessionStore.save).toHaveBeenCalledWith(request.globalSession);
         });
     });
 
@@ -249,12 +243,11 @@ describe('Session', function () {
 
     it('should set the cookie header', function () {
         request.signedCookies['rain.sid'] = '1234';
+        request.secret = 'some secret password';
+
         session.getHandle(options)(request, response, next);
-        request.globalSession = {
-            cookie: {
-                serialize: jasmine.createSpy('serialize')
-            }
-        };
+
+        request.globalSession = {};
 
         headerFn();
         expect(response.setHeader).toHaveBeenCalled();
