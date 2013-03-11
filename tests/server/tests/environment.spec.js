@@ -35,10 +35,8 @@ describe('Environment', function () {
         Environment = loadModuleExports('/lib/environment.js', mocks);
 
         session = {
-            global: {
-                get: function () {
-                    return userLanguage;
-                }
+            get: function () {
+                return userLanguage;
             }
         };
    });

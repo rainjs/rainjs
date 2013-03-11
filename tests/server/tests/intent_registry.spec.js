@@ -84,11 +84,11 @@ describe('Intents Registry', function () {
         isAuthorized = false;
 
         sessionStore = jasmine.createSpyObj('sessionStore', ['get', 'save']);
-        sessionStore.get.andCallFake(function (request, fn) {
-            fn(err, session);
+        sessionStore.get.andDefer(function (defer) {
+            defer.resolve(session);
         });
-        sessionStore.save.andCallFake(function (session, fn) {
-            fn();
+        sessionStore.save.andDefer(function (defer) {
+            defer.resolve();
         });
 
         mockedIntentRegistry = loadModuleContext('/lib/intent_registry.js', {
@@ -272,22 +272,35 @@ describe('Intents Registry', function () {
 
         it('should send error message if the session could not be retrieved', function () {
             err = new RainError('Invalid session');
+            var rainError = {};
             session = null;
+            var functionCallBack = jasmine.createSpy('fn');
+            functionCallBack.andCallFake(function () {
+                return rainError.code = 500;
+            });
+            sessionStore.get.andDefer(function (defer) {
+                defer.reject(err);
+            });
 
-            var rainError;
+
             fn({
                     category: 'com.rain.test',
                     action: 'LOG_MESSAGE',
                     context: {}
-               }, function (err) {
-                    rainError = err;
-               }
+               }, functionCallBack
             );
 
-            expect(rainError.code).toBe(500);
+            waitsFor(function () {
+                return functionCallBack.wasCalled;
+            });
+
+            runs(function () {
+                expect(rainError.code).toBe(500);
+            });
         });
 
         it('should create the rain context and render the component', function () {
+
             fn({
                     category: 'com.rain.test',
                     action: 'DO_SOMETHING',
@@ -295,54 +308,77 @@ describe('Intents Registry', function () {
                }
             );
 
-            expect(createRainContext).toHaveBeenCalledWith({
-                component: undefined,
-                transport: socket,
-                request: {
-                    sessionId: 'sid',
-                    component: {
-                        id: 'button'
-                    },
-                    sessionStore: sessionStore
-                },
-                session: session,
-                environment: {}
+            waitsFor(function () {
+                return sendComponent.wasCalled;
             });
 
-            expect(sessionStore.get).toHaveBeenCalled();
-            expect(sendComponent.mostRecentCall.args[0]).toBe(socket);
-            expect(Object.keys(sendComponent.mostRecentCall.args[1])).toEqual(
-                    ['component', 'viewId', 'instanceId', 'context', 'rain']);
+            runs(function () {
+                expect(createRainContext).toHaveBeenCalledWith({
+                    component: undefined,
+                    transport: socket,
+                    request: {
+                        sessionId: 'sid',
+                        component: {
+                            id: 'button'
+                        },
+                        sessionStore: sessionStore
+                    },
+                    session: session,
+                    environment: {}
+                });
+    
+                expect(sessionStore.get).toHaveBeenCalled();
+                expect(sendComponent.mostRecentCall.args[0]).toBe(socket);
+                expect(Object.keys(sendComponent.mostRecentCall.args[1])).toEqual(
+                        ['component', 'viewId', 'instanceId', 'context', 'rain']);
+            });
         });
 
         it('should send error message if the intent is not authorized', function () {
-            var rainError;
-            fn({category: 'com.rain.test', action: 'LOG_MESSAGE', context: {}}, function (err) {
-                rainError = err;
+            var rainError = {};
+            var functionCallBack = jasmine.createSpy('fn');
+            functionCallBack.andCallFake(function () {
+                rainError.code = 401;
+                rainError.type = RainError.ERROR_HTTP;
             });
-            expect(rainError.type).toBe(RainError.ERROR_HTTP);
-            expect(rainError.code).toBe(401);
+            fn({category: 'com.rain.test', action: 'LOG_MESSAGE', context: {}}, functionCallBack);
+
+            waitsFor(function () {
+                return functionCallBack.wasCalled;
+            });
+
+            runs(function () {
+                expect(rainError.type).toBe(RainError.ERROR_HTTP);
+                expect(rainError.code).toBe(401);
+            });
         });
 
         it('should execute the server-side controller associated with the intent', function () {
             var context = {
                 data: 'value'
             };
+            var functionCallBack = jasmine.createSpy('fn');
             isAuthorized = true;
             fn({
                     category: 'com.rain.test',
                     action: 'LOG_MESSAGE',
                     context: context
                },
-               function () {}
+               functionCallBack
             );
 
-            expect(logFn.mostRecentCall.args[0]).toEqual(context);
-            expect(logFn.mostRecentCall.args[1]).toEqual({
-                session: session
+            waitsFor(function () {
+                return functionCallBack.wasCalled;
             });
-            expect(sessionStore.save).toHaveBeenCalled();
-            expect(sessionStore.save.mostRecentCall.args[0]).toEqual(session);
+
+            runs(function () {
+                expect(logFn.mostRecentCall.args[0]).toEqual(context);
+                expect(logFn.mostRecentCall.args[1]).toEqual({
+                    session: session
+                });
+                expect(sessionStore.save).toHaveBeenCalled();
+                expect(sessionStore.save.mostRecentCall.args[0]).toEqual(session);
+            });
         });
     });
 });

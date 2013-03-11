@@ -73,7 +73,10 @@ describe('Translation context', function () {
                     }
                 },
                 path: 'someView',
-                method: 'GET'
+                method: 'GET',
+                environment: {
+                    language: 'en_US'
+                }
             };
             response = jasmine.createSpyObj('response', ['end']);
             controller = loadModuleExports('/lib/routes/controller.js', mocks);
