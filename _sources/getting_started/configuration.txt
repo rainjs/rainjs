@@ -78,6 +78,12 @@ fields are formatted with **bold**.
 - identity - an Object used to set the :doc:`IdentityProvider </server/api/IdentityProvider>`
   implementation. It has a ``provider`` key that represents the path to the implementation module.
 
+- cookieSecret - a String that is used to sign the cookies.
+
+- cookieMaxAge - the number of seconds after which to expire the session cookie if no new
+  requests are done by the user. The cookie is removed when the browser is closed if this value
+  isn't specified.
+
 .......
 Example
 .......

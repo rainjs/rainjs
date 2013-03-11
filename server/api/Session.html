@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class SocketHandler &mdash; Rain v0.24.0 documentation</title>
+    <title>Class Session &mdash; Rain v0.24.0 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -23,8 +23,8 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="Rain v0.24.0 documentation" href="../../index.html" />
-    <link rel="next" title="Class Stylesheet" href="Stylesheet.html" />
-    <link rel="prev" title="Class RuleSet" href="RuleSet.html" /> 
+    <link rel="next" title="Namespace SocketHandlers" href="SocketHandlers.html" />
+    <link rel="prev" title="Class Server" href="Server.html" /> 
   </head>
   <body>
     <div class="related">
@@ -34,10 +34,10 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="Stylesheet.html" title="Class Stylesheet"
+          <a href="SocketHandlers.html" title="Namespace SocketHandlers"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="RuleSet.html" title="Class RuleSet"
+          <a href="Server.html" title="Class Server"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Rain v0.24.0 documentation</a> &raquo;</li> 
       </ul>
@@ -48,42 +48,75 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="class-sockethandler">
-<h1>Class SocketHandler<a class="headerlink" href="#class-sockethandler" title="Permalink to this headline">¶</a></h1>
-<p>Handler class for WebSockets that manages the way WebSocket instances are cached and
-created.</p>
+  <div class="section" id="class-session">
+<h1>Class Session<a class="headerlink" href="#class-session" title="Permalink to this headline">¶</a></h1>
+<p>Creates a new session object.</p>
 <div class="section" id="constructor">
 <h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="SocketHandler">
-<em class="property">class </em><tt class="descname">SocketHandler</tt><big>(</big><big>)</big><a class="headerlink" href="#SocketHandler" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="methods">
-<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="getsocket">
-<h3>getSocket<a class="headerlink" href="#getsocket" title="Permalink to this headline">¶</a></h3>
-<dl class="function">
-<dt id="SocketHandler#getSocket">
-<tt class="descname">SocketHandler#getSocket</tt><big>(</big><em>channel</em><big>)</big><a class="headerlink" href="#SocketHandler#getSocket" title="Permalink to this definition">¶</a></dt>
+<dt id="Session">
+<em class="property">class </em><tt class="descname">Session</tt><big>(</big><em>options</em><big>)</big><a class="headerlink" href="#Session" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>channel</strong> (<em>String</em>) &#8211; the channel of the socket</li>
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>options</strong> (<em>Object</em>) &#8211; the session options</li>
 </ul>
-</td>
-</tr>
-<tr class="field"><th class="field-name">Returns Socket:</th><td class="field-body"><p class="first last">the websocket instance</p>
 </td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<p>Gets the socket associated to a particular channel.</p>
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="gethandle">
+<h3>getHandle<a class="headerlink" href="#gethandle" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Session.getHandle">
+<tt class="descclassname">Session.</tt><tt class="descname">getHandle</tt><big>(</big><em>options</em><big>)</big><a class="headerlink" href="#Session.getHandle" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>options</strong> (<em>Object</em>) &#8211; the session options</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Returns Function:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"><p class="first last">the middleware handle function</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Get the session middleware function.</p>
+</div>
+<div class="section" id="handle">
+<h3>handle<a class="headerlink" href="#handle" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Session#handle">
+<tt class="descname">Session#handle</tt><big>(</big><em>request</em>, <em>response</em>, <em>next</em><big>)</big><a class="headerlink" href="#Session#handle" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>request</strong> (<em>Request</em>) &#8211; the request object</li>
+<li><strong>response</strong> (<em>Response</em>) &#8211; the response object</li>
+<li><strong>next</strong> (<em>Function</em>) &#8211; callback passed by connect that execute the next middleware when called</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Handle function for the session middleware.</p>
 </div>
 </div>
 </div>
@@ -96,10 +129,11 @@ created.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Class SocketHandler</a><ul>
+<li><a class="reference internal" href="#">Class Session</a><ul>
 <li><a class="reference internal" href="#constructor">Constructor</a></li>
 <li><a class="reference internal" href="#methods">Methods</a><ul>
-<li><a class="reference internal" href="#getsocket">getSocket</a></li>
+<li><a class="reference internal" href="#gethandle">getHandle</a></li>
+<li><a class="reference internal" href="#handle">handle</a></li>
 </ul>
 </li>
 </ul>
@@ -107,11 +141,11 @@ created.</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="RuleSet.html"
-                        title="previous chapter">Class RuleSet</a></p>
+  <p class="topless"><a href="Server.html"
+                        title="previous chapter">Class Server</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="Stylesheet.html"
-                        title="next chapter">Class Stylesheet</a></p>
+  <p class="topless"><a href="SocketHandlers.html"
+                        title="next chapter">Namespace SocketHandlers</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -136,10 +170,10 @@ created.</p>
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="Stylesheet.html" title="Class Stylesheet"
+          <a href="SocketHandlers.html" title="Namespace SocketHandlers"
              >next</a> |</li>
         <li class="right" >
-          <a href="RuleSet.html" title="Class RuleSet"
+          <a href="Server.html" title="Class Server"
              >previous</a> |</li>
         <li><a href="../../index.html">Rain v0.24.0 documentation</a> &raquo;</li> 
       </ul>

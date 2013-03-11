@@ -183,7 +183,7 @@ write
 
 
 
-Write the queued modifications to the stylesheet.
+Write the queued modifications to the stylesheet object than to the html.
 
 
 

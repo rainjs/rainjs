@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class BaseSessionStore &mdash; Rain v0.23.0 documentation</title>
+    <title>Class BaseSessionStore &mdash; Rain v0.24.0 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.23.0',
+        VERSION:     '0.24.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.23.0 documentation" href="../../index.html" />
+    <link rel="top" title="Rain v0.24.0 documentation" href="../../index.html" />
     <link rel="next" title="Class ComponentHelper" href="ComponentHelper.html" />
     <link rel="prev" title="Class BaseSession" href="BaseSession.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="BaseSession.html" title="Class BaseSession"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.23.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.24.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -56,13 +56,12 @@ implemented when designing a session store in order to work with the rest of RAI
 <h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="BaseSessionStore">
-<em class="property">class </em><tt class="descname">BaseSessionStore</tt><big>(</big><em>cookieConfig</em><span class="optional">[</span>, <em>storeConfig</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#BaseSessionStore" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">BaseSessionStore</tt><big>(</big><span class="optional">[</span><em>storeConfig</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#BaseSessionStore" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>cookieConfig</strong> (<em>Object</em>) &#8211; the RAIN cookie configuration</li>
 <li><strong>storeConfig</strong> (<em>Object</em>) &#8211; the store configuration</li>
 </ul>
 </td>
@@ -78,89 +77,88 @@ implemented when designing a session store in order to work with the rest of RAI
 <h3>createNewSession<a class="headerlink" href="#createnewsession" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="BaseSessionStore#createNewSession">
-<tt class="descname">BaseSessionStore#createNewSession</tt><big>(</big><em>request</em>, <em>fn</em><big>)</big><a class="headerlink" href="#BaseSessionStore#createNewSession" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">BaseSessionStore#createNewSession</tt><big>(</big><em>sessionId</em><big>)</big><a class="headerlink" href="#BaseSessionStore#createNewSession" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>request</strong> (<em>Request</em>) &#8211; </li>
-<li><strong>fn</strong> (<em>Function</em>) &#8211; the callback that will be called after the session was created</li>
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>sessionId</strong> (<em>String</em>) &#8211; </li>
 </ul>
 </td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Returns Promise:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<p>Generates a new session id and creates an empty session associated with this id in the store.
-If the session can&#8217;t be created because a session with the same id already exists in the store,
-it generates a new id until a valid id is generated.</p>
+<p>Creates an empty session associated with the session id in the store.</p>
 </div>
 <div class="section" id="destroy">
 <h3>destroy<a class="headerlink" href="#destroy" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="BaseSessionStore#destroy">
-<tt class="descname">BaseSessionStore#destroy</tt><big>(</big><em>sessionId</em>, <em>fn</em><big>)</big><a class="headerlink" href="#BaseSessionStore#destroy" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">BaseSessionStore#destroy</tt><big>(</big><em>sessionId</em><big>)</big><a class="headerlink" href="#BaseSessionStore#destroy" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>sessionId</strong> (<em>String</em>) &#8211; the session id</li>
-<li><strong>fn</strong> (<em>Function</em>) &#8211; the callback that will be called after the session was saved</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+<p>:param Promise :</p>
 </dd></dl>
 
-<p>Destroys the session associated with the specified session id.
-This method will be invoked when a user is logging out.</p>
+<p>Destroys the session associated with the specified session id.</p>
 </div>
 <div class="section" id="get">
 <h3>get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="BaseSessionStore#get">
-<tt class="descname">BaseSessionStore#get</tt><big>(</big><em>request</em>, <em>fn</em><big>)</big><a class="headerlink" href="#BaseSessionStore#get" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">BaseSessionStore#get</tt><big>(</big><em>sessionId</em><span class="optional">[</span>, <em>componentId</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#BaseSessionStore#get" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>request</strong> (<em>Request</em>) &#8211; </li>
-<li><strong>fn</strong> (<em>Function</em>) &#8211; the callback that will be called after the session is obtained</li>
+<li><strong>sessionId</strong> (<em>String</em>) &#8211; the session id</li>
+<li><strong>componentId</strong> (<em>String</em>) &#8211; the component for which to get the session.</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Returns BaseSessionStore:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><p class="first last">the session store</p>
+<tr class="field"><th class="field-name" colspan="2">Returns Promise:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"><p class="first last">a promise that will be resolved with the session.</p>
 </td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<p>Gets the session instance associated with the session id of the current request and
-component id. If the specified session id doesn’t exist (expired session, wrong cookie data ...)
-then a new session id will be generated. The <tt class="docutils literal"><span class="pre">fn</span></tt> function is called with the err and session
-objects.</p>
+<p>Gets the session instance associated with session id and component id. Retrieves the global
+session if component id is missing.</p>
 </div>
 <div class="section" id="save">
 <h3>save<a class="headerlink" href="#save" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="BaseSessionStore#save">
-<tt class="descname">BaseSessionStore#save</tt><big>(</big><em>session</em>, <em>fn</em><big>)</big><a class="headerlink" href="#BaseSessionStore#save" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">BaseSessionStore#save</tt><big>(</big><em>session</em><big>)</big><a class="headerlink" href="#BaseSessionStore#save" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>session</strong> (<em>Session</em>) &#8211; the session that will be saved</li>
-<li><strong>fn</strong> (<em>Function</em>) &#8211; the callback that will be called after the session was saved</li>
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>session</strong> (<a class="reference internal" href="Session.html#Session" title="Session"><em>Session</em></a>) &#8211; the session that will be saved</li>
 </ul>
 </td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Returns Promise:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"></td>
 </tr>
 </tbody>
 </table>
@@ -227,7 +225,7 @@ objects.</p>
         <li class="right" >
           <a href="BaseSession.html" title="Class BaseSession"
              >previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.23.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.24.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

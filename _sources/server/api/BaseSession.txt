@@ -89,6 +89,34 @@ Get the value associated with the specified key.
 
 
 
+isEmpty
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: BaseSession#isEmpty()
+
+
+
+
+    
+    :returns Boolean:
+         
+    
+
+
+Indicates if this session has data in the store.
+
+
+
+
+
+
+
+
+
+    
+
+
+
 remove
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 

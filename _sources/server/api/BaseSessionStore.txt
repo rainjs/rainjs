@@ -30,13 +30,10 @@ implemented when designing a session store in order to work with the rest of RAI
 Constructor
 -----------
 
-.. js:class:: BaseSessionStore(cookieConfig, [storeConfig])
+.. js:class:: BaseSessionStore([storeConfig])
 
 
 
-    
-    :param Object cookieConfig: 
-        the RAIN cookie configuration 
     
     :param Object storeConfig: 
         the store configuration 
@@ -58,23 +55,23 @@ Methods
 createNewSession
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: BaseSessionStore#createNewSession(request, fn)
+.. js:function:: BaseSessionStore#createNewSession(sessionId)
 
 
     
-    :param Request request: 
+    :param String sessionId: 
          
     
-    :param Function fn: 
-        the callback that will be called after the session was created 
+
+
+
+    
+    :returns Promise:
+         
     
 
 
-
-
-Generates a new session id and creates an empty session associated with this id in the store.
-If the session can't be created because a session with the same id already exists in the store,
-it generates a new id until a valid id is generated.
+Creates an empty session associated with the session id in the store.
 
 
 
@@ -91,22 +88,21 @@ it generates a new id until a valid id is generated.
 destroy
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: BaseSessionStore#destroy(sessionId, fn)
+.. js:function:: BaseSessionStore#destroy(sessionId, )
 
 
     
     :param String sessionId: 
         the session id 
     
-    :param Function fn: 
-        the callback that will be called after the session was saved 
+    :param Promise : 
+         
     
 
 
 
 
 Destroys the session associated with the specified session id.
-This method will be invoked when a user is logging out.
 
 
 
@@ -123,29 +119,27 @@ This method will be invoked when a user is logging out.
 get
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: BaseSessionStore#get(request, fn)
+.. js:function:: BaseSessionStore#get(sessionId, [componentId])
 
 
     
-    :param Request request: 
-         
+    :param String sessionId: 
+        the session id 
     
-    :param Function fn: 
-        the callback that will be called after the session is obtained 
-    
-
-
-
-    
-    :returns BaseSessionStore:
-        the session store 
+    :param String componentId: 
+        the component for which to get the session. 
     
 
 
-Gets the session instance associated with the session id of the current request and
-component id. If the specified session id doesn’t exist (expired session, wrong cookie data ...)
-then a new session id will be generated. The ``fn`` function is called with the err and session
-objects.
+
+    
+    :returns Promise:
+        a promise that will be resolved with the session. 
+    
+
+
+Gets the session instance associated with session id and component id. Retrieves the global
+session if component id is missing.
 
 
 
@@ -162,18 +156,20 @@ objects.
 save
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: BaseSessionStore#save(session, fn)
+.. js:function:: BaseSessionStore#save(session)
 
 
     
     :param Session session: 
         the session that will be saved 
     
-    :param Function fn: 
-        the callback that will be called after the session was saved 
+
+
+
     
-
-
+    :returns Promise:
+         
+    
 
 
 Saves the specified session instance. Only the keys marked as dirty are saved.

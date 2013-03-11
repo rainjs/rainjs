@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Changelog &mdash; Rain v0.23.0 documentation</title>
+    <title>Changelog &mdash; Rain v0.24.0 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.23.0',
+        VERSION:     '0.24.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.23.0 documentation" href="index.html" />
+    <link rel="top" title="Rain v0.24.0 documentation" href="index.html" />
     <link rel="prev" title="Distributed Websockets" href="proposals/distributed_websockets.html" /> 
   </head>
   <body>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="proposals/distributed_websockets.html" title="Distributed Websockets"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Rain v0.23.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Rain v0.24.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -46,6 +46,44 @@
             
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="v-0-24">
+<h2>v 0.24<a class="headerlink" href="#v-0-24" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Reduced the number of session requests.</li>
+<li>Added <tt class="docutils literal"><span class="pre">useSession</span></tt> configuration option for the component&#8217;s <tt class="docutils literal"><span class="pre">meta.json</span></tt> file. It indicates
+if the component needs session. The default value is <tt class="docutils literal"><span class="pre">false</span></tt>. The global session is still
+retrieved for every request as it is needed for translation and identity provider.</li>
+<li>Added <tt class="docutils literal"><span class="pre">cookieMaxAge</span></tt> option to the server configuration (the value is in seconds). A browser
+session cookie will be used if this value is missing.</li>
+<li>Added <tt class="docutils literal"><span class="pre">idp</span></tt> (the identity provider instance for the current request), <tt class="docutils literal"><span class="pre">user</span></tt> (the
+current user) and <tt class="docutils literal"><span class="pre">environment</span></tt> on the custom request passed to the data layer method.</li>
+<li>Added <tt class="docutils literal"><span class="pre">idp</span></tt>, <tt class="docutils literal"><span class="pre">user</span></tt> and <tt class="docutils literal"><span class="pre">environment</span></tt> on the HTTP request object for controllers.</li>
+<li>Added <tt class="docutils literal"><span class="pre">idp</span></tt>, <tt class="docutils literal"><span class="pre">user</span></tt> and <tt class="docutils literal"><span class="pre">environment</span></tt> on the <tt class="docutils literal"><span class="pre">socket</span></tt> object for websockets.</li>
+<li><tt class="docutils literal"><span class="pre">IdentityProvider.get(request.session)</span></tt> is no longer working since the global and component
+session are now separated. Use <tt class="docutils literal"><span class="pre">request.idp</span></tt> or <tt class="docutils literal"><span class="pre">request.user</span></tt> instead (applies to
+controller and data layer methods).</li>
+<li>Fixed a CSS renderer bug where wrong CSS was removed.</li>
+</ul>
+</div>
+<div class="section" id="v-0-23-3">
+<h2>v 0.23.3<a class="headerlink" href="#v-0-23-3" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Removed logger from po_utils because the rain terminal commands were not working anymore.</li>
+</ul>
+</div>
+<div class="section" id="v-0-23-2">
+<h2>v 0.23.2<a class="headerlink" href="#v-0-23-2" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Fixed a typo in controller_path module.</li>
+</ul>
+</div>
+<div class="section" id="v-0-23-1">
+<h2>v 0.23.1<a class="headerlink" href="#v-0-23-1" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Fixed <tt class="docutils literal"><span class="pre">rain</span> <span class="pre">create</span> <span class="pre">project</span></tt> command and added credentials.conf</li>
+<li>Fixed internationalisation module - crashing on no <tt class="docutils literal"><span class="pre">tlds</span></tt> key with domains.</li>
+</ul>
+</div>
 <div class="section" id="v-0-23">
 <h2>v 0.23<a class="headerlink" href="#v-0-23" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -222,6 +260,10 @@ should request it using <tt class="docutils literal"><span class="pre">raintime/
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Changelog</a><ul>
+<li><a class="reference internal" href="#v-0-24">v 0.24</a></li>
+<li><a class="reference internal" href="#v-0-23-3">v 0.23.3</a></li>
+<li><a class="reference internal" href="#v-0-23-2">v 0.23.2</a></li>
+<li><a class="reference internal" href="#v-0-23-1">v 0.23.1</a></li>
 <li><a class="reference internal" href="#v-0-23">v 0.23</a></li>
 <li><a class="reference internal" href="#v-0-22">v 0.22</a></li>
 <li><a class="reference internal" href="#v-0-20">v 0.20</a></li>
@@ -273,7 +315,7 @@ should request it using <tt class="docutils literal"><span class="pre">raintime/
         <li class="right" >
           <a href="proposals/distributed_websockets.html" title="Distributed Websockets"
              >previous</a> |</li>
-        <li><a href="index.html">Rain v0.23.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Rain v0.24.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

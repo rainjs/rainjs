@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Server and component configuration &mdash; Rain v0.23.0 documentation</title>
+    <title>Server and component configuration &mdash; Rain v0.24.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.23.0',
+        VERSION:     '0.24.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.23.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.24.0 documentation" href="../index.html" />
     <link rel="next" title="RAIN component descriptor" href="../server/component_descriptor.html" />
     <link rel="prev" title="RAIN SDK Tutorial" href="rain_sdk_tutorial.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="rain_sdk_tutorial.html" title="RAIN SDK Tutorial"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.23.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.24.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -115,6 +115,10 @@ options then the <tt class="docutils literal"><span class="pre">session</span></
 and <tt class="docutils literal"><span class="pre">options</span></tt> (an Object with the store options) keys.</li>
 <li>identity - an Object used to set the <a class="reference internal" href="../server/api/IdentityProvider.html"><em>IdentityProvider</em></a>
 implementation. It has a <tt class="docutils literal"><span class="pre">provider</span></tt> key that represents the path to the implementation module.</li>
+<li>cookieSecret - a String that is used to sign the cookies.</li>
+<li>cookieMaxAge - the number of seconds after which to expire the session cookie if no new
+requests are done by the user. The cookie is removed when the browser is closed if this value
+isn&#8217;t specified.</li>
 </ul>
 </div>
 <div class="section" id="example">
@@ -420,7 +424,7 @@ the defaultLanguage</li>
         <li class="right" >
           <a href="rain_sdk_tutorial.html" title="RAIN SDK Tutorial"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.23.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.24.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
