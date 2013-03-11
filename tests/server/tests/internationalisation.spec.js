@@ -1,7 +1,7 @@
 "use strict";
 
 describe('iternationalisation module', function () {
-    var request, global, fakeConfig, internationalisationMock, mocks, fakeSession;
+    var request, globalSession, fakeConfig, internationalisationMock, mocks, fakeSession;
     beforeEach(function () {
         fakeConfig = {};
         fakeConfig["languages"] = [
@@ -13,23 +13,21 @@ describe('iternationalisation module', function () {
         fakeConfig["defaultLanguage"] =  "en_US";
         mocks = {};
 
-        request = jasmine.createSpyObj('request', ['rainRoute', 'session', 'sessionStore', 'headers']);
+        request = jasmine.createSpyObj('request', ['rainRoute', 'globalSession', 'headers']);
         request.headers = {
                 'host': 'atrifan.ro.schlund.net',
                 'accept-language': 'en-US,en;q=0.7'
         };
 
-        global = jasmine.createSpyObj('global', ['get', 'set']);
-        request.session = {
-                global: global
-        };
+        globalSession = jasmine.createSpyObj('global', ['get', 'set']);
+        request.globalSession = globalSession;
 
         fakeSession = {};
 
-        request.session.global.get = function(key) {
+        request.globalSession.get = function(key) {
             return fakeSession[key];
         };
-        request.session.global.set = function(key, value) {
+        request.globalSession.set = function(key, value) {
             fakeSession[key] = value;
         };
         request.sessionStore = {
@@ -39,9 +37,9 @@ describe('iternationalisation module', function () {
                 routeName: 'controller'
         };
 
-        mocks["./configuration"] = fakeConfig;
+        mocks["../configuration"] = fakeConfig;
         internationalisationMock = loadModuleExports(
-                '/lib/internationalisation.js', mocks);
+                '/lib/middleware/internationalisation.js', mocks);
     });
 
     it('should set the user language to the Accepted-Language header if is supported' +

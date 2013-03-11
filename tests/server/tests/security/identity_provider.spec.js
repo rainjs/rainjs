@@ -44,15 +44,11 @@ describe('The identity provider', function () {
         isNotLogged = false;
         err = null;
         sessionStore = jasmine.createSpyObj('sessionStore', ['save', 'destroy']);
-        sessionStore.save.andCallFake(function (session, fn) {
-            isSaved = true;
-            fn();
+        sessionStore.save.andDefer(function (defer) {
+            defer.resolve();
         });
-        sessionStore.destroy.andCallFake(function (sessionId, fn) {
-            process.nextTick(function () {
-                isNotLogged = true;
-                fn(err);
-            });
+        sessionStore.destroy.andDefer(function (defer) {
+            defer.resolve();
         });
 
         mocks = {
@@ -77,13 +73,13 @@ describe('The identity provider', function () {
         Spy.userClass = mocks['./user'];
 
         session = jasmine.createSpyObj('session', ['destroy']);
-        session.global = {
+        session = {
             get: jasmine.createSpy().andCallFake(function () {
                 return 'user';
             }),
             set: jasmine.createSpy()
         };
-        session.global.id = 'my-session';
+        session.id = 'my-session';
     });
 
     describe('get method', function () {
@@ -94,7 +90,7 @@ describe('The identity provider', function () {
             expect(provider instanceof Spy.provider).toBe(true);
 
             expect(mocks[myProvider]).toHaveBeenCalled();
-            expect(mocks[myProvider].mostRecentCall.args[0]).toEqual(session.global);
+            expect(mocks[myProvider].mostRecentCall.args[0]).toEqual(session);
         });
 
         it('should throw an error if the identity implementation does not exist', function () {
@@ -122,7 +118,7 @@ describe('The identity provider', function () {
 
             spyOn(IdentityProvider.prototype, '_authenticate').andReturn(deferred.promise);
 
-            var provider = new IdentityProvider(session.global);
+            var provider = new IdentityProvider(session);
 
             runs(function () {
                 provider.login('user', 'pass').then(callback);
@@ -132,14 +128,13 @@ describe('The identity provider', function () {
             });
 
             waitsFor(function () {
-                return isSaved;
+                return callback.wasCalled;
             }, 'user to be logged in');
 
             runs(function () {
                 expect(callback).toHaveBeenCalledWith('some user');
-                expect(session.global.set.mostRecentCall.args[0]).toBe('user');
-                expect(session.global.set.mostRecentCall.args[1]).toBe('some user');
-                expect(sessionStore.save.mostRecentCall.args[0]).toBe(session.global);
+                expect(session.set.mostRecentCall.args[0]).toBe('user');
+                expect(session.set.mostRecentCall.args[1]).toBe('some user');
             });
         });
 
@@ -175,45 +170,48 @@ describe('The identity provider', function () {
         it('should logout the user', function () {
             var callback = jasmine.createSpy();
 
-            var provider = new IdentityProvider(session.global);
+            var provider = new IdentityProvider(session);
             runs(function () {
                 provider.logout().then(callback);
             });
 
             waitsFor(function () {
-                return isNotLogged;
+                return callback.wasCalled;
             }, 'logout to happen');
 
             runs(function () {
                 expect(callback).toHaveBeenCalled();
-                expect(sessionStore.destroy.mostRecentCall.args[0]).toBe(session.global.id);
+                expect(sessionStore.destroy.mostRecentCall.args[0]).toBe(session.id);
             });
         });
 
         it('should reject on logout error', function () {
             var callback = jasmine.createSpy();
+            sessionStore.destroy.andDefer(function (defer) {
+                defer.reject('some error');
+            });
 
-            var provider = new IdentityProvider(session.global);
+            var provider = new IdentityProvider(session);
             runs(function () {
                 err = 'some error';
                 provider.logout().then(null, callback);
             });
 
             waitsFor(function () {
-                return isNotLogged;
+                return callback.wasCalled;
             }, 'logout to fail');
 
             runs(function () {
-                expect(sessionStore.destroy.mostRecentCall.args[0]).toBe(session.global.id);
+                expect(sessionStore.destroy.mostRecentCall.args[0]).toBe(session.id);
                 expect(callback).toHaveBeenCalledWith('some error');
             });
         });
 
         it('should get the user', function () {
-            var provider = new IdentityProvider(session.global);
+            var provider = new IdentityProvider(session);
             provider.getUser();
 
-            expect(session.global.get.mostRecentCall.args[0]).toBe('user');
+            expect(session.get.mostRecentCall.args[0]).toBe('user');
             expect(mocks['./user']).toHaveBeenCalledWith('user');
         });
     });

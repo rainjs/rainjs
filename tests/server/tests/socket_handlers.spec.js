@@ -27,15 +27,16 @@
 
 describe('Socket handlers', function () {
     var socketHandlers, mockedSocketHandlers;
-    var handlers = {}, sessionStore, err, session;
+    var handlers = {}, sessionStore, err, session, globalSession;
 
     beforeEach(function () {
+
         sessionStore = jasmine.createSpyObj('sessionStore', ['get', 'save']);
-        sessionStore.get.andCallFake(function (request, fn) {
-            fn(err, session);
+        sessionStore.get.andDefer(function (defer) {
+            defer.resolve();
         });
-        sessionStore.save.andCallFake(function (session, fn) {
-            fn();
+        sessionStore.save.andDefer(function (defer) {
+            defer.resolve();
         });
 
         mockedSocketHandlers = loadModuleContext('/lib/socket_handlers.js', {
@@ -71,13 +72,18 @@ describe('Socket handlers', function () {
                 on: function (event, callback) {
                     callbacks[event] = callback;
                 },
-                sessionId: 'sid'
+                sessionId: 'sid',
+                handshake: {
+                    globalSession: {
+                        set: jasmine.createSpy()
+                    }
+                }
             };
 
         beforeEach(function () {
             err = null;
             session = {
-                global: {
+                globalSession: {
                     get: jasmine.createSpy(),
                     set: jasmine.createSpy()
                 }
@@ -89,31 +95,37 @@ describe('Socket handlers', function () {
             fn = callbacks['change_language'];
         });
 
-        it('should get the session with the correct parameters', function () {
+        it('should not change the language is the session is missing', function () {
+            sessionStore.save.andDefer(function (defer) {
+                var err = 'eroare';
+                defer.reject(err);
+            });
             fn('en_US', ack);
 
-            expect(sessionStore.get.mostRecentCall.args[0]).toEqual({
-                sessionId: socket.sessionId,
-                component: {
-                    id: 'core'
-                },
-                sessionStore: sessionStore
+            waitsFor(function () {
+                return ack.wasCalled;
+            });
+            runs(function () {
+                expect(sessionStore.save).toHaveBeenCalled();
+                expect(ack).toHaveBeenCalledWith('eroare');
             });
         });
 
-        it('should not change the language is the session is missing', function () {
-            err = {};
-            fn();
-            expect(sessionStore.save).not.toHaveBeenCalled();
-            expect(session.global.set).not.toHaveBeenCalled();
-        });
-
         it('should change the user language', function () {
+            sessionStore.save.andDefer(function (defer) {
+                defer.resolve();
+            });
             fn('en_US', ack);
-            expect(session.global.set.mostRecentCall.args[0]).toBe('userLanguage');
-            expect(session.global.set.mostRecentCall.args[1]).toBe('en_US');
-            expect(sessionStore.save.mostRecentCall.args[0]).toEqual(session.global);
-            expect(sessionStore.save.mostRecentCall.args[1]).toBe(ack);
+
+            waitsFor(function () {
+                return ack.wasCalled;
+            });
+            runs(function () {
+                expect(socket.handshake.globalSession.set.mostRecentCall.args[0]).toBe('userLanguage');
+                expect(socket.handshake.globalSession.set.mostRecentCall.args[1]).toBe('en_US');
+                expect(sessionStore.save.mostRecentCall.args[0]).toEqual(socket.handshake.globalSession);
+                expect(ack).toHaveBeenCalledWith(undefined);
+            });
         });
 
         it('should throw an error if the new language is incorrect', function () {

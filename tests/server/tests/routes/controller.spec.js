@@ -58,6 +58,9 @@ describe('Router Plugin: Controller', function() {
 
         response = new http.ServerResponse();
         request = new http.ServerRequest();
+        request.environment = {
+                language: 'EN_us'
+        };
         mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
         mockComponentRegistry.registerConfigComponents();
         componentRegistry = new mockComponentRegistry.ComponentRegistry();

@@ -65,11 +65,14 @@ describe('Socket registry', function () {
         };
 
         sessionStore = jasmine.createSpyObj('sessionStore', ['get', 'save']);
-        sessionStore.get.andCallFake(function (request, fn) {
-            fn(err, session);
+        sessionStore.get.andDefer(function (defer) {
+            var session = {
+                    get: jasmine.createSpy('get')
+            };
+            defer.resolve(session);
         });
-        sessionStore.save.andCallFake(function (session, fn) {
-            fn && fn();
+        sessionStore.save.andDefer(function (defer) {
+            defer.resolve();
         });
 
         mockedSocketRegistry = loadModuleContext('/lib/socket_registry.js', {
@@ -145,53 +148,77 @@ describe('Socket registry', function () {
 
         it('should disconnect the socket if the session couldn\'t be obtained', function () {
             err = {};
+            sessionStore.get.andDefer(function (defer) {
+                var err = {};
+                defer.reject(err);
+            });
             socketRegistry.register('/core', handler, {id: 'core'});
-            fn = events['connection'];
 
-            expect(authorizationCallback).toHaveBeenCalledWith(jasmine.any(Object), false);
+            fn = events['connection'];
+            waitsFor(function () {
+                return authorizationCallback.wasCalled
+            });
+            runs(function () {
+                expect(authorizationCallback).toHaveBeenCalledWith(jasmine.any(Object), false);
+            });
         });
 
         it('should get and save the session', function () {
-            socketRegistry.register('/core', handler, {id: 'core'});
+            socketRegistry.register('/core', handler, {id: 'core', useSession: true});
             fn = events['connection'];
-            fn(socket);
-
-            expect(sessionStore.get).toHaveBeenCalled();
-            expect(session.id).toBe('sid');
-            expect(sessionStore.save).toHaveBeenCalledWith(session);
-        });
-
-        it('should save the session after the promise is resolved', function () {
-            var isResolved = false;
-
-            handler.andDefer(function (deferred) {
-                deferred.resolve();
-                isResolved = true;
-            });
-
-            socketRegistry.register('/core', handler, {id: 'core'});
-            fn = events['connection'];
-            fn(socket);
 
             waitsFor(function () {
-                return isResolved;
+                return authorizationCallback.wasCalled;
             });
 
             runs(function () {
-                expect(sessionStore.save).toHaveBeenCalledWith(session);
+                fn(socket);
+                expect(sessionStore.get).toHaveBeenCalled();
+                expect(socket.session.id).toBe('sid');
+                expect(sessionStore.save).toHaveBeenCalledWith(socket.session);
+            });
+        });
+
+        it('should save the session after the promise is resolved', function () {
+
+            socketRegistry.register('/core', handler, {id: 'core', useSession: true});
+            fn = events['connection'];
+
+            waitsFor(function () {
+                return authorizationCallback.wasCalled;
+            });
+
+            runs(function () {
+                fn(socket);
+                expect(sessionStore.save).toHaveBeenCalledWith(socket.session);
             });
         });
 
         it('should call the handlers when a new event is emitted', function () {
-            socketRegistry.register('/core', handler, {id: 'core'});
+            socketRegistry.register('/core', handler, {id: 'core', useSession: true});
             fn = events['connection'];
-            fn(socket);
+            var callFunction = jasmine.createSpy('fn');
 
-            socket.on('message', function () {});
-            events['message'](1, 2, 3);
+            waitsFor(function () {
+                return authorizationCallback.wasCalled;
+            });
 
-            expect(handler).toHaveBeenCalledWith(socket);
-            expect(sessionStore.get.callCount).toBe(2);
+            runs(function () {
+                fn(socket);
+                socket.on('message', callFunction);
+                events['message'](1, 2, 3);
+            });
+
+            waitsFor(function () {
+                return callFunction.wasCalled;
+            });
+
+
+            runs(function () {
+                expect(handler).toHaveBeenCalledWith(socket);
+                //global, component twice
+                expect(sessionStore.get.callCount).toBe(3);
+            });
         });
     });
 });

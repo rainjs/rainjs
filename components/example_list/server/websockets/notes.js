@@ -25,7 +25,6 @@
 
 "use strict";
 
-var IdentityProvider = require('rain/lib/security').IdentityProvider;
 var Promise = require('promised-io/promise');
 var defer = Promise.defer;
 
@@ -53,11 +52,8 @@ function handle(socket) {
         size: notes ? notes.length : 0
     });
 
-    var idp = IdentityProvider.get(socket.session),
-        user = idp.getUser();
-
     logger.info(t('The user "%1$s" connected to the notes websocket.',
-                  user && user.username || 'Guest'));
+                  socket.user && socket.user.username || 'Guest'));
 }
 
 module.exports = {

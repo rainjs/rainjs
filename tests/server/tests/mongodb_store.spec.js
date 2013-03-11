@@ -86,9 +86,9 @@ describe('MongoDB session store', function () {
     describe('constructor', function () {
         it('should initialize correctly', function () {
             spyOn(MongoDBSessionStore.prototype, '_initialize');
-            store = new MongoDBSessionStore(cookie, config);
+            store = new MongoDBSessionStore(config);
 
-            expect(Spy.BaseSessionStore).toHaveBeenCalledWith(cookie);
+            expect(Spy.BaseSessionStore).toHaveBeenCalledWith(config);
             expect(store._initialize).toHaveBeenCalledWith(config);
         });
     });
@@ -113,7 +113,7 @@ describe('MongoDB session store', function () {
         });
 
         it('should create the server, db and collection', function () {
-            store = new MongoDBSessionStore(cookie, config);
+            store = new MongoDBSessionStore(config);
 
             expect(Spy.MongoDB.Server).toHaveBeenCalledWith(config.host,
                     config.port, {});
@@ -137,16 +137,29 @@ describe('MongoDB session store', function () {
             callback = jasmine.createSpy('findOne callback');
         });
 
-        it('should call the callback with the error if findOne returns an error',
+        it('should reject the promise with an error if findOne returns an error',
                 function () {
             Spy.MongoDB.CollectionInstance.findOne.andCallFake(
                     function (selector, fields, callback) {
                         callback(new Error()); });
 
-            store = new MongoDBSessionStore(cookie, config);
-            store.get(request, callback);
+            store = new MongoDBSessionStore(config);
+            var isResolved;
+            store.get(request.sessionId, request.componentId).then(
+                    function() {
+                        isResolved = true;
+                    },
+                    function () {
+                        isResolved = false;
+                    }
+                    );
+            waitsFor(function() {
+                return typeof isResolved !== 'undefined';
+            });
 
-            expect(callback).toHaveBeenCalledWith(jasmine.any(Error));
+            runs(function () {
+                expect(isResolved).toBe(false);
+            });
         });
 
         it('should create a new session if the session wasn\'t found',
@@ -155,11 +168,23 @@ describe('MongoDB session store', function () {
                     function (selector, fields, callback) { callback(); });
             spyOn(MongoDBSessionStore.prototype, 'createNewSession');
 
-            store = new MongoDBSessionStore(cookie, config);
-            store.get(request, callback);
+            store = new MongoDBSessionStore(config);
+            var isResolved;
+            store.get(request.sessionId, request.componentId).then(function () {
+                isResolved = true;
+            }, function () {
+                isResolved = false;
+            });
 
-            expect(MongoDBSessionStore.prototype.createNewSession)
-                .toHaveBeenCalledWith(request, callback);
+            waitsFor(function () {
+                return typeof isResolved !== 'undefined';
+            });
+            
+            runs(function () {
+                expect(isResolved).toBe(true);
+                expect(Spy.MongoDBSession)
+                    .toHaveBeenCalledWith();
+            });
         });
 
         it('should create a session object with a found session that is fresh',
@@ -178,33 +203,25 @@ describe('MongoDB session store', function () {
                     function (selector, fields, callback) {
                         callback(null, session); });
 
-            store = new MongoDBSessionStore(cookie, config);
-            store.get(request, callback);
+            store = new MongoDBSessionStore(config);
+            var isResolved;
+            store.get(request.sessionId, request.componentId).then(function () {
+                isResolved = true
+            }, function () {
+                isResolved = false;
+            });
+            
+            waitsFor(function () {
+                return typeof isResolved !== 'undefined';
+            });
 
-            expect(Spy.MongoDBSession.argsForCall[0]).toEqual([
-                    session.components.test, request.component]);
-            expect(Spy.MongoDBSession.argsForCall[1]).toEqual([session.global]);
-            expect(callback).toHaveBeenCalled();
+            runs(function () {
+                expect(isResolved).toBe(true);
+                expect(Spy.MongoDBSession.argsForCall[0]).toEqual([{}]);
+                expect(Spy.MongoDBSession.argsForCall[1]).toEqual(undefined);
+            });
         });
 
-        it('should destroy the session if it\'s expired', function () {
-            session = {
-                cookie: {
-                    expires: new Date(Date.now() - 1000 * 60 * 60).toUTCString()
-                }
-            };
-
-            Spy.MongoDB.CollectionInstance.findOne.andCallFake(
-                    function (selector, fields, callback) {
-                        callback(null, session); });
-
-            spyOn(MongoDBSessionStore.prototype, 'destroy');
-            store = new MongoDBSessionStore(cookie, config);
-            store.get(request, callback);
-
-            expect(MongoDBSessionStore.prototype.destroy).toHaveBeenCalledWith(
-                request.sessionId, jasmine.any(Function));
-        });
     });
 
     describe('createNewSession', function () {
@@ -223,12 +240,23 @@ describe('MongoDB session store', function () {
         it('should insert the session into the store', function () {
             Spy.MongoDB.CollectionInstance.insert.andCallFake(
                     function (docs, options, callback) { callback(); });
-            store = new MongoDBSessionStore(cookie, config);
-            store.createNewSession(request, callback);
+            store = new MongoDBSessionStore(config);
+            var isResolved;
+            store.createNewSession(request.sessionId).then(function () {
+                isResolved = true;
+            }, function () {
+                isResolved = false;
+            });
+            
+            waitsFor(function () {
+                return typeof isResolved !== 'undefined';
+            });
 
-            expect(Spy.MongoDB.CollectionInstance.insert).toHaveBeenCalled();
-            expect(Spy.MongoDBSession).toHaveBeenCalled();
-            expect(callback).toHaveBeenCalled();
+            runs(function () {
+                expect(Spy.MongoDB.CollectionInstance.insert).toHaveBeenCalled();
+                expect(Spy.MongoDBSession).toHaveBeenCalled();
+                expect(isResolved).toBe(true);
+            });
         });
     });
 
@@ -238,12 +266,11 @@ describe('MongoDB session store', function () {
         beforeEach(function () {
             session = {
                 id: 'ffa5d',
-                isGlobal: false,
-                cookie: cookie,
-                _component: {id: 'test'},
+                isEmpty: true,
                 _updatedKeys: [],
                 _removedKeys: [],
-                _session: {}
+                _session: {},
+                _componentId: 'test'
             };
 
             Spy.MongoDB.CollectionInstance.update.andCallFake(
@@ -260,17 +287,28 @@ describe('MongoDB session store', function () {
                     'key-b': {value: 'b'}
                 };
 
-                store = new MongoDBSessionStore(cookie, config);
-                store.save(session, callback);
+                store = new MongoDBSessionStore(config);
+                var isResolved;
+                store.save(session).then(function () {
+                    isResolved = true;
+                }, function () {
+                    isResolved = false;
+                });
 
-                var args = Spy.MongoDB.CollectionInstance.update.mostRecentCall.args;
-                expect(args[0]).toEqual({id: session.id});
-                expect(args[1]).toEqual({
-                    $set: {
-                        cookie: session.cookie,
-                        'components.test.key-a': {value: 'a'},
-                        'components.test.key-b': {value: 'b'}
-                    }
+                waitsFor(function () {
+                    return typeof isResolved !== 'undefined';
+                });
+
+                runs(function () {
+                    var args = Spy.MongoDB.CollectionInstance.update.mostRecentCall.args;
+                    expect(isResolved).toBe(true);
+                    expect(args[0]).toEqual({id: session.id});
+                    expect(args[1]).toEqual({
+                        $set: {
+                            'components.test.key-a': {value: 'a'},
+                            'components.test.key-b': {value: 'b'}
+                        }
+                    });
                 });
             });
 
@@ -280,18 +318,27 @@ describe('MongoDB session store', function () {
                     'key-c': {value: 'c'}
                 };
 
-                store = new MongoDBSessionStore(cookie, config);
-                store.save(session, callback);
+                store = new MongoDBSessionStore(config);
+                var isResolved;
+                store.save(session).then(function () {
+                    isResolved = true;
+                }, function () {
+                    isResolved = false;
+                });
 
-                var args = Spy.MongoDB.CollectionInstance.update.mostRecentCall.args;
-                expect(args[0]).toEqual({id: session.id});
-                expect(args[1]).toEqual({
-                    $set: {
-                        cookie: session.cookie
-                    },
-                    $unset: {
-                        'components.test.key-c': 1
-                    }
+                waitsFor(function () {
+                    return typeof isResolved !== 'undefined';
+                });
+
+                runs(function () {
+                    var args = Spy.MongoDB.CollectionInstance.update.mostRecentCall.args;
+                    expect(isResolved).toBe(true);
+                    expect(args[0]).toEqual({id: session.id});
+                    expect(args[1]).toEqual({
+                        $unset: {
+                            'components.test.key-c': 1
+                        }
+                    });
                 });
             });
 
@@ -304,27 +351,38 @@ describe('MongoDB session store', function () {
                     'key-c': {value: 'c'}
                 };
 
-                store = new MongoDBSessionStore(cookie, config);
-                store.save(session, callback);
+                store = new MongoDBSessionStore(config);
+                var isResolved;
+                store.save(session).then(function () {
+                    isResolved = true;
+                }, function () {
+                    isResolved = false;
+                });
 
-                var args = Spy.MongoDB.CollectionInstance.update.mostRecentCall.args;
-                expect(args[0]).toEqual({id: session.id});
-                expect(args[1]).toEqual({
-                    $set: {
-                        cookie: session.cookie,
-                        'components.test.key-a': {value: 'a'},
-                        'components.test.key-b': {value: 'b'}
-                    },
-                    $unset: {
-                        'components.test.key-c': 1
-                    }
+                waitsFor(function () {
+                    return typeof isResolved !== 'undefined';
+                });
+                
+                runs(function () {
+                    var args = Spy.MongoDB.CollectionInstance.update.mostRecentCall.args;
+                    expect(isResolved).toBe(true);
+                    expect(args[0]).toEqual({id: session.id});
+                    expect(args[1]).toEqual({
+                        $set: {
+                            'components.test.key-a': {value: 'a'},
+                            'components.test.key-b': {value: 'b'}
+                        },
+                        $unset: {
+                            'components.test.key-c': 1
+                        }
+                    });
                 });
             });
         });
 
         describe('global', function () {
             it('should set changed keys and unset removed keys', function () {
-                session.isGlobal = true;
+                session._componentId = null;
                 session._updatedKeys = ['key-a', 'key-b'];
                 session._removedKeys = ['key-c'];
                 session._session = {
@@ -333,20 +391,31 @@ describe('MongoDB session store', function () {
                     'key-c': {value: 'c'}
                 };
 
-                store = new MongoDBSessionStore(cookie, config);
-                store.save(session, callback);
+                store = new MongoDBSessionStore(config);
+                var isResolved;
+                store.save(session).then(function () {
+                    isResolved = true;
+                }, function () {
+                    isResolved = false;
+                });
 
-                var args = Spy.MongoDB.CollectionInstance.update.mostRecentCall.args;
-                expect(args[0]).toEqual({id: session.id});
-                expect(args[1]).toEqual({
-                    $set: {
-                        cookie: session.cookie,
-                        'global.key-a': {value: 'a'},
-                        'global.key-b': {value: 'b'}
-                    },
-                    $unset: {
-                        'global.key-c': 1
-                    }
+                waitsFor(function () {
+                    return typeof isResolved !== 'undefined';
+                });
+
+                runs(function () {
+                    var args = Spy.MongoDB.CollectionInstance.update.mostRecentCall.args;
+                    expect(isResolved).toBe(true);
+                    expect(args[0]).toEqual({id: session.id});
+                    expect(args[1]).toEqual({
+                        $set: {
+                            'global.key-a': {value: 'a'},
+                            'global.key-b': {value: 'b'}
+                        },
+                        $unset: {
+                            'global.key-c': 1
+                        }
+                    });
                 });
             });
         });
@@ -360,16 +429,26 @@ describe('MongoDB session store', function () {
                     function (selector, options, callback) {
                         callback(); });
             sessionId = '55fad';
-            callback = jasmine.createSpy('destroy callback');
         });
 
         it('should destroy the entire session', function () {
-            store = new MongoDBSessionStore(cookie, config);
-            store.destroy(sessionId, callback);
+            store = new MongoDBSessionStore(config);
+            var isResolved;
+            store.destroy(sessionId).then(function () {
+                isResolved = true;
+            }, function () {
+                isResolved = false;
+            });
 
-            var args = Spy.MongoDB.CollectionInstance.remove.mostRecentCall.args;
-            expect(args[0]).toEqual({id: sessionId});
-            expect(callback).toHaveBeenCalled();
+            waitsFor(function () {
+                return typeof isResolved !== 'undefined';
+            });
+
+            runs(function () {
+                var args = Spy.MongoDB.CollectionInstance.remove.mostRecentCall.args;
+                expect(isResolved).toBe(true);
+                expect(args[0]).toEqual({id: sessionId});
+            });
         });
     });
 });

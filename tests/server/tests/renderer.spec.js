@@ -32,16 +32,22 @@ var cwd = process.cwd(),
         on: function (event, callback) {
             renderHandler = callback;
         },
-        sessionId: 'sid'
+        sessionId: 'sid',
+        handshake: {
+            globalSession: {}
+        },
+        environment: {
+            language: 'ro_RO'
+        }
     },
     sessionStore, webErr, webSession;
 
 sessionStore = jasmine.createSpyObj('sessionStore', ['get', 'save']);
-sessionStore.get.andCallFake(function (request, fn) {
-    fn(webErr, webSession);
+sessionStore.get.andDefer(function (defer) {
+    defer.resolve(webSession);
 });
-sessionStore.save.andCallFake(function (session, fn) {
-    fn();
+sessionStore.save.andDefer(function (defer) {
+    defer.resolve();
 });
 
 var button = {
@@ -251,7 +257,10 @@ describe('Renderer', function () {
         request = {
             session: {},
             query: "param=value",
-            body: "{}"
+            body: "{}",
+            environment: {
+                language: "ro_RO"
+            }
         };
         response = new http.ServerResponse();
         socket = new io.Socket();
@@ -428,7 +437,6 @@ describe('Renderer', function () {
             expect(dataLayer.loadData).toHaveBeenCalled();
 
             var callback = dataLayer.loadData.mostRecentCall.args[1];
-
             callback(null, {field: 'data'});
 
             expect(renderer.sendComponent).toHaveBeenCalledWith(response, {
@@ -498,28 +506,17 @@ describe('Renderer', function () {
 
     describe('registerWebsocketLayer', function () {
 
-        it('should get the session', function () {
-            renderHandler(button, function () {});
-
-            expect(sessionStore.get.mostRecentCall.args[0]).toEqual({
-                sessionId: websocket.sessionId,
-                component: {
-                    id: button.id
-                },
-                sessionStore: sessionStore
-            });
-        });
-
         it('should load the error component with view 500', function () {
+            dataLayer.loadData.andCallFake(function (obj, fn) {
+                var error = new Error('message');
+                fn(error);
+            });
             var load = renderer.loadDataAndSend;
-
             webErr = {};
-            renderer.loadDataAndSend = jasmine.createSpy();
 
-            renderHandler(button, function () {});
+            renderer.loadDataAndSend(button, response);
 
             expect(renderUtils.replaceWithError.mostRecentCall.args[0]).toBe(500);
-            expect(renderer.loadDataAndSend).toHaveBeenCalled();
             renderer.loadDataAndSend = load;
         });
 
