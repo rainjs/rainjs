@@ -58,7 +58,7 @@ program
 
 program.parse(process.argv);
 
-if (program.debug && 'win32' !== process.platform) {
+if (program.debug && process.platform !== 'win32') {
     // notify the node process that it needs to attach a debug server to itself
     process.kill(process.pid, 'SIGUSR1');
 }
@@ -76,12 +76,17 @@ var closeServer = function (error) {
     server.close(error);
 };
 
-if ('win32' !== process.platform) {
+var logRotate = function () {
+    server.logRotate();
+}
+
+if (process.platform !== 'win32') {
     // initialize shutdown signal handlers
     process.on('SIGTERM', closeServer);
     process.on('SIGQUIT', closeServer);
     process.on('SIGINT', closeServer);
     process.on('SIGSTOP', closeServer);
+    process.on('SIGUSR2', logRotate);
 }
 
 // add an uncaught exception handler to shutdown the server softly
