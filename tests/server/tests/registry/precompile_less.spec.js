@@ -113,7 +113,8 @@ describe('Registry Plugin: Precompile Less Plugin', function () {
         it('should ignore the files with the wrong content type', function () {
             precompileLess.configure(componentConfig);
 
-            expect(less.render.callCount).toEqual(2);
+            //a unscoped css and a scoped css fo each good request
+            expect(less.render.callCount).toEqual(4);
         });
 
         it('should rewrite the urls before less rendering', function () {
@@ -150,12 +151,16 @@ describe('Registry Plugin: Precompile Less Plugin', function () {
             expect(configure).toThrowType(RainError.ERROR_IO);
         });
 
-        it('should save the precompiled less content', function () {
+        it('should save the precompiled less content with a scoped css and an unscopedcss', 
+                function () {
+            var version_scope = componentConfig.version.replace('.', '_');
+            var scope = '.' + componentConfig.id + '_' + version_scope + ' { ';
             precompileLess.configure(componentConfig);
 
             expect(precompileLess._computeRules).toHaveBeenCalled();
             expect(componentConfig.compiledCSS['index.css']).toEqual({
-                content: content,
+                unscopedCSS: content,
+                content: scope + content + ' }',
                 ruleCount: 1,
                 lastModified: time
             });
