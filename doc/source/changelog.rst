@@ -2,6 +2,13 @@
 Changelog
 =========
 
+--------
+v 0.24.1
+--------
+
++ Fixed a bug in identity provider where the same user was returned even if the session data
+  changed.
+
 ------
 v 0.24
 ------
