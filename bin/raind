@@ -85,7 +85,6 @@ if (process.platform !== 'win32') {
     process.on('SIGTERM', closeServer);
     process.on('SIGQUIT', closeServer);
     process.on('SIGINT', closeServer);
-    process.on('SIGSTOP', closeServer);
     process.on('SIGUSR2', logRotate);
 }
 
