@@ -25,7 +25,8 @@
 
 "use strict";
 
-var path = require('path');
+var path = require('path'),
+    moment = require('moment');
 
 describe('File appender', function () {
     var mocks, Spy;
@@ -35,10 +36,10 @@ describe('File appender', function () {
     beforeEach(function () {
         Spy = jasmine.createSpyObj('Spy', ['Appender']);
 
-        Spy.Stream = jasmine.createSpyObj('Spy.Stream', ['write', 'end', 'on']);
+        Spy.Stream = jasmine.createSpyObj('Spy.Stream', ['write', 'end', 'on', 'destroySoon']);
         Spy.Stream.writable = true;
 
-        Spy.fs = jasmine.createSpyObj('Spy.fs', ['createWriteStream', 'openSync']);
+        Spy.fs = jasmine.createSpyObj('Spy.fs', ['createWriteStream', 'openSync', 'renameSync']);
         Spy.fs.createWriteStream.andReturn(Spy.Stream);
 
         mocks = {};
@@ -120,12 +121,13 @@ describe('File appender', function () {
     });
 
     describe('write', function () {
-        message = 'message';
-        options = {
-            file: 'log.log'
-        };
 
         it('should write the log message to the stream', function () {
+            var message = 'message',
+                options = {
+                    file: 'log.log'
+                };
+
             appender = new FileAppender('info', layout, options);
             appender._write(message);
 
@@ -135,16 +137,109 @@ describe('File appender', function () {
     });
 
     describe('destroy', function () {
-        message = 'message';
-        options = {
-            file: 'log.log'
-        };
 
         it('should end the write stream', function () {
+            message = 'message';
+            options = {
+                file: 'log.log'
+            };
             appender = new FileAppender('info', layout, options);
             appender.destroy();
 
             expect(Spy.Stream.end).toHaveBeenCalled();
+        });
+    });
+
+    describe('logRotate', function () {
+        it('should rotate the log', function () {
+            options = {
+                file: 'log.log',
+                rotateFile: {
+                    path: "logrotate.log",
+                    format: "DD-MM-YYYY HH:mm"
+                }
+            };
+            appender = new FileAppender('info', layout, options);
+            appender.rotate();
+
+            expect(Spy.Stream.destroySoon).toHaveBeenCalled();
+            expect(Spy.fs.renameSync).toHaveBeenCalledWith(options.file,
+                    options.rotateFile.path + '.' + moment().format(options.rotateFile.format));
+            expect(Spy.fs.openSync.argsForCall.length).toBe(2);
+            expect(Spy.fs.createWriteStream).toHaveBeenCalled();
+        });
+
+        it('should rotate the log if rotateFile.path is missing default options.file', function () {
+            options = {
+                file: 'log.log',
+                rotateFile: {
+                    format: "DD-MM-YYYY HH:mm"
+                }
+            };
+            appender = new FileAppender('info', layout, options);
+            appender.rotate();
+
+            expect(Spy.Stream.destroySoon).toHaveBeenCalled();
+            expect(Spy.fs.renameSync).toHaveBeenCalledWith(options.file, 
+                    options.file + '.' + moment().format(options.rotateFile.format));
+            expect(Spy.fs.createWriteStream).toHaveBeenCalled();
+            expect(Spy.fs.openSync.argsForCall.length).toBe(2);
+            expect(Spy.fs.createWriteStream.argsForCall.length).toBe(2);
+        });
+
+        it('should not rotate the log if rotateFile key is missing', function () {
+            options = {
+                file: 'log.log'
+            };
+            appender = new FileAppender('info', layout, options);
+            appender.rotate();
+
+            expect(Spy.Stream.destroySoon).not.toHaveBeenCalled();
+            expect(Spy.fs.renameSync).not.toHaveBeenCalledWith(options.file, 
+                    jasmine.any(String));
+            expect(Spy.fs.openSync.argsForCall.length).toBe(1);
+            expect(Spy.fs.createWriteStream.argsForCall.length).toBe(1);
+        });
+
+        it('should rotate the log if rotateFile.format key is missing default format', function () {
+            options = {
+                file: 'log.log',
+                rotateFile: {
+                    path: "log.log"
+                }
+            };
+
+            var defaultFormat = "DD-MM-YYYY HH:mm";
+            appender = new FileAppender('info', layout, options);
+            appender.rotate();
+
+            expect(Spy.Stream.destroySoon).toHaveBeenCalled();
+            expect(Spy.fs.renameSync).toHaveBeenCalledWith(options.file, 
+                    options.rotateFile.path + '.' + moment().format(defaultFormat));
+            expect(Spy.fs.createWriteStream).toHaveBeenCalled();
+            expect(Spy.fs.openSync.argsForCall.length).toBe(2);
+            expect(Spy.fs.createWriteStream.argsForCall.length).toBe(2);
+        });
+        
+        it('should rotate the log and set the day depending on the parameter in options', function () {
+            options = {
+                    file: 'log.log',
+                    rotateFile: {
+                        path: "log.log",
+                        format: "DD-MM-YY HH:mm",
+                        day: -1
+                    }
+            };
+            appender = new FileAppender('info', layout, options);
+            appender.rotate();
+
+            expect(Spy.Stream.destroySoon).toHaveBeenCalled();
+            expect(Spy.fs.renameSync).toHaveBeenCalledWith(options.file, 
+                    options.rotateFile.path + '.' + moment().add('days', options.rotateFile.day)
+                    .format(options.rotateFile.format));
+            expect(Spy.fs.createWriteStream).toHaveBeenCalled();
+            expect(Spy.fs.openSync.argsForCall.length).toBe(2);
+            expect(Spy.fs.createWriteStream.argsForCall.length).toBe(2);
         });
     });
 });
