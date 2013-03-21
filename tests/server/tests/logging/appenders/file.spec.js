@@ -36,7 +36,7 @@ describe('File appender', function () {
     beforeEach(function () {
         Spy = jasmine.createSpyObj('Spy', ['Appender']);
 
-        Spy.Stream = jasmine.createSpyObj('Spy.Stream', ['write', 'end', 'on', 'destroySoon']);
+        Spy.Stream = jasmine.createSpyObj('Spy.Stream', ['write', 'end', 'on', 'end']);
         Spy.Stream.writable = true;
 
         Spy.fs = jasmine.createSpyObj('Spy.fs', ['createWriteStream', 'openSync', 'renameSync']);
@@ -162,7 +162,7 @@ describe('File appender', function () {
             appender = new FileAppender('info', layout, options);
             appender.rotate();
 
-            expect(Spy.Stream.destroySoon).toHaveBeenCalled();
+            expect(Spy.Stream.end).toHaveBeenCalled();
             expect(Spy.fs.renameSync).toHaveBeenCalledWith(options.file,
                     options.rotateFile.path + '.' + moment().format(options.rotateFile.format));
             expect(Spy.fs.openSync.argsForCall.length).toBe(2);
@@ -179,8 +179,8 @@ describe('File appender', function () {
             appender = new FileAppender('info', layout, options);
             appender.rotate();
 
-            expect(Spy.Stream.destroySoon).toHaveBeenCalled();
-            expect(Spy.fs.renameSync).toHaveBeenCalledWith(options.file, 
+            expect(Spy.Stream.end).toHaveBeenCalled();
+            expect(Spy.fs.renameSync).toHaveBeenCalledWith(options.file,
                     options.file + '.' + moment().format(options.rotateFile.format));
             expect(Spy.fs.createWriteStream).toHaveBeenCalled();
             expect(Spy.fs.openSync.argsForCall.length).toBe(2);
@@ -194,8 +194,8 @@ describe('File appender', function () {
             appender = new FileAppender('info', layout, options);
             appender.rotate();
 
-            expect(Spy.Stream.destroySoon).not.toHaveBeenCalled();
-            expect(Spy.fs.renameSync).not.toHaveBeenCalledWith(options.file, 
+            expect(Spy.Stream.end).not.toHaveBeenCalled();
+            expect(Spy.fs.renameSync).not.toHaveBeenCalledWith(options.file,
                     jasmine.any(String));
             expect(Spy.fs.openSync.argsForCall.length).toBe(1);
             expect(Spy.fs.createWriteStream.argsForCall.length).toBe(1);
@@ -213,14 +213,14 @@ describe('File appender', function () {
             appender = new FileAppender('info', layout, options);
             appender.rotate();
 
-            expect(Spy.Stream.destroySoon).toHaveBeenCalled();
-            expect(Spy.fs.renameSync).toHaveBeenCalledWith(options.file, 
+            expect(Spy.Stream.end).toHaveBeenCalled();
+            expect(Spy.fs.renameSync).toHaveBeenCalledWith(options.file,
                     options.rotateFile.path + '.' + moment().format(defaultFormat));
             expect(Spy.fs.createWriteStream).toHaveBeenCalled();
             expect(Spy.fs.openSync.argsForCall.length).toBe(2);
             expect(Spy.fs.createWriteStream.argsForCall.length).toBe(2);
         });
-        
+
         it('should rotate the log and set the day depending on the parameter in options', function () {
             options = {
                     file: 'log.log',
@@ -233,8 +233,8 @@ describe('File appender', function () {
             appender = new FileAppender('info', layout, options);
             appender.rotate();
 
-            expect(Spy.Stream.destroySoon).toHaveBeenCalled();
-            expect(Spy.fs.renameSync).toHaveBeenCalledWith(options.file, 
+            expect(Spy.Stream.end).toHaveBeenCalled();
+            expect(Spy.fs.renameSync).toHaveBeenCalledWith(options.file,
                     options.rotateFile.path + '.' + moment().add('days', options.rotateFile.day)
                     .format(options.rotateFile.format));
             expect(Spy.fs.createWriteStream).toHaveBeenCalled();
