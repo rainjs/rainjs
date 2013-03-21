@@ -187,20 +187,6 @@ describe('File appender', function () {
             expect(Spy.fs.createWriteStream.argsForCall.length).toBe(2);
         });
 
-        it('should not rotate the log if rotateFile key is missing', function () {
-            options = {
-                file: 'log.log'
-            };
-            appender = new FileAppender('info', layout, options);
-            appender.rotate();
-
-            expect(Spy.Stream.end).not.toHaveBeenCalled();
-            expect(Spy.fs.renameSync).not.toHaveBeenCalledWith(options.file,
-                    jasmine.any(String));
-            expect(Spy.fs.openSync.argsForCall.length).toBe(1);
-            expect(Spy.fs.createWriteStream.argsForCall.length).toBe(1);
-        });
-
         it('should rotate the log if rotateFile.format key is missing default format', function () {
             options = {
                 file: 'log.log',
@@ -227,7 +213,7 @@ describe('File appender', function () {
                     rotateFile: {
                         path: "log.log",
                         format: "DD-MM-YY HH:mm",
-                        day: -1
+                        days: -1
                     }
             };
             appender = new FileAppender('info', layout, options);
@@ -235,7 +221,7 @@ describe('File appender', function () {
 
             expect(Spy.Stream.end).toHaveBeenCalled();
             expect(Spy.fs.renameSync).toHaveBeenCalledWith(options.file,
-                    options.rotateFile.path + '.' + moment().add('days', options.rotateFile.day)
+                    options.rotateFile.path + '.' + moment().add('days', options.rotateFile.days)
                     .format(options.rotateFile.format));
             expect(Spy.fs.createWriteStream).toHaveBeenCalled();
             expect(Spy.fs.openSync.argsForCall.length).toBe(2);
