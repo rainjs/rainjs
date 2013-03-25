@@ -49,7 +49,8 @@ describe('Router Plugin: CSS Route', function () {
 
         componentRegistry.getConfig('button', '1.0').compiledCSS = {
             'index.css': {
-                content: '.other {color: red;}'
+                unscopedCSS: '.other { color: red; } ',
+                content: '.button_1_0 .other { color: red; } '
             }
         };
 
@@ -96,7 +97,7 @@ describe('Router Plugin: CSS Route', function () {
         expect(response._body).toEqual('error|The specified URL was not found!|404');
     });
 
-    it('must scope the css with the current component', function () {
+    it('must server the cached css for current component', function () {
         runs(function () {
             request.method = 'get';
             request.path = 'index.css';
@@ -106,11 +107,11 @@ describe('Router Plugin: CSS Route', function () {
 
         runs(function() {
             expect(response._body.replace(/\s+/g, ' '))
-                   .toEqual('.button_1_0 .other { color: red; } ');
+                   .toEqual(request.component.compiledCSS[request.path].content);
         });
     });
 
-    it('must scope the css with the requested component', function () {
+    it('must scope the css with the requested component for cross referencing', function () {
         runs(function () {
             request.query = {
                 component: 'button',
@@ -123,8 +124,8 @@ describe('Router Plugin: CSS Route', function () {
         });
 
         runs(function() {
-            expect(response._body.replace(/\s+/g, ' '))
-                    .toEqual('.button_2_0 .other { color: red; } ');
+            expect(response._body.replace(/\s+/g, ' ')).toEqual('.button_2_0 ' + 
+                    request.component.compiledCSS[request.path].unscopedCSS);
         });
     });
 });
