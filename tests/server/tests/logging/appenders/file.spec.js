@@ -164,7 +164,7 @@ describe('File appender', function () {
 
             expect(Spy.Stream.end).toHaveBeenCalled();
             expect(Spy.fs.renameSync).toHaveBeenCalledWith(options.file,
-                    options.rotateFile.path + '.' + moment().format(options.rotateFile.format));
+                    path.resolve(options.rotateFile.path) + '.' + moment().format(options.rotateFile.format));
             expect(Spy.fs.openSync.argsForCall.length).toBe(2);
             expect(Spy.fs.createWriteStream).toHaveBeenCalled();
         });
@@ -181,7 +181,7 @@ describe('File appender', function () {
 
             expect(Spy.Stream.end).toHaveBeenCalled();
             expect(Spy.fs.renameSync).toHaveBeenCalledWith(options.file,
-                    options.file + '.' + moment().format(options.rotateFile.format));
+                    path.resolve(options.file) + '.' + moment().format(options.rotateFile.format));
             expect(Spy.fs.createWriteStream).toHaveBeenCalled();
             expect(Spy.fs.openSync.argsForCall.length).toBe(2);
             expect(Spy.fs.createWriteStream.argsForCall.length).toBe(2);
@@ -201,7 +201,7 @@ describe('File appender', function () {
 
             expect(Spy.Stream.end).toHaveBeenCalled();
             expect(Spy.fs.renameSync).toHaveBeenCalledWith(options.file,
-                    options.rotateFile.path + '.' + moment().format(defaultFormat));
+                    path.resolve(options.rotateFile.path) + '.' + moment().format(defaultFormat));
             expect(Spy.fs.createWriteStream).toHaveBeenCalled();
             expect(Spy.fs.openSync.argsForCall.length).toBe(2);
             expect(Spy.fs.createWriteStream.argsForCall.length).toBe(2);
@@ -221,7 +221,8 @@ describe('File appender', function () {
 
             expect(Spy.Stream.end).toHaveBeenCalled();
             expect(Spy.fs.renameSync).toHaveBeenCalledWith(options.file,
-                    options.rotateFile.path + '.' + moment().add('days', options.rotateFile.days)
+                    path.resolve(options.rotateFile.path) + '.' + 
+                    moment().add('days', options.rotateFile.days)
                     .format(options.rotateFile.format));
             expect(Spy.fs.createWriteStream).toHaveBeenCalled();
             expect(Spy.fs.openSync.argsForCall.length).toBe(2);
