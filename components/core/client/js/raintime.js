@@ -36,6 +36,9 @@ define(['raintime/lib/promise',
 
     var raintime = new Raintime();
 
+    var seq = Promise.seq;
+    var when = Promise.when;
+
     /**
      * The map of registered components, indexed by the instanceId property.
      *
@@ -163,6 +166,8 @@ define(['raintime/lib/promise',
             component.htmlLoaded = true;
             registerComponent(components, component);
         }
+
+        return components[component.instanceId];
     };
 
     /**
@@ -213,7 +218,6 @@ define(['raintime/lib/promise',
                 }
             }
 
-            //TODO: this commented line does not work because of the css renderer logic
             CssRenderer.get().unload(component);
             delete components[instanceId];
         }
@@ -328,88 +332,26 @@ define(['raintime/lib/promise',
      * @memberOf ComponentRegistry#
      */
     function registerComponent(map, component) {
-        var deferred = new Promise.Deferred();
         if (!component.staticId) {
             component.staticId = component.instanceId;
         }
-        var newComponent = new Component(component);
+
+        var deferred = new Promise.Deferred(),
+            newComponent = new Component(component),
+            deps = component.controller ? [component.controller] : [];
+
         map[newComponent.instanceId] = newComponent;
-
         newComponent.promise = deferred.promise;
+        newComponent.lifecyclePromises = {
+            init: new Promise.Deferred(),
+            start: new Promise.Deferred()
+        };
 
-        if (!component.controller) {
-            setTimeout(function () {
-                deferred.resolve();
-            }, 0);
-            delete callbacks[newComponent.instanceId];
-            return;
-        }
-
-        require([component.controller], function (Controller) {
-            // Extend the controller with EventEmitter methods.
-            for (var key in EventEmitter.prototype) {
-                Controller.prototype[key] = EventEmitter.prototype[key];
+        require(deps, function (Controller) {
+            if (!Controller) {
+                Controller = function () {};
             }
-
-            // Extend the controller with AsyncController methods.
-            for (var key in AsyncController.prototype) {
-                Controller.prototype[key] = AsyncController.prototype[key];
-            }
-
-            /**
-             * The client-side controller.
-             *
-             * @name controller
-             */
-            var controller = Controller;
-            if (typeof Controller === 'function') {
-                controller = new Controller();
-                AsyncController.call(controller);
-            }
-
-            controller.on = function (eventName, callback) {
-                if (eventName === 'start' && newComponent.state === Component.START) {
-                    callback.call(controller);
-                    return;
-                }
-                Controller.prototype.on.apply(controller, arguments);
-            };
-
-            // Attach modules to the controller.
-            /**
-             * The context of the controller. It is populated with useful functionality.
-             */
-            controller.context = new Context(raintime, newComponent);
-            controller.context.component = {
-                id: newComponent.id,
-                version: newComponent.version,
-                sid: newComponent.staticId,
-                children: newComponent.children
-            };
-
-            controller.context._getParent = function () {
-                var parentInstanceId = this.parentInstanceId,
-                    parent = components[parentInstanceId] || preComponents[parentInstanceId];
-
-                // return a promise if the controller isn't loaded yet
-                return parent && (parent.controller || parent.promise);
-            };
-
-            controller.context.find = function (staticIds, callback) {
-                if (typeof staticIds === 'function') {
-                    callback = staticIds;
-                    staticIds = undefined;
-                } else if (typeof staticIds === 'string') {
-                    staticIds = [staticIds];
-                }
-                if (typeof callback !== 'function') {
-                    logger.error('Invalid parameters for context\'s find method',
-                                    new Error('The callback parameter must be a function.'));
-                    return;
-                }
-                return find(newComponent.instanceId, staticIds, callback);
-            };
-
+            var controller = createControllerInstance(Controller, newComponent);
             newComponent.controller = controller;
 
             if (callbacks[newComponent.instanceId]) {
@@ -422,6 +364,73 @@ define(['raintime/lib/promise',
 
             deferred.resolve(controller);
         });
+    }
+
+    /**
+     * Creates a new controller instance. Adds EventEmitter and AsyncController methods.
+     * It also creates the context object.
+     *
+     * @param {Function} Controller the constructor for the controller instance
+     * @param {Component} component the component for which to create the controller
+     *
+     * @returns {Controller} the controller instance
+     */
+    function createControllerInstance(Controller, component) {
+        // Extend the controller with EventEmitter methods.
+        for (var key in EventEmitter.prototype) {
+            Controller.prototype[key] = EventEmitter.prototype[key];
+        }
+
+        // Extend the controller with AsyncController methods.
+        for (var key in AsyncController.prototype) {
+            Controller.prototype[key] = AsyncController.prototype[key];
+        }
+
+        var controller = new Controller();
+        AsyncController.call(controller);
+
+        controller.on = function (eventName, callback) {
+            if (eventName === 'init' &&
+                (component.state === Component.START || component.state === Component.INIT)) {
+                callback.call(controller);
+                return;
+            }
+
+            if (eventName === 'start' && component.state === Component.START) {
+                callback.call(controller);
+                return;
+            }
+
+            Controller.prototype.on.apply(controller, arguments);
+        };
+
+        // Attach modules to the controller.
+        controller.context = new Context(raintime, component);
+
+        controller.context._getParent = function () {
+            var parentInstanceId = this.parentInstanceId,
+                parent = components[parentInstanceId] || preComponents[parentInstanceId];
+
+            // return a promise if the controller isn't loaded yet
+            return parent && (parent.controller || parent.promise);
+        };
+
+        controller.context.find = function (staticIds, callback) {
+            if (typeof staticIds === 'function') {
+                callback = staticIds;
+                staticIds = undefined;
+            } else if (typeof staticIds === 'string') {
+                staticIds = [staticIds];
+            }
+            if (typeof callback !== 'function') {
+                logger.error('Invalid parameters for context\'s find method',
+                                new Error('The callback parameter must be a function.'));
+                return;
+            }
+            return find(component.instanceId, staticIds, callback);
+        };
+
+        return controller;
     }
 
     /**
@@ -447,7 +456,9 @@ define(['raintime/lib/promise',
                 emitControllerEvent(component, 'error', component.error, Component.ERROR);
                 return;
             }
+
             emitControllerEvent(component, 'start', undefined, Component.START);
+
             return;
         }
 
@@ -474,27 +485,31 @@ define(['raintime/lib/promise',
             return;
         }
 
-        var isPromise = false;
+        component.state = Component.PENDING;
 
-        if (typeof controller[eventName] === 'function') {
-            var result = controller[eventName](data);
+        var isInitOrStart = eventName === 'init' || eventName === 'start',
+            parentInstanceId = controller.context.parentInstanceId,
+            parentComponent = components[parentInstanceId] || preComponents[parentInstanceId],
+            deferred = parentComponent && parentComponent.lifecyclePromises[eventName];
 
-            if (result && result.then && typeof result.then === 'function') {
-                isPromise = true;
-                component.state = Component.PENDING;
-                result.then(function () {
-                    component.state = nextState;
-                    controller.emit(eventName, data);
-                    invokeLifecycle(component);
-                }, function () {});
-            }
-        }
+        seq([
+             function () { // wait for init/start method of the parent to be executed
+                 return isInitOrStart && deferred && deferred.promise;
+             },
+             function () {
+                var isFunction = typeof controller[eventName] === 'function',
+                    result = isFunction && controller[eventName](data);
 
-        if (!isPromise) {
-            controller.emit(eventName, data);
-            component.state = nextState;
-            invokeLifecycle(component);
-        }
+                isInitOrStart && component.lifecyclePromises[eventName].resolve();
+
+                return result;
+             },
+             function () {
+                 controller.emit(eventName, data);
+                 component.state = nextState;
+                 invokeLifecycle(component);
+             }
+        ]);
     }
 
     return raintime;

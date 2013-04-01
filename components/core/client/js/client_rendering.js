@@ -37,6 +37,8 @@ define([
         id: 'core'
     });
 
+    var when = Promise.when;
+
     var socketQueue = [];
     /**
      * The ClientRenderer handles the registration and inserting of new components from the server.
@@ -168,8 +170,7 @@ define([
         domElement.css('visibility', 'hidden').html(component.html);
         domElement.attr('id', component.instanceId);
         domElement.attr('class',
-                        'app-container ' + component.id + '_' + component.version.replace(/[\.]/g, '_')
-        );
+            'app-container ' + component.id + '_' + component.version.replace(/[\.]/g, '_'));
 
         if (this.orphans[component.instanceId]) {
             this.orphans[component.instanceId].forEach(this.renderComponent, this);
@@ -201,9 +202,21 @@ define([
      * @param {DomElement} element The wrapper of the component
      */
     ClientRenderer.prototype._showHTML = function (component, element) {
-        element.css('visibility', '');
         // Registers the component.
-        Raintime.componentRegistry.register(component);
+        var registeredComponent = Raintime.componentRegistry.register(component);
+        var controllerPromise = registeredComponent &&
+            (registeredComponent.controller || registeredComponent.promise);
+
+        // show the element after start was executed to avoid flicker
+        when(controllerPromise, function (controller) {
+            if (controller) {
+                controller.on('start', function () {
+                    element.css('visibility', '');
+                });
+            } else {
+                element.css('visibility', '');
+            }
+        });
     };
 
     /**
