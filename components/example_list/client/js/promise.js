@@ -26,7 +26,7 @@ define(['raintime/lib/promise'], function (Promise, logger) {
         setTimeout(function () {
             logger.info('Promise: "init" promise was resolved.');
             self.initDeferred.resolve();
-        }, 1000);
+        }, 500);
 
         return this.initDeferred.promise;
     };
@@ -42,12 +42,15 @@ define(['raintime/lib/promise'], function (Promise, logger) {
         logger.info('Promise: "start" function was called.');
 
         this._getChild('start').then(function (startButton) {
-            $(startButton.context.getRoot().children()[0]).button('option', 'label',
-                                                                 'Resolve start promise');
-            $(startButton.context.getRoot().children()[0]).click(function () {
+            var elem = $(startButton.context.getRoot().children()[0]);
+            elem.button('option', 'label', 'Waiting for start promise...');
+
+            setTimeout(function () {
                 logger.info('Promise: "start" promise was resolved.');
                 self.startDeferred.resolve();
-            });
+                elem.button('option', 'label', 'Start promise resolved');
+            }, 500);
+
         });
 
         return this.startDeferred.promise;

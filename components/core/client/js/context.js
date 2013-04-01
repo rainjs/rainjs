@@ -49,7 +49,12 @@ define(['raintime/client_storage',
         var self = this;
 
         raintime = raintimeInstance;
-        this.component = component;
+        this.component = {
+            id: component.id,
+            version: component.version,
+            sid: component.staticId,
+            children: component.children
+        };
         this.instanceId = component.instanceId;
         this.parentInstanceId = component.parentInstanceId;
         this.storage = new ClientStorage(this);
