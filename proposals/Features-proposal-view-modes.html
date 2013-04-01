@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>View modes &mdash; Rain v0.24.0 documentation</title>
+    <title>View modes &mdash; Rain 0.25.0 documentation</title>
+    
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.24.0',
+        VERSION:     '0.25.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +25,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.24.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain 0.25.0 documentation" href="../index.html" />
     <link rel="next" title="RAIN IDE" href="RAIN_IDE.html" />
     <link rel="prev" title="View authorization" href="Features-proposal-view-authorization.html" /> 
   </head>
@@ -39,7 +42,7 @@
         <li class="right" >
           <a href="Features-proposal-view-authorization.html" title="View authorization"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.24.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain 0.25.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -112,14 +115,14 @@
 </td></tr></table></div>
 <p>Each view can have a list of modes.  For a mode you can specify:</p>
 <blockquote>
-<ul class="simple">
+<div><ul class="simple">
 <li>name: the name of the mode, can be edit, help or a custom mode</li>
 <li>type:  can be page or popup depending how you want to open the mode view</li>
 <li>view_id: is the id of a view that will serve the declared mode</li>
 <li>icon: path to an icon to be displayed as a link to this mode</li>
 <li>tooltipMsgKey: a key for a text to be displayed as a tooltip for the link that navigates to the mode</li>
 </ul>
-</blockquote>
+</div></blockquote>
 <p>Edit and help modes are supported by default in Rain and they will be auto-discovered.
 For a view having viewid, if there are views called viewid_edit and viewid_help Rain will consider them the edit and help modes for that view.
 You should define them in meta.json only if you want to specify custom icon or tooltip.</p>
@@ -160,7 +163,7 @@ You should define them in meta.json only if you want to specify custom icon or t
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -186,11 +189,11 @@ You should define them in meta.json only if you want to specify custom icon or t
         <li class="right" >
           <a href="Features-proposal-view-authorization.html" title="View authorization"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.24.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain 0.25.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

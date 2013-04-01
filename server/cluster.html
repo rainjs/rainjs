@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>RAIN Clustering &mdash; Rain v0.24.0 documentation</title>
+    <title>RAIN Clustering &mdash; Rain 0.25.0 documentation</title>
+    
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.24.0',
+        VERSION:     '0.25.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +25,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.24.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain 0.25.0 documentation" href="../index.html" />
     <link rel="next" title="Class Appender" href="api/Appender.html" />
     <link rel="prev" title="RAIN SDK Architecture" href="sdk_architecture.html" /> 
   </head>
@@ -39,7 +42,7 @@
         <li class="right" >
           <a href="sdk_architecture.html" title="RAIN SDK Architecture"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.24.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain 0.25.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -54,24 +57,24 @@
 on the host machine is using HAProxy as a load balancer for multiple RAIN Workers hosted on different
 ports. This strategy has multiple advantages over node&#8217;s builtin cluster module:</p>
 <blockquote>
-<ul class="simple">
+<div><ul class="simple">
 <li>the posibility to leverage an already existing load balancing infrastructure</li>
 <li>no need to have a dedicated memory queue for the syncronization of socket.io connections across
 multiple servers by using keep-alive and sticky sessions on the reverse proxy</li>
 <li>no need to add another load balancing step in the infrastructure (if it already has a load balancer)</li>
 </ul>
-</blockquote>
+</div></blockquote>
 <div class="section" id="cluster-module-deficeincies">
 <h2>Cluster module deficeincies<a class="headerlink" href="#cluster-module-deficeincies" title="Permalink to this headline">¶</a></h2>
 <p>After reasearching the viability of using the builtin node cluster module the following problems were identified</p>
 <blockquote>
-<ul class="simple">
+<div><ul class="simple">
 <li>problems with socket.io due to no synchronization of handshakes across all workers which causes
 socket.io not to recognize the user if the socket ends up connecting to a different node than the
 one which executed the handshake</li>
 <li>an extra load balancing step added to the infrastructure, with no way of controlling the algorithm</li>
 </ul>
-</blockquote>
+</div></blockquote>
 </div>
 </div>
 
@@ -98,7 +101,7 @@ one which executed the handshake</li>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -124,11 +127,11 @@ one which executed the handshake</li>
         <li class="right" >
           <a href="sdk_architecture.html" title="RAIN SDK Architecture"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.24.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain 0.25.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

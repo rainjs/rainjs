@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class FileAppender &mdash; Rain v0.24.0 documentation</title>
+    <title>Class FileAppender &mdash; Rain 0.25.0 documentation</title>
+    
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.24.0',
+        VERSION:     '0.25.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +25,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.24.0 documentation" href="../../index.html" />
+    <link rel="top" title="Rain 0.25.0 documentation" href="../../index.html" />
     <link rel="next" title="Namespace Identity" href="Identity.html" />
     <link rel="prev" title="Class Event" href="Event.html" /> 
   </head>
@@ -39,7 +42,7 @@
         <li class="right" >
           <a href="Event.html" title="Class Event"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.24.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain 0.25.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -68,6 +71,82 @@
 <span class="p">}</span>
 </pre></div>
 </div>
+<p>Rotate is a method through which you can rename the logs for a period of time to a specified format
+and restart logging fresh.</p>
+<p>As a third party developer if you want to use the log rotate you need to use a simmilar configuration:</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre></div></td><td class="code"><div class="highlight"><pre>   <span class="s2">&quot;logger&quot;</span><span class="o">:</span> <span class="p">{</span>
+     <span class="s2">&quot;level&quot;</span><span class="o">:</span> <span class="s2">&quot;debug&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;appenders&quot;</span><span class="o">:</span> <span class="p">[{</span>
+          <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;file&quot;</span><span class="p">,</span> <span class="c1">//type of the appender</span>
+          <span class="s2">&quot;layout&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;pattern&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="o">:</span> <span class="p">{</span>
+                  <span class="s2">&quot;pattern&quot;</span><span class="o">:</span> <span class="s2">&quot;%logger - %source - [%level] %date: %message %stacktrace&quot;</span>
+            <span class="p">}</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;params&quot;</span><span class="o">:</span> <span class="p">{</span>
+              <span class="s2">&quot;file&quot;</span><span class="o">:</span> <span class="s2">&quot;server.log&quot;</span><span class="p">,</span> <span class="c1">//where to append the logs</span>
+              <span class="s2">&quot;rotateFile&quot;</span><span class="o">:</span> <span class="p">{</span>
+                   <span class="s2">&quot;path&quot;</span><span class="o">:</span> <span class="s2">&quot;server.log&quot;</span><span class="p">,</span> <span class="c1">//name of the renamed server.log</span>
+                   <span class="s2">&quot;format&quot;</span><span class="o">:</span> <span class="s2">&quot;DD-MM-YYYY HH:mm&quot;</span><span class="p">,</span> <span class="c1">//add to the name this specific format</span>
+                   <span class="s2">&quot;days&quot;</span><span class="o">:</span> <span class="o">-</span><span class="mi">1</span> <span class="c1">//log for the day before.</span>
+              <span class="p">}</span>
+          <span class="p">}</span>
+      <span class="p">}]</span>
+  <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p><strong>rotateFile</strong>: Optional key, if missing it will fall back to default, using the same name as the
+original log file and adding a default format <tt class="docutils literal"><span class="pre">DD-MM-YYYY</span> <span class="pre">HH:mm</span></tt> with the days parameter equal to 0.</p>
+<p><strong>path</strong>: Optional key, specifying the path of the rotateFile, if missing it will set as default the
+original log path.</p>
+<p><strong>format</strong>: Optional key, specifying the format of the rotateFile, the format will be appended to the
+path, if missing the format will be set to <tt class="docutils literal"><span class="pre">DD-MM-YYYY</span> <span class="pre">HH:mm</span></tt>.</p>
+<p>The supported formats are:
+- &#8220;YYYY-MM-DD&#8221;
+- &#8220;YYYY-MM-DDTHH&#8221;
+- &#8220;YYYY-MM-DD HH&#8221;
+- &#8220;YYYY-MM-DDTHH:mm&#8221;
+- &#8220;YYYY-MM-DD HH:mm&#8221;
+- &#8220;YYYY-MM-DDTHH:mm:ss&#8221;
+- &#8220;YYYY-MM-DD HH:mm:ss&#8221;
+- &#8220;YYYY-MM-DDTHH:mm:ss.SSS&#8221;
+- &#8220;YYYY-MM-DD HH:mm:ss.SSS&#8221;
+- &#8220;YYYY-MM-DDTHH:mm:ss Z&#8221;
+- &#8220;YYYY-MM-DD HH:mm:ss Z&#8221;</p>
+<p><strong>days</strong>: Optional key specifying how many days to be added to the current date, if missing
+the default will be set to 0 (the current day).</p>
+<p>As a third party developer if you want to trigger the log rotate you need to send a SIGUSR2
+signal to the raind process.</p>
+<blockquote>
+<div><div class="highlight-guess"><div class="highlight"><pre><span class="n">kill</span> <span class="o">-</span><span class="n">SIGUSR2</span> <span class="p">[</span><span class="n">pid</span> <span class="n">of</span> <span class="n">raind</span><span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The path of the rotate log file should be on the same partition with the server log
+file.</p>
+</div>
 <div class="section" id="constructor">
 <h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -77,7 +156,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>level</strong> (<em>String</em>) &#8211; the log level for this instance</li>
 <li><strong>layout</strong> (<a class="reference internal" href="Layout.html#Layout" title="Layout"><em>Layout</em></a>) &#8211; the log layout to use</li>
 <li><strong>options</strong> (<em>Object</em>) &#8211; the configuration options</li>
@@ -98,21 +177,19 @@
 <h3>destroy<a class="headerlink" href="#destroy" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="FileAppender#destroy">
-<tt class="descname">FileAppender#destroy</tt><big>(</big><em>cb</em><big>)</big><a class="headerlink" href="#FileAppender#destroy" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>cb</strong> &#8211; </li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
+<tt class="descname">FileAppender#destroy</tt><big>(</big><big>)</big><a class="headerlink" href="#FileAppender#destroy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <p>Destroy the appender.</p>
+</div>
+<div class="section" id="rotate">
+<h3>rotate<a class="headerlink" href="#rotate" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="FileAppender#rotate">
+<tt class="descname">FileAppender#rotate</tt><big>(</big><big>)</big><a class="headerlink" href="#FileAppender#rotate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Renames the actual log file and restarts the logger;</p>
 </div>
 </div>
 </div>
@@ -129,6 +206,7 @@
 <li><a class="reference internal" href="#constructor">Constructor</a></li>
 <li><a class="reference internal" href="#methods">Methods</a><ul>
 <li><a class="reference internal" href="#destroy">destroy</a></li>
+<li><a class="reference internal" href="#rotate">rotate</a></li>
 </ul>
 </li>
 </ul>
@@ -144,7 +222,7 @@
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -170,11 +248,11 @@
         <li class="right" >
           <a href="Event.html" title="Class Event"
              >previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.24.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain 0.25.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

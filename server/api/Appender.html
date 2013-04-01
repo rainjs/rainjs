@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class Appender &mdash; Rain v0.24.0 documentation</title>
+    <title>Class Appender &mdash; Rain 0.25.0 documentation</title>
+    
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.24.0',
+        VERSION:     '0.25.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +25,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.24.0 documentation" href="../../index.html" />
+    <link rel="top" title="Rain 0.25.0 documentation" href="../../index.html" />
     <link rel="next" title="Namespace Authorization" href="Authorization.html" />
     <link rel="prev" title="RAIN Clustering" href="../cluster.html" /> 
   </head>
@@ -39,7 +42,7 @@
         <li class="right" >
           <a href="../cluster.html" title="RAIN Clustering"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.24.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain 0.25.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -70,7 +73,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>event</strong> (<a class="reference internal" href="Event.html#Event" title="Event"><em>Event</em></a>) &#8211; The event to be appended to the log.</li>
 </ul>
 </td>
@@ -91,6 +94,15 @@
 <p>Abstract method that needs to be implemented when an appender needs to clean up before it is
 destroyed.</p>
 </div>
+<div class="section" id="rotate">
+<h3>rotate<a class="headerlink" href="#rotate" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Appender#rotate">
+<tt class="descname">Appender#rotate</tt><big>(</big><big>)</big><a class="headerlink" href="#Appender#rotate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Abstract method that needs to be implemented when an appender needs to rename the file.</p>
+</div>
 </div>
 </div>
 
@@ -107,6 +119,7 @@ destroyed.</p>
 <li><a class="reference internal" href="#methods">Methods</a><ul>
 <li><a class="reference internal" href="#append">append</a></li>
 <li><a class="reference internal" href="#destroy">destroy</a></li>
+<li><a class="reference internal" href="#rotate">rotate</a></li>
 </ul>
 </li>
 </ul>
@@ -122,7 +135,7 @@ destroyed.</p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -148,11 +161,11 @@ destroyed.</p>
         <li class="right" >
           <a href="../cluster.html" title="RAIN Clustering"
              >previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.24.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain 0.25.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

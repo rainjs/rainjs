@@ -127,6 +127,61 @@ and then you can write messages by calling one of its methods: ``debug``, ``info
      logger.info('some message');
 
 
+The logger also can rotate the log file:
+
+Log Rotate is a method through which you can rename the logs for a period of time to a specified format
+and restart logging fresh.
+
+As a third party developer if you want to use the log rotation you  need to:
+
+ - Have a configuration in the server conf for this rotation file;
+    .. code-block:: javascript
+        :linenos:
+
+          "logger": {
+              "level": "debug",
+              "appenders": [{
+                  "type": "file", //type of the appender
+                  "layout": {
+                      "type": "pattern",
+                      "params": {
+                          "pattern": "%logger - %source - [%level] %date: %message %stacktrace"
+                      }
+                  },
+                  "params": {
+                      "file": "server.log", //where to append the logs
+                      "rotateFile": {
+                          "path": "server.log", //name of the renamed server.log
+                          "format": "DD-MM-YYYY HH:mm", //add to the name this specific format
+                          "days": -1 //log for the day before.
+                      }
+                  }
+              }]
+          }
+
+  .. note:: The supported formats are:
+
+     - "YYYY-MM-DD"
+     - "YYYY-MM-DDTHH"
+     - "YYYY-MM-DD HH"
+     - "YYYY-MM-DDTHH:mm"
+     - "YYYY-MM-DD HH:mm"
+     - "YYYY-MM-DDTHH:mm:ss"
+     - "YYYY-MM-DD HH:mm:ss"
+     - "YYYY-MM-DDTHH:mm:ss.SSS"
+     - "YYYY-MM-DD HH:mm:ss.SSS"
+     - "YYYY-MM-DDTHH:mm:ss Z"
+     - "YYYY-MM-DD HH:mm:ss Z"
+
+  .. warning:: The path of the rotate log file should be on the same partition with the server log
+     file.
+
+ - Send a SIGUSR2 signal to the raind process to trigger the rotation.
+      .. code-block:: guess
+
+          kill -SIGUSR2 [pid of raind]
+
+
 
 
 
@@ -345,6 +400,29 @@ info
 
 
 Logs an info message.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+rotate
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Logger.rotate()
+
+
+
+
+
+Renames the actual log file and restarts the logger;
 
 
 

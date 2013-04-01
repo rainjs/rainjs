@@ -74,6 +74,29 @@ Softly shuts down the server closing any open pipes and connections.
 
 
 
+logRotate
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Server#logRotate()
+
+
+
+
+
+Renames the actual log file and restarts the logger;
+
+
+
+
+
+
+
+
+
+    
+
+
+
 start
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 

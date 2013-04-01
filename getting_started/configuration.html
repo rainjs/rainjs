@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Server and component configuration &mdash; Rain v0.24.0 documentation</title>
+    <title>Server and component configuration &mdash; Rain 0.25.0 documentation</title>
+    
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.24.0',
+        VERSION:     '0.25.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +25,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.24.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain 0.25.0 documentation" href="../index.html" />
     <link rel="next" title="RAIN component descriptor" href="../server/component_descriptor.html" />
     <link rel="prev" title="RAIN SDK Tutorial" href="rain_sdk_tutorial.html" /> 
   </head>
@@ -39,7 +42,7 @@
         <li class="right" >
           <a href="rain_sdk_tutorial.html" title="RAIN SDK Tutorial"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.24.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain 0.25.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -67,12 +70,12 @@ a credentials.conf file the <tt class="docutils literal"><span class="pre">crede
 files have to be in JSON format. When the RAIN server starts it reads all the files with the
 <tt class="docutils literal"><span class="pre">.conf</span></tt> extension from the configuration folder which is determined in the following order:</p>
 <blockquote>
-<ul class="simple">
+<div><ul class="simple">
 <li>if the RAIN_CONF environment variable is set, this value is used</li>
 <li>if the <tt class="docutils literal"><span class="pre">dir</span></tt> parameter of the <tt class="docutils literal"><span class="pre">raind</span></tt> process is set, the location is <tt class="docutils literal"><span class="pre">&lt;dir&gt;/conf</span></tt></li>
 <li>the default configuration that is <tt class="docutils literal"><span class="pre">&lt;project-root&gt;/conf</span></tt></li>
 </ul>
-</blockquote>
+</div></blockquote>
 <p>If no configuration files are found or the format is invalid then the server won&#8217;t start.</p>
 <div class="section" id="parameters">
 <h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
@@ -398,7 +401,7 @@ the defaultLanguage</li>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -424,11 +427,11 @@ the defaultLanguage</li>
         <li class="right" >
           <a href="rain_sdk_tutorial.html" title="RAIN SDK Tutorial"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.24.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain 0.25.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class Logger &mdash; Rain v0.24.0 documentation</title>
+    <title>Class Logger &mdash; Rain 0.25.0 documentation</title>
+    
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.24.0',
+        VERSION:     '0.25.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +25,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.24.0 documentation" href="../../index.html" />
+    <link rel="top" title="Rain 0.25.0 documentation" href="../../index.html" />
     <link rel="next" title="Class ParsedObject" href="ParsedObject.html" />
     <link rel="prev" title="Class Layout" href="Layout.html" /> 
   </head>
@@ -39,7 +42,7 @@
         <li class="right" >
           <a href="Layout.html" title="Class Layout"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.24.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain 0.25.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -159,6 +162,94 @@ and then you can write messages by calling one of its methods: <tt class="docuti
 <span class="nx">logger</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s1">&#39;some message&#39;</span><span class="p">);</span>
 </pre></div>
 </div>
+<p>The logger also can rotate the log file:</p>
+<p>Log Rotate is a method through which you can rename the logs for a period of time to a specified format
+and restart logging fresh.</p>
+<p>As a third party developer if you want to use the log rotation you  need to:</p>
+<blockquote>
+<div><ul>
+<li><dl class="first docutils">
+<dt>Have a configuration in the server conf for this rotation file;</dt>
+<dd><div class="first last highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre></div></td><td class="code"><div class="highlight"><pre>  <span class="s2">&quot;logger&quot;</span><span class="o">:</span> <span class="p">{</span>
+      <span class="s2">&quot;level&quot;</span><span class="o">:</span> <span class="s2">&quot;debug&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;appenders&quot;</span><span class="o">:</span> <span class="p">[{</span>
+          <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;file&quot;</span><span class="p">,</span> <span class="c1">//type of the appender</span>
+          <span class="s2">&quot;layout&quot;</span><span class="o">:</span> <span class="p">{</span>
+              <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;pattern&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;params&quot;</span><span class="o">:</span> <span class="p">{</span>
+                  <span class="s2">&quot;pattern&quot;</span><span class="o">:</span> <span class="s2">&quot;%logger - %source - [%level] %date: %message %stacktrace&quot;</span>
+              <span class="p">}</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;params&quot;</span><span class="o">:</span> <span class="p">{</span>
+              <span class="s2">&quot;file&quot;</span><span class="o">:</span> <span class="s2">&quot;server.log&quot;</span><span class="p">,</span> <span class="c1">//where to append the logs</span>
+              <span class="s2">&quot;rotateFile&quot;</span><span class="o">:</span> <span class="p">{</span>
+                  <span class="s2">&quot;path&quot;</span><span class="o">:</span> <span class="s2">&quot;server.log&quot;</span><span class="p">,</span> <span class="c1">//name of the renamed server.log</span>
+                  <span class="s2">&quot;format&quot;</span><span class="o">:</span> <span class="s2">&quot;DD-MM-YYYY HH:mm&quot;</span><span class="p">,</span> <span class="c1">//add to the name this specific format</span>
+                  <span class="s2">&quot;days&quot;</span><span class="o">:</span> <span class="o">-</span><span class="mi">1</span> <span class="c1">//log for the day before.</span>
+              <span class="p">}</span>
+          <span class="p">}</span>
+      <span class="p">}]</span>
+  <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</dd>
+</dl>
+</li>
+</ul>
+<blockquote>
+<div><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The supported formats are:</p>
+<ul class="last simple">
+<li>&#8220;YYYY-MM-DD&#8221;</li>
+<li>&#8220;YYYY-MM-DDTHH&#8221;</li>
+<li>&#8220;YYYY-MM-DD HH&#8221;</li>
+<li>&#8220;YYYY-MM-DDTHH:mm&#8221;</li>
+<li>&#8220;YYYY-MM-DD HH:mm&#8221;</li>
+<li>&#8220;YYYY-MM-DDTHH:mm:ss&#8221;</li>
+<li>&#8220;YYYY-MM-DD HH:mm:ss&#8221;</li>
+<li>&#8220;YYYY-MM-DDTHH:mm:ss.SSS&#8221;</li>
+<li>&#8220;YYYY-MM-DD HH:mm:ss.SSS&#8221;</li>
+<li>&#8220;YYYY-MM-DDTHH:mm:ss Z&#8221;</li>
+<li>&#8220;YYYY-MM-DD HH:mm:ss Z&#8221;</li>
+</ul>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The path of the rotate log file should be on the same partition with the server log
+file.</p>
+</div>
+</div></blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>Send a SIGUSR2 signal to the raind process to trigger the rotation.</dt>
+<dd><div class="first last highlight-guess"><div class="highlight"><pre><span class="n">kill</span> <span class="o">-</span><span class="n">SIGUSR2</span> <span class="p">[</span><span class="n">pid</span> <span class="n">of</span> <span class="n">raind</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
 <div class="section" id="constructor">
 <h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -168,7 +259,7 @@ and then you can write messages by calling one of its methods: <tt class="docuti
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>logger</strong> (<em>String</em>) &#8211; the logger name</li>
 <li><strong>appenders</strong> (<em>Appender[]</em>) &#8211; The appenders used by the logger.</li>
 <li><strong>inheritedAppenders</strong> (<em>Appender[]</em>) &#8211; The appenders inherited by a component logger from the platform logger.</li>
@@ -191,7 +282,7 @@ and then you can write messages by calling one of its methods: <tt class="docuti
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>message</strong> (<em>String</em>) &#8211; The message to be logged.</li>
 <li><strong>error</strong> (<em>RainError</em>) &#8211; The associated error, if one exists.</li>
 </ul>
@@ -221,7 +312,7 @@ and then you can write messages by calling one of its methods: <tt class="docuti
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>message</strong> (<em>String</em>) &#8211; The message to be logged.</li>
 <li><strong>error</strong> (<em>RainError</em>) &#8211; The associated error, if one exists.</li>
 </ul>
@@ -242,7 +333,7 @@ and then you can write messages by calling one of its methods: <tt class="docuti
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>message</strong> (<em>String</em>) &#8211; The message to be logged.</li>
 <li><strong>error</strong> (<em>RainError</em>) &#8211; The associated error, if one exists.</li>
 </ul>
@@ -263,18 +354,18 @@ and then you can write messages by calling one of its methods: <tt class="docuti
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>component</strong> &#8211; The component for which to create the logger. Creates the platform logger if component is undefined.</li>
 <li><strong>component.id</strong> &#8211; The component id.</li>
 <li><strong>component.version</strong> &#8211; The component version.</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Throws RainError:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><p class="first">: when the platform level is invalid.</p>
+<tr class="field-even field"><th class="field-name" colspan="2">Throws RainError:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">: when the platform level is invalid.</p>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns Logger:</th><td class="field-body"></td>
+<tr class="field-odd field"><th class="field-name">Returns Logger:</th><td class="field-body"></td>
 </tr>
 </tbody>
 </table>
@@ -291,7 +382,7 @@ and then you can write messages by calling one of its methods: <tt class="docuti
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>message</strong> (<em>String</em>) &#8211; The message to be logged.</li>
 <li><strong>error</strong> (<em>RainError</em>) &#8211; The associated error, if one exists.</li>
 </ul>
@@ -303,6 +394,15 @@ and then you can write messages by calling one of its methods: <tt class="docuti
 
 <p>Logs an info message.</p>
 </div>
+<div class="section" id="rotate">
+<h3>rotate<a class="headerlink" href="#rotate" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Logger.rotate">
+<tt class="descclassname">Logger.</tt><tt class="descname">rotate</tt><big>(</big><big>)</big><a class="headerlink" href="#Logger.rotate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Renames the actual log file and restarts the logger;</p>
+</div>
 <div class="section" id="warn">
 <h3>warn<a class="headerlink" href="#warn" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
@@ -312,7 +412,7 @@ and then you can write messages by calling one of its methods: <tt class="docuti
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>message</strong> (<em>String</em>) &#8211; The message to be logged.</li>
 <li><strong>error</strong> (<em>RainError</em>) &#8211; The associated error, if one exists.</li>
 </ul>
@@ -330,8 +430,8 @@ and then you can write messages by calling one of its methods: <tt class="docuti
 <div class="section" id="levels">
 <h3>LEVELS<a class="headerlink" href="#levels" title="Permalink to this headline">¶</a></h3>
 <dl class="attribute">
-<dt id="LEVELS ">
-<tt class="descname">LEVELS , <em>static)(constant</em></tt><a class="headerlink" href="#LEVELS " title="Permalink to this definition">¶</a></dt>
+<dt id="LEVELS">
+<tt class="descname">LEVELS</tt><a class="headerlink" href="#LEVELS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>Defines numeric values for the logger levels.</p>
@@ -356,6 +456,7 @@ and then you can write messages by calling one of its methods: <tt class="docuti
 <li><a class="reference internal" href="#fatal">fatal</a></li>
 <li><a class="reference internal" href="#get">get</a></li>
 <li><a class="reference internal" href="#info">info</a></li>
+<li><a class="reference internal" href="#rotate">rotate</a></li>
 <li><a class="reference internal" href="#warn">warn</a></li>
 </ul>
 </li>
@@ -376,7 +477,7 @@ and then you can write messages by calling one of its methods: <tt class="docuti
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -402,11 +503,11 @@ and then you can write messages by calling one of its methods: <tt class="docuti
         <li class="right" >
           <a href="Layout.html" title="Class Layout"
              >previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.24.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain 0.25.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

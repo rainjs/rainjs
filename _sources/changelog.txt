@@ -3,6 +3,26 @@ Changelog
 =========
 
 ------
+v 0.25
+------
+
++ Implemented log rotate. When a SIGUSR2 signal is sent to the process, RAIN renames the current
+  log file and creates a new file that will be used by the file appender for subsequent log
+  messages.
++ When a CSS file is requested from the component in which it is placed the scope is no
+  longer added at runtime.
++ The ``init`` and ``start`` methods from the client-side controller are called first for the
+  parent and then for the children.
++ The DOM for a component is shown after the ``start`` event is triggered.
+
+--------
+v 0.24.1
+--------
+
++ Fixed a bug in identity provider where the same user was returned even if the session data
+  changed.
+
+------
 v 0.24
 ------
 
