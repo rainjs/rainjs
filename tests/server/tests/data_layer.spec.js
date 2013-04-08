@@ -28,7 +28,7 @@
 var path = require('path');
 
 describe('Data layer', function() {
-    var dataLayer, cb, fn, componentOpt, sessionStore, session;
+    var dataLayer, cb, fn, componentOpt, sessionStore, session, moduleLoader;
 
     beforeEach(function () {
         session = {
@@ -67,18 +67,12 @@ describe('Data layer', function() {
             callback(null, {oldData: context, newData: 'my_new_data'});
         });
 
-        spyOn(global, 'requireWithContext').andCallFake(function () {
-            return {
-                index: fn
-            };
-        });
-
         var mocks = {
             './component_registry': jasmine.createSpyObj('component_registry', ['getConfig']),
             path: jasmine.createSpyObj('path', ['join']),
-            fs: jasmine.createSpyObj('fs', ['exists'])
+            fs: jasmine.createSpyObj('fs', ['exists']),
+            './module_loader': jasmine.createSpyObj('module_loader', ['get'])
         };
-        dataLayer = loadModuleExports('/lib/data_layer.js', mocks);
 
         mocks.fs.exists.andCallFake(function (path, callback) {
             callback(true);
@@ -95,6 +89,12 @@ describe('Data layer', function() {
                 };
             }
         });
+
+        moduleLoader = {requireWithContext: jasmine.createSpy('requireWithContext')};
+        mocks['./module_loader'].get.andReturn(moduleLoader);
+        moduleLoader.requireWithContext.andReturn({index: fn});
+
+        dataLayer = loadModuleExports('/lib/data_layer.js', mocks);
     });
 
     describe('loadData', function () {
@@ -140,7 +140,7 @@ describe('Data layer', function() {
             }, 'data layer method to finish and invoke the callback.');
 
             runs(function () {
-                expect(requireWithContext.mostRecentCall.args[0])
+                expect(moduleLoader.requireWithContext.mostRecentCall.args[0])
                     .toEqual(path.join('button', 'server/data.js'));
 
                 expect(sessionStore.get).toHaveBeenCalledWith(componentOpt.request.sessionId,

@@ -29,7 +29,7 @@ var path = require('path');
 
 describe('Registry plugin: Websockets', function () {
 
-    var socketRegistry, util, conf, websockets, socket;
+    var socketRegistry, util, conf, websockets, socket, moduleLoader;
 
     beforeEach(function () {
         socket = {
@@ -61,15 +61,15 @@ describe('Registry plugin: Websockets', function () {
             }
         };
 
-        // Mock for requireWithContext
-        spyOn(global, 'requireWithContext').andCallFake(function (path) {
-            return socket;
-        });
+        moduleLoader = {requireWithContext: jasmine.createSpy('requireWithContext')};
+        mocks['../module_loader'] = jasmine.createSpyObj('module_loader', ['get']);
+        mocks['../module_loader'].get.andReturn(moduleLoader);
+        moduleLoader.requireWithContext.andReturn(socket);
 
         conf = {
             id: 'button',
             version: '2.0',
-            folder: 'components/button2'
+            folder: path.join('components', 'button2')
         };
 
         websockets = loadModuleExports('/lib/registry/websockets.js', mocks);
@@ -89,7 +89,7 @@ describe('Registry plugin: Websockets', function () {
 
         var expectedPath = path.join('components', 'button2', 'server', 'websockets', 'socket.js');
 
-        expect(global.requireWithContext.mostRecentCall.args[0]).toBe(expectedPath);
+        expect(moduleLoader.requireWithContext.mostRecentCall.args[0]).toBe(expectedPath);
     });
 
     it('should register the socket', function () {
