@@ -1,3 +1,27 @@
+// Copyright © 2012 rainjs
+//
+// All rights reserved
+//
+// Redistribution and use in source and binary forms, with or without modification, are permitted
+// provided that the following conditions are met:
+//
+//    1. Redistributions of source code must retain the above copyright notice, this list of
+//       conditions and the following disclaimer.
+//    2. Redistributions in binary form must reproduce the above copyright notice, this list of
+//       conditions and the following disclaimer in the documentation and/or other materials
+//       provided with the distribution.
+//    3. Neither the name of The author nor the names of its contributors may be used to endorse or
+//       promote products derived from this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+// IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+// MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+// SHALL THE AUTHOR AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+// OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+// IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 "use strict";
 
 describe("Monitoring module", function () {
@@ -38,7 +62,7 @@ describe("Monitoring module", function () {
                 }
             }
         };
-        mocks['rain/lib/configuration'] = config;
+        mocks['../configuration'] = config;
 
         adapter = jasmine.createSpyObj('Spy.adapter', ['sendData']);
         adapter.sendData.andDefer(function (defer) {
@@ -85,7 +109,25 @@ describe("Monitoring module", function () {
                     }
                 }
             };
-            mocks['rain/lib/configuration'] = config;
+            mocks['../configuration'] = config;
+
+            Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
+            expect(function () {Monitoring.get()}).toThrowType(RainError.ERROR_PRECONDITION_FAILED);
+        });
+
+        it('should throw error if operation is not supported', function () {
+            config = {
+                monitoring: {
+                    step: 2,
+                    metrics: {
+                        fakeUseCase: {
+                            key: 'fakeKey',
+                            operation: "otherOperation"
+                        }
+                    }
+                }
+            };
+            mocks['../configuration'] = config;
 
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
             expect(function () {Monitoring.get()}).toThrowType(RainError.ERROR_PRECONDITION_FAILED);
@@ -102,7 +144,7 @@ describe("Monitoring module", function () {
                     }
                 }
             };
-            mocks['rain/lib/configuration'] = config;
+            mocks['../configuration'] = config;
 
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
             expect(function () {Monitoring.get()}).toThrowType(RainError.ERROR_PRECONDITION_FAILED);
@@ -111,7 +153,7 @@ describe("Monitoring module", function () {
 
         it('should disable the module if monitoring key is missing from configuration', function () {
             config = null;
-            mocks['rain/lib/configuration'] = config;
+            mocks['../configuration'] = config;
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
 
             var monitoring = Monitoring.get();
@@ -147,7 +189,7 @@ describe("Monitoring module", function () {
                     }
                 }
             };
-            mocks['rain/lib/configuration'] = config;
+            mocks['../configuration'] = config;
 
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
 
@@ -160,7 +202,7 @@ describe("Monitoring module", function () {
             config = {
                 monitoring: {}
             };
-            mocks['rain/lib/configuration'] = config;
+            mocks['../configuration'] = config;
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
 
             var monitoring = Monitoring.get();
@@ -201,7 +243,7 @@ describe("Monitoring module", function () {
                     }
                 }
             };
-            mocks['rain/lib/configuration'] = config;
+            mocks['../configuration'] = config;
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
 
             var monitoring = Monitoring.get();
@@ -240,7 +282,7 @@ describe("Monitoring module", function () {
             };
 
 
-            mocks['rain/lib/configuration'] = config;
+            mocks['../configuration'] = config;
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
 
             var monitoring = Monitoring.get();
@@ -269,12 +311,12 @@ describe("Monitoring module", function () {
                 }
             };
 
-            mocks['rain/lib/configuration'] = config;
+            mocks['../configuration'] = config;
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
 
             var monitoring = Monitoring.get();
 
-            expect(monitoring._defaultSend).toBe(60);
+            expect(monitoring._globalStep).toBe(60);
         })
 
     });
@@ -286,7 +328,7 @@ describe("Monitoring module", function () {
             config = {
                 monitoring: {}
             };
-            mocks['rain/lib/configuration'] = config;
+            mocks['../configuration'] = config;
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
 
             var monitoring = Monitoring.get();
@@ -361,7 +403,7 @@ describe("Monitoring module", function () {
                 }
             };
 
-            mocks['rain/lib/configuration'] = config;
+            mocks['../configuration'] = config;
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
 
             var monitoring = Monitoring.get();
@@ -395,7 +437,7 @@ describe("Monitoring module", function () {
                 }
             };
 
-            mocks['rain/lib/configuration'] = config;
+            mocks['../configuration'] = config;
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
 
             var monitoring = Monitoring.get();
@@ -441,7 +483,7 @@ describe("Monitoring module", function () {
 
         });
 
-        it('should throw an error if usecase is disabled', function () {
+        it('should log a debug message if usecase is disabled', function () {
 
             config = {
                 monitoring: {
@@ -456,16 +498,16 @@ describe("Monitoring module", function () {
                 }
             };
 
-            mocks['rain/lib/configuration'] = config;
+            mocks['../configuration'] = config;
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
 
             var monitoring = Monitoring.get();
             monitoring.endMeasurement('averageUseCase');
 
-            expect(logger.error).toHaveBeenCalled();
+            expect(logger.debug).toHaveBeenCalled();
         });
 
-        it('should log an error if it is called before although no measurement was started', function () {
+        it('should log an error if it is called although no measurement was started', function () {
 
             var monitoring = Monitoring.get();
             monitoring.endMeasurement('fakeUseCase');
@@ -498,7 +540,7 @@ describe("Monitoring module", function () {
                     }
                 }
             };
-            mocks['rain/lib/configuration'] = config;
+            mocks['../configuration'] = config;
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
 
             var monitoring = Monitoring.get();
@@ -545,7 +587,7 @@ describe("Monitoring module", function () {
                     }
                 }
             };
-            mocks['rain/lib/configuration'] = config;
+            mocks['../configuration'] = config;
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
 
             var monitoring = Monitoring.get();
@@ -646,7 +688,7 @@ describe("Monitoring module", function () {
                     return 3;
                 }
             });
-            mocks['rain/lib/configuration'] = config;
+            mocks['../configuration'] = config;
             adapter.sendData.andDefer(function (defer) {
                 wasCalled = true;
                 defer.resolve();
@@ -703,7 +745,7 @@ describe("Monitoring module", function () {
                 }
             });
             var wasCalled;
-            mocks['rain/lib/configuration'] = config;
+            mocks['../configuration'] = config;
             adapter.sendData.andDefer(function (defer) {
                 wasCalled = true;
                 defer.reject();
@@ -761,7 +803,7 @@ describe("Monitoring module", function () {
                     return 3;
                 }
             });
-            mocks['rain/lib/configuration'] = config;
+            mocks['../configuration'] = config;
             adapter.sendData.andDefer(function (defer) {
                 defer.reject();
             });
@@ -919,7 +961,7 @@ describe("Monitoring module", function () {
                 }
             };
 
-            mocks['rain/lib/configuration'] = config;
+            mocks['../configuration'] = config;
             adapter.sendData.andDefer(function (defer) {
                 defer.reject();
             });
