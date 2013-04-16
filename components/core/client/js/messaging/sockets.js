@@ -75,6 +75,20 @@ define(["raintime/lib/socket.io"], function (io) {
             socket.isConnected = true;
         });
 
+        // Ensure that emit calls always operate
+        // after the socket is properly connected.
+        var _emit = socket.emit;
+        socket.emit = function() {
+            if (socket.isConnected) {
+                _emit.apply(this, arguments);
+            } else {
+                var _arguments = Array.prototype.slice.call(arguments);
+                socket.on('connect', function() {
+                    _emit.apply(this, _arguments);
+                });
+            }
+        };
+
         return socket;
     };
 
