@@ -26,7 +26,7 @@
 "use strict";
 
 describe('Translation context', function () {
-    var translation, mocks;
+    var translation, moduleLoader, mocks;
 
     beforeEach(function () {
         mocks = {};
@@ -42,14 +42,17 @@ describe('Translation context', function () {
             }
         };
 
+        moduleLoader = {requireWithContext: jasmine.createSpy('requireWithContext')};
+        mocks['../module_loader'] = jasmine.createSpyObj('module_loader', ['get']);
+        mocks['../module_loader'].get.andReturn(moduleLoader);
+        moduleLoader.requireWithContext.andReturn({
+            'get': jasmine.createSpy()
+        });
+
         var translationSpy = jasmine.createSpyObj('Translation', ['generateContext']);
         translationSpy.generateContext.andReturn({});
         translation.get.andReturn(translationSpy);
         spyOn(global, 'setTimeout');
-        spyOn(global, 'requireWithContext');
-        requireWithContext.andReturn({
-            'get': jasmine.createSpy()
-        });
     });
 
     describe('controller', function () {
@@ -85,7 +88,8 @@ describe('Translation context', function () {
         it('should receive the language for the t and nt functions', function () {
             controller.handle(request, response);
 
-            expect(translation.get().generateContext).toHaveBeenCalledWith(request.component, 'en_US');
+            expect(moduleLoader.requireWithContext).toHaveBeenCalledWith(jasmine.any(String),
+                request.component, 'en_US');
         });
     });
 
@@ -111,6 +115,13 @@ describe('Translation context', function () {
             mocks['fs'] = fs = jasmine.createSpyObj('fs', ['exists']);
             callback = jasmine.createSpy();
 
+            moduleLoader = {requireWithContext: jasmine.createSpy('requireWithContext')};
+            mocks['./module_loader'] = jasmine.createSpyObj('module_loader', ['get']);
+            mocks['./module_loader'].get.andReturn(moduleLoader);
+            moduleLoader.requireWithContext.andReturn({
+                'get': jasmine.createSpy()
+            });
+
             registry.getConfig.andReturn(component);
 
             fs.exists.andCallFake(function (path, callback) {
@@ -124,7 +135,8 @@ describe('Translation context', function () {
             dataLayer.loadData(componentOpt, callback);
 
             expect(callback).toHaveBeenCalled();
-            expect(translation.get().generateContext).toHaveBeenCalledWith(component, 'en_US');
+            expect(moduleLoader.requireWithContext).toHaveBeenCalledWith(jasmine.any(String),
+                component, 'en_US');
         });
     });
 });
