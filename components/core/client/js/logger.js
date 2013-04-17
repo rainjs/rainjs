@@ -86,6 +86,14 @@ define(['raintime/messaging/sockets'], function (Sockets) {
     Logger._instances = {};
 
     /**
+     * The mocked logger instance used when client side logging is disabled.
+     *
+     * @type {Logger}
+     * @private
+     */
+    Logger._mockedLogger;
+
+    /**
      * Logs a debug message.
      *
      * @param {String} message The message to be logged.
@@ -165,6 +173,22 @@ define(['raintime/messaging/sockets'], function (Sockets) {
      * @returns {Logger}
      */
     Logger.get = function (component) {
+        if (!rainContext.enableClientLogging) {
+            if (!Logger._mockedLogger) {
+                var log = function () {};
+
+                Logger._mockedLogger = {
+                    debug: log,
+                    info: log,
+                    warn: log,
+                    error: log,
+                    fatal: log
+                };
+            }
+
+            return Logger._mockedLogger;
+        }
+
         var id = 'core';
 
         if (component && component.id && component.version) {

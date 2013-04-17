@@ -48,6 +48,9 @@ fields are formatted with **bold**.
 - language - a String representing the application language. This parameter is used by the I18N
   feature to translate messages and to determine what localized resources to use.
 
+- enableClientLogging - a Boolean value that enables or disables the client-side logging.
+  **For production environments this should be set to false**.
+
 - logger - an Object used to configure the Logger feature. The logging level and appenders can also
   be configured here. For information about the entire structure of this parameter, check the
   :doc:`Logger API</server/api/Logger>`.
@@ -100,6 +103,8 @@ Example
 
         "defaultLanguage": "en_US",
         "language": "en_US",
+
+        "enableClientLogging": false,
 
         "logger": {
             "level": "debug",
