@@ -23,7 +23,7 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-define(['/example/js/accordian.min.js'], function (logger) {
+define(['/example/js/jquery-ui-1.10.2.custom.js'], function (logger) {
     /**
      * Example controller class.
      *
@@ -51,17 +51,16 @@ define(['/example/js/accordian.min.js'], function (logger) {
             collapsible: true,
             active: false,
             autoHeight: false,
-            change: function (event, ui) {
-                ui.oldContent.empty();
-                if (ui.options.active !== false) {
-                    self.context.insert({
-                        id: "example",
-                        view: ui.newContent.data("example-view"),
-                        placeholder: true
-                    }, ui.newContent, function () {
-                        // "this" is the controller for new component
-                    });
-                }
+            heightStyle: 'content',
+            activate: function (event, ui) {
+                ui.oldPanel.empty();
+                self.context.insert({
+                    id: "example",
+                    view: ui.newPanel.data("example-view"),
+                    placeholder: true
+                }, ui.newPanel, function () {
+                    // "this" is the controller for new component
+                });
             }
         }).show();
     };
