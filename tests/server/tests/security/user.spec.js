@@ -34,7 +34,8 @@ describe('User', function () {
         user = new User({
             id: '1234',
             username: 'test',
-            permissions: ['perm1', 'perm2', 'perm3']
+            permissions: ['perm1', 'perm2', 'perm3'],
+            isDirty: false
         });
 
         anonymous = new User();
@@ -74,5 +75,9 @@ describe('User', function () {
         expect(JSON.stringify(user))
             .toEqual('{"id":"1234","username":"test","permissions":["perm1","perm2","perm3"]}');
         expect(JSON.stringify(anonymous)).toEqual('{}');
+    });
+
+    it('should return dirty if user is dirty ', function () {
+        expect(user.isDirty()).toEqual(false);
     });
 });

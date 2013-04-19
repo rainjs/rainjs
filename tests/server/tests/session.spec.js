@@ -253,3 +253,4 @@ describe('Session', function () {
         expect(response.setHeader).toHaveBeenCalled();
     });
 });
+

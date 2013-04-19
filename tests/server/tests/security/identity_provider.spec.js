@@ -214,5 +214,20 @@ describe('The identity provider', function () {
             expect(session.get.mostRecentCall.args[0]).toBe('user');
             expect(mocks['./user']).toHaveBeenCalledWith('user');
         });
+
+        it('should update the user', function () {
+            var provider = new IdentityProvider(session);
+
+            spyOn(IdentityProvider.prototype, 'getUser').andReturn({
+                isDirty : function() {return true;},
+                toJSON: function() {return 'user object';}
+            });
+
+            provider.updateUser();
+
+            expect(session.set.mostRecentCall.args[0]).toBe('user');
+            expect(session.set.mostRecentCall.args[1]).toBe(('user object'));
+        });
     });
+
 });
