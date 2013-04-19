@@ -98,10 +98,18 @@ describe('Handlebars component helper', function () {
             childComponent = component;
         };
 
+        var mockMonitoring = {
+            Monitoring: jasmine.createSpyObj('Monitoring', ['get'])
+        };
+        var monitoring = jasmine.createSpyObj('monitoring',
+            ['startMeasurement', 'endMeasurement', 'registerEvent']);
+        mockMonitoring.Monitoring.get.andReturn(monitoring);
+
         componentHelper = loadModuleExports('/lib/handlebars/component.js', {
             '../component_registry': componentRegistry,
             '../renderer': renderer,
-            '../render_utils': mockRenderUtils
+            '../render_utils': mockRenderUtils,
+            '../monitoring': mockMonitoring
         });
 
         Handlebars = require('handlebars');
