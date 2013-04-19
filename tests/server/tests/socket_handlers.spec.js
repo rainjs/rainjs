@@ -26,10 +26,14 @@
 "use strict";
 
 describe('Socket handlers', function () {
-    var socketHandlers, mockedSocketHandlers;
-    var handlers = {}, sessionStore, err, session, globalSession;
+    var socketHandlers, mockedSocketHandlers,
+        handlers = {}, sessionStore,
+        configuration = {
+            enableClientLogging: true
+        };
 
     beforeEach(function () {
+        handlers = {};
 
         sessionStore = jasmine.createSpyObj('sessionStore', ['get', 'save']);
         sessionStore.get.andDefer(function (defer) {
@@ -53,7 +57,8 @@ describe('Socket handlers', function () {
                     return jasmine.createSpyObj('logger',
                                                 ['debug', 'info', 'warn', 'error', 'fatal']);
                 }
-            }
+            },
+            './configuration' : configuration
         });
         socketHandlers = mockedSocketHandlers.module.exports;
     });
@@ -62,6 +67,14 @@ describe('Socket handlers', function () {
         it('should register the change language handler to the socket registry', function () {
             socketHandlers.register();
             expect(handlers['/core']).toEqual(mockedSocketHandlers.changeLanguage);
+            expect(handlers['/core/logging']).toEqual(jasmine.any(Function));
+        });
+
+        it('should not register the client side logging channels', function () {
+            configuration.enableClientLogging = false;
+            socketHandlers.register();
+            expect(handlers['/core']).toEqual(mockedSocketHandlers.changeLanguage);
+            expect(handlers['/core/logging']).toBeUndefined();
         });
     });
 
@@ -81,14 +94,6 @@ describe('Socket handlers', function () {
             };
 
         beforeEach(function () {
-            err = null;
-            session = {
-                globalSession: {
-                    get: jasmine.createSpy(),
-                    set: jasmine.createSpy()
-                }
-            };
-
             ack = jasmine.createSpy();
 
             mockedSocketHandlers.changeLanguage(socket);
@@ -97,8 +102,7 @@ describe('Socket handlers', function () {
 
         it('should not change the language is the session is missing', function () {
             sessionStore.save.andDefer(function (defer) {
-                var err = 'eroare';
-                defer.reject(err);
+                defer.reject('err');
             });
             fn('en_US', ack);
 
@@ -107,7 +111,7 @@ describe('Socket handlers', function () {
             });
             runs(function () {
                 expect(sessionStore.save).toHaveBeenCalled();
-                expect(ack).toHaveBeenCalledWith('eroare');
+                expect(ack).toHaveBeenCalledWith('err');
             });
         });
 

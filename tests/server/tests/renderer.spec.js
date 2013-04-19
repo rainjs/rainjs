@@ -288,6 +288,7 @@ describe('Renderer', function () {
                 placeholder: '{"html":"<div />"}',
                 placeholderTimeout: 500,
                 language: 'ro_RO',
+                enableClientLogging: 'false',
                 isContainer: false,
                 context: {
                     query: 'param=value',
@@ -305,6 +306,7 @@ describe('Renderer', function () {
                 placeholder: '{"html":"<div />"}',
                 placeholderTimeout: 500,
                 language: 'ro_RO',
+                enableClientLogging: 'false',
                 isContainer: true,
                 context: {
                     query: 'param=value',
