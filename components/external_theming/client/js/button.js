@@ -23,7 +23,7 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-define(['raintime/messaging/intents', '/external_theming/js/jquery_button.js'], function(Intents) {
+define(['raintime/messaging/intents', '/external_theming/js/jquery-ui-1.10.2.custom.js'], function(Intents) {
     /**
      * Example controller class.
      *
