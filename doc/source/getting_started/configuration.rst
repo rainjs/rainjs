@@ -7,7 +7,7 @@ level configuration.
 
 .. warning::
     - You must have a conf folder or setup a conf folder for your project
-    - Do not keep your credentials inside code, as a recommendation you can put them inside 
+    - Do not keep your credentials inside code, as a recommendation you can put them inside
       a credentials.conf file the ``credentials`` name is not mandatory
     - All the configuration files must be named <name>.conf any other files will be ignored.
 
@@ -40,6 +40,8 @@ fields are formatted with **bold**.
   - **timeoutForRequests** - the number of seconds the server should wait for a response when
     executing server-side code from a component's controller. If the timeout is reached the
     client receives an error response.
+  - idleWebsocket - the number of seconds after which a socket becomes idle. The default value is
+    1200 (20 minutes).
 
 - **defaultLanguage** - a String representing the default language used by the I18N feature to
   translate messages and to determine what localized resources to use. This value is used to

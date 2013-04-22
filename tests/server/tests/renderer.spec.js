@@ -251,6 +251,16 @@ describe('Renderer', function () {
                 return renderUtils;
             }
 
+            if (path === './monitoring') {
+                var Monitoring = {
+                    Monitoring: jasmine.createSpyObj('Monitoring', ['get'])
+                };
+                var monitoring = jasmine.createSpyObj('monitoring',
+                    ['startMeasurement', 'endMeasurement', 'registerEvent']);
+                Monitoring.Monitoring.get.andReturn(monitoring);
+                return Monitoring;
+            }
+
             return Module._load(path, this);
         });
 
