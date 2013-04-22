@@ -18,7 +18,7 @@
         "mime": "1.2.x",
         "node.extend": "",
         "promised-io": "https://github.com/kriszyp/promised-io/archive/master.tar.gz",
-        "socket.io": "0.9.13",
+        "socket.io": "0.9.14",
         "commander": "1.1.1",
         "mocks": "0.0.10",
         "colors": "0.6.0",
