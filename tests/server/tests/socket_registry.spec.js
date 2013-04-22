@@ -49,6 +49,9 @@ describe('Socket registry', function () {
             authorization: function (fn) {
                 fn (handshake, authorizationCallback);
                 socket.session = {};
+                socket.idp = {
+                    updateUser: jasmine.createSpy('updateUser')
+                };
                 return socket;
             }
         };
@@ -67,7 +70,8 @@ describe('Socket registry', function () {
         sessionStore = jasmine.createSpyObj('sessionStore', ['get', 'save']);
         sessionStore.get.andDefer(function (defer) {
             var session = {
-                    get: jasmine.createSpy('get')
+                    get: jasmine.createSpy('get'),
+                    isDirty: jasmine.createSpy('isDirty')
             };
             defer.resolve(session);
         });
@@ -120,12 +124,6 @@ describe('Socket registry', function () {
 
         beforeEach(function () {
             err = null;
-            session = {
-                global: {
-                    get: jasmine.createSpy(),
-                    set: jasmine.createSpy()
-                }
-            };
             handler = jasmine.createSpy();
         });
 
@@ -133,10 +131,15 @@ describe('Socket registry', function () {
             socketRegistry.register('/core', handler, {id: 'core'});
             fn = events['connection'];
             socketRegistry.register('/core', handler, {id: 'button'});
-            fn(socket);
+            waitsFor(function () {
+                return authorizationCallback.wasCalled
+            });
+            runs(function () {
+                fn(socket);
 
-            expect(handler).toHaveBeenCalledWith(socket);
-            expect(handler.callCount).toBe(2);
+                expect(handler).toHaveBeenCalledWith(socket);
+                expect(handler.callCount).toBe(2);
+            });
         });
 
         it('should disconnect the socket if the session id is missing', function () {
@@ -191,6 +194,71 @@ describe('Socket registry', function () {
             runs(function () {
                 fn(socket);
                 expect(sessionStore.save).toHaveBeenCalledWith(socket.session);
+            });
+        });
+
+        it('should call the handlers when a new event is emmited and run the ack', function () {
+            socketRegistry.register('/core', handler, {id: 'core', useSession: true});
+            fn = events['connection'];
+            var callFunction = jasmine.createSpy('fn');
+            var ack = jasmine.createSpy('ack');
+            callFunction.andCallFake(function () {
+               return {};
+            });
+
+            waitsFor(function () {
+                return authorizationCallback.wasCalled;
+            });
+
+            runs(function () {
+                fn(socket);
+                socket.on('message', callFunction);
+                events['message'](1, ack);
+
+            });
+
+            waitsFor(function () {
+                return callFunction.wasCalled;
+            });
+
+            runs(function () {
+                expect(handler).toHaveBeenCalledWith(socket);
+                expect(ack).toHaveBeenCalled();
+            });
+        });
+
+        it('should call the handlers and update the user', function () {
+            socketRegistry.register('/core', handler, {id: 'core', useSession: true});
+            fn = events['connection'];
+            var callFunction = jasmine.createSpy('fn');
+            var ack = jasmine.createSpy('ack');
+            callFunction.andCallFake(function () {
+                return {};
+            });
+
+            waitsFor(function () {
+                return authorizationCallback.wasCalled;
+            });
+
+            runs(function () {
+                fn(socket);
+                handshake.idp = {
+                    updateUser: jasmine.createSpy('upUser')
+                };
+                socket.on('message', callFunction);
+                console.log(events);
+                events['message'](1, ack);
+
+            });
+
+            waitsFor(function () {
+                return callFunction.wasCalled;
+            });
+
+            runs(function () {
+                expect(handler).toHaveBeenCalledWith(socket);
+                expect(ack).toHaveBeenCalled();
+                expect(socket.idp.updateUser).toHaveBeenCalled();
             });
         });
 
