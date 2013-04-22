@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class CssRenderer &mdash; Rain v0.26.0 documentation</title>
+    <title>Class ModuleLoader &mdash; Rain v0.26.0 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -23,8 +23,8 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="Rain v0.26.0 documentation" href="../../index.html" />
-    <link rel="next" title="Class EventEmitter" href="EventEmitter.html" />
-    <link rel="prev" title="Class CssRegistry" href="CssRegistry.html" /> 
+    <link rel="next" title="Class Monitoring" href="Monitoring.html" />
+    <link rel="prev" title="Class Logger" href="Logger.html" /> 
   </head>
   <body>
     <div class="related">
@@ -34,10 +34,10 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="EventEmitter.html" title="Class EventEmitter"
+          <a href="Monitoring.html" title="Class Monitoring"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="CssRegistry.html" title="Class CssRegistry"
+          <a href="Logger.html" title="Class Logger"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Rain v0.26.0 documentation</a> &raquo;</li> 
       </ul>
@@ -48,17 +48,15 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="class-cssrenderer">
-<h1>Class CssRenderer<a class="headerlink" href="#class-cssrenderer" title="Permalink to this headline">¶</a></h1>
-<p>Handles inserting and removing CSS into the page. The CSS is requested using AJAX and
-the received CSS text is added to style tags with no more than 4095 rules. The maximum
-number of stylesheets is 31. This is due to the limitations introduced by Internet
-Explorer 8 and Internet Explorer 9 browsers.</p>
+  <div class="section" id="class-moduleloader">
+<h1>Class ModuleLoader<a class="headerlink" href="#class-moduleloader" title="Permalink to this headline">¶</a></h1>
+<p>Module loader for the server side code of RAIN components. Adds custom properties to the
+module context. This class is a singleton.</p>
 <div class="section" id="constructor">
 <h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="CssRenderer">
-<em class="property">class </em><tt class="descname">CssRenderer</tt><big>(</big><big>)</big><a class="headerlink" href="#CssRenderer" title="Permalink to this definition">¶</a></dt>
+<dt id="ModuleLoader">
+<em class="property">class </em><tt class="descname">ModuleLoader</tt><big>(</big><big>)</big><a class="headerlink" href="#ModuleLoader" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
@@ -67,67 +65,46 @@ Explorer 8 and Internet Explorer 9 browsers.</p>
 <div class="section" id="get">
 <h3>get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="CssRenderer.get">
-<tt class="descclassname">CssRenderer.</tt><tt class="descname">get</tt><big>(</big><big>)</big><a class="headerlink" href="#CssRenderer.get" title="Permalink to this definition">¶</a></dt>
+<dt id="ModuleLoader.get">
+<tt class="descclassname">ModuleLoader.</tt><tt class="descname">get</tt><big>(</big><big>)</big><a class="headerlink" href="#ModuleLoader.get" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name" colspan="2">Returns CssRenderer:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body">the singleton instance</td>
+<tr class="field"><th class="field-name" colspan="2">Returns ModuleLoader:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<p>Returns the singleton instance.</p>
+<p>Gets the singleton instance.</p>
 </div>
-<div class="section" id="load">
-<h3>load<a class="headerlink" href="#load" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="requirewithcontext">
+<h3>requireWithContext<a class="headerlink" href="#requirewithcontext" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="CssRenderer#load">
-<tt class="descname">CssRenderer#load</tt><big>(</big><em>component</em><big>)</big><a class="headerlink" href="#CssRenderer#load" title="Permalink to this definition">¶</a></dt>
+<dt id="ModuleLoader#requireWithContext">
+<tt class="descname">ModuleLoader#requireWithContext</tt><big>(</big><em>modulePath</em>, <em>component</em>, <em>language</em><big>)</big><a class="headerlink" href="#ModuleLoader#requireWithContext" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>component</strong> (<em>Object</em>) &#8211; the component for which to load the CSS. This is the object sent by the server when a component is rendered.</li>
+<li><strong>modulePath</strong> (<em>String</em>) &#8211; absolute path for the module to be loaded</li>
+<li><strong>component</strong> (<em>Object</em>) &#8211; the component for which to generate the context</li>
+<li><strong>language</strong> (<em>String</em>) &#8211; the language for which to generate the context</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Returns Promise:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><p class="first last">indicates when the loading of the CSS finished.</p>
+<tr class="field"><th class="field-name">Returns Object:</th><td class="field-body"><p class="first last">the exported module</p>
 </td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<p>Requests the CSS files for the specified component and inserts the CSS into the page. The
-promise returned by this method is rejected when there is not enough space to insert
-the CSS in the page.</p>
-</div>
-<div class="section" id="unload">
-<h3>unload<a class="headerlink" href="#unload" title="Permalink to this headline">¶</a></h3>
-<dl class="function">
-<dt id="CssRenderer#unload">
-<tt class="descname">CssRenderer#unload</tt><big>(</big><em>component</em><big>)</big><a class="headerlink" href="#CssRenderer#unload" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
-<li><strong>component</strong> (<em>Object</em>) &#8211; the component for which to unload the CSS.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<p>Removes the CSS from the page if the number of instances for the specified component
-reaches 0.</p>
+<p>Load a module that will run in a new context to which <tt class="docutils literal"><span class="pre">t</span></tt>, <tt class="docutils literal"><span class="pre">nt</span></tt> and <tt class="docutils literal"><span class="pre">logger</span></tt>
+properties are added.</p>
 </div>
 </div>
 </div>
@@ -140,12 +117,11 @@ reaches 0.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Class CssRenderer</a><ul>
+<li><a class="reference internal" href="#">Class ModuleLoader</a><ul>
 <li><a class="reference internal" href="#constructor">Constructor</a></li>
 <li><a class="reference internal" href="#methods">Methods</a><ul>
 <li><a class="reference internal" href="#get">get</a></li>
-<li><a class="reference internal" href="#load">load</a></li>
-<li><a class="reference internal" href="#unload">unload</a></li>
+<li><a class="reference internal" href="#requirewithcontext">requireWithContext</a></li>
 </ul>
 </li>
 </ul>
@@ -153,11 +129,11 @@ reaches 0.</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="CssRegistry.html"
-                        title="previous chapter">Class CssRegistry</a></p>
+  <p class="topless"><a href="Logger.html"
+                        title="previous chapter">Class Logger</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="EventEmitter.html"
-                        title="next chapter">Class EventEmitter</a></p>
+  <p class="topless"><a href="Monitoring.html"
+                        title="next chapter">Class Monitoring</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -182,10 +158,10 @@ reaches 0.</p>
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="EventEmitter.html" title="Class EventEmitter"
+          <a href="Monitoring.html" title="Class Monitoring"
              >next</a> |</li>
         <li class="right" >
-          <a href="CssRegistry.html" title="Class CssRegistry"
+          <a href="Logger.html" title="Class Logger"
              >previous</a> |</li>
         <li><a href="../../index.html">Rain v0.26.0 documentation</a> &raquo;</li> 
       </ul>

@@ -89,6 +89,34 @@ Get the value associated with the specified key.
 
 
 
+isDirty
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: BaseSession#isDirty()
+
+
+
+
+    
+    :returns Boolean:
+         
+    
+
+
+Verifies if there were any changes in the current session.
+
+
+
+
+
+
+
+
+
+    
+
+
+
 isEmpty
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 

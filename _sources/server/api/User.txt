@@ -122,6 +122,34 @@ Returns true for authenticated users and false for anonymous users.
 
 
 
+isDirty
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: User#isDirty()
+
+
+
+
+    
+    :returns Boolean:
+         
+    
+
+
+Indicates if an user was modified.
+
+
+
+
+
+
+
+
+
+    
+
+
+
 toJSON
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 

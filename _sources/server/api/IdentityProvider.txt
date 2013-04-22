@@ -182,6 +182,29 @@ Destroys the session.
 
 
 
+updateUser
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: IdentityProvider#updateUser()
+
+
+
+
+
+Sets the user back on the session object if it was modified.
+
+
+
+
+
+
+
+
+
+    
+
+
+
 
     
 
