@@ -1,4 +1,4 @@
-define(['/demo_container/js/lib/jquery-ui-1.8.22.custom.min.js'], function () {
+define(['/demo_container/js/lib/jquery-ui-1.10.2.custom.js'], function () {
     "use strict";
 
     function Scrollable() {}
