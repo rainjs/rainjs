@@ -3,6 +3,16 @@ Changelog
 =========
 
 ------
+v 0.26
+------
+
++ Implemented monitoring module. This is a module used to measure various actions/events and send that data
+  to an adapter. This adapter forwards data to the actual monitoring software.
++ Implemented monitoring for: the number of fatal errors, websocket connections, idle websocket connections,
+  render events received through websockets and view requests being processed.
++ Imporved requireWithContext performance by using cache.
+
+------
 v 0.25
 ------
 

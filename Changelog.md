@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.26.0
+
+* Implemented monitoring module. This is a module used to measure various actions/events and send that data
+  to an adapter. This adapter forwards data to the actual monitoring software.
+* Implemented monitoring for: the number of fatal errors, websocket connections, idle websocket connections,
+  render events received through websockets and view requests being processed.
+* Imporved requireWithContext performance by using cache.
+
+
 ## 0.25.0
 
 * Implemented log rotate. When a SIGUSR2 signal is sent to the process, RAIN renames the current
