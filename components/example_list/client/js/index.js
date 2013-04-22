@@ -54,13 +54,15 @@ define(['/example/js/jquery-ui-1.10.2.custom.js'], function (logger) {
             heightStyle: 'content',
             activate: function (event, ui) {
                 ui.oldPanel.empty();
-                self.context.insert({
-                    id: "example",
-                    view: ui.newPanel.data("example-view"),
-                    placeholder: true
-                }, ui.newPanel, function () {
-                    // "this" is the controller for new component
-                });
+                if (ui.newPanel.length) {
+                    self.context.insert({
+                        id: "example",
+                        view: ui.newPanel.data("example-view"),
+                        placeholder: true
+                    }, ui.newPanel, function () {
+                        // "this" is the controller for new component
+                    });
+                }
             }
         }).show();
     };
