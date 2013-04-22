@@ -246,28 +246,27 @@ describe('Intents Registry', function () {
         });
 
         it('should send error message if the intent category is missing', function () {
-            var rainError;
-            fn({action: 'DO_SOMETHING', context: {}}, function (err) {
-                rainError = err;
-            });
-
-            expect(rainError.code).toBe('category');
+            try {
+                fn({action: 'DO_SOMETHING', context: {}});
+            } catch (rainError) {
+                expect(rainError.code).toBe('category');
+            }
         });
 
         it('should send error message if the intent action is missing', function () {
-            var rainError;
-            fn({category: 'com.intents.rain.test', context: {}}, function (err) {
-                rainError = err;
-            });
-            expect(rainError.code).toBe('action');
+            try {
+                fn({category: 'com.intents.rain.test', context: {}});
+            } catch (rainError) {
+                expect(rainError.code).toBe('action');
+            }
         });
 
         it('should send error message if the intent context is missing', function () {
-            var rainError;
-            fn({category: 'com.intents.rain.test', action: 'DO_SOMETHING'}, function (err) {
-                rainError = err;
-            });
-            expect(rainError.code).toBe('context');
+            try {
+                fn({category: 'com.intents.rain.test', action: 'DO_SOMETHING'});
+            } catch (rainError) {
+                expect(rainError.code).toBe('context');
+            }
         });
 
         it('should send error message if the session could not be retrieved', function () {
@@ -287,8 +286,7 @@ describe('Intents Registry', function () {
                     category: 'com.rain.test',
                     action: 'LOG_MESSAGE',
                     context: {}
-               }, functionCallBack
-            );
+            }).then(functionCallBack, functionCallBack);
 
             waitsFor(function () {
                 return functionCallBack.wasCalled;
@@ -326,7 +324,7 @@ describe('Intents Registry', function () {
                     session: session,
                     environment: {}
                 });
-    
+
                 expect(sessionStore.get).toHaveBeenCalled();
                 expect(sendComponent.mostRecentCall.args[0]).toBe(socket);
                 expect(Object.keys(sendComponent.mostRecentCall.args[1])).toEqual(
@@ -341,7 +339,8 @@ describe('Intents Registry', function () {
                 rainError.code = 401;
                 rainError.type = RainError.ERROR_HTTP;
             });
-            fn({category: 'com.rain.test', action: 'LOG_MESSAGE', context: {}}, functionCallBack);
+            fn({category: 'com.rain.test', action: 'LOG_MESSAGE', context: {}})
+                .then(functionCallBack, functionCallBack);
 
             waitsFor(function () {
                 return functionCallBack.wasCalled;
@@ -363,9 +362,7 @@ describe('Intents Registry', function () {
                     category: 'com.rain.test',
                     action: 'LOG_MESSAGE',
                     context: context
-               },
-               functionCallBack
-            );
+               }).then(functionCallBack);
 
             waitsFor(function () {
                 return functionCallBack.wasCalled;
