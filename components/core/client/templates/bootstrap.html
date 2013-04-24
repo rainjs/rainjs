@@ -67,6 +67,12 @@
             });
         </script>
         <link rel="stylesheet" type="text/css" href="/core/resources/bootstrap.css">
+
+        {{#if cssTheme}}
+            {{#with cssTheme}}
+                <link rel="stylesheet" href="{{url name=id version=version path=path}}" />
+            {{/with}}
+        {{/if}}
     </head>
     <body>
         {{#if isContainer}}
