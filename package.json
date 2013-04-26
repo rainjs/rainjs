@@ -26,7 +26,8 @@
         "jed": "0.5.2",
         "crc": "0.2.0",
         "mongodb": "1.2.11",
-        "moment": "2.0.x"
+        "moment": "2.0.x",
+        "node-syslog": "1.1.7"
     },
     "devDependencies": {
         "js-yaml": "",
