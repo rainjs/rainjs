@@ -24,7 +24,8 @@
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 define(["raintime/lib/socket.io"], function (io) {
-    var baseUrl = undefined;
+    var baseUrl = undefined,
+        reconnect = undefined;
 
     /**
      * Handler class for WebSockets that manages the way WebSocket instances are cached and
@@ -50,8 +51,8 @@ define(["raintime/lib/socket.io"], function (io) {
      * @returns {String} the constructed url
      */
     function getBaseUrl() {
-        var protocol = window.location.protocol + '//';
-        var hostname = window.location.host;
+        var protocol = window.location.protocol + '//',
+            hostname = window.location.host;
 
         return protocol + hostname;
     }
@@ -68,10 +69,17 @@ define(["raintime/lib/socket.io"], function (io) {
             channel = "/" + channel;
         }
 
-        var socket = io.connect(baseUrl + channel);
+        var socket = io.connect(baseUrl + channel, {
+            'reconnect': true
+        });
+
         socket.isConnected = socket.isConnected || false;
 
         socket.on('connect', function () {
+            socket.isConnected = true;
+        });
+
+        socket.on('reconnect', function () {
             socket.isConnected = true;
         });
 
@@ -82,12 +90,27 @@ define(["raintime/lib/socket.io"], function (io) {
             if (socket.isConnected) {
                 _emit.apply(this, arguments);
             } else {
+                if(reconnect) {
+                    reconnect = false;
+                    socket.socket.reconnect();
+                }
                 var _arguments = Array.prototype.slice.call(arguments);
                 socket.on('connect', function() {
                     _emit.apply(this, _arguments);
                 });
+                socket.on('reconnect', function () {
+                    _emit.apply(this, _arguments);
+                });
             }
         };
+
+
+        socket.on('disconnect', function (event) {
+            reconnect = true;
+            socket.isConnected = false;
+        });
+
+
 
         return socket;
     };
