@@ -25,7 +25,7 @@
 
 define(["raintime/lib/socket.io"], function (io) {
     var baseUrl = undefined,
-        reconnect = undefined;
+        shouldReconnect = undefined;
 
     /**
      * Handler class for WebSockets that manages the way WebSocket instances are cached and
@@ -90,8 +90,8 @@ define(["raintime/lib/socket.io"], function (io) {
             if (socket.isConnected) {
                 _emit.apply(this, arguments);
             } else {
-                if(reconnect) {
-                    reconnect = false;
+                if(shouldReconnect) {
+                    shouldReconnect = false;
                     socket.socket.reconnect();
                 }
                 var _arguments = Array.prototype.slice.call(arguments);
@@ -106,7 +106,7 @@ define(["raintime/lib/socket.io"], function (io) {
 
 
         socket.on('disconnect', function (event) {
-            reconnect = true;
+            shouldReconnect = true;
             socket.isConnected = false;
         });
 
