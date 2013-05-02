@@ -176,7 +176,6 @@ describe('Socket Watch', function () {
 
             config.websocket.disconnectIdleOnMaxConn =  1;
             config.websocket.idleCheckInterval = 1;
-
             socketWatch.disconnectOnIdle(socket);
 
             //expect(socketWatch.clientsMap['test_id'].disconnect).toHaveBeenCalled();
