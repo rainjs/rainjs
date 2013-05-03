@@ -39,6 +39,18 @@ function handle(socket) {
         socket.session.set('notes', notes);
     });
 
+    socket.on('save-list', function (list) {
+        var notes = socket.session.get('notes');
+        if (!notes) {
+            notes = [];
+        }
+
+        for(var index in list) {
+            notes[index] = list[index].note;
+        }
+        socket.session.set('notes', notes);
+    });
+
     socket.on('remove', function (data) {
         var notes = socket.session.get('notes');
         if (notes) {

@@ -24,6 +24,9 @@
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 define(['js/note'], function (Note) {
+    var canSend = true,
+        needResend = false,
+        dataList = {};
 
     function FloatNotes() {}
 
@@ -94,18 +97,47 @@ define(['js/note'], function (Note) {
     };
 
     /**
+     * Saves a list of updated notes that did not get the chance to be updated yet.
+     *
+     * @param {Object} list - object with all the updated notes
+     */
+    FloatNotes.prototype._saveList = function (list) {
+        canSend = false;
+
+        this._socket.emit('save-list', list, function () {
+            canSend = true;
+            needResend = false;
+        });
+    }
+
+    /**
      * Saves the note to the session.
      *
      * @param {Note} note
      * @param {Number} index position in notes list
      */
     FloatNotes.prototype._save = function (note, index) {
+        var self = this;
         var data = {
             index: index,
             note: note.serialize()
         };
 
-        this._socket.emit('save', data);
+        if (canSend) {
+            canSend = false;
+
+            this._socket.emit('save', data, function (data, error) {
+                canSend = true;
+
+                if (needResend) {
+                    self._saveList(dataList);
+                }
+            });
+
+        } else {
+            needResend = true;
+            dataList[index] = data;
+        }
     };
 
     return FloatNotes;
