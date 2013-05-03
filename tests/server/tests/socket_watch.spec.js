@@ -31,14 +31,16 @@ describe('Socket Watch', function () {
     var mocks, socketWatch, SocketWatch, socket, events, config, checkIdle, Logging;
 
     beforeEach(function () {
+
+
         mocks = {};
 
         config = {
             "websocket": {
                 "idleTime": 5,
-                "disconnectIdle": false,
-                "disconnectIdleOnMaxConn": 2,
-                "idleCheckInterval": 5
+                "disconnectIdle": true,
+                "disconnectIdleOnMaxConn": 1,
+                "idleCheckInterval": 1
             }
         };
 
@@ -122,7 +124,6 @@ describe('Socket Watch', function () {
     describe('Refresh idle status of socket', function () {
         beforeEach(function () {
             socketWatch = SocketWatch.get();
-            jasmine.Clock.useMock();
          });
 
         it('Should set a new timeout if not defined', function () {
@@ -156,30 +157,52 @@ describe('Socket Watch', function () {
 
 
     describe('Disconnect on Idle', function () {
-
+        var oldSetTimeout, timeWaited;
         beforeEach(function () {
-            socketWatch = SocketWatch.get();
-            jasmine.Clock.useMock();
-
             socket.sockets = {
                 clients: function() {
                     return [1];
                 }
             };
+
+            oldSetTimeout = setTimeout;
+            timeWaited = 0;
+
+            SocketWatch = loadModuleExports(path.join('lib', 'socket_watch.js'), mocks, {
+                setInterval: function(callback, timeout) {
+                    timeWaited += timeout;
+                    callback();
+                }
+            });
+
+            socketWatch = SocketWatch.get();
          });
 
-        xit('Should disconnect user if Idle', function () {
-            socketWatch.idleMap['test_id'] = true;
-            socketWatch.clientsMap['test_id'] = {
-                disconnect: jasmine.createSpy('disconnectClient')
-            };
-
-            config.websocket.disconnectIdleOnMaxConn =  1;
-            config.websocket.idleCheckInterval = 1;
+        it('Should call setInterval on correct time', function () {
             socketWatch.disconnectOnIdle(socket);
-
-            //expect(socketWatch.clientsMap['test_id'].disconnect).toHaveBeenCalled();
+            expect(timeWaited).toBe(1000);
         });
 
+        it('Should disconnect user on idle', function () {
+            socketWatch.idleMap['test_id'] = true;
+            socketWatch.clientsMap['test_id'] = {
+                disconnect: function() {}
+            }
+            socketWatch.disconnectOnIdle(socket);
+
+            expect(socketWatch.clientsMap['test_id']).not.toBeDefined();
+            expect(socketWatch.idleMap['test_id']).not.toBeDefined();
+        });
+
+        it('Should not disconnect user if not idle', function () {
+            socketWatch.idleMap['test_id'] = false;
+            socketWatch.clientsMap['test_id'] = {
+                disconnect: function() {}
+            }
+            socketWatch.disconnectOnIdle(socket);
+
+            expect(socketWatch.clientsMap['test_id']).toBeDefined();
+            expect(socketWatch.idleMap['test_id']).toBeDefined();
+        });
     });
 });
