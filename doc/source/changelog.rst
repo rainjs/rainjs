@@ -2,6 +2,13 @@
 Changelog
 =========
 
+
+--------
+v 0.26.1
+--------
+
++ Disabled runWithContext caching temporarily.
+
 ------
 v 0.26
 ------

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.26.1
+
+* Disabled runWithContext caching temporarily.
+
 ## 0.26.0
 
 * Implemented monitoring module. This is a module used to measure various actions/events and send that data
