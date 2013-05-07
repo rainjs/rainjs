@@ -43,6 +43,17 @@ fields are formatted with **bold**.
   - idleWebsocket - the number of seconds after which a socket becomes idle. The default value is
     1200 (20 minutes).
 
+- **websocket** - an optional Object with the following keys:
+
+  - idleTime - optional parameter regarding the default timeout time for an inactive websocket
+    connection, if missing the default is 20 minutes
+  - disconnectIdle - optional boolean parameter representing if the disconnect Sockets on idle
+    time should run or not, if missing this will automatically be false.
+  - disconnectIdleOnMaxConn - optional parameter representing the maximal number of admited
+    idle websockets on the server, if missing this will be set to 2000.
+  - idleCheckInterval - optional parameter representing the interval of time in which
+    it will check for idle websocket connections, if missing default is set to 10 seconds.
+
 - **defaultLanguage** - a String representing the default language used by the I18N feature to
   translate messages and to determine what localized resources to use. This value is used to
   determine translated text when a message translation in a required language couldn't be found.
@@ -101,6 +112,13 @@ Example
             "port": 1337,
             "timeoutForRequests" : 3,
             "components": ["./components"]
+        },
+
+        "websocket": {
+                "idleTime": 5,
+                "disconnectIdle": true,
+                "disconnectIdleOnMaxConn": 2,
+                "idleCheckInterval": 5
         },
 
         "defaultLanguage": "en_US",
