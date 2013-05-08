@@ -49,12 +49,13 @@ fields are formatted with **bold**.
     websocket connection, default value is 1200 seconds (20 minutes).
   - disconnectIdle - optional boolean parameter telling the server if it should close the idle
     websocket connections or not, default value is false.
-  - disconnectIdleOnMaxConn - optional parameter representing the maximal number of admited
+  - disconnectIdleOnMaxConn - optional parameter representing the maximal number of admitted
     websockets on the server, the default value is 2000. When this value is reached
     the websockets marked as idle will be closed.
   - idleCheckInterval - optional parameter in seconds representing the interval of time when
     the server should check if the number of connected websockets is greater than the
     configured ``disconectIdleOnMaxConn`` key and disconnect the websockets marked as idle.
+    The default value is 10 seconds.
 
 - **defaultLanguage** - a String representing the default language used by the I18N feature to
   translate messages and to determine what localized resources to use. This value is used to
