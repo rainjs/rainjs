@@ -28,7 +28,7 @@
 var path = require('path');
 
 describe('Socket Watch', function () {
-    var mocks, socketWatch, SocketWatch, socket, events, config, checkIdle, Logging;
+    var mocks, socketWatcher, SocketWatcher, socket, events, config, checkIdle, Logging;
 
     beforeEach(function () {
 
@@ -37,8 +37,8 @@ describe('Socket Watch', function () {
 
         config = {
             "websocket": {
-                "idleTime": 5,
-                "disconnectIdle": true,
+                "idleTime": 0.1,
+                "disconnectIdle": false,
                 "disconnectIdleOnMaxConn": 1,
                 "idleCheckInterval": 1
             }
@@ -68,52 +68,43 @@ describe('Socket Watch', function () {
         mocks['./monitoring'] = Monitoring;
         mocks['./configuration'] = config;
         mocks['./logging'] = Logging;
-        SocketWatch = loadModuleExports(path.join('lib', 'socket_watch.js'), mocks);
+        SocketWatcher = loadModuleExports(path.join('lib', 'socket_watcher.js'), mocks);
     });
 
     describe('get', function () {
         it('should always return the same instance', function () {
-            expect(SocketWatch._instance).toBeNull();
+            expect(SocketWatcher._instance).toBeNull();
 
-            socketWatch = SocketWatch.get();
+            socketWatcher = SocketWatcher.get();
 
-            expect(SocketWatch._instance).toBeDefined();
-            expect(socketWatch instanceof SocketWatch).toEqual(true);
+            expect(SocketWatcher._instance).toBeDefined();
+            expect(socketWatcher instanceof SocketWatcher).toEqual(true);
+        });
+        it('Should config idleTime', function () {
+            socketWatcher.configure(socket);
+
+            expect(socketWatcher._idleTime).toBe(100);
         });
     });
 
-    describe('Configure socketWatch', function () {
+    describe('Configure socketWatcher', function () {
 
         beforeEach(function () {
-            socketWatch = SocketWatch.get();
-            socketWatch._refreshIdle = jasmine.createSpy('_refreshIdle');
+            socketWatcher = SocketWatcher.get();
+            socketWatcher._refreshIdle = jasmine.createSpy('_refreshIdle');
         });
 
         it('Should use deafult if idleTime is not defined in config', function () {
             config.websocket.idleTime = null;
 
-            socketWatch.configure(socket);
-            expect(socketWatch.idleTime).not.toBe(-1);
-            expect(socketWatch.idleTime).not.toBeNull();
+            socketWatcher.configure(socket);
+            expect(socketWatcher._idleTime).not.toBe(-1);
+            expect(socketWatcher._idleTime).not.toBeNull();
         });
 
-        it('Should config idleTime', function () {
-            config.websocket.idleTime = 1;
-            socketWatch.configure(socket);
-
-            expect(socketWatch.idleTime).toBe(1000);
-        });
-
-        it('Should call _refreshIdle on emit', function () {
-            socketWatch.configure(socket);
-            socket.emit('foo');
-
-            expect(socketWatch._refreshIdle).toHaveBeenCalled();
-            expect(socketWatch._refreshIdle).toHaveBeenCalledWith('test_id', 'foo');
-        });
 
         it('Should correctly call \'on\' on connect emit', function () {
-            socketWatch.configure(socket);
+            socketWatcher.configure(socket);
             socket.emit('connect');
 
             expect(socket.on).toHaveBeenCalled();
@@ -123,35 +114,28 @@ describe('Socket Watch', function () {
 
     describe('Refresh idle status of socket', function () {
         beforeEach(function () {
-            socketWatch = SocketWatch.get();
+            socketWatcher = SocketWatcher.get();
          });
 
         it('Should set a new timeout if not defined', function () {
-            socketWatch.timeoutMap['test_id'] = null;
-            socketWatch._refreshIdle('test_id', '');
+            socketWatcher._timeoutMap['test_id'] = null;
+            socketWatcher._refreshIdle('test_id', '');
 
-            expect(socketWatch.timeoutMap['test_id']).not.toBeNull();
-        });
-
-        it('Should not set a new timeout on connection', function () {
-            socketWatch.timeoutMap['test_id'] = null;
-            socketWatch._refreshIdle('test_id', 'connection');
-
-            expect(socketWatch.timeoutMap['test_id']).toBeNull();
+            expect(socketWatcher._timeoutMap['test_id']).not.toBeNull();
         });
 
         it('Should not set a new timeout on disconnect', function () {
-            socketWatch.timeoutMap['test_id'] = null;
-            socketWatch._refreshIdle('test_id', 'disconnect');
+            socketWatcher._timeoutMap['test_id'] = null;
+            socketWatcher._refreshIdle('test_id', 'disconnect');
 
-            expect(socketWatch.timeoutMap['test_id']).toBeNull();
+            expect(socketWatcher._timeoutMap['test_id']).toBeNull();
         });
 
         it('Should null out idleMap id if idle true', function () {
-            socketWatch.idleMap['test_id'] = true;
-            socketWatch._refreshIdle('test_id', '');
+            socketWatcher._idleMap['test_id'] = true;
+            socketWatcher._refreshIdle('test_id', '');
 
-            expect(socketWatch.idleMap['test_id']).not.toBeNull();
+            expect(socketWatcher._idleMap['test_id']).not.toBeNull();
         });
     });
 
@@ -164,45 +148,45 @@ describe('Socket Watch', function () {
                     return [1];
                 }
             };
-
+            config.websocket.disconnectIdle = true;
             oldSetTimeout = setTimeout;
             timeWaited = 0;
 
-            SocketWatch = loadModuleExports(path.join('lib', 'socket_watch.js'), mocks, {
+            SocketWatcher = loadModuleExports(path.join('lib', 'socket_watcher.js'), mocks, {
                 setInterval: function(callback, timeout) {
                     timeWaited += timeout;
                     callback();
                 }
             });
 
-            socketWatch = SocketWatch.get();
+            socketWatcher = SocketWatcher.get();
          });
 
         it('Should call setInterval on correct time', function () {
-            socketWatch.disconnectOnIdle(socket);
+            socketWatcher.disconnectOnIdle(socket);
             expect(timeWaited).toBe(1000);
         });
 
         it('Should disconnect user on idle', function () {
-            socketWatch.idleMap['test_id'] = true;
-            socketWatch.clientsMap['test_id'] = {
+            socketWatcher._idleMap['test_id'] = true;
+            socketWatcher._clientsMap['test_id'] = {
                 disconnect: function() {}
             }
-            socketWatch.disconnectOnIdle(socket);
+            socketWatcher.disconnectOnIdle(socket);
 
-            expect(socketWatch.clientsMap['test_id']).not.toBeDefined();
-            expect(socketWatch.idleMap['test_id']).not.toBeDefined();
+            expect(socketWatcher._clientsMap['test_id']).not.toBeDefined();
+            expect(socketWatcher._idleMap['test_id']).not.toBeDefined();
         });
 
         it('Should not disconnect user if not idle', function () {
-            socketWatch.idleMap['test_id'] = false;
-            socketWatch.clientsMap['test_id'] = {
+            socketWatcher._idleMap['test_id'] = false;
+            socketWatcher._clientsMap['test_id'] = {
                 disconnect: function() {}
             }
-            socketWatch.disconnectOnIdle(socket);
+            socketWatcher.disconnectOnIdle(socket);
 
-            expect(socketWatch.clientsMap['test_id']).toBeDefined();
-            expect(socketWatch.idleMap['test_id']).toBeDefined();
+            expect(socketWatcher._clientsMap['test_id']).toBeDefined();
+            expect(socketWatcher._idleMap['test_id']).toBeDefined();
         });
     });
 });
