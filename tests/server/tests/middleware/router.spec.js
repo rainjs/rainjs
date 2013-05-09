@@ -31,8 +31,6 @@ var cwd = process.cwd(),
     router,
     request, response;
 
-var routesFolder = path.join(__dirname, 'routes');
-
 var routes = {
     'controller': {
         name: "Controller Route",
@@ -94,7 +92,7 @@ describe('Router', function () {
         response = {};
 
         spyOn(Module.prototype, 'require').andCallFake(function (module) {
-            if (module === './component_registry') {
+            if (module === '../component_registry') {
                 return {
                     getConfig: function (id, version) {
                         if (!componentMap[id] || !componentMap[id].config[version]) {
@@ -123,7 +121,7 @@ describe('Router', function () {
             spyOn(routes[key], 'handle').andCallThrough();
         }
 
-        router = require(cwd + '/lib/router')();
+        router = require(cwd + '/lib/middleware/router')();
     });
 
     it('should match the correct route', function () {

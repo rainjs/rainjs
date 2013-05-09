@@ -28,7 +28,7 @@
 describe('Session', function () {
 
     var session, mockedSession, options, mocks,
-        request, response, next, sessionStore, storeErr, storeSession,
+        request, response, next, sessionStore, storeErr,
         headerFn, sid, pause, pauseFn;
 
     beforeEach(function () {
@@ -87,6 +87,12 @@ describe('Session', function () {
         mocks = {
             'connect/lib/utils': {
                 pause: pauseFn
+            },
+            '../logging': {
+                get: function () {
+                    return jasmine.createSpyObj('logger',
+                                                ['debug', 'info', 'warn', 'error', 'fatal']);
+                }
             }
         };
 

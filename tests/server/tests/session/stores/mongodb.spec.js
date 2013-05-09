@@ -70,8 +70,7 @@ describe('MongoDB session store', function () {
         Mocks['../base_session'] = Spy.MongoDBSession;
         Mocks['../logging'] = Spy.Logger;
 
-        MongoDBSessionStore = loadModuleExports(
-                '/lib/mongodb/session_store.js', Mocks);
+        MongoDBSessionStore = loadModuleExports('/lib/session/stores/mongodb.js', Mocks);
 
         cookie = {
             expires: new Date(Date.now() + 1000 * 60 * 60).toUTCString()
@@ -125,7 +124,7 @@ describe('MongoDB session store', function () {
     });
 
     describe('get', function () {
-        var request, callback, session;
+        var request, session;
 
         beforeEach(function () {
             request = {
@@ -134,7 +133,6 @@ describe('MongoDB session store', function () {
                     id: 'test'
                 }
             };
-            callback = jasmine.createSpy('findOne callback');
         });
 
         it('should reject the promise with an error if findOne returns an error',
@@ -206,11 +204,11 @@ describe('MongoDB session store', function () {
             store = new MongoDBSessionStore(config);
             var isResolved;
             store.get(request.sessionId, request.componentId).then(function () {
-                isResolved = true
+                isResolved = true;
             }, function () {
                 isResolved = false;
             });
-            
+
             waitsFor(function () {
                 return typeof isResolved !== 'undefined';
             });
@@ -225,7 +223,7 @@ describe('MongoDB session store', function () {
     });
 
     describe('createNewSession', function () {
-        var callback, request;
+        var request;
 
         beforeEach(function () {
             request = {
@@ -234,7 +232,6 @@ describe('MongoDB session store', function () {
                     id: 'comp'
                 }
             };
-            callback = jasmine.createSpy('insert callback');
         });
 
         it('should insert the session into the store', function () {
@@ -261,7 +258,7 @@ describe('MongoDB session store', function () {
     });
 
     describe('save', function () {
-        var session, callback;
+        var session;
 
         beforeEach(function () {
             session = {
@@ -422,7 +419,7 @@ describe('MongoDB session store', function () {
     });
 
     describe('destroy', function () {
-        var sessionId, callback;
+        var sessionId;
 
         beforeEach(function () {
             Spy.MongoDB.CollectionInstance.remove.andCallFake(

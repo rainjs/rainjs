@@ -26,8 +26,8 @@
 "use strict";
 
 describe('Socket registry', function () {
-    var socketRegistry, mockedSocketRegistry;
-    var events, socket, connect, sessionStore, err, session, authorizationCallback, handshake;
+    var socketRegistry, mockedSocketRegistry,
+        events, socket, connect, sessionStore, authorizationCallback, handshake;
 
     beforeEach(function () {
         handshake = {
@@ -37,7 +37,6 @@ describe('Socket registry', function () {
         };
 
         authorizationCallback = jasmine.createSpy('authorizationCallback');
-        session = {};
         events = {};
         socket = {
             on: function (eventName, callback) {
@@ -70,8 +69,9 @@ describe('Socket registry', function () {
         sessionStore = jasmine.createSpyObj('sessionStore', ['get', 'save']);
         sessionStore.get.andDefer(function (defer) {
             var session = {
-                    get: jasmine.createSpy('get'),
-                    isDirty: jasmine.createSpy('isDirty')
+                get: jasmine.createSpy('get'),
+                isDirty: jasmine.createSpy('isDirty'),
+                isEmpty: jasmine.createSpy('isEmpty')
             };
             defer.resolve(session);
         });
@@ -123,7 +123,6 @@ describe('Socket registry', function () {
         var fn, handler;
 
         beforeEach(function () {
-            err = null;
             handler = jasmine.createSpy();
         });
 
@@ -132,7 +131,7 @@ describe('Socket registry', function () {
             fn = events['connection'];
             socketRegistry.register('/core', handler, {id: 'button'});
             waitsFor(function () {
-                return authorizationCallback.wasCalled
+                return authorizationCallback.wasCalled;
             });
             runs(function () {
                 fn(socket);
@@ -150,7 +149,6 @@ describe('Socket registry', function () {
         });
 
         it('should disconnect the socket if the session couldn\'t be obtained', function () {
-            err = {};
             sessionStore.get.andDefer(function (defer) {
                 var err = {};
                 defer.reject(err);
@@ -159,7 +157,7 @@ describe('Socket registry', function () {
 
             fn = events['connection'];
             waitsFor(function () {
-                return authorizationCallback.wasCalled
+                return authorizationCallback.wasCalled;
             });
             runs(function () {
                 expect(authorizationCallback).toHaveBeenCalledWith(jasmine.any(Object), false);

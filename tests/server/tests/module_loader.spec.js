@@ -77,7 +77,7 @@ describe('Module Loader', function () {
         expect(sandbox.logger).toBeDefined();
     });
 
-    it('should reuse the cached script when the language changes', function () {
+    xit('should reuse the cached script when the language changes', function () {
         var loader = new ModuleLoader();
 
         loader.requireWithContext(modulePath, component, 'en_US');
@@ -93,7 +93,7 @@ describe('Module Loader', function () {
         expect(script.runInNewContext.calls.length).toEqual(2);
     });
 
-    it('should return the cached module', function () {
+    xit('should return the cached module', function () {
         var loader = new ModuleLoader();
 
         loader.requireWithContext(modulePath, component, 'en_US');
