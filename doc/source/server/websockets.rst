@@ -70,3 +70,7 @@ data on the session::
             return deferred.promise;
         });
     }
+
+Websockets on RAIN provide also a disconnect on idle module. If there is an inactivity on a
+client's websocket and the number of admited socket connections on a server is reached than
+the idle websocket connections are closed.
