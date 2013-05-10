@@ -87,7 +87,7 @@ define(["raintime/lib/socket.io"], function (io) {
         // after the socket is properly connected.
         var _emit = socket.emit;
         socket.emit = function() {
-            if (socket.isConnected) {
+            if (socket.isConnected && !shouldReconnect) {
                 _emit.apply(this, arguments);
             } else {
                 if(shouldReconnect) {
@@ -104,13 +104,9 @@ define(["raintime/lib/socket.io"], function (io) {
             }
         };
 
-
         socket.on('disconnect', function (event) {
             shouldReconnect = true;
-            socket.isConnected = false;
         });
-
-
 
         return socket;
     };
