@@ -226,6 +226,7 @@ define([
      */
     ClientRenderer.prototype.renderPlaceholder = function (instanceId) {
         this.placeholderComponent.instanceId = instanceId;
+        this.placeholderComponent.isPlaceholder = true;
         this.renderComponent(this.placeholderComponent);
     };
 

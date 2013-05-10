@@ -354,7 +354,8 @@ define(['raintime/lib/promise',
             var controller = createControllerInstance(Controller, newComponent);
             newComponent.controller = controller;
 
-            if (callbacks[newComponent.instanceId]) {
+            // this callback shouldn't be called for the placeholder
+            if (!component.isPlaceholder && callbacks[newComponent.instanceId]) {
                 callbacks[newComponent.instanceId].call(controller, newComponent);
                 delete callbacks[newComponent.instanceId];
             }

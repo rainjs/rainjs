@@ -36,7 +36,8 @@
         "logging": {},
         "promise": {},
         "promise_use": {},
-        "partials": {}
+        "partials": {},
+        "client_side_insert": {}
     },
     "intents": [
         {
