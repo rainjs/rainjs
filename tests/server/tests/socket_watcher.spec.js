@@ -163,7 +163,7 @@ describe('Socket Watch', function () {
          });
 
         it('Should call setInterval on correct time', function () {
-            socketWatcher.disconnectOnIdle(socket);
+            socketWatcher._disconnectOnIdle(socket);
             expect(timeWaited).toBe(1000);
         });
 
@@ -172,7 +172,7 @@ describe('Socket Watch', function () {
             socketWatcher._clientsMap['test_id'] = {
                 disconnect: function() {}
             }
-            socketWatcher.disconnectOnIdle(socket);
+            socketWatcher._disconnectOnIdle(socket);
 
             expect(socketWatcher._clientsMap['test_id']).not.toBeDefined();
             expect(socketWatcher._idleMap['test_id']).not.toBeDefined();
@@ -183,7 +183,7 @@ describe('Socket Watch', function () {
             socketWatcher._clientsMap['test_id'] = {
                 disconnect: function() {}
             }
-            socketWatcher.disconnectOnIdle(socket);
+            socketWatcher._disconnectOnIdle(socket);
 
             expect(socketWatcher._clientsMap['test_id']).toBeDefined();
             expect(socketWatcher._idleMap['test_id']).toBeDefined();
