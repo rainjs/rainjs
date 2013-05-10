@@ -33,6 +33,8 @@ define(['js/note'], function (Note) {
     FloatNotes.prototype.start = function () {
         this._setup();
         this._board = this._root.find('.board');
+
+        var self = this;
     };
 
     /**
@@ -101,10 +103,16 @@ define(['js/note'], function (Note) {
      *
      * @param {Object} list - object with all the updated notes
      */
-    FloatNotes.prototype._saveList = function (list) {
+    FloatNotes.prototype._saveList = function () {
+        var self = this;
         canSend = false;
 
-        this._socket.emit('save-list', list, function () {
+
+        this._socket.emit('save-list', dataList, function (error, data) {
+
+            if(error) {
+                self._saveList();
+            }
             canSend = true;
             needResend = false;
         });
@@ -126,8 +134,12 @@ define(['js/note'], function (Note) {
         if (canSend) {
             canSend = false;
 
-            this._socket.emit('save', data, function (data, error) {
+            this._socket.emit('save', data, function (error, data) {
                 canSend = true;
+
+                if(error) {
+                    self._save(note, index);
+                }
 
                 if (needResend) {
                     self._saveList(dataList);
