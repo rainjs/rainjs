@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Server and component configuration &mdash; Rain v0.26.0 documentation</title>
+    <title>Server and component configuration &mdash; Rain v0.27.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.26.0',
+        VERSION:     '0.27.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.26.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.27.0 documentation" href="../index.html" />
     <link rel="next" title="RAIN component descriptor" href="../server/component_descriptor.html" />
     <link rel="prev" title="RAIN SDK Tutorial" href="rain_sdk_tutorial.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="rain_sdk_tutorial.html" title="RAIN SDK Tutorial"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.26.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.27.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -88,6 +88,20 @@ executing server-side code from a component&#8217;s controller. If the timeout i
 client receives an error response.</li>
 <li>idleWebsocket - the number of seconds after which a socket becomes idle. The default value is
 1200 (20 minutes).</li>
+</ul>
+</li>
+<li><strong>websocket</strong> - an optional Object with the following keys:<ul>
+<li>idleTime - optional parameter in seconds regarding the default timeout time for an inactive
+websocket connection, default value is 1200 seconds (20 minutes).</li>
+<li>disconnectIdle - optional boolean parameter telling the server if it should close the idle
+websocket connections or not, default value is false.</li>
+<li>disconnectIdleOnMaxConn - optional parameter representing the maximal number of admitted
+websockets on the server, the default value is 2000. When this value is reached
+the websockets marked as idle will be closed.</li>
+<li>idleCheckInterval - optional parameter in seconds representing the interval of time when
+the server should check if the number of connected websockets is greater than the
+configured <tt class="docutils literal"><span class="pre">disconectIdleOnMaxConn</span></tt> key and disconnect the websockets marked as idle.
+The default value is 10 seconds.</li>
 </ul>
 </li>
 <li><strong>defaultLanguage</strong> - a String representing the default language used by the I18N feature to
@@ -209,11 +223,25 @@ isn&#8217;t specified.</li>
 80
 81
 82
-83</pre></div></td><td class="code"><div class="highlight"><pre><span class="p">{</span>
+83
+84
+85
+86
+87
+88
+89
+90</pre></div></td><td class="code"><div class="highlight"><pre><span class="p">{</span>
     <span class="s2">&quot;server&quot;</span><span class="o">:</span> <span class="p">{</span>
         <span class="s2">&quot;port&quot;</span><span class="o">:</span> <span class="mi">1337</span><span class="p">,</span>
         <span class="s2">&quot;timeoutForRequests&quot;</span> <span class="o">:</span> <span class="mi">3</span><span class="p">,</span>
         <span class="s2">&quot;components&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;./components&quot;</span><span class="p">]</span>
+    <span class="p">},</span>
+
+    <span class="s2">&quot;websocket&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;idleTime&quot;</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="s2">&quot;disconnectIdle&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="s2">&quot;disconnectIdleOnMaxConn&quot;</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="s2">&quot;idleCheckInterval&quot;</span><span class="o">:</span> <span class="mi">5</span>
     <span class="p">},</span>
 
     <span class="s2">&quot;defaultLanguage&quot;</span><span class="o">:</span> <span class="s2">&quot;en_US&quot;</span><span class="p">,</span>
@@ -432,7 +460,7 @@ the defaultLanguage</li>
         <li class="right" >
           <a href="rain_sdk_tutorial.html" title="RAIN SDK Tutorial"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.26.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.27.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

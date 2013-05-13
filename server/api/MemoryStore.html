@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class BaseSessionStore &mdash; Rain v0.27.0 documentation</title>
+    <title>Class MemoryStore &mdash; Rain v0.27.0 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -23,8 +23,8 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="top" title="Rain v0.27.0 documentation" href="../../index.html" />
-    <link rel="next" title="Class ComponentHelper" href="ComponentHelper.html" />
-    <link rel="prev" title="Class BaseSession" href="BaseSession.html" /> 
+    <link rel="next" title="Class ModuleLoader" href="ModuleLoader.html" />
+    <link rel="prev" title="Class Logger" href="Logger.html" /> 
   </head>
   <body>
     <div class="related">
@@ -34,10 +34,10 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="ComponentHelper.html" title="Class ComponentHelper"
+          <a href="ModuleLoader.html" title="Class ModuleLoader"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="BaseSession.html" title="Class BaseSession"
+          <a href="Logger.html" title="Class Logger"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Rain v0.27.0 documentation</a> &raquo;</li> 
       </ul>
@@ -48,15 +48,20 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="class-basesessionstore">
-<h1>Class BaseSessionStore<a class="headerlink" href="#class-basesessionstore" title="Permalink to this headline">¶</a></h1>
-<p>The class creates, saves and destroys sessions. It describes the methods that have to be
-implemented when designing a session store in order to work with the rest of RAIN middleware.</p>
+  <div class="section" id="class-memorystore">
+<h1>Class MemoryStore<a class="headerlink" href="#class-memorystore" title="Permalink to this headline">¶</a></h1>
+<p>Session store implementation using memory store.</p>
+<p>Add the following options to configuration to use it:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="s2">&quot;session&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">&quot;store&quot;</span><span class="o">:</span> <span class="s2">&quot;./lib/session/stores/memory&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 <div class="section" id="constructor">
 <h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="BaseSessionStore">
-<em class="property">class </em><tt class="descname">BaseSessionStore</tt><big>(</big><span class="optional">[</span><em>storeConfig</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#BaseSessionStore" title="Permalink to this definition">¶</a></dt>
+<dt id="MemoryStore">
+<em class="property">class </em><tt class="descname">MemoryStore</tt><big>(</big><span class="optional">[</span><em>storeConfig</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#MemoryStore" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -76,14 +81,17 @@ implemented when designing a session store in order to work with the rest of RAI
 <div class="section" id="createnewsession">
 <h3>createNewSession<a class="headerlink" href="#createnewsession" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="BaseSessionStore#createNewSession">
-<tt class="descname">BaseSessionStore#createNewSession</tt><big>(</big><em>sessionId</em><big>)</big><a class="headerlink" href="#BaseSessionStore#createNewSession" title="Permalink to this definition">¶</a></dt>
+<dt id="MemoryStore#createNewSession">
+<tt class="descname">MemoryStore#createNewSession</tt><big>(</big><em>sessionId</em><big>)</big><a class="headerlink" href="#MemoryStore#createNewSession" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>sessionId</strong> (<em>String</em>) &#8211; </li>
+<li><strong>sessionId</strong> (<em>String</em>) &#8211; <ul>
+<li>the sessionId</li>
+</ul>
+</li>
 </ul>
 </td>
 </tr>
@@ -94,71 +102,80 @@ implemented when designing a session store in order to work with the rest of RAI
 </table>
 </dd></dl>
 
-<p>Creates an empty session associated with the session id in the store.</p>
+<p>Generates an empty session associated with the sessionId in the store and the promise is
+resolved with the created session.
+If the session can&#8217;t be created the promise is rejected.</p>
 </div>
 <div class="section" id="destroy">
 <h3>destroy<a class="headerlink" href="#destroy" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="BaseSessionStore#destroy">
-<tt class="descname">BaseSessionStore#destroy</tt><big>(</big><em>sessionId</em><big>)</big><a class="headerlink" href="#BaseSessionStore#destroy" title="Permalink to this definition">¶</a></dt>
+<dt id="MemoryStore#destroy">
+<tt class="descname">MemoryStore#destroy</tt><big>(</big><em>sessionId</em><big>)</big><a class="headerlink" href="#MemoryStore#destroy" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>sessionId</strong> (<em>String</em>) &#8211; the session id</li>
 </ul>
 </td>
 </tr>
+<tr class="field"><th class="field-name" colspan="2">Returns Promise:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"><p class="first last">the promise is resolved if the session was destroyed successfully,</p>
+</td>
+</tr>
 </tbody>
 </table>
-<p>:param Promise :</p>
 </dd></dl>
 
+<p>else it is rejected.</p>
 <p>Destroys the session associated with the specified session id.</p>
 </div>
 <div class="section" id="get">
 <h3>get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
-<dt id="BaseSessionStore#get">
-<tt class="descname">BaseSessionStore#get</tt><big>(</big><em>sessionId</em><span class="optional">[</span>, <em>componentId</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#BaseSessionStore#get" title="Permalink to this definition">¶</a></dt>
+<dt id="MemoryStore#get">
+<tt class="descname">MemoryStore#get</tt><big>(</big><em>sessionId</em><span class="optional">[</span>, <em>componentId</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#MemoryStore#get" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>sessionId</strong> (<em>String</em>) &#8211; the session id</li>
-<li><strong>componentId</strong> (<em>String</em>) &#8211; the component for which to get the session.</li>
+<li><strong>sessionId</strong> (<em>String</em>) &#8211; <ul>
+<li>the session id</li>
 </ul>
-</td>
-</tr>
-<tr class="field"><th class="field-name" colspan="2">Returns Promise:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><p class="first last">a promise that will be resolved with the session.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<p>Gets the session instance associated with session id and component id. Retrieves the global
-session if component id is missing.</p>
-</div>
-<div class="section" id="save">
-<h3>save<a class="headerlink" href="#save" title="Permalink to this headline">¶</a></h3>
-<dl class="function">
-<dt id="BaseSessionStore#save">
-<tt class="descname">BaseSessionStore#save</tt><big>(</big><em>session</em><big>)</big><a class="headerlink" href="#BaseSessionStore#save" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>session</strong> (<a class="reference internal" href="Session.html#Session" title="Session"><em>Session</em></a>) &#8211; the session that will be saved</li>
+</li>
+<li><strong>componentId</strong> (<em>String</em>) &#8211; <ul>
+<li>the component&#8217;s id</li>
+</ul>
+</li>
 </ul>
 </td>
 </tr>
 <tr class="field"><th class="field-name" colspan="2">Returns Promise:</th></tr>
 <tr><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Gets the session instance associated with session id and component id. If component id is
+missing then the global session is retrieved.</p>
+</div>
+<div class="section" id="save">
+<h3>save<a class="headerlink" href="#save" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="MemoryStore#save">
+<tt class="descname">MemoryStore#save</tt><big>(</big><em>session</em>, <em>returns</em><big>)</big><a class="headerlink" href="#MemoryStore#save" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>session</strong> (<a class="reference internal" href="Session.html#Session" title="Session"><em>Session</em></a>) &#8211; the session to save</li>
+<li><strong>returns</strong> (<em>Promise</em>) &#8211; a rejected promise if error, else the promise is resolved.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -177,7 +194,7 @@ session if component id is missing.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Class BaseSessionStore</a><ul>
+<li><a class="reference internal" href="#">Class MemoryStore</a><ul>
 <li><a class="reference internal" href="#constructor">Constructor</a></li>
 <li><a class="reference internal" href="#methods">Methods</a><ul>
 <li><a class="reference internal" href="#createnewsession">createNewSession</a></li>
@@ -191,11 +208,11 @@ session if component id is missing.</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="BaseSession.html"
-                        title="previous chapter">Class BaseSession</a></p>
+  <p class="topless"><a href="Logger.html"
+                        title="previous chapter">Class Logger</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="ComponentHelper.html"
-                        title="next chapter">Class ComponentHelper</a></p>
+  <p class="topless"><a href="ModuleLoader.html"
+                        title="next chapter">Class ModuleLoader</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -220,10 +237,10 @@ session if component id is missing.</p>
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="ComponentHelper.html" title="Class ComponentHelper"
+          <a href="ModuleLoader.html" title="Class ModuleLoader"
              >next</a> |</li>
         <li class="right" >
-          <a href="BaseSession.html" title="Class BaseSession"
+          <a href="Logger.html" title="Class Logger"
              >previous</a> |</li>
         <li><a href="../../index.html">Rain v0.27.0 documentation</a> &raquo;</li> 
       </ul>

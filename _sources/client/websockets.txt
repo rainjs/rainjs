@@ -67,3 +67,8 @@ The above example does the following:
 
    + Send a welcome message through the websocket.
    + Display de message data received for *hello* message.
+
+RAIN websockets provide a module of idle time disconnect. If a client is innactive for a preset time
+and the number of admitted websocket connections on the server is reached than the idle websockets
+are disconnect. If the client tries to emit any type of event over it's websocket channel than
+the connection is reestablished.
