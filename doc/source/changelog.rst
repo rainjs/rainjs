@@ -2,6 +2,15 @@
 Changelog
 =========
 
+--------
+v 0.27.0
+--------
+
++ Idle websocket disconnect and reconnect.
++ Implemented Memory Store.
++ SysLog Log appender support.
++ Fixed context.insert bug(the callback received the placeholder).
++ Fixed synchronization bung on notes.
 
 --------
 v 0.26.1
