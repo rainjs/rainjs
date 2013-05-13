@@ -1,5 +1,15 @@
 # Changelog
 
+
+## 0.27.0
+
++ Idle websocket disconnect and reconnect.
++ Implemented Memory Store.
++ SysLog Log appender support.
++ Fixed context.insert bug(the callback received the placeholder).
++ Fixed synchronization bug on notes.
+
+
 ## 0.26.1
 
 * Disabled runWithContext caching temporarily.
@@ -211,3 +221,4 @@
 ## < 0.4.0
 
 Here be dragons.
+z
