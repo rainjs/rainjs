@@ -77,6 +77,7 @@ define([
                 for (var i = 0, len = socketQueue.length; i < len; i++) {
                     socket.emit('render', socketQueue[i]);
                 }
+                socketQueue = [];
             });
         }
     }
