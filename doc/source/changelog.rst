@@ -10,7 +10,7 @@ v 0.27.0
 + Implemented Memory Store.
 + SysLog Log appender support.
 + Fixed context.insert bug(the callback received the placeholder).
-+ Fixed synchronization bung on notes.
++ Fixed synchronization bug on notes.
 
 --------
 v 0.26.1
