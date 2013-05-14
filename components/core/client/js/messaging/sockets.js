@@ -94,12 +94,11 @@ define(["raintime/lib/socket.io"], function (io) {
                     shouldReconnect = false;
                     socket.socket.reconnect();
                 }
-                var _arguments = Array.prototype.slice.call(arguments);
-                socket.on('connect', function() {
-                    _emit.apply(this, _arguments);
-                });
-                socket.on('reconnect', function () {
-                    _emit.apply(this, _arguments);
+
+                var args = Array.prototype.slice.call(arguments);
+
+                socket.once('connect', function () {
+                    _emit.apply(this, args);
                 });
             }
         };
