@@ -3,6 +3,13 @@ Changelog
 =========
 
 --------
+v 0.27.1
+--------
+
++ Fixed an issue where the disconnect method of the socket object was called on a null reference.
++ Fixed an issue where a message was sent multiple times when the websocket reconnected.
+
+--------
 v 0.27.0
 --------
 

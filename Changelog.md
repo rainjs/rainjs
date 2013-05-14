@@ -1,13 +1,18 @@
 # Changelog
 
 
+## 0.27.1
+
+* Fixed an issue where the disconnect method of the socket object was called on a null reference.
+* Fixed an issue where a message was sent multiple times when the socket reconnected.
+
 ## 0.27.0
 
-+ Idle websocket disconnect and reconnect.
-+ Implemented Memory Store.
-+ SysLog Log appender support.
-+ Fixed context.insert bug(the callback received the placeholder).
-+ Fixed synchronization bug on notes.
+* Idle websocket disconnect and reconnect.
+* Implemented Memory Store.
+* SysLog Log appender support.
+* Fixed context.insert bug(the callback received the placeholder).
+* Fixed synchronization bug on notes.
 
 
 ## 0.26.1
@@ -221,4 +226,3 @@
 ## < 0.4.0
 
 Here be dragons.
-z
