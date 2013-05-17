@@ -103,6 +103,34 @@ fields are formatted with **bold**.
   requests are done by the user. The cookie is removed when the browser is closed if this value
   isn't specified.
 
+- pageTitle - the default page title for all components. This can be overridden in the component's
+  configuration file. If the previous two parameters are missing the title defaults to the
+  component id.
+
+- bootstrap - a list of parameters used to customize the head tag scripts and a way to add scripts
+  in the page footer.
+
+  - customHead - boolean value (default = false) which allows the complete customization of the
+    meta tags, stylesheets and scripts. This can be used if you want to specify different
+    require-jquery or jquery versions.
+  - headFile - the location of the file that contains the custom head contents
+  - metas - an array of meta tag strings inserted before the link tags
+  - links - an array of link tag strings inserted after the bootstrap.css link and before scripts
+  - scripts - an array of script tags inserted after the link tags and before the script containing
+    the require-jquery configuration
+  - footerScripts - parameters used to insert scripts at the end of the body tag
+
+    - external - an array of script tags inserted after all renderComponent scripts
+    - inline - an array of file locations that are contain inline scripts. The contents of these
+      files are read, join together and pre-compiled with Handlebars. The resulted compiled
+      template is run with the following parameters:
+
+      - component - the component configuration attributes. Using this attribute, you can pass
+        component configuration options directly in the scripts.
+      - path - the requested page path
+      - user - the user attributes
+      - isAuthenticated - boolean value that tells you if the user is logged in or not
+
 .......
 Example
 .......
@@ -197,9 +225,44 @@ Example
 
         "identity": {
             "provider": "./configuration/custom_identity_provider"
+        },
+
+        "bootstrap": {
+            "customHead": false,
+            "headFile": "./resources/custom_bootstrap.html",
+            "metas": [
+                "<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>"
+            ],
+            "links": [
+                "<link rel='stylesheet' type='text/css' href='/globalComponent/resources/global.css'>"
+            ],
+            "scripts": [
+                "<script type=\"text/javascript\" src=\"/globalComponent/js/util.js\"></script>"
+            ],
+            "footerScripts": {
+                "external": [
+                    "<script type=\"text/javascript\" src=\"/globalComponent/js/analytics.js\"></script>"
+                ],
+                "inline": [
+                    "./resources/user_analytics.html"
+                ]
+            }
         }
 
     }
+
+The inline scripts can look like this:
+
+.. code-block:: javascript
+    :linenos:
+
+    <script type="text/javascript" src="/globalComponent/js/another_script.js"></script>
+    <script type="text/javascript">//<![CDATA[
+        var page = '{{component.id}}/{{path}}';
+        {{#if user.isAuthenticated}}
+            var username = '{{user.username}}';
+        {{/if}}
+    //]]></script>
 
 -----------------------
 Component configuration
