@@ -2,10 +2,11 @@
 Authorization
 =============
 
-Rain handles authorization in two ways. First it uses a permission based authorization system that
-checks if the user has the required permissions for viewing a component and it's views, and
+Rain handles authorization in three ways. First it uses a permission based authorization system that
+checks if the user has the required permissions for viewing a component and it's views,
 secondly there is a dynamic condition module that allows for defining custom conditions that are
-not covered by the permissions (for example checking the user's country).
+not covered by the permissions (for example checking the user's country) and thirdly a ``needAuthentication``
+property on component/view level.
 
 -----------------
 Permissions based
@@ -231,3 +232,74 @@ The following example demonstrates how dynamic conditions can be used (the conte
 
     :js:class:`Authorization`
         Authorization API
+
+
+------------------------
+Authentication condition
+------------------------
+
+If a user that is not authenticated tries to access a component or a view that needs authentication
+than the user is redirected to the login component set up in the server configuration file.
+
+.....
+Usage
+.....
+
+The key that specifies that a component/view needs authentication or not is specified in the ``meta.json``
+of that component. The key name is ``needsAuthentication`` and could be set globaly on an entire
+component or on separated views. If this key is missing than the default value is ``false``.
+
+``/meta.json``:
+
+.. code-block:: javascript
+
+    {
+        "id": "button",
+        "version": "1.0",
+        "needsAuthentication": true,
+        "views": {
+            "index": {
+                "view": "index.html",
+                "controller": {
+                    "client": "index.js"
+                }
+            },
+            "buttons": {
+                "view": "buttons.html",
+                "controller": {
+                    "client": "buttons.js"
+                }
+            }
+        }
+    }
+
+.. note::
+
+    If ``needsAuthentication`` is set on the component level(globaly) than this will effect every view
+    from that component and you will not be able to overwrite this property. If you want to specify
+    specific views that need authentication than you must remove the global ``needsAuthentication`` and
+    set it in view level
+
+``/meta.json``:
+
+.. code-block:: javascript
+
+    {
+        "id": "button",
+        "version": "1.0",
+        "views": {
+            "index": {
+                "view": "index.html",
+                "controller": {
+                    "client": "index.js"
+                }
+                "needsAuthentication": true,
+            },
+            "buttons": {
+                "view": "buttons.html",
+                "controller": {
+                    "client": "buttons.js"
+                }
+            }
+        }
+    }
