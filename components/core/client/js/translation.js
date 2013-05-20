@@ -116,12 +116,15 @@ define(['raintime/lib/jed'], function (Jed) {
         if (typeof msgId !== 'string') {
             args = msgId;
             msgId = customId;
+        } else if (typeof msgIdPlural !== 'string') {
+            args = count;
+            count = msgIdPlural;
+            msgIdPlural = msgId;
+            msgId = customId;
         } else {
             messageText = msgId;
             msgId = customId;
         }
-
-
 
         var jed = this.locales['language'];
 
@@ -133,15 +136,9 @@ define(['raintime/lib/jed'], function (Jed) {
             }
         }
 
-
-       /* if (!jed || !msgIdExists(jed, msgId, count)) {
-            jed = this.locales['defaultLanguage'];
-        }*/
-
         // If no locale was found we create an empty instance to enable the default behavior of
         // gettext: it returns msgId if count equals 1 or msgIdPlural otherwise.
         // In this way, the program is working without any translation files.
-        //jed = jed || emptyJed;
 
         try {
             return jed.translate(msgId).ifPlural(count, msgIdPlural).fetch(args);
