@@ -61,5 +61,7 @@
             "permissions": ["some_permission"],
             "provider": "index.js#deniedIntent"
         }
-    ]
+    ],
+
+    "pageTitle": "Title"
 }

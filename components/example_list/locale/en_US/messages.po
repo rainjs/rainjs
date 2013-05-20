@@ -32,3 +32,6 @@ msgstr "Send email"
 
 msgid "The user \"%1$s\" connected to the notes websocket."
 msgstr "The user \"%1$s\" connected to the notes websocket."
+
+msgid "Title"
+msgstr "RAIN features example"

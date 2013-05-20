@@ -227,6 +227,8 @@ Example
             "provider": "./configuration/custom_identity_provider"
         },
 
+        "pageTitle": "RAIN component",
+
         "bootstrap": {
             "customHead": false,
             "headFile": "./resources/custom_bootstrap.html",
@@ -258,7 +260,7 @@ The inline scripts can look like this:
     <script type="text/javascript" src="/globalComponent/js/another_script.js"></script>
     <script type="text/javascript">//<![CDATA[
         var page = '{{component.id}}/{{path}}';
-        {{#if user.isAuthenticated}}
+        {{#if isAuthenticated}}
             var username = '{{user.username}}';
         {{/if}}
     //]]></script>
