@@ -107,8 +107,8 @@ fields are formatted with **bold**.
   configuration file. If the previous two parameters are missing the title defaults to the
   component id.
 
-- bootstrap - a list of parameters used to customize the head tag scripts and a way to add scripts
-  in the page footer.
+- bootstrap - a list of parameters used to customize the head tags (script, link, meta) and a way
+  to add scripts in the page footer.
 
   - customHead - boolean value (default = false) which allows the complete customization of the
     meta tags, stylesheets and scripts. This can be used if you want to specify different
@@ -248,7 +248,6 @@ Example
                 ]
             }
         }
-
     }
 
 The inline scripts can look like this:
