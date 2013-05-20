@@ -24,7 +24,6 @@ supported by RAIN):
         "version": "1.0",
         "type": "component",
         "permissions": ["example"],
-        "needsAuthentication": true,
         "views": {
             "missing_intent" : {
                 "view": "missing_intent_example.html",
@@ -66,9 +65,7 @@ Here you define the module attributes:
 - id - this is the module identifier
 - version - this is the current module version
 - type - ``component`` (default value) or ``container``. This field is optional.
-- needsAuthentication - indicates if the component with all its views needs the user
-  to be authenticated in order for it to be displayed. The default value is ``false``.
-  This key should always be used with the ``permissions`` key.
+- permissions - an array of required permission for the component.
 
 ----------------
 Views definition
@@ -84,9 +81,7 @@ or if you want to apply constraints on it must appear in this section:
   ``<component_folder>/client/js`` and the server-side controllers are located in
   ``<component_folder>/server/controller``.
 - useSession - indicates if the component needs session. The default value is ``false``.
-- needsAuthentication - indicates if the specific view needs the user to be authenticated
-  in order for it to be displayed. The default value is ``false``. This key should always
-  be used withe the ``permissions`` key.
+- permissions - an array of permissions for the specific view.
 
 ------------------
 Intents definition

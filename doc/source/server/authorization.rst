@@ -238,7 +238,7 @@ The following example demonstrates how dynamic conditions can be used (the conte
 Authentication condition
 ------------------------
 
-If a user that is not authenticated tries to access a component or a view that needs authentication
+If a user that is not authenticated tries to access a component or a view that needs permissions
 than the user is redirected to the login component set up in the server configuration file.
 
 .....
@@ -246,9 +246,7 @@ Usage
 .....
 
 The key that specifies that a component/view needs authentication or not is specified in the ``meta.json``
-of that component. The key name is ``needsAuthentication`` and could be set globaly on an entire
-component or on separated views. If this key is missing than the default value is ``false``. The
-``needsAuthentication`` key should always be used with the ``permissions`` key.
+of that component and is called ``permissions``.
 
 ``/meta.json``:
 
@@ -257,7 +255,6 @@ component or on separated views. If this key is missing than the default value i
     {
         "id": "button",
         "version": "1.0",
-        "needsAuthentication": true,
         "permissions": [],
         "views": {
             "index": {
@@ -277,10 +274,9 @@ component or on separated views. If this key is missing than the default value i
 
 .. note::
 
-    If ``needsAuthentication`` is set on the component level(globaly) than this will effect every view
-    from that component and you will not be able to overwrite this property. If you want to specify
-    specific views that need authentication than you must remove the global ``needsAuthentication`` and
-    set it in view level
+    In order for the redirect to work and specify that a component/view needs authentication, you must
+    always set an array of ``permissions`` that is not empty. If the ``permissions`` are set on the base
+    component than it will affect all the views of that component.
 
 ``/meta.json``:
 
@@ -295,8 +291,7 @@ component or on separated views. If this key is missing than the default value i
                 "controller": {
                     "client": "index.js"
                 }
-                "needsAuthentication": true,
-                "permissions": [],
+                "permissions": ['somePermission']
             },
             "buttons": {
                 "view": "buttons.html",
