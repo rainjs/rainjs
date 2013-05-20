@@ -109,39 +109,17 @@ define(['raintime/lib/jed'], function (Jed) {
      * @param {Array} args the message parameters
      * @returns {String} the translated text or empty string if an error occurred
      */
-    ClientTranslation.prototype.translate = function (customId, msgId, msgIdPlural, count, args) {
-        var messageText;
-
-        //switching arguments
-        if (typeof msgId !== 'string') {
-            args = msgId;
-            msgId = customId;
-        } else {
-            messageText = msgId;
-            msgId = customId;
-        }
-
-
-
+    ClientTranslation.prototype.translate = function (msgId, msgIdPlural, count, args) {
         var jed = this.locales['language'];
 
         if (!jed || !msgIdExists(jed, msgId, count)) {
             jed = this.locales['defaultLanguage'];
-            if(!msgIdExists(jed, msgId, count)) {
-                msgId = messageText || msgId;
-                jed = emptyJed;
-            }
         }
-
-
-       /* if (!jed || !msgIdExists(jed, msgId, count)) {
-            jed = this.locales['defaultLanguage'];
-        }*/
 
         // If no locale was found we create an empty instance to enable the default behavior of
         // gettext: it returns msgId if count equals 1 or msgIdPlural otherwise.
         // In this way, the program is working without any translation files.
-        //jed = jed || emptyJed;
+        jed = jed || emptyJed;
 
         try {
             return jed.translate(msgId).ifPlural(count, msgIdPlural).fetch(args);

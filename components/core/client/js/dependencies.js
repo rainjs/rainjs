@@ -95,8 +95,8 @@ define(function () {
             }
 
             if (tIndex > -1) {
-                args[tIndex] = function (customId, msgId, args) {
-                    return translation.translate(customId, msgId, undefined, undefined, args);
+                args[tIndex] = function (msgId, args) {
+                    return translation.translate(msgId, undefined, undefined, args);
                 };
             }
 
