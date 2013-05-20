@@ -68,6 +68,7 @@ Here you define the module attributes:
 - type - ``component`` (default value) or ``container``. This field is optional.
 - needsAuthentication - indicates if the component with all its views needs the user
   to be authenticated in order for it to be displayed. The default value is ``false``.
+  This key should always be used with the ``permissions`` key.
 
 ----------------
 Views definition
@@ -84,7 +85,8 @@ or if you want to apply constraints on it must appear in this section:
   ``<component_folder>/server/controller``.
 - useSession - indicates if the component needs session. The default value is ``false``.
 - needsAuthentication - indicates if the specific view needs the user to be authenticated
-  in order for it to be displayed. The default value is ``false``.
+  in order for it to be displayed. The default value is ``false``. This key should always
+  be used withe the ``permissions`` key.
 
 ------------------
 Intents definition

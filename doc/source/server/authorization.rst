@@ -247,7 +247,8 @@ Usage
 
 The key that specifies that a component/view needs authentication or not is specified in the ``meta.json``
 of that component. The key name is ``needsAuthentication`` and could be set globaly on an entire
-component or on separated views. If this key is missing than the default value is ``false``.
+component or on separated views. If this key is missing than the default value is ``false``. The
+``needsAuthentication`` key should always be used with the ``permissions`` key.
 
 ``/meta.json``:
 
@@ -257,6 +258,7 @@ component or on separated views. If this key is missing than the default value i
         "id": "button",
         "version": "1.0",
         "needsAuthentication": true,
+        "permissions": [],
         "views": {
             "index": {
                 "view": "index.html",
@@ -294,6 +296,7 @@ component or on separated views. If this key is missing than the default value i
                     "client": "index.js"
                 }
                 "needsAuthentication": true,
+                "permissions": [],
             },
             "buttons": {
                 "view": "buttons.html",

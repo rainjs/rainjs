@@ -96,6 +96,7 @@ describe('Router Plugin: View handler', function() {
             id: 'fakeId',
             version: '1.0',
             needsAuthentication: true,
+            permissions: [],
             views: {
                 index: {}
             }
@@ -118,7 +119,8 @@ describe('Router Plugin: View handler', function() {
             version: '1.0',
             views: {
                 index: {
-                    needsAuthentication: true
+                    needsAuthentication: true,
+                    permissions: []
                 }
             }
         };
@@ -143,7 +145,8 @@ describe('Router Plugin: View handler', function() {
             version: '1.0',
             views: {
                 index: {
-                    needsAuthentication: true
+                    needsAuthentication: true,
+                    permissions: []
                 }
             }
         };
