@@ -45,7 +45,7 @@ function GeneratePoUtils() {}
 
 /**
  * Generates .po files.
- * Goes through the list of components, extracts messages from the source code, 
+ * Goes through the list of components, extracts messages from the source code,
  * merges them with the existing .po messages and generates updated .po files.
  * Entry point to the utility class' functions.
  *
@@ -80,7 +80,6 @@ GeneratePoUtils.prototype.generateLocalizationFiles = function (outputLocales, c
         }
     } catch (ex) {
         console.log(ex.message.red);
-        return;
     }
 };
 
@@ -133,8 +132,20 @@ GeneratePoUtils.prototype.scanComponents = function (componentsFolder) {
 GeneratePoUtils.prototype.parseComponent = function (component) {
     var translations = {};
 
-    extend(translations, this.parseTemplateFiles(component));
-    extend(translations, this.parseJsFiles(component));
+    extend(translations, this.parseFiles({
+        folders: [path.join(component.folder, 'client/templates')],
+        extensions: ['.html'],
+        parser: this.parseTemplateFile
+    }));
+
+    extend(translations, this.parseFiles({
+        folders: [
+            path.join(component.folder, 'client/js'),
+            path.join(component.folder, 'server')
+        ],
+        extensions: ['.html'],
+        parser: this.parseJsFile
+    }));
 
     return translations;
 };
@@ -142,20 +153,15 @@ GeneratePoUtils.prototype.parseComponent = function (component) {
 /**
  * Extracts the translations from a component's templates.
  *
- * @param {Object} component the component configuration
- * @returns {Object} the translation messages indexed by the file path
+ * @param {String} text
+ * @returns {Array} the translation messages found in this file
  */
-GeneratePoUtils.prototype.parseTemplateFiles = function (component) {
-    var matchString = '(((\\\\")?[^\\\\"]+(\\\\[^"])?(\\\\")?)+)',
-        tPattern = '(?:{{t\\s+")' + matchString + '(?:")',
-        ntPattern = '(?:{{nt\\s+")' + matchString + '(?:"\\s+")' + matchString + '(?:")';
-
-    return this.parseFiles({
-        folder: path.join(component.folder, 'client/templates'),
-        extensions: ['.html'],
-        tPattern: [tPattern],
-        ntPattern: [ntPattern]
-    });
+GeneratePoUtils.prototype.parseTemplateFile = function (text) {
+    return [{
+        id: '',
+        msgid: '',
+        msgidPlural: ''
+    }];
 };
 
 /**
@@ -164,84 +170,40 @@ GeneratePoUtils.prototype.parseTemplateFiles = function (component) {
  * @param {Object} component the component configuration
  * @returns {Object} the translation messages indexed by the file path
  */
-GeneratePoUtils.prototype.parseJsFiles = function (component) {
-    var matchStringSingleQuote = '(((\\\\\')?[^\\\\\']+(\\\\[^\'])?(\\\\\')?)+)',
-        tPatternSingleQuote = '(?:(?:\\s|\\(|\\+|=)t\\s*\\(\\s*\')' + matchStringSingleQuote + '(?:\')',
-        ntPatternSingleQuote = '(?:(?:\\s|\\(|\\+|=)nt\\s*\\(\\s*\')' + matchStringSingleQuote +
-                               '(?:\'\\s*,\\s*\')' + matchStringSingleQuote + '(?:\')';
-
-    var matchStringDoubleQuote = "(((\\\\\")?[^\\\\\"]+(\\\\[^\"])?(\\\\\")?)+)",
-        tPatternDoubleQuote = "(?:(?:\\s|\\(|\\+|=)t\\s*\\(\\s*\")" + matchStringDoubleQuote + "(?:\")",
-        ntPatternDoubleQuote = "(?:(?:\\s|\\(|\\+|=)nt\\s*\\(\\s*\")" + matchStringDoubleQuote +
-                               "(?:\"\\s*,\\s*\")" + matchStringDoubleQuote + "(?:\")";
-
-    var translations = this.parseFiles({
-        folder: path.join(component.folder, 'client/js'),
-        extensions: ['.js'],
-        tPattern: [tPatternSingleQuote, tPatternDoubleQuote],
-        ntPattern: [ntPatternSingleQuote, ntPatternDoubleQuote]
-    });
-
-    extend(translations, this.parseFiles({
-        folder: path.join(component.folder, 'server'),
-        extensions: ['.js'],
-        tPattern: [tPatternSingleQuote, tPatternDoubleQuote],
-        ntPattern: [ntPatternSingleQuote, ntPatternDoubleQuote]
-    }));
-
-    return translations;
+GeneratePoUtils.prototype.parseJsFile = function (component) {
+    return [{
+        id: '',
+        msgid: '',
+        msgidPlural: ''
+    }];
 };
 
 /**
  * Extracts the translations from a component's folder.
  *
  * @param {Object} options the parse options
- * @param {String} options.folder the component folder that will be scanned
- * @param {String} options.extensions the extensions used to filter the folder files
- * @param {Array} options.tPattern the patterns to extract the t translations
- * @param {Array} options.ntPattern the patterns to extract the nt translations
+ * @param {Array} options.folders the component folders that will be scanned
+ * @param {Array} options.extensions the extensions used to filter the folder files
+ * @param {Function} options.parser the function used to parse the file content
  * @returns {Object} the translation messages indexed by the file path
  */
 GeneratePoUtils.prototype.parseFiles = function (options) {
     var folderTranslations = {};
 
-    util.walkSync(options.folder, options.extensions, function (filePath) {
-        try {
-            var text = fs.readFileSync(filePath, 'utf8'),
-                matches,
-                translations = [],
-                tRegExp,
-                ntRegExp;
+    options.folders.each(function (folder) {
+        util.walkSync(folder, options.extensions, function (filePath) {
+            try {
+                var text = fs.readFileSync(filePath, 'utf8'),
+                    translations = options.parser(text);
 
-            for (var i = 0, len = options.tPattern.length; i < len; i++) {
-                tRegExp = new RegExp(options.tPattern[i], 'gm');
-                while ((matches = tRegExp.exec(text)) != null) {
-                    if (matches.length < 2 || !matches[1]) {
-                        continue;
-                    }
-
-                    translations.push(matches[1]);
+                if (translations.length > 0) {
+                    folderTranslations[filePath] = translations;
                 }
+            } catch (ex) {
+                console.log(('Could not extract the template translations from ' + filePath).red,
+                            ex.message);
             }
-
-            for (var i = 0, len = options.ntPattern.length; i < len; i++) {
-                ntRegExp = new RegExp(options.ntPattern[i], 'gm');
-                while ((matches = ntRegExp.exec(text)) != null) {
-                    if (matches.length < 7 || !matches[1] || !matches[6]) {
-                        continue;
-                    }
-
-                    translations.push([matches[1], matches[6]]);
-                }
-            }
-
-            if (translations.length > 0) {
-                folderTranslations[filePath] = translations;
-            }
-        } catch (ex) {
-            console.log(('Could not extract the template translations from ' + filePath).red,
-                        ex.message);
-        }
+        });
     });
 
     return folderTranslations;
