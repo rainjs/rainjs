@@ -5,8 +5,9 @@ Authorization
 Rain handles authorization in three ways. First it uses a permission based authorization system that
 checks if the user has the required permissions for viewing a component and it's views,
 secondly there is a dynamic condition module that allows for defining custom conditions that are
-not covered by the permissions (for example checking the user's country) and thirdly an authentication logic
-base ond ``permissions``.
+not covered by the permissions (for example checking the user's country) and thirdly if a user is not
+authenticated and the component/view required needs permissions or dynamic conditions he will be redirected
+to a 401 view.
 
 -----------------
 Permissions based

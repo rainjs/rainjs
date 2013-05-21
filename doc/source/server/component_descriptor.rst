@@ -38,7 +38,6 @@ supported by RAIN):
                     "client": "need_permissions.js"
                 },
                 "permissions": ["user", "admin"],
-                "needsAuthentication": true
             }
         },
         "intents": [
