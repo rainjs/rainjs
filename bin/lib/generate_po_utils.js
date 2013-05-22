@@ -152,6 +152,12 @@ GeneratePoUtils.prototype.parseComponent = function (component) {
     return translations;
 };
 
+/**
+ * Parses a javascript file and extracts the translation
+ *
+ * @param text, the content of the javascript file
+ * @returns {[Object]} the array of translations found in .js files
+ */
 GeneratePoUtils.prototype.parseJsFile = function (text) {
     var found = true,
         argumentsPerFile = [],
@@ -159,7 +165,6 @@ GeneratePoUtils.prototype.parseJsFile = function (text) {
 
     while(found) {
         var translationFoundPattern = text.match(/([^\w\.]|^)(t|nt)\(/);
-        //console.log(translationFoundPattern);
 
         if (!translationFoundPattern) {
             found = false;
@@ -168,8 +173,6 @@ GeneratePoUtils.prototype.parseJsFile = function (text) {
                 isInStringSingleQuote = false,
                 isInStringDoubleQuote = false,
                 functionArguments = '';
-
-            //daca este egal cu paranteza inchisa si nu e nici in singlequote si nici in double quote rupe while
 
             while(!(text[restartIndex] === ')'  &&
                     (!isInStringSingleQuote || !isInStringDoubleQuote))) {
@@ -199,16 +202,20 @@ GeneratePoUtils.prototype.parseJsFile = function (text) {
             });
 
             var translationFunction = text.substring(translationFoundPattern.index, restartIndex);
-            //console.log('-----',translationFunction,'------');
             text = text.substring(restartIndex);
         }
     }
 
+    /**
+     * Parses the translation function of it's arguments
+     *
+     * @param functionArgs, the arguments of the translation function
+     * @param type, the type of function ``t`` or ``nt``
+     * @throws {Error} not a valid call of ``t`` or ``nt`` function.
+     */
     var splitArguments = function(functionArgs, type) {
 
         var literalArgs = [];
-       //console.log('----->', functionArgs);
-        //console.log(require('util').inspect(esprima.parse(functionArgs), true, null, true));
         var parameters = esprima.parse(functionArgs);
         var parsedBody = parameters.body[0].expression;
         if (parsedBody.type === 'SequenceExpression') {
@@ -222,9 +229,13 @@ GeneratePoUtils.prototype.parseJsFile = function (text) {
         }
 
         if(literalArgs.length === 1) {
-            argumentsOfFile.push({
-                msgid: literalArgs[0]
-            });
+            if(type === 't') {
+                argumentsOfFile.push({
+                    msgid: literalArgs[0]
+                });
+            } else {
+                throw new Error('Invalid call of function ``nt``');
+            }
         } else if(literalArgs.length === 2){
             if (type === 't') {
                 argumentsOfFile.push({
@@ -238,24 +249,23 @@ GeneratePoUtils.prototype.parseJsFile = function (text) {
                 });
             }
         } else {
-            argumentsOfFile.push({
-                id: literalArgs[0],
-                msgid: literalArgs[1],
-                msgidPlural: literalArgs[2]
-            });
+            if(type === 'nt') {
+                argumentsOfFile.push({
+                    id: literalArgs[0],
+                    msgid: literalArgs[1],
+                    msgidPlural: literalArgs[2]
+                });
+            } else {
+                throw new Error('Invalid call of function ``t``');
+            }
         }
-       // console.log('----', literalArgs);
     };
 
     for(var i = 0, len = argumentsPerFile.length; i < len; i++) {
         splitArguments(argumentsPerFile[i].arguments, argumentsPerFile[i].type);
     }
 
-    console.log(argumentsOfFile);
-
     return argumentsOfFile;
-
-   // console.log(JSON.stringify(esprima.parse(text)));
 };
 
 /**
@@ -289,7 +299,6 @@ GeneratePoUtils.prototype.parseTemplateFile = function (text) {
  * @returns {Object} the translation messages indexed by the file path
  */
 GeneratePoUtils.prototype.parseFiles = function (options) {
-    console.log(options);
     var folderTranslations = {};
 
 
