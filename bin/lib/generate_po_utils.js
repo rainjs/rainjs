@@ -32,6 +32,7 @@ var path = require('path'),
     extend = require('node.extend'),
     util = require('../../lib/util'),
     poUtils = require('../../lib/po_utils'),
+    esprima = require('esprima'),
     wrench = require('wrench');
 
 /**
@@ -143,11 +144,118 @@ GeneratePoUtils.prototype.parseComponent = function (component) {
             path.join(component.folder, 'client/js'),
             path.join(component.folder, 'server')
         ],
-        extensions: ['.html'],
+        extensions: ['.js'],
         parser: this.parseJsFile
+
     }));
 
     return translations;
+};
+
+GeneratePoUtils.prototype.parseJsFile = function (text) {
+    var found = true,
+        argumentsPerFile = [],
+        argumentsOfFile = [];
+
+    while(found) {
+        var translationFoundPattern = text.match(/([^\w\.]|^)(t|nt)\(/);
+        //console.log(translationFoundPattern);
+
+        if (!translationFoundPattern) {
+            found = false;
+        } else {
+            var restartIndex =  translationFoundPattern.index + translationFoundPattern[0].length,
+                isInStringSingleQuote = false,
+                isInStringDoubleQuote = false,
+                functionArguments = '';
+
+            //daca este egal cu paranteza inchisa si nu e nici in singlequote si nici in double quote rupe while
+
+            while(!(text[restartIndex] === ')'  &&
+                    (!isInStringSingleQuote || !isInStringDoubleQuote))) {
+                functionArguments += text[restartIndex];
+                if(text[restartIndex] === "'") {
+                    if(!isInStringSingleQuote) {
+                        isInStringSingleQuote = true;
+                    } else {
+                        isInStringSingleQuote = false;
+                    }
+                }
+
+                if(text[restartIndex] === '"') {
+                    if(!isInStringDoubleQuote) {
+                        isInStringDoubleQuote = true;
+                    } else {
+                        isInStringDoubleQuote = false;
+                    }
+                }
+
+                restartIndex++;
+            }
+
+            argumentsPerFile.push({
+                arguments: functionArguments,
+                type: translationFoundPattern[2]
+            });
+
+            var translationFunction = text.substring(translationFoundPattern.index, restartIndex);
+            //console.log('-----',translationFunction,'------');
+            text = text.substring(restartIndex);
+        }
+    }
+
+    var splitArguments = function(functionArgs, type) {
+
+        var literalArgs = [];
+       //console.log('----->', functionArgs);
+        //console.log(require('util').inspect(esprima.parse(functionArgs), true, null, true));
+        var parameters = esprima.parse(functionArgs);
+        var parsedBody = parameters.body[0].expression;
+        if (parsedBody.type === 'SequenceExpression') {
+            for(var j = 0, len = parsedBody.expressions.length; j < len; j++) {
+                if (parsedBody.expressions[j].type && parsedBody.expressions[j].type === 'Literal') {
+                    literalArgs.push(parsedBody.expressions[j].value);
+                }
+            }
+        } else if (parsedBody.type === 'Literal') {
+            literalArgs.push(parsedBody.value);
+        }
+
+        if(literalArgs.length === 1) {
+            argumentsOfFile.push({
+                msgid: literalArgs[0]
+            });
+        } else if(literalArgs.length === 2){
+            if (type === 't') {
+                argumentsOfFile.push({
+                    id: literalArgs[0],
+                    msgid: literalArgs[1]
+                });
+            } else {
+                argumentsOfFile.push({
+                    msgid: literalArgs[0],
+                    msgidPlural: literalArgs[1]
+                });
+            }
+        } else {
+            argumentsOfFile.push({
+                id: literalArgs[0],
+                msgid: literalArgs[1],
+                msgidPlural: literalArgs[2]
+            });
+        }
+       // console.log('----', literalArgs);
+    };
+
+    for(var i = 0, len = argumentsPerFile.length; i < len; i++) {
+        splitArguments(argumentsPerFile[i].arguments, argumentsPerFile[i].type);
+    }
+
+    console.log(argumentsOfFile);
+
+    return argumentsOfFile;
+
+   // console.log(JSON.stringify(esprima.parse(text)));
 };
 
 /**
@@ -170,13 +278,6 @@ GeneratePoUtils.prototype.parseTemplateFile = function (text) {
  * @param {Object} component the component configuration
  * @returns {Object} the translation messages indexed by the file path
  */
-GeneratePoUtils.prototype.parseJsFile = function (component) {
-    return [{
-        id: '',
-        msgid: '',
-        msgidPlural: ''
-    }];
-};
 
 /**
  * Extracts the translations from a component's folder.
@@ -188,9 +289,11 @@ GeneratePoUtils.prototype.parseJsFile = function (component) {
  * @returns {Object} the translation messages indexed by the file path
  */
 GeneratePoUtils.prototype.parseFiles = function (options) {
+    console.log(options);
     var folderTranslations = {};
 
-    options.folders.each(function (folder) {
+
+    options.folders.forEach(function (folder) {
         util.walkSync(folder, options.extensions, function (filePath) {
             try {
                 var text = fs.readFileSync(filePath, 'utf8'),
@@ -201,9 +304,10 @@ GeneratePoUtils.prototype.parseFiles = function (options) {
                 }
             } catch (ex) {
                 console.log(('Could not extract the template translations from ' + filePath).red,
-                            ex.message);
+                            ex.stack);
             }
         });
+
     });
 
     return folderTranslations;

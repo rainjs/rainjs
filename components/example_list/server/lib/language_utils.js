@@ -29,7 +29,7 @@
  * module.
  */
 function translateSendMail() {
-    return t('Send email');
+    return t('tralala.a', 'Send email');
 }
 
 module.exports = {
