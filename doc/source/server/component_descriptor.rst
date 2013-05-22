@@ -37,7 +37,7 @@ supported by RAIN):
                 "controller": {
                     "client": "need_permissions.js"
                 },
-                "permissions": ["user", "admin"],
+                "permissions": ["user", "admin"]
             }
         },
         "intents": [

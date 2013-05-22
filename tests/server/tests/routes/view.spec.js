@@ -27,7 +27,6 @@
 
 var cwd = process.cwd();
 var globals = require(cwd + '/lib/globals.js');
-//var config = require(cwd + '/lib/configuration.js');
 
 describe('Router Plugin: View handler', function() {
     var mockComponentRegistry = null,
