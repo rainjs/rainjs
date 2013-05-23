@@ -61,16 +61,22 @@ var locale = {
 };
 
 describe('Translation module', function () {
+    var translation;
+
+    var init = function (ClientTranslation, Jed) {
+        translation = new ClientTranslation(locale);
+        translation.translate.andCallThrough();
+        Jed.sprintf.andCallThrough();
+        Jed.prototype.translate.andCallThrough();
+        Jed.prototype.textdomain.andCallFake(function () {
+            return 'messages';
+        });
+    };
+
     it('should properly translate an existing message id',
-        ['core/js/translation', 'raintime/lib/jed'],
-        function (ClientTranslation, Jed) {
-            var translation = new ClientTranslation(locale);
-            translation.translate.andCallThrough();
-            Jed.sprintf.andCallThrough();
-            Jed.prototype.translate.andCallThrough();
-            Jed.prototype.textdomain.andCallFake(function () {
-                return 'messages';
-            });
+        ['core/js/translation', 'raintime/lib/jed'], function (ClientTranslation, Jed) {
+            init(ClientTranslation, Jed);
+
             Jed.prototype.dcnpgettext.andCallFake(function () {
                 return 'Trimite email';
             });
@@ -80,15 +86,9 @@ describe('Translation module', function () {
         });
 
     it('should properly translate an existing message id with arguments',
-        ['core/js/translation', 'raintime/lib/jed'],
-        function (ClientTranslation, Jed) {
-            var translation = new ClientTranslation(locale);
-            translation.translate.andCallThrough();
-            Jed.sprintf.andCallThrough();
-            Jed.prototype.translate.andCallThrough();
-            Jed.prototype.textdomain.andCallFake(function () {
-                return 'messages';
-            });
+        ['core/js/translation', 'raintime/lib/jed'], function (ClientTranslation, Jed) {
+            init(ClientTranslation, Jed);
+
             Jed.prototype.dcnpgettext.andCallFake(function () {
                 return 'Draga Domnule John Doe,';
             });
@@ -98,15 +98,9 @@ describe('Translation module', function () {
         });
 
     it('should use the default language if it cannot find the translation',
-        ['core/js/translation', 'raintime/lib/jed'],
-        function (ClientTranslation, Jed) {
-            var translation = new ClientTranslation(locale);
-            translation.translate.andCallThrough();
-            Jed.sprintf.andCallThrough();
-            Jed.prototype.translate.andCallThrough();
-            Jed.prototype.textdomain.andCallFake(function () {
-                return 'messages';
-            });
+        ['core/js/translation', 'raintime/lib/jed'], function (ClientTranslation, Jed) {
+            init(ClientTranslation, Jed);
+
             Jed.prototype.dcnpgettext.andCallFake(function () {
                 return 'Salut Domnule John Doe,';
             });
@@ -116,15 +110,9 @@ describe('Translation module', function () {
         });
 
     it('should return the message id if it cannot find the translation',
-        ['core/js/translation', 'raintime/lib/jed'],
-        function (ClientTranslation, Jed) {
-            var translation = new ClientTranslation(locale);
-            translation.translate.andCallThrough();
-            Jed.sprintf.andCallThrough();
-            Jed.prototype.translate.andCallThrough();
-            Jed.prototype.textdomain.andCallFake(function () {
-                return 'messages';
-            });
+        ['core/js/translation', 'raintime/lib/jed'], function (ClientTranslation, Jed) {
+            init(ClientTranslation, Jed);
+
             Jed.prototype.dcnpgettext.andCallFake(function () {
                 return 'Cancel';
             });
@@ -134,15 +122,9 @@ describe('Translation module', function () {
         });
 
     it('should properly translate an existing plural',
-        ['core/js/translation', 'raintime/lib/jed'],
-        function (ClientTranslation, Jed) {
-            var translation = new ClientTranslation(locale);
-            translation.translate.andCallThrough();
-            Jed.sprintf.andCallThrough();
-            Jed.prototype.translate.andCallThrough();
-            Jed.prototype.textdomain.andCallFake(function () {
-                return 'messages';
-            });
+        ['core/js/translation', 'raintime/lib/jed'], function (ClientTranslation, Jed) {
+            init(ClientTranslation, Jed);
+
             Jed.prototype.dcnpgettext.andCallFake(function () {
                 return 'Draga Domnilor John Doe,';
             });
@@ -152,15 +134,9 @@ describe('Translation module', function () {
         });
 
     it('should use the default language if it cannot find a plural',
-        ['core/js/translation', 'raintime/lib/jed'],
-        function (ClientTranslation, Jed) {
-            var translation = new ClientTranslation(locale);
-            translation.translate.andCallThrough();
-            Jed.sprintf.andCallThrough();
-            Jed.prototype.translate.andCallThrough();
-            Jed.prototype.textdomain.andCallFake(function () {
-                return 'messages';
-            });
+        ['core/js/translation', 'raintime/lib/jed'], function (ClientTranslation, Jed) {
+            init(ClientTranslation, Jed);
+
             Jed.prototype.dcnpgettext.andCallFake(function () {
                 return 'Pentru voi';
             });
@@ -170,15 +146,9 @@ describe('Translation module', function () {
         });
 
     it('should return the key if trying to translate a plural form that doesn\'t exist',
-        ['core/js/translation', 'raintime/lib/jed'],
-        function (ClientTranslation, Jed) {
-            var translation = new ClientTranslation(locale);
-            translation.translate.andCallThrough();
-            Jed.sprintf.andCallThrough();
-            Jed.prototype.translate.andCallThrough();
-            Jed.prototype.textdomain.andCallFake(function () {
-                return 'messages';
-            });
+        ['core/js/translation', 'raintime/lib/jed'], function (ClientTranslation, Jed) {
+            init(ClientTranslation, Jed);
+
             Jed.prototype.dcnpgettext.andCallFake(function () {
                 return 'Send email';
             });
