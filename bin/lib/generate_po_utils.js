@@ -197,7 +197,7 @@ GeneratePoUtils.prototype.parseJsFile = function (text) {
             }
 
             argumentsPerFile.push({
-                arguments: functionArguments,
+                params: functionArguments,
                 type: translationFoundPattern[2]
             });
 
@@ -206,66 +206,67 @@ GeneratePoUtils.prototype.parseJsFile = function (text) {
         }
     }
 
-    /**
-     * Parses the translation function of it's arguments
-     *
-     * @param functionArgs, the arguments of the translation function
-     * @param type, the type of function ``t`` or ``nt``
-     * @throws {Error} not a valid call of ``t`` or ``nt`` function.
-     */
-    var splitArguments = function(functionArgs, type) {
-
-        var literalArgs = [];
-        var parameters = esprima.parse(functionArgs);
-        var parsedBody = parameters.body[0].expression;
-        if (parsedBody.type === 'SequenceExpression') {
-            for(var j = 0, len = parsedBody.expressions.length; j < len; j++) {
-                if (parsedBody.expressions[j].type && parsedBody.expressions[j].type === 'Literal') {
-                    literalArgs.push(parsedBody.expressions[j].value);
-                }
-            }
-        } else if (parsedBody.type === 'Literal') {
-            literalArgs.push(parsedBody.value);
-        }
-
-        if(literalArgs.length === 1) {
-            if(type === 't') {
-                argumentsOfFile.push({
-                    msgid: literalArgs[0]
-                });
-            } else {
-                throw new Error('Invalid call of function ``nt``');
-            }
-        } else if(literalArgs.length === 2){
-            if (type === 't') {
-                argumentsOfFile.push({
-                    id: literalArgs[0],
-                    msgid: literalArgs[1]
-                });
-            } else {
-                argumentsOfFile.push({
-                    msgid: literalArgs[0],
-                    msgidPlural: literalArgs[1]
-                });
-            }
-        } else {
-            if(type === 'nt') {
-                argumentsOfFile.push({
-                    id: literalArgs[0],
-                    msgid: literalArgs[1],
-                    msgidPlural: literalArgs[2]
-                });
-            } else {
-                throw new Error('Invalid call of function ``t``');
-            }
-        }
-    };
-
     for(var i = 0, len = argumentsPerFile.length; i < len; i++) {
-        splitArguments(argumentsPerFile[i].arguments, argumentsPerFile[i].type);
+        this.splitArguments(argumentsPerFile[i].params, argumentsPerFile[i].type);
     }
 
     return argumentsOfFile;
+};
+
+/**
+ * Parses the translation function of it's arguments. Esprima module will parse your
+ * text and generate
+ *
+ * @param functionArgs, the arguments of the translation function
+ * @param type, the type of function ``t`` or ``nt``
+ * @throws {Error} not a valid call of ``t`` or ``nt`` function.
+ */
+GeneratePoUtils.prototype.splitArguments = function(functionArgs, type) {
+
+    var literalArgs = [];
+    var parameters = esprima.parse(functionArgs);
+    var parsedBody = parameters.body[0].expression;
+    if (parsedBody.type === 'SequenceExpression') {
+        for(var j = 0, len = parsedBody.expressions.length; j < len; j++) {
+            if (parsedBody.expressions[j].type && parsedBody.expressions[j].type === 'Literal') {
+                literalArgs.push(parsedBody.expressions[j].value);
+            }
+        }
+    } else if (parsedBody.type === 'Literal') {
+        literalArgs.push(parsedBody.value);
+    }
+
+    if(literalArgs.length === 1) {
+        if(type === 't') {
+            argumentsOfFile.push({
+                msgid: literalArgs[0]
+            });
+        } else {
+            throw new Error('Invalid call of function ``nt``');
+        }
+    } else if(literalArgs.length === 2){
+        if (type === 't') {
+            argumentsOfFile.push({
+                id: literalArgs[0],
+                msgid: literalArgs[1]
+            });
+        } else {
+            argumentsOfFile.push({
+                msgid: literalArgs[0],
+                msgidPlural: literalArgs[1]
+            });
+        }
+    } else {
+        if(type === 'nt') {
+            argumentsOfFile.push({
+                id: literalArgs[0],
+                msgid: literalArgs[1],
+                msgidPlural: literalArgs[2]
+            });
+        } else {
+            throw new Error('Invalid call of function ``t``');
+        }
+    }
 };
 
 /**
