@@ -25,142 +25,59 @@
 
 "use strict";
 
-describe('Translation module', function() {
-    describe('translate method', function () {
-        var cwd = process.cwd(),
-            path = require('path'),
-            util = require(path.join(cwd, 'lib', 'util')),
-            Translation = require(path.join(cwd, 'lib', 'translation')),
-            translation;
+describe("Server Side Translation", function () {
+    var mocks = {},
+        fs, configuration, Translation, poUtils;
 
-        var component = {
-            id: 'example',
-            version: '4.5.2',
-            folder: path.join(cwd, 'tests', 'server', 'fixtures', 'components', 'example_4_5_2')
+    beforeEach(function () {
+
+        fs = jasmine.createSpyObj('fs', ['readFileSync']);
+        mocks['fs'] = fs;
+
+        configuration = {
+            defaultLanguage: 'en_EN',
+            language: 'ro_RO'
         };
+        mocks['./configuration'] = configuration;
 
-        beforeEach(function () {
-            var localeFolder = path.join(component.folder, 'locale');
+        poUtils = jasmine.createSpyObj('poUtils', ['parsePo']);
+        mocks['./po_utils'] = poUtils;
 
-            translation = Translation.get();
+        Translation = loadModuleExports('/lib/translation.js', mocks);
 
-            util.walkSync(path.join(localeFolder, 'en_US'), ['.po'], function (filePath) {
-                translation.loadLanguageFile(filePath, 'en_US', component);
-            });
-            util.walkSync(path.join(localeFolder, 'ro_RO'), ['.po'], function (filePath) {
-                translation.loadLanguageFile(filePath, 'ro_RO', component);
-            });
-        });
+    });
 
-        it('should translate if message id exists', function () {
-            expect(translation.translate(component, 'ro_RO', 'Send email'))
-            .toEqual('Trimite email');
-        });
+    describe("Constructor", function () {
+        it('should construct the object corectly', function () {
 
-        it('should return the message id, if translation doesn\'t exist', function () {
-            expect(translation.translate(component, 'en_US', 'No translation'))
-            .toEqual('No translation');
-        });
-
-        it('should correctly resolve arguments', function () {
-            var message = translation.translate(
-                    component, 'ro_RO', 'Dear %1$s %2$s,', undefined, undefined, ['Jhon', 'Doe']);
-            expect(message).toEqual('Bună ziua domnule Doe,');
         });
     });
 
-    describe('getLocale method', function() {
-        var context, translation;
-        beforeEach(function() {
-            context = loadModuleContext('/lib/translation.js');
-            translation = new context.Translation();
+    describe("Singleton method", function () {
+
+        it('should construct the object only once', function () {
+
         });
 
-        it('should throw an rain error if the component parameter is missing', function() {
-            expect(function() {
-                translation.getLocale();
-            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'component');
-        });
-
-        it('should throw an rain error if the locale parameter is missing', function() {
-            expect(function() {
-                translation.getLocale({});
-            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'locale');
-        });
-
-        it('should return an empty object cause no translation is existing', function() {
-            expect(translation.getLocale(1, 2)).toEqual({});
-        });
-
-        it('should return the domain and data object of a locale', function() {
-            context.locales['test 1.0'] = {
-                'de': {
-                    textdomain: function() { return "textdomain"; },
-                    options: { locale_data: "translations" }
-                }
-            };
-
-            //TODO find a way to mock private functions
-            spyOn(context, 'computeLocaleId');
-            var translationResult = translation.getLocale({
-                id: 'test', version: '1.0'
-            }, 'de');
-
-
-            expect(translationResult.domain).toEqual("textdomain");
-            expect(translationResult.data).toEqual("translations");
-        });
     });
 
-    describe('getLocales method', function() {
-        var Translation, translation, configuration;
-        var component = {
-            id: 'test',
-            version: '1.0'
-        };
+    describe("loadLanguageFile method", function () {
 
-        beforeEach(function() {
-            var mocks = {};
-            configuration = mocks['./configuration'] = {};
-            Translation = loadModuleExports('/lib/translation.js', mocks);
-            translation = Translation.get();
-            spyOn(translation, 'getLocale').andCallFake(function (component, locale) {
-                return locale;
-            });
+    });
+
+    describe("getLocales method", function () {
+
+    });
+
+    describe("generateContext method", function () {
+
+        it('should generate the context corectly', function () {
+
         });
 
-        it('should throw an error if the component parameter is missing', function() {
-            expect(function() {
-                translation.getLocales();
-            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'component');
-        });
+    });
 
-        it('should return two locales', function () {
-            configuration.language = 'de_DE';
-            configuration.defaultLanguage = 'en_US';
+    describe("translate method", function () {
 
-            expect(translation.getLocales(component, 'ro_RO'))
-                .toEqual({language: 'ro_RO', defaultLanguage: 'en_US'});
-            expect(translation.getLocale).toHaveBeenCalledWith(component, 'ro_RO');
-            expect(translation.getLocale).toHaveBeenCalledWith(component, 'en_US');
-        });
-
-        it('should use the platform language when the language parameter is missing', function () {
-            configuration.language = 'de_DE';
-            configuration.defaultLanguage = 'en_US';
-
-            expect(translation.getLocales(component))
-                .toEqual({language: 'de_DE', defaultLanguage: 'en_US'});
-            expect(translation.getLocale).toHaveBeenCalledWith(component, 'de_DE');
-            expect(translation.getLocale).toHaveBeenCalledWith(component, 'en_US');
-        });
-
-        it('should return one locale when language and defaultLanguage are the same', function() {
-            configuration.language = 'en_US';
-            configuration.defaultLanguage = 'en_US';
-
-            expect(translation.getLocales(component)).toEqual({language: 'en_US'});
-            expect(translation.getLocale).toHaveBeenCalledWith(component, 'en_US');
-        });
     });
 });
