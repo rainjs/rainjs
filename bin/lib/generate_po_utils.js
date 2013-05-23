@@ -207,7 +207,9 @@ GeneratePoUtils.prototype.parseJsFile = function (text) {
     }
 
     for(var i = 0, len = argumentsPerFile.length; i < len; i++) {
-        this.splitArguments(argumentsPerFile[i].params, argumentsPerFile[i].type);
+        argumentsOfFile.push(
+            this.splitArguments(argumentsPerFile[i].params, argumentsPerFile[i].type)
+        );
     }
 
     return argumentsOfFile;
@@ -223,7 +225,9 @@ GeneratePoUtils.prototype.parseJsFile = function (text) {
  */
 GeneratePoUtils.prototype.splitArguments = function(functionArgs, type) {
 
-    var literalArgs = [];
+    var parmetersOfFunction = {},
+        literalArgs = [];
+
     var parameters = esprima.parse(functionArgs);
     var parsedBody = parameters.body[0].expression;
     if (parsedBody.type === 'SequenceExpression') {
@@ -238,34 +242,38 @@ GeneratePoUtils.prototype.splitArguments = function(functionArgs, type) {
 
     if(literalArgs.length === 1) {
         if(type === 't') {
-            argumentsOfFile.push({
+            parmetersOfFunction = {
                 msgid: literalArgs[0]
-            });
+            };
         } else {
             throw new Error('Invalid call of function ``nt``');
         }
     } else if(literalArgs.length === 2){
         if (type === 't') {
-            argumentsOfFile.push({
+            parmetersOfFunction = {
                 id: literalArgs[0],
                 msgid: literalArgs[1]
-            });
+            };
         } else {
-            argumentsOfFile.push({
+            parmetersOfFunction = {
                 msgid: literalArgs[0],
                 msgidPlural: literalArgs[1]
-            });
+            };
         }
     } else {
         if(type === 'nt') {
-            argumentsOfFile.push({
+            parmetersOfFunction = {
                 id: literalArgs[0],
                 msgid: literalArgs[1],
                 msgidPlural: literalArgs[2]
-            });
+            };
         } else {
             throw new Error('Invalid call of function ``t``');
         }
+    }
+
+    if(parmetersOfFunction) {
+        return parmetersOfFunction;
     }
 };
 
