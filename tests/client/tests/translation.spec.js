@@ -54,6 +54,10 @@ var locale = {
                     "Pentru tine",
                     "Pentru voi"
                 ],
+                "button.custom.id": [
+                    null,
+                    "Text de buton",
+                ],
                 "":{"domain":"messages"}
             }
         }
@@ -83,6 +87,9 @@ describe('Translation module', function () {
 
             expect(translation.translate('Send email', null, 1))
                 .toEqual("Trimite email");
+
+            expect(Jed.prototype.dcnpgettext)
+                .toHaveBeenCalledWith(undefined, undefined, 'Send email', 1, undefined);
         });
 
     it('should properly translate an existing message id with arguments',
@@ -95,6 +102,11 @@ describe('Translation module', function () {
 
             expect(translation.translate('Dear Mr %1$s %2$s,', null, 1, ['John', 'Doe']))
                 .toEqual("Draga Domnule John Doe,");
+
+            expect(Jed.prototype.dcnpgettext)
+                .toHaveBeenCalledWith(undefined, undefined, 'Dear Mr %1$s %2$s,', 1,
+                                      ['John', 'Doe']);
+
         });
 
     it('should use the default language if it cannot find the translation',
@@ -107,6 +119,11 @@ describe('Translation module', function () {
 
             expect(translation.translate('Hello Mr %1$s %2$s,', null, 1, ['John', 'Doe']))
                 .toEqual("Salut Domnule John Doe,");
+
+            expect(Jed.prototype.dcnpgettext)
+                .toHaveBeenCalledWith(undefined, undefined, 'Hello Mr %1$s %2$s,', 1,
+                                      ['John', 'Doe']);
+
         });
 
     it('should return the message id if it cannot find the translation',
@@ -119,6 +136,10 @@ describe('Translation module', function () {
 
             expect(translation.translate('Cancel', null, 1, ['John', 'Doe']))
                 .toEqual("Cancel");
+
+            expect(Jed.prototype.dcnpgettext)
+                .toHaveBeenCalledWith(undefined, undefined, 'Cancel', 1,
+                                      ['John', 'Doe']);
         });
 
     it('should properly translate an existing plural',
@@ -131,6 +152,10 @@ describe('Translation module', function () {
 
             expect(translation.translate('Dear Mr %1$s %2$s,', null, 2, ['John', 'Doe']))
                 .toEqual("Draga Domnilor John Doe,");
+
+            expect(Jed.prototype.dcnpgettext)
+                .toHaveBeenCalledWith(undefined, undefined, 'Dear Mr %1$s %2$s,', 2,
+                                      ['John', 'Doe']);
         });
 
     it('should use the default language if it cannot find a plural',
@@ -143,6 +168,9 @@ describe('Translation module', function () {
 
             expect(translation.translate('For you', null, 2, ['John', 'Doe']))
                 .toEqual("Pentru voi");
+
+            expect(Jed.prototype.dcnpgettext)
+                .toHaveBeenCalledWith(undefined, undefined, 'For you', 2, ['John', 'Doe']);
         });
 
     it('should return the key if trying to translate a plural form that doesn\'t exist',
@@ -155,5 +183,39 @@ describe('Translation module', function () {
 
             expect(translation.translate('Send email', null, 3))
                 .toEqual("Send email");
+
+           expect(Jed.prototype.dcnpgettext)
+                .toHaveBeenCalledWith(undefined, undefined, 'Send email', 3, undefined);
         });
+
+    it('should return the custom id translation if valid',
+        ['core/js/translation', 'raintime/lib/jed'], function (ClientTranslation, Jed) {
+            init(ClientTranslation, Jed);
+
+            Jed.prototype.dcnpgettext.andCallFake(function () {
+                return 'Text de buton';
+            });
+            expect(translation.translate('button.custom.id','Send email', null, 1))
+                .toEqual("Text de buton");
+
+            expect(Jed.prototype.dcnpgettext)
+                .toHaveBeenCalledWith(undefined, undefined, 'button.custom.id', 'Send email', null);
+        });
+
+    it('should return the default id if custom id is invalid',
+        ['core/js/translation', 'raintime/lib/jed'], function (ClientTranslation, Jed) {
+            init(ClientTranslation, Jed);
+
+            Jed.prototype.dcnpgettext.andCallFake(function () {
+                console.log(arguments);
+                return 'Trimite email';
+            });
+
+            expect(translation.translate('invalid.id','Send email', null, 1))
+                .toEqual("Trimite email");
+
+            expect(Jed.prototype.dcnpgettext)
+                .toHaveBeenCalledWith(undefined, undefined, 'invalid.id', 'Send email', null);
+        });
+
 });
