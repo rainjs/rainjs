@@ -126,7 +126,7 @@ GeneratePoUtils.prototype.scanComponents = function (componentsFolder) {
 };
 
 /**
- * Parses a component's files and extract the translations.
+ * Parses a component's files and extracts the translations.
  *
  * @param {Object} component the component configuration
  * @returns {Object} the component's translations found in templates and .js files
@@ -269,22 +269,24 @@ GeneratePoUtils.prototype.parseJsFile = function (text) {
 };
 
 /**
- * Extracts the translations from a component's templates.
+ * Extracts the translations from a template. Returns an array of objects with the following
+ * properties: ``msgid``, ``msgidPlural``, ``id``.
  *
- * @param {String} text
+ * @param {String} text the template to be parsed
  * @returns {Array} the translation messages found in this file
  */
 GeneratePoUtils.prototype.parseTemplateFile = function (text) {
-    var ast = Handlebars.parse(text);
+    var parsedTemplate = Handlebars.parse(text);
 
-    var translations = this.inspectStatements(ast.statements);
-    return translations;
+    return this.inspectStatements(parsedTemplate.statements);
 };
 
 /**
+ * Iterates through the statements found in a template and extracts ``msgid``, ``msgidPlural``
+ * and ``id`` from the ``t`` and ``nt`` helpers
  *
- * @param statements
- * @returns {Array}
+ * @param {Array} statements the statements found in the template
+ * @returns {Array} the translation messages found
  */
 GeneratePoUtils.prototype.inspectStatements = function (statements) {
     var translations = [];
@@ -297,11 +299,13 @@ GeneratePoUtils.prototype.inspectStatements = function (statements) {
     for (var i = 0, len = statements.length; i < len; i++) {
         var statement = statements[i];
 
+        // block helper
         if (statement.type === 'block') {
             var blockTranslations = this.inspectStatements(statement.program.statements);
             translations = translations.concat(blockTranslations);
         }
 
+        // handlebars helper (isHelper is true if this statement has parameters)
         if (statement.type === 'mustache' && statement.isHelper) {
             var ids = [],
                 helperName = statement.id.string,
@@ -329,10 +333,13 @@ GeneratePoUtils.prototype.inspectStatements = function (statements) {
 };
 
 /**
+ * Extracts parameter values from a helper positional parameters.
  *
- * @param params
- * @param count
- * @returns {Array}
+ * @param {Array} params the helper parameters
+ * @param {Number} count the number of parameters to extract
+ * @returns {Array} the extracted parameter values
+ * @throws {Error} when there are fewer parameters than the specified count
+ * @throws {Error} when one of the parameter has a value that is not a string literal
  */
 GeneratePoUtils.prototype.getParamValues = function (params, count) {
     if (params.length < count) {
@@ -353,9 +360,12 @@ GeneratePoUtils.prototype.getParamValues = function (params, count) {
 };
 
 /**
+ * Returns the value of the ``id`` property from the hash of a Handlebars helper if
+ * it exists.
  *
- * @param pairs
- * @returns {String}
+ * @param {Array} pairs the key value pairs
+ * @returns {String} the value of the ``id`` property
+ * @throws {Error} when the value of the ``id`` property is not a string literal
  */
 GeneratePoUtils.prototype.getIdValue = function (pairs) {
     for (var i = 0, len = pairs.length; i < len; i++) {
@@ -372,13 +382,6 @@ GeneratePoUtils.prototype.getIdValue = function (pairs) {
         return pair[1].string;
     }
 };
-
-/**
- * Extracts the translations from a component's .js files.
- *
- * @param {Object} component the component configuration
- * @returns {Object} the translation messages indexed by the file path
- */
 
 /**
  * Extracts the translations from a component's folder.
