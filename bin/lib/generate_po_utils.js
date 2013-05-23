@@ -33,7 +33,8 @@ var path = require('path'),
     util = require('../../lib/util'),
     poUtils = require('../../lib/po_utils'),
     esprima = require('esprima'),
-    wrench = require('wrench');
+    wrench = require('wrench'),
+    Handlebars = require('handlebars');
 
 /**
  * Utility class for the 'generate-po-files' SDK command.
@@ -72,7 +73,7 @@ GeneratePoUtils.prototype.generateLocalizationFiles = function (outputLocales, c
                 this.compareTranslations(components[i], poTranslations, parsedTranslations);
                 this.createPoFiles(components[i], poTranslations);
             } catch (ex) {
-                console.log(ex.message.red);
+                console.log(ex.stack.red);
             }
 
             if (module == componentId) {
@@ -80,7 +81,7 @@ GeneratePoUtils.prototype.generateLocalizationFiles = function (outputLocales, c
             }
         }
     } catch (ex) {
-        console.log(ex.message.red);
+        console.log(ex.stack.red);
     }
 };
 
@@ -136,7 +137,7 @@ GeneratePoUtils.prototype.parseComponent = function (component) {
     extend(translations, this.parseFiles({
         folders: [path.join(component.folder, 'client/templates')],
         extensions: ['.html'],
-        parser: this.parseTemplateFile
+        parser: this.parseTemplateFile.bind(this)
     }));
 
     extend(translations, this.parseFiles({
@@ -145,8 +146,7 @@ GeneratePoUtils.prototype.parseComponent = function (component) {
             path.join(component.folder, 'server')
         ],
         extensions: ['.js'],
-        parser: this.parseJsFile
-
+        parser: this.parseJsFile.bind(this)
     }));
 
     return translations;
@@ -275,11 +275,102 @@ GeneratePoUtils.prototype.parseJsFile = function (text) {
  * @returns {Array} the translation messages found in this file
  */
 GeneratePoUtils.prototype.parseTemplateFile = function (text) {
-    return [{
-        id: '',
-        msgid: '',
-        msgidPlural: ''
-    }];
+    var ast = Handlebars.parse(text);
+
+    var translations = this.inspectStatements(ast.statements);
+    return translations;
+};
+
+/**
+ *
+ * @param statements
+ * @returns {Array}
+ */
+GeneratePoUtils.prototype.inspectStatements = function (statements) {
+    var translations = [];
+
+    var helpers = {
+        t: {paramCount: 1},
+        nt: {paramCount: 2}
+    };
+
+    for (var i = 0, len = statements.length; i < len; i++) {
+        var statement = statements[i];
+
+        if (statement.type === 'block') {
+            var blockTranslations = this.inspectStatements(statement.program.statements);
+            translations = translations.concat(blockTranslations);
+        }
+
+        if (statement.type === 'mustache' && statement.isHelper) {
+            var ids = [],
+                helperName = statement.id.string,
+                params = statement.params,
+                pairs = (statement.hash && statement.hash.pairs) || [];
+
+            if (!helpers[helperName]) {
+                continue;
+            }
+
+            var paramCount = helpers[helperName].paramCount;
+            var paramValues = this.getParamValues(params, paramCount);
+
+            var translation = {
+                msgid: paramValues[0],
+                msgidPlural: paramValues[1],
+                id: this.getIdValue(pairs)
+            };
+
+            translations.push(translation);
+        }
+    }
+
+    return translations;
+};
+
+/**
+ *
+ * @param params
+ * @param count
+ * @returns {Array}
+ */
+GeneratePoUtils.prototype.getParamValues = function (params, count) {
+    if (params.length < count) {
+        throw new Error("Invalid number of params.");
+    }
+
+    var values = [];
+
+    for (var i = 0; i < count; i++) {
+        if (params[i].type !== "STRING") {
+            throw new Error("msgid and msgid_plural should be strings.");
+        }
+
+        values.push(params[i].string);
+    }
+
+    return values;
+};
+
+/**
+ *
+ * @param pairs
+ * @returns {String}
+ */
+GeneratePoUtils.prototype.getIdValue = function (pairs) {
+    for (var i = 0, len = pairs.length; i < len; i++) {
+        var pair = pairs[i];
+
+        if (pair[0] !== 'id') {
+            continue;
+        }
+
+        if (pair[1].type !== 'STRING') {
+            throw new Error("id value should be a string");
+        }
+
+        return pair[1].string;
+    }
 };
 
 /**
@@ -301,7 +392,6 @@ GeneratePoUtils.prototype.parseTemplateFile = function (text) {
 GeneratePoUtils.prototype.parseFiles = function (options) {
     var folderTranslations = {};
 
-
     options.folders.forEach(function (folder) {
         util.walkSync(folder, options.extensions, function (filePath) {
             try {
@@ -313,7 +403,7 @@ GeneratePoUtils.prototype.parseFiles = function (options) {
                 }
             } catch (ex) {
                 console.log(('Could not extract the template translations from ' + filePath).red,
-                            ex.stack);
+                            ex.message);
             }
         });
 
