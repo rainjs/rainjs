@@ -114,14 +114,27 @@ define(['raintime/lib/jed'], function (Jed) {
 
         //switching arguments
         if (typeof msgId !== 'string') {
+            /**
+             * if the messageId is not a string than the msgId is actually the arguments,
+             * so two parammeters were passed in these case the msgId is the customId
+             */
             args = msgId;
             msgId = customId;
         } else if (typeof msgIdPlural !== 'string') {
+            /**
+             * if the msgIdPlural is not a string that means three parameters were passed
+             * so the msgId will shift to customId
+             */
             args = count;
             count = msgIdPlural;
             msgIdPlural = msgId;
             msgId = customId;
         } else {
+            /**
+             * in any other case we should save the msgId as the messageText so
+             * if the customId fails to be found in the translation than the translation
+             * should be the acttual text.
+             */
             messageText = msgId;
             msgId = customId;
         }
@@ -131,6 +144,11 @@ define(['raintime/lib/jed'], function (Jed) {
         if (!jed || !msgIdExists(jed, msgId, count)) {
             jed = this.locales['defaultLanguage'];
             if(!msgIdExists(jed, msgId, count)) {
+                /**
+                 * If the customId/msgId(in old implementations) is not to be found
+                 * than the msgId becomes depending on the sittuation the messageText
+                 * so it can be outputed as it is.
+                 */
                 msgId = messageText || msgId;
                 jed = emptyJed;
             }
