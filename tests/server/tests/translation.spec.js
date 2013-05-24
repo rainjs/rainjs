@@ -27,11 +27,23 @@
 
 describe("Server Side Translation", function () {
     var mocks = {},
-        fs, configuration, Translation, poUtils;
+        fs, configuration, Translation, poUtils,
+        file, component, locale, jed, Jed;
 
     beforeEach(function () {
 
+        file = 'fake.po';
+        component = {
+            id: 'fakeId',
+        };
+        locale = 'ro_RO';
+
+
         fs = jasmine.createSpyObj('fs', ['readFileSync']);
+        fs.readFileSync.andCallFake(function () {
+            var data = "msgid 'a.b.c' \n msgstr 'Some text'";
+            return data;
+        })
         mocks['fs'] = fs;
 
         configuration = {
@@ -41,21 +53,54 @@ describe("Server Side Translation", function () {
         mocks['./configuration'] = configuration;
 
         poUtils = jasmine.createSpyObj('poUtils', ['parsePo']);
+        poUtils.parsePo.andCallFake(function () {
+            return {};
+        });
         mocks['./po_utils'] = poUtils;
+
+        jed = {
+            translate: jasmine.createSpy('translate'),
+            textdomain: jasmine.createSpy('textdomain'),
+            pluralFormFn: jasmine.createSpy('pluralFormFn'),
+            options: {
+                locale_data: {
+
+                },
+                domain: {
+
+                }
+            }
+        }
+        jed.textdomain.andCallFake(function () {
+            return this.options.domain;
+        })
+        Jed = jasmine.createSpy('Jed');
+        Jed.PF  = {
+            compile: jasmine.createSpy('compile')
+        }
+
+        Jed.andCallFake(function (config) {
+            jed.options.locale_data = config.locale_data;
+            jed.options.domain = config.domain;
+            return jed;
+        });
+
+        mocks['jed'] = {
+            Jed: Jed
+        };
 
         Translation = loadModuleExports('/lib/translation.js', mocks);
 
     });
 
-    describe("Constructor", function () {
-        it('should construct the object corectly', function () {
-
-        });
-    });
-
     describe("Singleton method", function () {
 
         it('should construct the object only once', function () {
+
+            var translationInstance1 = Translation.get();
+            var translationInstance2 = Translation.get();
+
+            expect(translationInstance1).toBe(translationInstance2);
 
         });
 
@@ -63,16 +108,66 @@ describe("Server Side Translation", function () {
 
     describe("loadLanguageFile method", function () {
 
+        it('should throw an ERROR_IO error if the file could not have been read', function () {
+
+            fs.readFileSync.andCallFake(function () {
+                throw new Error('fail');
+            });
+
+            var translationInstance = Translation.get();
+
+            expect(function() {translationInstance.loadLanguageFile(); }).toThrowType(RainError.ERROR_IO);
+
+        });
+
+        it('should throw an ERROR_PRECONDITION_FAILED if the locale parameter is missing', function () {
+
+            var translationInstance = Translation.get();
+            expect(function () {translationInstance.loadLanguageFile('myFile');}).toThrowType(
+                RainError.ERROR_PRECONDITION_FAILED);
+
+        });
+
+        it('should set the private locales with the components id and locale', function () {
+
+            var translationInstance = Translation.get();
+
+            translationInstance.loadLanguageFile(file, locale, component);
+
+            expect(translationInstance._locales[component.id + ' ' + component.version]
+                [locale]).toEqual(jasmine.any(Object));
+        });
+
     });
 
     describe("getLocales method", function () {
+
+        it('should correctly get the locales for a component', function () {
+            var translationInstance = Translation.get();
+
+            translationInstance.loadLanguageFile(file, locale, component);
+
+            var localesForComponent = translationInstance.getLocales(component, locale);
+            expect(localesForComponent.language.domain).toBe('fake');
+            expect(localesForComponent.language.data).toEqual(jasmine.any(Object));
+        });
 
     });
 
     describe("generateContext method", function () {
 
-        it('should generate the context corectly', function () {
+        it('should generate the context correctly', function () {
 
+            Translation.prototype.translate = jasmine.createSpy('translate');
+            var translationInstance = Translation.get();
+
+            var context = translationInstance.generateContext(component, locale);
+
+            context.t('someCustomId');
+            context.nt('someCustomId');
+
+            expect(translationInstance.translate).toHaveBeenCalled();
+            expect(translationInstance.translate.callCount).toBe(2);
         });
 
     });

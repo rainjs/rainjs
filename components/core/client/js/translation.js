@@ -112,6 +112,7 @@ define(['raintime/lib/jed'], function (Jed) {
     ClientTranslation.prototype.translate = function (customId, msgId, msgIdPlural, count, args) {
         var messageText;
 
+        console.log(customId, msgId, msgIdPlural, count, args);
         //switching arguments
         if (typeof msgId !== 'string') {
             /**
@@ -120,7 +121,7 @@ define(['raintime/lib/jed'], function (Jed) {
              */
             args = msgId;
             msgId = customId;
-        } else if (typeof msgIdPlural !== 'string') {
+        } else if (typeof msgIdPlural !==  'string' && typeof msgIdPlural !== 'undefined') {
             /**
              * if the msgIdPlural is not a string that means three parameters were passed
              * so the msgId will shift to customId
@@ -135,9 +136,11 @@ define(['raintime/lib/jed'], function (Jed) {
              * if the customId fails to be found in the translation than the translation
              * should be the acttual text.
              */
+            console.log('oki');
             messageText = msgId;
             msgId = customId;
         }
+
 
         var jed = this.locales['language'];
 
