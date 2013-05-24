@@ -6,7 +6,7 @@ msgstr "ich schreibe Ihnen, um zu fragen, ob Sie mir eine Referenz geben könnte
 
 msgid "If you were able to attest to my qualifications for employment, and the skills I attained during my <b>one month</b> tenure at <b>%2$s</b>, I would sincerely appreciate it."
 msgid_plural "If you were able to attest to my qualifications for employment, and the skills I attained during my <b>%1$d months</b> tenure at <b>%2$s</b>, I would sincerely appreciate it."
-msgstr[0] "Ich würde es sehr schätzen, wenn Sie meine Qualifikationen für die Beschäftigung, und die Fähigkeiten, die ich während meiner <b>1 monatigen</b> Amtszeit bei <b>%2$s</ b> erreicht habe, bezeugen könnten."
+msgstr[0] "Ich würde es sehr schätzen, wenn Sie meine Qualifikationen für die Beschäftigung, und die Fähigkeiten, die ich während meiner <b>1 monatigen</b> Amtszeit bei <b>%2$s</b> erreicht habe, bezeugen könnten."
 msgstr[1] "Ich würde es sehr schätzen, wenn Sie meine Qualifikationen für die Beschäftigung, und die Fähigkeiten, die ich während meiner <b>%1$d monatigen</b> Amtszeit bei <b>%2$s</b> erreicht habe, bezeugen könnten."
 
 msgid "I am in the process of seeking employment and a positive reference from you would enhance my prospects of achieving my career goals."
