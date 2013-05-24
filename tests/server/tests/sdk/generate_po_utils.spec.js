@@ -290,13 +290,13 @@ describe('generate po utils', function () {
                 ro = path.join('components', 'x', 'locale', 'ro', 'messages.po');
                 en = path.join('components', 'x', 'locale', 'en', 'messages.po');
 
-                spyOn(utils, 'searchPoTranslation');
+                spyOn(utils, '__searchPoTranslation');
             });
 
             describe('one-to-one', function () {
 
                 beforeEach(function () {
-                    utils.searchPoTranslation.andReturn(void 0);
+                    utils._searchPoTranslation.andReturn(void 0);
                 });
 
                 it('should add one new singular entry', function () {
@@ -347,7 +347,7 @@ describe('generate po utils', function () {
             describe('many-to-many', function () {
 
                 beforeEach(function () {
-                    utils.searchPoTranslation.andCallFake(function (po, id) {
+                    utils._searchPoTranslation.andCallFake(function (po, id) {
                         for (var locale in po) {
                             var entry = po[locale][id];
                             if (entry) {
@@ -478,17 +478,17 @@ describe('generate po utils', function () {
             });
 
             it('should find existing message ids', function () {
-                found = utils.searchPoTranslation(po, 'goodbye');
+                found = utils._searchPoTranslation(po, 'goodbye');
 
                 expect(found).toBe(po.ro.goodbye);
 
-                found = utils.searchPoTranslation(po, 'welcome');
+                found = utils._searchPoTranslation(po, 'welcome');
 
                 expect(found).toBe(po.en.welcome);
             });
 
             it('should return undefined for missing message ids', function () {
-                found = utils.searchPoTranslation(po, 'hello, world');
+                found = utils._searchPoTranslation(po, 'hello, world');
 
                 expect(found).toBeUndefined();
             });
@@ -656,7 +656,7 @@ describe('generate po utils', function () {
         it("should corectly generate the translation", function() {
             var translation = new GeneratePoUtils();
 
-            expect(translation.composePoContent(locale)).toEqual(
+            expect(translation._composePoContent(locale)).toEqual(
                 'msgid ""\n' +
                 'msgstr ""\n' +
                 '"header1: header 1\\n"\n' +
@@ -705,7 +705,7 @@ describe('generate po utils', function () {
                 }
             };
 
-            spyOn(translation, 'composePoContent').andReturn(generatedText);
+            spyOn(translation, '__composePoContent').andReturn(generatedText);
 
             translation.createPoFiles(component, poTranslations);
 
@@ -744,7 +744,7 @@ describe('generate po utils', function () {
                 }
             };
 
-            spyOn(translation, 'composePoContent').andReturn(generatedText);
+            spyOn(translation, '__composePoContent').andReturn(generatedText);
             translation.createPoFiles(component, poTranslations);
 
             expect(fs.writeFileSync).not.toHaveBeenCalled();

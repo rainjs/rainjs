@@ -28,7 +28,7 @@
 var path = require('path'),
     fs = require('fs'),
     color = require('colors'),
-    utils = require('../lib/utils'),
+    utils = require('./utils'),
     extend = require('node.extend'),
     util = require('../../lib/util'),
     poUtils = require('../../lib/po_utils'),
@@ -55,33 +55,31 @@ function GeneratePoUtils() {}
  * @param {String} [componentId] the component identifier (id;version)
  */
 GeneratePoUtils.prototype.generateLocalizationFiles = function (outputLocales, componentId) {
-    try {
-        var projectRoot = utils.getProjectRoot(process.cwd()),
-            componentsFolder = path.join(projectRoot, 'components'),
-            components = this.scanComponents(componentsFolder);
+    var projectRoot = utils.getProjectRoot(process.cwd()),
+        componentsFolder = path.join(projectRoot, 'components'),
+        components = this._scanComponents(componentsFolder),
+        locales = outputLocales.split(',').map(function (locale) { return locale.trim(); });
 
-        for (var i = components.length; i--;) {
-            var module = components[i].id + ';' + components[i].version;
-            if (componentId && module != componentId) {
-                continue;
-            }
-
-            try {
-                var parsedTranslations = this.parseComponent(components[i]),
-                    poTranslations = this.loadPoFiles(components[i], outputLocales.split(','));
-
-                this.compareTranslations(components[i], poTranslations, parsedTranslations);
-                this.createPoFiles(components[i], poTranslations);
-            } catch (ex) {
-                console.log(ex.stack.red);
-            }
-
-            if (module == componentId) {
-                break;
-            }
+    for (var i = components.length; i--;) {
+        var currentComponentId = components[i].id + ';' + components[i].version;
+        if (componentId && componentId !== currentComponentId) {
+            continue;
         }
-    } catch (ex) {
-        console.log(ex.stack.red);
+
+        try {
+            var parsedTranslations = this._parseComponent(components[i]),
+                poTranslations = this._loadPoFiles(components[i], locales);
+
+            this._updateTranslations(components[i], poTranslations, parsedTranslations);
+            this._createPoFiles(components[i], poTranslations);
+        } catch (ex) {
+            console.log(('Failed to generate po files for ' + currentComponentId + ': '
+                + ex.message).red);
+        }
+
+        if (currentComponentId === componentId) {
+            break;
+        }
     }
 };
 
@@ -91,25 +89,14 @@ GeneratePoUtils.prototype.generateLocalizationFiles = function (outputLocales, c
  * @param {String} componentsFolder the components folder
  * @returns {Array} array of component descriptor files (meta.json) with added folder information
  */
-GeneratePoUtils.prototype.scanComponents = function (componentsFolder) {
+GeneratePoUtils.prototype._scanComponents = function (componentsFolder) {
     var components = [],
-        folders;
-    try {
         folders = fs.readdirSync(componentsFolder);
-    } catch (ex) {
-        throw new RainError('The components folder: ' + componentsFolder + ' does not exist!',
-            RainError.ERROR_IO);
-    }
 
     for (var i = 0, len = folders.length; i < len; i++) {
         var componentPath = path.join(componentsFolder, folders[i]);
-        try {
-            if (!fs.statSync(componentPath).isDirectory()) {
-                continue;
-            }
-        } catch (ex) {
-            console.log(('Failed to call stat for ' + componentPath).red);
-            break;
+        if (!fs.statSync(componentPath).isDirectory()) {
+            continue;
         }
 
         try {
@@ -129,36 +116,71 @@ GeneratePoUtils.prototype.scanComponents = function (componentsFolder) {
  * Parses a component's files and extracts the translations.
  *
  * @param {Object} component the component configuration
- * @returns {Object} the component's translations found in templates and .js files
+ * @returns {Object} the component's translations found in template and javascript files
  */
-GeneratePoUtils.prototype.parseComponent = function (component) {
+GeneratePoUtils.prototype._parseComponent = function (component) {
     var translations = {};
 
-    extend(translations, this.parseFiles({
-        folders: [path.join(component.folder, 'client/templates')],
+    extend(translations, this._parseFiles({
+        folders: [
+            path.join(component.folder, 'client/templates'),
+            path.join(component.folder, 'client/partials')
+        ],
         extensions: ['.html'],
-        parser: this.parseTemplateFile.bind(this)
+        parser: this._parseTemplateFile.bind(this)
     }));
 
-    extend(translations, this.parseFiles({
+    extend(translations, this._parseFiles({
         folders: [
             path.join(component.folder, 'client/js'),
             path.join(component.folder, 'server')
         ],
         extensions: ['.js'],
-        parser: this.parseJsFile.bind(this)
+        parser: this._parseJsFile.bind(this)
     }));
 
     return translations;
 };
 
 /**
+ * Extracts the translations from a component's folder.
+ *
+ * @param {Object} options the parse options
+ * @param {Array} options.folders the component folders that will be scanned
+ * @param {Array} options.extensions the extensions used to filter the folder files
+ * @param {Function} options.parser the function used to parse the file content
+ * @returns {Object} the translation messages indexed by the file path
+ */
+GeneratePoUtils.prototype._parseFiles = function (options) {
+    var folderTranslations = {};
+
+    options.folders.forEach(function (folder) {
+        util.walkSync(folder, options.extensions, function (filePath) {
+            try {
+                var text = fs.readFileSync(filePath, 'utf8'),
+                    translations = options.parser(text);
+
+                if (translations.length > 0) {
+                    folderTranslations[filePath] = translations;
+                }
+            } catch (ex) {
+                throw new Error('Could not extract the template translations from ' + filePath +
+                    ': ' + ex.message);
+            }
+        });
+
+    });
+
+    return folderTranslations;
+};
+
+/**
  * Parses a javascript file and extracts the translation
  *
- * @param text, the content of the javascript file
+ * @param text the content of the javascript file
  * @returns {[Object]} the array of translations found in .js files
  */
-GeneratePoUtils.prototype.parseJsFile = function (text) {
+GeneratePoUtils.prototype._parseJsFile = function (text) {
     var found = true,
         argumentsPerFile = [],
         argumentsOfFile = [];
@@ -208,7 +230,7 @@ GeneratePoUtils.prototype.parseJsFile = function (text) {
 
     for(var i = 0, len = argumentsPerFile.length; i < len; i++) {
         argumentsOfFile.push(
-            this.splitArguments(argumentsPerFile[i].params, argumentsPerFile[i].type)
+            this._splitArguments(argumentsPerFile[i].params, argumentsPerFile[i].type)
         );
     }
 
@@ -223,7 +245,7 @@ GeneratePoUtils.prototype.parseJsFile = function (text) {
  * @param type, the type of function ``t`` or ``nt``
  * @throws {Error} not a valid call of ``t`` or ``nt`` function.
  */
-GeneratePoUtils.prototype.splitArguments = function(functionArgs, type) {
+GeneratePoUtils.prototype._splitArguments = function(functionArgs, type) {
 
     var parmetersOfFunction = {},
         literalArgs = [];
@@ -284,10 +306,10 @@ GeneratePoUtils.prototype.splitArguments = function(functionArgs, type) {
  * @param {String} text the template to be parsed
  * @returns {Array} the translation messages found in this file
  */
-GeneratePoUtils.prototype.parseTemplateFile = function (text) {
+GeneratePoUtils.prototype._parseTemplateFile = function (text) {
     var parsedTemplate = Handlebars.parse(text);
 
-    return this.inspectStatements(parsedTemplate.statements);
+    return this._inspectStatements(parsedTemplate.statements);
 };
 
 /**
@@ -297,7 +319,7 @@ GeneratePoUtils.prototype.parseTemplateFile = function (text) {
  * @param {Array} statements the statements found in the template
  * @returns {Array} the translation messages found
  */
-GeneratePoUtils.prototype.inspectStatements = function (statements) {
+GeneratePoUtils.prototype._inspectStatements = function (statements) {
     var translations = [];
 
     var helpers = {
@@ -310,7 +332,7 @@ GeneratePoUtils.prototype.inspectStatements = function (statements) {
 
         // block helper
         if (statement.type === 'block') {
-            var blockTranslations = this.inspectStatements(statement.program.statements);
+            var blockTranslations = this._inspectStatements(statement.program.statements);
             translations = translations.concat(blockTranslations);
         }
 
@@ -326,12 +348,12 @@ GeneratePoUtils.prototype.inspectStatements = function (statements) {
             }
 
             var paramCount = helpers[helperName].paramCount;
-            var paramValues = this.getParamValues(params, paramCount);
+            var paramValues = this._getParamValues(params, paramCount);
 
             var translation = {
                 msgid: paramValues[0],
                 msgidPlural: paramValues[1],
-                id: this.getIdValue(pairs)
+                id: this._getIdValue(pairs)
             };
 
             translations.push(translation);
@@ -350,7 +372,7 @@ GeneratePoUtils.prototype.inspectStatements = function (statements) {
  * @throws {Error} when there are fewer parameters than the specified count
  * @throws {Error} when one of the parameter has a value that is not a string literal
  */
-GeneratePoUtils.prototype.getParamValues = function (params, count) {
+GeneratePoUtils.prototype._getParamValues = function (params, count) {
     if (params.length < count) {
         throw new Error("Invalid number of params.");
     }
@@ -369,14 +391,13 @@ GeneratePoUtils.prototype.getParamValues = function (params, count) {
 };
 
 /**
- * Returns the value of the ``id`` property from the hash of a Handlebars helper if
- * it exists.
+ * Returns the value of the ``id`` property from the hash of a Handlebars helper if it exists.
  *
  * @param {Array} pairs the key value pairs
  * @returns {String} the value of the ``id`` property
  * @throws {Error} when the value of the ``id`` property is not a string literal
  */
-GeneratePoUtils.prototype.getIdValue = function (pairs) {
+GeneratePoUtils.prototype._getIdValue = function (pairs) {
     for (var i = 0, len = pairs.length; i < len; i++) {
         var pair = pairs[i];
 
@@ -393,45 +414,13 @@ GeneratePoUtils.prototype.getIdValue = function (pairs) {
 };
 
 /**
- * Extracts the translations from a component's folder.
- *
- * @param {Object} options the parse options
- * @param {Array} options.folders the component folders that will be scanned
- * @param {Array} options.extensions the extensions used to filter the folder files
- * @param {Function} options.parser the function used to parse the file content
- * @returns {Object} the translation messages indexed by the file path
- */
-GeneratePoUtils.prototype.parseFiles = function (options) {
-    var folderTranslations = {};
-
-    options.folders.forEach(function (folder) {
-        util.walkSync(folder, options.extensions, function (filePath) {
-            try {
-                var text = fs.readFileSync(filePath, 'utf8'),
-                    translations = options.parser(text);
-
-                if (translations.length > 0) {
-                    folderTranslations[filePath] = translations;
-                }
-            } catch (ex) {
-                console.log(('Could not extract the template translations from ' + filePath).red,
-                            ex.message);
-            }
-        });
-
-    });
-
-    return folderTranslations;
-};
-
-/**
  * Loads all the .po files of a component.
  *
  * @param {Object} component the component configuration
  * @param {Array} locales the output locales
  * @returns {Object} the po messages indexed by the file path
  */
-GeneratePoUtils.prototype.loadPoFiles = function (component, locales) {
+GeneratePoUtils.prototype._loadPoFiles = function (component, locales) {
     var poTranslations = {},
         localeFolder = path.join(component.folder, 'locale');
 
@@ -477,11 +466,10 @@ GeneratePoUtils.prototype.loadPoFiles = function (component, locales) {
  * @param {Object} poTranslations the .po translations
  * @param {Object} parsedTranslations the parsed translations
  */
-GeneratePoUtils.prototype.compareTranslations = function (component,
-                                                          poTranslations,
-                                                          parsedTranslations) {
-    this.updateExistingTranslations(poTranslations, parsedTranslations);
-    this.addNewTranslations(component, poTranslations, parsedTranslations);
+GeneratePoUtils.prototype._updateTranslations = function (component,
+                                                          poTranslations, parsedTranslations) {
+    this._updateExistingTranslations(poTranslations, parsedTranslations);
+    this._addNewTranslations(component, poTranslations, parsedTranslations);
 };
 
 /**
@@ -491,8 +479,8 @@ GeneratePoUtils.prototype.compareTranslations = function (component,
  * @param {Object} poTranslations the .po translations
  * @param {Object} parsedTranslations the parsed translations
  */
-GeneratePoUtils.prototype.updateExistingTranslations = function (poTranslations,
-                                                                 parsedTranslations) {
+GeneratePoUtils.prototype._updateExistingTranslations = function (poTranslations,
+                                                                  parsedTranslations) {
     for (var path in poTranslations) {
         var translations = poTranslations[path];
         for (var messageId in translations) {
@@ -500,16 +488,20 @@ GeneratePoUtils.prototype.updateExistingTranslations = function (poTranslations,
                 continue;
             }
 
-            var parsed = this.searchParsedTranslation(parsedTranslations, messageId);
-            if (!parsed) {
+            var parsedTranslation = this._searchParsedTranslation(parsedTranslations, messageId);
+            if (!parsedTranslation) {
                 delete translations[messageId];
                 continue;
             }
 
-            var message = translations[messageId];
-            if (Array.isArray(parsed) && !message[0]) {
-                message[0] = parsed[1];
-            }
+
+            var poTranslation = translations[messageId];
+
+            // checks if the plural form was added, changed or removed
+            if (poTranslation[0] !== parsedTranslation.msgidPlural) {
+                poTranslation[0] = parsedTranslation.msgidPlural;
+                poTranslation[2] = parsedTranslation.msgidPlural;
+             }
         }
     }
 };
@@ -519,34 +511,17 @@ GeneratePoUtils.prototype.updateExistingTranslations = function (poTranslations,
  *
  * @param {Object} parsedTranslations the parsed translations
  * @param {String} messageId the message id
- * @returns {String|Array} the message
+ * @returns {Object} the message
  */
-GeneratePoUtils.prototype.searchParsedTranslation = function (parsedTranslations, messageId) {
+GeneratePoUtils.prototype._searchParsedTranslation = function (parsedTranslations, messageId) {
     for (var path in parsedTranslations) {
         var translations = parsedTranslations[path];
-        for (var i = translations.length; i--;) {
-            if (Array.isArray(translations[i]) && translations[i][0] == messageId) {
-                return translations[i];
-            }
-            if (translations[i] == messageId) {
-                return translations[i];
-            }
-        }
-    }
-};
 
-/**
- * Searches for a message id in the list of translations from .po files.
- *
- * @param {Object} poTranslations the .po translations
- * @param {String} messageId the message id
- * @returns {Array} the message with all available forms
- */
-GeneratePoUtils.prototype.searchPoTranslation = function (poTranslations, messageId) {
-    for (var path in poTranslations) {
-        var translations = poTranslations[path];
-        if (translations[messageId]) {
-            return translations[messageId];
+        for (var i = translations.length; i--;) {
+            var parsedMessageId = translations[i].id || translations[i].msgid;
+            if (parsedMessageId === messageId) {
+                return translations[i];
+            }
         }
     }
 };
@@ -558,34 +533,21 @@ GeneratePoUtils.prototype.searchPoTranslation = function (poTranslations, messag
  * @param {Object} poTranslations the .po translations
  * @param {Object} parsedTranslations the parsed translations
  */
-GeneratePoUtils.prototype.addNewTranslations = function (component,
+GeneratePoUtils.prototype._addNewTranslations = function (component,
                                                          poTranslations,
                                                          parsedTranslations) {
     for (var parsedPath in parsedTranslations) {
         var translations = parsedTranslations[parsedPath];
+
         for (var i = translations.length; i--;) {
-            var messageId, messageIdPlural = null;
-            if (Array.isArray(translations[i])) {
-                messageId = translations[i][0];
-                messageIdPlural = translations[i][1];
-            } else {
-                messageId = translations[i];
-            }
+            var translation = translations[i],
+                messageId = translation.id || translation.msgid;
 
-            if (this.searchPoTranslation(poTranslations, messageId)) {
-                continue;
-            }
-
-            // Add the new translation one time for each language.
-            var locales = [];
+            // Add the new translation for each file in which it doesn't exists.
             for (var poPath in poTranslations) {
-                var localeFolder = path.join(component.folder, 'locale'),
-                    language = poPath.substring(localeFolder.length + 1).split(path.sep)[0];
-
-                if (locales.indexOf(language) == -1) {
-                    var translation = poTranslations[poPath];
-                    translation[messageId] = [messageIdPlural, messageId];
-                    locales.push(language);
+                var poTranslation = poTranslations[poPath];
+                if (!poTranslation[messageId]) {
+                    poTranslation[messageId] = [translation.msgidPlural, translation.msgid];
                 }
             }
         }
@@ -598,7 +560,7 @@ GeneratePoUtils.prototype.addNewTranslations = function (component,
  * @param {Object} component the component configuration
  * @param {Object} poTranslations the .po translations
  */
-GeneratePoUtils.prototype.createPoFiles = function (component, poTranslations) {
+GeneratePoUtils.prototype._createPoFiles = function (component, poTranslations) {
     for (var poPath in poTranslations) {
         var translations = poTranslations[poPath];
 
@@ -608,7 +570,7 @@ GeneratePoUtils.prototype.createPoFiles = function (component, poTranslations) {
 
         wrench.mkdirSyncRecursive(path.dirname(poPath), '0755');
 
-        var content = this.composePoContent(translations);
+        var content = this._composePoContent(translations);
         fs.writeFileSync(poPath, content, 'utf8');
     }
 };
@@ -619,7 +581,7 @@ GeneratePoUtils.prototype.createPoFiles = function (component, poTranslations) {
  * @param {Object} translations the translations object
  * @returns {String} the .po content
  */
-GeneratePoUtils.prototype.composePoContent = function (translations) {
+GeneratePoUtils.prototype._composePoContent = function (translations) {
     var content = '',
         headers = translations[''];
     if (headers) {
