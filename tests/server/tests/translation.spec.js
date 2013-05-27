@@ -53,49 +53,12 @@ describe("Server Side Translation", function () {
         };
         mocks['./configuration'] = configuration;
 
-        poUtils = jasmine.createSpyObj('poUtils', ['parsePo']);
-        poUtils.parsePo.andCallFake(function () {
-            return {};
-        });
-
         logger = jasmine.createSpyObj('logger', ['error']);
         mocks['./logging'] = {
             get: function () {
                 return logger
             }
         };
-
-        jed = {
-            translate: jasmine.createSpy('translate'),
-            textdomain: jasmine.createSpy('textdomain'),
-            options: {
-                locale_data: {
-
-                },
-                domain: {
-
-                }
-            }
-        }
-        jed.textdomain.andCallFake(function () {
-            return this.options.domain;
-        })
-
-        pluralFormFn = jasmine.createSpy('pluralFormFn');
-        Jed = jasmine.createSpy('Jed');
-        Jed.PF  = {
-            compile: jasmine.createSpy('compile')
-        }
-        Jed.PF.compile.andCallFake(function () {
-            return pluralFormFn;
-        });
-
-        Jed.andCallFake(function (config) {
-            jed.options.locale_data = config.locale_data;
-            jed.options.domain = config.domain;
-            return jed;
-        });
-
 
         Translation = loadModuleExports('/lib/translation.js', mocks);
 
