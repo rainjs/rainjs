@@ -112,7 +112,6 @@ define(['raintime/lib/jed'], function (Jed) {
     ClientTranslation.prototype.translate = function (customId, msgId, msgIdPlural, count, args) {
         var messageText;
 
-        console.log(customId, msgId, msgIdPlural, count, args);
         //switching arguments
         if (typeof msgId !== 'string') {
             /**

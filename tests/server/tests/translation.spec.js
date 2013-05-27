@@ -28,22 +28,23 @@
 describe("Server Side Translation", function () {
     var mocks = {},
         fs, configuration, Translation, poUtils,
-        file, component, locale, jed, Jed;
+        file, component, locale, jed, Jed, logger, pluralFormFn;
 
     beforeEach(function () {
 
         file = 'fake.po';
         component = {
-            id: 'fakeId',
+            id: 'fakeId'
         };
         locale = 'ro_RO';
 
 
         fs = jasmine.createSpyObj('fs', ['readFileSync']);
         fs.readFileSync.andCallFake(function () {
-            var data = "msgid 'a.b.c' \n msgstr 'Some text'";
+            var data = 'msgid "a.b.c"\nmsgstr "Some text"\n\nmsgid "Some text"\nmsgstr "Some text"\n\nmsgid "plural.form"\nmsgstr "plurals"';
             return data;
         })
+
         mocks['fs'] = fs;
 
         configuration = {
@@ -56,12 +57,17 @@ describe("Server Side Translation", function () {
         poUtils.parsePo.andCallFake(function () {
             return {};
         });
-        mocks['./po_utils'] = poUtils;
+
+        logger = jasmine.createSpyObj('logger', ['error']);
+        mocks['./logging'] = {
+            get: function () {
+                return logger
+            }
+        };
 
         jed = {
             translate: jasmine.createSpy('translate'),
             textdomain: jasmine.createSpy('textdomain'),
-            pluralFormFn: jasmine.createSpy('pluralFormFn'),
             options: {
                 locale_data: {
 
@@ -74,10 +80,15 @@ describe("Server Side Translation", function () {
         jed.textdomain.andCallFake(function () {
             return this.options.domain;
         })
+
+        pluralFormFn = jasmine.createSpy('pluralFormFn');
         Jed = jasmine.createSpy('Jed');
         Jed.PF  = {
             compile: jasmine.createSpy('compile')
         }
+        Jed.PF.compile.andCallFake(function () {
+            return pluralFormFn;
+        });
 
         Jed.andCallFake(function (config) {
             jed.options.locale_data = config.locale_data;
@@ -85,9 +96,6 @@ describe("Server Side Translation", function () {
             return jed;
         });
 
-        mocks['jed'] = {
-            Jed: Jed
-        };
 
         Translation = loadModuleExports('/lib/translation.js', mocks);
 
@@ -149,7 +157,7 @@ describe("Server Side Translation", function () {
 
             var localesForComponent = translationInstance.getLocales(component, locale);
             expect(localesForComponent.language.domain).toBe('fake');
-            expect(localesForComponent.language.data).toEqual(jasmine.any(Object));
+            expect(localesForComponent.language.data['fake']['a.b.c']).toEqual(jasmine.any(Array));
         });
 
     });
@@ -157,6 +165,9 @@ describe("Server Side Translation", function () {
     describe("generateContext method", function () {
 
         it('should generate the context correctly', function () {
+            pluralFormFn.andCallFake(function () {
+                return 0
+            });
 
             Translation.prototype.translate = jasmine.createSpy('translate');
             var translationInstance = Translation.get();
@@ -173,6 +184,98 @@ describe("Server Side Translation", function () {
     });
 
     describe("translate method", function () {
+
+        it('should log an error if translation fails if no id passed', function () {
+            pluralFormFn.andCallFake(function () {
+                return 0
+            });
+
+            var translationInstance = Translation.get();
+            translationInstance.loadLanguageFile(file, locale, component);
+            translationInstance.loadLanguageFile(file, configuration.defaultLanguage, component);
+
+
+            var tr = translationInstance.translate(component, locale);
+
+            expect(logger.error).toHaveBeenCalled();
+
+        });
+
+        it('should translate depending on customId', function () {
+            pluralFormFn.andCallFake(function () {
+                return 0
+            });
+
+            var translationInstance = Translation.get();
+            translationInstance.loadLanguageFile(file, locale, component);
+            translationInstance.loadLanguageFile(file, configuration.defaultLanguage, component);
+
+
+            var tr = translationInstance.translate(component, locale, 'a.b.c', 'Some text');
+            expect(tr).toBe('Some text');
+
+        });
+
+        it('should translate depending on the msgId', function () {
+            pluralFormFn.andCallFake(function () {
+                return 0
+            });
+
+            var translationInstance = Translation.get();
+            translationInstance.loadLanguageFile(file, locale, component);
+            translationInstance.loadLanguageFile(file, configuration.defaultLanguage, component);
+
+
+            var tr = translationInstance.translate(component, locale, 'Some text');
+            expect(tr).toBe('Some text');
+
+        });
+
+        it('should translate plural form depending on customId', function () {
+            pluralFormFn.andCallFake(function () {
+                return 0
+            });
+
+            var translationInstance = Translation.get();
+            translationInstance.loadLanguageFile(file, locale, component);
+            translationInstance.loadLanguageFile(file, configuration.defaultLanguage, component);
+
+
+            var tr = translationInstance.translate(component, locale, 'plural.form', 'Plurals', 'Plurals', 2);
+            expect(tr).toBe('Plurals');
+
+        });
+
+        it('should display the messageId if no translation was possible for singular', function () {
+            pluralFormFn.andCallFake(function () {
+                return 0
+            });
+
+            var translationInstance = Translation.get();
+            translationInstance.loadLanguageFile(file, locale, component);
+            translationInstance.loadLanguageFile(file, configuration.defaultLanguage, component);
+
+
+            var tr = translationInstance.translate(component, locale, 'c.d.e', 'Some text');
+            expect(tr).toBe('Some text');
+
+        });
+
+        it('should display the messageId if no translation was possible for plural', function () {
+
+            pluralFormFn.andCallFake(function () {
+                return 0
+            });
+
+            var translationInstance = Translation.get();
+            translationInstance.loadLanguageFile(file, locale, component);
+            translationInstance.loadLanguageFile(file, configuration.defaultLanguage, component);
+
+
+            var tr = translationInstance.translate(component, locale, 'c.d.e', "Plural", 'Plurals', 2);
+            expect(tr).toBe('Plurals');
+
+        });
 
     });
 });
