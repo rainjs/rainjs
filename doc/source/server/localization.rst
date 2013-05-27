@@ -14,39 +14,34 @@ Text localization
 -----------------
 
 Text can be localized both on client-side and on server-side.
+
 There are two ways to use t and nt.
 
-1. The first one is just by using a message id. This way, a message is returnd if found, otherwise the
-current message id is returned.
-
-Examples
---------
+1. The first one is just by using a message id. This way, the classic translation is returnd if
+found, otherwise the message id is returned.
 
 .. code-block:: javascript
 
-// messages.po
-msgid "Translate"
-msgstr "Traduce"
+    // messages.po
+    msgid "Translate"
+    msgstr "Traduce"
 
-t('Translate'); // -> Traduce
-t('foo'); // -> foo
+    t('Translate'); // -> Traduce
+    t('foo'); // -> foo
 
 
 2. The second one is by using a structured custom message id. This way, you have to provide a
-structured custom message id and a classic message id.A message is returnd if translation based of
-the structured id is found, otherwise the classic message id is returned.
-
-Examples
---------
+structured custom message id and a classic message id. The translation of the structured id is
+returned if found, otherwise the classic message id is returned.
 
 .. code-block:: javascript
 
-// messages.po
-msgid "button.label"
-msgstr "Traduce"
+    // messages.po
+    msgid "button.label"
+    msgstr "Traduce"
 
-t('button.label', 'foo'); // -> Traduce
-t('invalid.button.label', 'foo'); // -> foo
+    t('button.label', 'foo'); // -> Traduce
+    t('invalid.button.label', 'foo'); // -> foo
 
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

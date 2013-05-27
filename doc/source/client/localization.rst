@@ -4,6 +4,35 @@ Text localization
 
 Text can be localized both on client-side and on server-side.
 
+There are two ways to use t and nt.
+
+1. The first one is just by using a message id. This way, the classic translation is returnd if
+found, otherwise the message id is returned.
+
+.. code-block:: javascript
+
+    // messages.po
+    msgid "Translate"
+    msgstr "Traduce"
+
+    t('Translate'); // -> Traduce
+    t('foo'); // -> foo
+
+
+2. The second one is by using a structured custom message id. This way, you have to provide a
+structured custom message id and a classic message id. The translation of the structured id is
+returned if found, otherwise the classic message id is returned.
+
+.. code-block:: javascript
+
+    // messages.po
+    msgid "button.label"
+    msgstr "Traduce"
+
+    t('button.label', 'foo'); // -> Traduce
+    t('invalid.button.label', 'foo'); // -> foo
+
+
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Text localization on the client-side
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
