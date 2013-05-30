@@ -29,7 +29,9 @@ var path = require('path'),
     fs = require('fs'),
     sdkUtils = require('../lib/utils'),
     util = require('../../lib/util'),
-    requirejs = require('requirejs');
+    requirejs = require('requirejs'),
+    less = require('less'),
+    async = require('async');
 
 /**
  * Register the generate localization files command.
@@ -60,12 +62,13 @@ function minify() {
         try {
             var metaFile = path.join(componentPath, 'meta.json');
             var config = JSON.parse(fs.readFileSync(metaFile, 'utf8'));
+            var options;
 
+            // minify JavaScript
             if (config.id === 'core') {
-                var options = {
+                options = {
                     baseUrl: path.join(componentPath, 'client/js'),
                     optimize: "uglify2",
-                    //optimize: 'none',
                     uglify2: {
                         mangle: false
                     },
@@ -86,6 +89,29 @@ function minify() {
 
                     wrap: {
                         end: "define('raintime/index.min', [], function () {});"
+                    }
+                };
+            } else {
+                options = {
+                    baseUrl: path.join(componentPath, 'client'),
+                    optimize: "uglify2",
+                    uglify2: {
+                        mangle: false
+                    },
+
+                    "packages": [{
+                        "name": "raintime",
+                        "main": "raintime",
+                        "location": "../../core/client/js"
+                    }],
+
+                    include: [],
+                    exclude: ["raintime"],
+                    out: path.join(componentPath, 'client/js/index.min.js'),
+
+                    wrap: {
+                        end: util.format("define('%s/%s/js/index.min', [], function () {});",
+                            config.id, config.version)
                     },
 
                     onBuildRead: function (moduleName, path, contents) {
@@ -97,78 +123,54 @@ function minify() {
                         }
 
                         return contents;
-                    }
+                    },
+
+                    onBuildWrite: (function (config) {
+                        return function (moduleName, path, contents) {
+                            return contents.replace(moduleName,
+                                util.format('%s/%s/%s', config.id, config.version, moduleName));
+                        }
+                    })(config)
                 };
 
-                requirejs.optimize(options, (function (config) {
-                    console.log('ok', config.id, config.version);
-                }).bind(null, config));
 
-                continue;
+                Object.keys(config.views).forEach(function (viewName) {
+                    var view  = config.views[viewName];
+
+                    if (view.controller && view.controller.client) {
+                        options.include.push('js/' + path.basename(view.controller.client, '.js'));
+                    } else {
+                        if(fs.existsSync(path.join(componentPath, 'client/js', viewName + '.js'))) {
+                            options.include.push('js/' + viewName);
+                        }
+                    }
+                });
             }
 
-            var options = {
-                baseUrl: path.join(componentPath, 'client'),
-                optimize: "uglify2",
-                //optimize: 'none',
-                uglify2: {
-                    mangle: false
-                },
-
-                "packages": [{
-                    "name": "raintime",
-                    "main": "raintime",
-                    "location": "../../core/client/js"
-                }],
-
-                include: [],
-                exclude: ["raintime"],
-                out: path.join(componentPath, 'client/js/index.min.js'),
-
-                wrap: {
-                    end: util.format("define('%s/%s/js/index.min', [], function () {});",
-                        config.id, config.version)
-                },
-
-                onBuildRead: function (moduleName, path, contents) {
-                    // global modules
-                    if (contents.indexOf('define(') === -1) {
-                        contents += '\n\n';
-                        contents += util.format('define("%s", function(){});', moduleName);
-                        contents += '\n\n';
-                    }
-
-                    return contents;
-                },
-
-                onBuildWrite: (function (config) {
-                    return function (moduleName, path, contents) {
-                        return contents.replace(moduleName,
-                            util.format('%s/%s/%s', config.id, config.version, moduleName));
-                    }
-                })(config)
-            };
-
-
-            Object.keys(config.views).forEach(function (viewName) {
-                var view  = config.views[viewName];
-
-                if (view.controller && view.controller.client) {
-                    options.include.push('js/' + path.basename(view.controller.client, '.js'));
-                } else {
-                    if(fs.existsSync(path.join(componentPath, 'client/js', viewName + '.js'))) {
-                        options.include.push('js/' + viewName);
-                    }
-                }
-            });
-
             requirejs.optimize(options, (function (config) {
-                console.log('ok', config.id, config.version);
+                console.log('js ok', config.id, config.version);
             }).bind(null, config));
 
+            // minify CSS
+            var cssFolder = path.join(componentPath, 'client/css'),
+                options = {compress: true, yuicompress: true},
+                minifiedCss = '',
+                files = [];
 
+            util.walkSync(cssFolder, ['.css'], function(filePath) {
+                if (filePath.indexOf('index.min.css') === -1)
+                files.push(filePath);
+            });
+
+            async.map(files, function (filePath, callback) {
+                var css = fs.readFileSync(filePath, 'utf8');
+                less.render(css, options, callback);
+            }, (function (config, cssFolder, err, results) {
+                fs.writeFileSync(path.join(cssFolder, 'index.min.css'), results.join('\n'), 'utf8');
+                console.log('css ok', config.id, config.version);
+            }).bind(null, config, cssFolder));
         } catch (ex) {
-            console.log('Failed to minify js from ' + componentPath + ' folder!\n' + ex.stack);
+            console.log('Failed to minify files in ' + componentPath + ' folder!\n' + ex.stack);
         }
     }
 }
