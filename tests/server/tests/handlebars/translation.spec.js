@@ -78,4 +78,35 @@ describe('Translation helper', function () {
             .toHaveBeenCalledWith('comp', 'ro', 'button.foo', 'Message',
                                   undefined, undefined, ['arg1', 'arg2', 'arg3']);
     });
+
+    it('should properly call translation with id and more arguments passed when var parameter is used', function () {
+        translationHelper.helper('Message', 'arg1', 'arg2', 'arg3', {hash: {id: 'button.foo', 'var': 'translationVarName'}});
+
+        expect(Translation.translate)
+            .toHaveBeenCalledWith('comp', 'ro', 'button.foo', 'Message',
+                                  undefined, undefined, ['arg1', 'arg2', 'arg3']);
+    });
+
+    it('should return an empty string when var parameter is used', function () {
+        var message = translationHelper.helper('Message', 'arg1', 'arg2',
+                                'arg3', {hash: {id: 'button.foo', 'var': 'translationVarName'}});
+
+        expect(message).toEqual('');
+    });
+
+    it('should add the current translation message on a variable on context when var parameter is used', function () {
+        var context = {},
+            options = {hash: {id: 'button.foo', 'var': 'translationVarName'}};
+
+        Translation.translate.andCallFake(function () {
+                return 'translated message';
+        });
+
+        translationHelper.helper.call(context, 'Message', 'arg1', 'arg2',
+                                'arg3', options);
+
+        expect(context['translationVarName']).toBeDefined();
+        expect(context['translationVarName']).toEqual('translated message');
+
+    });
 });
