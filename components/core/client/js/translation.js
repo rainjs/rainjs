@@ -135,7 +135,6 @@ define(['raintime/lib/jed'], function (Jed) {
              * if the customId fails to be found in the translation than the translation
              * should be the acttual text.
              */
-            console.log('oki');
             messageText = msgId;
             msgId = customId;
         }
