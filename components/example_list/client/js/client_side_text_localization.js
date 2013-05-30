@@ -51,9 +51,9 @@ define([], function (t, nt) {
             phone = '(111) 111-1111';
 
         root.find('.dear').html(t('letter.content.dear', [boss.title, boss.lastName]));
-        //root.find('.dear').html(t('letter.content.dear %1$s %2$s,', 'Dear %1$s %2$s,', [boss.title, boss.lastName]));
+
         root.find('.possible').html(t('letter.content.scope', 'I am writing to ask whether it would be possible for you to provide a reference for me.'));
-        root.find('.attest').html(nt('If you were able to attest to my qualifications for employment, and the skills I attained during my <b>one month</b> tenure at <b>%2$s</b>, I would sincerely appreciate it.',
+        root.find('.attest').html(nt('letter.content.positive.reference', 'If you were able to attest to my qualifications for employment, and the skills I attained during my <b>one month</b> tenure at <b>%2$s</b>, I would sincerely appreciate it.',
                                      'If you were able to attest to my qualifications for employment, and the skills I attained during my <b>%1$d months</b> tenure at <b>%2$s</b>, I would sincerely appreciate it.',
                                      months, [months, company]));
         root.find('.process').html(t('letter.content.positive.reference', 'I am in the process of seeking employment and a positive reference from you would enhance my prospects of achieving my career goals.'));
