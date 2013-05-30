@@ -128,9 +128,6 @@ describe("Server Side Translation", function () {
     describe("generateContext method", function () {
 
         it('should generate the context correctly', function () {
-            pluralFormFn.andCallFake(function () {
-                return 0
-            });
 
             Translation.prototype.translate = jasmine.createSpy('translate');
             var translationInstance = Translation.get();
@@ -149,9 +146,6 @@ describe("Server Side Translation", function () {
     describe("translate method", function () {
 
         it('should log an error if translation fails if no id passed', function () {
-            pluralFormFn.andCallFake(function () {
-                return 0
-            });
 
             var translationInstance = Translation.get();
             translationInstance.loadLanguageFile(file, locale, component);
@@ -165,9 +159,6 @@ describe("Server Side Translation", function () {
         });
 
         it('should translate depending on customId', function () {
-            pluralFormFn.andCallFake(function () {
-                return 0
-            });
 
             var translationInstance = Translation.get();
             translationInstance.loadLanguageFile(file, locale, component);
@@ -180,9 +171,6 @@ describe("Server Side Translation", function () {
         });
 
         it('should translate depending on the msgId', function () {
-            pluralFormFn.andCallFake(function () {
-                return 0
-            });
 
             var translationInstance = Translation.get();
             translationInstance.loadLanguageFile(file, locale, component);
@@ -195,9 +183,6 @@ describe("Server Side Translation", function () {
         });
 
         it('should translate plural form depending on customId', function () {
-            pluralFormFn.andCallFake(function () {
-                return 0
-            });
 
             var translationInstance = Translation.get();
             translationInstance.loadLanguageFile(file, locale, component);
@@ -210,9 +195,6 @@ describe("Server Side Translation", function () {
         });
 
         it('should display the messageId if no translation was possible for singular', function () {
-            pluralFormFn.andCallFake(function () {
-                return 0
-            });
 
             var translationInstance = Translation.get();
             translationInstance.loadLanguageFile(file, locale, component);
@@ -225,10 +207,6 @@ describe("Server Side Translation", function () {
         });
 
         it('should display the messageId if no translation was possible for plural', function () {
-
-            pluralFormFn.andCallFake(function () {
-                return 0
-            });
 
             var translationInstance = Translation.get();
             translationInstance.loadLanguageFile(file, locale, component);
