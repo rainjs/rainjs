@@ -64,6 +64,7 @@ Here you define the module attributes:
 - id - this is the module identifier
 - version - this is the current module version
 - type - ``component`` (default value) or ``container``. This field is optional.
+- permissions - an array of required permission for the component.
 
 ----------------
 Views definition
@@ -79,6 +80,7 @@ or if you want to apply constraints on it must appear in this section:
   ``<component_folder>/client/js`` and the server-side controllers are located in
   ``<component_folder>/server/controller``.
 - useSession - indicates if the component needs session. The default value is ``false``.
+- permissions - an array of permissions for the specific view.
 
 ------------------
 Intents definition
