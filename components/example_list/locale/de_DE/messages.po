@@ -9,7 +9,7 @@ msgid_plural "If you were able to attest to my qualifications for employment, an
 msgstr[0] "Ich würde es sehr schätzen, wenn Sie meine Qualifikationen für die Beschäftigung, und die Fähigkeiten, die ich während meiner <b>1 monatigen</b> Amtszeit bei <b>%2$s</b> erreicht habe, bezeugen könnten."
 msgstr[1] "Ich würde es sehr schätzen, wenn Sie meine Qualifikationen für die Beschäftigung, und die Fähigkeiten, die ich während meiner <b>%1$d monatigen</b> Amtszeit bei <b>%2$s</b> erreicht habe, bezeugen könnten."
 
-msgid "I am in the process of seeking employment and a positive reference from you would enhance my prospects of achieving my career goals."
+msgid "letter.content.process"
 msgstr "Ich bin in dem Prozess der Arbeitssuche und eine positive Referenz von Ihnen würde meine Aussichten für das Erreichen meiner beruflichen Ziele verbessern."
 
 msgid "Please let me know if there is any information I can provide regarding my experience to assist you in giving me a reference. I can be reached at %1$s or %2$s."

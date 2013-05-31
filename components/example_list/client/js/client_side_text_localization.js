@@ -56,7 +56,7 @@ define([], function (t, nt) {
         root.find('.attest').html(nt('letter.content.positive.reference', 'If you were able to attest to my qualifications for employment, and the skills I attained during my <b>one month</b> tenure at <b>%2$s</b>, I would sincerely appreciate it.',
                                      'If you were able to attest to my qualifications for employment, and the skills I attained during my <b>%1$d months</b> tenure at <b>%2$s</b>, I would sincerely appreciate it.',
                                      months, [months, company]));
-        root.find('.process').html(t('letter.content.positive.reference', 'I am in the process of seeking employment and a positive reference from you would enhance my prospects of achieving my career goals.'));
+        root.find('.process').html(t('letter.content.process', 'I am in the process of seeking employment and a positive reference from you would enhance my prospects of achieving my career goals.'));
         root.find('.let').html(t('Please let me know if there is any information I can provide regarding my experience to assist you in giving me a reference. I can be reached at %1$s or %2$s.',
                                  [email, phone]));
         root.find('.thank').html(t('letter.content.thank.you', 'Thank you for your consideration.'));
