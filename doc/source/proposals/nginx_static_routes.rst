@@ -22,7 +22,7 @@ Integrating with RAIN
 We are using NginX to serve static files/routes through NginX and reduce the load on the
 RAIN server. We have chosen to reconfigure the HaProxy to redirect static routes requests
 to NginX server and the rest of the requests to the RAIN server. Also we added another command
-to rain called ``generate-nginx-conf``. These command helpes you to generate an NginX configuration
+to rain called ``generate-nginx-conf``. This command helps you to generate an NginX configuration
 file so it knows how to serve the requests and mapping the components with different routes.
 
 
