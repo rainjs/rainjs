@@ -24,6 +24,7 @@ supported by RAIN):
         "version": "1.0",
         "type": "component",
         "permissions": ["example"],
+        "pageTitle": "My component title",
         "views": {
             "missing_intent" : {
                 "view": "missing_intent_example.html",
@@ -64,6 +65,9 @@ Here you define the module attributes:
 - id - this is the module identifier
 - version - this is the current module version
 - type - ``component`` (default value) or ``container``. This field is optional.
+- pageTitle - the page title, used when this component is the main component displayed. This field
+  is optional. The value is passed through the translation layer (can be a translation id found in
+  a .po file, in which case it's translated in the user's current language).
 
 ----------------
 Views definition

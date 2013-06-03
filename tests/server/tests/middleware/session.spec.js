@@ -34,10 +34,10 @@ describe('Session', function () {
     beforeEach(function () {
         sessionStore = jasmine.createSpyObj('sessionStore', ['get', 'save', 'createNewSession']);
         sessionStore.get.andDefer(function (deferred) {
-            session = {
-                    isEmpty: function () {
-                        return false;
-                    }
+            var session = {
+                isEmpty: function () {
+                    return false;
+                }
             };
             deferred.resolve(session);
         });

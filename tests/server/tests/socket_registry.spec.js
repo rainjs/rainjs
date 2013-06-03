@@ -244,7 +244,6 @@ describe('Socket registry', function () {
                     updateUser: jasmine.createSpy('upUser')
                 };
                 socket.on('message', callFunction);
-                console.log(events);
                 events['message'](1, ack);
 
             });
