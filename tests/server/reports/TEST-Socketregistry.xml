@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="Socket registry" errors="0" tests="0" failures="0" time="0" timestamp="2013-06-03T12:24:47">
+</testsuite>
+<testsuite name="Socket registry.registration" errors="0" tests="1" failures="0" time="0.037" timestamp="2013-06-03T12:24:47">
+  <testcase classname="Socket registry.registration" name="should register correctly multiple handlers" time="0.037"></testcase>
+</testsuite>
+<testsuite name="Socket registry.connection event handler" errors="0" tests="8" failures="0" time="0.169" timestamp="2013-06-03T12:24:47">
+  <testcase classname="Socket registry.connection event handler" name="should call the handlers" time="0.015"></testcase>
+  <testcase classname="Socket registry.connection event handler" name="should disconnect the socket if the session id is missing" time="0.006"></testcase>
+  <testcase classname="Socket registry.connection event handler" name="should disconnect the socket if the session couldn&apos;t be obtained" time="0.025"></testcase>
+  <testcase classname="Socket registry.connection event handler" name="should get and save the session" time="0.016"></testcase>
+  <testcase classname="Socket registry.connection event handler" name="should save the session after the promise is resolved" time="0.018"></testcase>
+  <testcase classname="Socket registry.connection event handler" name="should call the handlers when a new event is emmited and run the ack" time="0.031"></testcase>
+  <testcase classname="Socket registry.connection event handler" name="should call the handlers and update the user" time="0.027"></testcase>
+  <testcase classname="Socket registry.connection event handler" name="should call the handlers when a new event is emitted" time="0.03"></testcase>
+</testsuite>
+</testsuites>

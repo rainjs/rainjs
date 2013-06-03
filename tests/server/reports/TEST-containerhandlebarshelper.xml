@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="container handlebars helper" errors="0" tests="2" failures="0" time="0.005" timestamp="2013-06-03T12:24:48">
+  <testcase classname="container handlebars helper" name="should export the correct name" time="0.003"></testcase>
+  <testcase classname="container handlebars helper" name="should export a helper function that calls the component helper" time="0.002"></testcase>
+</testsuite>
+</testsuites>

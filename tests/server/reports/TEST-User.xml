@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="User" errors="0" tests="6" failures="0" time="0.022" timestamp="2013-06-03T12:24:49">
+  <testcase classname="User" name="should return the user id" time="0.004"></testcase>
+  <testcase classname="User" name="should return the username" time="0.003"></testcase>
+  <testcase classname="User" name="should check user permissions" time="0.004"></testcase>
+  <testcase classname="User" name="should tell if the user is authenticated" time="0.004"></testcase>
+  <testcase classname="User" name="should serialize to JSON" time="0.004"></testcase>
+  <testcase classname="User" name="should return dirty if user is dirty " time="0.003"></testcase>
+</testsuite>
+</testsuites>

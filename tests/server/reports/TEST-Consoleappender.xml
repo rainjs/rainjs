@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="Console appender" errors="0" tests="6" failures="0" time="0.023" timestamp="2013-06-03T12:24:48">
+  <testcase classname="Console appender" name="should call the parent constructor" time="0.003"></testcase>
+  <testcase classname="Console appender" name="should corectly format a debug message" time="0.005"></testcase>
+  <testcase classname="Console appender" name="should corectly format an info message" time="0.004"></testcase>
+  <testcase classname="Console appender" name="should corectly format a warning message" time="0.003"></testcase>
+  <testcase classname="Console appender" name="should corectly format an error message" time="0.004"></testcase>
+  <testcase classname="Console appender" name="should corectly format a fatal message" time="0.004"></testcase>
+</testsuite>
+</testsuites>

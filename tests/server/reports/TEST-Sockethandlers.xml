@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="Socket handlers" errors="0" tests="0" failures="0" time="0" timestamp="2013-06-03T12:24:49">
+</testsuite>
+<testsuite name="Socket handlers.registration" errors="0" tests="2" failures="0" time="0.008" timestamp="2013-06-03T12:24:49">
+  <testcase classname="Socket handlers.registration" name="should register the change language handler to the socket registry" time="0.004"></testcase>
+  <testcase classname="Socket handlers.registration" name="should not register the client side logging channels" time="0.003"></testcase>
+</testsuite>
+<testsuite name="Socket handlers.change language handler" errors="0" tests="3" failures="0" time="0.074" timestamp="2013-06-03T12:24:49">
+  <testcase classname="Socket handlers.change language handler" name="should not change the language is the session is missing" time="0.051"></testcase>
+  <testcase classname="Socket handlers.change language handler" name="should change the user language" time="0.018"></testcase>
+  <testcase classname="Socket handlers.change language handler" name="should throw an error if the new language is incorrect" time="0.005"></testcase>
+</testsuite>
+</testsuites>

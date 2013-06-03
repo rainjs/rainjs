@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="Translation context" errors="0" tests="0" failures="0" time="0" timestamp="2013-06-03T12:24:49">
+</testsuite>
+<testsuite name="Translation context.controller" errors="0" tests="1" failures="0" time="0.004" timestamp="2013-06-03T12:24:49">
+  <testcase classname="Translation context.controller" name="should receive the language for the t and nt functions" time="0.004"></testcase>
+</testsuite>
+<testsuite name="Translation context.data layer" errors="0" tests="1" failures="0" time="0.013" timestamp="2013-06-03T12:24:49">
+  <testcase classname="Translation context.data layer" name="should receive the language for the t and nt functions" time="0.013"></testcase>
+</testsuite>
+</testsuites>

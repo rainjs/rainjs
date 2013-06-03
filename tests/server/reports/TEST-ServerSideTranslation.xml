@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="Server Side Translation" errors="0" tests="0" failures="0" time="0" timestamp="2013-06-03T12:24:48">
+</testsuite>
+<testsuite name="Server Side Translation.Singleton method" errors="0" tests="1" failures="0" time="0.005" timestamp="2013-06-03T12:24:48">
+  <testcase classname="Server Side Translation.Singleton method" name="should construct the object only once" time="0.005"></testcase>
+</testsuite>
+<testsuite name="Server Side Translation.loadLanguageFile method" errors="0" tests="3" failures="0" time="0.032" timestamp="2013-06-03T12:24:48">
+  <testcase classname="Server Side Translation.loadLanguageFile method" name="should throw an ERROR_IO error if the file could not have been read" time="0.004"></testcase>
+  <testcase classname="Server Side Translation.loadLanguageFile method" name="should throw an ERROR_PRECONDITION_FAILED if the locale parameter is missing" time="0.004"></testcase>
+  <testcase classname="Server Side Translation.loadLanguageFile method" name="should set the private locales with the components id and locale" time="0.024"></testcase>
+</testsuite>
+<testsuite name="Server Side Translation.getLocales method" errors="0" tests="1" failures="0" time="0.003" timestamp="2013-06-03T12:24:48">
+  <testcase classname="Server Side Translation.getLocales method" name="should correctly get the locales for a component" time="0.003"></testcase>
+</testsuite>
+<testsuite name="Server Side Translation.generateContext method" errors="0" tests="1" failures="0" time="0.003" timestamp="2013-06-03T12:24:48">
+  <testcase classname="Server Side Translation.generateContext method" name="should generate the context correctly" time="0.003"></testcase>
+</testsuite>
+<testsuite name="Server Side Translation.translate method" errors="0" tests="6" failures="0" time="0.017" timestamp="2013-06-03T12:24:48">
+  <testcase classname="Server Side Translation.translate method" name="should log an error if translation fails if no id passed" time="0.002"></testcase>
+  <testcase classname="Server Side Translation.translate method" name="should translate depending on customId" time="0.003"></testcase>
+  <testcase classname="Server Side Translation.translate method" name="should translate depending on the msgId" time="0.003"></testcase>
+  <testcase classname="Server Side Translation.translate method" name="should translate plural form depending on customId" time="0.004"></testcase>
+  <testcase classname="Server Side Translation.translate method" name="should display the messageId if no translation was possible for singular" time="0.003"></testcase>
+  <testcase classname="Server Side Translation.translate method" name="should display the messageId if no translation was possible for plural" time="0.002"></testcase>
+</testsuite>
+</testsuites>

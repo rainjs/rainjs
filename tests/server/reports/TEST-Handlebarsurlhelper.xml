@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="Handlebars url helper" errors="0" tests="0" failures="0" time="0" timestamp="2013-06-03T12:24:48">
+</testsuite>
+<testsuite name="Handlebars url helper.register plugin to handlebars" errors="0" tests="1" failures="0" time="0" timestamp="2013-06-03T12:24:48">
+  <testcase classname="Handlebars url helper.register plugin to handlebars" name="must register the url helper to handlebars" time="0"></testcase>
+</testsuite>
+<testsuite name="Handlebars url helper.test preconditions" errors="0" tests="3" failures="0" time="0.001" timestamp="2013-06-03T12:24:48">
+  <testcase classname="Handlebars url helper.test preconditions" name="must return an empty string for an invalid path" time="0"></testcase>
+  <testcase classname="Handlebars url helper.test preconditions" name="must return an empty string for an empty parameter list" time="0.001"></testcase>
+  <testcase classname="Handlebars url helper.test preconditions" name="must correctly url encode paths" time="0"></testcase>
+</testsuite>
+<testsuite name="Handlebars url helper.test non-localized urls" errors="0" tests="0" failures="0" time="0" timestamp="2013-06-03T12:24:48">
+</testsuite>
+<testsuite name="Handlebars url helper.test non-localized urls.test urls relative to current component" errors="0" tests="5" failures="0" time="0.002" timestamp="2013-06-03T12:24:48">
+  <testcase classname="Handlebars url helper.test non-localized urls.test urls relative to current component" name="must resolve paths to current component when name &amp; version aren&apos;t present" time="0.001"></testcase>
+  <testcase classname="Handlebars url helper.test non-localized urls.test urls relative to current component" name="must correctly handle query parameters" time="0"></testcase>
+  <testcase classname="Handlebars url helper.test non-localized urls.test urls relative to current component" name="must correctly resolve a path with a starting /" time="0"></testcase>
+  <testcase classname="Handlebars url helper.test non-localized urls.test urls relative to current component" name="must leave external urls unmodified" time="0"></testcase>
+  <testcase classname="Handlebars url helper.test non-localized urls.test urls relative to current component" name="must ignore version if no name is present" time="0.001"></testcase>
+</testsuite>
+<testsuite name="Handlebars url helper.test non-localized urls.test urls that cross-reference other components" errors="0" tests="4" failures="0" time="0.002" timestamp="2013-06-03T12:24:48">
+  <testcase classname="Handlebars url helper.test non-localized urls.test urls that cross-reference other components" name="must correctly resolve cross-referencing urls without version" time="0"></testcase>
+  <testcase classname="Handlebars url helper.test non-localized urls.test urls that cross-reference other components" name="must correctly resolve cross-referencing urls" time="0.001"></testcase>
+  <testcase classname="Handlebars url helper.test non-localized urls.test urls that cross-reference other components" name="must correctly handle query parameters" time="0"></testcase>
+  <testcase classname="Handlebars url helper.test non-localized urls.test urls that cross-reference other components" name="must correctly resolve a path with a starting /" time="0.001"></testcase>
+</testsuite>
+<testsuite name="Handlebars url helper.test localized urls" errors="0" tests="1" failures="0" time="0" timestamp="2013-06-03T12:24:48">
+  <testcase classname="Handlebars url helper.test localized urls" name="must add the current locale to the generated path for localized urls" time="0"></testcase>
+</testsuite>
+</testsuites>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="Router" errors="0" tests="5" failures="0" time="0.013" timestamp="2013-06-03T12:24:46">
+  <testcase classname="Router" name="should match the correct route" time="0.009"></testcase>
+  <testcase classname="Router" name="should call next with a 404 error if the component was not found" time="0.001"></testcase>
+  <testcase classname="Router" name="should call next with a 404 error if no route was found" time="0.001"></testcase>
+  <testcase classname="Router" name="should call next with a 404 error if the url is not valid" time="0.002"></testcase>
+  <testcase classname="Router" name="should set the resource language in the request" time="0"></testcase>
+</testsuite>
+</testsuites>

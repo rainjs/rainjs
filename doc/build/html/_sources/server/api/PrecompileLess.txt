@@ -1,0 +1,83 @@
+
+
+
+
+
+
+..
+    Classes and methods
+
+Class PrecompileLess
+================================================================================
+
+..
+   class-title
+
+
+Module used to precompile the CSS / Less files for components.
+
+
+
+
+
+
+
+
+    
+
+
+Constructor
+-----------
+
+.. js:class:: PrecompileLess()
+
+
+
+
+
+
+
+
+
+Methods
+-------
+
+..
+   class-methods
+
+
+configure
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: PrecompileLess#configure(componentConfig)
+
+
+    
+    :param Object componentConfig: 
+        the meta.json information 
+    
+
+
+
+
+Precompiles the css / less files associated with a component. And saves
+a compiled css without scope for css cross referencing and a scoped CSS
+for faster response for none css cross referencing.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    
+
+
+

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="Event" errors="0" tests="7" failures="0" time="0.017" timestamp="2013-06-03T12:24:48">
+  <testcase classname="Event" name="should correctly instantiate" time="0.003"></testcase>
+  <testcase classname="Event" name="should return the correct message" time="0.002"></testcase>
+  <testcase classname="Event" name="should return the correct error" time="0.002"></testcase>
+  <testcase classname="Event" name="should return the correct level" time="0.003"></testcase>
+  <testcase classname="Event" name="should return the correct logger name" time="0.002"></testcase>
+  <testcase classname="Event" name="should return the correct date" time="0.002"></testcase>
+  <testcase classname="Event" name="should return the correct source" time="0.003"></testcase>
+</testsuite>
+</testsuites>

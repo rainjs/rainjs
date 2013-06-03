@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="Registry Plugin: Precompile Templates Plugin" errors="0" tests="6" failures="0" time="0.071" timestamp="2013-06-03T12:24:49">
+  <testcase classname="Registry Plugin: Precompile Templates Plugin" name="must compile the templates for all views" time="0.01"></testcase>
+  <testcase classname="Registry Plugin: Precompile Templates Plugin" name="must remove a view from the config when template is not found" time="0.01"></testcase>
+  <testcase classname="Registry Plugin: Precompile Templates Plugin" name="must set the default view path when it is missing" time="0.01"></testcase>
+  <testcase classname="Registry Plugin: Precompile Templates Plugin" name="must compile the template in the current language" time="0.011"></testcase>
+  <testcase classname="Registry Plugin: Precompile Templates Plugin" name="must compile the template in the default language" time="0.009"></testcase>
+  <testcase classname="Registry Plugin: Precompile Templates Plugin" name="must compile the template in English" time="0.021"></testcase>
+</testsuite>
+</testsuites>

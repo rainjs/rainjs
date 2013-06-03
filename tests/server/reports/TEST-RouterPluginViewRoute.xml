@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="Router Plugin: View Route" errors="0" tests="1" failures="0" time="0.004" timestamp="2013-06-03T12:24:49">
+  <testcase classname="Router Plugin: View Route" name="must return the bootstrap html" time="0.004"></testcase>
+</testsuite>
+</testsuites>

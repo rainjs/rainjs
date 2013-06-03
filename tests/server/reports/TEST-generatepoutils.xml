@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="generate po utils" errors="0" tests="0" failures="0" time="0" timestamp="2013-06-03T12:24:49">
+</testsuite>
+<testsuite name="generate po utils.merge translations" errors="0" tests="0" failures="0" time="0" timestamp="2013-06-03T12:24:49">
+</testsuite>
+<testsuite name="generate po utils.merge translations.compare translations" errors="0" tests="1" failures="0" time="0.006" timestamp="2013-06-03T12:24:49">
+  <testcase classname="generate po utils.merge translations.compare translations" name="should merge translations" time="0.006"></testcase>
+</testsuite>
+<testsuite name="generate po utils.merge translations.update existing translations" errors="0" tests="0" failures="0" time="0" timestamp="2013-06-03T12:24:49">
+</testsuite>
+<testsuite name="generate po utils.merge translations.update existing translations.one-to-one" errors="0" tests="7" failures="0" time="0.026" timestamp="2013-06-03T12:24:49">
+  <testcase classname="generate po utils.merge translations.update existing translations.one-to-one" name="should delete missing entries" time="0.003"></testcase>
+  <testcase classname="generate po utils.merge translations.update existing translations.one-to-one" name="should keep old entries" time="0.003"></testcase>
+  <testcase classname="generate po utils.merge translations.update existing translations.one-to-one" name="should keep old entries when custom id is present" time="0.002"></testcase>
+  <testcase classname="generate po utils.merge translations.update existing translations.one-to-one" name="should update entries" time="0.003"></testcase>
+  <testcase classname="generate po utils.merge translations.update existing translations.one-to-one" name="should update entries when custom id is present" time="0.002"></testcase>
+  <testcase classname="generate po utils.merge translations.update existing translations.one-to-one" name="should ignore header entries" time="0.002"></testcase>
+  <testcase classname="generate po utils.merge translations.update existing translations.one-to-one" name="should ignore header entries when custom id is present" time="0.01"></testcase>
+</testsuite>
+<testsuite name="generate po utils.merge translations.update existing translations.many-to-many" errors="0" tests="7" failures="0" time="0.019" timestamp="2013-06-03T12:24:49">
+  <testcase classname="generate po utils.merge translations.update existing translations.many-to-many" name="should delete missing entries" time="0.002"></testcase>
+  <testcase classname="generate po utils.merge translations.update existing translations.many-to-many" name="should keep old entries" time="0.003"></testcase>
+  <testcase classname="generate po utils.merge translations.update existing translations.many-to-many" name="should update entries" time="0.003"></testcase>
+  <testcase classname="generate po utils.merge translations.update existing translations.many-to-many" name="should update entries when custom id is present" time="0.002"></testcase>
+  <testcase classname="generate po utils.merge translations.update existing translations.many-to-many" name="should ignore header entries" time="0.003"></testcase>
+  <testcase classname="generate po utils.merge translations.update existing translations.many-to-many" name="should ignore header entries when custom id is present" time="0.003"></testcase>
+  <testcase classname="generate po utils.merge translations.update existing translations.many-to-many" name="should handle a complex case" time="0.003"></testcase>
+</testsuite>
+<testsuite name="generate po utils.merge translations.search parsed translations" errors="0" tests="2" failures="0" time="0.005" timestamp="2013-06-03T12:24:49">
+  <testcase classname="generate po utils.merge translations.search parsed translations" name="should find singular entries" time="0.002"></testcase>
+  <testcase classname="generate po utils.merge translations.search parsed translations" name="should find plural entries" time="0.003"></testcase>
+</testsuite>
+<testsuite name="generate po utils.merge translations.search parsed translations when custom id is present" errors="0" tests="2" failures="0" time="0.005" timestamp="2013-06-03T12:24:49">
+  <testcase classname="generate po utils.merge translations.search parsed translations when custom id is present" name="should find singular entries" time="0.003"></testcase>
+  <testcase classname="generate po utils.merge translations.search parsed translations when custom id is present" name="should find plural entries" time="0.002"></testcase>
+</testsuite>
+<testsuite name="generate po utils.merge translations.add new translations" errors="0" tests="0" failures="0" time="0" timestamp="2013-06-03T12:24:49">
+</testsuite>
+<testsuite name="generate po utils.merge translations.add new translations.one-to-one" errors="0" tests="5" failures="0" time="0.015" timestamp="2013-06-03T12:24:49">
+  <testcase classname="generate po utils.merge translations.add new translations.one-to-one" name="should add one new singular entry" time="0.003"></testcase>
+  <testcase classname="generate po utils.merge translations.add new translations.one-to-one" name="should add one new singular entry when custom id is present" time="0.002"></testcase>
+  <testcase classname="generate po utils.merge translations.add new translations.one-to-one" name="should add multiple singular entries" time="0.003"></testcase>
+  <testcase classname="generate po utils.merge translations.add new translations.one-to-one" name="should add one new plural entry" time="0.003"></testcase>
+  <testcase classname="generate po utils.merge translations.add new translations.one-to-one" name="should add multiple plural entries" time="0.004"></testcase>
+</testsuite>
+<testsuite name="generate po utils.merge translations.add new translations.many-to-many" errors="0" tests="5" failures="0" time="0.022" timestamp="2013-06-03T12:24:49">
+  <testcase classname="generate po utils.merge translations.add new translations.many-to-many" name="should add one new singular entry to multiple locales" time="0.002"></testcase>
+  <testcase classname="generate po utils.merge translations.add new translations.many-to-many" name="should add one new singular entry to multiple locales when custom id is present" time="0.002"></testcase>
+  <testcase classname="generate po utils.merge translations.add new translations.many-to-many" name="should add multiple singular entries to multiple locales" time="0.003"></testcase>
+  <testcase classname="generate po utils.merge translations.add new translations.many-to-many" name="should add multiple plural entries to multiple locales" time="0.003"></testcase>
+  <testcase classname="generate po utils.merge translations.add new translations.many-to-many" name="should handle a complex case" time="0.011"></testcase>
+</testsuite>
+<testsuite name="generate po utils._scanComponents" errors="0" tests="2" failures="0" time="0.008" timestamp="2013-06-03T12:24:49">
+  <testcase classname="generate po utils._scanComponents" name="should return a list of component configs" time="0.004"></testcase>
+  <testcase classname="generate po utils._scanComponents" name="should throw if the component folder does not exist" time="0.004"></testcase>
+</testsuite>
+<testsuite name="generate po utils._parseComponent" errors="0" tests="1" failures="0" time="0.005" timestamp="2013-06-03T12:24:49">
+  <testcase classname="generate po utils._parseComponent" name="should invoke the parse methods and return the result" time="0.005"></testcase>
+</testsuite>
+<testsuite name="generate po utils._parseTemplateFile" errors="0" tests="2" failures="0" time="0.01" timestamp="2013-06-03T12:24:49">
+  <testcase classname="generate po utils._parseTemplateFile" name="should call parse for template files with custom id" time="0.006"></testcase>
+  <testcase classname="generate po utils._parseTemplateFile" name="should call parse for template files with msg id" time="0.004"></testcase>
+</testsuite>
+<testsuite name="generate po utils._parseJsFile" errors="0" tests="2" failures="0" time="0.009" timestamp="2013-06-03T12:24:49">
+  <testcase classname="generate po utils._parseJsFile" name="should call parse for js files with custom id" time="0.004"></testcase>
+  <testcase classname="generate po utils._parseJsFile" name="should call parse for js files with msgid" time="0.005"></testcase>
+</testsuite>
+<testsuite name="generate po utils.write translation files" errors="0" tests="3" failures="0" time="0.012" timestamp="2013-06-03T12:24:49">
+  <testcase classname="generate po utils.write translation files" name="should corectly generate the translation" time="0.003"></testcase>
+  <testcase classname="generate po utils.write translation files" name="should try to write the translation to the file" time="0.004"></testcase>
+  <testcase classname="generate po utils.write translation files" name="shouldn&apos;t do anything if the file doesn&apos;t have any messages" time="0.003"></testcase>
+</testsuite>
+</testsuites>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="Error handler" errors="0" tests="4" failures="0" time="0.035" timestamp="2013-06-03T12:24:47">
+  <testcase classname="Error handler" name="must throw an error when the error component is not found" time="0.009"></testcase>
+  <testcase classname="Error handler" name="must throw an error when the default view is not specified" time="0.009"></testcase>
+  <testcase classname="Error handler" name="must return the default view when the status code is unknown" time="0.008"></testcase>
+  <testcase classname="Error handler" name="must return the correct status code when it is known" time="0.009"></testcase>
+</testsuite>
+</testsuites>

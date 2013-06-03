@@ -1,0 +1,285 @@
+
+
+
+
+
+
+..
+    Classes and methods
+
+Class Context
+================================================================================
+
+..
+   class-title
+
+
+The context reflects a component's client-side state. It gives access to other
+important libraries like client storage, messaging and web sockets.
+
+
+
+
+
+
+
+
+    
+
+
+Constructor
+-----------
+
+.. js:class:: Context(raintimeInstance, component)
+
+
+
+    
+    :param Raintime raintimeInstance: 
+         
+    
+    :param Component component: 
+        the component object 
+    
+
+
+
+
+
+
+
+Methods
+-------
+
+..
+   class-methods
+
+
+getRoot
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Context#getRoot()
+
+
+
+
+    
+    :returns jQueryElement:
+        The component's container jQuery element 
+    
+
+
+Returns the DOM container element for the component associated with this
+view context.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+insert
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Context#insert(component, dom, [callback])
+
+
+    
+    :param Object component: 
+        The component which to be requested 
+    
+    :param String component.id: 
+        The component id 
+    
+    :param String component.view: 
+        The component view id 
+    
+    :param String component.sid: 
+        The component staticId id 
+    
+    :param Object component.context: 
+        Custom data for the template 
+    
+    :param Boolean component.placeholder: 
+        Enable / Disable placeholder 
+    
+    :param jQueryDom dom: 
+        The dom object where the component is inserted 
+    
+    :param Function callback: 
+        the function to be called after the controller was loaded 
+    
+
+
+
+
+Insert a new component into the given DOM Element and set a function that will be called
+after the controller for the new controller was loaded.
+
+The context for the callback function will be the component's controller.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+remove
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Context#remove(staticId)
+
+
+    
+    :param String staticId: 
+        the child static id 
+    
+
+
+
+
+Removes a child component.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+replace
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Context#replace(component, [callback])
+
+
+    
+    :param Object component: 
+        The component which to be requested 
+    
+    :param String component.id: 
+        The component id 
+    
+    :param String component.view: 
+        The component view id 
+    
+    :param String component.sid: 
+        The component staticId id 
+    
+    :param Object component.context: 
+        Custom data for the template 
+    
+    :param Boolean component.placeholder: 
+        Enable / Disable placeholder 
+    
+    :param Function callback: 
+        the function to be called after the controller was loaded 
+    
+
+
+
+
+Replaces the component from where it is called with the given component and set a
+function that will be called after the controller for the new component was loaded.
+
+The context for the callback function will be the component's controller.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    
+
+Attributes
+----------
+
+..
+   class-attributes
+
+
+instanceId
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:attribute:: instanceId   
+
+
+the component's instance id
+
+
+
+
+
+
+
+
+    
+
+
+
+messaging
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:attribute:: messaging (static)  
+
+
+Provides methods to publish and subscribe to events.
+
+
+
+
+
+
+
+
+    
+
+
+
+storage
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:attribute:: storage   
+
+
+the local storage manager
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+

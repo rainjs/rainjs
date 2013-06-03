@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="Get latest version" errors="0" tests="2" failures="0" time="0.009" timestamp="2013-06-03T12:24:48">
+  <testcase classname="Get latest version" name="must get the correct version" time="0.005"></testcase>
+  <testcase classname="Get latest version" name="must be undefined version" time="0.004"></testcase>
+</testsuite>
+</testsuites>

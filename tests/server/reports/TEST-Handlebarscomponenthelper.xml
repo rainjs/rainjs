@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="Handlebars component helper" errors="0" tests="0" failures="0" time="0" timestamp="2013-06-03T12:24:48">
+</testsuite>
+<testsuite name="Handlebars component helper.register plugin to handlebars" errors="0" tests="1" failures="0" time="0.027" timestamp="2013-06-03T12:24:47">
+  <testcase classname="Handlebars component helper.register plugin to handlebars" name="should register the component helper to Handlebars" time="0.027"></testcase>
+</testsuite>
+<testsuite name="Handlebars component helper.test required and optional options" errors="0" tests="4" failures="0" time="0.089" timestamp="2013-06-03T12:24:47">
+  <testcase classname="Handlebars component helper.test required and optional options" name="should require &quot;name&quot; to be defined if neither &quot;name&quot; or &quot;view&quot; is defined" time="0.021"></testcase>
+  <testcase classname="Handlebars component helper.test required and optional options" name="should set &quot;view&quot; to &quot;index&quot; if &quot;view&quot; is not defined" time="0.02"></testcase>
+  <testcase classname="Handlebars component helper.test required and optional options" name="should require &quot;name&quot; to be defined when &quot;version&quot; is present" time="0.02"></testcase>
+  <testcase classname="Handlebars component helper.test required and optional options" name="should add all the necessary JSON dependencies" time="0.026"></testcase>
+</testsuite>
+<testsuite name="Handlebars component helper.test default options and error cases" errors="0" tests="3" failures="0" time="0.058" timestamp="2013-06-03T12:24:48">
+  <testcase classname="Handlebars component helper.test default options and error cases" name="should use the current component when &quot;name&quot; is not defined" time="0.019"></testcase>
+  <testcase classname="Handlebars component helper.test default options and error cases" name="should use the &quot;error&quot; component when the component is not found" time="0.019"></testcase>
+  <testcase classname="Handlebars component helper.test default options and error cases" name="should use the &quot;error&quot; component when the view is not found" time="0.02"></testcase>
+</testsuite>
+<testsuite name="Handlebars component helper.test authorization cases" errors="0" tests="6" failures="0" time="0.111" timestamp="2013-06-03T12:24:48">
+  <testcase classname="Handlebars component helper.test authorization cases" name="should use the required component when the authorization succeeds" time="0.026"></testcase>
+  <testcase classname="Handlebars component helper.test authorization cases" name="should use the &quot;error&quot; component when authorization fails" time="0.028"></testcase>
+  <testcase classname="Handlebars component helper.test authorization cases" name="should pass component level checks for dynamic conditions" time="0.013"></testcase>
+  <testcase classname="Handlebars component helper.test authorization cases" name="should use the &quot;error&quot; component when component level dynamic conditions fail" time="0.013"></testcase>
+  <testcase classname="Handlebars component helper.test authorization cases" name="should pass view level checks for dynamic conditions" time="0.013"></testcase>
+  <testcase classname="Handlebars component helper.test authorization cases" name="should use the &quot;error&quot; component when view level dynamic conditions fail" time="0.018"></testcase>
+</testsuite>
+<testsuite name="Handlebars component helper.test that the components are added to the children for the parent" errors="0" tests="1" failures="0" time="0.014" timestamp="2013-06-03T12:24:48">
+  <testcase classname="Handlebars component helper.test that the components are added to the children for the parent" name="must contain the correct child information" time="0.014"></testcase>
+</testsuite>
+<testsuite name="Handlebars component helper.test that the context is extended with custom attributes" errors="0" tests="1" failures="0" time="0.019" timestamp="2013-06-03T12:24:48">
+  <testcase classname="Handlebars component helper.test that the context is extended with custom attributes" name="must extend the aggregated component with custom attributes" time="0.019"></testcase>
+</testsuite>
+<testsuite name="Handlebars component helper.test component helper used as a block helper" errors="0" tests="1" failures="0" time="0.013" timestamp="2013-06-03T12:24:48">
+  <testcase classname="Handlebars component helper.test component helper used as a block helper" name="must add the context function as a key" time="0.013"></testcase>
+</testsuite>
+</testsuites>

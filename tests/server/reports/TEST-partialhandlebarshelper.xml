@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="partial handlebars helper" errors="0" tests="3" failures="0" time="0.01" timestamp="2013-06-03T12:24:48">
+  <testcase classname="partial handlebars helper" name="should log an error if the partial is undefined" time="0.003"></testcase>
+  <testcase classname="partial handlebars helper" name="should log an error if the partial has errors" time="0.003"></testcase>
+  <testcase classname="partial handlebars helper" name="should return the markup" time="0.004"></testcase>
+</testsuite>
+</testsuites>

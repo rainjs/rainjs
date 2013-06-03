@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="Util module" errors="0" tests="2" failures="0" time="0.001" timestamp="2013-06-03T12:24:47">
+  <testcase classname="Util module" name="must call the callback for all files" time="0"></testcase>
+  <testcase classname="Util module" name="must call the callback only for a set of files" time="0.001"></testcase>
+</testsuite>
+</testsuites>

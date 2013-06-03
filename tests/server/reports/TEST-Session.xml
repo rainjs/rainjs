@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="Session" errors="0" tests="10" failures="0" time="0.121" timestamp="2013-06-03T12:24:46">
+  <testcase classname="Session" name="should call the next middleware if the session is found" time="0.005"></testcase>
+  <testcase classname="Session" name="should call the next middleware if the route doesn&apos;t need the session" time="0.004"></testcase>
+  <testcase classname="Session" name="should create a new session if the session id is missing" time="0.045"></testcase>
+  <testcase classname="Session" name="should get the session if the session id is found" time="0.018"></testcase>
+  <testcase classname="Session" name="should get the session and call next with the session error" time="0.017"></testcase>
+  <testcase classname="Session" name="should save the session on response end" time="0.018"></testcase>
+  <testcase classname="Session" name="should not set the cookie is session is missing" time="0.006"></testcase>
+  <testcase classname="Session" name="should not set the cookie if expires is missing" time="0.002"></testcase>
+  <testcase classname="Session" name="should only send secure cookies via https" time="0.003"></testcase>
+  <testcase classname="Session" name="should set the cookie header" time="0.003"></testcase>
+</testsuite>
+</testsuites>

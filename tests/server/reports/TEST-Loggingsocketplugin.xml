@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="Logging socket plugin" errors="0" tests="2" failures="0" time="0.006" timestamp="2013-06-03T12:24:50">
+  <testcase classname="Logging socket plugin" name="should correctly register a component" time="0.003"></testcase>
+  <testcase classname="Logging socket plugin" name="should not enable logging if configuration disables it" time="0.003"></testcase>
+</testsuite>
+</testsuites>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="Handlebars css helper" errors="0" tests="0" failures="0" time="0" timestamp="2013-06-03T12:24:47">
+</testsuite>
+<testsuite name="Handlebars css helper.register plugin to handlebars" errors="0" tests="1" failures="0" time="0.003" timestamp="2013-06-03T12:24:47">
+  <testcase classname="Handlebars css helper.register plugin to handlebars" name="should register the css helper to handlebars" time="0.003"></testcase>
+</testsuite>
+<testsuite name="Handlebars css helper.test required and optional options" errors="0" tests="7" failures="0" time="0.032" timestamp="2013-06-03T12:24:47">
+  <testcase classname="Handlebars css helper.test required and optional options" name="should throw error if path is missing" time="0.006"></testcase>
+  <testcase classname="Handlebars css helper.test required and optional options" name="should throw error if the version is specified but the component is not" time="0.004"></testcase>
+  <testcase classname="Handlebars css helper.test required and optional options" name="should create correct css dependencies for the same component" time="0.003"></testcase>
+  <testcase classname="Handlebars css helper.test required and optional options" name="should generate a link without version when the version could not be found" time="0.003"></testcase>
+  <testcase classname="Handlebars css helper.test required and optional options" name="should create correct dependency css with latest version" time="0.003"></testcase>
+  <testcase classname="Handlebars css helper.test required and optional options" name="should create correct css dependency for external components" time="0.003"></testcase>
+  <testcase classname="Handlebars css helper.test required and optional options" name="should add the media query string" time="0.01"></testcase>
+</testsuite>
+</testsuites>

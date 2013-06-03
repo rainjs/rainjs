@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="RAIN create project" errors="0" tests="6" failures="0" time="0.297" timestamp="2013-06-03T12:24:49">
+  <testcase classname="RAIN create project" name="should register the create-project command" time="0.006"></testcase>
+  <testcase classname="RAIN create project" name="should create a new project (default path)" time="0.006"></testcase>
+  <testcase classname="RAIN create project" name="should create a new project (specified path)" time="0.264"></testcase>
+  <testcase classname="RAIN create project" name="should fail if the project directory is inside an existing project" time="0.004"></testcase>
+  <testcase classname="RAIN create project" name="should fail if the project directory already exists" time="0.012"></testcase>
+  <testcase classname="RAIN create project" name="should fail if can not write to disk" time="0.004"></testcase>
+</testsuite>
+</testsuites>

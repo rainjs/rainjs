@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="Renderer" errors="0" tests="0" failures="0" time="0" timestamp="2013-06-03T12:24:47">
+</testsuite>
+<testsuite name="Renderer.renderBootstrap" errors="0" tests="2" failures="0" time="0.004" timestamp="2013-06-03T12:24:47">
+  <testcase classname="Renderer.renderBootstrap" name="must call the compiled template for the bootstrap" time="0.004"></testcase>
+  <testcase classname="Renderer.renderBootstrap" name="must return the bootstrap" time="0"></testcase>
+</testsuite>
+<testsuite name="Renderer.renderComponent" errors="0" tests="3" failures="0" time="0.001" timestamp="2013-06-03T12:24:47">
+  <testcase classname="Renderer.renderComponent" name="must render the component" time="0.001"></testcase>
+  <testcase classname="Renderer.renderComponent" name="must call the context function" time="0"></testcase>
+  <testcase classname="Renderer.renderComponent" name="must render an error" time="0"></testcase>
+</testsuite>
+<testsuite name="Renderer.loadDataAndSend" errors="0" tests="1" failures="0" time="0" timestamp="2013-06-03T12:24:47">
+  <testcase classname="Renderer.loadDataAndSend" name="must call send component with the correct data" time="0"></testcase>
+</testsuite>
+<testsuite name="Renderer.sendComponent" errors="0" tests="4" failures="0" time="0.001" timestamp="2013-06-03T12:24:47">
+  <testcase classname="Renderer.sendComponent" name="must decrease the render level" time="0"></testcase>
+  <testcase classname="Renderer.sendComponent" name="must write the component" time="0"></testcase>
+  <testcase classname="Renderer.sendComponent" name="must end the connection when render level is 0" time="0.001"></testcase>
+  <testcase classname="Renderer.sendComponent" name="must write the component using web sockets" time="0"></testcase>
+</testsuite>
+<testsuite name="Renderer.registerWebsocketLayer" errors="0" tests="2" failures="0" time="0.001" timestamp="2013-06-03T12:24:47">
+  <testcase classname="Renderer.registerWebsocketLayer" name="should load the error component with view 500" time="0"></testcase>
+  <testcase classname="Renderer.registerWebsocketLayer" name="should load the error component with view 401" time="0.001"></testcase>
+</testsuite>
+</testsuites>

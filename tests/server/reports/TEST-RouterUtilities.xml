@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="Router Utilities" errors="0" tests="0" failures="0" time="0" timestamp="2013-06-03T12:24:46">
+</testsuite>
+<testsuite name="Router Utilities.handle error" errors="0" tests="5" failures="0" time="0.005" timestamp="2013-06-03T12:24:46">
+  <testcase classname="Router Utilities.handle error" name="must set header to text/html" time="0.003"></testcase>
+  <testcase classname="Router Utilities.handle error" name="must set header to text/plain" time="0"></testcase>
+  <testcase classname="Router Utilities.handle error" name="must set status code to 500 if it is below 400" time="0"></testcase>
+  <testcase classname="Router Utilities.handle error" name="must set status code to 500 if status code is given" time="0"></testcase>
+  <testcase classname="Router Utilities.handle error" name="must destroy the response if the header was already sent" time="0.001"></testcase>
+</testsuite>
+<testsuite name="Router Utilities.handle not found" errors="0" tests="1" failures="0" time="0.002" timestamp="2013-06-03T12:24:46">
+  <testcase classname="Router Utilities.handle not found" name="must call handle error handler with 404" time="0.002"></testcase>
+</testsuite>
+<testsuite name="Router Utilities.validate path" errors="0" tests="2" failures="0" time="0.001" timestamp="2013-06-03T12:24:46">
+  <testcase classname="Router Utilities.validate path" name="must return valid" time="0.001"></testcase>
+  <testcase classname="Router Utilities.validate path" name="must return invalid" time="0"></testcase>
+</testsuite>
+<testsuite name="Router Utilities.validate resource path" errors="0" tests="2" failures="0" time="0" timestamp="2013-06-03T12:24:46">
+  <testcase classname="Router Utilities.validate resource path" name="must return valid" time="0"></testcase>
+  <testcase classname="Router Utilities.validate resource path" name="must return invalid" time="0"></testcase>
+</testsuite>
+<testsuite name="Router Utilities.set resource headers" errors="0" tests="1" failures="0" time="0.001" timestamp="2013-06-03T12:24:46">
+  <testcase classname="Router Utilities.set resource headers" name="must set the headers correctly" time="0.001"></testcase>
+</testsuite>
+<testsuite name="Router Utilities.handle static resources" errors="0" tests="8" failures="0" time="0.102" timestamp="2013-06-03T12:24:46">
+  <testcase classname="Router Utilities.handle static resources" name="must return the static resource" time="0.001"></testcase>
+  <testcase classname="Router Utilities.handle static resources" name="must return an error 405 cause the method is not GET OR HEAD" time="0"></testcase>
+  <testcase classname="Router Utilities.handle static resources" name="must return an error" time="0.018"></testcase>
+  <testcase classname="Router Utilities.handle static resources" name="must return the resource" time="0.016"></testcase>
+  <testcase classname="Router Utilities.handle static resources" name="must return the requested language localized resource" time="0.015"></testcase>
+  <testcase classname="Router Utilities.handle static resources" name="must return the default language localized resource" time="0.016"></testcase>
+  <testcase classname="Router Utilities.handle static resources" name="must return the unlocalized resource" time="0.022"></testcase>
+  <testcase classname="Router Utilities.handle static resources" name="must return a 404 when the localized resource is not found" time="0.014"></testcase>
+</testsuite>
+</testsuites>

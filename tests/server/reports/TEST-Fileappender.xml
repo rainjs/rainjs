@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="File appender" errors="0" tests="0" failures="0" time="0" timestamp="2013-06-03T12:24:48">
+</testsuite>
+<testsuite name="File appender.constructor" errors="0" tests="5" failures="0" time="0.03" timestamp="2013-06-03T12:24:48">
+  <testcase classname="File appender.constructor" name="should throw an exception if options are missing" time="0.005"></testcase>
+  <testcase classname="File appender.constructor" name="should throw an exception if file option is missing" time="0.004"></testcase>
+  <testcase classname="File appender.constructor" name="should call the parent constructor" time="0.004"></testcase>
+  <testcase classname="File appender.constructor" name="should create a write stream with default params" time="0.005"></testcase>
+  <testcase classname="File appender.constructor" name="should create a write stream with custom params" time="0.012"></testcase>
+</testsuite>
+<testsuite name="File appender.write" errors="0" tests="1" failures="0" time="0.004" timestamp="2013-06-03T12:24:48">
+  <testcase classname="File appender.write" name="should write the log message to the stream" time="0.004"></testcase>
+</testsuite>
+<testsuite name="File appender.destroy" errors="0" tests="1" failures="0" time="0.003" timestamp="2013-06-03T12:24:48">
+  <testcase classname="File appender.destroy" name="should end the write stream" time="0.003"></testcase>
+</testsuite>
+<testsuite name="File appender.logRotate" errors="0" tests="4" failures="0" time="0.02" timestamp="2013-06-03T12:24:48">
+  <testcase classname="File appender.logRotate" name="should rotate the log" time="0.009"></testcase>
+  <testcase classname="File appender.logRotate" name="should rotate the log if rotateFile.path is missing default options.file" time="0.003"></testcase>
+  <testcase classname="File appender.logRotate" name="should rotate the log if rotateFile.format key is missing default format" time="0.004"></testcase>
+  <testcase classname="File appender.logRotate" name="should rotate the log and set the day depending on the parameter in options" time="0.004"></testcase>
+</testsuite>
+</testsuites>

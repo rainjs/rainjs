@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="Configurator" errors="0" tests="0" failures="0" time="0" timestamp="2013-06-03T12:24:48">
+</testsuite>
+<testsuite name="Configurator.get configurator" errors="0" tests="2" failures="0" time="0.009" timestamp="2013-06-03T12:24:48">
+  <testcase classname="Configurator.get configurator" name="should create a new instance" time="0.005"></testcase>
+  <testcase classname="Configurator.get configurator" name="should return the existing instance" time="0.004"></testcase>
+</testsuite>
+<testsuite name="Configurator._registerModules" errors="0" tests="1" failures="0" time="0.004" timestamp="2013-06-03T12:24:48">
+  <testcase classname="Configurator._registerModules" name="should register the modules from a given folder" time="0.004"></testcase>
+</testsuite>
+<testsuite name="Configurator._createAppender" errors="0" tests="11" failures="0" time="0.062" timestamp="2013-06-03T12:24:48">
+  <testcase classname="Configurator._createAppender" name="should throw an error if level is invalid" time="0.005"></testcase>
+  <testcase classname="Configurator._createAppender" name="should log with error level if the custom appender is missing" time="0.015"></testcase>
+  <testcase classname="Configurator._createAppender" name="should throw an error if the appender and the component are invalid" time="0.006"></testcase>
+  <testcase classname="Configurator._createAppender" name="should log with error level if the appender type is invalid" time="0.007"></testcase>
+  <testcase classname="Configurator._createAppender" name="should throw an error if the layout and the component are invalid" time="0.005"></testcase>
+  <testcase classname="Configurator._createAppender" name="should log with error level if the layout is invalid" time="0.004"></testcase>
+  <testcase classname="Configurator._createAppender" name="should return undefined if the layout cannot be created" time="0.004"></testcase>
+  <testcase classname="Configurator._createAppender" name="should create a global appender" time="0.004"></testcase>
+  <testcase classname="Configurator._createAppender" name="should create a component appender" time="0.004"></testcase>
+  <testcase classname="Configurator._createAppender" name="should throw an error if the custom appender has errors" time="0.004"></testcase>
+  <testcase classname="Configurator._createAppender" name="should log with error level if the custom appender has errors" time="0.004"></testcase>
+</testsuite>
+<testsuite name="Configurator._createLayout" errors="0" tests="6" failures="0" time="0.292" timestamp="2013-06-03T12:24:48">
+  <testcase classname="Configurator._createLayout" name="should log with error level if the layout is missing" time="0.009"></testcase>
+  <testcase classname="Configurator._createLayout" name="should throw an error if the layout and the component are invalid" time="0.005"></testcase>
+  <testcase classname="Configurator._createLayout" name="should log with error level if the layout type is invalid" time="0.004"></testcase>
+  <testcase classname="Configurator._createLayout" name="should create a layout" time="0.004"></testcase>
+  <testcase classname="Configurator._createLayout" name="should throw an error if the layout has errors" time="0.266"></testcase>
+  <testcase classname="Configurator._createLayout" name="should log with error level if the layout has errors" time="0.004"></testcase>
+</testsuite>
+<testsuite name="Configurator.getAppenders" errors="0" tests="5" failures="0" time="0.022" timestamp="2013-06-03T12:24:48">
+  <testcase classname="Configurator.getAppenders" name="should return empty array if logger configuration is missng" time="0.005"></testcase>
+  <testcase classname="Configurator.getAppenders" name="should throw an error if the logger value is invalid" time="0.005"></testcase>
+  <testcase classname="Configurator.getAppenders" name="should return the platform appenders" time="0.004"></testcase>
+  <testcase classname="Configurator.getAppenders" name="should return empty array if the component is missing" time="0.004"></testcase>
+  <testcase classname="Configurator.getAppenders" name="should return empty array if the component&apos;s logger config is missing" time="0.004"></testcase>
+</testsuite>
+</testsuites>

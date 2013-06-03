@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="the component class" errors="0" tests="1" failures="0" time="0.004" timestamp="2013-06-03T12:24:49">
+  <testcase classname="the component class" name="should update placeholders" time="0.004"></testcase>
+</testsuite>
+<testsuite name="the component class.create" errors="0" tests="2" failures="0" time="0.008" timestamp="2013-06-03T12:24:49">
+  <testcase classname="the component class.create" name="should throw an error if the component path already exists" time="0.004"></testcase>
+  <testcase classname="the component class.create" name="should create the component" time="0.004"></testcase>
+</testsuite>
+</testsuites>

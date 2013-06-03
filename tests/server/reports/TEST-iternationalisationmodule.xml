@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="iternationalisation module" errors="0" tests="5" failures="0" time="0.017" timestamp="2013-06-03T12:24:46">
+  <testcase classname="iternationalisation module" name="should set the user language to the Accepted-Language header if is supportedin the domain" time="0.005"></testcase>
+  <testcase classname="iternationalisation module" name="should set the user language to the default language of the domain if it is supportedand the Accepted-Language is not accepted by the domain" time="0.003"></testcase>
+  <testcase classname="iternationalisation module" name="should set the user language from the config if Accepted-Language is not supported and domain is not existing" time="0.002"></testcase>
+  <testcase classname="iternationalisation module" name="should set the default language to the Accepted-Language header if is supported and the domain is not set" time="0.004"></testcase>
+  <testcase classname="iternationalisation module" name="should set in the session the accepted languages regarding the base config" time="0.003"></testcase>
+</testsuite>
+</testsuites>
