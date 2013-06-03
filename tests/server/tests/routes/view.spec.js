@@ -65,7 +65,10 @@ describe('Router Plugin: View handler', function() {
         response = jasmine.createSpyObj('response', ['write', 'setHeader', 'writeHead', 'end']);
 
         request.user = {
-            _isAuthenticated: false
+            _isAuthenticated: false,
+            isAuthenticated: function () {
+                return this._isAuthenticated;
+            }
         };
 
         mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
