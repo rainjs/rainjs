@@ -14,6 +14,8 @@
   the head element or you can specify custom content. The page title can also be customized.
 * If the user is authenticated, he is redirected to the main page when trying to access the
   login page.
+* Added ``no-store`` to the cache headers. This prevents the browser to take the page from
+    cache when using the back button.
 
 ## 0.27.1
 
