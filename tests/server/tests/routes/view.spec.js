@@ -27,34 +27,57 @@
 
 var cwd = process.cwd();
 var globals = require(cwd + '/lib/globals.js');
-var config = require(cwd + '/lib/configuration.js');
-var routerPlugin = loadModuleExports('/lib/routes/view.js', {
-    "../renderer": {
-        renderBootstrap: function(component, viewId, request, response){
-            return "bootstrap with "+component.id+" "+component.version+" "+viewId;
-        }
-    }
-});
 
-var http = require('mocks').http;
+describe('Router Plugin: View handler', function() {
+    var mockComponentRegistry = null,
+        componentRegistry = null,
+        response,
+        request = {},
+        mocks = {},
+        renderBootstrap, renderer, config, routerPlugin,
+        loginComponentId, loginVersion, loginViewId;
 
-describe('Router Plugin: ' + routerPlugin.name, function() {
-    var mockComponentRegistry = null;
-    var componentRegistry = null;
-    var response = null;
-    var request = null;
     beforeEach(function() {
-        response = new http.ServerResponse();
-        request = new http.ServerRequest();
+
+        renderer = jasmine.createSpyObj('renderer', ['renderBootstrap']);
+        renderer.renderBootstrap.andCallFake(function (component, viewId, request, response) {
+            return "bootstrap with "+component.id+" "+component.version+" "+viewId;
+        });
+        mocks['../renderer'] = renderer;
+
+        var config = {
+            "loginComponent": {
+                "id": "user",
+                "version": "1.0",
+                "viewId": "login"
+            }
+        };
+
+        mocks['../configuration'] = config;
+
+        loginComponentId = config.loginComponent.id,
+        loginVersion = config.loginComponent.version,
+        loginViewId = config.loginComponent.viewId;
+
+        routerPlugin = loadModuleExports('/lib/routes/view.js', mocks);
+
+
+        response = jasmine.createSpyObj('response', ['write', 'setHeader', 'writeHead', 'end']);
+
+        request.user = {
+            _isAuthenticated: false
+        };
+
         mockComponentRegistry = loadModuleContext('/lib/component_registry.js');
         mockComponentRegistry.registerConfigComponents();
         componentRegistry = new mockComponentRegistry.ComponentRegistry();
-        response.write = function(text){
+        response.write.andCallFake(function (text) {
             if(!this._body){
                 this._body = "";
             }
             this._body += text;
-        };
+            this.finished = true;
+        });
     });
 
     it('must return the bootstrap html', function() {
@@ -62,6 +85,72 @@ describe('Router Plugin: ' + routerPlugin.name, function() {
         request.component = componentRegistry.getConfig("example", "0.0.1");
         routerPlugin.handle(request, response);
         expect(response._body).toEqual("bootstrap with example 0.0.1 index");
-        response.finished = true;
+        expect(response.finished).toBe(true);
+    });
+
+    it('must redirect to login component if authentication is needed for the requested component',
+            function () {
+
+        request.component = {
+            id: 'fakeId',
+            version: '1.0',
+            permissions: ['somePermission'],
+            views: {
+                index: {}
+            }
+        };
+        request.path = "index";
+        var loginRoute = '/' + loginComponentId + '/' + loginVersion + '/' + loginViewId;
+
+        routerPlugin.handle(request, response);
+        expect(response._body).toBe(undefined);
+        expect(response.writeHead).toHaveBeenCalledWith(302, {
+            'Location': loginRoute
+        });
+        expect(response.end).toHaveBeenCalled();
+
+    });
+
+    it('must redirect to login component if authentication is needed for the requested view', function () {
+        request.component = {
+            id: 'fakeId',
+            version: '1.0',
+            views: {
+                index: {
+                    permissions: ['somePermission']
+                }
+            }
+        };
+        request.path = "index";
+        var loginRoute = '/' + loginComponentId + '/' + loginVersion + '/' + loginViewId;
+
+        routerPlugin.handle(request, response);
+        expect(response._body).toBe(undefined);
+        expect(response.writeHead).toHaveBeenCalledWith(302, {
+            'Location': loginRoute
+        });
+        expect(response.end).toHaveBeenCalled();
+    });
+
+    it('must not redirect the user if he is authenticated when he requires a component' +
+        ' that needs authentication', function () {
+
+        request.user._isAuthenticated = true;
+
+        request.component = {
+            id: 'fakeId',
+            version: '1.0',
+            views: {
+                index: {
+                    permissions: ['somePermission']
+                }
+            }
+        };
+        request.path = "index";
+        var loginRoute = '/' + loginComponentId + '/' + loginVersion + '/' + loginViewId;
+
+        routerPlugin.handle(request, response);
+        expect(response._body).toBe('bootstrap with fakeId 1.0 index');
+        expect(response.finished).toBe(true);
     });
 });

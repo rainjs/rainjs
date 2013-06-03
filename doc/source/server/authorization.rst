@@ -2,10 +2,12 @@
 Authorization
 =============
 
-Rain handles authorization in two ways. First it uses a permission based authorization system that
-checks if the user has the required permissions for viewing a component and it's views, and
+Rain handles authorization in three ways. First it uses a permission based authorization system that
+checks if the user has the required permissions for viewing a component and it's views,
 secondly there is a dynamic condition module that allows for defining custom conditions that are
-not covered by the permissions (for example checking the user's country).
+not covered by the permissions (for example checking the user's country) and thirdly if a user is not
+authenticated and the component/view required needs permissions or dynamic conditions he will be redirected
+the login component, if missing he will try to access the requested component.
 
 -----------------
 Permissions based
@@ -231,3 +233,72 @@ The following example demonstrates how dynamic conditions can be used (the conte
 
     :js:class:`Authorization`
         Authorization API
+
+
+------------------------
+Authentication condition
+------------------------
+
+If a user that is not authenticated tries to access a component or a view that needs permissions
+than the user is redirected to the login component set up in the server configuration file.
+
+.....
+Usage
+.....
+
+The key that specifies that a component/view needs authentication or not is specified in the ``meta.json``
+of that component and is called ``permissions``.
+
+``/meta.json``:
+
+.. code-block:: javascript
+
+    {
+        "id": "button",
+        "version": "1.0",
+        "permissions": [],
+        "views": {
+            "index": {
+                "view": "index.html",
+                "controller": {
+                    "client": "index.js"
+                }
+            },
+            "buttons": {
+                "view": "buttons.html",
+                "controller": {
+                    "client": "buttons.js"
+                }
+            }
+        }
+    }
+
+.. note::
+
+    In order for the redirect to work and specify that a component/view needs authentication, you must
+    always set an array of ``permissions`` that is not empty. If the ``permissions`` are set on the base
+    component than it will affect all the views of that component.
+
+``/meta.json``:
+
+.. code-block:: javascript
+
+    {
+        "id": "button",
+        "version": "1.0",
+        "views": {
+            "index": {
+                "view": "index.html",
+                "controller": {
+                    "client": "index.js"
+                }
+                "permissions": ['somePermission']
+            },
+            "buttons": {
+                "view": "buttons.html",
+                "controller": {
+                    "client": "buttons.js"
+                }
+            }
+        }
+    }
