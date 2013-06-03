@@ -32,3 +32,6 @@ msgstr "Trimite email"
 
 msgid "The user \"%1$s\" connected to the notes websocket."
 msgstr "Utilizatorul \"%1$s\" s-a conectat la websocket-ul notes."
+
+msgid "Title"
+msgstr "Componentă exemplu pentru caracteristicile RAIN"

@@ -1,72 +1,84 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="x-ua-compatible" content="IE=edge" />
-        <title>{{id}}</title>
-        <script type="text/javascript" src="/core/js/lib/es5-shim.min.js"></script>
-        <script type="text/javascript" src="/core/js/lib/require-jquery.js"></script>
-        <script type="text/javascript" src="/core/js/lib/jquery_plugins.js"></script>
-        <script type="text/javascript">
-            var requireConfig = {
-                "debug": ('{{server.env}}' == 'production'? 'false' : 'true'),
-                "baseUrl": "/",
-                "paths": {
-                    "text": "core/js/lib/require-text",
-                    "locale": "core/js/lib/require-locale"
-                },
-                "packages": [{
-                    "name": "raintime",
-                    "main": "raintime",
-                    "location": "core/js"
-                }],
-                "deps": [
-                    "raintime/dependencies",
-                    "raintime"
-                ]
-            };
-            var rainContext = {
-                language: '{{language}}',
-                enableClientLogging: {{enableClientLogging}}
-            };
-            var renderQueueList = [];
-            function renderQueue() {
-                var len = renderQueueList.length;
-                if(len > 0){
-                    for(var i = 0; i < len; i++){
-                        ClientRenderer.get().renderComponent(renderQueueList[i]);
+        <meta charset="UTF-8">
+        <meta http-equiv="x-ua-compatible" content="IE=edge">
+        <title>{{title}}</title>
+
+        {{#if configuration.customHead}}
+            {{{bootstrap.headTags}}}
+        {{else}}
+            {{{bootstrap.metas}}}
+
+            <link rel="stylesheet" type="text/css" href="/core/resources/bootstrap.css">
+            {{{bootstrap.links}}}
+
+            <script type="text/javascript" src="/core/js/lib/es5-shim.min.js"></script>
+            <script type="text/javascript" src="/core/js/lib/require-jquery.js"></script>
+            <script type="text/javascript" src="/core/js/lib/jquery_plugins.js"></script>
+
+            {{{bootstrap.scripts}}}
+
+            <script type="text/javascript">
+                var requireConfig = {
+                    "debug": ('{{server.env}}' == 'production'? 'false' : 'true'),
+                    "baseUrl": "/",
+                    "paths": {
+                        "text": "core/js/lib/require-text",
+                        "locale": "core/js/lib/require-locale"
+                    },
+                    "packages": [{
+                        "name": "raintime",
+                        "main": "raintime",
+                        "location": "core/js"
+                    }],
+                    "deps": [
+                        "raintime/dependencies",
+                        "raintime"
+                    ]
+                };
+                var rainContext = {
+                    language: '{{language}}',
+                    enableClientLogging: {{enableClientLogging}}
+                };
+                var renderQueueList = [];
+                function renderQueue() {
+                    var len = renderQueueList.length;
+                    if (len > 0) {
+                        for (var i = 0; i < len; i++) {
+                            ClientRenderer.get().renderComponent(renderQueueList[i]);
+                        }
+                        renderQueueList = [];
                     }
-                    renderQueueList = [];
                 }
-            }
 
-            function renderComponent(component) {
-                if (!component) {
+                function renderComponent(component) {
+                    if (!component) {
+                        renderQueue();
+                        return;
+                    }
+
+                    if (!window.ClientRenderer) {
+                        renderQueueList.push(component);
+                    } else {
+                        renderQueue();
+                        ClientRenderer.get().renderComponent(component);
+                    }
+                }
+
+                require(requireConfig, ["raintime/client_rendering"],
+                        function(ClientRenderer) {
+                    ClientRenderer.get().setPlaceholderTimeout({{placeholderTimeout}});
+                    ClientRenderer.get().setPlaceholder({{{placeholder}}});
+
+                    if (renderQueueList.length === 0) {
+                        ClientRenderer.get().renderPlaceholder($($('body div').get(0)).attr('id'));
+                    }
+
                     renderQueue();
-                    return;
-                }
-
-                if (!window.ClientRenderer) {
-                    renderQueueList.push(component);
-                } else {
-                    renderQueue();
-                    ClientRenderer.get().renderComponent(component);
-                }
-            }
-
-            require(requireConfig, ["raintime/client_rendering"],
-                    function(ClientRenderer) {
-                ClientRenderer.get().setPlaceholderTimeout({{placeholderTimeout}});
-                ClientRenderer.get().setPlaceholder({{{placeholder}}});
-
-                if (0 === renderQueueList.length) {
-                    ClientRenderer.get().renderPlaceholder($($('body div').get(0)).attr('id'));
-                }
-
-                renderQueue();
-            });
-        </script>
-        <link rel="stylesheet" type="text/css" href="/core/resources/bootstrap.css">
+                });
+            </script>
+        {{/if}}
     </head>
     <body>
         {{#if isContainer}}
@@ -79,4 +91,3 @@
             {{/with}}
         {{/if}}
         <div id="modalDialog" class="core_1_0" style="width: 0; height: 0;"></div>
-

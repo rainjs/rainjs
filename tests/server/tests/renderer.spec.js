@@ -140,8 +140,15 @@ var io = {
 
 var renderUtils, isValid, isAuthorized;
 
-renderUtils = jasmine.createSpyObj('renderUtils',
-                                   ['isValidView', 'isAuthorized', 'replaceWithError']);
+var bootstrapData = {
+    metas: '',
+    links: '',
+    scripts: '',
+    footer: {}
+};
+
+renderUtils = jasmine.createSpyObj('renderUtils', ['isValidView', 'isAuthorized',
+                                                   'replaceWithError', 'processBootstrapScripts']);
 renderUtils.isValidView.andCallFake(function () {
     return isValid;
 });
@@ -149,6 +156,7 @@ renderUtils.isAuthorized.andCallFake(function () {
     return isAuthorized;
 });
 renderUtils.replaceWithError.andCallFake(function () {});
+renderUtils.processBootstrapScripts.andReturn(bootstrapData);
 
 describe('Renderer', function () {
 
@@ -303,7 +311,9 @@ describe('Renderer', function () {
                 context: {
                     query: 'param=value',
                     body: '{}'
-                }
+                },
+                bootstrap: bootstrapData,
+                title: 'button'
             });
 
             button.type = 'container';
@@ -321,7 +331,9 @@ describe('Renderer', function () {
                 context: {
                     query: 'param=value',
                     body: '{}'
-                }
+                },
+                bootstrap: bootstrapData,
+                title: 'button'
             });
         });
 
