@@ -1,6 +1,20 @@
 # Changelog
 
 
+## v 0.28.0
+
+* Added the ability to add a custom id for translation messages. See the documentation for
+  ``t`` and ``nt`` methods from client and server side JavaScript and ``t`` and ``nt`` helpers
+  for more details.
+* The output of ``t`` and ``nt`` handlebars helpers can be saved in a variable and used later
+  in the template. The ``var`` attribute should be used to achieve this behavior.
+* The user is automatically redirected to the login page when the main component requires an
+  authenticated user and the current user is not authenticated.
+* Added support for configurable bootstrap head tags. Meta, link and script tags can be added to
+  the head element or you can specify custom content. The page title can also be customized.
+* If the user is authenticated, he is redirected to the main page when trying to access the
+  login page.
+
 ## 0.27.1
 
 * Fixed an issue where the disconnect method of the socket object was called on a null reference.
