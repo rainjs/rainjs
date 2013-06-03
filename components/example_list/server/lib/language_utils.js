@@ -29,7 +29,7 @@
  * module.
  */
 function translateSendMail() {
-    return t('Send email');
+    return t('send.email.button.label', 'Send email');
 }
 
 module.exports = {

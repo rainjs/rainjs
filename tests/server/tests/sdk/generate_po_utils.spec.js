@@ -53,8 +53,8 @@ describe('generate po utils', function () {
         describe('compare translations', function () {
 
             beforeEach(function () {
-                spyOn(utils, 'updateExistingTranslations');
-                spyOn(utils, 'addNewTranslations');
+                spyOn(utils, '_updateExistingTranslations');
+                spyOn(utils, '_addNewTranslations');
             });
 
             it('should merge translations', function () {
@@ -62,62 +62,86 @@ describe('generate po utils', function () {
                 po = {};
                 tr = {};
 
-                utils.compareTranslations(component, po, tr);
+                utils._updateTranslations(component, po, tr);
 
-                expect(utils.updateExistingTranslations).toHaveBeenCalledWith(po, tr);
-                expect(utils.addNewTranslations).toHaveBeenCalledWith(component, po, tr);
+                expect(utils._updateExistingTranslations).toHaveBeenCalledWith(po, tr);
+                expect(utils._addNewTranslations).toHaveBeenCalledWith(component, po, tr);
             });
 
         });
 
         describe('update existing translations', function () {
 
-            beforeEach(function () {
-                spyOn(utils, 'searchParsedTranslation');
-            });
-
             describe('one-to-one', function () {
 
                 it('should delete missing entries', function () {
                     po = { 'ro': { 'hello, world': [null, 'salut, lume'] } };
-                    tr = { 'test': {} };
+                    tr = { 'test': [] };
 
-                    utils.searchParsedTranslation.andReturn('');
-                    utils.updateExistingTranslations(po, tr);
+                    utils._updateExistingTranslations(po, tr);
 
                     expect(po.ro['hello, world']).not.toBeDefined();
                 });
 
                 it('should keep old entries', function () {
                     po = { 'ro': { 'hello, world': [null, 'salut, lume'] } };
-                    tr = { 'test': ['hello, world'] };
+                    tr = { 'test': [{msgid: 'hello, world'}] };
 
-                    utils.searchParsedTranslation.andReturn(tr.test[0]);
-                    utils.updateExistingTranslations(po, tr);
+                    utils._updateExistingTranslations(po, tr);
 
                     expect(po.ro['hello, world']).toBeDefined();
                 });
 
+                it('should keep old entries when custom id is present', function () {
+                    po = { 'ro': { 'custom.id': [null, 'salut, lume'] } };
+                    tr = { 'test': [{msgid: 'hello, world', id: 'custom.id'}] };
+
+                    utils._updateExistingTranslations(po, tr);
+
+                    expect(po.ro['custom.id']).toBeDefined();
+                });
+
+
                 it('should update entries', function () {
                     po = { 'ro': { 'error': [null, 'eroare'] } };
-                    tr = { 'test': [['error', 'errors']] };
+                    tr = { 'test': [{msgid: 'error', msgidPlural: 'errors'}] };
 
-                    utils.searchParsedTranslation.andReturn(tr.test[0]);
-                    utils.updateExistingTranslations(po, tr);
+                    utils._updateExistingTranslations(po, tr);
 
                     expect(po.ro.error).toBeDefined();
-                    expect(po.ro.error[0]).toEqual(tr.test[0][1]);
+
+                    expect(po.ro.error[0]).toEqual(tr.test[0].msgidPlural);
+                });
+
+                it('should update entries when custom id is present', function () {
+                    po = { 'ro': { 'custom.id': [null, 'eroare'] } };
+                    tr = { 'test': [{msgid: 'error', msgidPlural: 'errors', id: "custom.id"}] };
+
+                    utils._updateExistingTranslations(po, tr);
+
+                    expect(po.ro['custom.id']).toBeDefined();
+
+                    expect(po.ro['custom.id'][0]).toEqual(tr.test[0].msgidPlural);
                 });
 
                 it('should ignore header entries', function () {
                     po = { 'ro': { '': { 'header-key': 'header-value' }, 'hello, world': [null, 'salut, lume'] } };
-                    tr = { 'test': ['hello, world'] };
+                    tr = { 'test': [{msgid: 'hello, world'}] };
 
-                    utils.searchParsedTranslation.andReturn(tr.test[0]);
-                    utils.updateExistingTranslations(po, tr);
+                    utils._updateExistingTranslations(po, tr);
 
                     expect(po.ro['']).toBeDefined();
                     expect(po.ro['hello, world']).toBeDefined();
+                });
+
+                it('should ignore header entries when custom id is present', function () {
+                    po = { 'ro': { '': { 'header-key': 'header-value' }, 'custom.id': [null, 'salut, lume'] } };
+                    tr = { 'test': [{msgid: 'hello, world', id: 'custom.id'}] };
+
+                    utils._updateExistingTranslations(po, tr);
+
+                    expect(po.ro['']).toBeDefined();
+                    expect(po.ro['custom.id']).toBeDefined();
                 });
 
             });
@@ -129,13 +153,9 @@ describe('generate po utils', function () {
                         'ro': { 'hello, world': [null, 'salut, lume'] },
                         'en': { 'hello, world': [null, 'hello, world'] }
                     };
-                    tr = {
-                        'one': {},
-                        'two': {}
-                    };
+                    tr = {};
 
-                    utils.searchParsedTranslation.andReturn('');
-                    utils.updateExistingTranslations(po, tr);
+                    utils._updateExistingTranslations(po, tr);
 
                     expect(po.ro['hello, world']).not.toBeDefined();
                     expect(po.en['hello, world']).not.toBeDefined();
@@ -147,12 +167,10 @@ describe('generate po utils', function () {
                         'en': { 'hello, world': [null, 'hello, world'] }
                     };
                     tr = {
-                        'one': [],
-                        'two': ['hello, world']
+                        'two': [{msgid: 'hello, world'}]
                     };
 
-                    utils.searchParsedTranslation.andReturn(tr.two[0]);
-                    utils.updateExistingTranslations(po, tr);
+                    utils._updateExistingTranslations(po, tr);
 
                     expect(po.ro['hello, world']).toBeDefined();
                     expect(po.en['hello, world']).toBeDefined();
@@ -164,17 +182,32 @@ describe('generate po utils', function () {
                         'en': { 'error': [null, 'error'] }
                     };
                     tr = {
-                        'one': [['error', 'errors']],
-                        'two': []
+                        'one': [{msgid: 'error', msgidPlural: 'errors'}],
                     };
 
-                    utils.searchParsedTranslation.andReturn(tr.one[0]);
-                    utils.updateExistingTranslations(po, tr);
+                    utils._updateExistingTranslations(po, tr);
 
                     expect(po.ro.error).toBeDefined();
-                    expect(po.ro.error[0]).toEqual(tr.one[0][1]);
+                    expect(po.ro.error[0]).toEqual(tr.one[0].msgidPlural);
                     expect(po.en.error).toBeDefined();
-                    expect(po.en.error[0]).toEqual(tr.one[0][1]);
+                    expect(po.en.error[0]).toEqual(tr.one[0].msgidPlural);
+                });
+
+                it('should update entries when custom id is present', function () {
+                    po = {
+                        'ro': { 'custom.id': [null, 'eroare'] },
+                        'en': { 'custom.id': [null, 'error'] }
+                    };
+                    tr = {
+                        'one': [{msgid: 'error', msgidPlural: 'errors', id: 'custom.id'}],
+                    };
+
+                    utils._updateExistingTranslations(po, tr);
+
+                    expect(po.ro['custom.id']).toBeDefined();
+                    expect(po.ro['custom.id'][0]).toEqual(tr.one[0].msgidPlural);
+                    expect(po.en['custom.id']).toBeDefined();
+                    expect(po.en['custom.id'][0]).toEqual(tr.one[0].msgidPlural);
                 });
 
                 it('should ignore header entries', function () {
@@ -183,17 +216,32 @@ describe('generate po utils', function () {
                         'en': { '': { 'header-key': 'header-value' }, 'hello, world': [null, 'hello, world'] }
                     };
                     tr = {
-                        'one': ['hello, world'],
-                        'two': []
+                        'one': [{msgid: 'hello, world'}],
                     };
 
-                    utils.searchParsedTranslation.andReturn(tr.one[0]);
-                    utils.updateExistingTranslations(po, tr);
+                    utils._updateExistingTranslations(po, tr);
 
                     expect(po.ro['']).toBeDefined();
                     expect(po.ro['hello, world']).toBeDefined();
                     expect(po.en['']).toBeDefined();
                     expect(po.en['hello, world']).toBeDefined();
+                });
+
+                it('should ignore header entries when custom id is present', function () {
+                    po = {
+                        'ro': { '': { 'header-key': 'header-value' }, 'custom.id': [null, 'salut, lume'] },
+                        'en': { '': { 'header-key': 'header-value' }, 'custom.id': [null, 'hello, world'] }
+                    };
+                    tr = {
+                        'one': [{msgid: 'hello, world', id: 'custom.id'}],
+                    };
+
+                    utils._updateExistingTranslations(po, tr);
+
+                    expect(po.ro['']).toBeDefined();
+                    expect(po.ro['custom.id']).toBeDefined();
+                    expect(po.en['']).toBeDefined();
+                    expect(po.en['custom.id']).toBeDefined();
                 });
 
                 it('should handle a complex case', function () {
@@ -204,40 +252,36 @@ describe('generate po utils', function () {
                             'hello': [null, 'salut'],
                             'goodbye': [null, 'la revedere'],
                             'error': [null, 'eroare'],
-                            'event': [null, 'eveniment']
+                            'event': [null, 'eveniment'],
+                            'custom.id.code': [null, 'cod'],
+                            'custom.id.morning': [null, 'dimineata']
                         },
                         'en': {
                             '': { 'header-key': 'header-value' },
                             'hello, world': [null, 'hello, world'],
                             'goodbye': [null, 'goodbye'],
                             'error': [null, 'error'],
-                            'event': ['events', 'event']
+                            'event': ['events', 'event'],
+                            'custom.id.code': ['codes', 'code'],
+                            'custom.id.morning': [null, 'morning']
                         }
                     };
                     tr = {
                         'one': [
-                            'hello, world',
-                            ['error', 'errors']
+                            {msgid: 'hello, world'},
+                            {msgid: 'error', msgidPlural: 'errors'}
                         ],
                         'two': [
-                            ['event', 'more events'],
-                            'goodbye'
+                            {msgid: 'event', msgidPlural: 'more events'},
+                            {msgid: 'goodbye'}
+                        ],
+                        'three': [
+                            {msgid: 'code', msgidPlural: 'more codes', id: 'custom.id.code'},
+                            {msgid: 'morning', id: 'custom.id.morning'}
                         ]
                     };
 
-                    utils.searchParsedTranslation.andCallFake(function (tr, id) {
-                        for (var file in tr) {
-                            for (var i = 0, l = tr[file].length; i < l; i++) {
-                                var entry = tr[file][i];
-                                if ((Array.isArray(entry) && entry[0] && id === entry[0]) || id === entry) {
-                                    return entry;
-                                }
-                            }
-                        }
-
-                        return '';
-                    });
-                    utils.updateExistingTranslations(po, tr);
+                    utils._updateExistingTranslations(po, tr);
 
                     expect(po.ro['']).toBeDefined();
                     expect(po.ro['hello, world']).toBeDefined();
@@ -246,14 +290,21 @@ describe('generate po utils', function () {
                     expect(po.ro['error']).toBeDefined();
                     expect(po.ro['error'][0]).toEqual('errors');
                     expect(po.ro['event']).toBeDefined();
-                    expect(po.ro['event'][0]).toEqual(tr.two[0][1]);
+                    expect(po.ro['event'][0]).toEqual(tr.two[0].msgidPlural);
+                    expect(po.ro['custom.id.morning']).toBeDefined();
+                    expect(po.ro['custom.id.code'][0]).toEqual(tr.three[0].msgidPlural);
+
                     expect(po.en['']).toBeDefined();
                     expect(po.en['hello, world']).toBeDefined();
                     expect(po.en['goodbye']).toBeDefined();
                     expect(po.en['error']).toBeDefined();
                     expect(po.en['error'][0]).toEqual('errors');
                     expect(po.en['event']).toBeDefined();
-                    expect(po.en['event'][0]).toEqual('events');
+                    expect(po.en['event'][0]).toEqual(tr.two[0].msgidPlural);
+                    expect(po.en['custom.id.morning']).toBeDefined();
+                    expect(po.en['custom.id.morning'][0]).toBeUndefined();
+                    expect(po.en['custom.id.code'][0]).toEqual(tr.three[0].msgidPlural);
+
                 });
 
             });
@@ -265,18 +316,40 @@ describe('generate po utils', function () {
 
             beforeEach(function () {
                 tr = {
-                    'one': [['error', 'errors']],
-                    'two': ['hello, world']
+                    'one': [{msgid: 'error', msgidPlural: 'errors'}],
+                    'two': [{msgid: 'hello, world'}]
                 };
             });
 
             it('should find singular entries', function () {
-                found = utils.searchParsedTranslation(tr, 'hello, world');
+                found = utils._searchParsedTranslation(tr, 'hello, world');
                 expect(found).toBe(tr.two[0]);
             });
 
             it('should find plural entries', function () {
-                found = utils.searchParsedTranslation(tr, 'error');
+                found = utils._searchParsedTranslation(tr, 'error');
+                expect(found).toBe(tr.one[0]);
+            });
+
+        });
+
+        describe('search parsed translations when custom id is present', function () {
+            var found;
+
+            beforeEach(function () {
+                tr = {
+                    'one': [{msgid: 'error', msgidPlural: 'errors', id: 'custom.id.error'}],
+                    'two': [{msgid: 'hello, world', id: 'custom.id.hello'}]
+                };
+            });
+
+            it('should find singular entries', function () {
+                found = utils._searchParsedTranslation(tr, 'custom.id.hello');
+                expect(found).toBe(tr.two[0]);
+            });
+
+            it('should find plural entries', function () {
+                found = utils._searchParsedTranslation(tr, 'custom.id.error');
                 expect(found).toBe(tr.one[0]);
             });
 
@@ -289,103 +362,115 @@ describe('generate po utils', function () {
                 component = { folder: path.join('components', 'x') };
                 ro = path.join('components', 'x', 'locale', 'ro', 'messages.po');
                 en = path.join('components', 'x', 'locale', 'en', 'messages.po');
-
-                spyOn(utils, 'searchPoTranslation');
             });
 
             describe('one-to-one', function () {
 
-                beforeEach(function () {
-                    utils.searchPoTranslation.andReturn(void 0);
+                it('should add one new singular entry', function () {
+                    po = {};
+                    po[ro] = { 'hello': [null, 'salut'] };
+                    tr = { 'one': [{msgid: 'goodbye'}] };
+
+                    utils._addNewTranslations(component, po, tr);
+
+                    expect(po[ro]['goodbye'][0]).toBeUndefined();
+                    expect(po[ro]['goodbye'][1]).toEqual('goodbye');
                 });
 
-                it('should add one new singular entry', function () {
-                    po = {}; po[ro] = { 'hello': [null, 'salut'] };
-                    tr = { 'one': ['goodbye'] };
+                it('should add one new singular entry when custom id is present', function () {
+                    po = {};
+                    po[ro] = { 'hello': [null, 'salut'] };
+                    tr = { 'one': [{msgid: 'goodbye', id: 'custom.id'}] };
 
-                    utils.addNewTranslations(component, po, tr);
+                    utils._addNewTranslations(component, po, tr);
 
-                    expect(po[ro]['goodbye'][0]).toBeNull();
-                    expect(po[ro]['goodbye'][1]).toEqual('goodbye');
+                    expect(po[ro]['custom.id'][0]).toBeUndefined();
+                    expect(po[ro]['custom.id'][1]).toEqual('goodbye');
                 });
 
                 it('should add multiple singular entries', function () {
                     po = {}; po[ro] = { 'hello': [null, 'salut'] };
-                    tr = { 'one': ['goodbye', 'error'] };
+                    tr = { 'one': [{msgid: 'goodbye'}, {msgid: 'error', id: 'custom.id'}] };
 
-                    utils.addNewTranslations(component, po, tr);
+                    utils._addNewTranslations(component, po, tr);
 
-                    expect(po[ro]['goodbye'][0]).toBeNull();
+                    expect(po[ro]['goodbye'][0]).toBeUndefined();
                     expect(po[ro]['goodbye'][1]).toEqual('goodbye');
-                    expect(po[ro]['error'][0]).toBeNull();
-                    expect(po[ro]['error'][1]).toEqual('error');
+                    expect(po[ro]['custom.id'][0]).toBeUndefined();
+                    expect(po[ro]['custom.id'][1]).toEqual('error');
                 });
 
                 it('should add one new plural entry', function () {
                     po = {}; po[ro] = { 'hello': [null, 'salut'] };
-                    tr = { 'one': [['error', 'errors']] };
+                    tr = { 'one': [{msgid: 'error', msgidPlural: 'errors', id: 'custom.id'}] };
 
-                    utils.addNewTranslations(component, po, tr);
+                    utils._addNewTranslations(component, po, tr);
 
-                    expect(po[ro]['error'][0]).toEqual('errors');
-                    expect(po[ro]['error'][1]).toEqual('error');
+                    expect(po[ro]['custom.id'][0]).toEqual('errors');
+                    expect(po[ro]['custom.id'][1]).toEqual('error');
                 });
 
                 it('should add multiple plural entries', function () {
                     po = {}; po[ro] = { 'hello': [null, 'salut'] };
-                    tr = { 'one': [['error', 'errors'], ['event', 'events']] };
+                    tr = { 'one': [
+                                    {msgid: 'error', msgidPlural: 'errors'},
+                                    {msgid: 'event', msgidPlural: 'events', id: 'custom.id'}
+                                  ]
+                         };
 
-                    utils.addNewTranslations(component, po, tr);
+                    utils._addNewTranslations(component, po, tr);
 
                     expect(po[ro]['error'][0]).toEqual('errors');
                     expect(po[ro]['error'][1]).toEqual('error');
-                    expect(po[ro]['event'][0]).toEqual('events');
-                    expect(po[ro]['event'][1]).toEqual('event');
+                    expect(po[ro]['custom.id'][0]).toEqual('events');
+                    expect(po[ro]['custom.id'][1]).toEqual('event');
                 });
+
             });
 
             describe('many-to-many', function () {
 
-                beforeEach(function () {
-                    utils.searchPoTranslation.andCallFake(function (po, id) {
-                        for (var locale in po) {
-                            var entry = po[locale][id];
-                            if (entry) {
-                                return entry;
-                            }
-                        }
-                    });
-                });
-
                 it('should add one new singular entry to multiple locales', function () {
                     po = {}; po[ro] = {}; po[en] = {};
-                    tr = { 'one': ['hello'] };
+                    tr = { 'one': [{msgid: 'hello'}] };
 
-                    utils.addNewTranslations(component, po, tr);
+                    utils._addNewTranslations(component, po, tr);
 
-                    expect(po[ro]['hello'][0]).toBeNull();
+                    expect(po[ro]['hello'][0]).toBeUndefined();
                     expect(po[ro]['hello'][1]).toEqual('hello');
-                    expect(po[en]['hello'][0]).toBeNull();
+                    expect(po[en]['hello'][0]).toBeUndefined();
                     expect(po[en]['hello'][1]).toEqual('hello');
+                });
+
+                it('should add one new singular entry to multiple locales when custom id is present', function () {
+                    po = {}; po[ro] = {}; po[en] = {};
+                    tr = { 'one': [{msgid: 'hello', id: 'custom.id'}] };
+
+                    utils._addNewTranslations(component, po, tr);
+
+                    expect(po[ro]['custom.id'][0]).toBeUndefined();
+                    expect(po[ro]['custom.id'][1]).toEqual('hello');
+                    expect(po[en]['custom.id'][0]).toBeUndefined();
+                    expect(po[en]['custom.id'][1]).toEqual('hello');
                 });
 
                 it('should add multiple singular entries to multiple locales', function () {
                     po = {}; po[ro] = {}; po[en] = {};
                     tr = {
-                        'one': ['hello'],
-                        'two': ['error']
+                        'one': [{msgid: 'hello', id: 'custom.id'}],
+                        'two': [{msgid: 'error'}]
                     };
 
-                    utils.addNewTranslations(component, po, tr);
+                    utils._addNewTranslations(component, po, tr);
 
-                    expect(po[ro]['hello'][0]).toBeNull();
-                    expect(po[ro]['hello'][1]).toEqual('hello');
-                    expect(po[en]['hello'][0]).toBeNull();
-                    expect(po[en]['hello'][1]).toEqual('hello');
+                    expect(po[ro]['custom.id'][0]).toBeUndefined();
+                    expect(po[ro]['custom.id'][1]).toEqual('hello');
+                    expect(po[en]['custom.id'][0]).toBeUndefined();
+                    expect(po[en]['custom.id'][1]).toEqual('hello');
 
-                    expect(po[ro]['error'][0]).toBeNull();
+                    expect(po[ro]['error'][0]).toBeUndefined();
                     expect(po[ro]['error'][1]).toEqual('error');
-                    expect(po[en]['error'][0]).toBeNull();
+                    expect(po[en]['error'][0]).toBeUndefined();
                     expect(po[en]['error'][1]).toEqual('error');
 
                 });
@@ -393,111 +478,128 @@ describe('generate po utils', function () {
                 it('should add multiple plural entries to multiple locales', function () {
                     po = {}; po[ro] = {}; po[en] = {};
                     tr = {
-                        'one': [['error', 'errors']],
-                        'two': [['event', 'events']]
+                        'one': [{msgid: 'error', msgidPlural: 'errors'}],
+                        'two': [{msgid: 'event', msgidPlural: 'events', id: 'custom.id.event'}],
+                        'three': [{msgid: 'morning', msgidPlural: 'mornings', id: 'custom.id.morning'}]
                     };
 
-                    utils.addNewTranslations(component, po, tr);
+                    utils._addNewTranslations(component, po, tr);
 
                     expect(po[ro]['error'][0]).toEqual('errors');
                     expect(po[ro]['error'][1]).toEqual('error');
                     expect(po[en]['error'][0]).toEqual('errors');
                     expect(po[en]['error'][1]).toEqual('error');
 
-                    expect(po[ro]['event'][0]).toEqual('events');
-                    expect(po[ro]['event'][1]).toEqual('event');
-                    expect(po[en]['event'][0]).toEqual('events');
-                    expect(po[en]['event'][1]).toEqual('event');
+                    expect(po[ro]['custom.id.event'][0]).toEqual('events');
+                    expect(po[ro]['custom.id.event'][1]).toEqual('event');
+                    expect(po[en]['custom.id.event'][0]).toEqual('events');
+                    expect(po[en]['custom.id.event'][1]).toEqual('event');
+
+                    expect(po[ro]['custom.id.morning'][0]).toEqual('mornings');
+                    expect(po[ro]['custom.id.morning'][1]).toEqual('morning');
+                    expect(po[en]['custom.id.morning'][0]).toEqual('mornings');
+                    expect(po[en]['custom.id.morning'][1]).toEqual('morning');
 
                 });
 
                 it('should handle a complex case', function () {
-                    var ro_other = path.join('components', 'x', 'locale', 'ro', 'misc.po');
+                    var fr = path.join('components', 'x', 'locale', 'fr', 'misc.po');
 
                     po = {};
                     po[ro] = {
                         'hello': [null, 'salut'],
                     };
-                    po[ro_other] = {
-                        'goodbye': [null, 'la revedere']
+                    po[fr] = {
+                        'goodbye': [null, 'au revoir'],
+                        'morning': ['matins', 'matin'],
+                        'custom.id.morning': ['matins', 'matin', 'matins']
                     };
                     po[en] = {
                         'hello': [null, 'hello'],
-                        'goodbye': [null, 'goodbye']
+                        'goodbye': [null, 'goodbye'],
+                        'thank you': [null, 'thank you'],
+                        'morning': [null, 'morning', 'mornings'],
+                        'food': ['foods', 'food', 'foods']
                     };
                     tr = {
-                        'one': ['error', ['option', 'options']],
-                        'two': ['goodbye', ['event', 'events']],
-                        'three': ['hello']
+                        'one': [{msgid: 'error'}, {msgid: 'option', msgidPlural: 'options'}],
+                        'two': [{msgid: 'goodbye'}, {msgid: 'event', msgidPlural: 'events'}],
+                        'three': [{msgid: 'hello'}],
+                        'four': [{msgid: 'thank you', id: 'custom.id.thank.you'}],
+                        'five': [
+                                    {msgid: 'goodbye'},
+                                    {msgid: 'morning', msgidPlural: 'mornings', id: 'custom.id.morning'}
+                                ],
+                        'six': [
+                                {msgid: 'goodbye', id: 'custom.id.goodbye'},
+                                {msgid: 'food', msgidPlural: 'foods', id: 'custom.id.food'}
+                        ]
                     };
 
-                    utils.addNewTranslations(component, po, tr);
+                    utils._addNewTranslations(component, po, tr);
 
                     expect(po[ro]['hello'][0]).toBeNull();
                     expect(po[ro]['hello'][1]).toEqual('salut');
-                    expect(po[ro_other]['hello']).not.toBeDefined();
+                    expect(po[fr]['hello'][1]).toEqual('hello');
                     expect(po[en]['hello'][0]).toBeNull();
                     expect(po[en]['hello'][1]).toEqual('hello');
 
-                    expect(po[ro]['error'][0]).toBeNull();
+                    expect(po[ro]['error'][0]).toBeUndefined();
                     expect(po[ro]['error'][1]).toEqual('error');
-                    expect(po[ro_other]['error']).not.toBeDefined();
-                    expect(po[en]['error'][0]).toBeNull();
+                    expect(po[fr]['error'][1]).toEqual('error');
+                    expect(po[en]['error'][0]).toBeUndefined();
                     expect(po[en]['error'][1]).toEqual('error');
 
                     expect(po[ro]['option'][0]).toEqual('options');
                     expect(po[ro]['option'][1]).toEqual('option');
-                    expect(po[ro_other]['option']).not.toBeDefined();
+                    expect(po[fr]['option'][0]).toEqual('options');
+                    expect(po[fr]['option'][1]).toEqual('option');
                     expect(po[en]['option'][0]).toEqual('options');
                     expect(po[en]['option'][1]).toEqual('option');
 
-                    expect(po[ro]['goodbye']).not.toBeDefined();
-                    expect(po[ro_other]['goodbye'][0]).toBeNull();
-                    expect(po[ro_other]['goodbye'][1]).toEqual('la revedere');
+                    expect(po[ro]['goodbye'][0]).toBeUndefined();
+                    expect(po[fr]['goodbye'][0]).toBeNull();
+                    expect(po[fr]['goodbye'][1]).toEqual('au revoir');
                     expect(po[en]['goodbye'][0]).toBeNull();
                     expect(po[en]['goodbye'][1]).toEqual('goodbye');
 
                     expect(po[ro]['event'][0]).toEqual('events');
                     expect(po[ro]['event'][1]).toEqual('event');
-                    expect(po[ro_other]['event']).not.toBeDefined();
+                    expect(po[fr]['event'][0]).toEqual('events');
+                    expect(po[fr]['event'][1]).toEqual('event');
                     expect(po[en]['event'][0]).toEqual('events');
                     expect(po[en]['event'][1]).toEqual('event');
+
+                    expect(po[ro]['custom.id.thank.you'][0]).toBeUndefined();
+                    expect(po[ro]['custom.id.thank.you'][1]).toEqual('thank you');
+                    expect(po[fr]['custom.id.thank.you'][0]).toBeUndefined();
+                    expect(po[fr]['custom.id.thank.you'][1]).toEqual('thank you');
+                    expect(po[en]['custom.id.thank.you'][0]).toBeUndefined();
+                    expect(po[en]['custom.id.thank.you'][1]).toEqual('thank you');
+
+                    expect(po[ro]['custom.id.morning'][0]).toEqual('mornings');
+                    expect(po[ro]['custom.id.morning'][1]).toEqual('morning');
+                    expect(po[fr]['custom.id.morning'][0]).toEqual('matins');
+                    expect(po[fr]['custom.id.morning'][1]).toEqual('matin');
+                    expect(po[fr]['morning'][0]).toEqual('matins');
+                    expect(po[fr]['morning'][1]).toEqual('matin');
+                    expect(po[en]['custom.id.morning'][0]).toEqual('mornings');
+                    expect(po[en]['custom.id.morning'][1]).toEqual('morning');
+
+                    expect(po[ro]['custom.id.food'][0]).toEqual('foods');
+                    expect(po[ro]['custom.id.food'][1]).toEqual('food');
+
+                    expect(po[fr]['custom.id.food'][0]).toEqual('foods');
+                    expect(po[fr]['custom.id.food'][1]).toEqual('food');
+
+                    expect(po[en]['custom.id.food'][0]).toEqual('foods');
+                    expect(po[en]['custom.id.food'][1]).toEqual('food');
                 });
-
             });
         });
-
-        describe('search po translations', function () {
-            var found;
-
-            beforeEach(function () {
-                po = {
-                    'ro': { 'hello': [null, 'salut'], 'goodbye': [null, 'la revedere'] },
-                    'en': { 'welcome': [null, 'bine ați venit'] }
-                };
-            });
-
-            it('should find existing message ids', function () {
-                found = utils.searchPoTranslation(po, 'goodbye');
-
-                expect(found).toBe(po.ro.goodbye);
-
-                found = utils.searchPoTranslation(po, 'welcome');
-
-                expect(found).toBe(po.en.welcome);
-            });
-
-            it('should return undefined for missing message ids', function () {
-                found = utils.searchPoTranslation(po, 'hello, world');
-
-                expect(found).toBeUndefined();
-            });
-
-        });
-
     });
 
-    describe('scanComponents', function () {
+    describe('_scanComponents', function () {
         beforeEach(function () {
             fs.statSync.andReturn({ isDirectory: function () { return true; } });
         });
@@ -509,7 +611,7 @@ describe('generate po utils', function () {
                 return '{"file": "' + file.replace(/\\/g, '\\\\') + '"}';
             });
 
-            var components = utils.scanComponents('components');
+            var components = utils._scanComponents('components');
 
             var component1 = {
                 file: path.join('components', 'button', 'meta.json'),
@@ -532,123 +634,90 @@ describe('generate po utils', function () {
             fs.readdirSync.andThrow(new Error('some error'));
 
             expect(function () {
-                utils.scanComponents('components');
+                utils._scanComponents('components');
             }).toThrow();
         });
     });
 
-    describe('parseComponent', function () {
+    describe('_parseComponent', function () {
         beforeEach(function () {
-            spyOn(utils, 'parseTemplateFiles');
-            spyOn(utils, 'parseJsFiles');
+            spyOn(utils, '_parseTemplateFile');
+            spyOn(utils, '_parseJsFile');
         });
 
         it('should invoke the parse methods and return the result', function () {
-            utils.parseTemplateFiles.andReturn({a: 1, b: 2});
-            utils.parseJsFiles.andReturn({c: 3});
-
-            var translations = utils.parseComponent({});
-
-            expect(translations).toEqual({a: 1, b: 2, c: 3});
-        });
-    });
-
-    describe('parseTemplateFiles', function () {
-        beforeEach(function () {
-            spyOn(utils, 'parseFiles');
-        });
-
-        it('should call parse for template files', function () {
-            utils.parseFiles.andReturn('value');
-
-            expect(utils.parseTemplateFiles({folder: '/components/button'})).toEqual('value');
-
-            expect(utils.parseFiles).toHaveBeenCalledWith({
-                folder: path.join('/components/button', 'client/templates'),
-                extensions: ['.html'],
-                tPattern: jasmine.any(Object),
-                ntPattern: jasmine.any(Object)
-            });
-        });
-    });
-
-    describe('parseJsFiles', function () {
-        beforeEach(function () {
-            spyOn(utils, 'parseFiles');
-        });
-
-        it('should call parse for js files', function () {
-            utils.parseFiles.andReturn('value');
-
-            expect(utils.parseJsFiles({folder: '/components/button'})).toEqual('value');
-
-            expect(utils.parseFiles).toHaveBeenCalledWith({
-                folder: path.join('/components/button', 'client/js'),
-                extensions: ['.js'],
-                tPattern: jasmine.any(Object),
-                ntPattern: jasmine.any(Object)
-            });
-
-            expect(utils.parseFiles).toHaveBeenCalledWith({
-                folder: path.join('/components/button', 'server'),
-                extensions: ['.js'],
-                tPattern: jasmine.any(Object),
-                ntPattern: jasmine.any(Object)
-            });
-        });
-    });
-
-    describe('parseFiles', function () {
-        it('should parse js files', function () {
-            util.walkSync.andCallFake(function (folder, extensions, cb) {
-                cb('file1');
-                cb('file2');
-            });
-
             fs.readFileSync.andCallFake(function (file) {
-                if (file === 'file1') {
-                    return "for (var i = 0; i < 3; i++) {\n" +
-                            "   console.log(t( \"abc\"));\n" +
-                            "}\n" +
-                            "\n" +
-                            "button.label =nt('new', 'new plural', 2, [1, 3]);";
-                }
-
-                if (file === 'file2') {
-                    return "if (i === 0) {" +
-                            "  return t ('message' );" +
-                            "} else {" +
-                            "  component.text = t(" +
-                            "      'some text');";
-                }
+                // on windows, path separators are treated as escape characters in JSON
+                return '{"file": "' + file.replace(/\\/g, '\\\\') + '"}';
+            });
+            utils._parseTemplateFile.andReturn({a: 1, b: 2});
+            utils._parseJsFile.andReturn([{c: 3}]);
+            util.walkSync.andCallFake(function (folder, extensions, cb) {
+                cb('file1.html');
+                cb('file2.js');
             });
 
-            var messages = utils.parseJsFiles({folder: '/components/button'});
+            var translations = utils._parseComponent({
+                folder: 'fakeFolder'
+            });
 
-            expect(messages['file1']).toEqual(['abc', ['new', 'new plural']]);
-            expect(messages['file2']).toEqual(['message', 'some text']);
+            expect(translations).toEqual({
+                'file1.html' : [{c: 3}],
+                'file2.js' : [{c: 3}]
+            });
+        });
+    });
+
+    describe('_parseTemplateFile', function () {
+        beforeEach(function () {
+            spyOn(utils, '_parseFiles');
         });
 
-        it('should parse template files', function () {
-            util.walkSync.andCallFake(function (folder, extensions, cb) {
-                cb('template1');
-                cb('template2');
-            });
-
-            fs.readFileSync.andCallFake(function (file) {
-                if (file === 'template1') {
-                    return '{{t "some message"}}';
+        it('should call parse for template files with custom id', function () {
+            expect(utils._parseTemplateFile('{{t "fakemsgid" id="customid"}}')).toEqual([
+                {
+                    msgid: 'fakemsgid',
+                    msgidPlural: undefined,
+                    id: 'customid'
                 }
+            ]);
+        });
 
-                if (file === 'template2') {
-                    return '{{nt "singular" "plural" n n var }}';
+        it('should call parse for template files with msg id', function () {
+            expect(utils._parseTemplateFile('{{t "hello"}}')).toEqual([
+                {
+                    msgid: 'hello',
+                    msgidPlural: undefined,
+                    id: undefined
                 }
-            });
+            ]);
+        });
+    });
 
-            var messages = utils.parseTemplateFiles({folder: '/components/button'});
+    describe('_parseJsFile', function () {
+        beforeEach(function () {
+            spyOn(utils, '_parseFiles');
+        });
 
-            expect(messages['template1']).toEqual(['some message']);
-            expect(messages['template2']).toEqual([['singular', 'plural']]);
+        it('should call parse for js files with custom id', function () {
+
+            expect(utils._parseJsFile(' t("my.custom", "fakemsgid");')).toEqual([
+                {
+                    id: 'my.custom',
+                    msgid : 'fakemsgid'
+                }
+            ]);
+
+        });
+
+        it('should call parse for js files with msgid', function () {
+
+            expect(utils._parseJsFile(' t("fakemsgid");')).toEqual([
+                {
+                    msgid : 'fakemsgid'
+                }
+            ]);
+
         });
     });
 
@@ -656,7 +725,7 @@ describe('generate po utils', function () {
         it("should corectly generate the translation", function() {
             var translation = new GeneratePoUtils();
 
-            expect(translation.composePoContent(locale)).toEqual(
+            expect(translation._composePoContent(locale)).toEqual(
                 'msgid ""\n' +
                 'msgstr ""\n' +
                 '"header1: header 1\\n"\n' +
@@ -705,9 +774,9 @@ describe('generate po utils', function () {
                 }
             };
 
-            spyOn(translation, 'composePoContent').andReturn(generatedText);
+            spyOn(translation, '_composePoContent').andReturn(generatedText);
 
-            translation.createPoFiles(component, poTranslations);
+            translation._createPoFiles(component, poTranslations);
 
             expect(fs.writeFileSync).toHaveBeenCalledWith('/some/path', generatedText, 'utf8');
         });
@@ -744,8 +813,8 @@ describe('generate po utils', function () {
                 }
             };
 
-            spyOn(translation, 'composePoContent').andReturn(generatedText);
-            translation.createPoFiles(component, poTranslations);
+            spyOn(translation, '_composePoContent').andReturn(generatedText);
+            translation._createPoFiles(component, poTranslations);
 
             expect(fs.writeFileSync).not.toHaveBeenCalled();
         });

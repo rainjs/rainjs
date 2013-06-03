@@ -25,142 +25,198 @@
 
 "use strict";
 
-describe('Translation module', function() {
-    describe('translate method', function () {
-        var cwd = process.cwd(),
-            path = require('path'),
-            util = require(path.join(cwd, 'lib', 'util')),
-            Translation = require(path.join(cwd, 'lib', 'translation')),
-            translation;
+describe("Server Side Translation", function () {
+    var mocks = {},
+        fs, configuration, Translation, poUtils,
+        file, component, locale, jed, Jed, logger, pluralFormFn;
 
-        var component = {
-            id: 'example',
-            version: '4.5.2',
-            folder: path.join(cwd, 'tests', 'server', 'fixtures', 'components', 'example_4_5_2')
+    beforeEach(function () {
+
+        file = 'fake.po';
+        component = {
+            id: 'fakeId'
+        };
+        locale = 'ro_RO';
+
+
+        fs = jasmine.createSpyObj('fs', ['readFileSync']);
+        fs.readFileSync.andCallFake(function () {
+            var data = 'msgid "a.b.c"\nmsgstr "Some text"\n\nmsgid "Some text"\nmsgstr "Some text"\n\nmsgid "plural.form"\nmsgstr "plurals"';
+            return data;
+        })
+
+        mocks['fs'] = fs;
+
+        configuration = {
+            defaultLanguage: 'en_EN',
+            language: 'ro_RO'
+        };
+        mocks['./configuration'] = configuration;
+
+        logger = jasmine.createSpyObj('logger', ['error']);
+        mocks['./logging'] = {
+            get: function () {
+                return logger
+            }
         };
 
-        beforeEach(function () {
-            var localeFolder = path.join(component.folder, 'locale');
+        Translation = loadModuleExports('/lib/translation.js', mocks);
 
-            translation = Translation.get();
-
-            util.walkSync(path.join(localeFolder, 'en_US'), ['.po'], function (filePath) {
-                translation.loadLanguageFile(filePath, 'en_US', component);
-            });
-            util.walkSync(path.join(localeFolder, 'ro_RO'), ['.po'], function (filePath) {
-                translation.loadLanguageFile(filePath, 'ro_RO', component);
-            });
-        });
-
-        it('should translate if message id exists', function () {
-            expect(translation.translate(component, 'ro_RO', 'Send email'))
-            .toEqual('Trimite email');
-        });
-
-        it('should return the message id, if translation doesn\'t exist', function () {
-            expect(translation.translate(component, 'en_US', 'No translation'))
-            .toEqual('No translation');
-        });
-
-        it('should correctly resolve arguments', function () {
-            var message = translation.translate(
-                    component, 'ro_RO', 'Dear %1$s %2$s,', undefined, undefined, ['Jhon', 'Doe']);
-            expect(message).toEqual('Bună ziua domnule Doe,');
-        });
     });
 
-    describe('getLocale method', function() {
-        var context, translation;
-        beforeEach(function() {
-            context = loadModuleContext('/lib/translation.js');
-            translation = new context.Translation();
+    describe("Singleton method", function () {
+
+        it('should construct the object only once', function () {
+
+            var translationInstance1 = Translation.get();
+            var translationInstance2 = Translation.get();
+
+            expect(translationInstance1).toBe(translationInstance2);
+
         });
 
-        it('should throw an rain error if the component parameter is missing', function() {
-            expect(function() {
-                translation.getLocale();
-            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'component');
-        });
-
-        it('should throw an rain error if the locale parameter is missing', function() {
-            expect(function() {
-                translation.getLocale({});
-            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'locale');
-        });
-
-        it('should return an empty object cause no translation is existing', function() {
-            expect(translation.getLocale(1, 2)).toEqual({});
-        });
-
-        it('should return the domain and data object of a locale', function() {
-            context.locales['test 1.0'] = {
-                'de': {
-                    textdomain: function() { return "textdomain"; },
-                    options: { locale_data: "translations" }
-                }
-            };
-
-            //TODO find a way to mock private functions
-            spyOn(context, 'computeLocaleId');
-            var translationResult = translation.getLocale({
-                id: 'test', version: '1.0'
-            }, 'de');
-
-
-            expect(translationResult.domain).toEqual("textdomain");
-            expect(translationResult.data).toEqual("translations");
-        });
     });
 
-    describe('getLocales method', function() {
-        var Translation, translation, configuration;
-        var component = {
-            id: 'test',
-            version: '1.0'
-        };
+    describe("loadLanguageFile method", function () {
 
-        beforeEach(function() {
-            var mocks = {};
-            configuration = mocks['./configuration'] = {};
-            Translation = loadModuleExports('/lib/translation.js', mocks);
-            translation = Translation.get();
-            spyOn(translation, 'getLocale').andCallFake(function (component, locale) {
-                return locale;
+        it('should throw an ERROR_IO error if the file could not have been read', function () {
+
+            fs.readFileSync.andCallFake(function () {
+                throw new Error('fail');
             });
+
+            var translationInstance = Translation.get();
+
+            expect(function() {translationInstance.loadLanguageFile(); }).toThrowType(RainError.ERROR_IO);
+
         });
 
-        it('should throw an error if the component parameter is missing', function() {
-            expect(function() {
-                translation.getLocales();
-            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'component');
+        it('should throw an ERROR_PRECONDITION_FAILED if the locale parameter is missing', function () {
+
+            var translationInstance = Translation.get();
+            expect(function () {translationInstance.loadLanguageFile('myFile');}).toThrowType(
+                RainError.ERROR_PRECONDITION_FAILED);
+
         });
 
-        it('should return two locales', function () {
-            configuration.language = 'de_DE';
-            configuration.defaultLanguage = 'en_US';
+        it('should set the private locales with the components id and locale', function () {
 
-            expect(translation.getLocales(component, 'ro_RO'))
-                .toEqual({language: 'ro_RO', defaultLanguage: 'en_US'});
-            expect(translation.getLocale).toHaveBeenCalledWith(component, 'ro_RO');
-            expect(translation.getLocale).toHaveBeenCalledWith(component, 'en_US');
+            var translationInstance = Translation.get();
+
+            translationInstance.loadLanguageFile(file, locale, component);
+
+            expect(translationInstance._locales[component.id + ' ' + component.version]
+                [locale]).toEqual(jasmine.any(Object));
         });
 
-        it('should use the platform language when the language parameter is missing', function () {
-            configuration.language = 'de_DE';
-            configuration.defaultLanguage = 'en_US';
+    });
 
-            expect(translation.getLocales(component))
-                .toEqual({language: 'de_DE', defaultLanguage: 'en_US'});
-            expect(translation.getLocale).toHaveBeenCalledWith(component, 'de_DE');
-            expect(translation.getLocale).toHaveBeenCalledWith(component, 'en_US');
+    describe("getLocales method", function () {
+
+        it('should correctly get the locales for a component', function () {
+            var translationInstance = Translation.get();
+
+            translationInstance.loadLanguageFile(file, locale, component);
+
+            var localesForComponent = translationInstance.getLocales(component, locale);
+            expect(localesForComponent.language.domain).toBe('fake');
+            expect(localesForComponent.language.data['fake']['a.b.c']).toEqual(jasmine.any(Array));
         });
 
-        it('should return one locale when language and defaultLanguage are the same', function() {
-            configuration.language = 'en_US';
-            configuration.defaultLanguage = 'en_US';
+    });
 
-            expect(translation.getLocales(component)).toEqual({language: 'en_US'});
-            expect(translation.getLocale).toHaveBeenCalledWith(component, 'en_US');
+    describe("generateContext method", function () {
+
+        it('should generate the context correctly', function () {
+
+            Translation.prototype.translate = jasmine.createSpy('translate');
+            var translationInstance = Translation.get();
+
+            var context = translationInstance.generateContext(component, locale);
+
+            context.t('someCustomId');
+            context.nt('someCustomId');
+
+            expect(translationInstance.translate).toHaveBeenCalled();
+            expect(translationInstance.translate.callCount).toBe(2);
         });
+
+    });
+
+    describe("translate method", function () {
+
+        it('should log an error if translation fails if no id passed', function () {
+
+            var translationInstance = Translation.get();
+            translationInstance.loadLanguageFile(file, locale, component);
+            translationInstance.loadLanguageFile(file, configuration.defaultLanguage, component);
+
+
+            var tr = translationInstance.translate(component, locale);
+
+            expect(logger.error).toHaveBeenCalled();
+
+        });
+
+        it('should translate depending on customId', function () {
+
+            var translationInstance = Translation.get();
+            translationInstance.loadLanguageFile(file, locale, component);
+            translationInstance.loadLanguageFile(file, configuration.defaultLanguage, component);
+
+
+            var tr = translationInstance.translate(component, locale, 'a.b.c', 'Some text');
+            expect(tr).toBe('Some text');
+
+        });
+
+        it('should translate depending on the msgId', function () {
+
+            var translationInstance = Translation.get();
+            translationInstance.loadLanguageFile(file, locale, component);
+            translationInstance.loadLanguageFile(file, configuration.defaultLanguage, component);
+
+
+            var tr = translationInstance.translate(component, locale, 'Some text');
+            expect(tr).toBe('Some text');
+
+        });
+
+        it('should translate plural form depending on customId', function () {
+
+            var translationInstance = Translation.get();
+            translationInstance.loadLanguageFile(file, locale, component);
+            translationInstance.loadLanguageFile(file, configuration.defaultLanguage, component);
+
+
+            var tr = translationInstance.translate(component, locale, 'plural.form', 'Plurals', 'Plurals', 2);
+            expect(tr).toBe('Plurals');
+
+        });
+
+        it('should display the messageId if no translation was possible for singular', function () {
+
+            var translationInstance = Translation.get();
+            translationInstance.loadLanguageFile(file, locale, component);
+            translationInstance.loadLanguageFile(file, configuration.defaultLanguage, component);
+
+
+            var tr = translationInstance.translate(component, locale, 'c.d.e', 'Some text');
+            expect(tr).toBe('Some text');
+
+        });
+
+        it('should display the messageId if no translation was possible for plural', function () {
+
+            var translationInstance = Translation.get();
+            translationInstance.loadLanguageFile(file, locale, component);
+            translationInstance.loadLanguageFile(file, configuration.defaultLanguage, component);
+
+
+            var tr = translationInstance.translate(component, locale, 'c.d.e', "Plural", 'Plurals', 2);
+            expect(tr).toBe('Plurals');
+
+        });
+
     });
 });

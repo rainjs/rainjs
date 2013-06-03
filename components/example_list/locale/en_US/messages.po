@@ -1,24 +1,25 @@
-msgid "Dear %1$s %2$s,"
+msgid "letter.content.dear"
 msgstr "Hello %1$s %2$s,"
 
-msgid "I am writing to ask whether it would be possible for you to provide a reference for me."
+msgid "letter.content.scope"
 msgstr "I am writing to ask whether it would be possible for you to provide a reference for me."
 
-msgid "If you were able to attest to my qualifications for employment, and the skills I attained during my <b>one month</b> tenure at <b>%2$s</b>, I would sincerely appreciate it."
+msgid "letter.content.positive.reference"
 msgid_plural "If you were able to attest to my qualifications for employment, and the skills I attained during my <b>%1$d months</b> tenure at <b>%2$s</b>, I would sincerely appreciate it."
 msgstr[0] "If you were able to attest to my qualifications for employment, and the skills I attained during my <b>one month</b> tenure at <b>%2$s</b>, I would sincerely appreciate it."
 msgstr[1] "If you were able to attest to my qualifications for employment, and the skills I attained during my <b>%1$d months</b> tenure at <b>%2$s</b>, I would sincerely appreciate it."
 
-msgid "I am in the process of seeking employment and a positive reference from you would enhance my prospects of achieving my career goals."
+msgid "letter.content.process"
 msgstr "I am in the process of seeking employment and a positive reference from you would enhance my prospects of achieving my career goals."
 
 msgid "Please let me know if there is any information I can provide regarding my experience to assist you in giving me a reference. I can be reached at %1$s or %2$s."
 msgstr "Please let me know if there is any information I can provide regarding my experience to assist you in giving me a reference. I can be reached at %1$s or %2$s."
 
-msgid "Thank you for your consideration."
+msgid "letter.content.thank.you"
 msgstr "Thank you for your consideration."
 
-msgid "Sincerely,"
+
+msgid "letter.ending.sincerely"
 msgstr "Sincerely,"
 
 msgid "%1$s %2$s"
@@ -27,7 +28,7 @@ msgstr "%1$s %2$s"
 msgid "Email was sent successfully!"
 msgstr "Email was sent successfully!"
 
-msgid "Send email"
+msgid "send.email.button.label"
 msgstr "Send email"
 
 msgid "The user \"%1$s\" connected to the notes websocket."
