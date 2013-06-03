@@ -32,7 +32,7 @@ found, otherwise the message id is returned.
 
 2. The second one is by using a structured custom message id. This way, you have to provide a
 structured custom message id and a classic message id. The translation of the structured id is
-returned if found, otherwise the classic message id is returned.
+returned if found, otherwise the classic message id is returned. The classic message id is always mandatory.
 
 .. code-block:: javascript
 

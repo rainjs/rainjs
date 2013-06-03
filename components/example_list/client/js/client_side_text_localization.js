@@ -50,7 +50,7 @@ define([], function (t, nt) {
             email = 'jsmith@abcd.com',
             phone = '(111) 111-1111';
 
-        root.find('.dear').html(t('letter.content.dear', [boss.title, boss.lastName]));
+        root.find('.dear').html(t('letter.content.dear', 'Hello %1$s %2$s,', [boss.title, boss.lastName]));
 
         root.find('.possible').html(t('letter.content.scope', 'I am writing to ask whether it would be possible for you to provide a reference for me.'));
         root.find('.attest').html(nt('letter.content.positive.reference', 'If you were able to attest to my qualifications for employment, and the skills I attained during my <b>one month</b> tenure at <b>%2$s</b>, I would sincerely appreciate it.',

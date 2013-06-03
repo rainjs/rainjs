@@ -2,7 +2,7 @@ msgid "letter.content.dear"
 msgstr "Hallo %1$s %2$s,"
 
 msgid "letter.content.scope"
-msgstr "ich schreibe Ihnen, um zu fragen, ob Sie mir eine Referenz geben könnten."
+msgstr "Ich schreibe Ihnen, um zu fragen, ob Sie mir eine Referenz geben könnten."
 
 msgid "letter.content.positive.reference"
 msgid_plural "If you were able to attest to my qualifications for employment, and the skills I attained during my <b>%1$d months</b> tenure at <b>%2$s</b>, I would sincerely appreciate it."

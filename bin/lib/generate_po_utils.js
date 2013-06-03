@@ -177,7 +177,7 @@ GeneratePoUtils.prototype._parseFiles = function (options) {
 /**
  * Parses a javascript file and extracts the translation
  *
- * @param text the content of the javascript file
+ * @param {String} text the content of the javascript file
  * @returns {[Object]} the array of translations found in .js files
  */
 GeneratePoUtils.prototype._parseJsFile = function (text) {
@@ -241,8 +241,8 @@ GeneratePoUtils.prototype._parseJsFile = function (text) {
  * Parses the translation function of it's arguments. Esprima module will parse your
  * text and generate
  *
- * @param functionArgs, the arguments of the translation function
- * @param type, the type of function ``t`` or ``nt``
+ * @param {String} functionArgs the arguments of the translation function
+ * @param {String} type the type of function ``t`` or ``nt``
  * @throws {Error} not a valid call of ``t`` or ``nt`` function.
  */
 GeneratePoUtils.prototype._splitArguments = function(functionArgs, type) {
