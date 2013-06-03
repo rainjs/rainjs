@@ -338,7 +338,8 @@ define(['raintime/lib/promise',
 
         var deferred = new Promise.Deferred(),
             newComponent = new Component(component),
-            deps = component.controller ? [component.controller] : [];
+            deps = component.controller ?
+                [component.controller.substring(1, component.controller.length - 3)] : [];
 
         map[newComponent.instanceId] = newComponent;
         newComponent.promise = deferred.promise;
@@ -347,23 +348,25 @@ define(['raintime/lib/promise',
             start: new Promise.Deferred()
         };
 
-        require(deps, function (Controller) {
-            if (!Controller) {
-                Controller = function () {};
-            }
-            var controller = createControllerInstance(Controller, newComponent);
-            newComponent.controller = controller;
+        require([component.id + '/' + component.version + '/js/index.min'], function () {
+            require(deps, function (Controller) {
+                if (!Controller) {
+                    Controller = function () {};
+                }
+                var controller = createControllerInstance(Controller, newComponent);
+                newComponent.controller = controller;
 
-            // this callback shouldn't be called for the placeholder
-            if (!component.isPlaceholder && callbacks[newComponent.instanceId]) {
-                callbacks[newComponent.instanceId].call(controller, newComponent);
-                delete callbacks[newComponent.instanceId];
-            }
+                // this callback shouldn't be called for the placeholder
+                if (!component.isPlaceholder && callbacks[newComponent.instanceId]) {
+                    callbacks[newComponent.instanceId].call(controller, newComponent);
+                    delete callbacks[newComponent.instanceId];
+                }
 
-            newComponent.controllerLoaded = true;
-            invokeLifecycle(newComponent);
+                newComponent.controllerLoaded = true;
+                invokeLifecycle(newComponent);
 
-            deferred.resolve(controller);
+                deferred.resolve(controller);
+            });
         });
     }
 

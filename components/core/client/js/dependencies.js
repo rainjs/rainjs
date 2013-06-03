@@ -265,6 +265,12 @@ define(function () {
         }
 
         if (typeof name === 'string') {
+            if (isDummyDepAdded) {
+                //remove dummy dependency
+                currentDeps.pop();
+                isDummyDepAdded = false;
+            }
+            modifyDependencies(name, currentDeps, currentCallback);
             oldDefine(name, currentDeps, currentCallback);
         } else {
             oldDefine(currentDeps, currentCallback);

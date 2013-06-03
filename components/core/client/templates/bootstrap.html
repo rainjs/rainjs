@@ -19,11 +19,11 @@
                     "name": "raintime",
                     "main": "raintime",
                     "location": "core/js"
-                }],
+                }]/*,
                 "deps": [
                     "raintime/dependencies",
                     "raintime"
-                ]
+                ]*/
             };
             var rainContext = {
                 language: '{{language}}',
@@ -54,16 +54,20 @@
                 }
             }
 
-            require(requireConfig, ["raintime/client_rendering"],
-                    function(ClientRenderer) {
-                ClientRenderer.get().setPlaceholderTimeout({{placeholderTimeout}});
-                ClientRenderer.get().setPlaceholder({{{placeholder}}});
+            require(requireConfig, ['raintime/index.min'], function (main) {
+                require(['raintime/dependencies'], function (main) {});
 
-                if (0 === renderQueueList.length) {
-                    ClientRenderer.get().renderPlaceholder($($('body div').get(0)).attr('id'));
-                }
+                require(["raintime/client_rendering"],
+                        function(ClientRenderer) {
+                    ClientRenderer.get().setPlaceholderTimeout({{placeholderTimeout}});
+                    ClientRenderer.get().setPlaceholder({{{placeholder}}});
 
-                renderQueue();
+                    if (0 === renderQueueList.length) {
+                        ClientRenderer.get().renderPlaceholder($($('body div').get(0)).attr('id'));
+                    }
+
+                    renderQueue();
+                });
             });
         </script>
         <link rel="stylesheet" type="text/css" href="/core/resources/bootstrap.css">
