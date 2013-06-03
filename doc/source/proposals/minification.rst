@@ -2,17 +2,17 @@
 JavaScript and CSS Minification
 ===============================
 
-Minification is important for fast to load web applications. The scope of this research is to
+Minification is important to load web applications faster. The scope of this research is to
 reduce the page load time by decreasing the number and size of the requests performed by the
 browser. The number of requests is decreased by combining multiple CSS or JavaScript files in
-a single file. The request size is reduced by removing white space and applying other compression
+a single file. The request size is reduced by removing white spaces and applying other compression
 algorithms that gives you smaller files while preserving the same functionality, e.g.: name
 mangling, stripping comments etc.
 
 The minification will be performed as a predeployment step using a SDK command like ``rain minify``
 which will generate the minified files for each component. It might be desired that this command
-generates a new RAIN project containing only the minified files instead adding the minified files
-in the current project.
+generates a new RAIN project containing only the minified files instead of adding the minified
+files in the current project.
 
 -----------------------
 JavaScript Minification
@@ -29,7 +29,7 @@ multiple modules in the same file each module must have the optional module name
         return Notes;
     });
 
-When performing minification the client-side controllers associated with each view are identified
+When performing minification, the client-side controllers associated with each view are identified
 and added to the list of modules to be included in the minified file. The dependencies of each
 client-side controller are identified and included by the RequireJS Optimizer. This process
 generates a file named ``index.min.js`` for each component. Any external dependencies are
@@ -155,7 +155,7 @@ the ``core`` component is written manually and it should look like this::
     };
 
 The current minification prototype requires a few improvements which are listed below:
- - the files that needs to be included for the ``core`` component should be found automatically.
+ - the files that need to be included for the ``core`` component should be found automatically.
    An approach might be to use the RequireJS optimizer to trace the dependencies for each module
    an than adding all the files to the include list in the correct order. This might not be an
    issue in our case since the module that is required when requesting the file is the empty
@@ -183,9 +183,9 @@ The current minification prototype requires a few improvements which are listed 
    We should come up with a list of supported module paths and see what needs to be done to
    make them work.
 
-Some changes needs to be implemented in RAIN to use the minified files:
+Some changes need to be implemented in RAIN to use the minified files:
 
- - a flag indicating if minification should be used should be added
+ - a flag indicating if minification is enabled should be added
  - the dependencies module should be modified to support multiple modules per file
  - raintime should be modified to require the ``index.min`` module associated with the component
    before requiring the client side controller when minification is used.
@@ -198,12 +198,12 @@ CSS Minification
 The tool used for CSS minification is less. It supports CSS minification using the YUI compressor.
 All the css files (*.css) for a component are rendered using less and placed in the same file.
 The rules should also be counted when adding CSS to the minified file to avoid the situation where
-more than 4095 rules are added in the same file. If this is the case a JSON file should be created
+more than 4095 rules are added in the same file. If this is the case, a JSON file should be created
 specifying which files were added to which minified file.
 
 Some changes needs to be implemented in RAIN to use the minified files:
 
- - a flag indicating if minification should be used should be added
+ - a flag indicating if minification is enabled should be added
  - the css helper should be modified to replace the requested css file path with the minified file
    when minification is enabled. It should also ensure that the same path is added only once in the
    css list
