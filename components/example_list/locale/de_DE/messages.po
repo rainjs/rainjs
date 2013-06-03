@@ -1,24 +1,24 @@
-msgid "Dear %1$s %2$s,"
+msgid "letter.content.dear"
 msgstr "Hallo %1$s %2$s,"
 
-msgid "I am writing to ask whether it would be possible for you to provide a reference for me."
-msgstr "ich schreibe Ihnen, um zu fragen, ob Sie mir eine Referenz geben könnten."
+msgid "letter.content.scope"
+msgstr "Ich schreibe Ihnen, um zu fragen, ob Sie mir eine Referenz geben könnten."
 
-msgid "If you were able to attest to my qualifications for employment, and the skills I attained during my <b>one month</b> tenure at <b>%2$s</b>, I would sincerely appreciate it."
+msgid "letter.content.positive.reference"
 msgid_plural "If you were able to attest to my qualifications for employment, and the skills I attained during my <b>%1$d months</b> tenure at <b>%2$s</b>, I would sincerely appreciate it."
-msgstr[0] "Ich würde es sehr schätzen, wenn Sie meine Qualifikationen für die Beschäftigung, und die Fähigkeiten, die ich während meiner <b>1 monatigen</b> Amtszeit bei <b>%2$s</ b> erreicht habe, bezeugen könnten."
+msgstr[0] "Ich würde es sehr schätzen, wenn Sie meine Qualifikationen für die Beschäftigung, und die Fähigkeiten, die ich während meiner <b>1 monatigen</b> Amtszeit bei <b>%2$s</b> erreicht habe, bezeugen könnten."
 msgstr[1] "Ich würde es sehr schätzen, wenn Sie meine Qualifikationen für die Beschäftigung, und die Fähigkeiten, die ich während meiner <b>%1$d monatigen</b> Amtszeit bei <b>%2$s</b> erreicht habe, bezeugen könnten."
 
-msgid "I am in the process of seeking employment and a positive reference from you would enhance my prospects of achieving my career goals."
+msgid "letter.content.process"
 msgstr "Ich bin in dem Prozess der Arbeitssuche und eine positive Referenz von Ihnen würde meine Aussichten für das Erreichen meiner beruflichen Ziele verbessern."
 
 msgid "Please let me know if there is any information I can provide regarding my experience to assist you in giving me a reference. I can be reached at %1$s or %2$s."
 msgstr "Bitte lassen Sie mich wissen, wenn ich Sie mit meiner Erfahrung unterstützen kann, um mir diese Referenz zu geben. Sie können mich unter %1$s oder %2$s erreichen."
 
-msgid "Thank you for your consideration."
+msgid "letter.content.thank.you"
 msgstr "Vielen Dank für Ihre Aufmerksamkeit."
 
-msgid "Sincerely,"
+msgid "letter.ending.sincerely"
 msgstr "Aufrichtig,"
 
 msgid "%1$s %2$s"
@@ -27,5 +27,5 @@ msgstr "%1$s %2$s"
 msgid "Email was sent successfully!"
 msgstr "E-Mail wurde erfolgreich gesendet!"
 
-msgid "Send email"
+msgid "send.email.button.label"
 msgstr "E-Mail senden"

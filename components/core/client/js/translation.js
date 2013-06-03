@@ -109,17 +109,58 @@ define(['raintime/lib/jed'], function (Jed) {
      * @param {Array} args the message parameters
      * @returns {String} the translated text or empty string if an error occurred
      */
-    ClientTranslation.prototype.translate = function (msgId, msgIdPlural, count, args) {
+    ClientTranslation.prototype.translate = function (customId, msgId, msgIdPlural, count, args) {
+        var messageText;
+
+        //switching arguments
+        if (typeof msgId !== 'string') {
+            /**
+             * If the messageId is not a string then the msgId is the array of arguments,
+             * that means that two parameters were passed. That means that the msgId is
+             * the value of the customId argument.
+             */
+            args = msgId;
+        } else if (typeof msgIdPlural !==  'string' && typeof msgIdPlural !== 'undefined') {
+            /**
+             * If the msgIdPlural is not a string that means three parameters were passed
+             * so the msgId will shift to customId.
+             */
+            args = count;
+            count = msgIdPlural;
+            msgIdPlural = msgId;
+        } else {
+            /**
+             * In any other case we should save the msgId as the messageText so
+             * if the customId fails to be found in the translation then the translation
+             * should be the actual text.
+             */
+            messageText = msgId;
+        }
+
+        msgId = customId;
+
+
         var jed = this.locales['language'];
 
         if (!jed || !msgIdExists(jed, msgId, count)) {
-            jed = this.locales['defaultLanguage'];
+            if(this.locales['defaultLanguage']) {
+                jed = this.locales['defaultLanguage'];
+            }
+
+            if(!msgIdExists(jed, msgId, count)) {
+                /**
+                 * If the customId/msgId(in old implementations) is not to be found
+                 * than the msgId becomes depending on the sittuation the messageText
+                 * so it can be outputed as it is.
+                 */
+                msgId = messageText || msgId;
+                jed = emptyJed;
+            }
         }
 
         // If no locale was found we create an empty instance to enable the default behavior of
         // gettext: it returns msgId if count equals 1 or msgIdPlural otherwise.
         // In this way, the program is working without any translation files.
-        jed = jed || emptyJed;
 
         try {
             return jed.translate(msgId).ifPlural(count, msgIdPlural).fetch(args);

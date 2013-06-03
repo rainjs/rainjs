@@ -1,21 +1,21 @@
-msgid "Dear %1$s %2$s,"
+msgid "letter.content.dear"
 msgstr "Bună ziua domnule %2$s,"
 
 msgid "I am writing to ask whether it would be possible for you to provide a reference for me."
 msgstr "Ați putea să scrieți o scrisoare de recomandare pentru mine?"
 
-msgid "If you were able to attest to my qualifications for employment, and the skills I attained during my <b>one month</b> tenure at <b>%2$s</b>, I would sincerely appreciate it."
+msgid "letter.content.positive.reference"
 msgid_plural "If you were able to attest to my qualifications for employment, and the skills I attained during my <b>%1$d months</b> tenure at <b>%2$s</b>, I would sincerely appreciate it."
 msgstr[0] "Dacă ați putea atesta calificările mele și aptitudinile dobândite în timpul stagiului de <b>o lună</b> la <b>%2$s</b>, v-aș fi recunoscător."
 msgstr[1] "Dacă ați putea atesta calificările mele și aptitudinile dobândite în timpul stagiului de <b>%1$d luni</b> la <b>%2$s</b>, v-aș fi recunoscător."
 
-msgid "I am in the process of seeking employment and a positive reference from you would enhance my prospects of achieving my career goals."
+msgid "letter.content.process"
 msgstr "Îmi caut un loc de muncă și o scrisoare de recomandare din partea dumneavoastră m-ar ajuta foarte mult."
 
 msgid "Please let me know if there is any information I can provide regarding my experience to assist you in giving me a reference. I can be reached at %1$s or %2$s."
 msgstr "Vă rog să mă anunțați dacă aveți nevoie de informații suplimentare pentru a scrie scrisoarea de recomandare. Mă puteți contacta la %2$s sau %1$s."
 
-msgid "Thank you for your consideration."
+msgid "letter.content.thank.you"
 msgstr "Vă mulțumesc."
 
 msgid "Sincerely,"
