@@ -307,6 +307,7 @@ describe('Renderer', function () {
                 placeholderTimeout: 500,
                 language: 'ro_RO',
                 enableClientLogging: 'false',
+                cookieMaxAge: 0,
                 isContainer: false,
                 context: {
                     query: 'param=value',
@@ -327,6 +328,7 @@ describe('Renderer', function () {
                 placeholderTimeout: 500,
                 language: 'ro_RO',
                 enableClientLogging: 'false',
+                cookieMaxAge: 0,
                 isContainer: true,
                 context: {
                     query: 'param=value',
