@@ -1,5 +1,8 @@
 # Changelog
 
+## v 0.28.1
+
+* Use an empty Jed instance when a component instance is not found.
 
 ## v 0.28.0
 

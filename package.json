@@ -1,7 +1,7 @@
 {
     "name": "rain",
     "description": "A component-based and distributed web application framework",
-    "version": "0.28.0",
+    "version": "0.28.1",
     "author": "Rain Team <rain-team@1and1.ro>",
     "contributors": [
         { "name": "Mitko Tschimev", "email": "mitko.tschimev@1und1.de" },
