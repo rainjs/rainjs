@@ -139,7 +139,6 @@ define(['raintime/lib/jed'], function (Jed) {
 
         msgId = customId;
 
-
         var jed = this.locales['language'];
 
         if (!jed || !msgIdExists(jed, msgId, count)) {
@@ -156,6 +155,10 @@ define(['raintime/lib/jed'], function (Jed) {
                 msgId = messageText || msgId;
                 jed = emptyJed;
             }
+        }
+
+        if (!jed) {
+            jed = emptyJed;
         }
 
         // If no locale was found we create an empty instance to enable the default behavior of
