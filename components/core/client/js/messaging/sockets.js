@@ -25,7 +25,8 @@
 
 define(["raintime/lib/socket.io"], function (io) {
     var baseUrl = undefined,
-        shouldReconnect = undefined;
+        shouldReconnect = undefined,
+        controllerRegexp = /^\/([\w-]+)\/(?:(\d(?:\.\d)?(?:\.\d)?)\/)?(?:controller)\/(.+)/;
 
     /**
      * Handler class for WebSockets that manages the way WebSocket instances are cached and
@@ -36,6 +37,8 @@ define(["raintime/lib/socket.io"], function (io) {
      * @constructor
      */
     function SocketHandler() {
+        var self = this;
+
         baseUrl = getBaseUrl();
 
         // Check if we're on Firefox and only have MozWebSocket
@@ -43,6 +46,27 @@ define(["raintime/lib/socket.io"], function (io) {
         if(window.MozWebSocket) {
             window.WebSocket = window.MozWebSocket;
         }
+
+        /**
+         * The timestamp at which the last AJAX request to a controller route was made.
+         *
+         * @type {Number}
+         * @private
+         */
+        this._lastAjaxCall = null;
+
+        // wrapping XMLHttpRequest#open to know when the last AJAX request to a controller route
+        // was made.
+        var oldOpen = XMLHttpRequest.prototype.open;
+        XMLHttpRequest.prototype.open = function () {
+            var url = arguments[1];
+
+            if (url.match(controllerRegexp)) {
+                self._lastAjaxCall = Date.now();
+            }
+
+            oldOpen.apply(this, arguments);
+        };
     }
 
     /**
