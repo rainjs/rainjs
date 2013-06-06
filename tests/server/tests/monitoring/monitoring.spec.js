@@ -54,6 +54,7 @@ describe("Monitoring module", function () {
         config = {
             monitoring: {
                 step: 2,
+                enableTld: true,
                 metrics: {
                     fakeUseCase: {
                         key: "fakeKey",
@@ -990,4 +991,148 @@ describe("Monitoring module", function () {
         });
 
     });
+
+    describe('Register tlds', function () {
+        beforeEach(function () {
+            config = {
+                monitoring: {
+                    step: 2,
+                    enableTld: true,
+                    metrics: {
+                        fakeUseCase1: {
+                            key: "fakeKey",
+                            operation: "average",
+                            secondaryKey: "secondaryFakeKey"
+                        },
+                        fakeUseCase2: {
+                            key: "fakeKey2",
+                            operation: "average",
+                            secondaryKey: "secondaryFakeKey"
+                        },
+                        fakeUseCase1_net: {
+                            key: "fakeKey_net",
+                            operation: "average",
+                            secondaryKey: "secondaryFakeKey_net"
+                        }
+                    }
+                }
+            };
+
+            mocks['../configuration'] = config;
+            Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
+        });
+
+        it('should return the usecase combined with the tld if the usecase was created previously', function () {
+
+            var monitoring = Monitoring.get();
+
+            var useCase = monitoring.registerTld('fakeUseCase1', 'fake.schlund.net');
+
+            expect(useCase).toBe('fakeUseCase1_net');
+
+        });
+
+        it('should create the new usecase with the tld and return the usecase name if it wasn`t created', function () {
+
+            var monitoring = Monitoring.get();
+
+            var useCase = monitoring.registerTld('fakeUseCase2', 'fake.schlund.net');
+
+            expect(useCase).toBe('fakeUseCase2_net');
+            expect(monitoring._measurementMap[useCase]).toEqual({
+                key: "fakeKey2_net",
+                operation: "average",
+                secondaryKey: "secondaryFakeKey_net"
+            });
+
+        });
+
+        it('should return the normal use case name if no tld is passed', function () {
+
+            var monitoring = Monitoring.get();
+
+            var useCase = monitoring.registerTld('fakeUseCase2');
+
+            expect(useCase).toBe('fakeUseCase2');
+        });
+
+        it('should return the normal use case name with no tld if the use case does not exist at all', function () {
+
+            var monitoring = Monitoring.get();
+
+            var useCase = monitoring.registerTld('fakeUseCase3');
+
+            expect(useCase).toBe('fakeUseCase3');
+        });
+
+        it('should not do anything if the monitoring is disabled', function () {
+            config = {
+                monitoring: {
+                    step: 2,
+                    disabled: true,
+                    metrics: {
+                        fakeUseCase1: {
+                            key: "fakeKey",
+                            operation: "average",
+                            secondaryKey: "secondaryFakeKey"
+                        },
+                        fakeUseCase2: {
+                            key: "fakeKey2",
+                            operation: "average",
+                            secondaryKey: "secondaryFakeKey"
+                        },
+                        fakeUseCase1_net: {
+                            key: "fakeKey_net",
+                            operation: "average",
+                            secondaryKey: "secondaryFakeKey_net"
+                        }
+                    }
+                }
+            };
+
+            mocks['../configuration'] = config;
+            Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
+
+            var monitoring = Monitoring.get();
+
+            var useCase = monitoring.registerTld('fakeUseCase1', 'fake.schlund.net');
+
+            expect(useCase).toBe(undefined);
+        });
+
+        it('should not concatanate with the tld if the tld functionality is disabled', function () {
+            config = {
+                monitoring: {
+                    step: 2,
+                    enableTld: false,
+                    metrics: {
+                        fakeUseCase1: {
+                            key: "fakeKey",
+                            operation: "average",
+                            secondaryKey: "secondaryFakeKey"
+                        },
+                        fakeUseCase2: {
+                            key: "fakeKey2",
+                            operation: "average",
+                            secondaryKey: "secondaryFakeKey"
+                        },
+                        fakeUseCase1_net: {
+                            key: "fakeKey_net",
+                            operation: "average",
+                            secondaryKey: "secondaryFakeKey_net"
+                        }
+                    }
+                }
+            };
+
+            mocks['../configuration'] = config;
+            Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
+
+            var monitoring = Monitoring.get();
+
+            var useCase = monitoring.registerTld('fakeUseCase1', 'fake.schlund.net');
+
+            expect(useCase).toBe('fakeUseCase1');
+        });
+    })
 });
