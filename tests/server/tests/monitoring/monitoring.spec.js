@@ -504,7 +504,7 @@ describe("Monitoring module", function () {
             var monitoring = Monitoring.get();
             monitoring.endMeasurement('averageUseCase');
 
-            expect(logger.debug).toHaveBeenCalled();
+            expect(logger.error).toHaveBeenCalled();
         });
 
         it('should log an error if it is called although no measurement was started', function () {
