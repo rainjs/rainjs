@@ -23,10 +23,13 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-define(["raintime/lib/socket.io"], function (io) {
+define(["raintime/lib/socket.io",
+        "raintime/messaging/observer"], function (io, observer) {
     var baseUrl = undefined,
         shouldReconnect = undefined,
         controllerRegexp = /^\/([\w-]+)\/(?:(\d(?:\.\d)?(?:\.\d)?)\/)?(?:controller)\/(.+)/;
+
+    var KEEP_SESSION_ACTIVE_URL = '/core/controller/cookie';
 
     /**
      * Handler class for WebSockets that manages the way WebSocket instances are cached and
@@ -40,6 +43,39 @@ define(["raintime/lib/socket.io"], function (io) {
         var self = this;
 
         baseUrl = getBaseUrl();
+
+        //rewrite socket emits and save the last time of the emit to keep session cookie updated
+        var lastEmit = new Date();
+        var oldEmit$ = io.SocketNamespace.prototype.$emit;
+        io.SocketNamespace.prototype.$emit = function () {
+            lastEmit = Date.now();
+            oldEmit$.apply(this, arguments);
+        };
+
+        var oldEmit = io.SocketNamespace.prototype.emit;
+        io.SocketNamespace.prototype.emit = function () {
+            lastEmit = Date.now();
+            oldEmit.apply(this, arguments);
+        };
+
+        var cookieExpirationLimit = (rainContext.cookieMaxAge || 3600) * 1000;
+
+        //check to see if session cookie needs to be refreshed 1sec before it expires
+        var keepSessionActive = setInterval(keepCookieConsistent, cookieExpirationLimit - 1000);
+
+        //keeps the session cookie refreshed is there was any socket or ajax activity
+        //othewise publish a session_expired event
+        function keepCookieConsistent () {
+            var isSocketActive = Date.now() - lastEmit < rainContext.cookieMaxAge;
+            var hadAjaxCalls = Date.now() - this._lastAjaxCall < rainContext.cookieMaxAge;
+
+            if (isSocketActive || hadAjaxCalls) {
+                $.ajax({url: KEEP_SESSION_ACTIVE_URL});
+            } else {
+                observer.publish('session_expired');
+                clearInterval(keepSessionActive);
+            }
+        }
 
         // Check if we're on Firefox and only have MozWebSocket
         // and assign it to the WebSocket object.

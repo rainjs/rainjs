@@ -47,6 +47,7 @@ define(['/example/js/jquery-ui-1.10.2.custom.js'], function (logger) {
      */
     Controller.prototype.start = function () {
         var self = this;
+
         this.context.getRoot().find('.navi').accordion({
             collapsible: true,
             active: false,
@@ -65,6 +66,11 @@ define(['/example/js/jquery-ui-1.10.2.custom.js'], function (logger) {
                 }
             }
         }).show();
+
+        this.context.messaging.subscribe('session_expired', function() {
+            alert('Expired Session');
+        });
+
     };
 
     return Controller;
