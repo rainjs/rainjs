@@ -72,3 +72,5 @@ RAIN websockets provide a module of idle time disconnect. If a client is innacti
 and the number of admitted websocket connections on the server is reached than the idle websockets
 are disconnect. If the client tries to emit any type of event over it's websocket channel than
 the connection is reestablished.
+
+Also, RAIN websockets provide a session cookie consistency. If socket or ajax activity exist in a preset time, a keep alive call is sent to ``/core/controller/cookie`` to keep the session cookie updated, otherwise a ``session_expired`` event is published.
