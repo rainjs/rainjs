@@ -654,12 +654,20 @@ describe("Monitoring module", function () {
 
         });
 
-        it('should increase the number of active connections', function () {
+        it('should increase the number of active connections if no value is sent', function () {
             var monitoring = Monitoring.get();
 
             monitoring.registerEvent('fakeUseCase');
 
             expect(monitoring._measurementMap['fakeUseCase'].measurements.activeRequests).toBe(1);
+        });
+
+        it('should add the value passed to the method of the registered event', function () {
+            var monitoring = Monitoring.get();
+
+            monitoring.registerEvent('fakeUseCase', 3);
+
+            expect(monitoring._measurementMap['fakeUseCase'].measurements.activeRequests).toBe(3);
         });
     });
 
