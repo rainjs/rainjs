@@ -165,8 +165,19 @@ define(["raintime/lib/socket.io",
         return socket;
     };
 
+    /**
+     * The singleton instance.
+     *
+     * @type {SocketHandler}
+     * @private
+     */
     SocketHandler._instance = null;
 
+    /**
+     * Gets the singleton instance.
+     *
+     * @returns {SocketHandler}
+     */
     SocketHandler.get = function () {
         if (!SocketHandler._instance) {
             SocketHandler._instance = new SocketHandler();
