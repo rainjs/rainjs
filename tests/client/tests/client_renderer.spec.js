@@ -37,8 +37,8 @@ describe('Client Renderer', function () {
             return new ClientRenderer;
         });
 
-        mocks.Sockets = jasmine.loadedModules['raintime/messaging/sockets'];
-        mocks.Sockets.getSocket.andReturn({ on: jasmine.createSpy() });
+        mocks.SocketHandler = jasmine.loadedModules['raintime/messaging/sockets'];
+        mocks.SocketHandler.get().getSocket.andReturn({ on: jasmine.createSpy() });
 
         mocks.Raintime = jasmine.loadedModules['raintime'];
         mocks.Raintime.componentRegistry = jasmine.createSpyObj('componentRegistry',

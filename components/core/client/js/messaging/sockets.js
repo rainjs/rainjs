@@ -23,6 +23,8 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+'use strict';
+
 define(["raintime/lib/socket.io",
         "raintime/messaging/observer"], function (io, observer) {
     var baseUrl = undefined,
@@ -36,7 +38,6 @@ define(["raintime/lib/socket.io",
      * created.
      *
      * @name SocketHandler
-     * @class
      * @constructor
      */
     function SocketHandler() {
@@ -75,12 +76,6 @@ define(["raintime/lib/socket.io",
                 observer.publish('session_expired');
                 clearInterval(keepSessionActive);
             }
-        }
-
-        // Check if we're on Firefox and only have MozWebSocket
-        // and assign it to the WebSocket object.
-        if(window.MozWebSocket) {
-            window.WebSocket = window.MozWebSocket;
         }
 
         /**
@@ -170,5 +165,15 @@ define(["raintime/lib/socket.io",
         return socket;
     };
 
-    return new SocketHandler();
+    SocketHandler._instance = null;
+
+    SocketHandler.get = function () {
+        if (!SocketHandler._instance) {
+            SocketHandler._instance = new SocketHandler();
+        }
+
+        return SocketHandler._instance;
+    };
+
+    return SocketHandler;
 });

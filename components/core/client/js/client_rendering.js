@@ -31,7 +31,7 @@ define([
     'raintime',
     'raintime/logger',
     'raintime/css/renderer'
-], function (Promise, Sockets, Raintime, Logger, CssRenderer) {
+], function (Promise, SocketHandler, Raintime, Logger, CssRenderer) {
 
     var logger = Logger.get({
         id: 'core'
@@ -66,7 +66,7 @@ define([
          */
         this.orphans = {};
 
-        var socket = this.socket = Sockets.getSocket('/core');
+        var socket = this.socket = SocketHandler.get().getSocket('/core');
         socket.on('render', function (component) {
             Raintime.componentRegistry.deregister(component.instanceId);
             self.renderComponent(component);

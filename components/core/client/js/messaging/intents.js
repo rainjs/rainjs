@@ -25,8 +25,8 @@
 
 define(['raintime/messaging/sockets',
         'raintime/lib/promise'
-], function (Sockets, Promise) {
-    var socket = Sockets.getSocket('/core');
+], function (SocketHandler, Promise) {
+    var socket = SocketHandler.get().getSocket('/core');
 
     /**
      * Send an intent and return a promise that gets triggered after the server finishes processing
