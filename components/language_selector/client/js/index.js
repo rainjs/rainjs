@@ -25,12 +25,10 @@ define(['raintime/messaging/sockets'], function (SocketHandler) {
             socket = SocketHandler.get().getSocket('/core');
 
         select.change(function (event) {
-            if (socket.socket.connected) {
-                var language = select.val();
-                socket.emit('change_language', language, function (error) {
-                    window.location.href = window.location.href;
-                });
-            }
+            var language = select.val();
+            socket.emit('change_language', language, function (error) {
+                window.location.href = window.location.href;
+            });
         });
     };
 
