@@ -23,38 +23,49 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-define(["raintime/lib/socket.io"], function (io) {
-    var baseUrl = undefined,
-        shouldReconnect = undefined;
+'use strict';
+
+define(["raintime/lib/socket.io", "raintime/messaging/observer"], function (io, observer) {
+
+    var REFRESH_COOKIE_URL = '/core/controller/cookie';
 
     /**
      * Handler class for WebSockets that manages the way WebSocket instances are cached and
      * created.
      *
      * @name SocketHandler
-     * @class
      * @constructor
      */
     function SocketHandler() {
-        baseUrl = getBaseUrl();
+        /**
+         * The current protocol and host
+         *
+         * @type {String}
+         * @private
+         */
+        this._baseUrl = this._getBaseUrl();
 
-        // Check if we're on Firefox and only have MozWebSocket
-        // and assign it to the WebSocket object.
-        if(window.MozWebSocket) {
-            window.WebSocket = window.MozWebSocket;
+        /**
+         * Indicates if any communication with the server (WS or AJAX) occurred.
+         *
+         * @type {Boolean}
+         * @private
+         */
+        this._isClientActive = false;
+
+        /**
+         * Indicates that the socket should be reconnected.
+         *
+         * @type {Boolean}
+         * @private
+         */
+        this._shouldReconnect = false;
+
+        if (rainContext.cookieMaxAge !== 0) {
+            this._interceptSocketMessages();
+            this._interceptAjaxCalls();
+            this._refreshSessionCookie(rainContext.cookieMaxAge);
         }
-    }
-
-    /**
-     * Constructs the base url for the socket server out of the window location.
-     *
-     * @returns {String} the constructed url
-     */
-    function getBaseUrl() {
-        var protocol = window.location.protocol + '//',
-            hostname = window.location.host;
-
-        return protocol + hostname;
     }
 
     /**
@@ -65,11 +76,13 @@ define(["raintime/lib/socket.io"], function (io) {
      * @returns {Socket} the websocket instance
      */
     SocketHandler.prototype.getSocket = function (channel) {
+        var self = this;
+
         if(channel.charAt(0) != "/") {
             channel = "/" + channel;
         }
 
-        var socket = io.connect(baseUrl + channel, {
+        var socket = io.connect(this._baseUrl + channel, {
             'reconnect': true
         });
 
@@ -87,11 +100,11 @@ define(["raintime/lib/socket.io"], function (io) {
         // after the socket is properly connected.
         var _emit = socket.emit;
         socket.emit = function() {
-            if (socket.isConnected && !shouldReconnect) {
+            if (socket.isConnected && !self._shouldReconnect) {
                 _emit.apply(this, arguments);
             } else {
-                if(shouldReconnect) {
-                    shouldReconnect = false;
+                if(self._shouldReconnect) {
+                    self._shouldReconnect = false;
                     socket.socket.reconnect();
                 }
 
@@ -104,11 +117,101 @@ define(["raintime/lib/socket.io"], function (io) {
         };
 
         socket.on('disconnect', function (event) {
-            shouldReconnect = true;
+            self._shouldReconnect = true;
         });
 
         return socket;
     };
 
-    return new SocketHandler();
+    /**
+     * Constructs the base url for the socket server out of the window location.
+     *
+     * @returns {String} the constructed url
+     */
+    SocketHandler.prototype._getBaseUrl = function () {
+        var protocol = window.location.protocol + '//',
+            hostname = window.location.host;
+
+        return protocol + hostname;
+    };
+
+    /**
+     * Intercepts all the websocket messages.
+     */
+    SocketHandler.prototype._interceptSocketMessages = function () {
+        var self = this,
+            emit = io.SocketNamespace.prototype.emit,
+            $emit = io.SocketNamespace.prototype.$emit;
+
+        io.SocketNamespace.prototype.$emit = function () {
+            self._isClientActive = true;
+            $emit.apply(this, arguments);
+        };
+
+        io.SocketNamespace.prototype.emit = function () {
+            self._isClientActive = true;
+            emit.apply(this, arguments);
+        };
+    };
+
+    /**
+     * Intercepts AJAX calls.
+     */
+    SocketHandler.prototype._interceptAjaxCalls = function () {
+        var self = this,
+            controllerRegexp = /^\/([\w-]+)\/(?:(\d(?:\.\d)?(?:\.\d)?)\/)?(?:controller)\/(.+)/;
+
+        var open = XMLHttpRequest.prototype.open;
+        XMLHttpRequest.prototype.open = function () {
+            var url = arguments[1];
+
+            if (url.match(controllerRegexp)) {
+                self._isClientActive = true;
+            }
+
+            open.apply(this, arguments);
+        };
+    };
+
+    /**
+     * Refreshes the session cookie when it is about to expire.
+     *
+     * @param cookieMaxAge
+     */
+    SocketHandler.prototype._refreshSessionCookie = function (cookieMaxAge) {
+        var self = this;
+
+        var intervalId = setInterval(function () {
+            if (self._isClientActive) {
+                $.ajax({url: REFRESH_COOKIE_URL});
+                self._isClientActive = false;
+            } else {
+                observer.publish('session_expired');
+                clearInterval(intervalId);
+            }
+        }, (cookieMaxAge - 1) * 1000);
+    };
+
+    /**
+     * The singleton instance.
+     *
+     * @type {SocketHandler}
+     * @private
+     */
+    SocketHandler._instance = null;
+
+    /**
+     * Gets the singleton instance.
+     *
+     * @returns {SocketHandler}
+     */
+    SocketHandler.get = function () {
+        if (!SocketHandler._instance) {
+            SocketHandler._instance = new SocketHandler();
+        }
+
+        return SocketHandler._instance;
+    };
+
+    return SocketHandler;
 });

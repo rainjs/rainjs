@@ -27,7 +27,7 @@ define(['raintime/client_storage',
         'raintime/messaging/observer',
         'raintime/messaging/intents',
         'raintime/messaging/sockets'
-], function (ClientStorage, Observer, Intents, Sockets) {
+], function (ClientStorage, Observer, Intents, SocketHandler) {
 
     var raintime = null;
 
@@ -109,7 +109,7 @@ define(['raintime/client_storage',
                     channel = '/' + self.component.id + '/' + self.component.version + '/' + channel;
                 }
 
-                return Sockets.getSocket(channel);
+                return SocketHandler.get().getSocket(channel);
             }
         };
     }

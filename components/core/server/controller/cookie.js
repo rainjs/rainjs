@@ -23,55 +23,20 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-define(['/example/js/jquery-ui-1.10.2.custom.js'], function (logger) {
-    /**
-     * Example controller class.
-     *
-     * @name Controller
-     * @class a controller instance
-     * @constructor
-     */
-    function Controller() {
-        // constructor logic here
-    }
+"use strict";
 
-    /**
-     * Initialization lifecycle step that happens immediately after the controller is loaded.
-     *
-     * @function
-     */
-    Controller.prototype.init = $.noop;
+/**
+ * This controller is called using an AJAX request when the client needs to refresh the session
+ * cookie which is about to expire. This scenario is possible when the only communication
+ * happening is via websockets where the session cookie isn't refreshed.
+ *
+ * @param {Request} request the request object
+ * @param {Response} response the response object
+ */
+function doGet(request, response) {
+    response.statusCode = 200;
+    response.setHeader('Content-Type', 'text/plain');
+    response.end('ok');
+}
 
-    /**
-     * Startup lifecycle step that happens right after the markup is in place.
-     */
-    Controller.prototype.start = function () {
-        var self = this;
-
-        this.context.getRoot().find('.navi').accordion({
-            collapsible: true,
-            active: false,
-            autoHeight: false,
-            heightStyle: 'content',
-            activate: function (event, ui) {
-                ui.oldPanel.empty();
-                if (ui.newPanel.length) {
-                    self.context.insert({
-                        id: "example",
-                        view: ui.newPanel.data("example-view"),
-                        placeholder: true
-                    }, ui.newPanel, function () {
-                        // "this" is the controller for new component
-                    });
-                }
-            }
-        }).show();
-
-        this.context.messaging.subscribe('session_expired', function() {
-            alert('Expired Session');
-        });
-
-    };
-
-    return Controller;
-});
+exports.get = doGet;
