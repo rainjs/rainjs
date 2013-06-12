@@ -73,4 +73,18 @@ and the number of admitted websocket connections on the server is reached than t
 are disconnect. If the client tries to emit any type of event over it's websocket channel than
 the connection is reestablished.
 
-Also, RAIN websockets provide a session cookie consistency. If socket or ajax activity exist in a preset time, a keep alive call is sent to ``/core/controller/cookie`` to keep the session cookie updated, otherwise a ``session_expired`` event is published.
+-----------------
+Cookie Expiration
+-----------------
+
+When the communication with the server is happening only via Web Sockets, no headers are exchanged
+and the cookie expiration time is never extended. To overcome this limitation, Web Socket
+activity is monitored and when the cookie is about to expire, an AJAX call is sent to the server
+if any message was sent or received. If no activity occurred, a ``session_expired`` event
+is published globally to notify the application that the session for the current user expired.
+One possible way to respond to this event is to redirect the user to the login page. The
+following example shows how you can listen for this event::
+
+    this.context.messaging.subscribe('session_expired', function() {
+        alert('Expired Session');
+    });
