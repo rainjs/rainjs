@@ -24,18 +24,36 @@
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 "use strict";
 
+var path = require('path');
+
 describe("Monitoring module", function () {
 
     var util = require('util');
-    var mocks = [], logger, config, adapter, crypto, Monitoring,
+    var mocks = [], logger, config, adapter, crypto, Monitoring, hasRunned,
         map;
 
     beforeEach(function () {
         map = {};
 
+        spyOn(process, 'nextTick');
+
+        process.nextTick.andCallFake(function (fn) {
+            hasRunned = true;
+            fn();
+        });
+
         spyOn(global, 'setInterval');
         global.setInterval.andCallFake(function (fn, time) {
-            map[time] = fn;
+            if(map[time] && !(map[time] instanceof Array)) {
+                var oldFn = map[time];
+                map[time] = [];
+                map[time].push(oldFn);
+                map[time].push(fn);
+            } else if (map[time] instanceof Array) {
+                map[time].push(fn);
+            } else {
+                map[time] = fn;
+            }
         });
 
 
@@ -90,7 +108,6 @@ describe("Monitoring module", function () {
 
             var monitoring = Monitoring.get();
             var newMonitoringInstance = Monitoring.get();
-
 
             expect(monitoring).toBe(newMonitoringInstance);
         })
@@ -317,7 +334,350 @@ describe("Monitoring module", function () {
             var monitoring = Monitoring.get();
 
             expect(monitoring._globalStep).toBe(60);
-        })
+        });
+
+        it('should not load plugins if the loadMeasurementPlugins key does not exist', function () {
+            var monitoring = Monitoring.get();
+
+            waitsFor(function () {
+                return hasRunned === true;
+            });
+
+            runs(function () {
+                expect(monitoring._measurementPlugins).toEqual({});
+            });
+        });
+
+        it('should not load a specific plugin if the plugin is disabled', function () {
+            config = {
+                monitoring: {
+                    "measurementPlugins": {
+                        "disabled": false,
+                        "plugins": {
+                            "systemChecks": {
+                                "disabled": true,
+                                "path": "./plugins/server/monitoring/system_checks"
+                            },
+                            "otherTest": {
+                                "disabled": false,
+                                "path": "./plugins/server/monitoring/something"
+                            }
+                        }
+                    },
+
+                    metrics: {
+                        UseCase: {
+                            key: "disabledUseCase",
+                            operation: "count"
+                        },
+
+                        "otherTest": {
+                            key: 'someKey',
+                            operation: "count"
+                        },
+
+                        differentUseCase: {
+                            key: "enabledKey",
+                            operation: "average",
+                            step: 20
+                        }
+                    }
+                }
+            };
+
+            mocks['../configuration'] = config;
+            var fakePlugin = jasmine.createSpyObj('fake', ['run']);
+            mocks[path.join(process.cwd(), './plugins/server/monitoring/something')] = fakePlugin;
+            Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
+
+            var monitoring = Monitoring.get();
+
+            waitsFor(function () {
+                return hasRunned === true;
+            });
+
+            runs(function () {
+                expect(monitoring._measurementPlugins.systemChecks).toBeUndefined();
+                expect(monitoring._measurementPlugins.otherTest).toBe(fakePlugin);
+            });
+        });
+
+        it('should not load plugins if the measurementPlugin key is disabled', function () {
+            config = {
+                monitoring: {
+                    "measurementPlugins": {
+                        "disabled": false,
+                        "plugins": {
+                            "systemChecks": {
+                                "disabled": true,
+                                "path": "./plugins/server/monitoring/system_checks"
+                            },
+                            "otherTest": {
+                                "disabled": false,
+                                "path": "./plugins/server/monitoring/something"
+                            }
+                        }
+                    },
+
+                    metrics: {
+                        UseCase: {
+                            key: "disabledUseCase",
+                            operation: "count"
+                        },
+
+                        "otherTest": {
+                            disabled: true,
+                            key: 'someKey',
+                            operation: "count"
+                        },
+
+                        differentUseCase: {
+                            key: "enabledKey",
+                            operation: "average",
+                            step: 20
+                        }
+                    }
+                }
+            };
+
+            mocks['../configuration'] = config;
+            Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
+
+            var monitoring = Monitoring.get();
+
+            waitsFor(function () {
+                return hasRunned === true;
+            });
+
+            runs(function () {
+                expect(monitoring._measurementPlugins).toEqual({});
+            });
+        });
+
+        it('should not load plugins if the measurementPlugin key does not exist', function () {
+            config = {
+                monitoring: {
+                    metrics: {
+                        UseCase: {
+                            key: "disabledUseCase",
+                            operation: "count"
+                        },
+
+                        differentUseCase: {
+                            key: "enabledKey",
+                            operation: "average",
+                            step: 20
+                        }
+                    }
+                }
+            };
+
+            mocks['../configuration'] = config;
+            Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
+
+            var monitoring = Monitoring.get();
+
+            waitsFor(function () {
+                return hasRunned === true;
+            });
+
+            runs(function () {
+                expect(monitoring._measurementPlugins).toEqual({});
+            });
+        });
+
+        it('should register measurement plugins from the configuration', function () {
+            config = {
+                monitoring: {
+                    "measurementPlugins": {
+                        "disabled": false,
+                        "plugins": {
+                            "otherTest": {
+                                "path": "./plugins/server/monitoring/something"
+                            }
+                        }
+                    },
+
+                    metrics: {
+                        UseCase: {
+                            key: "disabledUseCase",
+                            operation: "count"
+                        },
+
+                        "otherTest": {
+                            key: 'someKey',
+                            operation: "count"
+                        },
+
+                        differentUseCase: {
+                            key: "enabledKey",
+                            operation: "average",
+                            step: 20
+                        }
+                    }
+                }
+            };
+
+            mocks['../configuration'] = config;
+            var fakePlugin = jasmine.createSpyObj('fake', ['run']);
+            mocks[path.join(process.cwd(), './plugins/server/monitoring/something')] = fakePlugin;
+            Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
+
+            var monitoring = Monitoring.get();
+
+            waitsFor(function () {
+                return hasRunned === true;
+            });
+
+            runs(function () {
+                expect(monitoring._measurementPlugins.otherTest).toBe(fakePlugin);
+            });
+        });
+
+        it('should run the plugins at the preset interval of time', function () {
+            config = {
+                monitoring: {
+                    "measurementPlugins": {
+                        "disabled": false,
+                        "plugins": {
+                            "otherTest": {
+                                "path": "./plugins/server/monitoring/something"
+                            }
+                        }
+                    },
+
+                    metrics: {
+                        UseCase: {
+                            key: "disabledUseCase",
+                            operation: "count"
+                        },
+
+                        "otherTest": {
+                            key: 'someKey',
+                            operation: "count"
+                        },
+
+                        differentUseCase: {
+                            key: "enabledKey",
+                            operation: "average",
+                            step: 20
+                        }
+                    }
+                }
+            };
+
+            mocks['../configuration'] = config;
+            var fakePlugin = jasmine.createSpyObj('fake', ['run']);
+            mocks[path.join(process.cwd(), './plugins/server/monitoring/something')] = fakePlugin;
+            Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
+
+            var monitoring = Monitoring.get();
+
+            waitsFor(function () {
+                return hasRunned === true;
+            });
+
+            runs(function () {
+                /*the first one in this interval will be the run of the plugin and 60 seconds is the default
+                interval*/
+                map[60000][0]()
+                expect(fakePlugin.run).toHaveBeenCalled();
+                expect(monitoring._measurementPlugins.otherTest).toBe(fakePlugin);
+            });
+        });
+
+        it('should not load plugins if the use case is disabled', function () {
+            config = {
+                monitoring: {
+                    "measurementPlugins": {
+                        "disabled": false,
+                        "plugins": {
+                            "otherTest": {
+                                "path": "./plugins/server/monitoring/something"
+                            }
+                        }
+                    },
+
+                    metrics: {
+                        UseCase: {
+                            key: "disabledUseCase",
+                            operation: "count"
+                        },
+
+                        differentUseCase: {
+                            key: "enabledKey",
+                            operation: "average",
+                            step: 20
+                        }
+                    }
+                }
+            };
+
+            mocks['../configuration'] = config;
+            Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
+
+            var monitoring = Monitoring.get();
+
+            waitsFor(function () {
+                return hasRunned === true;
+            });
+
+            runs(function () {
+                expect(monitoring._measurementPlugins).toEqual({});
+            });
+        });
+
+        it('should run the plugins at the specified interval of time', function () {
+            config = {
+                monitoring: {
+                    "measurementPlugins": {
+                        "disabled": false,
+                        "plugins": {
+                            "otherTest": {
+                                "path": "./plugins/server/monitoring/something"
+                            }
+                        }
+                    },
+
+                    metrics: {
+                        UseCase: {
+                            key: "disabledUseCase",
+                            operation: "count"
+                        },
+
+                        "otherTest": {
+                            key: 'someKey',
+                            operation: "count",
+                            step: 3
+                        },
+
+                        differentUseCase: {
+                            key: "enabledKey",
+                            operation: "average",
+                            step: 20
+                        }
+                    }
+                }
+            };
+
+            mocks['../configuration'] = config;
+            var fakePlugin = jasmine.createSpyObj('fake', ['run']);
+            mocks[path.join(process.cwd(), './plugins/server/monitoring/something')] = fakePlugin;
+            Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
+
+            var monitoring = Monitoring.get();
+
+            waitsFor(function () {
+                return hasRunned === true;
+            });
+
+            runs(function () {
+                //the first one in this interval will be the run of the plugin
+                map[3000][0]();
+                expect(fakePlugin.run).toHaveBeenCalled();
+                expect(monitoring._measurementPlugins.otherTest).toBe(fakePlugin);
+            });
+        });
 
     });
 
