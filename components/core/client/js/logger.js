@@ -25,7 +25,7 @@
 
 "use strict";
 
-define(['raintime/messaging/sockets'], function (Sockets) {
+define(['raintime/messaging/sockets'], function (SocketHandler) {
 
     /**
      * The logger for the RAIN components. It uses a websocket so send the logging event to the
@@ -50,7 +50,7 @@ define(['raintime/messaging/sockets'], function (Sockets) {
             channel = '/' + component.id + '/' + component.version + '/logging';
         }
 
-        this._socket = Sockets.getSocket(channel);
+        this._socket = SocketHandler.get().getSocket(channel);
 
         var self = this;
 

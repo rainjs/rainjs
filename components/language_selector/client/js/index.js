@@ -1,4 +1,4 @@
-define(['raintime/messaging/sockets'], function (Sockets) {
+define(['raintime/messaging/sockets'], function (SocketHandler) {
 
     /**
      * The language selector component provides a way to change the user language.
@@ -22,15 +22,13 @@ define(['raintime/messaging/sockets'], function (Sockets) {
      */
     LanguageSelector.prototype.start = function () {
         var select = this.context.getRoot().find('.languages'),
-            socket = Sockets.getSocket('/core');
+            socket = SocketHandler.get().getSocket('/core');
 
         select.change(function (event) {
-            if (socket.socket.connected) {
-                var language = select.val();
-                socket.emit('change_language', language, function (error) {
-                    window.location.href = window.location.href;
-                });
-            }
+            var language = select.val();
+            socket.emit('change_language', language, function (error) {
+                window.location.href = window.location.href;
+            });
         });
     };
 
