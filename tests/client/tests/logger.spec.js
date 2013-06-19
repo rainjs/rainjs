@@ -26,9 +26,12 @@
 "use strict";
 
 describe('Client-side logger', function () {
+
     describe('constructor', function () {
+
         it('should create the core logger',
             ['raintime/logger', 'raintime/messaging/sockets'], function (Logger, SocketHandler) {
+                SocketHandler.get.andCallThrough();
                 SocketHandler.get().getSocket.andReturn({on: jasmine.createSpy()});
                 new Logger();
                 expect(SocketHandler.get().getSocket).toHaveBeenCalledWith('/core/logging');
@@ -37,6 +40,7 @@ describe('Client-side logger', function () {
 
         it('should create a comoonent logger',
             ['raintime/logger', 'raintime/messaging/sockets'], function (Logger, SocketHandler) {
+                SocketHandler.get.andCallThrough();
                 SocketHandler.get().getSocket.andReturn({on: jasmine.createSpy()});
                 new Logger({id: 'example', version: '1.0'});
                 expect(SocketHandler.get().getSocket).toHaveBeenCalledWith('/example/1.0/logging');
@@ -51,6 +55,7 @@ describe('Client-side logger', function () {
                     emit: jasmine.createSpy('emit'),
                     on: jasmine.createSpy('on')
                 };
+                SocketHandler.get.andCallThrough();
                 SocketHandler.get().getSocket.andReturn(socket);
 
                 socket.on.andCallFake(function (event, cb) {
@@ -77,6 +82,7 @@ describe('Client-side logger', function () {
                         emit: jasmine.createSpy('emit'),
                         on: jasmine.createSpy('on')
                     };
+                    SocketHandler.get.andCallThrough();
                     SocketHandler.get().getSocket.andReturn(socket);
 
                     var f;
@@ -109,6 +115,7 @@ describe('Client-side logger', function () {
     describe('debug', function () {
         it('should call _log with debug level',
             ['raintime/logger', 'raintime/messaging/sockets'], function (Logger, SocketHandler) {
+                SocketHandler.get.andCallThrough();
                 SocketHandler.get().getSocket.andReturn({on: jasmine.createSpy()});
                 var logger = new Logger();
                 logger.debug.andCallThrough();
@@ -122,6 +129,7 @@ describe('Client-side logger', function () {
     describe('info', function () {
         it('should call _log with info level',
             ['raintime/logger', 'raintime/messaging/sockets'], function (Logger, SocketHandler) {
+                SocketHandler.get.andCallThrough();
                 SocketHandler.get().getSocket.andReturn({on: jasmine.createSpy()});
                 var logger = new Logger();
                 logger.info.andCallThrough();
@@ -135,6 +143,7 @@ describe('Client-side logger', function () {
     describe('warn', function () {
         it('should call _log with warn level',
             ['raintime/logger', 'raintime/messaging/sockets'], function (Logger, SocketHandler) {
+                SocketHandler.get.andCallThrough();
                 SocketHandler.get().getSocket.andReturn({on: jasmine.createSpy()});
                 var logger = new Logger();
                 logger.warn.andCallThrough();
@@ -148,6 +157,7 @@ describe('Client-side logger', function () {
     describe('error', function () {
         it('should call _log with error level',
             ['raintime/logger', 'raintime/messaging/sockets'], function (Logger, SocketHandler) {
+                SocketHandler.get.andCallThrough();
                 SocketHandler.get().getSocket.andReturn({on: jasmine.createSpy()});
                 var logger = new Logger();
                 logger.error.andCallThrough();
@@ -161,6 +171,7 @@ describe('Client-side logger', function () {
     describe('fatal', function () {
         it('should call _log with fatal level',
             ['raintime/logger', 'raintime/messaging/sockets'], function (Logger, SocketHandler) {
+                SocketHandler.get.andCallThrough();
                 SocketHandler.get().getSocket.andReturn({on: jasmine.createSpy()});
                 var logger = new Logger();
                 logger.fatal.andCallThrough();
@@ -174,6 +185,7 @@ describe('Client-side logger', function () {
     describe('get', function () {
         it('should get the platform logger',
             ['raintime/logger', 'raintime/messaging/sockets'], function (Logger, SocketHandler) {
+                SocketHandler.get.andCallThrough();
                 SocketHandler.get().getSocket.andReturn({on: jasmine.createSpy()});
                 Logger.get.andCallThrough();
                 var logger = Logger.get();
@@ -183,6 +195,7 @@ describe('Client-side logger', function () {
 
         it('should cache the logger instances',
             ['raintime/logger', 'raintime/messaging/sockets'], function (Logger, SocketHandler) {
+                SocketHandler.get.andCallThrough();
                 SocketHandler.get().getSocket.andReturn({on: jasmine.createSpy()});
                 Logger.get.andCallThrough();
                 var instance1 = Logger.get(),
@@ -194,6 +207,7 @@ describe('Client-side logger', function () {
 
         it('should get a component logger',
             ['raintime/logger', 'raintime/messaging/sockets'], function (Logger, SocketHandler) {
+                SocketHandler.get.andCallThrough();
                 SocketHandler.get().getSocket.andReturn({on: jasmine.createSpy()});
                 Logger.get.andCallThrough();
                 var logger = Logger.get({id: 'example', version: '1.0'});

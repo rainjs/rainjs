@@ -61,7 +61,7 @@ define(["raintime/lib/socket.io", "raintime/messaging/observer"], function (io, 
          */
         this._shouldReconnect = false;
 
-        if (rainContext.cookieMaxAge !== 0) {
+        if (typeof rainContext !== 'undefined' && rainContext.cookieMaxAge !== 0) {
             this._interceptSocketMessages();
             this._interceptAjaxCalls();
             this._refreshSessionCookie(rainContext.cookieMaxAge);

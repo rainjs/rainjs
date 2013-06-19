@@ -173,7 +173,7 @@ define(['raintime/messaging/sockets'], function (SocketHandler) {
      * @returns {Logger}
      */
     Logger.get = function (component) {
-        if (!rainContext.enableClientLogging) {
+        if (typeof rainContext !== 'undefined' && !rainContext.enableClientLogging) {
             if (!Logger._mockedLogger) {
                 var log = function () {};
 

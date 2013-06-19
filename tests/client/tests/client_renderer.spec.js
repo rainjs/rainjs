@@ -38,6 +38,8 @@ describe('Client Renderer', function () {
         });
 
         mocks.SocketHandler = jasmine.loadedModules['raintime/messaging/sockets'];
+
+        mocks.SocketHandler.get.andCallThrough();
         mocks.SocketHandler.get().getSocket.andReturn({ on: jasmine.createSpy() });
 
         mocks.Raintime = jasmine.loadedModules['raintime'];
