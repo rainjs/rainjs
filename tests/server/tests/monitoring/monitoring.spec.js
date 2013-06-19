@@ -387,7 +387,9 @@ describe("Monitoring module", function () {
 
             mocks['../configuration'] = config;
             var fakePlugin = jasmine.createSpyObj('fake', ['run']);
-            mocks[path.join(process.cwd(), './plugins/server/monitoring/something')] = fakePlugin;
+            mocks[path.join(process.cwd(), './plugins/server/monitoring/something')] = function () {
+                return fakePlugin;
+            };
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
 
             var monitoring = Monitoring.get();
@@ -520,7 +522,9 @@ describe("Monitoring module", function () {
 
             mocks['../configuration'] = config;
             var fakePlugin = jasmine.createSpyObj('fake', ['run']);
-            mocks[path.join(process.cwd(), './plugins/server/monitoring/something')] = fakePlugin;
+            mocks[path.join(process.cwd(), './plugins/server/monitoring/something')] = function () {
+                return fakePlugin;
+            };
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
 
             var monitoring = Monitoring.get();
@@ -568,7 +572,9 @@ describe("Monitoring module", function () {
 
             mocks['../configuration'] = config;
             var fakePlugin = jasmine.createSpyObj('fake', ['run']);
-            mocks[path.join(process.cwd(), './plugins/server/monitoring/something')] = fakePlugin;
+            mocks[path.join(process.cwd(), './plugins/server/monitoring/something')] = function () {
+                return fakePlugin;
+            }
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
 
             var monitoring = Monitoring.get();
@@ -580,7 +586,7 @@ describe("Monitoring module", function () {
             runs(function () {
                 /*the first one in this interval will be the run of the plugin and 60 seconds is the default
                 interval*/
-                map[60000][0]()
+                map[60000]();
                 expect(fakePlugin.run).toHaveBeenCalled();
                 expect(monitoring._measurementPlugins.otherTest).toBe(fakePlugin);
             });
@@ -662,7 +668,9 @@ describe("Monitoring module", function () {
 
             mocks['../configuration'] = config;
             var fakePlugin = jasmine.createSpyObj('fake', ['run']);
-            mocks[path.join(process.cwd(), './plugins/server/monitoring/something')] = fakePlugin;
+            mocks[path.join(process.cwd(), './plugins/server/monitoring/something')] = function () {
+                return fakePlugin;
+            }
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
 
             var monitoring = Monitoring.get();
@@ -673,7 +681,7 @@ describe("Monitoring module", function () {
 
             runs(function () {
                 //the first one in this interval will be the run of the plugin
-                map[3000][0]();
+                map[3000]();
                 expect(fakePlugin.run).toHaveBeenCalled();
                 expect(monitoring._measurementPlugins.otherTest).toBe(fakePlugin);
             });
