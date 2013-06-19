@@ -25,7 +25,6 @@
 "use strict";
 
 describe("Monitoring module", function () {
-
     var util = require('util');
     var mocks = [], logger, config, adapter, crypto, Monitoring,
         map;
@@ -54,6 +53,7 @@ describe("Monitoring module", function () {
         config = {
             monitoring: {
                 step: 2,
+                enableTld: true,
                 metrics: {
                     fakeUseCase: {
                         key: "fakeKey",
@@ -82,18 +82,16 @@ describe("Monitoring module", function () {
         mocks['crypto'] = crypto;
 
         Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
-
     });
 
     describe('Singleton Get', function () {
         it('should always get the same instance', function () {
-
             var monitoring = Monitoring.get();
             var newMonitoringInstance = Monitoring.get();
 
 
             expect(monitoring).toBe(newMonitoringInstance);
-        })
+        });
     });
 
     describe("Constructor", function () {
@@ -148,7 +146,6 @@ describe("Monitoring module", function () {
 
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
             expect(function () {Monitoring.get()}).toThrowType(RainError.ERROR_PRECONDITION_FAILED);
-
         });
 
         it('should disable the module if monitoring key is missing from configuration', function () {
@@ -176,7 +173,6 @@ describe("Monitoring module", function () {
         });
 
         it('should disable the module if this is specified in the monitoring.conf', function () {
-
             config = {
                 monitoring: {
                     step: 2,
@@ -220,7 +216,6 @@ describe("Monitoring module", function () {
         });
 
         it('should create a measurementMap from the configuration file', function () {
-
             var monitoring = Monitoring.get();
 
             expect(monitoring._measurementMap).toEqual(config.monitoring.metrics);
@@ -257,7 +252,6 @@ describe("Monitoring module", function () {
         });
 
         it('should set the default send rate', function () {
-
             var monitoring = Monitoring.get();
 
             expect(setInterval.calls.length).toEqual(1);
@@ -324,7 +318,6 @@ describe("Monitoring module", function () {
     describe("StartMeasurement", function () {
 
         it('should not run the method if the module is disabled', function () {
-
             config = {
                 monitoring: {}
             };
@@ -335,12 +328,9 @@ describe("Monitoring module", function () {
 
             expect(monitoring._disabled).toBe(true);
             expect(monitoring.startMeasurement('fakeUseCase')).toBe(undefined);
-
-
         });
 
         it('should log an error if use case is not passed to the method', function () {
-
             var monitoring = Monitoring.get();
 
             monitoring.startMeasurement();
@@ -349,7 +339,6 @@ describe("Monitoring module", function () {
         });
 
         it('should log an error if invalid or disabled use case is passed to the method', function () {
-
             var monitoring = Monitoring.get();
             monitoring.startMeasurement('wrongUseCase');
 
@@ -357,7 +346,6 @@ describe("Monitoring module", function () {
         });
 
         it('should generate an id if no id is passed', function () {
-
             var monitoring = Monitoring.get();
 
             var id = monitoring.startMeasurement('fakeUseCase');
@@ -366,7 +354,6 @@ describe("Monitoring module", function () {
         });
 
         it('should always return the id even though it is passed', function () {
-
             var monitoring = Monitoring.get();
 
             var id = monitoring.startMeasurement('fakeUseCase', 'passedId');
@@ -376,7 +363,6 @@ describe("Monitoring module", function () {
 
         it('should register measurements to the map if no id is passed, no id should be pushed' +
             'if operation is count and also should increment the active requests', function () {
-
             var monitoring = Monitoring.get();
 
             monitoring.startMeasurement('fakeUseCase');
@@ -390,7 +376,6 @@ describe("Monitoring module", function () {
 
         it('should register measurements and id to map if operation is average, should set the current' +
             'time for the pushed id and should increment the active requests', function () {
-
             config = {
                 monitoring: {
                     metrics: {
@@ -422,9 +407,8 @@ describe("Monitoring module", function () {
             });
         });
 
-        it('should push another id to the metrics map of an useCase if concurency, should set the activeRequests' +
+        it('should push another id to the metrics map of an use case if concurency, should set the activeRequests' +
             'to the number of concurent ids/users', function () {
-
             config = {
                 monitoring: {
                     metrics: {
@@ -464,27 +448,22 @@ describe("Monitoring module", function () {
 
     describe("Stop Measurement", function () {
 
-        it('should log an error if usecase is not passed', function () {
-
+        it('should log an error if use case is not passed', function () {
             var monitoring = Monitoring.get();
 
             monitoring.startMeasurement('fakeUseCase');
             monitoring.endMeasurement();
             expect(logger.error).toHaveBeenCalled();
-
         });
 
-        it('should log an error if usecase is invalid', function () {
-
+        it('should log an error if use case is invalid', function () {
             var monitoring = Monitoring.get();
             monitoring.endMeasurement('invalid');
 
             expect(logger.error).toHaveBeenCalled();
-
         });
 
-        it('should log a debug message if usecase is disabled', function () {
-
+        it('should log a debug message if use case is disabled', function () {
             config = {
                 monitoring: {
                     metrics: {
@@ -504,20 +483,17 @@ describe("Monitoring module", function () {
             var monitoring = Monitoring.get();
             monitoring.endMeasurement('averageUseCase');
 
-            expect(logger.debug).toHaveBeenCalled();
+            expect(logger.error).toHaveBeenCalled();
         });
 
         it('should log an error if it is called although no measurement was started', function () {
-
             var monitoring = Monitoring.get();
             monitoring.endMeasurement('fakeUseCase');
 
             expect(logger.error).toHaveBeenCalled();
-
         });
 
         it('should get the time of a request from start to end and added to total', function () {
-
             var times = 1;
 
             Date.now.andCallFake(function () {
@@ -549,18 +525,15 @@ describe("Monitoring module", function () {
             monitoring.endMeasurement('fakeUseCase', id);
 
             expect(monitoring._measurementMap['fakeUseCase'].measurements.total).toEqual(2);
-
         });
 
         it('should increment the number of finished requests on end', function () {
-
             var monitoring = Monitoring.get();
 
             var id = monitoring.startMeasurement('fakeUseCase');
             monitoring.endMeasurement('fakeUseCase', id);
 
             expect(monitoring._measurementMap['fakeUseCase'].measurements.resolvedRequests).toEqual(1);
-
         });
 
         it('should flag the specified id from the map that it has finished the requests if average', function () {
@@ -607,13 +580,11 @@ describe("Monitoring module", function () {
 
             expect(monitoring._measurementMap['fakeUseCase'].measurements.activeRequests).toEqual(0);
         });
-
     });
 
     describe("Close", function () {
 
         it('should compose all data and send it to the server not depending on interval', function () {
-
             var isResolved;
             var monitoring = Monitoring.get();
 
@@ -638,9 +609,7 @@ describe("Monitoring module", function () {
                     }]
                 );
             })
-
         });
-
     });
 
     describe("Register Event", function () {
@@ -721,7 +690,6 @@ describe("Monitoring module", function () {
         });
 
         it('should keep the active requests until they are resolved', function () {
-
             config = {
                 monitoring: {
                     step: 2,
@@ -824,7 +792,6 @@ describe("Monitoring module", function () {
         });
 
         it('should reset the registered events', function () {
-
             var times = 1;
             Date.now.andCallFake(function () {
                 if(times === 1) {
@@ -860,7 +827,6 @@ describe("Monitoring module", function () {
         });
 
         it('should not reset the activeRequests for count measurements', function () {
-
             var monitoring = Monitoring.get();
             monitoring.startMeasurement('fakeUseCase', 'fakeId');
             monitoring.startMeasurement('fakeUseCase', 'fakeId');
@@ -990,4 +956,142 @@ describe("Monitoring module", function () {
         });
 
     });
+
+    describe('Register tlds', function () {
+        beforeEach(function () {
+            config = {
+                monitoring: {
+                    step: 2,
+                    enableTld: true,
+                    metrics: {
+                        fakeUseCase1: {
+                            key: "fakeKey",
+                            operation: "average",
+                            secondaryKey: "secondaryFakeKey"
+                        },
+                        fakeUseCase2: {
+                            key: "fakeKey2",
+                            operation: "average",
+                            secondaryKey: "secondaryFakeKey"
+                        },
+                        fakeUseCase1_net: {
+                            key: "fakeKey_net",
+                            operation: "average",
+                            secondaryKey: "secondaryFakeKey_net"
+                        }
+                    }
+                }
+            };
+
+            mocks['../configuration'] = config;
+            Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
+        });
+
+        it('should return the use case combined with the tld if the use case was created previously', function () {
+            var monitoring = Monitoring.get();
+
+            var useCase = monitoring.registerTld('fakeUseCase1', 'fake.schlund.net');
+
+            expect(useCase).toBe('fakeUseCase1_net');
+        });
+
+        it('should create the new use case with the tld and return the use case name if it wasn`t created', function () {
+            var monitoring = Monitoring.get();
+
+            var useCase = monitoring.registerTld('fakeUseCase2', 'fake.schlund.net');
+
+            expect(useCase).toBe('fakeUseCase2_net');
+            expect(monitoring._measurementMap[useCase]).toEqual({
+                key: "fakeKey2_net",
+                operation: "average",
+                secondaryKey: "secondaryFakeKey_net"
+            });
+        });
+
+        it('should return the normal use case name if no tld is passed', function () {
+            var monitoring = Monitoring.get();
+
+            var useCase = monitoring.registerTld('fakeUseCase2');
+
+            expect(useCase).toBe('fakeUseCase2');
+        });
+
+        it('should return the normal use case name with no tld if the use case does not exist at all', function () {
+            var monitoring = Monitoring.get();
+
+            var useCase = monitoring.registerTld('fakeUseCase3');
+
+            expect(useCase).toBe('fakeUseCase3');
+        });
+
+        it('should not do anything if the monitoring is disabled', function () {
+            config = {
+                monitoring: {
+                    step: 2,
+                    disabled: true,
+                    metrics: {
+                        fakeUseCase1: {
+                            key: "fakeKey",
+                            operation: "average",
+                            secondaryKey: "secondaryFakeKey"
+                        },
+                        fakeUseCase2: {
+                            key: "fakeKey2",
+                            operation: "average",
+                            secondaryKey: "secondaryFakeKey"
+                        },
+                        fakeUseCase1_net: {
+                            key: "fakeKey_net",
+                            operation: "average",
+                            secondaryKey: "secondaryFakeKey_net"
+                        }
+                    }
+                }
+            };
+
+            mocks['../configuration'] = config;
+            Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
+
+            var monitoring = Monitoring.get();
+
+            var useCase = monitoring.registerTld('fakeUseCase1', 'fake.schlund.net');
+
+            expect(useCase).toBe(undefined);
+        });
+
+        it('should not concatenate with the tld if the tld functionality is disabled', function () {
+            config = {
+                monitoring: {
+                    step: 2,
+                    enableTld: false,
+                    metrics: {
+                        fakeUseCase1: {
+                            key: "fakeKey",
+                            operation: "average",
+                            secondaryKey: "secondaryFakeKey"
+                        },
+                        fakeUseCase2: {
+                            key: "fakeKey2",
+                            operation: "average",
+                            secondaryKey: "secondaryFakeKey"
+                        },
+                        fakeUseCase1_net: {
+                            key: "fakeKey_net",
+                            operation: "average",
+                            secondaryKey: "secondaryFakeKey_net"
+                        }
+                    }
+                }
+            };
+
+            mocks['../configuration'] = config;
+            Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
+
+            var monitoring = Monitoring.get();
+
+            var useCase = monitoring.registerTld('fakeUseCase1', 'fake.schlund.net');
+
+            expect(useCase).toBe('fakeUseCase1');
+        });
+    })
 });

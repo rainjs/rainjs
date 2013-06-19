@@ -55,14 +55,19 @@ describe('Socket Watch', function () {
             Monitoring: jasmine.createSpyObj('Monitoring', ['get'])
         };
         var monitoring = jasmine.createSpyObj('monitoring',
-            ['startMeasurement', 'endMeasurement', 'registerEvent']);
+            ['startMeasurement', 'endMeasurement', 'registerEvent', 'registerTld']);
         Monitoring.Monitoring.get.andReturn(monitoring);
 
         socket = jasmine.createSpy('socket', ['on','emit']);
         socket = {
             id: 'test_id',
             on: jasmine.createSpy('on'),
-            emit: jasmine.createSpy('emit')
+            emit: jasmine.createSpy('emit'),
+            handshake: {
+                headers: {
+                    host: 'fake.schlund.net'
+                }
+            }
         };
 
         mocks['./monitoring'] = Monitoring;
@@ -81,6 +86,9 @@ describe('Socket Watch', function () {
             expect(socketWatcher instanceof SocketWatcher).toEqual(true);
         });
         it('Should config idleTime', function () {
+
+            socketWatcher = SocketWatcher.get();
+
             socketWatcher.configure(socket);
 
             expect(socketWatcher._idleTime).toBe(100);
@@ -98,6 +106,7 @@ describe('Socket Watch', function () {
             config.websocket.idleTime = null;
 
             socketWatcher.configure(socket);
+            socketWatcher._clientsMap['test_id'] = socket;
             expect(socketWatcher._idleTime).not.toBe(-1);
             expect(socketWatcher._idleTime).not.toBeNull();
         });
@@ -105,6 +114,7 @@ describe('Socket Watch', function () {
 
         it('Should correctly call \'on\' on connect emit', function () {
             socketWatcher.configure(socket);
+            socketWatcher._clientsMap['test_id'] = socket;
             socket.emit('connect');
 
             expect(socket.on).toHaveBeenCalled();
@@ -115,10 +125,11 @@ describe('Socket Watch', function () {
     describe('Refresh idle status of socket', function () {
         beforeEach(function () {
             socketWatcher = SocketWatcher.get();
+            socketWatcher.configure(socket);
          });
 
         it('Should set a new timeout if not defined', function () {
-            socketWatcher._timeoutMap['test_id'] = null;
+            socketWatcher._clientsMap['test_id'] = socket;
             socketWatcher._refreshIdle('test_id', '');
 
             expect(socketWatcher._timeoutMap['test_id']).not.toBeNull();
@@ -126,12 +137,14 @@ describe('Socket Watch', function () {
 
         it('Should not set a new timeout on disconnect', function () {
             socketWatcher._timeoutMap['test_id'] = null;
+            socketWatcher._clientsMap['test_id'] = socket;
             socketWatcher._refreshIdle('test_id', 'disconnect');
 
             expect(socketWatcher._timeoutMap['test_id']).toBeNull();
         });
 
         it('Should null out idleMap id if idle true', function () {
+            socketWatcher._clientsMap['test_id'] = socket;
             socketWatcher._idleMap['test_id'] = true;
             socketWatcher._refreshIdle('test_id', '');
 
@@ -160,18 +173,25 @@ describe('Socket Watch', function () {
             });
 
             socketWatcher = SocketWatcher.get();
+            socketWatcher.configure(socket);
          });
 
         it('Should call setInterval on correct time', function () {
+            socketWatcher._clientsMap['test_id'] = socket;
             socketWatcher._disconnectOnIdle(socket);
-            expect(timeWaited).toBe(1000);
+            expect(timeWaited).toBe(2000);
         });
 
         it('Should disconnect user on idle', function () {
-            socketWatcher._idleMap['test_id'] = true;
             socketWatcher._clientsMap['test_id'] = {
-                disconnect: function() {}
+                disconnect: function() {},
+                handshake: {
+                    headers: {
+                        host: 'fake.schlund.net'
+                    }
+                }
             }
+            socketWatcher._idleMap['test_id'] = true;
             socketWatcher._disconnectOnIdle(socket);
 
             expect(socketWatcher._clientsMap['test_id']).not.toBeDefined();
@@ -179,10 +199,15 @@ describe('Socket Watch', function () {
         });
 
         it('Should not disconnect user if not idle', function () {
-            socketWatcher._idleMap['test_id'] = false;
             socketWatcher._clientsMap['test_id'] = {
-                disconnect: function() {}
+                disconnect: function() {},
+                handshake: {
+                    headers: {
+                        host: 'fake.schlund.net'
+                    }
+                }
             }
+            socketWatcher._idleMap['test_id'] = false;
             socketWatcher._disconnectOnIdle(socket);
 
             expect(socketWatcher._clientsMap['test_id']).toBeDefined();
