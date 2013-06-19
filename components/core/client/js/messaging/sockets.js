@@ -83,7 +83,8 @@ define(["raintime/lib/socket.io", "raintime/messaging/observer"], function (io, 
         }
 
         var socket = io.connect(this._baseUrl + channel, {
-            'reconnect': true
+            'reconnect': true,
+            'query': 'bal_uid=' + (new Date()).getTime()
         });
 
         socket.isConnected = socket.isConnected || false;
