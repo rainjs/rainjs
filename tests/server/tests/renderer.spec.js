@@ -34,7 +34,10 @@ var cwd = process.cwd(),
         },
         sessionId: 'sid',
         handshake: {
-            globalSession: {}
+            globalSession: {},
+            headers: {
+                host: 'fake.schlund.net'
+            }
         },
         environment: {
             language: 'ro_RO'
@@ -264,7 +267,7 @@ describe('Renderer', function () {
                     Monitoring: jasmine.createSpyObj('Monitoring', ['get'])
                 };
                 var monitoring = jasmine.createSpyObj('monitoring',
-                    ['startMeasurement', 'endMeasurement', 'registerEvent']);
+                    ['startMeasurement', 'endMeasurement', 'registerEvent', 'registerTld']);
                 Monitoring.Monitoring.get.andReturn(monitoring);
                 return Monitoring;
             }
