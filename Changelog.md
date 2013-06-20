@@ -1,10 +1,18 @@
 # Changelog
 
-## v 0.28.1
+
+
+## 0.29.0
+
+* Added functionality to prevent the session cookie from expiring when only web sockets are used.
+  This works by sending an AJAX request to the server when the cookie is about to expire.
+  An event is published when the cookie expires.
+
+## 0.28.1
 
 * Use an empty Jed instance when a component instance is not found.
 
-## v 0.28.0
+## 0.28.0
 
 * Added the ability to add a custom id for translation messages. See the documentation for
   ``t`` and ``nt`` methods from client and server side JavaScript and ``t`` and ``nt`` helpers

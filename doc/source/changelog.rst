@@ -3,6 +3,14 @@ Changelog
 =========
 
 --------
+v 0.29.0
+--------
+
++ Added functionality to prevent the session cookie from expiring when only web sockets are used.
+  This works by sending an AJAX request to the server when the cookie is about to expire.
+  An event is published when the cookie expires.
+
+--------
 v 0.28.1
 --------
 
