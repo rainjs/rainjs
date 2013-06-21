@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<testsuites>
-<testsuite name="Handlebars configuration" errors="0" tests="1" failures="0" time="0.003" timestamp="2013-06-03T12:24:48">
-  <testcase classname="Handlebars configuration" name="must register all Handlebars plugins" time="0.003"></testcase>
-</testsuite>
-</testsuites>

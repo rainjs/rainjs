@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<testsuites>
-<testsuite name="RAIN generate .po files" errors="0" tests="2" failures="0" time="0.007" timestamp="2013-06-03T12:24:49">
-  <testcase classname="RAIN generate .po files" name="should register the generate_po_files command" time="0.004"></testcase>
-  <testcase classname="RAIN generate .po files" name="should call the generate po utility function" time="0.003"></testcase>
-</testsuite>
-</testsuites>

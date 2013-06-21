@@ -22,7 +22,8 @@ in the following situation:
 - the monitoring metrics key is missing;
 - the disabled key in the monitoring configuration;
 
-The monitoring module creates a measurementMap that would look like this:
+The monitoring module can also measure some use cases for different tlds. In this sittuation please
+use.
 
 
 
@@ -36,6 +37,31 @@ The monitoring module creates a measurementMap that would look like this:
 Examples
 --------
 
+
+.. code-block:: javascript
+
+    var monitoringInstance = Monitoring.get();
+     var useCase = monitoringInstance.registerTld('<useCase>', '<host>');
+     var id = monitoringInstance.startMeasurement(useCase);
+     monitoringInstance.endMeasurement(useCase, id);
+     monitoringInstance.registerEvent(useCase);
+
+The monitoring module can also load self dependent measurement plugins with their own measurement
+plan and logic. To include your modules you should describe them in your configuration like so:
+
+.. code-block:: javascript
+
+    "measurementPlugins": {
+          "pluginName": {
+              "path": "./path/to/plugin"
+          }
+      }
+
+Also you should not forget to include the ``pluginName`` set above in your ``metrics`` key
+from the configuration file. The way you write it in the metrics key is the same as for other
+use cases.
+
+The monitoring module creates a measurementMap that would look like this:
 
 .. code-block:: javascript
 
@@ -216,12 +242,15 @@ Singleton getter.
 registerEvent
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: Monitoring#registerEvent(configKey)
+.. js:function:: Monitoring#registerEvent(configKey, value)
 
 
     
     :param String configKey: 
         useCase for which to gather data. 
+    
+    :param  value: 
+         
     
 
 
@@ -229,6 +258,45 @@ registerEvent
 
 Collecting other types of monitoring data not depending on ``startMeasurement`` and ``endMeasurement``
 methods, this method can be called only for the use cases that have a ``count`` operation.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+registerTld
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Monitoring#registerTld(configKey, [host])
+
+
+    
+    :param String configKey: 
+        the name of the use case. 
+    
+    :param String host: 
+        optional parameter representing the host that requests the measurement. 
+    
+
+
+
+    
+    :returns String/Null:
+        returns the name of the use case or null if the module is disabled. 
+    
+
+
+Registers a tld use case if no host is passed then it will return the current useCase, also
+if the tld configuration is disabled it will also return the same useCase. If the module
+is disabled then this method will not work. This module also dynamically adds a clone of the base
+use case concatanated with the tld retrieved from the host paramether.
 
 
 
@@ -283,6 +351,33 @@ see the class documentation for the parameters set by this method.
 
 
     
+
+Attributes
+----------
+
+..
+   class-attributes
+
+
+measurementPlugins
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:attribute:: measurementPlugins (inner)  
+
+
+delay registering plugins, mess up multiple requires.
+
+
+
+
+
+
+
+
+    
+
+
+
 
 
 

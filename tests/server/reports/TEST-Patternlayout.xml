@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<testsuites>
-<testsuite name="Pattern layout" errors="0" tests="4" failures="0" time="0.012" timestamp="2013-06-03T12:24:48">
-  <testcase classname="Pattern layout" name="should be properly constructed" time="0.003"></testcase>
-  <testcase classname="Pattern layout" name="should corectly calculate the date" time="0.003"></testcase>
-  <testcase classname="Pattern layout" name="should corectly determine the newline format" time="0.003"></testcase>
-  <testcase classname="Pattern layout" name="should corectly format the message" time="0.002"></testcase>
-</testsuite>
-</testsuites>

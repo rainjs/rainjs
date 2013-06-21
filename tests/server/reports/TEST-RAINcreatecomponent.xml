@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<testsuites>
-<testsuite name="RAIN create component" errors="0" tests="3" failures="0" time="0.012" timestamp="2013-06-03T12:24:49">
-  <testcase classname="RAIN create component" name="should register the create-component command" time="0.004"></testcase>
-  <testcase classname="RAIN create component" name="should create a new component" time="0.004"></testcase>
-  <testcase classname="RAIN create component" name="should exit in case it cannot create the component and print the error" time="0.004"></testcase>
-</testsuite>
-</testsuites>

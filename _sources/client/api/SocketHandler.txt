@@ -47,6 +47,34 @@ Methods
    class-methods
 
 
+get
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: SocketHandler.get()
+
+
+
+
+    
+    :returns SocketHandler:
+         
+    
+
+
+Gets the singleton instance.
+
+
+
+
+
+
+
+
+
+    
+
+
+
 getSocket
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 

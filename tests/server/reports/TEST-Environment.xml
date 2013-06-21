@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<testsuites>
-<testsuite name="Environment" errors="0" tests="2" failures="0" time="0.006" timestamp="2013-06-03T12:24:47">
-  <testcase classname="Environment" name="should set the language to user language" time="0.003"></testcase>
-  <testcase classname="Environment" name="should set the language to configuration language" time="0.003"></testcase>
-</testsuite>
-</testsuites>

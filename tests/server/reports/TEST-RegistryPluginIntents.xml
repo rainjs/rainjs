@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<testsuites>
-<testsuite name="Registry Plugin: Intents" errors="0" tests="2" failures="0" time="0.005" timestamp="2013-06-03T12:24:50">
-  <testcase classname="Registry Plugin: Intents" name="should register 2 intents" time="0.003"></testcase>
-  <testcase classname="Registry Plugin: Intents" name="should not register intents for containers" time="0.002"></testcase>
-</testsuite>
-</testsuites>

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<testsuites>
-<testsuite name="Module Loader" errors="0" tests="1" failures="0" time="0.006" timestamp="2013-06-03T12:24:48">
-  <testcase classname="Module Loader" name="should create a new context for the specified parameters" time="0.006"></testcase>
-</testsuite>
-</testsuites>

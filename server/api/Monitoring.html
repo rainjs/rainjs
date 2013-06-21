@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class Monitoring &mdash; Rain v0.28.0 documentation</title>
+    <title>Class Monitoring &mdash; Rain v0.29.0 documentation</title>
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.28.0',
+        VERSION:     '0.29.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.28.0 documentation" href="../../index.html" />
+    <link rel="top" title="Rain v0.29.0 documentation" href="../../index.html" />
     <link rel="next" title="Class MonitoringAdapter" href="MonitoringAdapter.html" />
     <link rel="prev" title="Class ModuleLoader" href="ModuleLoader.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="ModuleLoader.html" title="Class ModuleLoader"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.28.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.29.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -57,9 +57,30 @@ in the following situation:
 - the adapter module instance is missing or could not be initialized;
 - the monitoring metrics key is missing;
 - the disabled key in the monitoring configuration;</p>
-<p>The monitoring module creates a measurementMap that would look like this:</p>
+<p>The monitoring module can also measure some use cases for different tlds. In this sittuation please
+use.</p>
 <div class="section" id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">monitoringInstance</span> <span class="o">=</span> <span class="nx">Monitoring</span><span class="p">.</span><span class="nx">get</span><span class="p">();</span>
+ <span class="kd">var</span> <span class="nx">useCase</span> <span class="o">=</span> <span class="nx">monitoringInstance</span><span class="p">.</span><span class="nx">registerTld</span><span class="p">(</span><span class="s1">&#39;&lt;useCase&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;host&gt;&#39;</span><span class="p">);</span>
+ <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">monitoringInstance</span><span class="p">.</span><span class="nx">startMeasurement</span><span class="p">(</span><span class="nx">useCase</span><span class="p">);</span>
+ <span class="nx">monitoringInstance</span><span class="p">.</span><span class="nx">endMeasurement</span><span class="p">(</span><span class="nx">useCase</span><span class="p">,</span> <span class="nx">id</span><span class="p">);</span>
+ <span class="nx">monitoringInstance</span><span class="p">.</span><span class="nx">registerEvent</span><span class="p">(</span><span class="nx">useCase</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The monitoring module can also load self dependent measurement plugins with their own measurement
+plan and logic. To include your modules you should describe them in your configuration like so:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="s2">&quot;measurementPlugins&quot;</span><span class="o">:</span> <span class="p">{</span>
+      <span class="s2">&quot;pluginName&quot;</span><span class="o">:</span> <span class="p">{</span>
+          <span class="s2">&quot;path&quot;</span><span class="o">:</span> <span class="s2">&quot;./path/to/plugin&quot;</span>
+      <span class="p">}</span>
+  <span class="p">}</span>
+</pre></div>
+</div>
+<p>Also you should not forget to include the <tt class="docutils literal"><span class="pre">pluginName</span></tt> set above in your <tt class="docutils literal"><span class="pre">metrics</span></tt> key
+from the configuration file. The way you write it in the metrics key is the same as for other
+use cases.</p>
+<p>The monitoring module creates a measurementMap that would look like this:</p>
 <div class="highlight-javascript"><div class="highlight"><pre><span class="s2">&quot;useCase1&quot;</span><span class="o">:</span> <span class="p">{</span>
      <span class="nx">key</span><span class="o">:</span><span class="s1">&#39;zabbixUniqueKey&#39;</span><span class="p">,</span>
      <span class="nx">operation</span><span class="o">:</span> <span class="s1">&#39;count&#39;</span><span class="o">/</span><span class="s1">&#39;average&#39;</span><span class="p">,</span>
@@ -201,13 +222,14 @@ map or there was no measurement started before the <tt class="docutils literal">
 <h3>registerEvent<a class="headerlink" href="#registerevent" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="Monitoring#registerEvent">
-<tt class="descname">Monitoring#registerEvent</tt><big>(</big><em>configKey</em><big>)</big><a class="headerlink" href="#Monitoring#registerEvent" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">Monitoring#registerEvent</tt><big>(</big><em>configKey</em>, <em>value</em><big>)</big><a class="headerlink" href="#Monitoring#registerEvent" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>configKey</strong> (<em>String</em>) &#8211; useCase for which to gather data.</li>
+<li><strong>value</strong> &#8211; </li>
 </ul>
 </td>
 </tr>
@@ -217,6 +239,34 @@ map or there was no measurement started before the <tt class="docutils literal">
 
 <p>Collecting other types of monitoring data not depending on <tt class="docutils literal"><span class="pre">startMeasurement</span></tt> and <tt class="docutils literal"><span class="pre">endMeasurement</span></tt>
 methods, this method can be called only for the use cases that have a <tt class="docutils literal"><span class="pre">count</span></tt> operation.</p>
+</div>
+<div class="section" id="registertld">
+<h3>registerTld<a class="headerlink" href="#registertld" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Monitoring#registerTld">
+<tt class="descname">Monitoring#registerTld</tt><big>(</big><em>configKey</em><span class="optional">[</span>, <em>host</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#Monitoring#registerTld" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>configKey</strong> (<em>String</em>) &#8211; the name of the use case.</li>
+<li><strong>host</strong> (<em>String</em>) &#8211; optional parameter representing the host that requests the measurement.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Returns String/Null:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body"><p class="first last">returns the name of the use case or null if the module is disabled.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Registers a tld use case if no host is passed then it will return the current useCase, also
+if the tld configuration is disabled it will also return the same useCase. If the module
+is disabled then this method will not work. This module also dynamically adds a clone of the base
+use case concatanated with the tld retrieved from the host paramether.</p>
 </div>
 <div class="section" id="startmeasurement">
 <h3>startMeasurement<a class="headerlink" href="#startmeasurement" title="Permalink to this headline">¶</a></h3>
@@ -246,6 +296,18 @@ was started before for an use case it registers a measurement key in the measure
 see the class documentation for the parameters set by this method.</p>
 </div>
 </div>
+<div class="section" id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="measurementplugins">
+<h3>measurementPlugins<a class="headerlink" href="#measurementplugins" title="Permalink to this headline">¶</a></h3>
+<dl class="attribute">
+<dt id="measurementPlugins ">
+<tt class="descname">measurementPlugins </tt><a class="headerlink" href="#measurementPlugins " title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>delay registering plugins, mess up multiple requires.</p>
+</div>
+</div>
 </div>
 
 
@@ -264,7 +326,12 @@ see the class documentation for the parameters set by this method.</p>
 <li><a class="reference internal" href="#endmeasurement">endMeasurement</a></li>
 <li><a class="reference internal" href="#get">get</a></li>
 <li><a class="reference internal" href="#registerevent">registerEvent</a></li>
+<li><a class="reference internal" href="#registertld">registerTld</a></li>
 <li><a class="reference internal" href="#startmeasurement">startMeasurement</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#attributes">Attributes</a><ul>
+<li><a class="reference internal" href="#measurementplugins">measurementPlugins</a></li>
 </ul>
 </li>
 </ul>
@@ -306,7 +373,7 @@ see the class documentation for the parameters set by this method.</p>
         <li class="right" >
           <a href="ModuleLoader.html" title="Class ModuleLoader"
              >previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.28.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain v0.29.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

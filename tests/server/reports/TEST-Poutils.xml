@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<testsuites>
-<testsuite name="Po utils" errors="0" tests="1" failures="0" time="0" timestamp="2013-06-03T12:24:47">
-  <testcase classname="Po utils" name="must correctly parse the po file" time="0"></testcase>
-</testsuite>
-</testsuites>

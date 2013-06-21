@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<testsuites>
-<testsuite name="Registry Plugin: Controller Path Plugin" errors="0" tests="1" failures="0" time="0" timestamp="2013-06-03T12:24:50">
-  <testcase classname="Registry Plugin: Controller Path Plugin" name="must rewrite the js clientside controller to the right url" time="0"></testcase>
-</testsuite>
-</testsuites>

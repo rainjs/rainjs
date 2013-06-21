@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<testsuites>
-<testsuite name="Registry Plugin: Load translation files" errors="0" tests="3" failures="0" time="0.012" timestamp="2013-06-03T12:24:50">
-  <testcase classname="Registry Plugin: Load translation files" name="should load all po files" time="0.005"></testcase>
-  <testcase classname="Registry Plugin: Load translation files" name="should not load any po file if the locale folder could not be read" time="0.003"></testcase>
-  <testcase classname="Registry Plugin: Load translation files" name="should not load any po file if the locale folder is empty" time="0.004"></testcase>
-</testsuite>
-</testsuites>

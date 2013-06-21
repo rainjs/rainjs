@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Client side websockets API &mdash; Rain v0.28.0 documentation</title>
+    <title>Client side websockets API &mdash; Rain v0.29.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.28.0',
+        VERSION:     '0.29.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.28.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.29.0 documentation" href="../index.html" />
     <link rel="next" title="Client rendering" href="client_rendering.html" />
     <link rel="prev" title="Client runtime dependencies" href="requirejs.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="requirejs.html" title="Client runtime dependencies"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.28.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.29.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -114,6 +114,21 @@ and the number of admitted websocket connections on the server is reached than t
 are disconnect. If the client tries to emit any type of event over it&#8217;s websocket channel than
 the connection is reestablished.</p>
 </div>
+<div class="section" id="cookie-expiration">
+<h2>Cookie Expiration<a class="headerlink" href="#cookie-expiration" title="Permalink to this headline">¶</a></h2>
+<p>When the communication with the server is happening only via Web Sockets, no headers are exchanged
+and the cookie expiration time is never extended. To overcome this limitation, Web Socket
+activity is monitored and when the cookie is about to expire, an AJAX call is sent to the server
+if any message was sent or received. If no activity occurred, a <tt class="docutils literal"><span class="pre">session_expired</span></tt> event
+is published globally to notify the application that the session for the current user expired.
+One possible way to respond to this event is to redirect the user to the login page. The
+following example shows how you can listen for this event:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">messaging</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s1">&#39;session_expired&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Expired Session&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -126,6 +141,7 @@ the connection is reestablished.</p>
   <ul>
 <li><a class="reference internal" href="#">Client side websockets API</a><ul>
 <li><a class="reference internal" href="#websockets-example">Websockets example</a></li>
+<li><a class="reference internal" href="#cookie-expiration">Cookie Expiration</a></li>
 </ul>
 </li>
 </ul>
@@ -165,7 +181,7 @@ the connection is reestablished.</p>
         <li class="right" >
           <a href="requirejs.html" title="Client runtime dependencies"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.28.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.29.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<testsuites>
-<testsuite name="Router Plugin: CSS Route" errors="0" tests="4" failures="0" time="0.056" timestamp="2013-06-03T12:24:49">
-  <testcase classname="Router Plugin: CSS Route" name="must return 404 if the compiled css is not found" time="0.037"></testcase>
-  <testcase classname="Router Plugin: CSS Route" name="must return 404 if the scope component is specified and invalid" time="0.006"></testcase>
-  <testcase classname="Router Plugin: CSS Route" name="must server the cached css for current component" time="0.006"></testcase>
-  <testcase classname="Router Plugin: CSS Route" name="must scope the css with the requested component for cross referencing" time="0.007"></testcase>
-</testsuite>
-</testsuites>

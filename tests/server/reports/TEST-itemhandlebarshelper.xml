@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<testsuites>
-<testsuite name="item handlebars helper" errors="0" tests="1" failures="0" time="0.003" timestamp="2013-06-03T12:24:48">
-  <testcase classname="item handlebars helper" name="should add a new item" time="0.003"></testcase>
-</testsuite>
-</testsuites>
