@@ -65,7 +65,7 @@ describe('The identity provider', function () {
         };
         mocks[myProvider] = jasmine.createSpy('Spy.provider');
         mocks['./user'] = jasmine.createSpy('Spy.userClass');
-        mocks['./user'].andReturn({isAuthenticated: function () {return false}});
+        mocks['./user'].andReturn({isAuthenticated: function () { return false; }});
 
         Spy = {
             configuration: configuration
