@@ -63,11 +63,28 @@ function minify() {
             var metaFile = path.join(componentPath, 'meta.json');
             var config = JSON.parse(fs.readFileSync(metaFile, 'utf8'));
             var options;
+            var excludedCoreFiles = [
+                'index.min.js',
+                'logger.js',
+                'context.js',
+                'raintime.js',
+                'async_controller.js',
+                'client_storage.js',
+                'lib/es5-shim.min.js',
+                'lib/jquery_plugins.js',
+                'lib/require-jquery.js'
+            ];
+            var jsPath = path.join(componentPath, 'client/js/');
 
             // minify JavaScript
             if (config.id === 'core') {
                 options = {
                     baseUrl: path.join(componentPath, 'client/js'),
+
+                    "paths": {
+                        "text": "lib/require-text"
+                    },
+
                     optimize: "uglify2",
                     uglify2: {
                         mangle: false
@@ -79,18 +96,23 @@ function minify() {
                         "location": "."
                     }],
 
-                    include: [
-                        'raintime/dependencies',
-                        'raintime/client_rendering',
-                        'raintime/dialog',
-                        'raintime/translation'
-                    ],
+                    include: [],
                     out: path.join(componentPath, 'client/js/index.min.js'),
 
                     wrap: {
                         end: "define('raintime/index.min', [], function () {});"
                     }
                 };
+
+                util.walkSync(jsPath, ['.js'], function(filePath) {
+                    var file = filePath.match(/core\/client\/js\/(.*)/)[1];
+
+                    if (excludedCoreFiles.indexOf(file) === -1) {
+                        options.include.push('raintime/' + file.slice(0, -3));
+                    };
+
+                });
+
             } else {
                 options = {
                     baseUrl: path.join(componentPath, 'client'),
@@ -132,7 +154,6 @@ function minify() {
                         }
                     })(config)
                 };
-
 
                 Object.keys(config.views).forEach(function (viewName) {
                     var view  = config.views[viewName];
