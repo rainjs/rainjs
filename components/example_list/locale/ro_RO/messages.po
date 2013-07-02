@@ -18,7 +18,7 @@ msgstr "Vă rog să mă anunțați dacă aveți nevoie de informații suplimenta
 msgid "letter.content.thank.you"
 msgstr "Vă mulțumesc."
 
-msgid "Sincerely,"
+msgid "letter.ending.sincerely"
 msgstr "Cu stimă,"
 
 msgid "%1$s %2$s"

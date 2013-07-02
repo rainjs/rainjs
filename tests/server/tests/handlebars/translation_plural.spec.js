@@ -26,11 +26,11 @@
 "use strict";
 
 describe('Plural translation helper', function () {
-    var translationHelper, renderer, Translation;
+    var translationHelper, Translation;
 
     beforeEach(function () {
         var mocks = {};
-        renderer = mocks['../renderer'] = {
+        mocks['../renderer'] = {
             rain: {
                 component: 'comp',
                 environment: {
@@ -51,7 +51,7 @@ describe('Plural translation helper', function () {
         translationHelper.helper('Message', 'Plural', 2, {hash: {}});
 
         expect(Translation.translate)
-            .toHaveBeenCalledWith('comp', 'ro', 'Message', 'Plural', 2, []);
+            .toHaveBeenCalledWith('comp', 'ro', 'Message', 'Message', 'Plural', 2, []);
     });
 
 
@@ -66,7 +66,7 @@ describe('Plural translation helper', function () {
         translationHelper.helper('Message', 'Plural', 2, 'arg1', 'arg2', {hash: {}});
 
         expect(Translation.translate)
-            .toHaveBeenCalledWith('comp', 'ro', 'Message', 'Plural', 2, ['arg1', 'arg2']);
+            .toHaveBeenCalledWith('comp', 'ro', 'Message', 'Message', 'Plural', 2, ['arg1', 'arg2']);
     });
 
     it('should properly call translation with id and more arguments passed', function () {
