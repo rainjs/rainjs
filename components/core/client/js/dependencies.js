@@ -81,6 +81,7 @@ define(function () {
         }
 
         if (typeof name === 'string') {
+            modifyDependencies(name, currentDeps, currentCallback);
             oldDefine(name, currentDeps, currentCallback);
         } else {
             oldDefine(currentDeps, currentCallback);
