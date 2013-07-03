@@ -31,17 +31,21 @@
                         "name": "raintime",
                         "main": "raintime",
                         "location": "core/js"
-                    }],
-                    "deps": [
-                        "raintime/dependencies",
-                        "raintime"
-                    ]
+                    }]
                 };
                 var rainContext = {
                     language: '{{language}}',
                     enableClientLogging: {{enableClientLogging}},
-                    cookieMaxAge: {{cookieMaxAge}}
+                    cookieMaxAge: {{cookieMaxAge}},
+                    enableMinification: {{enableMinification}}
                 };
+                if (!rainContext.enableMinification) {
+                    requireConfig.deps = [
+                        "raintime/dependencies",
+                        "raintime"
+                    ];
+                };
+
                 var renderQueueList = [];
                 function renderQueue() {
                     var len = renderQueueList.length;
@@ -67,17 +71,26 @@
                     }
                 }
 
-                require(requireConfig, ["raintime/client_rendering"],
-                        function(ClientRenderer) {
-                    ClientRenderer.get().setPlaceholderTimeout({{placeholderTimeout}});
-                    ClientRenderer.get().setPlaceholder({{{placeholder}}});
+                var minFilePath = '';
+                var dependenciesPath = '';
+                if (rainContext.enableMinification) {
+                        minFilePath = 'raintime/index.min';
+                        dependenciesPath = 'raintime/dependencies';
+                }
 
-                    if (renderQueueList.length === 0) {
-                        ClientRenderer.get().renderPlaceholder($($('body div').get(0)).attr('id'));
-                    }
+                require(requireConfig, [minFilePath], function (main) {
+                    require([dependenciesPath], function (dep) {});
+                    require(["raintime/client_rendering"], function(ClientRenderer) {
+                        ClientRenderer.get().setPlaceholder({{{placeholder}}});
 
-                    renderQueue();
+                        if (renderQueueList.length === 0) {
+                            ClientRenderer.get().renderPlaceholder($($('body div').get(0)).attr('id'));
+                        }
+
+                        renderQueue();
+                    });
                 });
+
             </script>
         {{/if}}
     </head>
