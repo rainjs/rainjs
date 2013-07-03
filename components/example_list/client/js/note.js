@@ -23,9 +23,7 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-define(['t','raintime/lib/util','logger', 'raintime/lib/event_emitter'], function (t, Util,logger, EventEmitter) {
-	console.log(t('mama'));
-console.log(logger);
+define(['raintime/lib/util', 'raintime/lib/event_emitter'], function (Util, EventEmitter) {
 
     /**
      * A note. Takes care of updating the content after the user
