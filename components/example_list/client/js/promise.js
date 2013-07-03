@@ -1,4 +1,4 @@
-define(['raintime/lib/promise'], function (Promise, logger) {
+define(['raintime/lib/promise', 'logger'], function (Promise, logger) {
 
     /**
      * This class is used to show how to use the promise based functionality of the component's
