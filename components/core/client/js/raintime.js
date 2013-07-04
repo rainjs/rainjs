@@ -338,7 +338,15 @@ define(['raintime/lib/promise',
 
         var deferred = new Promise.Deferred(),
             newComponent = new Component(component),
-            deps = component.controller ? [component.controller] : [];
+            deps,
+            strippedPath;
+
+            if (component.controller) {
+                strippedPath = component.controller.replace(/^\/?(.*?)(.js)?$/, '$1');
+                deps = [strippedPath];
+            } else {
+                deps = [];
+            }
 
         map[newComponent.instanceId] = newComponent;
         newComponent.promise = deferred.promise;
