@@ -23,9 +23,7 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-define(['raintime/lib/util',
-        '/example/js/note.js',
-        '/example/js/notes.js'], function (Util, Note, FloatNotes) {
+define(['raintime/lib/util', 'js/note', 'js/notes'], function (Util, Note, FloatNotes) {
 
     /**
      * This controller uses a layout to add and remove notes.
