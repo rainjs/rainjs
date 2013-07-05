@@ -26,7 +26,10 @@
 "use strict";
 
 var path = require('path'),
+    fs = require('fs'),
+    wrench = require('wrench'),
     sdkUtils = require('../lib/utils'),
+    util = require('../../lib/util'),
     JavaScriptOptimizer = require('../lib/javascript_optimizer');
 
 /**
@@ -48,7 +51,8 @@ function minify() {
     var projectRoot = sdkUtils.getProjectRoot(process.cwd()),
         componentsFolder = path.join(projectRoot, 'components'),
         components = {},
-        includedComponents = [];
+        includedComponents = [],
+        outputPath;
 
     sdkUtils.iterateComponents(componentsFolder, function (config, path, folder) {
         var fullId = config.id + ';' + config.version;
@@ -65,6 +69,11 @@ function minify() {
     try {
         var buildConfig = require(path.join(projectRoot, 'build.json')),
             additionalProjects = buildConfig.additionalProjects || [];
+
+        if (buildConfig.buildPath) {
+            outputPath = path.resolve(projectRoot, buildConfig.buildPath);
+            copyProject(projectRoot, outputPath);
+        }
 
         for (var i = 0, len = additionalProjects.length; i < len; i++) {
             var folder = path.resolve(projectRoot, additionalProjects[i], 'components');
@@ -84,11 +93,42 @@ function minify() {
     }
 
     var optimizer = new JavaScriptOptimizer({
-        out: '/path/to/the/minified/project', // defaults to the current project
+        outputPath: outputPath,
         components: components,
         includedComponents: includedComponents
     });
     optimizer.run();
+}
+
+function copyProject(projectPath, minPath) {
+    wrench.mkdirSyncRecursive(minPath, '0755');
+
+    var files = fs.readdirSync(projectPath);
+
+    for (var i = 0, len = files.length; i < len; i++) {
+        var file = files[i],
+            fromPath = path.join(projectPath, file),
+            toPath = path.join(minPath, file),
+            stats = fs.statSync(fromPath);
+
+        if (['.git', '.svn', '.cvs'].indexOf(file) !== -1) {
+            continue;
+        }
+
+        if (stats.isDirectory() && fromPath.match(/^.*\/client\/js$/)) {
+            wrench.mkdirSyncRecursive(toPath, '0755');
+            continue;
+        }
+
+        if (stats.isDirectory()) {
+            wrench.mkdirSyncRecursive(toPath, '0755');
+            copyProject(fromPath, toPath);
+        } else {
+            fs.writeFileSync(toPath, fs.readFileSync(fromPath));
+        }
+
+
+    }
 }
 
 module.exports = register;

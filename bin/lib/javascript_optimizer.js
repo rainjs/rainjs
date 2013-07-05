@@ -31,6 +31,7 @@ var requirejs = require('requirejs'),
     path = require('path'),
     util = require('../../lib/util'),
     fs = require('fs'),
+    wrench = require('wrench'),
     extend = require('node.extend');
 
 var excludedModules = ['js/index.min'];
@@ -45,6 +46,7 @@ var excludedCoreModules = [
 function JsOptimizer(options) {
     this._components = options.components;
     this._includedComponents = options.includedComponents;
+    this._outputPath = options.outputPath;
 
     this._baseConfig = {
         optimize: "none",
@@ -57,11 +59,20 @@ function JsOptimizer(options) {
 JsOptimizer.prototype.run = function () {
     for (var i = 0, len = this._includedComponents.length; i < len; i++) {
         var component = this._components[this._includedComponents[i]],
-            output = path.join(component.path, 'client/js/index.min.js');
+            output;
+
+        if (this._outputPath) {
+            this._copyExcludedFiles(component);
+            this._modifyMetaJson(component);
+            output = path.join(this._outputPath, 'components', component.folder,
+                'client', 'js', 'index.min.js');
+        } else {
+            output = path.join(component.path, 'client', 'js', 'index.min.js');
+        }
 
         var options = component.id === 'core' ?
-            this._generateCoreConfiguration(component, component.path, output) :
-            this._generateConfiguration(component, component.path, output);
+            this._generateCoreConfiguration(component, output) :
+            this._generateConfiguration(component, output);
 
         (function (component) {
             requirejs.optimize(options, function () {
@@ -73,8 +84,27 @@ JsOptimizer.prototype.run = function () {
     }
 };
 
-JsOptimizer.prototype._generateConfiguration = function (component, componentPath, outputFile) {
+JsOptimizer.prototype._modifyMetaJson = function (component) {
+    var config = component.config,
+        configPath = path.join(this._outputPath, 'components', component.folder, 'meta.json');
+
+    for (var viewName in config.views) {
+        var view = config.views[viewName],
+            hasController = view.controller && view.controller.client,
+            controllerPath = path.join(component.path, 'client', 'js', viewName + '.js');
+
+        if (!hasController && fs.existsSync(controllerPath)) {
+            view.controller = view.controller || {};
+            view.controller.client = viewName + '.js';
+        }
+    }
+
+    fs.writeFileSync(configPath, JSON.stringify(config), 'utf8');
+};
+
+JsOptimizer.prototype._generateConfiguration = function (component, outputFile) {
     var self = this;
+    var componentPath = component.path;
     var coreLocation = path.join(this._components['core;1.0'].path, 'client', 'js');
     return  extend(true, {}, this._baseConfig, {
         baseUrl: path.join(componentPath, 'client'),
@@ -116,7 +146,9 @@ JsOptimizer.prototype._generateConfiguration = function (component, componentPat
     });
 };
 
-JsOptimizer.prototype._generateCoreConfiguration = function (component, componentPath, outputFile) {
+JsOptimizer.prototype._generateCoreConfiguration = function (component, outputFile) {
+    var componentPath = component.path;
+
     return {
         baseUrl: path.join(componentPath, 'client', 'js'),
 
@@ -221,9 +253,25 @@ JsOptimizer.prototype._getModules = function (componentPath, modulePrefix, exclu
     return modules;
 };
 
-JsOptimizer.prototype._getDefineStatement = function (ast) {
-    // TODO: handle socket.io, promise, step and rain_error
+JsOptimizer.prototype._copyExcludedFiles = function (component) {
+    var jsPath = path.join(component.path, 'client', 'js'),
+        prefix = component.id === 'core' ? 'raintime' : 'js',
+        excluded = component.id === 'core' ? excludedCoreModules : excludedModules,
+        output = path.join(this._outputPath, 'components', component.folder, 'client', 'js');
 
+    util.walkSync(jsPath, ['.js'], function (filePath) {
+        var moduleName = filePath.substring(jsPath.length + 1, filePath.length - 3),
+            destination = path.join(output, path.relative(jsPath, filePath));
+        moduleName = prefix + '/' + moduleName.replace('\\', '/');
+
+        if (excluded.indexOf(moduleName) !== -1) {
+            wrench.mkdirSyncRecursive(path.dirname(destination));
+            fs.writeFileSync(destination, fs.readFileSync(filePath));
+        }
+    });
+};
+
+JsOptimizer.prototype._getDefineStatement = function (ast) {
     for (var i = 0, len = ast.body.length; i < len; i++) {
         var statement = ast.body[i];
 
