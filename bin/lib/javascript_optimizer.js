@@ -43,19 +43,31 @@ var excludedCoreModules = [
 ];
 
 
+/**
+ * Minifies the client-side JavaScript code for the specified components.
+ *
+ * @param {Object} options the minification options
+ * @param {Object} options.components contains the components needed to minify
+ * @param {Array} options.includedComponents list of components to be minified
+ * @param {String} options.[outputPath] the path to create the minified project
+ * @constructor
+ */
 function JsOptimizer(options) {
     this._components = options.components;
     this._includedComponents = options.includedComponents;
     this._outputPath = options.outputPath;
 
     this._baseConfig = {
-        optimize: "none",
+        optimize: "uglify2",
         uglify2: {
-            mangle: false
+            mangle: true
         }
     };
 }
 
+/**
+ * Performs the minification.
+ */
 JsOptimizer.prototype.run = function () {
     for (var i = 0, len = this._includedComponents.length; i < len; i++) {
         var component = this._components[this._includedComponents[i]],
@@ -84,6 +96,14 @@ JsOptimizer.prototype.run = function () {
     }
 };
 
+/**
+ * Explicitly specifies the client-side controllers in the meta.json file. Since the files will
+ * not be present in the minified project, the runtime will fail to autodiscover the client-side
+ * controller.
+ *
+ * @param {Object} component the component for which to modify the meta.json
+ * @private
+ */
 JsOptimizer.prototype._modifyMetaJson = function (component) {
     var config = component.config,
         configPath = path.join(this._outputPath, 'components', component.folder, 'meta.json');
@@ -102,10 +122,19 @@ JsOptimizer.prototype._modifyMetaJson = function (component) {
     fs.writeFileSync(configPath, JSON.stringify(config), 'utf8');
 };
 
+/**
+ * Generates the RequireJS optimizer configuration for a regular component.
+ *
+ * @param {Object} component
+ * @param {String} outputFile the path where the minified file will be written
+ * @returns {Object} the optimizer configuration
+ * @private
+ */
 JsOptimizer.prototype._generateConfiguration = function (component, outputFile) {
     var self = this;
     var componentPath = component.path;
     var coreLocation = path.join(this._components['core;1.0'].path, 'client', 'js');
+
     return  extend(true, {}, this._baseConfig, {
         baseUrl: path.join(componentPath, 'client'),
         packages: [{
@@ -146,19 +175,23 @@ JsOptimizer.prototype._generateConfiguration = function (component, outputFile) 
     });
 };
 
+/**
+ * Generates the RequireJS optimizer configuration for the core component.
+ *
+ * @param {Object} component
+ * @param {String} outputFile the path where the minified file will be written
+ * @returns {Object} the optimizer configuration
+ * @private
+ */
 JsOptimizer.prototype._generateCoreConfiguration = function (component, outputFile) {
     var componentPath = component.path;
 
-    return {
+    return extend(true, {}, this._baseConfig, {
         baseUrl: path.join(componentPath, 'client', 'js'),
 
         paths: {
-            'text': 'lib/require-text'
-        },
-
-        optimize: 'none',
-        uglify2: {
-            mangle: false
+            'text': 'lib/require-text',
+            'locale': 'lib/require-locale'
         },
 
         packages: [{
@@ -171,11 +204,24 @@ JsOptimizer.prototype._generateCoreConfiguration = function (component, outputFi
         out: outputFile,
 
         wrap: {
-            end: "define('raintime/index.min', [], function () {});"
+            end: "define('raintime/index.min', [], function () {});" +
+                "define('locale', ['raintime/lib/require-locale'], " +
+                "function (locale) { return locale; });"
         }
-    };
+    });
 };
 
+/**
+ * Callback to be used for the onBuildRead option of RequireJS optimizer.
+ *
+ * @param {Object} config the RequireJS optimizer configuration
+ * @param {Object} component the current component
+ * @param {String} moduleName current module name
+ * @param {String} path current module path
+ * @param {String} contents current module contents
+ * @returns {String} the modified module contents
+ * @private
+ */
 JsOptimizer.prototype._onBuildRead = function (config, component, moduleName, path, contents) {
     var self = this;
 
@@ -223,6 +269,17 @@ JsOptimizer.prototype._onBuildRead = function (config, component, moduleName, pa
     return contents;
 };
 
+/**
+ * Callback to be used for the onBuildWrite option of RequireJS optimizer.
+ *
+ * @param {Object} config the RequireJS optimizer configuration.
+ * @param {Object} component the current component
+ * @param {String} moduleName current module name
+ * @param {String} path current module path
+ * @param {String} contents current module contents
+ * @returns {String} the modified module contents
+ * @private
+ */
 JsOptimizer.prototype._onBuildWrite = function (config, component, moduleName, path, contents) {
     var ast = esprima.parse(contents),
         defineStatement = this._getDefineStatement(ast),
@@ -233,6 +290,15 @@ JsOptimizer.prototype._onBuildWrite = function (config, component, moduleName, p
     return escodegen.generate(ast);
 };
 
+/**
+ * Get the modules for the specified component.
+ *
+ * @param {String} componentPath the component path
+ * @param {String} modulePrefix the prefix to be used when composing the module name
+ * @param {Array} excludedModules the modules to be excluded
+ * @returns {Array} the found modules
+ * @private
+ */
 JsOptimizer.prototype._getModules = function (componentPath, modulePrefix, excludedModules) {
     var jsPath = path.join(componentPath, 'client', 'js'),
         modules = [];
@@ -253,6 +319,12 @@ JsOptimizer.prototype._getModules = function (componentPath, modulePrefix, exclu
     return modules;
 };
 
+/**
+ * Copies the files that were excluded from minification to the minified project.
+ *
+ * @param {Object} component
+ * @private
+ */
 JsOptimizer.prototype._copyExcludedFiles = function (component) {
     var jsPath = path.join(component.path, 'client', 'js'),
         prefix = component.id === 'core' ? 'raintime' : 'js',
@@ -271,6 +343,13 @@ JsOptimizer.prototype._copyExcludedFiles = function (component) {
     });
 };
 
+/**
+ * Locates the define statement in the specified AST.
+ *
+ * @param {Object} ast
+ * @returns {Object} the define statement
+ * @private
+ */
 JsOptimizer.prototype._getDefineStatement = function (ast) {
     for (var i = 0, len = ast.body.length; i < len; i++) {
         var statement = ast.body[i];
@@ -283,6 +362,13 @@ JsOptimizer.prototype._getDefineStatement = function (ast) {
     }
 };
 
+/**
+ * Extracts the dependencies from a define statement.
+ *
+ * @param {Object} defineStatement
+ * @returns {Array} the list of dependencies
+ * @private
+ */
 JsOptimizer.prototype._getDependencies = function (defineStatement) {
     var args = defineStatement.expression.arguments,
         depsArg,

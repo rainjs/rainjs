@@ -45,7 +45,16 @@ function register(program) {
 }
 
 /**
- * Performs minification for the current RAIN project.
+ * Performs minification for the current RAIN project. Options are specified in the ``build.json``
+ * file located in the project root.
+ *
+ * The options that can be specified are:
+ *
+ * - ``additionalProjects``: array of project paths containing components on which the current
+ *   project depends
+ * - ``buildPath``: if this option is specified a new project containing the minified files
+ *   will be created at this location. By default, the minified files are placed in the
+ *   component folder.
  */
 function minify() {
     var projectRoot = sdkUtils.getProjectRoot(process.cwd()),
@@ -100,6 +109,12 @@ function minify() {
     optimizer.run();
 }
 
+/**
+ * Copies a RAIN project. Javascript files and or folders created by the source code repositories
+ * are not copied
+ * @param {String} projectPath the project to be copied
+ * @param {String} minPath the destination directory
+ */
 function copyProject(projectPath, minPath) {
     wrench.mkdirSyncRecursive(minPath, '0755');
 
