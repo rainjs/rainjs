@@ -45,22 +45,15 @@ On the client-side, text can be localized in any JavaScript file that is loaded 
 module system.
 
 Localization on the client side is done through the ``t`` and ``nt`` functions provided by the
-framework, and the only thing you need to do is to include them as the last two paramaters of the
-callback passed to ``define`` or ``require`` like so::
+framework. You need to include them as dependencies like so::
 
-    define(['mycomp/js/lib/myModule'], function (myModule, t, nt) {
+    define(['mycomp/js/lib/myModule', 't', 'nt'], function (myModule, t, nt) {
         t('my string')
     });
 
-.. warning::
-
-    Failing to include the t and nt functions at the end of the parameter list will make them
-    unavailable to your code, and RAIN has no way of explicitly determining if you have used them
-    in your code, so you will have runtime errors due to the functions being undefined.
-
 The translation used can be found in the ``locale`` folder inside your component under
 ``<locale>/messages.po``, and they will be automatically loaded by the framework when your client
-side controller is initialised.
+side controller is initialised if ``t`` and ``nt`` are included in the dependencies.
 
 .. note::
 
