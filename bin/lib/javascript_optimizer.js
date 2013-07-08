@@ -217,12 +217,12 @@ JsOptimizer.prototype._generateCoreConfiguration = function (component, outputFi
  * @param {Object} config the RequireJS optimizer configuration
  * @param {Object} component the current component
  * @param {String} moduleName current module name
- * @param {String} path current module path
+ * @param {String} modulePath current module path
  * @param {String} contents current module contents
  * @returns {String} the modified module contents
  * @private
  */
-JsOptimizer.prototype._onBuildRead = function (config, component, moduleName, path, contents) {
+JsOptimizer.prototype._onBuildRead = function (config, component, moduleName, modulePath, contents) {
     var self = this;
 
     if (moduleName.indexOf(component.id + '/' + component.version) === 0) {
@@ -257,7 +257,7 @@ JsOptimizer.prototype._onBuildRead = function (config, component, moduleName, pa
             var packageObj = {
                 name: packageName,
                 main: 'js/index',
-                location: '../../' + externalComponent.folder + '/client'
+                location: path.join(externalComponent.path, 'client')
             };
 
             config.packages.push(packageObj);
