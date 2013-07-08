@@ -124,9 +124,13 @@ function copyProject(projectPath, minPath) {
         var file = files[i],
             fromPath = path.join(projectPath, file),
             toPath = path.join(minPath, file),
-            stats = fs.statSync(fromPath);
+            stats = fs.lstatSync(fromPath);
 
         if (['.git', '.svn', '.cvs'].indexOf(file) !== -1) {
+            continue;
+        }
+
+        if (stats.isSymbolicLink()) {
             continue;
         }
 
