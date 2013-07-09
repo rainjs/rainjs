@@ -1,0 +1,8 @@
+msgid "currency.format"
+msgstr "$"
+
+msgid "decimal.separator"
+msgstr "."
+
+msgid "thousand.separator"
+msgstr ","
