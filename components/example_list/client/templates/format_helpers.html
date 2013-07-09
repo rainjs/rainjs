@@ -1,38 +1,54 @@
 {{css path="format_helpers.css"}}
 <div class="fh_container">
     <div>
+        <p class="fh_current_locale">
+            Locale: <span id="id-locale">{{currentLocale}}</span> <br />
+        </p>
+
         <p class="fh_date">
-            Date format:
+            Date: <span id="id-date-container">{{date currentDate currentLocale}}</span>
         </p>
     </div>
 
     <div>
         <p class="fh_time">
-             Time format:
+             Time: <span id="id-time">{{time currentDate currentLocale}}</span>
         </p>
     </div>
 
     <div>
         <p class="fh_time_interval">
-            Time Interval:
+            Time interval (1 week): <span id="id-time-interval-month">{{range currentDate oneWeekFromNow currentLocale}}</span>
+        </p>
+    </div>
+
+    <div>
+        <p class="fh_time_interval">
+            Time interval (1 year): <span id="id-time-interval-year">{{range currentDate oneYearFromNow currentLocale}}</span>
         </p>
     </div>
 
     <div>
         <p class="fh_decimal_separator">
-            Decimal separator:
+            Decimal separator: <span id="id-decimal-number">{{number "120000.43" currentLocale}}</span>
         </p>
     </div>
 
     <div>
-        <p class="fh_thousand_separator">
-            Thousand separator:
+        <p class="fh_thousands_separator">
+            Thousands separator: <span id="id-thousands_separator">insertBigNumberHere</span>
         </p>
     </div>
 
     <div>
         <p class="fh_percentage">
-            Percentage:
+            Percentage: <span id="id-percentage">insertPercentageDateHere</span>
+        </p>
+    </div>
+
+    <div>
+        <p class="fh_currency">
+            Currency: <span id="id-currency">insertCurrencyHere</span>
         </p>
     </div>
 </div>

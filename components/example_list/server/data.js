@@ -106,6 +106,22 @@ function text_localization(environment, callback, data) {
     callback(null, customData);
 }
 
+function format_helpers(environment, callback, data) {
+    console.log("locale: ", environment.language);
+
+    var currentDate = new Date();
+    var customData = {
+        currentLocale: environment.language,
+        currentDate: currentDate,
+        oneWeekFromNow: new Date((new Date()).setDate(currentDate.getDate() + 7)),
+        oneYearFromNow: new Date((new Date()).setYear(currentDate.getFullYear() + 1))
+    };
+
+    //console.log("customData: ", customData);
+    callback(null, customData);
+}
+
+
 function flowLayout(environment, callback, context, request) {
     var data = {
         notes: request.session.get('notes') || []
@@ -142,6 +158,7 @@ module.exports = {
     level3: level3,
     platform_language: platform_language,
     text_localization: text_localization,
+    format_helpers: format_helpers,
     'layout/flow': flowLayout,
     partials: partials
 };
