@@ -1,54 +1,34 @@
 {{css path="format_helpers.css"}}
-<div class="fh_container">
-    <div>
-        <p class="fh_current_locale">
-            Locale: <span id="id-locale">{{currentLocale}}</span> <br />
-        </p>
 
-        <p class="fh_date">
-            Date: <span id="id-date-container">{{date currentDate currentLocale}}</span>
-        </p>
-    </div>
+<table class="fh_container">
+    <tr>
+        <td class="fh_attribute_title">Locale:</td> <td>{{currentLocale}}</td>
+    </tr>
+    <tr>
+        <td class="fh_attribute_title">Date:</td> <td>{{date currentDate currentLocale}}</td>
+    </tr>
 
-    <div>
-        <p class="fh_time">
-             Time: <span id="id-time">{{time currentDate currentLocale}}</span>
-        </p>
-    </div>
+    <tr>
+        <td class="fh_attribute_title">Time:</td><td>{{time currentDate currentLocale}}</td>
+    </tr>
 
-    <div>
-        <p class="fh_time_interval">
-            Time interval (1 week): <span id="id-time-interval-month">{{range currentDate oneWeekFromNow currentLocale}}</span>
-        </p>
-    </div>
+    <tr>
+        <td class="fh_attribute_title">Time interval (1 week):</td> <td>{{range currentDate oneWeekFromNow currentLocale}}</td>
+    </tr>
 
-    <div>
-        <p class="fh_time_interval">
-            Time interval (1 year): <span id="id-time-interval-year">{{range currentDate oneYearFromNow currentLocale}}</span>
-        </p>
-    </div>
+    <tr>
+        <td class="fh_attribute_title">Time interval (1 year):</td> <td>{{range currentDate oneYearFromNow currentLocale}}</td>
+    </tr>
 
-    <div>
-        <p class="fh_decimal_separator">
-            Decimal separator: <span id="id-decimal-number">{{number "120000.43" currentLocale}}</span>
-        </p>
-    </div>
+    <tr>
+        <td class="fh_attribute_title">Number:</td> <td>{{number "120000.43" currentLocale}}</td>
+    </tr>
 
-    <div>
-        <p class="fh_thousands_separator">
-            Thousands separator: <span id="id-thousands_separator">insertBigNumberHere</span>
-        </p>
-    </div>
+    <tr>
+        <td class="fh_attribute_title">Percentage:</td> <td>percentageToBeAddedHere</td>
+    </tr>
 
-    <div>
-        <p class="fh_percentage">
-            Percentage: <span id="id-percentage">insertPercentageDateHere</span>
-        </p>
-    </div>
-
-    <div>
-        <p class="fh_currency">
-            Currency: <span id="id-currency">insertCurrencyHere</span>
-        </p>
-    </div>
-</div>
+    <tr>
+        <td class="fh_attribute_title">Currency:</td> <td>currencyToBeAddedHere</td>
+    </tr>
+</table>

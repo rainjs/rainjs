@@ -1,3 +1,12 @@
-.fh_container {
+table.fh_container {
+    padding: 15px 0 20px 15px;
+}
 
+table.fh_container td {
+    text-align: left;
+    padding-right: 10px;
+}
+
+table.fh_container td.fh_attribute_title {
+    text-align: right;
 }
