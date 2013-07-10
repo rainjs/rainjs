@@ -1,5 +1,5 @@
 msgid "currency.format"
-msgstr "%s €"
+msgstr "%s zł"
 
 msgid "percentage.format"
 msgstr "%s%%"

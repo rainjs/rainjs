@@ -1,8 +1,8 @@
 msgid "currency.format"
-msgstr "%s €"
+msgstr "$%s"
 
 msgid "percentage.format"
-msgstr "%s%%"
+msgstr "%s %%"
 
 msgid "decimal.separator"
 msgstr ","

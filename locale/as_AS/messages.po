@@ -1,30 +1,11 @@
-msgid ""
-msgstr ""
-"Content-Type: text/plain; charset=UTF-8\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+msgid "currency.format"
+msgstr "$%s"
 
-msgid "If you were able to attest to my qualifications for employment, and the skills I attained during my <b>one month</b> tenure at <b>%2$s</b>, I would sincerely appreciate it."
-msgid_plural "If you were able to attest to my qualifications for employment, and the skills I attained during my <b>%1$d months</b> tenure at <b>%2$s</b>, I would sincerely appreciate it."
-msgstr[0] "If you were able to attest to my qualifications for employment, and the skills I attained during my <b>one month</b> tenure at <b>%2$s</b>, I would sincerely appreciate it."
-msgstr[1] "If you were able to attest to my qualifications for employment, and the skills I attained during my <b>%1$d months</b> tenure at <b>%2$s</b>, I would sincerely appreciate it."
+msgid "percentage.format"
+msgstr "%s%%"
 
-msgid "%1$s %2$s"
-msgstr "%1$s %2$s"
+msgid "decimal.separator"
+msgstr "."
 
-msgid "Sincerely,"
-msgstr "Sincerely,"
-
-msgid "Thank you for your consideration."
-msgstr "Thank you for your consideration."
-
-msgid "Please let me know if there is any information I can provide regarding my experience to assist you in giving me a reference. I can be reached at %1$s or %2$s."
-msgstr "Please let me know if there is any information I can provide regarding my experience to assist you in giving me a reference. I can be reached at %1$s or %2$s."
-
-msgid "I am in the process of seeking employment and a positive reference from you would enhance my prospects of achieving my career goals."
-msgstr "I am in the process of seeking employment and a positive reference from you would enhance my prospects of achieving my career goals."
-
-msgid "I am writing to ask whether it would be possible for you to provide a reference for me."
-msgstr "I am writing to ask whether it would be possible for you to provide a reference for me."
-
-msgid "Dear %1$s %2$s,"
-msgstr "Dear %1$s %2$s,"
+msgid "thousand.separator"
+msgstr ","
