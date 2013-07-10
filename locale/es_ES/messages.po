@@ -9,3 +9,13 @@ msgstr ","
 
 msgid "thousand.separator"
 msgstr "."
+
+msgid "date.format"
+msgstr "DD/MM/YYYY"
+
+msgid "time.format"
+msgstr "HH:MM"
+
+msgid "range.format"
+msgstr "MMMM DD YYYY"
+
