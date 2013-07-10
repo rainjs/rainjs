@@ -13,6 +13,8 @@
 //    3. Neither the name of The author nor the names of its contributors may be used to endorse or
 //       promote products derived from this software without specific prior written permission.
 //
+
+// swagger
 // THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
 // IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
 // MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
@@ -49,7 +51,7 @@ define(function () {
 
         var node = oldLoad(context, moduleName, url);
 
-        if (node.attachEvent
+        if (node && node.attachEvent
             && !(node.attachEvent.toString && node.attachEvent.toString().indexOf('[native code') < 0)
             && !isOpera) {
             useInteractive = true;
@@ -81,7 +83,7 @@ define(function () {
         }
 
         if (typeof name === 'string') {
-            modifyDependencies(name, currentDeps, currentCallback);
+            modifyDependencies(name, currentDeps);
             oldDefine(name, currentDeps, currentCallback);
         } else {
             oldDefine(currentDeps, currentCallback);
@@ -97,7 +99,7 @@ define(function () {
                 context = require.s.contexts[node.getAttribute("data-requirecontext")];
                 if (context && context.defQueue.length > 0) {
                     var def = context.defQueue[context.defQueue.length - 1];
-                    modifyDependencies(def[0], def[1], def[2]);
+                    modifyDependencies(def[0], def[1]);
                 }
             }
 
@@ -116,7 +118,7 @@ define(function () {
             //all browsers except IE
             if (currentDeps && currentCallback) {
                 var moduleName = node.getAttribute("data-requiremodule");
-                modifyDependencies(moduleName, currentDeps, currentCallback);
+                modifyDependencies(moduleName, currentDeps);
             }
 
             oldOnScriptLoad(evt);
@@ -133,7 +135,7 @@ define(function () {
      * @param {String[]} deps the module dependencies
      * @param {Function} callback a function that is called when the module is loaded
      */
-    function modifyDependencies(moduleName, deps, callback) {
+    function modifyDependencies(moduleName, deps) {
         var moduleRegex = /^\/?([\w-]+)\/(\d(?:\.\d)?(?:\.\d)?)\/js\/(.+)/,
             matches = moduleName && moduleName.match(moduleRegex);
 
@@ -147,7 +149,7 @@ define(function () {
         };
 
         resolveDependencyPaths(component, deps);
-        addDependencies(component, moduleName, deps, callback);
+        addDependencies(component, moduleName, deps);
     }
 
     /**
@@ -165,7 +167,7 @@ define(function () {
             // require.jsExtRegExp is defined in RequireJS and tests that a string is a regular
             // path and not a module ID. See http://requirejs.org/docs/api.html#jsfiles for more
             // details.
-            if (typeof dependency !== 'undefined' &&
+            if (typeof dependency !== 'undefined' && require.jsExtRegExp &&
                 !require.jsExtRegExp.test(dependency) &&
                 dependency.indexOf('js/') === 0) {
                 deps[i] = component.id + '/' + component.version + '/' + dependency;
@@ -181,9 +183,8 @@ define(function () {
      * @param {Object} component the component for which the module is loaded
      * @param {String} moduleName the module name
      * @param {String[]} deps the module dependencies
-     * @param {Function} callback a function that is called when the module is loaded
      */
-    function addDependencies(component, moduleName, deps, callback) {
+    function addDependencies(component, moduleName, deps) {
         var module = {};
         module.component = component;
 
@@ -222,12 +223,10 @@ define(function () {
                 translation = Translation.get(module.component, locale);
             }
 
-            // They must be inserted in reverse order
-            if (module.logger > -1) {
+            if (module.logger > -1) {  // They must be inserted in reverse order
                 func = Logger.get(module.component);
                 args.splice(module.logger, 0, func);
-            }
-
+}
             if (module.nt > -1) {
                 func = translation.translate.bind(translation);
                 args.splice(module.nt, 0, func);

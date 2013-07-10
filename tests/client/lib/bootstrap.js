@@ -40,8 +40,13 @@ var requireConfig = {
 require.config(requireConfig);
 
 var oldLoad = require.load;
+var onScriptLoad, execCb;
 
 require.load = function (context, moduleName, url) {
+
+    onScriptLoad = context.onScriptLoad;
+    execCb = context.execCb;
+
     context.execCb = function (name, callback, args, exports) {
         var module = callback.apply(exports, args);
 
