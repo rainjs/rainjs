@@ -26,6 +26,7 @@
 "use strict";
 
 var languageUtils = require('./lib/language_utils');
+var Formatter = require('../../../lib/format');
 
 /**
  * Handles the template data for the view index and returns it with invoking the callback function.
@@ -107,12 +108,20 @@ function text_localization(environment, callback, data) {
 }
 
 function format_helpers(environment, callback, data) {
+    var formatter = Formatter.get();
+    var lang = environment.language;
     var today = new Date();
+    var oneMonthInterval =
+        formatter.formatRange(today, new Date(today.getFullYear(), today.getMonth()+1, today.getDate()), lang);
+    var decimalNumberSample =  formatter.formatNumber(7.44517, lang);
+
     var customData = {
-        currentLocale: environment.language,
+        currentLocale: lang,
         currentDate: today,
         oneWeekFromNow: new Date(today.getFullYear(), today.getMonth(), today.getDate()+7),
-        oneYearFromNow: new Date(today.getFullYear()+1, today.getMonth(), today.getDate())
+        oneYearFromNow: new Date(today.getFullYear()+1, today.getMonth(), today.getDate()),
+        oneMonthInterval: oneMonthInterval,
+        decimalNumberSample: decimalNumberSample
     };
 
     callback(null, customData);
