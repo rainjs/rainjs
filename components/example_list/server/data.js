@@ -107,12 +107,12 @@ function text_localization(environment, callback, data) {
 }
 
 function format_helpers(environment, callback, data) {
-    var currentDate = new Date();
+    var today = new Date();
     var customData = {
         currentLocale: environment.language,
-        currentDate: currentDate,
-        oneWeekFromNow: new Date((new Date()).setDate(currentDate.getDate() + 7)),
-        oneYearFromNow: new Date((new Date()).setYear(currentDate.getFullYear() + 1))
+        currentDate: today,
+        oneWeekFromNow: new Date(today.getFullYear(), today.getMonth(), today.getDate()+7),
+        oneYearFromNow: new Date(today.getFullYear()+1, today.getMonth(), today.getDate())
     };
 
     callback(null, customData);
