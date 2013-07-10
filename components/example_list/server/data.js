@@ -107,8 +107,6 @@ function text_localization(environment, callback, data) {
 }
 
 function format_helpers(environment, callback, data) {
-    console.log("locale: ", environment.language);
-
     var currentDate = new Date();
     var customData = {
         currentLocale: environment.language,
@@ -117,10 +115,8 @@ function format_helpers(environment, callback, data) {
         oneYearFromNow: new Date((new Date()).setYear(currentDate.getFullYear() + 1))
     };
 
-    //console.log("customData: ", customData);
     callback(null, customData);
 }
-
 
 function flowLayout(environment, callback, context, request) {
     var data = {

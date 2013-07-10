@@ -5,30 +5,30 @@
         <td class="fh_attribute_title">Locale:</td> <td>{{currentLocale}}</td>
     </tr>
     <tr>
-        <td class="fh_attribute_title">Date:</td> <td>{{date currentDate currentLocale}}</td>
+        <td class="fh_attribute_title">Date:</td> <td>{{date currentDate}}</td>
     </tr>
 
     <tr>
-        <td class="fh_attribute_title">Time:</td><td>{{time currentDate currentLocale}}</td>
+        <td class="fh_attribute_title">Time:</td><td>{{time currentDate}}</td>
     </tr>
 
     <tr>
-        <td class="fh_attribute_title">Time interval (1 week):</td> <td>{{range currentDate oneWeekFromNow currentLocale}}</td>
+        <td class="fh_attribute_title">Time interval (1 week):</td> <td>{{range currentDate oneWeekFromNow}}</td>
     </tr>
 
     <tr>
-        <td class="fh_attribute_title">Time interval (1 year):</td> <td>{{range currentDate oneYearFromNow currentLocale}}</td>
+        <td class="fh_attribute_title">Time interval (1 year):</td> <td>{{range currentDate oneYearFromNow}}</td>
     </tr>
 
     <tr>
-        <td class="fh_attribute_title">Number:</td> <td>{{number "120000.43" currentLocale}}</td>
+        <td class="fh_attribute_title">Number:</td> <td>{{number "120000.43"}}</td>
     </tr>
 
     <tr>
-        <td class="fh_attribute_title">Percentage:</td> <td>percentageToBeAddedHere</td>
+        <td class="fh_attribute_title">Percentage:</td> <td>{{percentage "34.26785"}}</td>
     </tr>
 
     <tr>
-        <td class="fh_attribute_title">Currency:</td> <td>currencyToBeAddedHere</td>
+        <td class="fh_attribute_title">Currency:</td> <td>{{currency "345.2311"}}</td>
     </tr>
 </table>
