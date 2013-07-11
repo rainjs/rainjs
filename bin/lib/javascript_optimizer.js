@@ -248,6 +248,12 @@ JsOptimizer.prototype._onBuildRead = function (config, component, moduleName, mo
         }).forEach(function (dep) {
             var parts = dep.split('/');
             var externalComponent = self._components[parts[0] + ';' + parts[1]];
+
+            if (!externalComponent) {
+                throw new Error(util.format('The component %s;%s does not exist',
+                    parts[0], parts[1]));
+            }
+
             var packageName = parts[0] + '/' + parts[1];
 
             if (!config.pkgs || config.pkgs[packageName]) {

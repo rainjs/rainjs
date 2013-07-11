@@ -134,7 +134,7 @@ function copyProject(projectPath, minPath) {
             continue;
         }
 
-        if (stats.isDirectory() && fromPath.match(/^.*\/client\/js$/)) {
+        if (stats.isDirectory() && fromPath.match(/^.*\/client\/js$|^.*\\client\\js$/)) {
             wrench.mkdirSyncRecursive(toPath, '0755');
             continue;
         }
