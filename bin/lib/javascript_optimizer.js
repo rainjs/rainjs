@@ -321,7 +321,7 @@ JsOptimizer.prototype._getModules = function (componentPath, modulePrefix, exclu
 
 
         if (modulePrefix !== 'raintime' || moduleName !== 'raintime') {
-            moduleName = modulePrefix + '/' + moduleName.replace('\\', '/');
+            moduleName = modulePrefix + '/' + moduleName.replace(/\\/g, '/');
         }
 
         if (excludedModules.indexOf(moduleName) === -1) {
