@@ -230,8 +230,15 @@ JsOptimizer.prototype._onBuildRead = function (config, component, moduleName, mo
         return contents;
     }
 
-    var ast = esprima.parse(contents),
-        defineStatement = this._getDefineStatement(ast);
+    var ast;
+
+    try {
+        ast = esprima.parse(contents);
+    } catch(e) {
+        throw new RainError('Error while parsing ' + moduleName + '. ' + e.message);
+    }
+
+    var defineStatement = this._getDefineStatement(ast);
 
     if (typeof defineStatement === 'undefined') { // global module
         contents += '\n\n';
