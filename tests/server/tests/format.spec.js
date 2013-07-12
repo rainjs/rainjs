@@ -27,16 +27,13 @@
 
 describe("Format Helpers", function () {
     var mocks = {},
-        config,
-        logger,
         fs,
         Formatter,
         poText;
 
     beforeEach(function () {
 
-        //mock configuration
-        config = {
+        mocks['./configuration'] =  {
             "format": {
                 "default_date": "MM/DD/YYYY",
                 "default_time": "hh:mm",
@@ -49,13 +46,10 @@ describe("Format Helpers", function () {
 
             "defaultLanguage": "en_US"
         };
-        mocks['./configuration'] =  config;
 
-        //mock logger
-        logger = jasmine.createSpyObj('logger', ['error']);
         mocks['./logging'] = {
             get: function () {
-                return logger
+                return jasmine.createSpyObj('logger', ['error']);
             }
         };
 
@@ -106,16 +100,14 @@ describe("Format Helpers", function () {
                 callback('/de_DE/messages.po');
             });
             var frm = Formatter.get();
-            var currentDate = new Date(2013, 8, 17);
-            var formattedDate =  frm.formatDate(currentDate, 'en_EN');
+            var formattedDate =  frm.formatDate(new Date(2013, 8, 17), 'en_EN');
 
             expect(formattedDate).toEqual('09/17/2013');
         });
 
         it('should return the date formatted according to the default language', function () {
             var frm = Formatter.get();
-            var currentDate = new Date(2013, 8, 17);
-            var formattedDate =  frm.formatDate(currentDate, 'de_DE');
+            var formattedDate =  frm.formatDate(new Date(2013, 8, 17), 'de_DE');
 
             expect(formattedDate).toEqual('09/17/2013');
         });
