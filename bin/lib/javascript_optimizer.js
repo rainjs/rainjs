@@ -47,7 +47,7 @@ var excludedCoreModules = [
  * Minifies the client-side JavaScript code for the specified components.
  *
  * @param {Object} options the minification options
- * @param {Object} options.components contains the components needed to minify
+ * @param {Object} options.components contains the components to be minified and the additional components
  * @param {Array} options.includedComponents list of components to be minified
  * @param {String} options.[outputPath] the path to create the minified project
  * @constructor
@@ -359,7 +359,7 @@ JsOptimizer.prototype._copyExcludedFiles = function (component) {
 /**
  * Locates the define statement in the specified AST.
  *
- * @param {Object} ast
+ * @param {Object} ast the abstract syntax tree from which to extract the define statement
  * @returns {Object} the define statement
  * @private
  */
@@ -378,7 +378,7 @@ JsOptimizer.prototype._getDefineStatement = function (ast) {
 /**
  * Extracts the dependencies from a define statement.
  *
- * @param {Object} defineStatement
+ * @param {Object} defineStatement the ast for the define statement
  * @returns {Array} the list of dependencies
  * @private
  */

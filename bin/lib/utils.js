@@ -66,7 +66,7 @@ function iterateComponents(componentsFolder, callback) {
         try {
             config = JSON.parse(fs.readFileSync(metaFile, 'utf8'));
         } catch (ex) {
-            //parsing errors are ignored
+            console.log('Failed to parse ' + metaFile, ex.stack);
         }
 
         if (config) {
