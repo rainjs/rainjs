@@ -1,4 +1,4 @@
-define(['/demo_container/js/lib/jquery-ui-1.10.2.custom.js'], function () {
+define(['js/lib/jquery-ui-1.10.2.custom'], function () {
     "use strict";
 
     function Scrollable() {}

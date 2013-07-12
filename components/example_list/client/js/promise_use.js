@@ -1,4 +1,4 @@
-define([], function (logger) {
+define(['logger'], function (logger) {
     /**
      * This class is used to show how to use the promise based functionality of the component's
      * lifecycle events.

@@ -317,7 +317,8 @@ describe('Renderer', function () {
                     body: '{}'
                 },
                 bootstrap: bootstrapData,
-                title: 'button'
+                title: 'button',
+                enableMinification : 'false'
             });
 
             button.type = 'container';
@@ -338,7 +339,8 @@ describe('Renderer', function () {
                     body: '{}'
                 },
                 bootstrap: bootstrapData,
-                title: 'button'
+                title: 'button',
+                enableMinification : 'false'
             });
         });
 

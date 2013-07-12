@@ -205,7 +205,7 @@ describe('Client-side logger', function () {
             }
         );
 
-        it('should get a component logger',
+        xit('should get a component logger',
             ['raintime/logger', 'raintime/messaging/sockets'], function (Logger, SocketHandler) {
                 SocketHandler.get.andCallThrough();
                 SocketHandler.get().getSocket.andReturn({on: jasmine.createSpy()});
