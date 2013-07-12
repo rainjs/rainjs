@@ -67,7 +67,8 @@ fields are formatted with **bold**.
 - enableClientLogging - a Boolean value that enables or disables the client-side logging.
   **For production environments this should be set to false**.
 
-- enableMinification - a Boolean value that enables or disables the loading of minified javascript and css files.
+- enableMinification - a Boolean value that enables or disables the loading of
+  minified javascript and css files.
 
 - logger - an Object used to configure the Logger feature. The logging level and appenders can also
   be configured here. For information about the entire structure of this parameter, check the

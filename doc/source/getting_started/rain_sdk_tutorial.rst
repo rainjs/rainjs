@@ -88,7 +88,8 @@ The rain SDK provides a method to generate a minified RAIN project.
 
 All the js files from the client folder of components will be minified into an ``index.min.js`` file.
 
-The new minified project is generated at the path specified in the build.json file that can look like this:
+The new minified project is generated at the path specified in
+the build.json file that can look like this:
 
 .. code-block:: javascript
 
@@ -97,12 +98,13 @@ The new minified project is generated at the path specified in the build.json fi
         "buildPath": "../min/sprint"
     }
 
-If the ``buildPath`` key is missing then all the minified files will be generated in the current project,
-in each component folder.
+If the ``buildPath`` key is missing then all the minified files will be generated in
+the current project, in each component folder.
 
 Example::
 
     #generate the minified project
     $ rain minify
 
-A detailed description of this process can be found in the :doc:`RAIN Minification Process </client/minification>` page.
+A detailed description of this process can be found in
+the :doc:`RAIN Minification Process </client/minification>` page.
