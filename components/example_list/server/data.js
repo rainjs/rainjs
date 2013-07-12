@@ -112,16 +112,15 @@ function format_helpers(environment, callback, data) {
     var lang = environment.language;
     var today = new Date();
     var oneMonthInterval =
-        formatter.formatRange(today, new Date(today.getFullYear(), today.getMonth()+1, today.getDate()), lang);
-    var decimalNumberSample =  formatter.formatNumber(7.44517, lang);
+        formatter.formatRange(today, new Date(today.getFullYear(), today.getMonth() + 1, today.getDate()), lang);
 
     var customData = {
         currentLocale: lang,
         currentDate: today,
-        oneWeekFromNow: new Date(today.getFullYear(), today.getMonth(), today.getDate()+7),
-        oneYearFromNow: new Date(today.getFullYear()+1, today.getMonth(), today.getDate()),
+        oneWeekFromNow: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7),
+        oneYearFromNow: new Date(today.getFullYear() + 1, today.getMonth(), today.getDate()),
         oneMonthInterval: oneMonthInterval,
-        decimalNumberSample: decimalNumberSample
+        decimalNumberSample: formatter.formatNumber(7.44517, lang)
     };
 
     callback(null, customData);
