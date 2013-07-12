@@ -13,8 +13,6 @@
 //    3. Neither the name of The author nor the names of its contributors may be used to endorse or
 //       promote products derived from this software without specific prior written permission.
 //
-
-// swagger
 // THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
 // IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
 // MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
@@ -24,6 +22,8 @@
 // OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+"use strict"
 
 define(function () {
     var oldExecCb,
@@ -133,8 +133,7 @@ define(function () {
      *
      * @param {String} moduleName the module name
      * @param {String[]} deps the module dependencies
-     * @param {Function} callback a function that is called when the module is loaded
-     */
+    */
     function modifyDependencies(moduleName, deps) {
         var moduleRegex = /^\/?([\w-]+)\/(\d(?:\.\d)?(?:\.\d)?)\/js\/(.+)/,
             matches = moduleName && moduleName.match(moduleRegex);
@@ -242,7 +241,7 @@ define(function () {
         return oldExecCb(name, callback, args, exports);
     }
 
-    getInteractiveScript = function() {
+    var getInteractiveScript = function() {
         var scripts, i, script;
         if (interactiveScript && interactiveScript.readyState === 'interactive') {
             return interactiveScript;
