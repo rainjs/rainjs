@@ -27,11 +27,11 @@
 
 describe("Format Helpers", function () {
     var mocks = {},
-        //Translation,
         config,
         logger,
         fs,
-        Formatter;
+        Formatter,
+        poText;
 
     beforeEach(function () {
 
@@ -39,7 +39,7 @@ describe("Format Helpers", function () {
         config = {
             "format": {
                 "default_date": "MM/DD/YYYY",
-                "default_time": "HH:MM",
+                "default_time": "hh:mm",
                 "default_range": "MMMM DD, YYYY",
                 "default_percentage": "%s%%",
                 "default_currency": "%s$",
@@ -60,20 +60,31 @@ describe("Format Helpers", function () {
         };
 
         //mock fs
+        poText = 'msgid "currency.format"\n' +
+            'msgstr "$%s"\n\n' +
+            'msgid "percentage.format"\n' +
+            'msgstr "%s%%"\n\n' +
+            'msgid "decimal.separator"\n' +
+            'msgstr "."\n\n' +
+            'msgid "thousand.separator"\n' +
+            'msgstr ","\n\n' +
+            'msgid "date.format"\n' +
+            'msgstr "MM/DD/YYYY"\n\n' +
+            'msgid "time.format"\n' +
+            'msgstr "hh:mm a"\n\n' +
+            'msgid "range.format"\n' +
+            'msgstr "MMMM DD, YYYY"\n';
         fs = jasmine.createSpyObj('fs', ['readFileSync']);
-
         mocks['fs'] = fs;
         fs.readFileSync.andCallFake(function () {
-            var data = 'msgid "id.message"\nmsgstr "Some text"\n\nmsgid "Some text"\nmsgstr "Some text"';
+            var data = poText;
             return data;
         })
 
         //mock util.walkSync
         mocks['./util'] = util = jasmine.createSpyObj('util', ['walkSync']);
         util.walkSync.andCallFake(function (folder, extensions, callback) {
-
             callback('/en_EN/messages.po');
-
         });
 
         Formatter = loadModuleExports('/lib/format.js', mocks);
@@ -101,7 +112,7 @@ describe("Format Helpers", function () {
             expect(formattedDate).toEqual('09/17/2013');
         });
 
-        it('should return the date formatted according to the defaultLanguage', function () {
+        it('should return the date formatted according to the default language', function () {
             var frm = Formatter.get();
             var currentDate = new Date(2013, 8, 17);
             var formattedDate =  frm.formatDate(currentDate, 'de_DE');
@@ -110,8 +121,26 @@ describe("Format Helpers", function () {
         });
     });
 
+    describe("formatTime method", function () {
+        it('should return the time formatted according to the specified language', function () {
+            var frm = Formatter.get();
+            var meetingDateAndTime = new Date(2013, 8, 17, 2, 34, 50);
+            var formattedTime =  frm.formatTime(meetingDateAndTime, 'en_EN');
+
+            expect(formattedTime).toEqual('02:34 am');
+        });
+
+        it('should return the time formatted according to the default language', function () {
+            var frm = Formatter.get();
+            var meetingDateAndTime = new Date(2013, 8, 17, 2, 34, 50);
+            var formattedTime =  frm.formatTime(meetingDateAndTime, 'de_DE');
+
+            expect(formattedTime).toEqual('02:34');
+        });
+    });
+
     describe("formatRange method", function () {
-        it('should return the date range formatted according the specified language', function () {
+        it('should return the date range formatted according to the specified language', function () {
             var frm = Formatter.get();
             var startDate = new Date(2013, 8, 17);
             var endDate = new Date(2014, 10, 17);
@@ -120,7 +149,7 @@ describe("Format Helpers", function () {
             expect(formattedDateRange).toEqual('September 17, 2013 - November 17, 2014');
         });
 
-        it('should return the date range formatted according to the defaultLanguage', function () {
+        it('should return the date range formatted according to the default language', function () {
             var frm = Formatter.get();
             var startDate = new Date(2013, 8, 17);
             var endDate = new Date(2013, 8, 29);
@@ -131,13 +160,53 @@ describe("Format Helpers", function () {
     });
 
     describe("formatNumber method", function () {
-        it('should return the number formatted according the specified format', function () {
+        it('should return the number formatted according to the specified language', function () {
             var frm = Formatter.get();
             var formattedNumber =  frm.formatNumber('1200200.34123', 'en_EN');
 
+            expect(formattedNumber).toEqual('1,200,200.34123');
+        });
+
+        it('should return the number formatted according to the default language', function () {
+            var frm = Formatter.get();
+            var formattedNumber =  frm.formatNumber('1200200.34123', 'de_DE');
+
             expect(formattedNumber).toEqual('1.200.200,34123');
         });
+
     });
 
+    describe("formatPercentage method", function () {
+        it('should return the percentage formatted according to the specified language', function () {
+            var frm = Formatter.get();
+            var formattedNumber =  frm.formatPercentage('76.437', 'en_EN');
+
+            expect(formattedNumber).toEqual('76.44%');
+        });
+
+        it('should return the percentage formatted according to the default language', function () {
+            var frm = Formatter.get();
+            var formattedNumber =  frm.formatPercentage('76.437', 'de_DE');
+
+            expect(formattedNumber).toEqual('76,44%');
+        });
+
+    });
+
+    describe("formatCurrency method", function () {
+        it('should return the currency formatted according to the specified language', function () {
+            var frm = Formatter.get();
+            var formattedNumber =  frm.formatCurrency('7644561.437', 'en_EN');
+
+            expect(formattedNumber).toEqual('$7,644,561.44');
+        });
+
+        it('should return the currency formatted according to the default language', function () {
+            var frm = Formatter.get();
+            var formattedNumber =  frm.formatCurrency('7644561.437', 'de_DE');
+
+            expect(formattedNumber).toEqual('7.644.561,44$');
+        });
+    });
 
 });

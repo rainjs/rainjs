@@ -14,7 +14,7 @@ msgid "date.format"
 msgstr "DD/MM/YYYY"
 
 msgid "time.format"
-msgstr "HH:MM"
+msgstr "hh:mm"
 
 msgid "range.format"
 msgstr "MMMM DD YYYY"
