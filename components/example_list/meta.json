@@ -29,6 +29,7 @@
         "image_localization": {},
         "text_localization": {},
         "client_side_text_localization": {},
+        "format_helpers": {},
         "media_queries": {},
         "containers_v1": {},
         "containers_v2": {},

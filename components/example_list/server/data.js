@@ -26,6 +26,7 @@
 "use strict";
 
 var languageUtils = require('./lib/language_utils');
+var Formatter = require('../../../lib/format');
 
 /**
  * Handles the template data for the view index and returns it with invoking the callback function.
@@ -106,6 +107,25 @@ function text_localization(environment, callback, data) {
     callback(null, customData);
 }
 
+function format_helpers(environment, callback, data) {
+    var formatter = Formatter.get();
+    var lang = environment.language;
+    var today = new Date();
+    var oneMonthInterval =
+        formatter.formatRange(today, new Date(today.getFullYear(), today.getMonth() + 1, today.getDate()), lang);
+
+    var customData = {
+        currentLocale: lang,
+        currentDate: today,
+        oneWeekFromNow: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7),
+        oneYearFromNow: new Date(today.getFullYear() + 1, today.getMonth(), today.getDate()),
+        oneMonthInterval: oneMonthInterval,
+        decimalNumberSample: formatter.formatNumber(7.44517, lang)
+    };
+
+    callback(null, customData);
+}
+
 function flowLayout(environment, callback, context, request) {
     var data = {
         notes: request.session.get('notes') || []
@@ -142,6 +162,7 @@ module.exports = {
     level3: level3,
     platform_language: platform_language,
     text_localization: text_localization,
+    format_helpers: format_helpers,
     'layout/flow': flowLayout,
     partials: partials
 };
