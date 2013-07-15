@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Server and component configuration &mdash; Rain v0.29.0 documentation</title>
+    <title>Server and component configuration &mdash; Rain 0.30.0 documentation</title>
+    
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.29.0',
+        VERSION:     '0.30.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +25,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.29.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain 0.30.0 documentation" href="../index.html" />
     <link rel="next" title="RAIN component descriptor" href="../server/component_descriptor.html" />
     <link rel="prev" title="RAIN SDK Tutorial" href="rain_sdk_tutorial.html" /> 
   </head>
@@ -39,7 +42,7 @@
         <li class="right" >
           <a href="rain_sdk_tutorial.html" title="RAIN SDK Tutorial"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.29.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain 0.30.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -111,6 +114,8 @@ determine translated text when a message translation in a required language coul
 feature to translate messages and to determine what localized resources to use.</li>
 <li>enableClientLogging - a Boolean value that enables or disables the client-side logging.
 <strong>For production environments this should be set to false</strong>.</li>
+<li>enableMinification - a Boolean value that enables or disables the loading of
+minified javascript and css files.</li>
 <li>logger - an Object used to configure the Logger feature. The logging level and appenders can also
 be configured here. For information about the entire structure of this parameter, check the
 <a class="reference internal" href="../server/api/Logger.html"><em>Logger API</em></a>.</li>
@@ -282,7 +287,9 @@ component configuration options directly in the scripts.</li>
 110
 111
 112
-113</pre></div></td><td class="code"><div class="highlight"><pre><span class="p">{</span>
+113
+114
+115</pre></div></td><td class="code"><div class="highlight"><pre><span class="p">{</span>
     <span class="s2">&quot;server&quot;</span><span class="o">:</span> <span class="p">{</span>
         <span class="s2">&quot;port&quot;</span><span class="o">:</span> <span class="mi">1337</span><span class="p">,</span>
         <span class="s2">&quot;timeoutForRequests&quot;</span> <span class="o">:</span> <span class="mi">3</span><span class="p">,</span>
@@ -300,6 +307,8 @@ component configuration options directly in the scripts.</li>
     <span class="s2">&quot;language&quot;</span><span class="o">:</span> <span class="s2">&quot;en_US&quot;</span><span class="p">,</span>
 
     <span class="s2">&quot;enableClientLogging&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+
+    <span class="s2">&quot;enableMinification&quot;</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
 
     <span class="s2">&quot;logger&quot;</span><span class="o">:</span> <span class="p">{</span>
         <span class="s2">&quot;level&quot;</span><span class="o">:</span> <span class="s2">&quot;debug&quot;</span><span class="p">,</span>
@@ -518,7 +527,7 @@ the defaultLanguage</li>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -544,11 +553,11 @@ the defaultLanguage</li>
         <li class="right" >
           <a href="rain_sdk_tutorial.html" title="RAIN SDK Tutorial"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.29.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain 0.30.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

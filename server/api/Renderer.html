@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class Renderer &mdash; Rain v0.29.0 documentation</title>
+    <title>Class Renderer &mdash; Rain 0.30.0 documentation</title>
+    
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.29.0',
+        VERSION:     '0.30.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,9 +25,9 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.29.0 documentation" href="../../index.html" />
+    <link rel="top" title="Rain 0.30.0 documentation" href="../../index.html" />
     <link rel="next" title="Class Server" href="Server.html" />
-    <link rel="prev" title="Class PrecompileLess" href="PrecompileLess.html" /> 
+    <link rel="prev" title="Class RangeHelper" href="RangeHelper.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,9 +40,9 @@
           <a href="Server.html" title="Class Server"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="PrecompileLess.html" title="Class PrecompileLess"
+          <a href="RangeHelper.html" title="Class RangeHelper"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.29.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain 0.30.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -70,12 +73,12 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>component</strong> (<em>Object</em>) &#8211; A rendered component</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns String:</th><td class="field-body"></td>
+<tr class="field-even field"><th class="field-name">Returns String:</th><td class="field-body"></td>
 </tr>
 </tbody>
 </table>
@@ -92,14 +95,14 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>pInstanceId</strong> (<em>String</em>) &#8211; Parent instance id</li>
 <li><strong>staticId</strong> (<em>String</em>) &#8211; Static id</li>
 <li><strong>sessionId</strong> (<em>String</em>) &#8211; Session id</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns String:</th><td class="field-body"></td>
+<tr class="field-even field"><th class="field-name">Returns String:</th><td class="field-body"></td>
 </tr>
 </tbody>
 </table>
@@ -116,7 +119,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>component</strong> (<em>Object</em>) &#8211; The component information</li>
 <li><strong>transport</strong> (<em>HttpServerResponse|Socket</em>) &#8211; The transport layer</li>
 </ul>
@@ -138,7 +141,7 @@ response over the specified transport layer.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>mainComponent</strong> (<em>Object</em>) &#8211; The component which is requested</li>
 <li><strong>viewId</strong> (<em>String</em>) &#8211; The view id which is requested</li>
 <li><strong>request</strong> (<em>HttpRequest</em>) &#8211; HttpRequest object</li>
@@ -146,7 +149,7 @@ response over the specified transport layer.</p>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns String:</th><td class="field-body"><p class="first last">The rendered html</p>
+<tr class="field-even field"><th class="field-name">Returns String:</th><td class="field-body"><p class="first last">The rendered html</p>
 </td>
 </tr>
 </tbody>
@@ -165,7 +168,7 @@ This is only used for the HTTP transport layer.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>opt</strong> (<em>Object</em>) &#8211; Contains a map of component information</li>
 <li><strong>opt.component</strong> (<em>Object</em>) &#8211; The component which get rendered</li>
 <li><strong>opt.viewId</strong> (<em>Object</em>) &#8211; The view id of the component which get rendered</li>
@@ -175,7 +178,7 @@ This is only used for the HTTP transport layer.</p>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns Object:</th><td class="field-body"></td>
+<tr class="field-even field"><th class="field-name">Returns Object:</th><td class="field-body"></td>
 </tr>
 </tbody>
 </table>
@@ -192,7 +195,7 @@ This is only used for the HTTP transport layer.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>opt</strong> (<em>Object</em>) &#8211; Map of component information for the <a class="reference internal" href="#Renderer#renderComponent" title="Renderer#renderComponent"><tt class="xref js js-func docutils literal"><span class="pre">Renderer#renderComponent()</span></tt></a></li>
 <li><strong>opt</strong> &#8211; </li>
 </ul>
@@ -251,15 +254,15 @@ This is only used for the HTTP transport layer.</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="PrecompileLess.html"
-                        title="previous chapter">Class PrecompileLess</a></p>
+  <p class="topless"><a href="RangeHelper.html"
+                        title="previous chapter">Class RangeHelper</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="Server.html"
                         title="next chapter">Class Server</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -283,13 +286,13 @@ This is only used for the HTTP transport layer.</p>
           <a href="Server.html" title="Class Server"
              >next</a> |</li>
         <li class="right" >
-          <a href="PrecompileLess.html" title="Class PrecompileLess"
+          <a href="RangeHelper.html" title="Class RangeHelper"
              >previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.29.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain 0.30.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

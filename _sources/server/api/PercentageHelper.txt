@@ -1,0 +1,92 @@
+
+
+
+
+
+
+..
+    Classes and methods
+
+Class PercentageHelper
+================================================================================
+
+..
+   class-title
+
+
+This Handlebar helper is used to format a number according to the percentage
+format of the specific language.
+
+Syntax::
+
+     {{percentage numberParam}}
+
+
+
+
+
+
+
+
+    
+
+
+Constructor
+-----------
+
+.. js:class:: PercentageHelper()
+
+
+
+
+
+
+
+
+
+Methods
+-------
+
+..
+   class-methods
+
+
+helper
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: PercentageHelper#helper(number)
+
+
+    
+    :param Number number: 
+        the number that needs to be formatted 
+    
+
+
+
+    
+    :returns String:
+        the formatted percentage 
+    
+
+
+Formats a number and outputs it according to the percentage format of
+the specific language.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    
+
+
+

@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Logging &mdash; Rain v0.29.0 documentation</title>
+    <title>Logging &mdash; Rain 0.30.0 documentation</title>
+    
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.29.0',
+        VERSION:     '0.30.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +25,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.29.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain 0.30.0 documentation" href="../index.html" />
     <link rel="next" title="RAIN authorization" href="Features-proposal-rain-authorization.html" />
     <link rel="prev" title="View Instances" href="Features-proposal-instances.html" /> 
   </head>
@@ -39,7 +42,7 @@
         <li class="right" >
           <a href="Features-proposal-instances.html" title="View Instances"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.29.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain 0.30.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -165,16 +168,16 @@ logger for server code or a particular component logger for that component&#8217
 <col width="87%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Property</th>
+<tr class="row-odd"><th class="head">Property</th>
 <th class="head">Description</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>level</td>
+<tr class="row-even"><td>level</td>
 <td>Optional property. Log level value that will be inherited by all appenders that
 don&#8217;t specify a level. Only valid for the platform logger definition.</td>
 </tr>
-<tr><td>appenders</td>
+<tr class="row-odd"><td>appenders</td>
 <td>Optional property. Array of appenders. For component loggers, these are added to
 the list provided by the platform logger.</td>
 </tr>
@@ -191,25 +194,25 @@ configuration objects support the following properties:</p>
 <col width="88%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Property</th>
+<tr class="row-odd"><th class="head">Property</th>
 <th class="head">Description</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>level</td>
+<tr class="row-even"><td>level</td>
 <td>Optional property. Threshold level below which messages are not logged by this
 appender. Acts as a basic filter. If not specified, it will be inherited from the
 platform logger level.</td>
 </tr>
-<tr><td>type</td>
+<tr class="row-odd"><td>type</td>
 <td>Required property. One of the predefined appender types or a path to a module
 implementing the Appender interface inside the server folder of the current
 component if configuring a component logger.</td>
 </tr>
-<tr><td>layout</td>
+<tr class="row-even"><td>layout</td>
 <td>Optional property. Layout configuration object for this appender.</td>
 </tr>
-<tr><td>params</td>
+<tr class="row-odd"><td>params</td>
 <td>Optional property. Specific configuration parameters for this appender.</td>
 </tr>
 </tbody>
@@ -224,18 +227,18 @@ in the following table:</p>
 <col width="80%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Appender</th>
+<tr class="row-odd"><th class="head">Appender</th>
 <th class="head">Description</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>console</td>
+<tr class="row-even"><td>console</td>
 <td>Logs to the standard output.</td>
 </tr>
-<tr><td>colored-console</td>
+<tr class="row-odd"><td>colored-console</td>
 <td>Logs to the standard output using configurable colors.</td>
 </tr>
-<tr><td>file</td>
+<tr class="row-even"><td>file</td>
 <td>Logs to a file.</td>
 </tr>
 </tbody>
@@ -252,17 +255,17 @@ may be defined per appender. Layout configuration objects support the following 
 <col width="88%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Property</th>
+<tr class="row-odd"><th class="head">Property</th>
 <th class="head">Description</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>type</td>
+<tr class="row-even"><td>type</td>
 <td>Required property. One of the predefined layout types or a path to a module
 implementing the Layout interface inside the server folder of the current
 component if configuring a component logger.</td>
 </tr>
-<tr><td>params</td>
+<tr class="row-odd"><td>params</td>
 <td>Optional property. Specific configuration parameters for this layout.</td>
 </tr>
 </tbody>
@@ -277,16 +280,16 @@ in the following table:</p>
 <col width="80%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th class="head">Layout</th>
+<tr class="row-odd"><th class="head">Layout</th>
 <th class="head">Description</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr><td>simple</td>
+<tr class="row-even"><td>simple</td>
 <td>Consists of the message level, followed by a dash and the messsage itself,
 e.g. <tt class="docutils literal"><span class="pre">DEBUG</span> <span class="pre">-</span> <span class="pre">Module</span> <span class="pre">loaded</span></tt>.</td>
 </tr>
-<tr><td>pattern</td>
+<tr class="row-odd"><td>pattern</td>
 <td><p class="first">Supports a comprehensive list of placeholders that can be combined to
 assemble a message containing information exposed by the platform,
 by the environment or by the logging event.</p>
@@ -353,7 +356,7 @@ providing a placeholder for this use.</p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -379,11 +382,11 @@ providing a placeholder for this use.</p>
         <li class="right" >
           <a href="Features-proposal-instances.html" title="View Instances"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.29.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain 0.30.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

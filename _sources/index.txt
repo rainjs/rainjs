@@ -38,6 +38,7 @@ Client side modules
     client/client_rendering
     client/rendering
     client/localization
+    server/minification
 
 ....
 APIs

@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class Logger &mdash; Rain v0.29.0 documentation</title>
+    <title>Class Logger &mdash; Rain 0.30.0 documentation</title>
+    
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.29.0',
+        VERSION:     '0.30.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +25,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.29.0 documentation" href="../../index.html" />
+    <link rel="top" title="Rain 0.30.0 documentation" href="../../index.html" />
     <link rel="next" title="Class MemoryStore" href="MemoryStore.html" />
     <link rel="prev" title="Class Layout" href="Layout.html" /> 
   </head>
@@ -39,7 +42,7 @@
         <li class="right" >
           <a href="Layout.html" title="Class Layout"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.29.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain 0.30.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -239,7 +242,7 @@ file.</p>
 <ul>
 <li><dl class="first docutils">
 <dt>Send a SIGUSR2 signal to the raind process to trigger the rotation.</dt>
-<dd><div class="first last highlight-guess"><div class="highlight"><pre><span class="nb">kill</span> <span class="o">-</span><span class="n">SIGUSR2</span> <span class="p">[</span><span class="n">pid</span> <span class="n">of</span> <span class="n">raind</span><span class="p">]</span>
+<dd><div class="first last highlight-guess"><div class="highlight"><pre><span class="n">kill</span> <span class="o">-</span><span class="n">SIGUSR2</span> <span class="p">[</span><span class="n">pid</span> <span class="n">of</span> <span class="n">raind</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -256,7 +259,7 @@ file.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>logger</strong> (<em>String</em>) &#8211; the logger name</li>
 <li><strong>appenders</strong> (<em>Appender[]</em>) &#8211; The appenders used by the logger.</li>
 <li><strong>inheritedAppenders</strong> (<em>Appender[]</em>) &#8211; The appenders inherited by a component logger from the platform logger.</li>
@@ -279,7 +282,7 @@ file.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>message</strong> (<em>String</em>) &#8211; The message to be logged.</li>
 <li><strong>error</strong> (<em>RainError</em>) &#8211; The associated error, if one exists.</li>
 </ul>
@@ -309,7 +312,7 @@ file.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>message</strong> (<em>String</em>) &#8211; The message to be logged.</li>
 <li><strong>error</strong> (<em>RainError</em>) &#8211; The associated error, if one exists.</li>
 </ul>
@@ -330,7 +333,7 @@ file.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>message</strong> (<em>String</em>) &#8211; The message to be logged.</li>
 <li><strong>error</strong> (<em>RainError</em>) &#8211; The associated error, if one exists.</li>
 </ul>
@@ -351,18 +354,18 @@ file.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>component</strong> &#8211; The component for which to create the logger. Creates the platform logger if component is undefined.</li>
 <li><strong>component.id</strong> &#8211; The component id.</li>
 <li><strong>component.version</strong> &#8211; The component version.</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Throws RainError:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><p class="first">: when the platform level is invalid.</p>
+<tr class="field-even field"><th class="field-name" colspan="2">Throws RainError:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">: when the platform level is invalid.</p>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns Logger:</th><td class="field-body"></td>
+<tr class="field-odd field"><th class="field-name">Returns Logger:</th><td class="field-body"></td>
 </tr>
 </tbody>
 </table>
@@ -379,7 +382,7 @@ file.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>message</strong> (<em>String</em>) &#8211; The message to be logged.</li>
 <li><strong>error</strong> (<em>RainError</em>) &#8211; The associated error, if one exists.</li>
 </ul>
@@ -409,7 +412,7 @@ file.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
 <li><strong>message</strong> (<em>String</em>) &#8211; The message to be logged.</li>
 <li><strong>error</strong> (<em>RainError</em>) &#8211; The associated error, if one exists.</li>
 </ul>
@@ -427,8 +430,8 @@ file.</p>
 <div class="section" id="levels">
 <h3>LEVELS<a class="headerlink" href="#levels" title="Permalink to this headline">¶</a></h3>
 <dl class="attribute">
-<dt id="LEVELS ">
-<tt class="descname">LEVELS </tt><a class="headerlink" href="#LEVELS " title="Permalink to this definition">¶</a></dt>
+<dt id="LEVELS">
+<tt class="descname">LEVELS</tt><a class="headerlink" href="#LEVELS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>Defines numeric values for the logger levels.</p>
@@ -474,7 +477,7 @@ file.</p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -500,11 +503,11 @@ file.</p>
         <li class="right" >
           <a href="Layout.html" title="Class Layout"
              >previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.29.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain 0.30.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

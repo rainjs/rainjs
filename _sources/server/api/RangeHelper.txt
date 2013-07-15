@@ -1,0 +1,93 @@
+
+
+
+
+
+
+..
+    Classes and methods
+
+Class RangeHelper
+================================================================================
+
+..
+   class-title
+
+
+This Handlebar helper is used to format a date range according to the specific language.
+
+Syntax::
+
+     {{range startDate endDate}}
+
+
+
+
+
+
+
+
+    
+
+
+Constructor
+-----------
+
+.. js:class:: RangeHelper()
+
+
+
+
+
+
+
+
+
+Methods
+-------
+
+..
+   class-methods
+
+
+helper
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: RangeHelper#helper(startDate, endDate)
+
+
+    
+    :param Object startDate: 
+        the first date from date range 
+    
+    :param Object endDate: 
+        the second date from the date range 
+    
+
+
+
+    
+    :returns String:
+        the formatted date range 
+    
+
+
+Formats a date range according to the language specified in the platform configuration.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    
+
+
+

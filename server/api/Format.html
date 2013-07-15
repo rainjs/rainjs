@@ -1,0 +1,337 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class Format &mdash; Rain 0.30.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.30.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Rain 0.30.0 documentation" href="../../index.html" />
+    <link rel="next" title="Namespace Identity" href="Identity.html" />
+    <link rel="prev" title="Class FileAppender" href="FileAppender.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Identity.html" title="Namespace Identity"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="FileAppender.html" title="Class FileAppender"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Rain 0.30.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="class-format">
+<h1>Class Format<a class="headerlink" href="#class-format" title="Permalink to this headline">¶</a></h1>
+<p>Format module that formats date/time/date-range/numbers based on the language.</p>
+<div class="section" id="constructor">
+<h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Format">
+<em class="property">class </em><tt class="descname">Format</tt><big>(</big><big>)</big><a class="headerlink" href="#Format" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="formatcurrency">
+<h3>formatCurrency<a class="headerlink" href="#formatcurrency" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Format#formatCurrency">
+<tt class="descname">Format#formatCurrency</tt><big>(</big><em>number</em>, <em>locale</em><big>)</big><a class="headerlink" href="#Format#formatCurrency" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>number</strong> (<em>Number</em>) &#8211; the number to be formatted in currency context</li>
+<li><strong>locale</strong> (<em>String</em>) &#8211; the language in which you want to format the currency</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns String:</th><td class="field-body"><p class="first last">the formatted currency in the desired language</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Formats a number and outputs in the country&#8217;s currency format standards. If not present
+falls to default language of the server and if that is also missing it uses a configuration
+preset format.</p>
+</div>
+<div class="section" id="formatdate">
+<h3>formatDate<a class="headerlink" href="#formatdate" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Format#formatDate">
+<tt class="descname">Format#formatDate</tt><big>(</big><em>date</em>, <em>locale</em><span class="optional">[</span>, <em>format</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#Format#formatDate" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>date</strong> (<em>String</em>) &#8211; the date that you want to format</li>
+<li><strong>locale</strong> (<em>String</em>) &#8211; the language in which you want to format the date</li>
+<li><strong>format</strong> (<em>String</em>) &#8211; optional parameter of the way to format the date</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns String:</th><td class="field-body"><p class="first last">the formatted date in the desired language</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Formats a date in the country&#8217;s date format standards. If not present falls
+to default language of the server and if that is also missing it uses a
+configuration preset format.</p>
+</div>
+<div class="section" id="formatnumber">
+<h3>formatNumber<a class="headerlink" href="#formatnumber" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Format#formatNumber">
+<tt class="descname">Format#formatNumber</tt><big>(</big><em>value</em>, <em>locale</em><big>)</big><a class="headerlink" href="#Format#formatNumber" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> (<em>Number</em>) &#8211; the value that you want to format</li>
+<li><strong>locale</strong> (<em>String</em>) &#8211; the language in which you want to format the number</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns String:</th><td class="field-body"><p class="first last">the formatted number in the desired language</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Formats a given number taking into account the decimals and the thousands. If not present
+falls to default language of the server and if that is also missing it uses a configuration
+preset format.</p>
+</div>
+<div class="section" id="formatpercentage">
+<h3>formatPercentage<a class="headerlink" href="#formatpercentage" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Format#formatPercentage">
+<tt class="descname">Format#formatPercentage</tt><big>(</big><em>number</em>, <em>locale</em><big>)</big><a class="headerlink" href="#Format#formatPercentage" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>number</strong> (<em>Number</em>) &#8211; the number to be formatted in percentage context</li>
+<li><strong>locale</strong> (<em>String</em>) &#8211; the language in which you want to format the percentage</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns String:</th><td class="field-body"><p class="first last">the formatted percentage in the desired language</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Formats a number and ouputs it in the country&#8217;s percentage format standards. If not present
+falls to default language of the server and if that is also missing it uses a configuration
+preset format.</p>
+</div>
+<div class="section" id="formatrange">
+<h3>formatRange<a class="headerlink" href="#formatrange" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Format#formatRange">
+<tt class="descname">Format#formatRange</tt><big>(</big><em>startDate</em>, <em>endDate</em>, <em>locale</em><big>)</big><a class="headerlink" href="#Format#formatRange" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>startDate</strong> (<em>String</em>) &#8211; the start date of the range</li>
+<li><strong>endDate</strong> (<em>String</em>) &#8211; the end date of the range</li>
+<li><strong>locale</strong> (<em>String</em>) &#8211; the language in which you want to format</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns String:</th><td class="field-body"><p class="first last">the formatted range in the desired language</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Formats a date range in the default date range format of the country. If not present falls to default
+language of the server and if that is also missing it uses a configuration preset format.</p>
+</div>
+<div class="section" id="formattime">
+<h3>formatTime<a class="headerlink" href="#formattime" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Format#formatTime">
+<tt class="descname">Format#formatTime</tt><big>(</big><em>date</em>, <em>locale</em><big>)</big><a class="headerlink" href="#Format#formatTime" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>date</strong> (<em>String</em>) &#8211; the date for which you want the time format</li>
+<li><strong>locale</strong> (<em>String</em>) &#8211; the language in which you want to format the time</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns String:</th><td class="field-body"><p class="first last">the formatted time in the desired language</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Formats a time in the country&#8217;s time format standards. If not present falls
+to default language of the server and if that is also missing it uses a
+configuration preset format.</p>
+</div>
+<div class="section" id="get">
+<h3>get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Format.get">
+<tt class="descclassname">Format.</tt><tt class="descname">get</tt><big>(</big><big>)</big><a class="headerlink" href="#Format.get" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns Format:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Singleton method to get the instance of the Format module.</p>
+</div>
+<div class="section" id="translate">
+<h3>translate<a class="headerlink" href="#translate" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Format#translate">
+<tt class="descname">Format#translate</tt><big>(</big><em>customId</em>, <em>msgId</em>, <em>language</em>, <em>args</em><big>)</big><a class="headerlink" href="#Format#translate" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>customId</strong> (<em>String</em>) &#8211; the customId from the .po file</li>
+<li><strong>msgId</strong> (<em>String</em>) &#8211; the msgId representing the default text for that customId</li>
+<li><strong>language</strong> (<em>String</em>) &#8211; the language in which you want to translate</li>
+<li><strong>args</strong> (<em>[String]</em>) &#8211; the arguments to be inserted in the translation</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns String:</th><td class="field-body"><p class="first last">the translated text.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Translates a text. Logs an error if the translation was not possible.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class Format</a><ul>
+<li><a class="reference internal" href="#constructor">Constructor</a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#formatcurrency">formatCurrency</a></li>
+<li><a class="reference internal" href="#formatdate">formatDate</a></li>
+<li><a class="reference internal" href="#formatnumber">formatNumber</a></li>
+<li><a class="reference internal" href="#formatpercentage">formatPercentage</a></li>
+<li><a class="reference internal" href="#formatrange">formatRange</a></li>
+<li><a class="reference internal" href="#formattime">formatTime</a></li>
+<li><a class="reference internal" href="#get">get</a></li>
+<li><a class="reference internal" href="#translate">translate</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="FileAppender.html"
+                        title="previous chapter">Class FileAppender</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Identity.html"
+                        title="next chapter">Namespace Identity</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Identity.html" title="Namespace Identity"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="FileAppender.html" title="Class FileAppender"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Rain 0.30.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

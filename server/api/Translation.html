@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class Translation &mdash; Rain v0.29.0 documentation</title>
+    <title>Class Translation &mdash; Rain 0.30.0 documentation</title>
+    
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.29.0',
+        VERSION:     '0.30.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,9 +25,9 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.29.0 documentation" href="../../index.html" />
+    <link rel="top" title="Rain 0.30.0 documentation" href="../../index.html" />
     <link rel="next" title="Class TranslationHelper" href="TranslationHelper.html" />
-    <link rel="prev" title="Class SyslogAppender" href="SyslogAppender.html" /> 
+    <link rel="prev" title="Class TimeHelper" href="TimeHelper.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,9 +40,9 @@
           <a href="TranslationHelper.html" title="Class TranslationHelper"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="SyslogAppender.html" title="Class SyslogAppender"
+          <a href="TimeHelper.html" title="Class TimeHelper"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.29.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain 0.30.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -70,13 +73,13 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>component</strong> (<em>Object</em>) &#8211; the component configuration for the component</li>
 <li><strong>language</strong> (<em>String</em>) &#8211; the language</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns Object:</th><td class="field-body"><p class="first last">the context in which the component will run</p>
+<tr class="field-even field"><th class="field-name">Returns Object:</th><td class="field-body"><p class="first last">the context in which the component will run</p>
 </td>
 </tr>
 </tbody>
@@ -94,8 +97,8 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name" colspan="2">Returns Translation:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body">the singleton instance</td>
+<tr class="field-odd field"><th class="field-name" colspan="2">Returns Translation:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">the singleton instance</td>
 </tr>
 </tbody>
 </table>
@@ -112,14 +115,14 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>component</strong> (<em>Object</em>) &#8211; Component object</li>
 <li><strong>language</strong> (<em>String</em>) &#8211; the preferred language. If missing platform language is used</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Throws RainError:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><p class="first last">: &#8216;component&#8217; precondition failed when  the component parameter is missing</p>
+<tr class="field-even field"><th class="field-name" colspan="2">Throws RainError:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">: &#8216;component&#8217; precondition failed when  the component parameter is missing</p>
 </td>
 </tr>
 </tbody>
@@ -141,15 +144,15 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>file</strong> (<em>String</em>) &#8211; the file path</li>
 <li><strong>locale</strong> (<em>String</em>) &#8211; the locale for which this file should be used</li>
 <li><strong>component</strong> (<em>Object</em>) &#8211; the descriptor of the component</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Throws RainError:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><p class="first last">: when the po file doesn&#8217;t exist</p>
+<tr class="field-even field"><th class="field-name" colspan="2">Throws RainError:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">: when the po file doesn&#8217;t exist</p>
 </td>
 </tr>
 </tbody>
@@ -167,7 +170,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>msgId</strong> (<em>String</em>) &#8211; the message to be translated</li>
 <li><strong>msgIdPlural</strong> (<em>String</em>) &#8211; the plural form of the message</li>
 <li><strong>count</strong> (<em>Number</em>) &#8211; determines what form of the translation will be used: singular or plural</li>
@@ -175,7 +178,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns String:</th><td class="field-body"><p class="first last">the translated message</p>
+<tr class="field-even field"><th class="field-name">Returns String:</th><td class="field-body"><p class="first last">the translated message</p>
 </td>
 </tr>
 </tbody>
@@ -200,13 +203,13 @@ the value of a variable.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>msgId</strong> (<em>String</em>) &#8211; the message to be translated</li>
 <li><strong>args</strong> (<em>Array</em>) &#8211; an array of values that will replace the placeholders in the message</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns String:</th><td class="field-body"><p class="first last">the translated message</p>
+<tr class="field-even field"><th class="field-name">Returns String:</th><td class="field-body"><p class="first last">the translated message</p>
 </td>
 </tr>
 </tbody>
@@ -229,7 +232,7 @@ defined for the component in which the code runs.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
 <li><strong>component</strong> (<em>Object</em>) &#8211; the descriptor of the component for which we do the translation</li>
 <li><strong>language</strong> (<em>String</em>) &#8211; the translation language</li>
 <li><strong>msgId</strong> (<em>String</em>) &#8211; the message to be translated</li>
@@ -240,7 +243,7 @@ defined for the component in which the code runs.</p>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns String:</th><td class="field-body"><p class="first last">the translated message</p>
+<tr class="field-even field"><th class="field-name">Returns String:</th><td class="field-body"><p class="first last">the translated message</p>
 </td>
 </tr>
 </tbody>
@@ -295,15 +298,15 @@ The last fallback is to return the message passed as parameter.</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="SyslogAppender.html"
-                        title="previous chapter">Class SyslogAppender</a></p>
+  <p class="topless"><a href="TimeHelper.html"
+                        title="previous chapter">Class TimeHelper</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="TranslationHelper.html"
                         title="next chapter">Class TranslationHelper</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -327,13 +330,13 @@ The last fallback is to return the message passed as parameter.</p>
           <a href="TranslationHelper.html" title="Class TranslationHelper"
              >next</a> |</li>
         <li class="right" >
-          <a href="SyslogAppender.html" title="Class SyslogAppender"
+          <a href="TimeHelper.html" title="Class TimeHelper"
              >previous</a> |</li>
-        <li><a href="../../index.html">Rain v0.29.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain 0.30.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

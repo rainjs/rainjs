@@ -1,0 +1,90 @@
+
+
+
+
+
+
+..
+    Classes and methods
+
+Class NumberHelper
+================================================================================
+
+..
+   class-title
+
+
+This Handlebar helper is used to format a number according to the specific language.
+
+Syntax::
+
+     {{number numberParam}}
+
+
+
+
+
+
+
+
+    
+
+
+Constructor
+-----------
+
+.. js:class:: NumberHelper()
+
+
+
+
+
+
+
+
+
+Methods
+-------
+
+..
+   class-methods
+
+
+helper
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: NumberHelper#helper(number)
+
+
+    
+    :param Number number: 
+        the number that needs to be formatted 
+    
+
+
+
+    
+    :returns String:
+        the formatted number 
+    
+
+
+Formats a number according to the language specified in the platform configuration.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    
+
+
+

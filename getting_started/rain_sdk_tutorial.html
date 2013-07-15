@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>RAIN SDK Tutorial &mdash; Rain v0.29.0 documentation</title>
+    <title>RAIN SDK Tutorial &mdash; Rain 0.30.0 documentation</title>
+    
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.29.0',
+        VERSION:     '0.30.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +25,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.29.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain 0.30.0 documentation" href="../index.html" />
     <link rel="next" title="Server and component configuration" href="configuration.html" />
     <link rel="prev" title="Installing RAIN" href="installation.html" /> 
   </head>
@@ -39,7 +42,7 @@
         <li class="right" >
           <a href="installation.html" title="Installing RAIN"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.29.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain 0.30.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -116,6 +119,27 @@ $ rain generate-po-files "en_GB,de_DE"
 $ rain generate-po-files "en_GB" "example;1.0"</pre>
 </div>
 </div>
+<div class="section" id="rain-sdk-minify-javascript-files">
+<h2>RAIN SDK Minify Javascript files<a class="headerlink" href="#rain-sdk-minify-javascript-files" title="Permalink to this headline">¶</a></h2>
+<p>The rain SDK provides a method to generate a minified RAIN project.</p>
+<p>All the js files from the client folder of components will be minified into an <tt class="docutils literal"><span class="pre">index.min.js</span></tt> file.</p>
+<p>The new minified project is generated at the path specified in
+the build.json file that can look like this:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s2">&quot;additionalProjects&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;../rainjs&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;buildPath&quot;</span><span class="o">:</span> <span class="s2">&quot;../min/sprint&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>If the <tt class="docutils literal"><span class="pre">buildPath</span></tt> key is missing then all the minified files will be generated in
+the current project, in each component folder.</p>
+<p>Example:</p>
+<div class="highlight-js"><pre>#generate the minified project
+$ rain minify</pre>
+</div>
+<p>A detailed description of this process can be found in
+the <tt class="xref doc docutils literal"><span class="pre">RAIN</span> <span class="pre">Minification</span> <span class="pre">Process</span></tt> page.</p>
+</div>
 </div>
 
 
@@ -131,6 +155,7 @@ $ rain generate-po-files "en_GB" "example;1.0"</pre>
 <li><a class="reference internal" href="#rain-sdk-create-project">RAIN SDK Create project</a></li>
 <li><a class="reference internal" href="#rain-sdk-debug-mode">RAIN SDK Debug mode</a></li>
 <li><a class="reference internal" href="#rain-sdk-generate-localization-files-from-source">RAIN SDK Generate Localization files from source</a></li>
+<li><a class="reference internal" href="#rain-sdk-minify-javascript-files">RAIN SDK Minify Javascript files</a></li>
 </ul>
 </li>
 </ul>
@@ -144,7 +169,7 @@ $ rain generate-po-files "en_GB" "example;1.0"</pre>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -170,11 +195,11 @@ $ rain generate-po-files "en_GB" "example;1.0"</pre>
         <li class="right" >
           <a href="installation.html" title="Installing RAIN"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.29.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain 0.30.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

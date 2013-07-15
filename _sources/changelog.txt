@@ -3,6 +3,16 @@ Changelog
 =========
 
 --------
+v 0.30.0
+--------
+
++ Added SDK command to minify project
++ Added date, time, number, currency, percentage and date range handlebars helpers
++ Added format module to format date, time, number, currency, percentange and date range.
++ Added ttl support for mongodb.
++ Implemented primary indexing for mongodb.
+
+--------
 v 0.29.0
 --------
 
