@@ -1,6 +1,6 @@
--------------------------
+=========================
 RAIN Minification Process
--------------------------
+=========================
 
 During this process a new minified RAIN project is generated.
 
