@@ -1,0 +1,44 @@
+{{css path="format_helpers.css"}}
+
+<table class="fh_container">
+    <tr>
+        <td class="fh_attribute_title">Locale:</td> <td>{{currentLocale}}</td>
+    </tr>
+    <tr>
+        <td class="fh_attribute_title">Date:</td> <td>{{date currentDate}}</td>
+    </tr>
+
+    <tr>
+        <td class="fh_attribute_title">Time:</td><td>{{time currentDate}}</td>
+    </tr>
+
+    <tr>
+        <td class="fh_attribute_title">Time interval (1 week):</td>
+        <td>{{range currentDate oneWeekFromNow}}</td>
+    </tr>
+
+    <tr>
+        <td class="fh_attribute_title">Time interval (1 month):</td> <td>{{oneMonthInterval}}</td>
+    </tr>
+
+    <tr>
+        <td class="fh_attribute_title">Time interval (1 year):</td>
+        <td>{{range currentDate oneYearFromNow}}</td>
+    </tr>
+
+    <tr>
+        <td class="fh_attribute_title">Decimal Separator:</td> <td>{{decimalNumberSample}}</td>
+    </tr>
+
+    <tr>
+        <td class="fh_attribute_title">Big Number:</td> <td>{{number "1250747.4321"}}</td>
+    </tr>
+
+    <tr>
+        <td class="fh_attribute_title">Percentage:</td> <td>{{percentage "34.26785"}}</td>
+    </tr>
+
+    <tr>
+        <td class="fh_attribute_title">Currency:</td> <td>{{currency "41345.2311"}}</td>
+    </tr>
+</table>
