@@ -42,7 +42,13 @@ describe('Handlebars configuration', function () {
             { name: 't', file: 'translation' },
             { name: 'nt', file: 'translation_plural' },
             { name: 'item', file: 'item' },
-            { name: 'partial', file: 'partial' }
+            { name: 'partial', file: 'partial' },
+            { name: 'percentage', file: 'percentage'},
+            { name: 'date', file: 'date'},
+            { name: 'number', file: 'number'},
+            { name: 'range', file: 'range'},
+            { name: 'time', file: 'time'},
+            { name: 'currency', file: 'currency'}
         ];
 
         plugins = {};
@@ -75,6 +81,12 @@ describe('Handlebars configuration', function () {
         expect(plugins['nt']).toEqual(jasmine.any(Function));
         expect(plugins['item']).toEqual(jasmine.any(Function));
         expect(plugins['partial']).toEqual(jasmine.any(Function));
+        expect(plugins['percentage']).toEqual(jasmine.any(Function));
+        expect(plugins['date']).toEqual(jasmine.any(Function));
+        expect(plugins['time']).toEqual(jasmine.any(Function));
+        expect(plugins['number']).toEqual(jasmine.any(Function));
+        expect(plugins['range']).toEqual(jasmine.any(Function));
+        expect(plugins['currency']).toEqual(jasmine.any(Function));
     });
 
 });

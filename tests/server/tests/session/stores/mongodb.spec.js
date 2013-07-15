@@ -55,7 +55,7 @@ describe('MongoDB session store', function () {
 
         Spy.MongoDB.CollectionInstance = jasmine.createSpyObj(
                 'Spy.MongoDB.CollectionInstance', ['findOne', 'insert',
-                'update', 'remove']);
+                'update', 'remove', 'ensureIndex']);
         Spy.MongoDB.Collection.andCallFake(function () {
                 return Spy.MongoDB.CollectionInstance; });
 
@@ -299,11 +299,12 @@ describe('MongoDB session store', function () {
                 runs(function () {
                     var args = Spy.MongoDB.CollectionInstance.update.mostRecentCall.args;
                     expect(isResolved).toBe(true);
-                    expect(args[0]).toEqual({id: session.id});
+                    expect(args[0]).toEqual({_id: session.id});
                     expect(args[1]).toEqual({
                         $set: {
                             'components.test.key-a': {value: 'a'},
-                            'components.test.key-b': {value: 'b'}
+                            'components.test.key-b': {value: 'b'},
+                            'lastModified': jasmine.any(Object)
                         }
                     });
                 });
@@ -330,8 +331,11 @@ describe('MongoDB session store', function () {
                 runs(function () {
                     var args = Spy.MongoDB.CollectionInstance.update.mostRecentCall.args;
                     expect(isResolved).toBe(true);
-                    expect(args[0]).toEqual({id: session.id});
+                    expect(args[0]).toEqual({_id: session.id});
                     expect(args[1]).toEqual({
+                        $set: {
+                            lastModified: jasmine.any(Object)
+                        },
                         $unset: {
                             'components.test.key-c': 1
                         }
@@ -363,11 +367,12 @@ describe('MongoDB session store', function () {
                 runs(function () {
                     var args = Spy.MongoDB.CollectionInstance.update.mostRecentCall.args;
                     expect(isResolved).toBe(true);
-                    expect(args[0]).toEqual({id: session.id});
+                    expect(args[0]).toEqual({_id: session.id});
                     expect(args[1]).toEqual({
                         $set: {
                             'components.test.key-a': {value: 'a'},
-                            'components.test.key-b': {value: 'b'}
+                            'components.test.key-b': {value: 'b'},
+                            lastModified: jasmine.any(Object)
                         },
                         $unset: {
                             'components.test.key-c': 1
@@ -403,11 +408,12 @@ describe('MongoDB session store', function () {
                 runs(function () {
                     var args = Spy.MongoDB.CollectionInstance.update.mostRecentCall.args;
                     expect(isResolved).toBe(true);
-                    expect(args[0]).toEqual({id: session.id});
+                    expect(args[0]).toEqual({_id: session.id});
                     expect(args[1]).toEqual({
                         $set: {
                             'global.key-a': {value: 'a'},
-                            'global.key-b': {value: 'b'}
+                            'global.key-b': {value: 'b'},
+                            lastModified: jasmine.any(Object)
                         },
                         $unset: {
                             'global.key-c': 1
@@ -444,7 +450,7 @@ describe('MongoDB session store', function () {
             runs(function () {
                 var args = Spy.MongoDB.CollectionInstance.remove.mostRecentCall.args;
                 expect(isResolved).toBe(true);
-                expect(args[0]).toEqual({id: sessionId});
+                expect(args[0]).toEqual({_id: sessionId});
             });
         });
     });
