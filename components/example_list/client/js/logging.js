@@ -1,4 +1,4 @@
-define(function (logger) {
+define(['logger'], function (logger) {
     function Logging() {}
 
     Logging.prototype.start = function () {

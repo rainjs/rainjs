@@ -23,6 +23,8 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+"use strict"
+
 define(function () {
     var oldExecCb,
         oldOnScriptLoad,
@@ -30,7 +32,6 @@ define(function () {
         oldLoad = require.load,
         currentDeps,
         currentCallback,
-        isDummyDepAdded,
         dependencyModules = {},
         useInteractive = false, //this is only for IE
         interactiveScript = null;
@@ -50,13 +51,61 @@ define(function () {
 
         var node = oldLoad(context, moduleName, url);
 
-        if (node.attachEvent
+        if (node && node.attachEvent
             && !(node.attachEvent.toString && node.attachEvent.toString().indexOf('[native code') < 0)
             && !isOpera) {
             useInteractive = true;
         }
 
         return node;
+    };
+
+    define = function(name, deps, callback) {
+        currentDeps = deps;
+        currentCallback = callback;
+
+        if (typeof name !== 'string') {
+            currentDeps = name;
+            currentCallback = deps;
+        }
+
+        if (Object.prototype.toString.call(currentDeps) !== '[object Array]') {
+            currentCallback = currentDeps;
+            currentDeps = [];
+        }
+
+        // when the order plugin is used the callback parameter is not a function
+        if (typeof currentCallback !== 'function') {
+            oldDefine(name, deps, callback);
+            currentDeps = null;
+            currentCallback = null;
+            return;
+        }
+
+        if (typeof name === 'string') {
+            modifyDependencies(name, currentDeps);
+            oldDefine(name, currentDeps, currentCallback);
+        } else {
+            oldDefine(currentDeps, currentCallback);
+        }
+
+        //IE
+        if (useInteractive) {
+            var node = getInteractiveScript();
+            if (node) {
+                if (!name) {
+                    name = node.getAttribute("data-requiremodule");
+                }
+                context = require.s.contexts[node.getAttribute("data-requirecontext")];
+                if (context && context.defQueue.length > 0) {
+                    var def = context.defQueue[context.defQueue.length - 1];
+                    modifyDependencies(def[0], def[1]);
+                }
+            }
+
+            currentDeps = null;
+            currentCallback = null;
+        }
     };
 
     // onScriptLoad executes immediately after define, so currentDeps and
@@ -69,94 +118,23 @@ define(function () {
             //all browsers except IE
             if (currentDeps && currentCallback) {
                 var moduleName = node.getAttribute("data-requiremodule");
-                modifyDependencies(moduleName, currentDeps, currentCallback);
+                modifyDependencies(moduleName, currentDeps);
             }
 
             oldOnScriptLoad(evt);
         }
     }
 
-    function execCb(name, callback, args, exports) {
-        var module = dependencyModules[name];
-        if (module) {
-            var Logger, Translation, locale, translation,
-                loggerIndex = module.loggerIndex,
-                tIndex = module.tIndex,
-                ntIndex = module.ntIndex;
-
-            if (loggerIndex > -1) {
-                Logger = args.pop();
-            }
-
-            if (tIndex > -1 || ntIndex > -1) {
-                locale = args.pop();
-                Translation = args.pop();
-                translation = Translation.get(module.component, locale);
-            }
-
-            if (tIndex > -1) {
-                args[tIndex] = function (customId, msgId, args) {
-                    return translation.translate(customId, msgId, undefined, undefined, args);
-                };
-            }
-
-            if (ntIndex > -1) {
-                args[ntIndex] = translation.translate.bind(translation);
-            }
-
-            if (loggerIndex > -1) {
-                args[loggerIndex] = Logger.get(module.component);
-            }
-        }
-
-        // invoke the original implementation of the function
-        return oldExecCb(name, callback, args, exports);
-    }
-
-    function getInteractiveScript() {
-        var scripts, i, script;
-        if (interactiveScript && interactiveScript.readyState === 'interactive') {
-            return interactiveScript;
-        }
-
-        scripts = document.getElementsByTagName('script');
-        for (i = scripts.length - 1; i > -1 && (script = scripts[i]); i--) {
-            if (script.readyState === 'interactive') {
-                return (interactiveScript = script);
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Check if a controller needs to have inserted special RAIN functions (t, nt, logger).
-     *
-     * @param {Function} the controller function
-     * @returns {Boolean} true if one of the special parameter names is detected
-     */
-    function hasDependencies(fn) {
-        var argumentsRegExp = /\(([\s\S]*?)\)/,
-        splitRegExp = /[ ,\n\r\t]+/,
-        callBackMatches = argumentsRegExp.exec(fn.toString());
-
-        if (!callBackMatches || !callBackMatches[1]) {
-            return false;
-        }
-
-        var args = callBackMatches[1].trim().split(splitRegExp);
-        return args.indexOf('t') > -1 || args.indexOf('nt') > -1 || args.indexOf('logger') > -1;
-    }
-
     /**
      * Prefixes component dependencies with component id and version and
-     * adds special RAIN dependencies like translation and logger.
+     * adds special RAIN dependencies like translation and logger. It only modifies relative paths
+     * not ending with .js (RequireJS module id) and starting with js/ like: js/index or
+     * js/lib/file. The path js/lib/file will become id/version/js/lib/file.
      *
      * @param {String} moduleName the module name
      * @param {String[]} deps the module dependencies
-     * @param {Function} callback a function that is called when the module is loaded
-     */
-    function modifyDependencies(moduleName, deps, callback) {
+    */
+    function modifyDependencies(moduleName, deps) {
         var moduleRegex = /^\/?([\w-]+)\/(\d(?:\.\d)?(?:\.\d)?)\/js\/(.+)/,
             matches = moduleName && moduleName.match(moduleRegex);
 
@@ -170,7 +148,7 @@ define(function () {
         };
 
         resolveDependencyPaths(component, deps);
-        addDependencies(component, moduleName, deps, callback);
+        addDependencies(component, moduleName, deps);
     }
 
     /**
@@ -188,111 +166,96 @@ define(function () {
             // require.jsExtRegExp is defined in RequireJS and tests that a string is a regular
             // path and not a module ID. See http://requirejs.org/docs/api.html#jsfiles for more
             // details.
-            if (typeof dependency !== 'undefined' && !require.jsExtRegExp.test(dependency) && dependency.indexOf('js/') === 0) {
+            if (typeof dependency !== 'undefined' && require.jsExtRegExp &&
+                !require.jsExtRegExp.test(dependency) &&
+                dependency.indexOf('js/') === 0) {
                 deps[i] = component.id + '/' + component.version + '/' + dependency;
             }
         }
     }
 
+
     /**
-     * Adds special RAIN dependencies like translation and logger.
+     * Removes t, nt and logger from dependencies and adds special RAIN dependencies like
+     * translation, locale, logger.
      *
      * @param {Object} component the component for which the module is loaded
      * @param {String} moduleName the module name
      * @param {String[]} deps the module dependencies
-     * @param {Function} callback a function that is called when the module is loaded
      */
-    function addDependencies(component, moduleName, deps, callback) {
-        var argumentsRegExp = /\(([\s\S]*?)\)/,
-        splitRegExp = /[ ,\n\r\t]+/,
-        callBackMatches = argumentsRegExp.exec(callback.toString());
+    function addDependencies(component, moduleName, deps) {
+        var module = {};
+        module.component = component;
 
-        if (!callBackMatches || !callBackMatches[1]) {
-            return;
-        }
+        ['t', 'nt', 'logger'].forEach( function(element) {
+            var index = currentDeps.indexOf(element);
+            if (index > -1) {
+                currentDeps.splice(index, 1);
+            }
+            module[element] = index;
+        });
 
-        var args = callBackMatches[1].trim().split(splitRegExp);
-
-        var tIndex = args.indexOf('t'),
-            ntIndex = args.indexOf('nt'),
-            loggerIndex = args.indexOf('logger');
-
-        if (tIndex > -1 || ntIndex > -1) {
+        if (module.t > -1 || module.nt > -1) {
             deps.push('raintime/translation');
             deps.push('locale!' + component.id + '/' + component.version + '/' + rainContext.language);
         }
 
-        if (loggerIndex > -1) {
+        if (module.logger > -1) {
             deps.push('raintime/logger');
         }
 
-        dependencyModules[moduleName] = {
-            component: component,
-            tIndex: tIndex,
-            ntIndex: ntIndex,
-            loggerIndex: loggerIndex
-        };
+        dependencyModules[moduleName] = module;
     }
 
-    define = function (name, deps, callback) {
-        currentDeps = deps;
-        currentCallback = callback;
-        isDummyDepAdded = false;
+    function execCb(name, callback, args, exports) {
+        var module = dependencyModules[name];
+        if (module) {
+            var Logger, Translation, locale, translation, func;
 
-        if (typeof name !== 'string') {
-            currentDeps = name;
-            currentCallback = deps;
-        }
-
-        if (Object.prototype.toString.call(currentDeps) !== '[object Array]') {
-            currentCallback = currentDeps;
-            currentDeps = [];
-        }
-
-        //when the order plugin is used the callback parameter is not a function
-        if (typeof currentCallback !== 'function') {
-            oldDefine(name, deps, callback);
-            currentDeps = null;
-            currentCallback = null;
-            return;
-        }
-
-        if (!currentDeps.length && hasDependencies(currentCallback)) {
-            //this is a dummy dependency used to let RequireJS know that this isn't
-            //a CommonJS module
-            currentDeps.push('dummy');
-            isDummyDepAdded = true;
-        }
-
-        if (typeof name === 'string') {
-            oldDefine(name, currentDeps, currentCallback);
-        } else {
-            oldDefine(currentDeps, currentCallback);
-        }
-
-        if (isDummyDepAdded) {
-            //remove dummy dependency
-            currentDeps.pop();
-        }
-
-        //IE
-        if (useInteractive) {
-            var node = getInteractiveScript();
-            if (node) {
-                if (!name) {
-                    name = node.getAttribute("data-requiremodule");
-                }
-                context = require.s.contexts[node.getAttribute("data-requirecontext")];
-                if (context && context.defQueue.length > 0) {
-                    var def = context.defQueue[context.defQueue.length - 1];
-                    modifyDependencies(def[0], def[1], def[2]);
-                }
+            if (module.logger > -1) {
+                Logger = args.pop();
             }
 
-            currentDeps = null;
-            currentCallback = null;
+            if (module.t > -1 || module.nt > -1) {
+                locale = args.pop();
+                Translation = args.pop();
+                translation = Translation.get(module.component, locale);
+            }
+
+            if (module.logger > -1) {  // They must be inserted in reverse order
+                func = Logger.get(module.component);
+                args.splice(module.logger, 0, func);
+}
+            if (module.nt > -1) {
+                func = translation.translate.bind(translation);
+                args.splice(module.nt, 0, func);
+            }
+
+            if (module.t > -1) {
+                func = function (customId, msgId, args) {
+                    return translation.translate(customId, msgId, undefined, undefined, args);
+                };
+                args.splice(module.t, 0, func);
+            }
         }
-    };
+        return oldExecCb(name, callback, args, exports);
+    }
+
+    var getInteractiveScript = function() {
+        var scripts, i, script;
+        if (interactiveScript && interactiveScript.readyState === 'interactive') {
+            return interactiveScript;
+        }
+
+        scripts = document.getElementsByTagName('script');
+        for (i = scripts.length - 1; i > -1 && (script = scripts[i]); i--) {
+            if (script.readyState === 'interactive') {
+                return (interactiveScript = script);
+            }
+        }
+
+        return null;
+    }
 
     define.amd = oldDefine.amd;
 });

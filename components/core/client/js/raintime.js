@@ -338,7 +338,15 @@ define(['raintime/lib/promise',
 
         var deferred = new Promise.Deferred(),
             newComponent = new Component(component),
-            deps = component.controller ? [component.controller] : [];
+            deps,
+            strippedPath;
+
+            if (component.controller) {
+                strippedPath = component.controller.replace(/^\/?(.*?)(.js)?$/, '$1');
+                deps = [strippedPath];
+            } else {
+                deps = [];
+            }
 
         map[newComponent.instanceId] = newComponent;
         newComponent.promise = deferred.promise;
@@ -347,23 +355,30 @@ define(['raintime/lib/promise',
             start: new Promise.Deferred()
         };
 
-        require(deps, function (Controller) {
-            if (!Controller) {
-                Controller = function () {};
-            }
-            var controller = createControllerInstance(Controller, newComponent);
-            newComponent.controller = controller;
+        var minFilePath = '';
+        if (rainContext.enableMinification) {
+            minFilePath = component.id + '/' + component.version + '/js/index.min';
+        }
 
-            // this callback shouldn't be called for the placeholder
-            if (!component.isPlaceholder && callbacks[newComponent.instanceId]) {
-                callbacks[newComponent.instanceId].call(controller, newComponent);
-                delete callbacks[newComponent.instanceId];
-            }
+        require([minFilePath], function () {
+            require(deps, function (Controller) {
+                if (!Controller) {
+                    Controller = function () {};
+                }
+                var controller = createControllerInstance(Controller, newComponent);
+                newComponent.controller = controller;
 
-            newComponent.controllerLoaded = true;
-            invokeLifecycle(newComponent);
+                // this callback shouldn't be called for the placeholder
+                if (!component.isPlaceholder && callbacks[newComponent.instanceId]) {
+                    callbacks[newComponent.instanceId].call(controller, newComponent);
+                    delete callbacks[newComponent.instanceId];
+                }
 
-            deferred.resolve(controller);
+                newComponent.controllerLoaded = true;
+                invokeLifecycle(newComponent);
+
+                deferred.resolve(controller);
+            });
         });
     }
 

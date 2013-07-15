@@ -51,6 +51,31 @@ function getProjectRoot(cwd) {
     throw new Error('The specified path is not a RAIN project.');
 }
 
+function iterateComponents(componentsFolder, callback) {
+    var folders = fs.readdirSync(componentsFolder);
+
+    for (var i = 0, len = folders.length; i < len; i++) {
+        var componentPath = path.join(componentsFolder, folders[i]),
+            metaFile = path.join(componentPath, 'meta.json');
+
+        if (!fs.statSync(componentPath).isDirectory()) {
+            continue;
+        }
+
+        var config = null;
+        try {
+            config = JSON.parse(fs.readFileSync(metaFile, 'utf8'));
+        } catch (ex) {
+            console.log('Failed to parse ' + metaFile, ex.stack);
+        }
+
+        if (config) {
+            callback(config, componentPath, folders[i]);
+        }
+    }
+}
+
 module.exports = {
-    getProjectRoot: getProjectRoot
+    getProjectRoot: getProjectRoot,
+    iterateComponents: iterateComponents
 };
