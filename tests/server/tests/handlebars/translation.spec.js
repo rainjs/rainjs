@@ -26,11 +26,11 @@
 "use strict";
 
 describe('Translation helper', function () {
-    var translationHelper, renderer, Translation;
+    var translationHelper, Translation;
 
     beforeEach(function () {
         var mocks = {};
-        renderer = mocks['../renderer'] = {
+        mocks['../renderer'] = {
             rain: {
                 component: 'comp',
                 environment: {
@@ -51,23 +51,21 @@ describe('Translation helper', function () {
         translationHelper.helper('Message', {hash: {}});
 
         expect(Translation.translate)
-            .toHaveBeenCalledWith('comp', 'ro', 'Message',
-                                  undefined, undefined, []);
+            .toHaveBeenCalledWith('comp', 'ro', 'Message', 'Message', undefined, undefined, []);
     });
 
     it('should properly call translation with id passed', function () {
         translationHelper.helper('Message', {hash: {id: 'button.foo'}});
 
         expect(Translation.translate)
-            .toHaveBeenCalledWith('comp', 'ro', 'button.foo', 'Message',
-                                  undefined, undefined, []);
+            .toHaveBeenCalledWith('comp', 'ro', 'button.foo', 'Message', undefined, undefined, []);
     });
 
     it('should properly call translation with no id and more arguments passed', function () {
         translationHelper.helper('Message', 'arg1', 'arg2', {hash: {}});
 
         expect(Translation.translate)
-            .toHaveBeenCalledWith('comp', 'ro', 'Message',
+            .toHaveBeenCalledWith('comp', 'ro', 'Message', 'Message',
                                   undefined, undefined, ['arg1', 'arg2']);
     });
 

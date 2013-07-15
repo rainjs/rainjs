@@ -65,7 +65,7 @@ function handle(socket) {
     });
 
     logger.info(t('The user "%1$s" connected to the notes websocket.',
-                  socket.user && socket.user.username || 'Guest'));
+                  [socket.user && socket.user.username || 'Guest']));
 }
 
 module.exports = {
