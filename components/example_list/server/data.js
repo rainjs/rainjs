@@ -112,7 +112,8 @@ function format_helpers(environment, callback, data) {
     var lang = environment.language;
     var today = new Date();
     var oneMonthInterval =
-        formatter.formatRange(today, new Date(today.getFullYear(), today.getMonth() + 1, today.getDate()), lang);
+        formatter.formatRange(today,
+            new Date(today.getFullYear(), today.getMonth() + 1, today.getDate()), lang);
 
     var customData = {
         currentLocale: lang,
