@@ -135,6 +135,10 @@ define(function () {
      * @param {String[]} deps the module dependencies
     */
     function modifyDependencies(moduleName, deps) {
+        if (dependencyModules[moduleName]) {
+            return;
+        }
+
         var moduleRegex = /^\/?([\w-]+)\/(\d(?:\.\d)?(?:\.\d)?)\/js\/(.+)/,
             matches = moduleName && moduleName.match(moduleRegex);
 
