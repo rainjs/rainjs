@@ -30,7 +30,8 @@ var path = require('path'),
     wrench = require('wrench'),
     sdkUtils = require('../lib/utils'),
     util = require('../../lib/util'),
-    JavaScriptOptimizer = require('../lib/javascript_optimizer');
+    JavaScriptOptimizer = require('../lib/javascript_optimizer'),
+    CssOptimizer = require('../lib/css_optimizer');
 
 /**
  * Registers the minify command.
@@ -56,7 +57,8 @@ function register(program) {
  *   will be created at this location. By default, the minified files are placed in the
  *   component folder.
  */
-function minify() {
+function minify(type) {
+
     var projectRoot = sdkUtils.getProjectRoot(process.cwd()),
         componentsFolder = path.join(projectRoot, 'components'),
         components = {},
@@ -98,15 +100,24 @@ function minify() {
             });
         }
     } catch (ex) {
+        console.log('wtf');
         // the build configuration doesn't exists
     }
 
-    var optimizer = new JavaScriptOptimizer({
-        outputPath: outputPath,
-        components: components,
-        includedComponents: includedComponents
-    });
-    optimizer.run();
+    if(type === 'javascript') {
+        var optimizer = new JavaScriptOptimizer({
+            outputPath: outputPath,
+            components: components,
+            includedComponents: includedComponents
+        });
+        optimizer.run();
+    } else {
+        var optimizer = new CssOptimizer({
+            outputPath: outputPath,
+            components: components
+        });
+        optimizer.run();
+    }
 }
 
 /**
