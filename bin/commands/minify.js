@@ -100,7 +100,7 @@ function minify(type) {
             });
         }
     } catch (ex) {
-        console.log('wtf');
+        console.log(ex.stack);
         // the build configuration doesn't exists
     }
 
