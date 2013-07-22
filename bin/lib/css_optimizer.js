@@ -6,7 +6,7 @@ var path = require('path'),
     less = require('less'),
     Promise = require('promised-io/promise'),
     Handlebars = require('handlebars'),
-    extend = require('node.extend');;
+    extend = require('node.extend');
 
 
 function CssOptimizer(config) {
@@ -20,6 +20,8 @@ function CssOptimizer(config) {
     this._components = config.components;
     this._outputPath = config.outputPath;
     this._minfiedCSS = {};
+    this._minifiedDiy = {};
+    this._minifiedCp = {};
 }
 
 CssOptimizer.prototype.run = function () {
@@ -29,56 +31,87 @@ CssOptimizer.prototype.run = function () {
         var cssPath = path.join(this._components[component].path, 'client/css');
         try {
             this._minfiedCSS[component] = this._minify(component, cssPath);
+            this._minifiedDiy[component] = this._minify(component, path.join(cssPath, '/diy'), true);
+            this._minifiedCp[component] = this._minify(component, path.join(cssPath, '/cp'), true);
         } catch (ex) {
+            console.log(ex);
             console.log(util.format("Failed to minify component %s from path %s",
                 component, cssPath) + ex.stack);
         }
     }
 
     Promise.allKeys(this._minfiedCSS).then(function (data) {
+        self._writeFiles(data);
+    }
+    , function (err) {
+        console.log(err.stack);
+    });
 
-        for(var component in data) {
-            self._map[component] = {
-                destination: [],
-                files: []
-            }
-            for(var i = 0, len = data[component].length; i < len; i++) {
-                var fileName;
-                if (i === 0) {
-                    fileName = "index.min.css";
-                } else {
-                    fileName = "index" + i + ".min.css";
-                }
-
-                var destinationPath = path.join(self._outputPath, 'components/',
-                    data[component][i].folder, '/client/css/', fileName);
-
-                self._map[component].destination.push(destinationPath);
-                self._map[component].files.push(data[component][i].files);
-
-                try {
-                    fs.writeFileSync(destinationPath, data[component][i].content, 'utf8');
-                } catch (ex) {
-                    console.log(util.format("Failed to write %s for component %s at destination %s",
-                        destinationPath, component, self._outputPath) + ex.stack);
-                }
-            }
-        }
-
-        fs.writeFileSync(path.join(self._outputPath, 'cssMaps.json'), JSON.stringify(self._map));
+    Promise.allKeys(this._minifiedCp).then(function (data) {
+        self._writeFiles(data, 'cp');
     }, function (err) {
         console.log(err.stack);
     });
+
+    Promise.allKeys(this._minifiedDiy).then(function (data) {
+        self._writeFiles(data, 'diy');
+    }, function (err) {
+        console.log(err.stack);
+    });
+
+
 };
 
+
+CssOptimizer.prototype._writeFiles = function (data, folder) {
+
+    if(folder) {
+        folder = folder;
+    } else {
+        folder = './';
+    }
+    for(var component in data) {
+        if(!this._map[component]) {
+            this._map[component] = {
+                destination: [],
+                files: []
+            }
+        }
+
+        for(var i = 0, len = data[component].length; i < len; i++) {
+            var fileName;
+            if (i === 0) {
+                fileName = "index.min.css";
+            } else {
+                fileName = "index" + i + ".min.css";
+            }
+
+            var destinationPath = path.join(this._outputPath, 'components/',
+                data[component][i].folder, '/client/css/', folder, fileName);
+
+            this._map[component].destination.push(destinationPath);
+            this._map[component].files.push(data[component][i].files);
+
+            try {
+                fs.writeFileSync(destinationPath, data[component][i].content, 'utf8');
+            } catch (ex) {
+                console.log(util.format("Failed to write %s for component %s at destination %s",
+                    destinationPath, component, this._outputPath) + ex.stack);
+            }
+        }
+    }
+
+    fs.writeFileSync(path.join(this._outputPath, 'cssMaps.json'), JSON.stringify(this._map));
+
+}
 
 CssOptimizer.prototype._computeRules = function (css) {
     css = css.replace(/\/\*(.|\s*)+?\*\/[\r\n]*/g, '');
     var rules = css.split('}');
     return rules.length - 1;
-}
+};
 
-CssOptimizer.prototype._minify = function (component, cssPath) {
+CssOptimizer.prototype._minify = function (component, cssPath, isTheme) {
     var cssData = {},
         cssFile = 0,
         self = this,
@@ -88,6 +121,13 @@ CssOptimizer.prototype._minify = function (component, cssPath) {
     //var map = this._getViewsWithCss(component);
 
     util.walkSync(cssPath, ['.css'], function (filePath) {
+
+       if(!isTheme) {
+           if(filePath.indexOf('diy') !== -1) {
+               return;
+           }
+       }
+
        if(filePath.indexOf('.min.css') === -1) {
            if(Object.keys(cssData).length === 0) {
                cssData[cssFile] = {
@@ -98,6 +138,7 @@ CssOptimizer.prototype._minify = function (component, cssPath) {
            }
            try {
                var content = fs.readFileSync(filePath, 'utf8');
+               content = self._mangleImportLess(content, path.join('components/', self._components[component].folder));
 
                var noRules = self._computeRules(content);
 
@@ -127,7 +168,7 @@ CssOptimizer.prototype._minify = function (component, cssPath) {
         cssData[style].content = cssData[style].content.join('\n');
         less.render(cssData[style].content, this._baseConfig, function (err, data) {
             if(err) {
-                throw new Error(err);
+                console.log(err.stack);
             }
 
             var cssInfo = {
@@ -149,6 +190,15 @@ CssOptimizer.prototype._minify = function (component, cssPath) {
     return generalDefer.promise;
 };
 
+
+CssOptimizer.prototype._mangleImportLess = function (content, folder) {
+    var requiredLess = content.match(/@import.*"(.*\.less)?"/);
+    if(requiredLess) {
+        requiredLess = requiredLess[1];
+    }
+    content = content.replace(/@import.*"(.*\.less)?"/, '@import "' + path.join(folder, '/client/css/', requiredLess) + '"');
+    return content;
+}
 CssOptimizer.prototype._getViewsWithCss = function (component) {
     for(var view in this._components[component].config.views) {
         var viewConf = this._components[component].config.views[view];
