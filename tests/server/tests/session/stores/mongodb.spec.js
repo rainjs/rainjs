@@ -177,7 +177,7 @@ describe('MongoDB session store', function () {
             waitsFor(function () {
                 return typeof isResolved !== 'undefined';
             });
-            
+
             runs(function () {
                 expect(isResolved).toBe(true);
                 expect(Spy.MongoDBSession)
@@ -244,7 +244,7 @@ describe('MongoDB session store', function () {
             }, function () {
                 isResolved = false;
             });
-            
+
             waitsFor(function () {
                 return typeof isResolved !== 'undefined';
             });
@@ -359,7 +359,7 @@ describe('MongoDB session store', function () {
                 waitsFor(function () {
                     return typeof isResolved !== 'undefined';
                 });
-                
+
                 runs(function () {
                     var args = Spy.MongoDB.CollectionInstance.update.mostRecentCall.args;
                     expect(isResolved).toBe(true);
