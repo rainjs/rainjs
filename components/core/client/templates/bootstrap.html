@@ -87,6 +87,7 @@
                 require(requireConfig, [minFilePath], function (main) {
                     require([dependenciesPath], function (dep) {});
                     require(["raintime/client_rendering"], function(ClientRenderer) {
+                        ClientRenderer.get().setPlaceholderTimeout({{placeholderTimeout}});
                         ClientRenderer.get().setPlaceholder({{{placeholder}}});
 
                         if (renderQueueList.length === 0) {
