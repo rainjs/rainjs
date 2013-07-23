@@ -20,6 +20,7 @@ function CssOptimizer(config) {
     this._components = config.components;
     this._outputPath = config.outputPath;
     this._minfiedCSS = {};
+    this._handlebarsComponent = {};
     this._minifiedDiy = {};
     this._minifiedCp = {};
 }
@@ -27,6 +28,8 @@ function CssOptimizer(config) {
 CssOptimizer.prototype.run = function () {
 
     var self = this;
+    this._parseMediaQueries();
+
     for(var component in this._components) {
         var cssPath = path.join(this._components[component].path, 'client/css');
         try {
@@ -37,6 +40,7 @@ CssOptimizer.prototype.run = function () {
             console.log(ex);
             console.log(util.format("Failed to minify component %s from path %s",
                 component, cssPath) + ex.stack);
+            throw new Error(ex);
         }
     }
 
@@ -44,24 +48,35 @@ CssOptimizer.prototype.run = function () {
         self._writeFiles(data);
     }
     , function (err) {
-        console.log(err.stack);
+        console.log(err);
+        throw new Error(err);
     });
 
     Promise.allKeys(this._minifiedCp).then(function (data) {
         self._writeFiles(data, 'cp');
     }, function (err) {
-        console.log(err.stack);
+        console.log(err);
+        throw new Error(err);
     });
 
     Promise.allKeys(this._minifiedDiy).then(function (data) {
         self._writeFiles(data, 'diy');
     }, function (err) {
-        console.log(err.stack);
+        console.log(err);
+        throw new Error(err);
     });
 
 
 };
 
+CssOptimizer.prototype._parseMediaQueries = function() {
+    for(var component in this._components) {
+        var parsedViews = this._getViewsWithCss(component);
+        if(typeof parsedViews !== 'undefined') {
+            this._handlebarsComponent[component] = this._getViewsWithCss(component);
+        }
+    }
+}
 
 CssOptimizer.prototype._writeFiles = function (data, folder) {
 
@@ -94,6 +109,7 @@ CssOptimizer.prototype._writeFiles = function (data, folder) {
 
             try {
                 fs.writeFileSync(destinationPath, data[component][i].content, 'utf8');
+                console.log('OK ', component);
             } catch (ex) {
                 console.log(util.format("Failed to write %s for component %s at destination %s",
                     destinationPath, component, this._outputPath) + ex.stack);
@@ -123,7 +139,7 @@ CssOptimizer.prototype._minify = function (component, cssPath, isTheme) {
     util.walkSync(cssPath, ['.css'], function (filePath) {
 
        if(!isTheme) {
-           if(filePath.indexOf('diy') !== -1) {
+           if(filePath.indexOf('diy') !== -1 || filePath.indexOf('cp') !== -1) {
                return;
            }
        }
@@ -138,9 +154,16 @@ CssOptimizer.prototype._minify = function (component, cssPath, isTheme) {
            }
            try {
                var content = fs.readFileSync(filePath, 'utf8');
-               content = self._mangleImportLess(content, path.join('components/', self._components[component].folder));
+               content = self._rewriteLessImport(content, path.join('components/',
+                   self._components[component].folder));
 
                var noRules = self._computeRules(content);
+
+               if(self._handlebarsComponent[component] &&
+                   self._handlebarsComponent[component][path.basename(filePath)]) {
+                   var querys = self._handlebarsComponent[component][path.basename(filePath)];
+                   content = self._addQuery(content, querys);
+               }
 
                if(cssData[cssFile].ruleCount + noRules > 4095) {
                    cssFile++;
@@ -168,7 +191,8 @@ CssOptimizer.prototype._minify = function (component, cssPath, isTheme) {
         cssData[style].content = cssData[style].content.join('\n');
         less.render(cssData[style].content, this._baseConfig, function (err, data) {
             if(err) {
-                console.log(err.stack);
+                console.log(err);
+                throw new Error(err);
             }
 
             var cssInfo = {
@@ -190,8 +214,24 @@ CssOptimizer.prototype._minify = function (component, cssPath, isTheme) {
     return generalDefer.promise;
 };
 
+CssOptimizer.prototype._addQuery = function (content, querys) {
+    var headQuery = "@media ";
 
-CssOptimizer.prototype._mangleImportLess = function (content, folder) {
+    for (var i = 0, len = querys.length; i < len; i++) {
+        headQuery += querys[i];
+
+        if(i === querys.length - 1) {
+            continue;
+        }
+
+        headQuery += ", ";
+    }
+
+    content = headQuery + "{\n" + content + "}";
+    return content;
+}
+
+CssOptimizer.prototype._rewriteLessImport = function (content, folder) {
     var requiredLess = content.match(/@import.*"(.*\.less)?"/);
     if(requiredLess) {
         requiredLess = requiredLess[1];
@@ -199,7 +239,10 @@ CssOptimizer.prototype._mangleImportLess = function (content, folder) {
     content = content.replace(/@import.*"(.*\.less)?"/, '@import "' + path.join(folder, '/client/css/', requiredLess) + '"');
     return content;
 }
+
 CssOptimizer.prototype._getViewsWithCss = function (component) {
+    var views = {};
+
     for(var view in this._components[component].config.views) {
         var viewConf = this._components[component].config.views[view];
         var rootOfHTML = path.join(this._components[component].path, 'client/templates/');
@@ -213,13 +256,30 @@ CssOptimizer.prototype._getViewsWithCss = function (component) {
 
         var parsedHTML = Handlebars.parse(contentHTML);
 
-        this._inspectStatement(parsedHTML.statements);
+        //console.log(contentHTML);
 
-    };
+        var handlebarsView = this._inspectStatement(parsedHTML.statements);
+
+        if (typeof handlebarsView !== 'undefined') {
+            for (var css in handlebarsView) {
+                if (views[css]) {
+                    views[css] = views[css].concat(handlebarsView[css]);
+                } else {
+                    views[css] = handlebarsView[css];
+                }
+            }
+        };
+        //console.log(this._inspectStatement(parsedHTML.statements));
+        //views[view] = this._inspectStatement(parsedHTML.statements);
+    }
+
+    if (Object.keys(views).length > 0) {
+        return views;
+    }
 }
 
 CssOptimizer.prototype._inspectStatement = function (statements) {
-    var cssHelpers = [];
+    var cssHelpers = {};
 
     for (var i = 0, len = statements.length; i < len; i++) {
         var statement = statements[i];
@@ -227,7 +287,14 @@ CssOptimizer.prototype._inspectStatement = function (statements) {
         // block helper
         if (statement.type === 'block') {
             var cssBlockHelper = this._inspectStatement(statement.program.statements);
-            cssHelpers = cssHelpers.concat(cssBlockHelper);
+            if(typeof cssBlockHelper !== 'undefined') {
+                var key = Object.keys(cssBlockHelper)[0];
+                if(cssHelpers[key]) {
+                    cssHelpers[key].push(cssBlockHelper[key]);
+                } else {
+                    cssHelpers[key] = [cssBlockHelper[key]];
+                }
+            }
         }
 
         // handlebars helper (isHelper is true if this statement has parameters)
@@ -244,27 +311,48 @@ CssOptimizer.prototype._inspectStatement = function (statements) {
 
             var paramValues = this._getPairsValues(pairs);
 
-            return;
-            var translation = {
-                msgid: paramValues[0],
-                msgidPlural: paramValues[1],
-                id: this._getIdValue(pairs)
-            };
-
-            cssHelpers.push(translation);
+            if(typeof paramValues !== 'undefined') {
+                var key = Object.keys(paramValues)[0];
+                if(cssHelpers[key]) {
+                    cssHelpers[key].push(paramValues[key]);
+                } else {
+                    cssHelpers[key] = [paramValues[key]];
+                }
+            }
         }
     }
 
-    return cssHelpers;
-}
+    if(Object.keys(cssHelpers).length > 0) {
+        return cssHelpers;
+    }
+
+    return;
+};
 
 CssOptimizer.prototype._getPairsValues = function (pairs) {
 
-    var values = [];
+    var keys = {};
+
+    var mediaQ = {};
+
+    for(var i = 0, len = pairs.length; i < len; i++) {
+        if(pairs[i].indexOf('path') !== -1) {
+            keys["path"] = pairs[i][1];
+        } else if(pairs[i].indexOf('media') !== -1) {
+            keys['media'] = pairs[i][1];
+        }
+    }
+
+    if(keys["media"]) {
+        mediaQ[keys["path"].string] = keys["media"].string
+        return mediaQ;
+    }
+
+    return;
+
+    //console.log(pairs);
 
     //TODO: to be continued
-    console.log(pairs);
-
 };
 
 module.exports = CssOptimizer;
