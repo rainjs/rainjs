@@ -494,7 +494,7 @@ exports.all = function(array){
 exports.allKeys = function(hash){
 	var deferred = new Deferred();
 	var array = Object.keys(hash);
-	var fulfilled = 0, length = array.length;
+	var fulfilled = 0, length = array.length, rejected = false;
 	var results = {};
 	if (length === 0) deferred.resolve(results);
 	else {
