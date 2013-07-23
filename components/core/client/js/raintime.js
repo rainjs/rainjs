@@ -153,8 +153,12 @@ define(['raintime/lib/promise',
                 return;
             }
 
-            var children = preComponent.children;
-            children.push.apply(children, component.children);
+            // fixing an issue were the placeholder was registered over the actual component.
+            if (component.isPlaceholder && components[component.instanceId]) {
+                return;
+            }
+
+            preComponent.children = component.children;
             preComponent.error = component.error;
             components[preComponent.instanceId] = preComponent;
 

@@ -507,7 +507,12 @@ exports.allKeys = function(hash){
 						deferred.resolve(results);
 					}
 				},
-				deferred.reject);
+				function(error){
+					if(!rejected){
+						deferred.reject(error);
+					}
+					rejected = true;
+				});
 		});
 	}
 	return deferred.promise;
