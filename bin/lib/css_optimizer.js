@@ -1,3 +1,28 @@
+// Copyright © 2012 rainjs
+//
+// All rights reserved
+//
+// Redistribution and use in source and binary forms, with or without modification, are permitted
+// provided that the following conditions are met:
+//
+// 1. Redistributions of source code must retain the above copyright notice, this list of
+// conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright notice, this list of
+// conditions and the following disclaimer in the documentation and/or other materials
+// provided with the distribution.
+// 3. Neither the name of The author nor the names of its contributors may be used to endorse or
+// promote products derived from this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+// IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+// MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+// SHALL THE AUTHOR AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+// OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+// IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 "use strict";
 
 var path = require('path'),
@@ -8,6 +33,7 @@ var path = require('path'),
     Handlebars = require('handlebars'),
     extend = require('node.extend');
 
+var MAX_NO_RULES = 4095;
 
 function CssOptimizer(config) {
     this._baseConfig = {
@@ -19,10 +45,19 @@ function CssOptimizer(config) {
 
     this._components = config.components;
     this._outputPath = config.outputPath;
-    this._minfiedCSS = {};
+    this._themes = config.themes;
+
+    this._minfiedCSS = {
+        default: {}
+    };
+
+    for(var theme in this._themes) {
+        if(!this._minfiedCSS[theme]) {
+            this._minfiedCSS[theme] = {};
+        }
+    }
+
     this._handlebarsComponent = {};
-    this._minifiedDiy = {};
-    this._minifiedCp = {};
 }
 
 CssOptimizer.prototype.run = function () {
@@ -31,11 +66,20 @@ CssOptimizer.prototype.run = function () {
     this._parseMediaQueries();
 
     for(var component in this._components) {
-        var cssPath = path.join(this._components[component].path, 'client/css');
         try {
-            this._minfiedCSS[component] = this._minify(component, cssPath);
-            this._minifiedDiy[component] = this._minify(component, path.join(cssPath, '/diy'), true);
-            this._minifiedCp[component] = this._minify(component, path.join(cssPath, '/cp'), true);
+
+            for (var theme in this._minfiedCSS) {
+                var isTheme = false,
+                    cssPath = path.join(this._components[component].path, 'client/css');
+
+                if(this._themes[theme]) {
+                    cssPath = path.join(cssPath, './', this._themes[theme]);
+                    isTheme = true;
+                }
+
+                this._minfiedCSS[theme][component] = this._minify(component, cssPath, isTheme);
+            }
+
         } catch (ex) {
             console.log(ex);
             console.log(util.format("Failed to minify component %s from path %s",
@@ -44,29 +88,21 @@ CssOptimizer.prototype.run = function () {
         }
     }
 
-    Promise.allKeys(this._minfiedCSS).then(function (data) {
-        self._writeFiles(data);
+    for(var theme in this._minfiedCSS) {
+        var folder;
+        if(this._themes[theme]) {
+            folder = this._themes[theme];
+        }
+
+        (function(folder) {
+            Promise.allKeys(self._minfiedCSS[theme]).then(function (data) {
+                self._writeFiles(data, folder);
+            }, function (err) {
+                console.log(err);
+                throw new Error(err);
+            });
+        })(folder);
     }
-    , function (err) {
-        console.log(err);
-        throw new Error(err);
-    });
-
-    Promise.allKeys(this._minifiedCp).then(function (data) {
-        self._writeFiles(data, 'cp');
-    }, function (err) {
-        console.log(err);
-        throw new Error(err);
-    });
-
-    Promise.allKeys(this._minifiedDiy).then(function (data) {
-        self._writeFiles(data, 'diy');
-    }, function (err) {
-        console.log(err);
-        throw new Error(err);
-    });
-
-
 };
 
 CssOptimizer.prototype._parseMediaQueries = function() {
@@ -88,8 +124,6 @@ CssOptimizer.prototype._writeFiles = function (data, folder) {
     for(var component in data) {
         if(!this._map[component]) {
             this._map[component] = {
-                destination: [],
-                files: []
             }
         }
 
@@ -104,8 +138,11 @@ CssOptimizer.prototype._writeFiles = function (data, folder) {
             var destinationPath = path.join(this._outputPath, 'components/',
                 data[component][i].folder, '/client/css/', folder, fileName);
 
-            this._map[component].destination.push(destinationPath);
-            this._map[component].files.push(data[component][i].files);
+            if(!this._map[component][destinationPath]) {
+                this._map[component][destinationPath] = data[component][i].files;
+            } else {
+                this._map[component][destinationPath].concat(data[component][i].files);
+            }
 
             try {
                 fs.writeFileSync(destinationPath, data[component][i].content, 'utf8');
@@ -131,6 +168,7 @@ CssOptimizer.prototype._minify = function (component, cssPath, isTheme) {
     var cssData = {},
         cssFile = 0,
         self = this,
+        isThemeFolder = false,
         deferrers = [],
         generalDefer = Promise.defer();
 
@@ -139,7 +177,13 @@ CssOptimizer.prototype._minify = function (component, cssPath, isTheme) {
     util.walkSync(cssPath, ['.css'], function (filePath) {
 
        if(!isTheme) {
-           if(filePath.indexOf('diy') !== -1 || filePath.indexOf('cp') !== -1) {
+           for(var theme in self._themes) {
+               if(filePath.indexOf(self._themes[theme]) !== -1) {
+                   isThemeFolder = true;
+               }
+           }
+
+           if(isThemeFolder) {
                return;
            }
        }
@@ -165,7 +209,7 @@ CssOptimizer.prototype._minify = function (component, cssPath, isTheme) {
                    content = self._addQuery(content, querys);
                }
 
-               if(cssData[cssFile].ruleCount + noRules > 4095) {
+               if(cssData[cssFile].ruleCount + noRules > MAX_NO_RULES) {
                    cssFile++;
                    cssData[cssFile] = {
                        content: [content],
@@ -189,20 +233,22 @@ CssOptimizer.prototype._minify = function (component, cssPath, isTheme) {
         var deferred = Promise.defer();
         deferrers.push(deferred.promise);
         cssData[style].content = cssData[style].content.join('\n');
-        less.render(cssData[style].content, this._baseConfig, function (err, data) {
-            if(err) {
-                console.log(err);
-                throw new Error(err);
-            }
+        (function (style, deferred) {
+            less.render(cssData[style].content, self._baseConfig, function (err, data) {
+                if(err) {
+                    console.log(err);
+                    throw new Error(err);
+                }
 
-            var cssInfo = {
-                content: data,
-                folder: self._components[component].folder,
-                files: cssData[style].files
-            };
+                var cssInfo = {
+                    content: data,
+                    folder: self._components[component].folder,
+                    files: cssData[style].files
+                };
 
-            deferred.resolve(cssInfo);
-        });
+                deferred.resolve(cssInfo);
+            });
+        })(style, deferred);
     }
 
     Promise.all(deferrers).then(function (data) {
@@ -252,25 +298,27 @@ CssOptimizer.prototype._getViewsWithCss = function (component) {
 
         var pathOfHTML = path.join(rootOfHTML, viewHTML);
 
-        var contentHTML = fs.readFileSync(pathOfHTML, 'utf8');
+        if(fs.existsSync(pathOfHTML)) {
+            var contentHTML = fs.readFileSync(pathOfHTML, 'utf8');
 
-        var parsedHTML = Handlebars.parse(contentHTML);
+            var parsedHTML = Handlebars.parse(contentHTML);
 
-        //console.log(contentHTML);
+            //console.log(contentHTML);
 
-        var handlebarsView = this._inspectStatement(parsedHTML.statements);
+            var handlebarsView = this._inspectStatement(parsedHTML.statements);
 
-        if (typeof handlebarsView !== 'undefined') {
-            for (var css in handlebarsView) {
-                if (views[css]) {
-                    views[css] = views[css].concat(handlebarsView[css]);
-                } else {
-                    views[css] = handlebarsView[css];
+            if (typeof handlebarsView !== 'undefined') {
+                for (var css in handlebarsView) {
+                    if (views[css]) {
+                        views[css] = views[css].concat(handlebarsView[css]);
+                    } else {
+                        views[css] = handlebarsView[css];
+                    }
                 }
-            }
-        };
-        //console.log(this._inspectStatement(parsedHTML.statements));
-        //views[view] = this._inspectStatement(parsedHTML.statements);
+            };
+            //console.log(this._inspectStatement(parsedHTML.statements));
+            //views[view] = this._inspectStatement(parsedHTML.statements);
+        }
     }
 
     if (Object.keys(views).length > 0) {
@@ -349,10 +397,6 @@ CssOptimizer.prototype._getPairsValues = function (pairs) {
     }
 
     return;
-
-    //console.log(pairs);
-
-    //TODO: to be continued
 };
 
 module.exports = CssOptimizer;

@@ -1,3 +1,7 @@
 {
-    "buildPath": "../min/rainjs"
+    "buildPath": "../min/rainjs",
+    "themes": {
+        "diy": "diy",
+        "cp": "cp"
+    }
 }

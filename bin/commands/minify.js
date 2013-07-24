@@ -114,6 +114,7 @@ function minify(type) {
     } else {
         var optimizer = new CssOptimizer({
             outputPath: outputPath,
+            themes: buildConfig.themes,
             components: components
         });
         optimizer.run();
