@@ -33,20 +33,104 @@ var path = require('path'),
     Handlebars = require('handlebars'),
     extend = require('node.extend');
 
+/**
+ * The maximum number of rules to be included in a minified css file.
+ * 4095 - is the maximum number for < IE10
+ * @type {number}
+ */
 var MAX_NO_RULES = 4095;
 
+/**
+ * CssOptimizer module.
+ * @example
+ * var config = {
+ *  outputPath: 'path/to/output',
+ *  themes: {
+ *      'themeName': 'themeFolderName'
+ *   },
+ *  components: {config:configValue}
+ * };
+ * new CssOptimizer(config);
+ *
+ * @param {Object} config the configuration with which to generate the minification
+ * @name CssOptimizer
+ * @constructor
+ */
 function CssOptimizer(config) {
+    /**
+     * Default set of rules to be applied on less.render method
+     * @type {{compress: boolean, yuicompress: boolean}}
+     * @private
+     */
     this._baseConfig = {
         compress: true,
         yuicompress: true
     };
 
+    /**
+     * The map of components containing the path to the minified css files and the array
+     * of files introduced in the minified file that is to be written in the cssMaps.json file
+     * @example
+     * {
+     *      "component;1.0": {
+     *          "/path/to/component/client/css/index.min.css": ["file1.css", "file2.css"],
+     *          "/path/to/component/client/css/index1.min.css": ["file3.css", "file4.css"]
+     *      }
+     * }
+     * @type {Object}
+     * @private
+     */
     this._map = {};
 
+    /**
+     * The map of components configurations for which the minification is done.
+     * @type {Object}
+     * @private
+     */
     this._components = config.components;
+
+    /**
+     * The output path for the minified project
+     * @type {String}
+     * @private
+     */
     this._outputPath = config.outputPath;
+
+    /**
+     * A theme map containing theme name and theme name of the folder inside the components.
+     * @type {Object}
+     * @example
+     * {
+     *      'themeName': 'themeFolderName'
+     * }
+     * @private
+     */
     this._themes = config.themes;
 
+    /**
+     * A map of minifiedCss for default and themes
+     * @type {Object}
+     * @example
+     * {
+     *      default: {
+     *          'component;1.0': [
+     *              {
+     *                  content: 'cssContent',
+     *                  folder: 'theFolderOfCssFile',
+     *                  files: ['file1.css', 'file2.css'] //the files that generated the content
+     *             }
+     *     },
+     *     theme1: {
+     *          'component;1.0': [
+     *              {
+     *                  content: 'cssContent',
+     *                  folder: 'theFolderOfCssFile',
+     *                  files: ['themeFile1.css', 'themeFile2.css']
+     *              }
+     *    }
+     * }
+     * @private
+     */
     this._minfiedCSS = {
         default: {}
     };
@@ -57,9 +141,27 @@ function CssOptimizer(config) {
         }
     }
 
-    this._handlebarsComponent = {};
+    /**
+     * The media query map, generated for css files that have media query rules
+     * @type {Object}
+     * @example
+     * {
+     *      'component;1.0': {
+     *          'file.css': ['queryrule1', queryrule2']
+     *      }
+     * }
+     * @private
+     */
+    this._mediaQueryMap = {};
 }
 
+/**
+ * Runs the css minification
+ *
+ * @public
+ * @throws {Error} if minification for a component fails.
+ * @throws {Error} if the writing to a .min.css fails.
+ */
 CssOptimizer.prototype.run = function () {
 
     var self = this;
@@ -105,15 +207,40 @@ CssOptimizer.prototype.run = function () {
     }
 };
 
+/**
+ * Parses the views of a component and memorates the css files and the media queries to be
+ * applied on that css file
+ *
+ * @private
+ */
 CssOptimizer.prototype._parseMediaQueries = function() {
     for(var component in this._components) {
-        var parsedViews = this._getViewsWithCss(component);
+        var parsedViews = this._getMediaQuerrys(component);
         if(typeof parsedViews !== 'undefined') {
-            this._handlebarsComponent[component] = this._getViewsWithCss(component);
+            this._mediaQueryMap[component] = this._getMediaQuerrys(component);
         }
     }
-}
+};
 
+/**
+ * Writes the minified css for a component to the desired destination in a index(1|2|..).min.css file.
+ * Also in writes a ``cssMaps.json`` representing the component that contains keys representing paths
+ * to the minified file and for values it contains an array of files that have been included in that
+ * minified file (this is needed to be abble to split depending on the number of rules into multiple
+ * min.css files.
+ *
+ * @example
+ * {
+ *      form;1.0: {
+ *          "/path/to/component/client/css/index.min.css": ["file1.css", "file2.css"]
+ *      }
+ * }
+ *
+ * @param {Object} data the data of the minified css for a component
+ * @param {String} [folder] optional parameter specifing a more exact folder in which you want to write the files,
+ * currently this folder is used for themes
+ * @private
+ */
 CssOptimizer.prototype._writeFiles = function (data, folder) {
 
     if(folder) {
@@ -156,14 +283,32 @@ CssOptimizer.prototype._writeFiles = function (data, folder) {
 
     fs.writeFileSync(path.join(this._outputPath, 'cssMaps.json'), JSON.stringify(this._map));
 
-}
+};
 
+/**
+ * Computes the number of rules for a css file.
+ *
+ * @params {String} css the data in the css file.
+ * @returns {Number} the number of css rules for that file.
+ * @private
+ */
 CssOptimizer.prototype._computeRules = function (css) {
+    //TODO: I am applying this on .less files I think it does not work properly.
     css = css.replace(/\/\*(.|\s*)+?\*\/[\r\n]*/g, '');
     var rules = css.split('}');
     return rules.length - 1;
 };
 
+/**
+ * Minifies all css files from a component into a single css file. Steps over themes if flaged
+ * to do so.
+ *
+ * @param {String} component the component name
+ * @param {String} cssPath the path to where the css files are located
+ * @param {Boolean} [isTheme] specifies if the location where the minification is done is a theme folder
+ * @returns {Promise} the combined minified files.
+ * @private
+ */
 CssOptimizer.prototype._minify = function (component, cssPath, isTheme) {
     var cssData = {},
         cssFile = 0,
@@ -171,8 +316,6 @@ CssOptimizer.prototype._minify = function (component, cssPath, isTheme) {
         isThemeFolder = false,
         deferrers = [],
         generalDefer = Promise.defer();
-
-    //var map = this._getViewsWithCss(component);
 
     util.walkSync(cssPath, ['.css'], function (filePath) {
 
@@ -203,9 +346,9 @@ CssOptimizer.prototype._minify = function (component, cssPath, isTheme) {
 
                var noRules = self._computeRules(content);
 
-               if(self._handlebarsComponent[component] &&
-                   self._handlebarsComponent[component][path.basename(filePath)]) {
-                   var querys = self._handlebarsComponent[component][path.basename(filePath)];
+               if(self._mediaQueryMap[component] &&
+                   self._mediaQueryMap[component][path.basename(filePath)]) {
+                   var querys = self._mediaQueryMap[component][path.basename(filePath)];
                    content = self._addQuery(content, querys);
                }
 
@@ -260,6 +403,14 @@ CssOptimizer.prototype._minify = function (component, cssPath, isTheme) {
     return generalDefer.promise;
 };
 
+/**
+ * Mangles a content of a css file and adds the ``@media`` with rules option
+ *
+ * @param {String} content the content of a css file
+ * @param {[String]} querys the array of query rules to be applied on the css rules.
+ * @returns {String} returns the content of the css with the ``@media`` and rules applied to it.
+ * @private
+ */
 CssOptimizer.prototype._addQuery = function (content, querys) {
     var headQuery = "@media ";
 
@@ -275,8 +426,17 @@ CssOptimizer.prototype._addQuery = function (content, querys) {
 
     content = headQuery + "{\n" + content + "}";
     return content;
-}
+};
 
+/**
+ * Rewrites the less import ``@import`` rule from a css file. It rewrites the path of the import
+ * to the actual location of the file.
+ *
+ * @param {String} content the content of the css file in which the rewrite should be done.
+ * @param {String} folder the folder in which the css file is
+ * @returns {String} the content of the css file with the rewritten ``@import`` rule.
+ * @private
+ */
 CssOptimizer.prototype._rewriteLessImport = function (content, folder) {
     var requiredLess = content.match(/@import.*"(.*\.less)?"/);
     if(requiredLess) {
@@ -284,28 +444,29 @@ CssOptimizer.prototype._rewriteLessImport = function (content, folder) {
     }
     content = content.replace(/@import.*"(.*\.less)?"/, '@import "' + path.join(folder, '/client/css/', requiredLess) + '"');
     return content;
-}
+};
 
-CssOptimizer.prototype._getViewsWithCss = function (component) {
+/**
+ * Gets the set of rules for media querryes for each view from the css helper inside.
+ *
+ * @param {String} component the component's name.
+ * @returns {Object|null} If querys for a css are found than an object with css file name and the array
+ * of querrys for that file that should be applied.
+ * @private
+ */
+CssOptimizer.prototype._getMediaQuerrys = function (component) {
     var views = {};
 
     for(var view in this._components[component].config.views) {
-        var viewConf = this._components[component].config.views[view];
-        var rootOfHTML = path.join(this._components[component].path, 'client/templates/');
-        //.view
-
-        var viewHTML = viewConf.view || view + '.html';
-
-        var pathOfHTML = path.join(rootOfHTML, viewHTML);
+        var viewConf = this._components[component].config.views[view],
+            rootOfHTML = path.join(this._components[component].path, 'client/templates/'),
+            viewHTML = viewConf.view || view + '.html',
+            pathOfHTML = path.join(rootOfHTML, viewHTML);
 
         if(fs.existsSync(pathOfHTML)) {
-            var contentHTML = fs.readFileSync(pathOfHTML, 'utf8');
-
-            var parsedHTML = Handlebars.parse(contentHTML);
-
-            //console.log(contentHTML);
-
-            var handlebarsView = this._inspectStatement(parsedHTML.statements);
+            var contentHTML = fs.readFileSync(pathOfHTML, 'utf8'),
+                parsedHTML = Handlebars.parse(contentHTML),
+                handlebarsView = this._inspectStatement(parsedHTML.statements);
 
             if (typeof handlebarsView !== 'undefined') {
                 for (var css in handlebarsView) {
@@ -316,23 +477,28 @@ CssOptimizer.prototype._getViewsWithCss = function (component) {
                     }
                 }
             };
-            //console.log(this._inspectStatement(parsedHTML.statements));
-            //views[view] = this._inspectStatement(parsedHTML.statements);
         }
     }
 
     if (Object.keys(views).length > 0) {
         return views;
     }
-}
+};
 
+/**
+ * Inspects the css handlebars helper statement.
+ *
+ * @param {Object} statements the css helper handlebar statement
+ * @returns {Object|null} if found query statement returns an object containing the css file name and
+ * the querry rule
+ * @private
+ */
 CssOptimizer.prototype._inspectStatement = function (statements) {
     var cssHelpers = {};
 
     for (var i = 0, len = statements.length; i < len; i++) {
         var statement = statements[i];
 
-        // block helper
         if (statement.type === 'block') {
             var cssBlockHelper = this._inspectStatement(statement.program.statements);
             if(typeof cssBlockHelper !== 'undefined') {
@@ -377,6 +543,14 @@ CssOptimizer.prototype._inspectStatement = function (statements) {
     return;
 };
 
+/**
+ * Gets the path and the media query rules from the css handlebars helper.
+ *
+ * @param {[Object]} pairs the pairs of css handlebars helper variables.
+ * @returns {Object|null} if the css file has media querys applied on it it returns an object
+ * containing the name of the file as key and the media query rules as value.
+ * @private
+ */
 CssOptimizer.prototype._getPairsValues = function (pairs) {
 
     var keys = {};
