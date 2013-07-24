@@ -158,7 +158,11 @@ define(['raintime/lib/promise',
                 return;
             }
 
-            preComponent.children = component.children;
+            // it is important not to change the children reference; it is used on context
+            var children = preComponent.children;
+            if (children.length === 0) {
+                children.push.apply(children, component.children);
+            }
             preComponent.error = component.error;
             components[preComponent.instanceId] = preComponent;
 
