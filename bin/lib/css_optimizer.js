@@ -153,6 +153,7 @@ function CssOptimizer(config) {
      * @private
      */
     this._mediaQueryMap = {};
+
 }
 
 /**
@@ -161,6 +162,7 @@ function CssOptimizer(config) {
  * @public
  * @throws {Error} if minification for a component fails.
  * @throws {Error} if the writing to a .min.css fails.
+ * @throws {Error} if the reading of a css file fails.
  */
 CssOptimizer.prototype.run = function () {
 
@@ -200,8 +202,7 @@ CssOptimizer.prototype.run = function () {
             Promise.allKeys(self._minfiedCSS[theme]).then(function (data) {
                 self._writeFiles(data, folder);
             }, function (err) {
-                console.log(err);
-                throw new Error(err);
+                console.log(err.message);
             });
         })(folder);
     }
@@ -254,25 +255,25 @@ CssOptimizer.prototype._writeFiles = function (data, folder) {
             }
         }
 
-        for(var i = 0, len = data[component].length; i < len; i++) {
+        for(var index in data[component]) {
             var fileName;
-            if (i === 0) {
+            if (index === '0') {
                 fileName = "index.min.css";
             } else {
-                fileName = "index" + i + ".min.css";
+                fileName = "index" + index + ".min.css";
             }
 
             var destinationPath = path.join(this._outputPath, 'components/',
-                data[component][i].folder, '/client/css/', folder, fileName);
+                data[component][index].folder, '/client/css/', folder, fileName);
 
             if(!this._map[component][destinationPath]) {
-                this._map[component][destinationPath] = data[component][i].files;
+                this._map[component][destinationPath] = data[component][index].files;
             } else {
-                this._map[component][destinationPath].concat(data[component][i].files);
+                this._map[component][destinationPath].concat(data[component][index].files);
             }
 
             try {
-                fs.writeFileSync(destinationPath, data[component][i].content, 'utf8');
+                fs.writeFileSync(destinationPath, data[component][index].content, 'utf8');
                 console.log('OK ', component);
             } catch (ex) {
                 console.log(util.format("Failed to write %s for component %s at destination %s",
@@ -332,19 +333,11 @@ CssOptimizer.prototype._minify = function (component, cssPath, isTheme) {
        }
 
        if(filePath.indexOf('.min.css') === -1) {
-           if(Object.keys(cssData).length === 0) {
-               cssData[cssFile] = {
-                   content: [],
-                   ruleCount: 0,
-                   files: []
-               };
-           }
+
            try {
                var content = fs.readFileSync(filePath, 'utf8');
                content = self._rewriteLessImport(content, path.join('components/',
                    self._components[component].folder));
-
-               var noRules = self._computeRules(content);
 
                if(self._mediaQueryMap[component] &&
                    self._mediaQueryMap[component][path.basename(filePath)]) {
@@ -352,53 +345,71 @@ CssOptimizer.prototype._minify = function (component, cssPath, isTheme) {
                    content = self._addQuery(content, querys);
                }
 
-               if(cssData[cssFile].ruleCount + noRules > MAX_NO_RULES) {
-                   cssFile++;
-                   cssData[cssFile] = {
-                       content: [content],
-                       ruleCount: noRules,
-                       files: [path.basename(filePath)]
-                   }
-               } else {
-                   cssData[cssFile].ruleCount += noRules;
-                   cssData[cssFile].content.push(content);
-                   cssData[cssFile].files.push(path.basename(filePath));
-               }
+               var deferred = Promise.defer();
+               deferrers.push(deferred.promise);
+               (function (cssData, component, content, file, deferred) {
+                   less.render(content, self._baseConfig, function (err, data) {
+                       if(err) {
+                           console.log(err);
+                           deferred.reject(err);
+                           return;
+                       }
+
+                       var noRules = self._computeRules(content);
+
+                       var cssInfo = {
+                           content: data,
+                           folder: self._components[component].folder,
+                           file: file,
+                           noRules: noRules
+                       };
+
+                       deferred.resolve(cssInfo);
+                   });
+               })(cssData, component, content, path.basename(filePath), deferred);
 
            } catch (ex) {
                 console.log(util.format('Failed to read file %s from folder %s\n',
                    filePath, cssPath) + ex.stack);
+                throw ex;
            }
        }
     });
 
-    for(var style in cssData) {
-        var deferred = Promise.defer();
-        deferrers.push(deferred.promise);
-        cssData[style].content = cssData[style].content.join('\n');
-        (function (style, deferred) {
-            less.render(cssData[style].content, self._baseConfig, function (err, data) {
-                if(err) {
-                    console.log(err);
-                    throw new Error(err);
-                }
-
-                var cssInfo = {
-                    content: data,
-                    folder: self._components[component].folder,
-                    files: cssData[style].files
-                };
-
-                deferred.resolve(cssInfo);
-            });
-        })(style, deferred);
-    }
-
     Promise.all(deferrers).then(function (data) {
-        generalDefer.resolve(data)
+        if(data.length > 0) {
+            cssData[cssFile] = {
+                content: '',
+                ruleCount: 0,
+                files: [],
+                folder: ''
+            };
+        }
+
+        for(var i = 0, len = data.length; i < len; i++) {
+            var minifiedFile = data[i],
+                content = minifiedFile.content;
+
+            if(cssData[cssFile].ruleCount + minifiedFile.noRules > MAX_NO_RULES) {
+                cssFile++;
+                cssData[cssFile] = {
+                    content: content,
+                    ruleCount: minifiedFile.noRules,
+                    files: [minifiedFile.file],
+                    folder: minifiedFile.folder
+                }
+            } else {
+                cssData[cssFile].ruleCount += minifiedFile.noRules;
+                cssData[cssFile].content += content;
+                cssData[cssFile].files.push(minifiedFile.file);
+                cssData[cssFile].folder = minifiedFile.folder;
+            }
+        }
+
+        generalDefer.resolve(cssData);
     }, function (err) {
         generalDefer.reject(err);
-    })
+    });
 
     return generalDefer.promise;
 };
