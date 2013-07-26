@@ -61,7 +61,8 @@ function JsOptimizer(options) {
         optimize: "uglify2",
         uglify2: {
             mangle: true
-        }
+        },
+        preserveLicenseComments: false
     };
 }
 
