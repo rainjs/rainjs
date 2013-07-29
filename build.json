@@ -1,4 +1,7 @@
 {
+    "cssMinification": true,
+    "javascriptMinification": true,
+    "buildPath": "../min/rainjs",
     "themes": {
         "diy": "diy",
         "cp": "cp"
