@@ -57,7 +57,7 @@ function register(program) {
  *   will be created at this location. By default, the minified files are placed in the
  *   component folder.
  */
-function minify(type) {
+function minify() {
 
     var projectRoot = sdkUtils.getProjectRoot(process.cwd()),
         componentsFolder = path.join(projectRoot, 'components'),
@@ -104,14 +104,16 @@ function minify(type) {
         // the build configuration doesn't exists
     }
 
-    if(type === 'javascript') {
+    if(buildConfig.javascriptMinification) {
         var optimizer = new JavaScriptOptimizer({
             outputPath: outputPath,
             components: components,
             includedComponents: includedComponents
         });
         optimizer.run();
-    } else {
+    }
+
+    if(buildConfig.cssMinification) {
         var optimizer = new CssOptimizer({
             outputPath: outputPath,
             themes: buildConfig.themes,
