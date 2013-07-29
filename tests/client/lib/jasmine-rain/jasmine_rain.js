@@ -148,6 +148,10 @@ jasmine.util.extend(jasmine.getGlobal(), (function () {
 
         return jasmineIt(description, function () {
             runs(function () {
+                if (modules.length === 0) {
+                    return;
+                }
+
                 require(modules, function () {
                    deps = Array.prototype.slice.call(arguments, 0);
                 });
