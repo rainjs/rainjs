@@ -195,7 +195,7 @@ define(function () {
             if (index > -1) {
                 deps.splice(index, 1);
             }
-            module[element] = index;d
+            module[element] = index;
         });
 
         if (module.t > -1 || module.nt > -1) {
