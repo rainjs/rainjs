@@ -266,10 +266,14 @@ CssOptimizer.prototype._writeFiles = function (data, folder) {
             var destinationPath = path.join(this._outputPath, 'components/',
                 data[component][index].folder, '/client/css/', folder, fileName);
 
-            if(!this._map[component][destinationPath]) {
-                this._map[component][destinationPath] = data[component][index].files;
+            var requestRoute = component.replace(';', '/');
+            requestRoute = '/' + requestRoute;
+            requestRoute = path.join(requestRoute, '/css/', folder, fileName);
+
+            if(!this._map[component][requestRoute]) {
+                this._map[component][requestRoute] = data[component][index].files;
             } else {
-                this._map[component][destinationPath].concat(data[component][index].files);
+                this._map[component][requestRoute].concat(data[component][index].files);
             }
 
             try {
