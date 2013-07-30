@@ -117,7 +117,8 @@ function minify() {
         var optimizer = new CssOptimizer({
             outputPath: outputPath,
             themes: buildConfig.themes,
-            components: components
+            components: components,
+            includedComponents: includedComponents
         });
         optimizer.run();
     }

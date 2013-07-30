@@ -87,7 +87,11 @@ function CssOptimizer(config) {
      * @type {Object}
      * @private
      */
-    this._components = config.components;
+    this._components = {};
+    for(var i = 0, len = config.includedComponents.length; i < len; i++) {
+        var componentName = config.includedComponents[i];
+        this._components[componentName] = config.components[componentName];
+    }
 
     /**
      * The output path for the minified project
