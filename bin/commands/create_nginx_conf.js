@@ -29,6 +29,7 @@ var path = require('path'),
     fs = require('fs'),
     color = require('colors'),
     util = require('../../lib/util'),
+    nginxGenerator = require('../lib/nginx_generate'),
     utils = require('../lib/utils');
 
 /**
@@ -45,86 +46,33 @@ function register(program) {
 
 function generateNginxConfiguration () {
 
-    try {
-        var defaultConfiguration = fs.readFileSync(path.join(utils.getProjectRoot(), '/bin/init/conf/nginx.conf'));
+    var projects = [],
+        defaultConfiguration = require(path.join(utils.getProjectRoot(), 'build.json'));
 
-        defaultConfiguration = JSON.parse(defaultConfiguration);
+    if(defaultConfiguration.additionalProjects) {
+        projects.concat(defaultConfiguration.additionalProjects);
+    }
+
+    projects.push(utils.getProjectRoot());
+
+    try {
+        var nginxConfDefault = fs.readFileSync(path.join(utils.getProjectRoot(),
+            '/bin/init/conf/nginx.conf'));
+
+        nginxConfDefault = JSON.parse(defaultConfiguration);
     } catch (e) {
         console.log(e.message.red);
         process.exit(1);
     }
 
-    var routes = [];
-    util.walkSync(path.join(utils.getProjectRoot(), 'components'), ['.json'], function(file, folderPath) {
-        var configuration = require(file);
-        /*folderPath = folderPath.split('/');
-        folderPath.pop();
-        folderPath = folderPath.join('/');*/
-        //folderPath = folderPath.join('/');
-
-        routes.push({
-            componentId: configuration.id,
-            componentVersion: configuration.version,
-            basePath: folderPath + '/client',
-            regexp: 'location ~* ' + configuration.id + '/.*(js.*\\.js)$'
-        });
-
-        routes.push({
-            componentId: configuration.id,
-            componentVersion: configuration.version,
-            basePath: folderPath,
-            regexp: 'location ~* ' + configuration.id + '/.*(resources.*)$'
-        })
+    var generator = new nginxGenerator({
+        projects: projects,
+        nginxConf: nginxConfDefault
     });
 
-    for(var i = 0, len = routes.length; i < len; i++) {
-        defaultConfiguration.http.server.locations[routes[i].regexp] = {
-            alias: routes[i].basePath + '/$1'
-         };
-    }
+    generator.run();
 
-    var fd = fs.openSync('nginx.conf', 'w');
-    var stream = fs.createWriteStream('nginx.conf', {
-        flags: 'w',
-        encoding: 'utf-8',
-        mode: '0644',
-        fd: fd
-    });
-
-    var NEWLINE = ('win32' === process.platform) ? '\r\n' :
-        ('darwin' === process.platform) ? '\r' : '\n';
-
-    var walkObjectSync = function (object, level) {
-        for(var i in object) {
-            for(var j = 0; j < level; j++) {
-                stream.write('\t');
-            }
-            if(i !== 'locations') {
-                stream.write(i);
-            }
-
-            if(typeof object[i] === 'object') {
-                if(i !== 'locations' ) {
-                    stream.write(' {'+NEWLINE);
-                }
-                walkObjectSync(object[i], level+1);
-                if(i !== 'locations') {
-                    console.log(i);
-                    for(var j = 0; j < level; j++) {
-                        stream.write('\t');
-                    }
-                    stream.write('}'+NEWLINE);
-                }
-            } else {
-                stream.write(' ' + object[i] + ';' + NEWLINE);
-            }
-        }
-    }
-
-    console.log(util.inspect(defaultConfiguration, true, null, true));
-    walkObjectSync(defaultConfiguration, 0);
-
-}
+};
 
 
 module.exports = register;
