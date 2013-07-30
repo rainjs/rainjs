@@ -33,6 +33,7 @@ define(function () {
         currentDeps,
         currentCallback,
         dependencyModules = {},
+        minDependencies = {},
         useInteractive = false, //this is only for IE
         interactiveScript = null;
 
@@ -96,7 +97,7 @@ define(function () {
                 if (!name) {
                     name = node.getAttribute("data-requiremodule");
                 }
-                context = require.s.contexts[node.getAttribute("data-requirecontext")];
+                var context = require.s.contexts[node.getAttribute("data-requirecontext")];
                 if (context && context.defQueue.length > 0) {
                     var def = context.defQueue[context.defQueue.length - 1];
                     modifyDependencies(def[0], def[1]);
@@ -139,20 +140,18 @@ define(function () {
             return;
         }
 
-        var moduleRegex = /^\/?([\w-]+)\/(\d(?:\.\d)?(?:\.\d)?)\/js\/(.+)/,
-            matches = moduleName && moduleName.match(moduleRegex);
-
-        if (!matches || !matches[1] || !matches[2]) {
-            return;
+        if (minDependencies[moduleName]) {
+            Array.prototype.push.apply(deps, minDependencies[moduleName]);
+            minDependencies[moduleName] = null;
         }
 
-        var component = {
-            id: matches[1],
-            version: matches[2]
-        };
+        var component = getModuleComponent(moduleName);
 
-        resolveDependencyPaths(component, deps);
-        addDependencies(component, moduleName, deps);
+        if (component) {
+            resolveDependencyPaths(component, deps);
+            addDependencies(component, moduleName, deps);
+            resolveExternalDependencies(component, moduleName, deps);
+        }
     }
 
     /**
@@ -191,10 +190,10 @@ define(function () {
         var module = {};
         module.component = component;
 
-        ['t', 'nt', 'logger'].forEach( function(element) {
-            var index = currentDeps.indexOf(element);
+        ['t', 'nt', 'logger'].forEach(function (element) {
+            var index = deps.indexOf(element);
             if (index > -1) {
-                currentDeps.splice(index, 1);
+                deps.splice(index, 1);
             }
             module[element] = index;
         });
@@ -211,8 +210,75 @@ define(function () {
         dependencyModules[moduleName] = module;
     }
 
+    /**
+     * Looks to see if any of the dependencies for the current module is an external dependency
+     * and if the module is not defined replaces it with the min file for the external
+     * component. Also constructs an array of dependencies to be loaded when the minified module
+     * loads. Only executes when the minifiaction is enabled.
+     *
+     * @param {Object} component the component for which the module is loaded
+     * @param {String} moduleName the module name
+     * @param {String[]} deps the module dependencies
+     */
+    function resolveExternalDependencies(component, moduleName, deps) {
+        if (!rainContext.enableMinification) {
+            return;
+        }
+
+        var module = dependencyModules[moduleName];
+        module.externalDependencies = [];
+
+        for (var i = 0, len = deps.length; i < len; i++) {
+            var depComponent = getModuleComponent(deps[i]);
+
+            if (depComponent && depComponent.id !== component.id && !require.defined(deps[i])) {
+                var minModule = depComponent.id + '/' + depComponent.version + '/js/index.min';
+
+                module.externalDependencies.push({
+                    name: deps[i],
+                    index: i
+                });
+                if (!minDependencies[minModule]) {
+                    minDependencies[minModule] = [];
+                }
+                minDependencies[minModule].push(deps[i]);
+                deps[i] = minModule;
+            }
+        }
+    }
+
+    /**
+     * Gets the id and version for the component to which the module belongs.
+     *
+     * @param {String} moduleName the module name
+     * @returns {Object} the component to which the module belongs
+     */
+    function getModuleComponent(moduleName) {
+        var moduleRegex = /^\/?([\w-]+)\/(\d(?:\.\d)?(?:\.\d)?)\/js\/(.+)/,
+            matches = moduleName && moduleName.match(moduleRegex);
+
+        if (!matches || !matches[1] || !matches[2]) {
+            return null;
+        }
+
+        return {
+            id: matches[1],
+            version: matches[2]
+        };
+    }
+
     function execCb(name, callback, args, exports) {
         var module = dependencyModules[name];
+
+        if (module && rainContext.enableMinification) {
+            var externalDependencies = module.externalDependencies;
+
+            for (var i = 0, len = externalDependencies.length; i < len; i++) {
+                var dep = externalDependencies[i];
+                args[dep.index] = require(dep.name);
+            }
+        }
+
         if (module) {
             var Logger, Translation, locale, translation, func;
 
@@ -245,7 +311,7 @@ define(function () {
         return oldExecCb(name, callback, args, exports);
     }
 
-    var getInteractiveScript = function() {
+    function getInteractiveScript() {
         var scripts, i, script;
         if (interactiveScript && interactiveScript.readyState === 'interactive') {
             return interactiveScript;

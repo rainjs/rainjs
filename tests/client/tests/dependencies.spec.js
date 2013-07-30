@@ -48,7 +48,7 @@ describe('Client side dependencies', function () {
         context = {},
         old = {},
         fixture = {},
-        once, oldDefine, testDefine, evt, fn, translationDeps;
+        once, oldDefine, testDefine, evt, fn, translationDeps, moduleIndex = 0;
 
     /**
      * Keeps references to functions redefined by the module under test.
@@ -60,7 +60,6 @@ describe('Client side dependencies', function () {
     var test = {};
 
     beforeEach(function () {
-
         if (once) {
             return;
         }
@@ -126,7 +125,7 @@ describe('Client side dependencies', function () {
         beforeEach(function () {
 
             fixture = {
-                name: 'Harry Potter',
+                name: 'harry/2.0/js/potter',
                 deps: [],
                 fn: function () {},
                 args: [],
@@ -136,6 +135,8 @@ describe('Client side dependencies', function () {
                     url: '/harry/2.0/js/potter.js'
                 }
             };
+
+            fixture.name += moduleIndex++;
 
             var node = $('<script/>', { 'data-requiremodule': fixture.component.url });
             evt = {
@@ -150,7 +151,7 @@ describe('Client side dependencies', function () {
 
             spy.requireLoad.andCallFake(function(){});
 
-            spy.onScriptLoad = spyOn(window, 'onScriptLoad')
+            spy.onScriptLoad = spyOn(window, 'onScriptLoad');
             spy.execCb = spyOn(window, 'execCb');
 
             context = {
@@ -176,7 +177,7 @@ describe('Client side dependencies', function () {
 
             // onScriptLoad() calls execCb()
             spy.onScriptLoad.andCallFake(function() {
-                test.execCb(fixture.component.url, fixture.fn, fixture.args, {});
+                test.execCb(fixture.name, fixture.fn, fixture.args, {});
             });
 
             spy.execCb.andCallFake(function() {});
@@ -187,7 +188,7 @@ describe('Client side dependencies', function () {
 
             expect(spy.onScriptLoad).toHaveBeenCalledWith(evt);
             expect(spy.execCb).toHaveBeenCalledWith(
-                fixture.component.url,
+                fixture.name,
                 fixture.fn,
                 fixture.args,
                 {});
