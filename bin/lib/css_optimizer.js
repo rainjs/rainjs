@@ -180,7 +180,7 @@ CssOptimizer.prototype.run = function () {
                 var isTheme = false,
                     cssPath = path.join(this._components[component].path, 'client/css');
 
-                if(this._themes[theme]) {
+                if(this._themes && this._themes[theme]) {
                     cssPath = path.join(cssPath, './', this._themes[theme]);
                     isTheme = true;
                 }
@@ -198,7 +198,7 @@ CssOptimizer.prototype.run = function () {
 
     for(var theme in this._minfiedCSS) {
         var folder;
-        if(this._themes[theme]) {
+        if(this._themes && this._themes[theme]) {
             folder = this._themes[theme];
         }
 
