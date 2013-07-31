@@ -1,18 +1,27 @@
 "use strict";
 
+var fs = require('fs'),
+    path = require('path'),
+    util = require('../../lib/util'),
+    utils = require('../lib/utils');
+
 function NginxGenerator(configuration) {
     this._baseConfiguration = configuration;
 };
 
 NginxGenerator.prototype.run = function () {
 
+
     var routes = [],
         defaultConfiguration = this._baseConfiguration.nginxConf;
 
-    for(var i = 0, len = this._baseConfiguration.projects; i < len; i++) {
+    for(var i = 0, len = this._baseConfiguration.projects.length; i < len; i++) {
         var projectPath = this._baseConfiguration.projects[i];
 
         util.walkSync(path.join(projectPath, 'components'), ['.json'], function(file, folderPath) {
+            if(file.indexOf('..') !== -1) {
+                file = path.join(utils.getProjectRoot(process.cwd()), file);
+            }
             var configuration = require(file);
             /*folderPath = folderPath.split('/');
              folderPath.pop();
@@ -83,3 +92,5 @@ NginxGenerator.prototype.run = function () {
     console.log(util.inspect(defaultConfiguration, true, null, true));
     walkObjectSync(defaultConfiguration, 0);
 }
+
+module.exports = NginxGenerator;

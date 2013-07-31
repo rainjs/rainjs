@@ -29,7 +29,7 @@ var path = require('path'),
     fs = require('fs'),
     color = require('colors'),
     util = require('../../lib/util'),
-    nginxGenerator = require('../lib/nginx_generate'),
+    nginxGenerator = require('../lib/nginx_generator'),
     utils = require('../lib/utils');
 
 /**
@@ -38,6 +38,9 @@ var path = require('path'),
  * @param {Program} program
  */
 function register(program) {
+
+    var projectRoot = utils.getProjectRoot(process.cwd());
+
     program
         .command('generate-nginx-conf')
         .description('Generate the nginix configuration file')
@@ -46,22 +49,23 @@ function register(program) {
 
 function generateNginxConfiguration () {
 
-    var projects = [],
-        defaultConfiguration = require(path.join(utils.getProjectRoot(), 'build.json'));
+    var projects = [utils.getProjectRoot()],
+        defaultConfiguration = require(path.join(utils.getProjectRoot(process.cwd()),
+            'build.json'));
 
+
+    console.log(defaultConfiguration);
     if(defaultConfiguration.additionalProjects) {
-        projects.concat(defaultConfiguration.additionalProjects);
+        projects = projects.concat(defaultConfiguration.additionalProjects);
     }
 
-    projects.push(utils.getProjectRoot());
-
     try {
-        var nginxConfDefault = fs.readFileSync(path.join(utils.getProjectRoot(),
-            '/bin/init/conf/nginx.conf'));
+        var nginxConfDefault = fs.readFileSync(path.join(__dirname, '../init/conf/nginx.conf'));
 
-        nginxConfDefault = JSON.parse(defaultConfiguration);
+        nginxConfDefault = JSON.parse(nginxConfDefault);
     } catch (e) {
         console.log(e.message.red);
+        console.log(e.stack.red);
         process.exit(1);
     }
 
