@@ -85,15 +85,24 @@ util.inherits(RainError, Error);
 function StackTraceFormatter(error) {
     this.error = error;
 
+    var isIE10 = false;
+
+    /*@cc_on
+        if (/^10/.test(@_jscript_version)) {
+            isIE10 = true;
+        }
+    @*/
+
     // determine implementation
     if (error.stack) {
-        if ('arguments' in error) {
-            this.implementation = 'Chrome'
-        } else {
-            this.implementation = 'Firefox';
-        }
+        this.implementation = error.arguments ? 'Chrome' : 'Firefox';
     } else {
-        this.implementation = 'IE';
+        try {
+            throw error;
+        } catch(e) {
+            error = e;
+        }
+        this.implementation = error.stack ? 'IE10' : 'IE';
     }
 }
 
@@ -129,7 +138,7 @@ StackTraceFormatter.prototype.formatFirefox = function () {
 };
 
 /**
- * Implements the formatter for IE.
+ * Implements the formatter for IE 8 and 9.
  * Since this browser don't support the ``Error.stack`` property,
  * this is simulated by going up the call stack using the ``callee``
  * and ``caller`` properties of function objects.
@@ -146,8 +155,7 @@ StackTraceFormatter.prototype.formatIE = function () {
         result, name;
 
     // skip the inner functions until the last useful function
-    for (var i = 3; i--; fn = fn.caller)
-        ;
+    for (var i = 3; i--; fn = fn.caller);
 
     while (fn && stack.length < maxStackSize) {
         // try to obtain the function name
@@ -162,6 +170,16 @@ StackTraceFormatter.prototype.formatIE = function () {
 
     return stack.join('\n');
 };
+
+/**
+ * Implements the formatter for IE10.
+ *
+ * @returns {String} the formatted stack trace
+ */
+StackTraceFormatter.prototype.formatIE10 = function () {
+    return this.error.stack;
+};
+
 
 // make RainError global
 (typeof window === 'undefined' ? global : window).RainError = RainError;
