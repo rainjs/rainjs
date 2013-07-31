@@ -732,7 +732,7 @@ describe("Monitoring module", function () {
             expect(monitoring._measurementMap["fakeUseCase"].measurements).toEqual({
                 resolvedRequests: 0,
                 activeRequests: 1,
-                start: jasmine.any( Number )
+                start: jasmine.any(Number)
             });
         });
 
@@ -763,7 +763,7 @@ describe("Monitoring module", function () {
                 resolvedRequests: 0,
                 uniqueId: {
                     times: [],
-                    time: Date.now()
+                    time: jasmine.any(Number)
                 },
                 start: jasmine.any(Number)
             });
@@ -1242,7 +1242,7 @@ describe("Monitoring module", function () {
                     },
                     {
                         key:'fakeKey',
-                        value: 0
+                        value: jasmine.any(Number)
                     }
                     ]
                 )
