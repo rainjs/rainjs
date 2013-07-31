@@ -282,7 +282,7 @@ CssOptimizer.prototype._writeFiles = function (data, folder) {
 
             try {
                 fs.writeFileSync(destinationPath, data[component][index].content, 'utf8');
-                console.log('OK ', component);
+                console.log('css OK ', component);
             } catch (ex) {
                 console.log(util.format("Failed to write %s for component %s at destination %s",
                     destinationPath, component, this._outputPath) + ex.stack);
