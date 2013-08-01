@@ -149,7 +149,7 @@ function copyProject(projectPath, minPath, config) {
             continue;
         }
 
-        if (config && config.javascriptMinification &&
+        if (config.javascriptMinification &&
             stats.isDirectory() && fromPath.match(/^.*\/client\/js$|^.*\\client\\js$/)) {
             wrench.mkdirSyncRecursive(toPath, '0755');
             continue;
@@ -157,7 +157,7 @@ function copyProject(projectPath, minPath, config) {
 
         if (stats.isDirectory()) {
             wrench.mkdirSyncRecursive(toPath, '0755');
-            copyProject(fromPath, toPath);
+            copyProject(fromPath, toPath, config);
         } else {
             fs.writeFileSync(toPath, fs.readFileSync(fromPath));
         }
