@@ -248,13 +248,11 @@ describe('Handlebars css helper', function () {
             cssHelper = loadModule('/lib/handlebars/css.js', mocks);
 
             Handlebars.compile('{{css path="layout_localization.css"}}')();
-            console.log('first test', rainContext.css);
             expect(rainContext.css.length).toEqual(1);
             expect(rainContext.css[0].path).toEqual('/example/1.0/css/index.min.css');
 
             rainContext.css = [];
             Handlebars.compile('{{css path="jquery-ui-1.10.2.custom.css"}}')();
-            console.log('second test', rainContext.css);
             expect(rainContext.css.length).toEqual(1);
             expect(rainContext.css[0].path).toEqual('/example/1.0/css/index2.min.css');
 
