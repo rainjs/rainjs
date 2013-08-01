@@ -272,7 +272,7 @@ CssOptimizer.prototype._writeFiles = function (data, folder) {
 
             var requestRoute = component.replace(';', '/');
             requestRoute = '/' + requestRoute;
-            requestRoute = path.join(requestRoute, '/css/', folder, fileName);
+            requestRoute = path.join(requestRoute, 'css', folder, fileName);
 
             if(!this._map[component][requestRoute]) {
                 this._map[component][requestRoute] = data[component][index].files;
