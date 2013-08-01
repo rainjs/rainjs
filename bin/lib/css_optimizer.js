@@ -87,11 +87,7 @@ function CssOptimizer(config) {
      * @type {Object}
      * @private
      */
-    this._components = {};
-    for(var i = 0, len = config.includedComponents.length; i < len; i++) {
-        var componentName = config.includedComponents[i];
-        this._components[componentName] = config.components[componentName];
-    }
+    this._components  = config.components;
 
     /**
      * The output path for the minified project
@@ -283,6 +279,10 @@ CssOptimizer.prototype._writeFiles = function (data, folder) {
                 this._map[component][requestRoute] = data[component][index].files;
             } else {
                 this._map[component][requestRoute].concat(data[component][index].files);
+            }
+
+            if(!fs.existsSync(destinationPath)) {
+                continue;
             }
 
             try {
