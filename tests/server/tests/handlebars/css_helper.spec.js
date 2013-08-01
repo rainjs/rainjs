@@ -153,6 +153,7 @@ describe('Handlebars css helper', function () {
 
         it('should act correctly if different options are missing', function () {
             conf.enableMinification = true;
+            conf.enableMinificationCSS = true;
             mocks['../configuration'] = conf;
             var cssMap = {
                 "example;1.0": {
@@ -181,6 +182,7 @@ describe('Handlebars css helper', function () {
 
         it('should create correct css dependencies for the same component', function () {
             conf.enableMinification = true;
+            conf.enableMinificationCSS = true;
             mocks['../configuration'] = conf;
             var cssMap = {
                 "example;1.0": {
@@ -210,6 +212,7 @@ describe('Handlebars css helper', function () {
 
         it('should create correct css dependencies for an external component', function () {
             conf.enableMinification = true;
+            conf.enableMinificationCSS = true;
             mocks['../configuration'] = conf;
             var cssMap = {
                 "example;1.0": {
@@ -232,6 +235,7 @@ describe('Handlebars css helper', function () {
 
         it('should create correct css dependencies for a component that has more than 4095 rules', function () {
             conf.enableMinification = true;
+            conf.enableMinificationCSS = true;
             mocks['../configuration'] = conf;
             var cssMap = {
                 "example;1.0": {
