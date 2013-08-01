@@ -47,7 +47,7 @@ describe('Css optimizer', function () {
         util = jasmine.createSpyObj('util', ['format', 'walkSync']);
 
         util.walkSync.andCallFake(function (path, extension, fn) {
-            fn('fake.css');
+            fn(path + '/fake.css');
         });
 
         mocks['../../lib/util'] = util;
@@ -95,8 +95,8 @@ describe('Css optimizer', function () {
             });
 
             util.walkSync.andCallFake(function (path, extension, fn) {
-                fn('fake.css');
-                fn('fake1.css');
+                fn(path + '/fake.css');
+                fn(path + '/fake1.css');
             });
 
             var instance = new CssOptimizer(config);
@@ -111,18 +111,13 @@ describe('Css optimizer', function () {
                expect(fs.writeFileSync).toHaveBeenCalledWith(
                    'fake/output/cssMaps.json',
                    '{"component1;1.0":' +
-                       '{"fake/output/components/component1/client/css/index.min.css":["fake.css","fake1.css"],' +
-                            '"fake/output/components/component1/client/css/th1/index.min.css":["th1/fake.css","th1/fake1.css"],' +
-                            '"fake/output/components/component1/client/css/th2/index.min.css":["th2/fake.css","th2/fake1.css"]' +
+                       '{"/component1/1.0/css/index.min.css":["fake.css","fake1.css"],' +
+                            '"/component1/1.0/css/th1/index.min.css":["th1/fake.css","th1/fake1.css"],' +
+                            '"/component1/1.0/css/th2/index.min.css":["th2/fake.css","th2/fake1.css"]' +
                        '}' +
                    '}'
                );
 
-               expect(fs.writeFileSync).toHaveBeenCalledWith(
-                   'fake/output/components/component1/client/css/index.min.css',
-                   cssData + cssData,
-                   'utf8'
-               );
             });
 
         });
@@ -138,8 +133,8 @@ describe('Css optimizer', function () {
             });
 
             util.walkSync.andCallFake(function (path, extension, fn) {
-                fn('fake.css');
-                fn('fake1.css');
+                fn(path + '/fake.css');
+                fn(path + '/fake1.css');
             });
 
             var instance = new CssOptimizer(config);
@@ -154,23 +149,11 @@ describe('Css optimizer', function () {
                 expect(fs.writeFileSync).toHaveBeenCalledWith(
                     'fake/output/cssMaps.json',
                     '{"component1;1.0":' +
-                        '{"fake/output/components/component1/client/css/index.min.css":["fake.css","fake1.css"],' +
-                        '"fake/output/components/component1/client/css/th1/index.min.css":["fake.css","fake1.css"],' +
-                        '"fake/output/components/component1/client/css/th2/index.min.css":["fake.css","fake1.css"]' +
+                        '{"/component1/1.0/css/index.min.css":["fake.css","fake1.css"],' +
+                        '"/component1/1.0/css/th1/index.min.css":["th1/fake.css","th1/fake1.css"],' +
+                        '"/component1/1.0/css/th2/index.min.css":["th2/fake.css","th2/fake1.css"]' +
                         '}' +
                         '}'
-                );
-
-                expect(fs.writeFileSync).toHaveBeenCalledWith(
-                    'fake/output/components/component1/client/css/' + config.themes.theme1 + '/index.min.css',
-                    cssData + cssData,
-                    'utf8'
-                );
-
-                expect(fs.writeFileSync).toHaveBeenCalledWith(
-                    'fake/output/components/component1/client/css/' + config.themes.theme2 + '/index.min.css',
-                    cssData + cssData,
-                    'utf8'
                 );
             });
 
@@ -189,8 +172,8 @@ describe('Css optimizer', function () {
             cssData = '@import "fake.less" .css {min-width: 100px;}';
 
             util.walkSync.andCallFake(function (path, extension, fn) {
-                fn('fake.css');
-                fn('fake1.css');
+                fn(path + '/fake.css');
+                fn(path + '/fake1.css');
             });
 
             var instance = new CssOptimizer(config);
@@ -205,26 +188,13 @@ describe('Css optimizer', function () {
                 expect(fs.writeFileSync).toHaveBeenCalledWith(
                     'fake/output/cssMaps.json',
                     '{"component1;1.0":' +
-                        '{"fake/output/components/component1/client/css/index.min.css":["fake.css","fake1.css"],' +
-                        '"fake/output/components/component1/client/css/th1/index.min.css":["fake.css","fake1.css"],' +
-                        '"fake/output/components/component1/client/css/th2/index.min.css":["fake.css","fake1.css"]' +
+                        '{"/component1/1.0/css/index.min.css":["fake.css","fake1.css"],' +
+                        '"/component1/1.0/css/th1/index.min.css":["th1/fake.css","th1/fake1.css"],' +
+                        '"/component1/1.0/css/th2/index.min.css":["th2/fake.css","th2/fake1.css"]' +
                         '}' +
                         '}'
                 );
 
-                expect(fs.writeFileSync).toHaveBeenCalledWith(
-                    'fake/output/components/component1/client/css/' + config.themes.theme1 + '/index.min.css',
-                    '@import "components/component1/client/css/fake.less" .css {min-width: 100px;}' +
-                        '@import "components/component1/client/css/fake.less" .css {min-width: 100px;}',
-                    'utf8'
-                );
-
-                expect(fs.writeFileSync).toHaveBeenCalledWith(
-                    'fake/output/components/component1/client/css/' + config.themes.theme2 + '/index.min.css',
-                    '@import "components/component1/client/css/fake.less" .css {min-width: 100px;}' +
-                        '@import "components/component1/client/css/fake.less" .css {min-width: 100px;}',
-                    'utf8'
-                );
             });
 
         });
@@ -239,8 +209,8 @@ describe('Css optimizer', function () {
             });
 
             util.walkSync.andCallFake(function (path, extension, fn) {
-                fn('fake.css');
-                fn('fake1.css');
+                fn(path + '/fake.css');
+                fn(path + '/fake1.css');
             });
 
             var instance = new CssOptimizer(config);
@@ -255,9 +225,9 @@ describe('Css optimizer', function () {
                 expect(fs.writeFileSync).toHaveBeenCalledWith(
                     'fake/output/cssMaps.json',
                     '{"component1;1.0":' +
-                        '{"fake/output/components/component1/client/css/index.min.css":["fake.css","fake1.css"],' +
-                        '"fake/output/components/component1/client/css/th1/index.min.css":["fake.css","fake1.css"],' +
-                        '"fake/output/components/component1/client/css/th2/index.min.css":["fake.css","fake1.css"]' +
+                        '{"/component1/1.0/css/index.min.css":["fake.css","fake1.css"],' +
+                        '"/component1/1.0/css/th1/index.min.css":["th1/fake.css","th1/fake1.css"],' +
+                        '"/component1/1.0/css/th2/index.min.css":["th2/fake.css","th2/fake1.css"]' +
                         '}' +
                     '}'
                 );
@@ -278,8 +248,8 @@ describe('Css optimizer', function () {
             });
 
             util.walkSync.andCallFake(function (path, extension, fn) {
-                fn('fake.css');
-                fn('fake1.css');
+                fn(path + '/fake.css');
+                fn(path + '/fake1.css');
             });
 
             var instance = new CssOptimizer(config);
@@ -295,12 +265,12 @@ describe('Css optimizer', function () {
                 expect(fs.writeFileSync.mostRecentCall.args).toEqual([
                     'fake/output/cssMaps.json',
                     '{"component1;1.0":' +
-                        '{"fake/output/components/component1/client/css/index.min.css":["fake.css"],' +
-                        '"fake/output/components/component1/client/css/index1.min.css":["fake1.css"],' +
-                        '"fake/output/components/component1/client/css/th1/index.min.css":["fake.css"],' +
-                        '"fake/output/components/component1/client/css/th1/index1.min.css":["fake1.css"],' +
-                        '"fake/output/components/component1/client/css/th2/index.min.css":["fake.css"],' +
-                        '"fake/output/components/component1/client/css/th2/index1.min.css":["fake1.css"]' +
+                        '{"/component1/1.0/css/index.min.css":["fake.css"],' +
+                        '"/component1/1.0/css/index1.min.css":["fake1.css"],' +
+                        '"/component1/1.0/css/th1/index.min.css":["th1/fake.css"],' +
+                        '"/component1/1.0/css/th1/index1.min.css":["th1/fake1.css"],' +
+                        '"/component1/1.0/css/th2/index.min.css":["th2/fake.css"],' +
+                        '"/component1/1.0/css/th2/index1.min.css":["th2/fake1.css"]' +
                         '}' +
                     '}']
                 );
@@ -317,8 +287,8 @@ describe('Css optimizer', function () {
             });
 
             util.walkSync.andCallFake(function (path, extension, fn) {
-                fn('fake.css');
-                fn('fake1.css');
+                fn(path + '/fake.css');
+                fn(path + '/fake1.css');
             });
 
             fs.existsSync.andCallFake(function () {
@@ -341,24 +311,13 @@ describe('Css optimizer', function () {
                 expect(fs.writeFileSync).toHaveBeenCalledWith(
                     'fake/output/cssMaps.json',
                     '{"component1;1.0":' +
-                        '{"fake/output/components/component1/client/css/index.min.css":["fake.css","fake1.css"],' +
-                        '"fake/output/components/component1/client/css/th1/index.min.css":["fake.css","fake1.css"],' +
-                        '"fake/output/components/component1/client/css/th2/index.min.css":["fake.css","fake1.css"]' +
+                        '{"/component1/1.0/css/index.min.css":["fake.css","fake1.css"],' +
+                        '"/component1/1.0/css/th1/index.min.css":["th1/fake.css","th1/fake1.css"],' +
+                        '"/component1/1.0/css/th2/index.min.css":["th2/fake.css","th2/fake1.css"]' +
                         '}' +
                         '}'
                 );
 
-                expect(fs.writeFileSync).toHaveBeenCalledWith(
-                    'fake/output/components/component1/client/css/' + config.themes.theme1 + '/index.min.css',
-                    '@media ' + mediaTag + ', ' + mediaTag + '{\n' + cssData + '}' + cssData,
-                    'utf8'
-                );
-
-                expect(fs.writeFileSync).toHaveBeenCalledWith(
-                    'fake/output/components/component1/client/css/' + config.themes.theme2 + '/index.min.css',
-                    '@media ' + mediaTag + ', ' + mediaTag + '{\n' + cssData + '}' + cssData,
-                    'utf8'
-                );
             });
 
 
