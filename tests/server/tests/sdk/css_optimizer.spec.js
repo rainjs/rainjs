@@ -22,6 +22,7 @@ describe('Css optimizer', function () {
                     }
                 }
             },
+            includedComponents: ['component;1.0'],
             outputPath: 'fake/output',
             themes: {
                 theme1: 'th1',
@@ -111,8 +112,8 @@ describe('Css optimizer', function () {
                    'fake/output/cssMaps.json',
                    '{"component1;1.0":' +
                        '{"fake/output/components/component1/client/css/index.min.css":["fake.css","fake1.css"],' +
-                            '"fake/output/components/component1/client/css/th1/index.min.css":["fake.css","fake1.css"],' +
-                            '"fake/output/components/component1/client/css/th2/index.min.css":["fake.css","fake1.css"]' +
+                            '"fake/output/components/component1/client/css/th1/index.min.css":["th1/fake.css","th1/fake1.css"],' +
+                            '"fake/output/components/component1/client/css/th2/index.min.css":["th2/fake.css","th2/fake1.css"]' +
                        '}' +
                    '}'
                );
