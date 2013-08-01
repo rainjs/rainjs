@@ -97,6 +97,13 @@ function CssOptimizer(config) {
     this._outputPath = config.outputPath;
 
     /**
+     * The components for the current project
+     * @type {Object}
+     * @private
+     */
+    this._includedComponents = config.includedComponents;
+
+    /**
      * A theme map containing theme name and theme name of the folder inside the components.
      * @type {Object}
      * @example
@@ -281,7 +288,7 @@ CssOptimizer.prototype._writeFiles = function (data, folder) {
                 this._map[component][requestRoute].concat(data[component][index].files);
             }
 
-            if(!fs.existsSync(destinationPath)) {
+            if(this._includedComponents.indexOf(component) === -1) {
                 continue;
             }
 
@@ -328,6 +335,7 @@ CssOptimizer.prototype._minify = function (component, cssPath, isTheme) {
         cssFile = 0,
         self = this,
         isThemeFolder = false,
+        themeFolder,
         deferrers = [],
         generalDefer = Promise.defer();
 
@@ -344,6 +352,14 @@ CssOptimizer.prototype._minify = function (component, cssPath, isTheme) {
                return;
            }
        }
+
+       for(var theme in self._themes) {
+           if(filePath.indexOf(self._themes[theme]) !== -1) {
+               themeFolder = self._themes[theme];
+           }
+       }
+
+
 
        if(filePath.indexOf('.min.css') === -1) {
 
@@ -373,7 +389,7 @@ CssOptimizer.prototype._minify = function (component, cssPath, isTheme) {
                        var cssInfo = {
                            content: data,
                            folder: self._components[component].folder,
-                           file: file,
+                           file: themeFolder ? themeFolder + '/' + file : file,
                            noRules: noRules
                        };
 
