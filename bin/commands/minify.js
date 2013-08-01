@@ -83,7 +83,7 @@ function minify() {
 
         if (buildConfig.buildPath) {
             outputPath = path.resolve(projectRoot, buildConfig.buildPath);
-            copyProject(projectRoot, outputPath);
+            copyProject(projectRoot, outputPath, buildConfig);
         }
 
         for (var i = 0, len = additionalProjects.length; i < len; i++) {
@@ -130,7 +130,7 @@ function minify() {
  * @param {String} projectPath the project to be copied
  * @param {String} minPath the destination directory
  */
-function copyProject(projectPath, minPath) {
+function copyProject(projectPath, minPath, config) {
     wrench.mkdirSyncRecursive(minPath, '0755');
 
     var files = fs.readdirSync(projectPath);
@@ -149,7 +149,8 @@ function copyProject(projectPath, minPath) {
             continue;
         }
 
-        if (stats.isDirectory() && fromPath.match(/^.*\/client\/js$|^.*\\client\\js$/)) {
+        if (config && config.javascriptMinification &&
+            stats.isDirectory() && fromPath.match(/^.*\/client\/js$|^.*\\client\\js$/)) {
             wrench.mkdirSyncRecursive(toPath, '0755');
             continue;
         }
