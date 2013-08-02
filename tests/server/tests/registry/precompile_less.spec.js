@@ -65,8 +65,13 @@ describe('Registry Plugin: Precompile Less Plugin', function () {
         });
 
         less = jasmine.createSpyObj('less', ['render']);
-        less.render.andCallFake(function (content, cb) {
-            cb(lessError, content);
+        less.render.andCallFake(function (content, obj, cb) {
+            //if the function is called with only 2 params then the second one is actually the callback
+            if(arguments.length === 2) {
+                obj(lessError, content);
+           } else {
+                cb(lessError, content);
+           }
         });
 
         componentRegistry = jasmine.createSpyObj('componentRegistry',
@@ -111,6 +116,7 @@ describe('Registry Plugin: Precompile Less Plugin', function () {
         });
 
         it('should ignore the files with the wrong content type', function () {
+
             precompileLess.configure(componentConfig);
 
             //a unscoped css and a scoped css fo each good request
