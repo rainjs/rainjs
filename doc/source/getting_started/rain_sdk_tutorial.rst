@@ -81,12 +81,13 @@ Example::
     $ rain generate-po-files "en_GB" "example;1.0" 
 
 ------------------------------------------------
-RAIN SDK Minify Javascript files
+RAIN SDK Minify
 ------------------------------------------------
 
 The rain SDK provides a method to generate a minified RAIN project.
 
-All the js files from the client folder of components will be minified into an ``index.min.js`` file.
+All the js and css files from the client folder of components will be minified into
+an ``index.min.js``/``index.min.css`` file.
 
 The new minified project is generated at the path specified in
 the build.json file that can look like this:
@@ -95,16 +96,24 @@ the build.json file that can look like this:
 
     {
         "additionalProjects": ["../rainjs"],
-        "buildPath": "../min/sprint"
+        "buildPath": "../min/sprint",
+        "cssMinification": true,
+        "javascriptMinification": true,
+        "themes": {
+                "diy": "diy",
+                "cp": "cp"
+         }
     }
 
 If the ``buildPath`` key is missing then all the minified files will be generated in
 the current project, in each component folder.
 
+The ``themes`` key specifies the current css themes used in the project and their folder name.
+
 Example::
 
-    #generate the minified project
+    #generate the minified project (with the above configuration both javascript and css files will be minified)
     $ rain minify
 
 A detailed description of this process can be found in
-the :doc:`RAIN Minification Process </client/minification>` page.
+the :doc:`RAIN Minification Process </server/minification>` page.

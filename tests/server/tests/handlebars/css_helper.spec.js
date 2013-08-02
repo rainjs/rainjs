@@ -29,7 +29,7 @@ var cwd = process.cwd(),
     globals = require(cwd + '/lib/globals.js');
 
 describe('Handlebars css helper', function () {
-    var cssHelper, Handlebars, rainContext, version;
+    var cssHelper, Handlebars, rainContext, version, conf, mocks;
 
     beforeEach(function () {
 
@@ -42,7 +42,7 @@ describe('Handlebars css helper', function () {
         };
         version = '1.0';
 
-        var mocks = {};
+        mocks = {};
         mocks['../renderer'] = {
             rain: rainContext
         };
@@ -54,6 +54,33 @@ describe('Handlebars css helper', function () {
                 return;
             }
         };
+
+        conf = {
+            "server": {
+                "port": 2337,
+                "timeoutForRequests" : "0.2",
+                "components": ["./tests/server/fixtures/components/"]
+            },
+
+            "defaultLanguage": "en_US",
+            "cookieSecret": "let it rain ;)",
+            "language": "ro_RO",
+
+            "enableMinification": false,
+
+            "errorComponent": {
+                "id": "error",
+                "version": "1.0"
+            },
+
+            "loadingComponent": {
+                "id": "placeholder",
+                "version": "1.0",
+                "viewId": "index",
+                "timeout": 500
+            }
+        };
+        mocks['../configuration'] = conf;
 
         cssHelper = loadModule('/lib/handlebars/css.js', mocks);
 
@@ -68,7 +95,7 @@ describe('Handlebars css helper', function () {
         });
     });
 
-    describe('test required and optional options', function () {
+    describe('test required and optional options with minification disabled', function () {
         it('should throw error if path is missing', function () {
             var template = Handlebars.compile('{{css version="1.0"}}');
             expect(function() {
@@ -120,5 +147,116 @@ describe('Handlebars css helper', function () {
             expect(rainContext.css[0].path).toEqual('/example/1.0/css/index.css');
             expect(rainContext.css[0].media).toEqual(media);
         });
+    });
+
+    describe('test required and optional options with minification enabled', function() {
+
+        it('should act correctly if different options are missing', function () {
+            conf.enableMinification = true;
+            conf.enableMinificationCSS = true;
+            mocks['../configuration'] = conf;
+            var cssMap = {
+                "example;1.0": {
+                    "/example/1.0/css/index.min.css": ["landscape.css", "layout_localization.css", "platform_language.css", "index.css", "notes.css", "format_helpers.css", "partials.css", "image_localization.css", "text_localization.css", "media_queries.css", "jquery-ui-1.10.2.custom.css", "portrait.css"]
+                }
+            };
+            mocks[process.cwd() + '/cssMaps.json'] = cssMap;
+            cssHelper = loadModule('/lib/handlebars/css.js', mocks);
+
+            var template = Handlebars.compile('{{css version="1.0"}}');
+            expect(function() {
+                template();
+            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'css');
+
+            var template = Handlebars.compile('{{css path="index.css" version="3.0"}}');
+            expect(function() {
+                template();
+            }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'name missing');
+
+            version = undefined;
+            Handlebars.compile('{{css name="other" path="layout_localization.css"}}')();
+            expect(rainContext.css.length).toEqual(1);
+            expect(rainContext.css[0].path).toEqual('/other/css/layout_localization.css');
+
+        });
+
+        it('should create correct css dependencies for the same component', function () {
+            conf.enableMinification = true;
+            conf.enableMinificationCSS = true;
+            mocks['../configuration'] = conf;
+            var cssMap = {
+                "example;1.0": {
+                    "/example/1.0/css/index.min.css": ["landscape.css", "layout_localization.css", "platform_language.css", "index.css", "notes.css", "format_helpers.css", "partials.css", "image_localization.css", "text_localization.css", "media_queries.css", "jquery-ui-1.10.2.custom.css", "portrait.css"]
+                }
+            };
+            mocks[process.cwd() + '/cssMaps.json'] = cssMap;
+            cssHelper = loadModule('/lib/handlebars/css.js', mocks);
+
+            Handlebars.compile('{{css path="index.css"}}')();
+            expect(rainContext.css.length).toEqual(1);
+            expect(rainContext.css[0].path).toEqual('/example/1.0/css/index.min.css');
+
+            Handlebars.compile('{{css path="notes.css"}}')();
+            expect(rainContext.css.length).toEqual(1);
+            expect(rainContext.css[0].path).toEqual('/example/1.0/css/index.min.css');
+
+            //test that media string is added
+            rainContext.css = [];
+            var media = 'max-width: 1024px';
+            Handlebars.compile('{{css path="landscape.css" media="' + media + '"}}')();
+            expect(rainContext.css.length).toEqual(1);
+            expect(rainContext.css[0].path).toEqual('/example/1.0/css/index.min.css');
+            expect(rainContext.css[0].media).toEqual(media);
+
+        });
+
+        it('should create correct css dependencies for an external component', function () {
+            conf.enableMinification = true;
+            conf.enableMinificationCSS = true;
+            mocks['../configuration'] = conf;
+            var cssMap = {
+                "example;1.0": {
+                    "/example/1.0/css/index.min.css": ["landscape.css", "layout_localization.css", "platform_language.css", "index.css", "notes.css", "format_helpers.css", "partials.css", "image_localization.css", "text_localization.css", "media_queries.css", "jquery-ui-1.10.2.custom.css", "portrait.css"]
+                }
+            };
+            mocks[process.cwd() + '/cssMaps.json'] = cssMap;
+            cssHelper = loadModule('/lib/handlebars/css.js', mocks);
+
+            // Test external resource with latest version.
+            Handlebars.compile('{{css name="error" path="index.css"}}')();
+            expect(rainContext.css[0].path).toEqual('/error/1.0/css/index.css?component=example&version=1.0');
+
+            // Test external resource with given version.
+            version = '3.3';
+            Handlebars.compile('{{css name="example" version="3.3" path="index.css"}}')();
+            expect(rainContext.css[1].path).toEqual('/example/3.3/css/index.css?component=example&version=1.0');
+
+        });
+
+        it('should create correct css dependencies for a component that has more than 4095 rules', function () {
+            conf.enableMinification = true;
+            conf.enableMinificationCSS = true;
+            mocks['../configuration'] = conf;
+            var cssMap = {
+                "example;1.0": {
+                    "/example/1.0/css/index.min.css": ["landscape.css", "layout_localization.css"],
+                    "/example/1.0/css/index1.min.css": ["platform_language.css", "index.css", "notes.css", "format_helpers.css", "partials.css", "image_localization.css", "text_localization.css"],
+                    "/example/1.0/css/index2.min.css": ["media_queries.css", "jquery-ui-1.10.2.custom.css", "portrait.css"]
+                }
+            };
+            mocks[process.cwd() + '/cssMaps.json'] = cssMap;
+            cssHelper = loadModule('/lib/handlebars/css.js', mocks);
+
+            Handlebars.compile('{{css path="layout_localization.css"}}')();
+            expect(rainContext.css.length).toEqual(1);
+            expect(rainContext.css[0].path).toEqual('/example/1.0/css/index.min.css');
+
+            rainContext.css = [];
+            Handlebars.compile('{{css path="jquery-ui-1.10.2.custom.css"}}')();
+            expect(rainContext.css.length).toEqual(1);
+            expect(rainContext.css[0].path).toEqual('/example/1.0/css/index2.min.css');
+
+        });
+
     });
 });
