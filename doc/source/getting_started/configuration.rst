@@ -70,6 +70,8 @@ fields are formatted with **bold**.
 - enableMinification - a Boolean value that enables or disables the loading of
   minified javascript and css files.
 
+- enableMinificationCSS - a Boolean value that enables loading of minified css files.
+
 - logger - an Object used to configure the Logger feature. The logging level and appenders can also
   be configured here. For information about the entire structure of this parameter, check the
   :doc:`Logger API</server/api/Logger>`.

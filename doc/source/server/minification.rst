@@ -8,11 +8,15 @@ General Rules
 
 During this process a new minified RAIN project is generated.
 
-In the :doc:`server.conf </getting_started/configuration>` file minification should be enabled:
+In the :doc:`server.conf </getting_started/configuration>` the enableMinification should be set on true:
 
 .. code-block:: javascript
 
     "enableMinification": true,
+    "enableMinificationCSS": true,
+
+If the enableMinificationCSS is not enabled the server will respond with
+minified js files and non-minified css files.
 
 
 The path where this project is built should be specified in the ``build.json`` file as below:
