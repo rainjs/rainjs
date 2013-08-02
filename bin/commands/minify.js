@@ -100,8 +100,7 @@ function minify() {
             });
         }
     } catch (ex) {
-        console.log(ex.stack);
-        // the build configuration doesn't exists
+        console.log('Minify failed, build configuration does not exist' + ex.stack);
     }
 
     if(buildConfig.javascriptMinification) {
@@ -129,6 +128,7 @@ function minify() {
  * are not copied
  * @param {String} projectPath the project to be copied
  * @param {String} minPath the destination directory
+ * @param {} config the configuration from the build.json file
  */
 function copyProject(projectPath, minPath, config) {
     wrench.mkdirSyncRecursive(minPath, '0755');

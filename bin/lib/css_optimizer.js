@@ -43,14 +43,19 @@ var MAX_NO_RULES = 4095;
 /**
  * CssOptimizer module.
  * @example
- * var config = {
- *  outputPath: 'path/to/output',
- *  themes: {
- *      'themeName': 'themeFolderName'
- *   },
- *  components: {config:configValue}
- * };
- * new CssOptimizer(config);
+ *  var config = {
+ *      //the path where the minified project is created
+ *      outputPath: 'path/to/output',
+ *      //if the project has css themes they will be listed here along with their folder names
+ *      themes: {
+ *          'themeName': 'themeFolderName'
+ *      },
+ *      //the components that will be minified
+ *      components: {
+ *          config: configValue
+ *      }
+ *  };
+ *  new CssOptimizer(config);
  *
  * @param {Object} config the configuration with which to generate the minification
  * @name CssOptimizer
@@ -104,7 +109,7 @@ function CssOptimizer(config) {
     this._includedComponents = config.includedComponents;
 
     /**
-     * A theme map containing theme name and theme name of the folder inside the components.
+     * A theme map containing theme name and its folder inside the components.
      * @type {Object}
      * @example
      * {
@@ -138,13 +143,13 @@ function CssOptimizer(config) {
      * }
      * @private
      */
-    this._minfiedCSS = {
-        default: {}
+    this._minifiedCSS = {
+        'default': {}
     };
 
     for(var theme in this._themes) {
-        if(!this._minfiedCSS[theme]) {
-            this._minfiedCSS[theme] = {};
+        if(!this._minifiedCSS[theme]) {
+            this._minifiedCSS[theme] = {};
         }
     }
 
@@ -179,7 +184,7 @@ CssOptimizer.prototype.run = function () {
     for(var component in this._components) {
         try {
 
-            for (var theme in this._minfiedCSS) {
+            for (var theme in this._minifiedCSS) {
                 var isTheme = false,
                     cssPath = path.join(this._components[component].path, 'client/css');
 
@@ -188,7 +193,7 @@ CssOptimizer.prototype.run = function () {
                     isTheme = true;
                 }
 
-                this._minfiedCSS[theme][component] = this._minify(component, cssPath, isTheme);
+                this._minifiedCSS[theme][component] = this._minify(component, cssPath, isTheme);
             }
 
         } catch (ex) {
@@ -199,14 +204,14 @@ CssOptimizer.prototype.run = function () {
         }
     }
 
-    for(var theme in this._minfiedCSS) {
+    for(var theme in this._minifiedCSS) {
         var folder;
         if(this._themes && this._themes[theme]) {
             folder = this._themes[theme];
         }
 
         (function(folder) {
-            Promise.allKeys(self._minfiedCSS[theme]).then(function (data) {
+            Promise.allKeys(self._minifiedCSS[theme]).then(function (data) {
                 self._writeFiles(data, folder);
             }, function (err) {
                 console.log(err.message);
@@ -216,16 +221,16 @@ CssOptimizer.prototype.run = function () {
 };
 
 /**
- * Parses the views of a component and memorates the css files and the media queries to be
+ * Parses the views of a component and memorizes the css files and the media queries to be
  * applied on that css file
  *
  * @private
  */
 CssOptimizer.prototype._parseMediaQueries = function() {
     for(var component in this._components) {
-        var parsedViews = this._getMediaQuerrys(component);
+        var parsedViews = this._getMediaQueries(component);
         if(typeof parsedViews !== 'undefined') {
-            this._mediaQueryMap[component] = this._getMediaQuerrys(component);
+            this._mediaQueryMap[component] = parsedViews;
         }
     }
 };
@@ -234,7 +239,7 @@ CssOptimizer.prototype._parseMediaQueries = function() {
  * Writes the minified css for a component to the desired destination in a index(1|2|..).min.css file.
  * Also in writes a ``cssMaps.json`` representing the component that contains keys representing paths
  * to the minified file and for values it contains an array of files that have been included in that
- * minified file (this is needed to be abble to split depending on the number of rules into multiple
+ * minified file (this is needed to be able to split depending on the number of rules into multiple
  * min.css files.
  *
  * @example
@@ -245,7 +250,7 @@ CssOptimizer.prototype._parseMediaQueries = function() {
  * }
  *
  * @param {Object} data the data of the minified css for a component
- * @param {String} [folder] optional parameter specifing a more exact folder in which you want to write the files,
+ * @param {String} [folder] optional parameter specifying a more exact folder in which you want to write the files,
  * currently this folder is used for themes
  * @private
  */
@@ -314,14 +319,14 @@ CssOptimizer.prototype._writeFiles = function (data, folder) {
  * @private
  */
 CssOptimizer.prototype._computeRules = function (css) {
-    //TODO: I am applying this on .less files I think it does not work properly.
+    //Remove the comments from css code
     css = css.replace(/\/\*(.|\s*)+?\*\/[\r\n]*/g, '');
     var rules = css.split('}');
     return rules.length - 1;
 };
 
 /**
- * Minifies all css files from a component into a single css file. Steps over themes if flaged
+ * Minifies all css files from a component into a single css file. Steps over themes if flagged
  * to do so.
  *
  * @param {String} component the component name
@@ -358,8 +363,6 @@ CssOptimizer.prototype._minify = function (component, cssPath, isTheme) {
                themeFolder = self._themes[theme];
            }
        }
-
-
 
        if(filePath.indexOf('.min.css') === -1) {
 
@@ -426,7 +429,7 @@ CssOptimizer.prototype._minify = function (component, cssPath, isTheme) {
                     ruleCount: minifiedFile.noRules,
                     files: [minifiedFile.file],
                     folder: minifiedFile.folder
-                }
+                };
             } else {
                 cssData[cssFile].ruleCount += minifiedFile.noRules;
                 cssData[cssFile].content += content;
@@ -487,14 +490,14 @@ CssOptimizer.prototype._rewriteLessImport = function (content, folder) {
 };
 
 /**
- * Gets the set of rules for media querryes for each view from the css helper inside.
+ * Gets the set of rules for media queries for each view from the css helper inside.
  *
  * @param {String} component the component's name.
- * @returns {Object|null} If querys for a css are found than an object with css file name and the array
- * of querrys for that file that should be applied.
+ * @returns {Object|null} If queries for a css are found, then an object with css file name
+ * and the array of query rules for that file will be created.
  * @private
  */
-CssOptimizer.prototype._getMediaQuerrys = function (component) {
+CssOptimizer.prototype._getMediaQueries = function (component) {
     var views = {};
 
     for(var view in this._components[component].config.views) {
@@ -516,7 +519,7 @@ CssOptimizer.prototype._getMediaQuerrys = function (component) {
                         views[css] = handlebarsView[css];
                     }
                 }
-            };
+            }
         }
     }
 
@@ -554,9 +557,7 @@ CssOptimizer.prototype._inspectStatement = function (statements) {
         // handlebars helper (isHelper is true if this statement has parameters)
         if (statement.type === 'mustache' && statement.isHelper) {
 
-            var ids = [],
-                helperName = statement.id.string,
-                params = statement.params,
+            var helperName = statement.id.string,
                 pairs = (statement.hash && statement.hash.pairs) || [];
 
             if (helperName !== 'css') {
@@ -587,7 +588,7 @@ CssOptimizer.prototype._inspectStatement = function (statements) {
  * Gets the path and the media query rules from the css handlebars helper.
  *
  * @param {[Object]} pairs the pairs of css handlebars helper variables.
- * @returns {Object|null} if the css file has media querys applied on it it returns an object
+ * @returns {Object|null} if the css file has media queries applied on it it returns an object
  * containing the name of the file as key and the media query rules as value.
  * @private
  */
