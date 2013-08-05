@@ -30,7 +30,8 @@ var path = require('path'),
     wrench = require('wrench'),
     sdkUtils = require('../lib/utils'),
     util = require('../../lib/util'),
-    JavaScriptOptimizer = require('../lib/javascript_optimizer');
+    JavaScriptOptimizer = require('../lib/javascript_optimizer'),
+    CssOptimizer = require('../lib/css_optimizer');
 
 /**
  * Registers the minify command.
@@ -57,6 +58,7 @@ function register(program) {
  *   component folder.
  */
 function minify() {
+
     var projectRoot = sdkUtils.getProjectRoot(process.cwd()),
         componentsFolder = path.join(projectRoot, 'components'),
         components = {},
@@ -81,7 +83,7 @@ function minify() {
 
         if (buildConfig.buildPath) {
             outputPath = path.resolve(projectRoot, buildConfig.buildPath);
-            copyProject(projectRoot, outputPath);
+            copyProject(projectRoot, outputPath, buildConfig);
         }
 
         for (var i = 0, len = additionalProjects.length; i < len; i++) {
@@ -98,15 +100,27 @@ function minify() {
             });
         }
     } catch (ex) {
-        // the build configuration doesn't exists
+        console.log('Minify failed, build configuration does not exist' + ex.stack);
     }
 
-    var optimizer = new JavaScriptOptimizer({
-        outputPath: outputPath,
-        components: components,
-        includedComponents: includedComponents
-    });
-    optimizer.run();
+    if(buildConfig.javascriptMinification) {
+        var optimizer = new JavaScriptOptimizer({
+            outputPath: outputPath,
+            components: components,
+            includedComponents: includedComponents
+        });
+        optimizer.run();
+    }
+
+    if(buildConfig.cssMinification) {
+        var optimizer = new CssOptimizer({
+            outputPath: outputPath,
+            themes: buildConfig.themes,
+            components: components,
+            includedComponents: includedComponents
+        });
+        optimizer.run();
+    }
 }
 
 /**
@@ -114,8 +128,9 @@ function minify() {
  * are not copied
  * @param {String} projectPath the project to be copied
  * @param {String} minPath the destination directory
+ * @param {} config the configuration from the build.json file
  */
-function copyProject(projectPath, minPath) {
+function copyProject(projectPath, minPath, config) {
     wrench.mkdirSyncRecursive(minPath, '0755');
 
     var files = fs.readdirSync(projectPath);
@@ -134,14 +149,15 @@ function copyProject(projectPath, minPath) {
             continue;
         }
 
-        if (stats.isDirectory() && fromPath.match(/^.*\/client\/js$|^.*\\client\\js$/)) {
+        if (config.javascriptMinification &&
+            stats.isDirectory() && fromPath.match(/^.*\/client\/js$|^.*\\client\\js$/)) {
             wrench.mkdirSyncRecursive(toPath, '0755');
             continue;
         }
 
         if (stats.isDirectory()) {
             wrench.mkdirSyncRecursive(toPath, '0755');
-            copyProject(fromPath, toPath);
+            copyProject(fromPath, toPath, config);
         } else {
             fs.writeFileSync(toPath, fs.readFileSync(fromPath));
         }
