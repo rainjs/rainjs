@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class Format &mdash; Rain 0.30.0 documentation</title>
+    <title>Class Format &mdash; Rain 0.31.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.30.0',
+        VERSION:     '0.31.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Rain 0.30.0 documentation" href="../../index.html" />
+    <link rel="top" title="Rain 0.31.0 documentation" href="../../index.html" />
     <link rel="next" title="Namespace Identity" href="Identity.html" />
     <link rel="prev" title="Class FileAppender" href="FileAppender.html" /> 
   </head>
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="FileAppender.html" title="Class FileAppender"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Rain 0.30.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain 0.31.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -53,7 +53,17 @@
             
   <div class="section" id="class-format">
 <h1>Class Format<a class="headerlink" href="#class-format" title="Permalink to this headline">¶</a></h1>
-<p>Format module that formats date/time/date-range/numbers based on the language.</p>
+<p>Format module that formats date/time/date-range/numbers/currency/percentage depending on the language.</p>
+<p>Example:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">today</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">someInterval</span> <span class="o">=</span>
+   <span class="nx">formatterInstance</span><span class="p">.</span><span class="nx">formatRange</span><span class="p">(</span><span class="nx">today</span><span class="p">,</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">today</span><span class="p">.</span><span class="nx">getFullYear</span><span class="p">(),</span> <span class="nx">today</span><span class="p">.</span><span class="nx">getMonth</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nx">today</span><span class="p">.</span><span class="nx">getDate</span><span class="p">()),</span> <span class="s1">&#39;de_DE&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">decNumber</span> <span class="o">=</span> <span class="nx">formatter</span><span class="p">(</span><span class="mf">345989.3452</span><span class="p">,</span> <span class="s1">&#39;de_DE&#39;</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">someInterval</span><span class="p">)</span> <span class="c1">// =&gt; &#39;Juli 10 - August 10. 2013&#39;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">decNumber</span><span class="p">)</span> <span class="c1">// =&gt; &#39;345.989,3452&#39;</span>
+</pre></div>
+</div>
 <div class="section" id="constructor">
 <h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -327,7 +337,7 @@ configuration preset format.</p>
         <li class="right" >
           <a href="FileAppender.html" title="Class FileAppender"
              >previous</a> |</li>
-        <li><a href="../../index.html">Rain 0.30.0 documentation</a> &raquo;</li> 
+        <li><a href="../../index.html">Rain 0.31.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

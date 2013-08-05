@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>RAIN Minification Process &mdash; Rain 0.30.0 documentation</title>
+    <title>RAIN Minification Process &mdash; Rain 0.31.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.30.0',
+        VERSION:     '0.31.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain 0.30.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain 0.31.0 documentation" href="../index.html" />
     <link rel="next" title="Class AsyncController" href="../client/api/AsyncController.html" />
     <link rel="prev" title="Text localization" href="../client/localization.html" /> 
   </head>
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="../client/localization.html" title="Text localization"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain 0.30.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain 0.31.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -53,7 +53,33 @@
             
   <div class="section" id="rain-minification-process">
 <h1>RAIN Minification Process<a class="headerlink" href="#rain-minification-process" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="general-rules">
+<h2>General Rules<a class="headerlink" href="#general-rules" title="Permalink to this headline">¶</a></h2>
 <p>During this process a new minified RAIN project is generated.</p>
+<p>In the <a class="reference internal" href="../getting_started/configuration.html"><em>server.conf</em></a> the enableMinification should be set on true:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="s2">&quot;enableMinification&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+<span class="s2">&quot;enableMinificationCSS&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>If the enableMinificationCSS is not enabled the server will respond with
+minified js files and non-minified css files.</p>
+<p>The path where this project is built should be specified in the <tt class="docutils literal"><span class="pre">build.json</span></tt> file as below:</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s2">&quot;buildPath&quot;</span><span class="o">:</span> <span class="s2">&quot;../min/sprint&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;additionalProjects&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;../rainjs&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;javascriptMinification&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="s2">&quot;cssMinification&quot;</span><span class="o">:</span> <span class="kc">false</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>The minification process can include both js and javascript or only one of them by modifying the
+<tt class="docutils literal"><span class="pre">javascriptMinification</span></tt> and <tt class="docutils literal"><span class="pre">cssMinification</span></tt> keys from above.</p>
+</div>
 <div class="section" id="javascript-minification">
 <h2>Javascript Minification<a class="headerlink" href="#javascript-minification" title="Permalink to this headline">¶</a></h2>
 <p>The tool used for JavaScript minification is RequireJS Optimizer.
@@ -74,27 +100,68 @@ the newly generated project.</p>
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
-<li>In the <a class="reference internal" href="../getting_started/configuration.html"><em>server.conf</em></a> file minification should be enabled:</li>
+<li>In the <tt class="docutils literal"><span class="pre">build.json</span></tt> file the javascriptMinification key should be set on <tt class="docutils literal"><span class="pre">true</span></tt>:</li>
 </ol>
-<div class="highlight-javascript"><div class="highlight"><pre><span class="s2">&quot;enableMinification&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-</pre></div>
-</div>
-<ol class="arabic simple" start="3">
-<li>The path where this project is built should be specified in the <tt class="docutils literal"><span class="pre">build.json</span></tt> file as below:</li>
-</ol>
-<div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span>
-    <span class="s2">&quot;buildPath&quot;</span><span class="o">:</span> <span class="s2">&quot;../min/sprint&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;additionalProjects&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;../rainjs&quot;</span><span class="p">]</span>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span class="p">{</span>
+        <span class="s2">&quot;buildPath&quot;</span><span class="o">:</span> <span class="s2">&quot;../min/sprint&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;additionalProjects&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;../rainjs&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;javascriptMinification&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="s2">&quot;cssMinification&quot;</span><span class="o">:</span> <span class="kc">true</span>
 <span class="p">}</span>
 </pre></div>
-</div>
+</td></tr></table></div>
 <p>If the <tt class="docutils literal"><span class="pre">buildPath</span></tt> key is missing then all the minified files will be added in the current project,
-in the <tt class="docutils literal"><span class="pre">client/js</span></tt> folder of each component.</p>
+in the <cite>client/js</cite> folder of each component.</p>
 <p>As you can see above, the <tt class="docutils literal"><span class="pre">build.json</span></tt> file can also include
 an additional projects paths key needed by RequireJS.</p>
-<ol class="arabic simple" start="4">
-<li>Running the minify command:</li>
+</div>
+<div class="section" id="css-minification">
+<h2>CSS Minification<a class="headerlink" href="#css-minification" title="Permalink to this headline">¶</a></h2>
+<p>The tool used for CSS minification is less. It supports CSS minification using the YUI compressor.
+All the css files from the client folder of each component will be minified into
+an <tt class="docutils literal"><span class="pre">index.min.css</span></tt> file.</p>
+<p>This file will be placed into the <cite>client/css</cite> folder of each component in
+the newly generated project.</p>
+<p>If the number of rules in the file exceeds 4095 then
+additional min files (index1.min.css, index2.min.css etc) are created.</p>
+<ol class="arabic simple">
+<li>In the <tt class="docutils literal"><span class="pre">build.json</span></tt> file the <tt class="docutils literal"><span class="pre">cssMinification</span></tt> key should be set on <tt class="docutils literal"><span class="pre">true</span></tt>:</li>
 </ol>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s2">&quot;buildPath&quot;</span><span class="o">:</span> <span class="s2">&quot;../min/sprint&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;additionalProjects&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;../rainjs&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;javascriptMinification&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="s2">&quot;cssMinification&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="s2">&quot;themes&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;diy&quot;</span><span class="o">:</span> <span class="s2">&quot;diy&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cp&quot;</span><span class="o">:</span> <span class="s2">&quot;cp&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>2. If the project is using css themes the build.json file should contain
+an object with theme names as keys and their folder names as values, as it can be seen above.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">A normal css file (Not minified) will be delivered in case of a css cross referencing request.</p>
+</div>
+</div>
+<div class="section" id="running-the-minify-command">
+<h2>Running the minify command:<a class="headerlink" href="#running-the-minify-command" title="Permalink to this headline">¶</a></h2>
 <p>Example:</p>
 <div class="highlight-js"><div class="highlight"><pre><span class="nx">$</span> <span class="nx">rain</span> <span class="nx">minify</span>
 </pre></div>
@@ -111,7 +178,10 @@ an additional projects paths key needed by RequireJS.</p>
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">RAIN Minification Process</a><ul>
+<li><a class="reference internal" href="#general-rules">General Rules</a></li>
 <li><a class="reference internal" href="#javascript-minification">Javascript Minification</a></li>
+<li><a class="reference internal" href="#css-minification">CSS Minification</a></li>
+<li><a class="reference internal" href="#running-the-minify-command">Running the minify command:</a></li>
 </ul>
 </li>
 </ul>
@@ -151,7 +221,7 @@ an additional projects paths key needed by RequireJS.</p>
         <li class="right" >
           <a href="../client/localization.html" title="Text localization"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain 0.30.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain 0.31.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

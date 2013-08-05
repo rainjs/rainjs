@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Changelog &mdash; Rain 0.30.0 documentation</title>
+    <title>Changelog &mdash; Rain 0.31.0 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.30.0',
+        VERSION:     '0.31.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Rain 0.30.0 documentation" href="index.html" />
+    <link rel="top" title="Rain 0.31.0 documentation" href="index.html" />
     <link rel="prev" title="NginX static routes server" href="proposals/nginx_static_routes.html" /> 
   </head>
   <body>
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="proposals/nginx_static_routes.html" title="NginX static routes server"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Rain 0.30.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Rain 0.31.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -49,6 +49,20 @@
             
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="v-0-31-0">
+<h2>v 0.31.0<a class="headerlink" href="#v-0-31-0" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Implemented CSS minification for RAIN projects.</li>
+<li>Fixed bug: external javascript modules weren&#8217;t loaded correctly for minified projects.</li>
+<li>Fixed bug: RainError wasn&#8217;t working properly on IE 10.</li>
+<li>Fixed bug: when using <tt class="docutils literal"><span class="pre">context._getChildren</span></tt> an error was thrown if multiple child components
+were not found.</li>
+<li>Fixed bug: in some situations the placeholder was registered instead of the actual component.</li>
+<li>Fixed bug: in some situations the child components where duplicated in the children array.</li>
+<li>Fixed bug: a load timeout was happening randomly when loading modules using RequireJS. This
+was fixed by disabling the load timeout in the RequireJS configuration.</li>
+</ul>
+</div>
 <div class="section" id="v-0-30-0">
 <h2>v 0.30.0<a class="headerlink" href="#v-0-30-0" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -358,6 +372,7 @@ should request it using <tt class="docutils literal"><span class="pre">raintime/
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Changelog</a><ul>
+<li><a class="reference internal" href="#v-0-31-0">v 0.31.0</a></li>
 <li><a class="reference internal" href="#v-0-30-0">v 0.30.0</a></li>
 <li><a class="reference internal" href="#v-0-29-0">v 0.29.0</a></li>
 <li><a class="reference internal" href="#v-0-28-1">v 0.28.1</a></li>
@@ -423,7 +438,7 @@ should request it using <tt class="docutils literal"><span class="pre">raintime/
         <li class="right" >
           <a href="proposals/nginx_static_routes.html" title="NginX static routes server"
              >previous</a> |</li>
-        <li><a href="index.html">Rain 0.30.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Rain 0.31.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

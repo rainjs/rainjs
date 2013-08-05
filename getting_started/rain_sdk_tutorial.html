@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>RAIN SDK Tutorial &mdash; Rain 0.30.0 documentation</title>
+    <title>RAIN SDK Tutorial &mdash; Rain 0.31.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.30.0',
+        VERSION:     '0.31.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain 0.30.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain 0.31.0 documentation" href="../index.html" />
     <link rel="next" title="Server and component configuration" href="configuration.html" />
     <link rel="prev" title="Installing RAIN" href="installation.html" /> 
   </head>
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="installation.html" title="Installing RAIN"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain 0.30.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain 0.31.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -119,26 +119,34 @@ $ rain generate-po-files "en_GB,de_DE"
 $ rain generate-po-files "en_GB" "example;1.0"</pre>
 </div>
 </div>
-<div class="section" id="rain-sdk-minify-javascript-files">
-<h2>RAIN SDK Minify Javascript files<a class="headerlink" href="#rain-sdk-minify-javascript-files" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="rain-sdk-minify">
+<h2>RAIN SDK Minify<a class="headerlink" href="#rain-sdk-minify" title="Permalink to this headline">¶</a></h2>
 <p>The rain SDK provides a method to generate a minified RAIN project.</p>
-<p>All the js files from the client folder of components will be minified into an <tt class="docutils literal"><span class="pre">index.min.js</span></tt> file.</p>
+<p>All the js and css files from the client folder of components will be minified into
+an <tt class="docutils literal"><span class="pre">index.min.js</span></tt>/<tt class="docutils literal"><span class="pre">index.min.css</span></tt> file.</p>
 <p>The new minified project is generated at the path specified in
 the build.json file that can look like this:</p>
 <div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span>
     <span class="s2">&quot;additionalProjects&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;../rainjs&quot;</span><span class="p">],</span>
-    <span class="s2">&quot;buildPath&quot;</span><span class="o">:</span> <span class="s2">&quot;../min/sprint&quot;</span>
+    <span class="s2">&quot;buildPath&quot;</span><span class="o">:</span> <span class="s2">&quot;../min/sprint&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cssMinification&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="s2">&quot;javascriptMinification&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="s2">&quot;themes&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;diy&quot;</span><span class="o">:</span> <span class="s2">&quot;diy&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cp&quot;</span><span class="o">:</span> <span class="s2">&quot;cp&quot;</span>
+     <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>If the <tt class="docutils literal"><span class="pre">buildPath</span></tt> key is missing then all the minified files will be generated in
 the current project, in each component folder.</p>
+<p>The <tt class="docutils literal"><span class="pre">themes</span></tt> key specifies the current css themes used in the project and their folder name.</p>
 <p>Example:</p>
-<div class="highlight-js"><pre>#generate the minified project
+<div class="highlight-js"><pre>#generate the minified project (with the above configuration both javascript and css files will be minified)
 $ rain minify</pre>
 </div>
 <p>A detailed description of this process can be found in
-the <tt class="xref doc docutils literal"><span class="pre">RAIN</span> <span class="pre">Minification</span> <span class="pre">Process</span></tt> page.</p>
+the <a class="reference internal" href="../server/minification.html"><em>RAIN Minification Process</em></a> page.</p>
 </div>
 </div>
 
@@ -155,7 +163,7 @@ the <tt class="xref doc docutils literal"><span class="pre">RAIN</span> <span cl
 <li><a class="reference internal" href="#rain-sdk-create-project">RAIN SDK Create project</a></li>
 <li><a class="reference internal" href="#rain-sdk-debug-mode">RAIN SDK Debug mode</a></li>
 <li><a class="reference internal" href="#rain-sdk-generate-localization-files-from-source">RAIN SDK Generate Localization files from source</a></li>
-<li><a class="reference internal" href="#rain-sdk-minify-javascript-files">RAIN SDK Minify Javascript files</a></li>
+<li><a class="reference internal" href="#rain-sdk-minify">RAIN SDK Minify</a></li>
 </ul>
 </li>
 </ul>
@@ -195,7 +203,7 @@ the <tt class="xref doc docutils literal"><span class="pre">RAIN</span> <span cl
         <li class="right" >
           <a href="installation.html" title="Installing RAIN"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain 0.30.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain 0.31.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

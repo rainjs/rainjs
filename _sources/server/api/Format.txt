@@ -14,7 +14,19 @@ Class Format
    class-title
 
 
-Format module that formats date/time/date-range/numbers based on the language.
+Format module that formats date/time/date-range/numbers/currency/percentage depending on the language.
+
+Example:
+
+.. code-block:: javascript
+
+      var today = new Date();
+      var someInterval =
+         formatterInstance.formatRange(today, new Date(today.getFullYear(), today.getMonth()+1, today.getDate()), 'de_DE');
+      var decNumber = formatter(345989.3452, 'de_DE');
+
+      console.log(someInterval) // => 'Juli 10 - August 10. 2013'
+      console.log(decNumber) // => '345.989,3452'
 
 
 
