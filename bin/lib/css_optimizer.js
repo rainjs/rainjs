@@ -183,7 +183,6 @@ CssOptimizer.prototype.run = function () {
 
     for(var component in this._components) {
         try {
-
             for (var theme in this._minifiedCSS) {
                 var isTheme = false,
                     cssPath = path.join(this._components[component].path, 'client/css');
@@ -485,7 +484,11 @@ CssOptimizer.prototype._rewriteLessImport = function (content, folder) {
     if(requiredLess) {
         requiredLess = requiredLess[1];
     }
-    content = content.replace(/@import.*"(.*\.less)?"/, '@import "' + path.join(folder, '/client/css/', requiredLess) + '"');
+
+    if(requiredLess) {
+        content = content.replace(/@import.*"(.*\.less)?"/, '@import "' + path.join(folder, '/client/css/', requiredLess) + '"');
+    }
+
     return content;
 };
 
