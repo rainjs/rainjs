@@ -118,6 +118,9 @@ describe('The identity provider', function () {
                 callback = jasmine.createSpy();
 
             spyOn(IdentityProvider.prototype, '_authenticate').andReturn(deferred.promise);
+            spyOn(IdentityProvider.prototype, 'getUser').andReturn({
+                isAuthenticated : function() {return false;},
+            });
 
             var provider = new IdentityProvider(session);
 
@@ -145,6 +148,9 @@ describe('The identity provider', function () {
                 callback = jasmine.createSpy();
 
             spyOn(IdentityProvider.prototype, '_authenticate').andReturn(deferred.promise);
+            spyOn(IdentityProvider.prototype, 'getUser').andReturn({
+                isAuthenticated : function() {return false;},
+            });
 
             var provider = new IdentityProvider(session);
 
