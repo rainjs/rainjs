@@ -161,6 +161,7 @@ namespace('test', function () {
                 jasmine = require('jasmine-node/lib/jasmine-node/index');
             } catch (e) {
                 console.log('You do not have jasmine-node installed, please run "npm install -d".');
+                console.log(e.stack);
                 return;
             }
 
@@ -187,7 +188,7 @@ namespace('test', function () {
                 savePath : "./tests/server/reports/",
                 useDotNotation: true,
                 consolidate: true
-            }
+            };
             var useRequireJs = false;
 
             console.log('\nRunning server side tests...');
@@ -203,24 +204,32 @@ namespace('test', function () {
             }
 
             jasmine.loadHelpersInFolder(specFolder, new RegExp("[-_]helper\\.(" + extentions + ")$"));
-            jasmine.executeSpecsInFolder(specFolder, function (runner, log) {
-                util.print('\n');
+            jasmine.executeSpecsInFolder({
+                specFolders: [specFolder],
+                onComplete: function (runner, log) {
+                    util.print('\n');
 
-                var runner = jasmine.getEnv().currentRunner_,
-                    suite, spec;
+                    var runner = jasmine.getEnv().currentRunner_,
+                        suite, spec;
 
-                for (var i = runner.suites_.length; i--;) {
-                    suite = runner.suites_[i];
-                    for (var j = suite.specs_.length; j--;) {
-                        spec = suite.specs_[j];
+                    for (var i = runner.suites_.length; i--;) {
+                        suite = runner.suites_[i];
+                        for (var j = suite.specs_.length; j--;) {
+                            spec = suite.specs_[j];
 
-                        if (spec.didFail) {
-                            process.exit(1);
+                            if (spec.didFail) {
+                                process.exit(1);
+                            }
                         }
                     }
-                }
-            }, isVerbose, showColors, teamcity, useRequireJs,
-               new RegExp(match + "\.spec\\.(" + extentions + ")$", 'i'), junitreport);
+                },
+                isVerbose: isVerbose,
+                showColors: showColors,
+                teamcity: teamcity,
+                useRequireJs: useRequireJs,
+                regExpSpec: new RegExp(match + "\.spec\\.(" + extentions + ")$", 'i'),
+                junitreport: junitreport
+            });
         });
 
         desc('Run all tests.');
