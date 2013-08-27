@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.31.1
+## 0.32.0
 
 * RAIN now works with Node.js 0.8.x and 0.10.x except the node-syslog module.
 * Fixed a fatal error in the code that tracks idle web sockets.
