@@ -3,20 +3,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Remote aggregation &mdash; Rain 0.31.0 documentation</title>
-    
+    <title>Remote aggregation &mdash; Rain v0.32.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.31.0',
+        VERSION:     '0.32.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +22,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain 0.31.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.32.0 documentation" href="../index.html" />
     <link rel="next" title="Rendering Process" href="Features-proposal-rendering-layer.html" />
     <link rel="prev" title="RAIN Cloud In Action" href="Features-proposal-rain-cloud-action.html" /> 
   </head>
@@ -42,7 +39,7 @@
         <li class="right" >
           <a href="Features-proposal-rain-cloud-action.html" title="RAIN Cloud In Action"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain 0.31.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.32.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -125,28 +122,28 @@
 <col width="54%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head">Exception</th>
+<tr><th class="head">Exception</th>
 <th class="head">Possible solution</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>Remote server is not available.</td>
+<tr><td>Remote server is not available.</td>
 <td>A default image will be displayed to indicate something is not available.</td>
 </tr>
-<tr class="row-odd"><td>Remote server responds really slow.</td>
+<tr><td>Remote server responds really slow.</td>
 <td>RAIN is processing each fragment in parallel. If the processing of a
 fragment will not end in a timely manner (&amp;lt; 300ms for instance) RAIN
 will automatically stop the process and it will display a predefined
 image instead.</td>
 </tr>
-<tr class="row-even"><td>Remote server responds with 401 / 403 / other HTTP error code.</td>
+<tr><td>Remote server responds with 401 / 403 / other HTTP error code.</td>
 <td>RAIN might display a predefined image for this instead of the fragment.</td>
 </tr>
-<tr class="row-odd"><td>Fragments might define the same css classes in markup thus
+<tr><td>Fragments might define the same css classes in markup thus
 resulting a name clash.</td>
 <td>This is solved automatically by RAIN.</td>
 </tr>
-<tr class="row-even"><td>Fragments might define the same javascript functions in
+<tr><td>Fragments might define the same javascript functions in
 global space thus resulting a name clash.</td>
 <td>This should not be the case because all fragments should write
 javascript using requirejs.</td>
@@ -194,7 +191,7 @@ javascript using requirejs.</td>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" size="18" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -220,11 +217,11 @@ javascript using requirejs.</td>
         <li class="right" >
           <a href="Features-proposal-rain-cloud-action.html" title="RAIN Cloud In Action"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain 0.31.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.32.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

@@ -49,12 +49,12 @@ Methods
 configure
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-.. js:function:: SocketWatcher#configure(the)
+.. js:function:: SocketWatcher#configure(socketServer)
 
 
     
-    :param Object the: 
-        actual socket object. 
+    :param Object socketServer: 
+        the actual socket object. 
     
 
 
