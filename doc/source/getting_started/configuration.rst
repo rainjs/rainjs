@@ -138,6 +138,12 @@ fields are formatted with **bold**.
       - user - the user attributes
       - isAuthenticated - boolean value that tells you if the user is logged in or not
 
+.. warning::
+    The "cookieSecure" option should be used only when the requests are encrypted / using https
+    protocol, otherwise the session cookie won't be created. If you are using HAProxy in front of
+    the NodeJS servers, adding this line for the secured connections avoids the problem:
+    ``reqadd x-forwarded-proto:\ https``.
+
 .......
 Example
 .......
