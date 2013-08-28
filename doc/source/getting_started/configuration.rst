@@ -108,6 +108,8 @@ fields are formatted with **bold**.
   requests are done by the user. The cookie is removed when the browser is closed if this value
   isn't specified.
 
+- cookieSecure - enable or disable the cookie secure attribute. The default value is false.
+
 - pageTitle - the default page title for all components. This can be overridden in the component's
   configuration file. If the previous two parameters are missing the title defaults to the
   component id.

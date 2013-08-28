@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.32.1
+
+* Added the ``cookieSecure`` option to the server configuration to enable or disable the cookie
+secure attribute.
+
 ## 0.32.0
 
 * RAIN now works with Node.js 0.8.x and 0.10.x except the node-syslog module.
