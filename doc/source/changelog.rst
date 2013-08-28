@@ -7,7 +7,7 @@ v 0.32.1
 --------
 
 + Added the ``cookieSecure`` option to the server configuration to enable or disable the cookie
-secure attribute.
+  secure attribute.
 
 --------
 v 0.32.0

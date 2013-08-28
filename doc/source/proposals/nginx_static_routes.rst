@@ -74,15 +74,14 @@ The only things added are the two acl containing regexps, these are needed to re
 depending on the url path. Also the use of another backend called ``static`` in which you specify where
 your NginX server is located and on which port is it listening.
 
-
 .....
 NginX
 .....
 
 The only thing that you need here is to install the NginX server on your machine. This is done by
 using the following command::
-    sudo apt-get install nginx
 
+    sudo apt-get install nginx
 
 ..........................
 RAIN & NginX configuration
@@ -105,20 +104,20 @@ An example of the output configuration would be:
 
     user root;
     events {
-    	worker_connections 1024;
+        worker_connections 1024;
     }
     http {
-    	include mime.types;
-    	default_type application/octet-stream;
-    	sendfile on;
-    	gzip on;
-    	upstream backend {
-    		server 127.0.0.1:1337;
-    	}
-    	server {
-    		listen 8080;
-    		server_name localhost;
-    		charset UTF-8;
+        include mime.types;
+        default_type application/octet-stream;
+        sendfile on;
+        gzip on;
+        upstream backend {
+            server 127.0.0.1:1337;
+        }
+        server {
+            listen 8080;
+            server_name localhost;
+            charset UTF-8;
             location / {
             }
             location ~* example/.*(js.*\.js)$ {
@@ -181,8 +180,8 @@ An example of the output configuration would be:
             location ~* css-renderer/.*(resources.*)$ {
                 alias /home/atrifan/my_space/rainjs/components/css_renderer/$1;
             }
-    	}
+        }
     }
 
-You can also change default values in the configuration by editing the ``bin/init/conf/nginx.conf`` file in your
-rain folder.
+You can also change default values in the configuration by editing the ``bin/init/conf/nginx.conf``
+file in your rain folder.
