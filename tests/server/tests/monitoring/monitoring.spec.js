@@ -27,7 +27,6 @@
 var path = require('path');
 
 describe("Monitoring module", function () {
-    var util = require('util');
     var mocks = [], logger, config, adapter, crypto, Monitoring, hasRunned,
         map;
 
@@ -121,7 +120,7 @@ describe("Monitoring module", function () {
             mocks['../configuration'] = config;
 
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
-            expect(function () {Monitoring.get()}).toThrowType(RainError.ERROR_PRECONDITION_FAILED);
+            expect(function () {Monitoring.get();}).toThrowType(RainError.ERROR_PRECONDITION_FAILED);
         });
 
         it('should throw error if operation is not supported', function () {
@@ -139,7 +138,7 @@ describe("Monitoring module", function () {
             mocks['../configuration'] = config;
 
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
-            expect(function () {Monitoring.get()}).toThrowType(RainError.ERROR_PRECONDITION_FAILED);
+            expect(function () {Monitoring.get();}).toThrowType(RainError.ERROR_PRECONDITION_FAILED);
         });
 
         it('should throw error if one of the use cases doesn`t have operation key', function () {
@@ -156,7 +155,7 @@ describe("Monitoring module", function () {
             mocks['../configuration'] = config;
 
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
-            expect(function () {Monitoring.get()}).toThrowType(RainError.ERROR_PRECONDITION_FAILED);
+            expect(function () {Monitoring.get();}).toThrowType(RainError.ERROR_PRECONDITION_FAILED);
         });
 
         it('should disable the module if monitoring key is missing from configuration', function () {
@@ -263,7 +262,7 @@ describe("Monitoring module", function () {
         });
 
         it('should set the default send rate', function () {
-            var monitoring = Monitoring.get();
+            Monitoring.get();
 
             expect(setInterval.calls.length).toEqual(1);
         });
@@ -290,7 +289,7 @@ describe("Monitoring module", function () {
             mocks['../configuration'] = config;
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
 
-            var monitoring = Monitoring.get();
+            Monitoring.get();
 
             map[20000]();
             map[60000]();
@@ -562,7 +561,7 @@ describe("Monitoring module", function () {
             var fakePlugin = jasmine.createSpyObj('fake', ['run']);
             mocks[path.join(process.cwd(), './plugins/server/monitoring/something')] = function () {
                 return fakePlugin;
-            }
+            };
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
 
             var monitoring = Monitoring.get();
@@ -658,7 +657,7 @@ describe("Monitoring module", function () {
             var fakePlugin = jasmine.createSpyObj('fake', ['run']);
             mocks[path.join(process.cwd(), './plugins/server/monitoring/something')] = function () {
                 return fakePlugin;
-            }
+            };
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
 
             var monitoring = Monitoring.get();
@@ -936,7 +935,7 @@ describe("Monitoring module", function () {
             });
 
             waitsFor(function () {
-                return typeof isResolved !== 'undefined'
+                return typeof isResolved !== 'undefined';
             }, 'the sending has been resolved');
 
             runs(function () {
@@ -947,7 +946,7 @@ describe("Monitoring module", function () {
                         value: monitoring._measurementMap['fakeUseCase'].measurements.activeRequests
                     }]
                 );
-            })
+            });
         });
     });
 
@@ -979,8 +978,9 @@ describe("Monitoring module", function () {
     });
 
     describe('Sending data to adapter', function () {
+        var wasCalled = false;
+
         it('should reset the values after a period of time', function () {
-            var wasCalled;
             config = {
                 monitoring: {
                     step: 2,
@@ -1011,7 +1011,7 @@ describe("Monitoring module", function () {
             map[2000]();
 
             waitsFor(function () {
-                return typeof wasCalled !== 'undefined'
+                return wasCalled;
             }, 'sent data to zabbix');
 
             runs(function () {
@@ -1026,6 +1026,8 @@ describe("Monitoring module", function () {
         });
 
         it('should keep the active requests until they are resolved', function () {
+            var wasCalled = false;
+
             config = {
                 monitoring: {
                     step: 2,
@@ -1038,7 +1040,6 @@ describe("Monitoring module", function () {
                 }
             };
 
-            var wasCalled;
             mocks['../configuration'] = config;
             adapter.sendData.andDefer(function (defer) {
                 wasCalled = true;
@@ -1059,7 +1060,7 @@ describe("Monitoring module", function () {
             map[2000]();
 
             waitsFor(function () {
-                return typeof wasCalled !== 'undefined';
+                return wasCalled;
             }, 'sent was called');
 
             runs(function () {
@@ -1075,6 +1076,8 @@ describe("Monitoring module", function () {
         });
 
         it('should not send data if there were no resolved requests', function () {
+            var wasCalled = false;
+
             config = {
                 monitoring: {
                     step: 2,
@@ -1089,13 +1092,14 @@ describe("Monitoring module", function () {
 
             mocks['../configuration'] = config;
             adapter.sendData.andDefer(function (defer) {
+                wasCalled = true;
                 defer.reject();
             });
             Monitoring = loadModuleExports('/lib/monitoring/monitoring.js', mocks);
 
             var monitoring = Monitoring.get();
 
-            var id = monitoring.startMeasurement('fakeUseCase1');
+            monitoring.startMeasurement('fakeUseCase1');
 
             runs(function () {
                 map[2000]();
@@ -1108,9 +1112,7 @@ describe("Monitoring module", function () {
         });
 
         it('should reset the registered events', function () {
-            var wasCalled;
             adapter.sendData.andDefer(function (defer) {
-                wasCalled = true;
                 defer.resolve();
             });
 
@@ -1119,7 +1121,7 @@ describe("Monitoring module", function () {
             map[2000]();
 
             waitsFor(function () {
-                return typeof wasCalled!== 'undefined'
+                return wasCalled;
             }, 'send data was called');
 
             runs(function () {
@@ -1129,7 +1131,7 @@ describe("Monitoring module", function () {
                     key: 'fakeKey',
                     value: 1
                 }]);
-            })
+            });
         });
 
         it('should not reset the activeRequests for count measurements', function () {
@@ -1145,14 +1147,11 @@ describe("Monitoring module", function () {
                     key: 'fakeKey',
                     value: jasmine.any(Number)
                 }]);
-            })
+            });
         });
 
         it('should not send data if nothing to send', function () {
-            var wasCalled;
-
             adapter.sendData.andDefer(function (defer) {
-                wasCalled = true;
                 defer.resolve();
             });
 
@@ -1172,14 +1171,10 @@ describe("Monitoring module", function () {
                 map[2000]();
                 expect(adapter.sendData.calls.length).toEqual(jasmine.any(Number));
             });
-
-
         });
 
         it('should measure even though the send was unsuccessfull', function () {
-            var wasCalled;
             adapter.sendData.andDefer(function (defer) {
-                wasCalled = true;
                 defer.reject();
             });
 
@@ -1204,7 +1199,6 @@ describe("Monitoring module", function () {
                     value: jasmine.any(Number)
                 }]);
             });
-
         });
 
         it('should compose the sending object with the secondary key', function () {
@@ -1245,8 +1239,8 @@ describe("Monitoring module", function () {
                         value: jasmine.any(Number)
                     }
                     ]
-                )
-            })
+                );
+            });
         });
 
     });
@@ -1387,5 +1381,5 @@ describe("Monitoring module", function () {
 
             expect(useCase).toBe('fakeUseCase1');
         });
-    })
+    });
 });

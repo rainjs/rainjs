@@ -7,6 +7,8 @@ describe('Css optimizer', function () {
     beforeEach(function () {
         var mocks = {};
 
+        console.log = function () {};
+
         config = {
             components: {
                 'component1;1.0': {
@@ -85,11 +87,10 @@ describe('Css optimizer', function () {
         });
 
         it('should minify multiple files for a component in a min file', function () {
-
-            var finished;
+            var finished = false;
 
             less.render.andCallFake(function (content, conf, fn) {
-                var data = content
+                var data = content;
                 finished = true;
                 fn(null, data);
             });
@@ -104,7 +105,7 @@ describe('Css optimizer', function () {
             instance.run();
 
             waitsFor(function () {
-                return (typeof finished !== 'undefined');
+                return finished;
             }, 'finished rendering less');
 
             runs(function () {
@@ -123,8 +124,7 @@ describe('Css optimizer', function () {
         });
 
         it('should minify themes in their own folders', function () {
-
-            var finished;
+            var finished = false;
 
             less.render.andCallFake(function (content, conf, fn) {
                 var data = content;
@@ -142,7 +142,7 @@ describe('Css optimizer', function () {
             instance.run();
 
             waitsFor(function () {
-                return (typeof finished !== 'undefined');
+                return finished;
             }, 'finished rendering less');
 
             runs(function () {
@@ -160,8 +160,7 @@ describe('Css optimizer', function () {
         });
 
         it('should minify css that import a less', function () {
-
-            var finished;
+            var finished = false;
 
             less.render.andCallFake(function (content, conf, fn) {
                 var data = content;
@@ -181,7 +180,7 @@ describe('Css optimizer', function () {
             instance.run();
 
             waitsFor(function () {
-                return (typeof finished !== 'undefined');
+                return finished;
             }, 'finished rendering less');
 
             runs(function () {
@@ -200,10 +199,10 @@ describe('Css optimizer', function () {
         });
 
         it('should generate a json map of minified files and the destination', function () {
-            var finished;
+            var finished = false;
 
             less.render.andCallFake(function (content, conf, fn) {
-                var data = content
+                var data = content;
                 finished = true;
                 fn(null, data);
             });
@@ -218,7 +217,7 @@ describe('Css optimizer', function () {
             instance.run();
 
             waitsFor(function () {
-                return (typeof finished !== 'undefined');
+                return finished;
             }, 'finished rendering less');
 
             runs(function () {
@@ -235,14 +234,15 @@ describe('Css optimizer', function () {
         });
 
         it('should minify in multiple min files if rules are over 4095 and map them accordingly', function () {
+            var finished = false;
+
             cssData = '';
             for (var i = 0; i < 4095; i++) {
                 cssData += '.css {min-width: 100px}';
             }
-            var finished;
 
             less.render.andCallFake(function (content, conf, fn) {
-                var data = content
+                var data = content;
                 finished = true;
                 fn(null, data);
             });
@@ -257,7 +257,7 @@ describe('Css optimizer', function () {
             instance.run();
 
             waitsFor(function () {
-                return (typeof finished !== 'undefined');
+                return finished;
             }, 'finished rendering less');
 
             runs(function () {
@@ -278,7 +278,7 @@ describe('Css optimizer', function () {
         });
 
         it('should resolve media querys for css of different components', function () {
-            var finished;
+            var finished = false;
 
             less.render.andCallFake(function (content, conf, fn) {
                 var data = content;
@@ -297,14 +297,12 @@ describe('Css optimizer', function () {
 
             htmlData = '{{css path="fake.css" media="all and (min-width: 300px)"}}';
 
-            var mediaTag = 'all and (min-width: 300px)';
-
             var instance = new CssOptimizer(config);
 
             instance.run();
 
             waitsFor(function () {
-                return (typeof finished !== 'undefined');
+                return finished;
             }, 'finished rendering less');
 
             runs(function () {
@@ -317,12 +315,7 @@ describe('Css optimizer', function () {
                         '}' +
                         '}'
                 );
-
             });
-
-
         });
-
     });
-
 });

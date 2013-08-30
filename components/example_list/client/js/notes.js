@@ -33,8 +33,6 @@ define(['js/note'], function (Note) {
     FloatNotes.prototype.start = function () {
         this._setup();
         this._board = this._root.find('.board');
-
-        var self = this;
     };
 
     /**
@@ -116,7 +114,7 @@ define(['js/note'], function (Note) {
             canSend = true;
             needResend = false;
         });
-    }
+    };
 
     /**
      * Saves the note to the session.

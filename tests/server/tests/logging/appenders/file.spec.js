@@ -29,9 +29,9 @@ var path = require('path'),
     moment = require('moment');
 
 describe('File appender', function () {
-    var mocks, Spy;
-    var FileAppenderModule, FileAppender;
-    var appender, layout, options, message;
+    var mocks, Spy,
+        FileAppenderModule, FileAppender,
+        appender, layout, options;
 
     beforeEach(function () {
         Spy = jasmine.createSpyObj('Spy', ['Appender']);
@@ -139,7 +139,6 @@ describe('File appender', function () {
     describe('destroy', function () {
 
         it('should end the write stream', function () {
-            message = 'message';
             options = {
                 file: 'log.log'
             };

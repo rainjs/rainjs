@@ -258,8 +258,7 @@ define(['raintime/css/stylesheet',
      * @returns {RuleSet[]} an array containing the RuleSets that fit inside the stylesheet
      */
     CssRegistry.prototype._getRulesWithin = function (count, startSheet) {
-        var left = count,
-            rules = [];
+        var rules = [];
 
         for (var i = startSheet, len = this._stylesheets.length; i < len; i++) {
             var style = this._stylesheets[i];

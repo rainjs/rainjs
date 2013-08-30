@@ -23,11 +23,10 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 'use strict';
 
 describe('JavaScript Optimizer', function () {
-    var JsOptimizer, components, requirejs, util, fs, wrench;
+    var JsOptimizer, components, requirejs, util, fs;
 
     beforeEach(function () {
         var mocks = {};
@@ -63,7 +62,7 @@ describe('JavaScript Optimizer', function () {
 
         mocks['fs'] = fs = jasmine.createSpyObj('fs',
             ['existsSync', 'writeFileSync', 'readFileSync']);
-        mocks['wrench'] = wrench = jasmine.createSpyObj('wrench', ['mkdirSyncRecursive']);
+        mocks['wrench'] = jasmine.createSpyObj('wrench', ['mkdirSyncRecursive']);
         mocks['requirejs'] = requirejs = jasmine.createSpyObj('requirejs', ['optimize']);
         mocks['../../lib/util'] = util = jasmine.createSpyObj('util', ['walkSync']);
         util.format = require('util').format;

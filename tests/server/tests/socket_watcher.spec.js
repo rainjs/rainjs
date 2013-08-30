@@ -152,7 +152,8 @@ describe('Socket Watch', function () {
 
 
     describe('Disconnect on Idle', function () {
-        var oldSetTimeout, timeWaited;
+        var timeWaited;
+
         beforeEach(function () {
             socket.sockets = {
                 clients: function() {
@@ -160,7 +161,6 @@ describe('Socket Watch', function () {
                 }
             };
             config.websocket.disconnectIdle = true;
-            oldSetTimeout = setTimeout;
             timeWaited = 0;
 
             SocketWatcher = loadModuleExports(path.join('lib', 'socket_watcher.js'), mocks, {
@@ -188,7 +188,7 @@ describe('Socket Watch', function () {
                         host: 'fake.schlund.net'
                     }
                 }
-            }
+            };
             socketWatcher._idleMap['test_id'] = true;
             socketWatcher._disconnectOnIdle(socket);
 
@@ -204,7 +204,7 @@ describe('Socket Watch', function () {
                         host: 'fake.schlund.net'
                     }
                 }
-            }
+            };
             socketWatcher._idleMap['test_id'] = false;
             socketWatcher._disconnectOnIdle(socket);
 

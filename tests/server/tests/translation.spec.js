@@ -27,8 +27,8 @@
 
 describe("Server Side Translation", function () {
     var mocks = {},
-        fs, configuration, Translation, poUtils,
-        file, component, locale, jed, Jed, logger, pluralFormFn;
+        fs, configuration, Translation,
+        file, component, locale;
 
     beforeEach(function () {
 
@@ -41,9 +41,10 @@ describe("Server Side Translation", function () {
 
         fs = jasmine.createSpyObj('fs', ['readFileSync']);
         fs.readFileSync.andCallFake(function () {
-            var data = 'msgid "a.b.c"\nmsgstr "Some text"\n\nmsgid "Some text"\nmsgstr "Some text"\n\nmsgid "plural.form"\nmsgstr "plurals"';
+            var data = 'msgid "a.b.c"\nmsgstr "Some text"\n\nmsgid "Some text"\nmsgstr ' +
+                       '"Some text"\n\nmsgid "plural.form"\nmsgstr "plurals"';
             return data;
-        })
+        });
 
         mocks['fs'] = fs;
 
@@ -56,7 +57,7 @@ describe("Server Side Translation", function () {
         logger = jasmine.createSpyObj('logger', ['error']);
         mocks['./logging'] = {
             get: function () {
-                return logger
+                return logger;
             }
         };
 
@@ -146,13 +147,11 @@ describe("Server Side Translation", function () {
     describe("translate method", function () {
 
         it('should log an error if translation fails if no id passed', function () {
-
             var translationInstance = Translation.get();
             translationInstance.loadLanguageFile(file, locale, component);
             translationInstance.loadLanguageFile(file, configuration.defaultLanguage, component);
 
-
-            var tr = translationInstance.translate(component, locale);
+            translationInstance.translate(component, locale);
 
             expect(logger.error).toHaveBeenCalled();
 

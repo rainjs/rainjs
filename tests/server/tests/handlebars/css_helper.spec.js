@@ -163,9 +163,8 @@ describe('Handlebars css helper', function () {
             mocks[process.cwd() + '/cssMaps.json'] = cssMap;
             cssHelper = loadModule('/lib/handlebars/css.js', mocks);
 
-            var template = Handlebars.compile('{{css version="1.0"}}');
             expect(function() {
-                template();
+                Handlebars.compile('{{css version="1.0"}}')();
             }).toThrowType(RainError.ERROR_PRECONDITION_FAILED, 'css');
 
             var template = Handlebars.compile('{{css path="index.css" version="3.0"}}');
