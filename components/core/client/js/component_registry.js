@@ -23,7 +23,7 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-define(function () {
+define(['raintime/lib/promise'], function (Promise) {
 
     /**
      *
@@ -34,11 +34,94 @@ define(function () {
     }
 
     /**
+     * Registers a component in the component map.
      *
-     * @param {Component} component
+     * @param {Component} component the component that needs to be registerd in the component map.
      */
     ComponentRegistry.prototype.register = function (component) {
-        this._componentMap[component.instanceId()] = component;
+        if(!this._isRegistered(component.instanceId())) {
+            this._componentMap[component.instanceId()] = component;
+        }
+    };
+
+
+    /**
+     * Verifies if a componentId is already in the component map.
+     *
+     * @param {String} componentId the instance id of the component.
+     * @private
+     */
+    ComponentRegistry.prototype._isRegistered = function (componentId) {
+
+        if(this._componentMap[componentId]) {
+            return true;
+        }
+
+        return false;
+    };
+
+    /**
+     * Finds a component in the component map depending on it's instance id.
+     *
+     * @param {String} componentId the instanceId of the component.
+     */
+    ComponentRegistry.prototype.findComponent = function (componentId) {
+
+    };
+
+    /**
+     * Loads the CSS for a component.
+     *
+     * @param {Component} component the component for which you want to load the CSS.
+     * @returns {Promise} a promise informing if the loading of the css was or not successful.
+     * @private
+     */
+    ComponentRegistry.prototype._loadCSS = function (component) {
+        var deferred = Promise.defer();
+
+        /**
+         * load the css for a component
+         */
+
+        return deferred.promise;
+    };
+
+    /**
+     * Loads the javascript for a component.
+     *
+     * @param {Component} component the component for which you want to load the javascript.
+     * @returns {Promise} a promise informing if the loading of the js was or not successful.
+     * @private
+     */
+    ComponentRegistry.prototype._loadJS = function (component) {
+        var deferred = Promise.defer();
+
+        /**
+         * load the js for a component
+         */
+
+        return deferred.promise;
+    };
+
+    /**
+     * Gets the component map.
+     *
+     * @returns {Object} the componentMap.
+     */
+    ComponentRegistry.prototype.getMap = function () {
+        return this._componentMap;
+    };
+
+    /**
+     * Invokes the life cycle of a component.
+     *
+     * @param {Component} component the component for which the life cycle should be invoked.
+     */
+    ComponentRegistry.prototype.invokeLifeCycle = function (component) {
+
+        /**
+         * invoke the life cycle of the component.
+         */
     };
 
     return ComponentRegistry;
