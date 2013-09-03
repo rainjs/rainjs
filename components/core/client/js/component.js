@@ -34,10 +34,16 @@ define(function () {
         this._id = componentData.id;
         this._version = componentData.version;
         this._instanceId = componentData.instanceId;
+        this._staticId = componentData.staticId;
         this._html = componentDate.html;
         this._containerId = componentData.containerId;
         this._rootElement = null;
-        this._staticId = componentData.staticId;
+        this._controllerPath = '';
+
+        if (componentData.controller) {
+            this._controllerPath = componentData.controller.replace(/^\/?(.*?)(.js)?$/, '$1');
+        }
+
         this._state = Component.LOAD;
     }
 
@@ -65,16 +71,16 @@ define(function () {
         return this._instanceId;
     };
 
-    Component.prototype.html = function () {
-        return this._html;
+    Component.prototype.staticId = function () {
+        return this._staticId || this._instanceId;
     };
 
     Component.prototype.containerId = function () {
         return this._containerId;
     };
 
-    Component.prototype.staticId = function () {
-        return this._staticId;
+    Component.prototype.html = function () {
+        return this._html;
     };
 
     Component.prototype.cssClass = function () {
@@ -89,8 +95,8 @@ define(function () {
         return this._rootElement;
     };
 
-    Component.prototype.controller = function () {
-
+    Component.prototype.controllerPath = function () {
+        return this._controllerPath;
     };
 
     return Component;

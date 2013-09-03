@@ -23,7 +23,13 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-define(['raintime/lib/promise'], function (Promise) {
+define([
+    'raintime/css/renderer',
+    'raintime/controller',
+    'raintime/lib/promise',
+    'raintime/lib/event_emitter',
+    'raintime/lib/util'
+], function (CssRenderer, BaseController, Promise, EventEmitter, util) {
 
     /**
      *
@@ -33,35 +39,65 @@ define(['raintime/lib/promise'], function (Promise) {
         this._componentMap = {};
     }
 
+    util.inherits(ComponentRegistry, EventEmitter);
+
     /**
      * Registers a component in the component map.
      *
      * @param {Component} component the component that needs to be registered in the component map.
      */
     ComponentRegistry.prototype.register = function (component) {
-        if(!this._isRegistered(component.instanceId())) {
-            this._componentMap[component.instanceId()] = component;
-            this._loadCSS(component);
-            this._loadJS(component);
+        if (!component) {
+            throw new RainError('The component parameter is mandatory');
         }
 
-        throw new RainError('The component id "' + component.instanceId() + '" is duplicated.');
+        if (this._componentMap(component.instanceId())) {
+            throw new RainError('A component with the specified instance id is already registered: '
+                + component.instanceId());
+        }
+
+        this._componentMap[component.instanceId()] = component;
+
+        // TODO: modify the CSS renderer to use Component instances
+        CssRenderer.get().load(component);
+        this._loadController(component).then(function (Controller) {
+            if (!Controller) {
+                Controller = function () {};
+            }
+
+            var Constructor = function (component) {
+                BaseController.call(this, component);
+                Controller.call(this);
+            };
+
+            Constructor.prototype = $.extend({}, BaseController.prototype, Controller.prototype);
+
+            var controller = new Constructor();
+
+        });
+
+            /*.then(function () {
+
+        }, function (error) {
+            logger.error('Failed to load CSS for: ' + component.uniqueId());
+        });*/
     };
 
+    ComponentRegistry.prototype._loadController = function (component) {
+        var deferred = Promise.defer();
 
-    /**
-     * Verifies if a componentId is already in the component map.
-     *
-     * @param {String} componentId the instance id of the component.
-     * @private
-     */
-    ComponentRegistry.prototype._isRegistered = function (componentId) {
-
-        if(this._componentMap[componentId]) {
-            return true;
+        var minFilePath = '';
+        if (rainContext.enableMinification) {
+            minFilePath = component.id() + '/' + component.version() + '/js/index.min';
         }
 
-        return false;
+        require([minFilePath], function () {
+            require([component.controllerPath()], function (Controller) {
+                deferred.resolve(Controller);
+            });
+        });
+
+        return deferred.promise;
     };
 
     /**

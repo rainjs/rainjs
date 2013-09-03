@@ -150,6 +150,7 @@ define([
             instanceId = component.instanceId();
 
         if (component.rootElement().length === 0) {
+            // fix the case where this component is an indirect container child
             var containerId = component.containerId();
 
             if (!this._orphanComponents[containerId]) {
@@ -160,15 +161,15 @@ define([
             return;
         }
 
-        this._setupComponentMarkup(component);
+        this._setupComponent(component);
 
         if (this._orphanComponents[instanceId]) {
-            this._orphanComponents[instanceId].forEach(this._setupComponentMarkup, this);
+            this._orphanComponents[instanceId].forEach(this._setupComponent, this);
             this._orphanComponents[instanceId] = null;
         }
     };
 
-    ClientRenderer.prototype._setupComponentMarkup = function (component) {
+    ClientRenderer.prototype._setupComponent = function (component) {
         var element = component.rootElement();
 
         element.css('visibility', 'hidden').html(component.html());
@@ -178,12 +179,7 @@ define([
         // CSS and JavaScript can be loaded at register time
         this._registry.register(component);
 
-        // TODO: modify the CSS renderer to use Component instances
-        CssRenderer.get().load(component).then(function () {
 
-        }, function (error) {
-            logger.error('Failed to load CSS for: ' + component.uniqueId());
-        });
     };
 
     ClientRenderer.prototype._showComponent = function (component) {
