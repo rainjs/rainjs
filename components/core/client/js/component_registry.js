@@ -60,17 +60,18 @@ define([
 
         // TODO: modify the CSS renderer to use Component instances
         CssRenderer.get().load(component);
-        this._loadController(component).then(function (Controller) {
-            if (!Controller) {
-                Controller = function () {};
+
+        this._loadController(component).then(function (ComponentController) {
+            if (!ComponentController) {
+                ComponentController = function () {};
             }
 
             var Constructor = function (component) {
                 BaseController.call(this, component);
-                Controller.call(this);
+                ComponentController.call(this);
             };
 
-            Constructor.prototype = $.extend({}, BaseController.prototype, Controller.prototype);
+            Constructor.prototype = $.extend({}, BaseController.prototype, ComponentController.prototype);
 
             var controller = new Constructor();
 

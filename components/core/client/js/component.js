@@ -88,7 +88,7 @@ define(function () {
     };
 
     Component.prototype.rootElement = function () {
-        if (!this._rootElement || this._rootElement.length === 0) {
+        if (!(this._rootElement && this._rootElement.length === 0)) {
             this._rootElement = $('#' + this.instanceId);
         }
 
