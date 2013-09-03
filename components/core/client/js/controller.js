@@ -47,16 +47,16 @@ define(['raintime/lib/event_emitter',
 
         if (eventName === 'init' &&
             (component.state === Component.START || component.state() === Component.INIT)) {
-            callback.call(controller);
+            callback.call(this);
             return;
         }
 
         if (eventName === 'start' && component.state === Component.START) {
-            callback.call(controller);
+            callback.call(this);
             return;
         }
 
-        Controller.prototype.on.apply(controller, arguments);
+        Controller.prototype.on.apply(this, arguments);
     };
 
     /**
