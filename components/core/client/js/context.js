@@ -29,8 +29,6 @@ define(['raintime/client_storage',
         'raintime/messaging/sockets'
 ], function (ClientStorage, Observer, Intents, SocketHandler) {
 
-    var raintime = null;
-
     /**
      * The context reflects a component's client-side state. It gives access to other
      * important libraries like client storage, messaging and web sockets.
@@ -45,16 +43,16 @@ define(['raintime/client_storage',
      * @property {String} instanceId the component's instance id
      * @property {ClientStorage} storage the local storage manager
      */
-    function Context(raintimeInstance, component) {
+    function Context(component) {
         var self = this;
 
-        raintime = raintimeInstance;
         this.component = {
             id: component.id,
             version: component.version,
             sid: component.staticId,
             children: component.children
         };
+
         this.instanceId = component.instanceId;
         this.parentInstanceId = component.parentInstanceId;
         this.storage = new ClientStorage(this);
@@ -139,25 +137,17 @@ define(['raintime/client_storage',
      * @param {jQueryDom} dom The dom object where the component is inserted
      * @param {Function} [callback] the function to be called after the controller was loaded
      */
-    Context.prototype.insert = function (component, dom, callback) {
-        var staticId = component.sid || Math.floor(Math.random(0, Date.now()));
-        var instanceId = (
-                Date.now().toString() +
-                (++window.ClientRenderer.get().counter) +
-                staticId + this.instanceId
-        );
-        $(dom).html('<div id="' + instanceId + '"></div>');
-        component.instanceId = instanceId;
+    Context.prototype.insert = function (component, element, callback) {
 
         var self = this;
 
-        raintime.componentRegistry.setCallback(instanceId, function (registeredComponent) {
-            self.component.children.push(registeredComponent);
+        ClientRenderer.get().insertComponent(component, element, this.instanceId).then(function (registeredComponent) {
             registeredComponent.controller.context.parentInstanceId = self.instanceId;
             callback && callback.call(registeredComponent.controller, registeredComponent);
+        }, function () {
+            //TODO: what happens on error
         });
 
-        window.ClientRenderer.get().requestComponent(component);
     };
 
     /**
@@ -175,14 +165,15 @@ define(['raintime/client_storage',
      * @param {Function} [callback] the function to be called after the controller was loaded
      */
     Context.prototype.replace = function (component, callback) {
-        component.instanceId = this.instanceId;
 
-        raintime.componentRegistry.setCallback(this.instanceId, function (registeredComponent) {
+        var self = this;
+
+        ClientRenderer.get().replaceComponent(component, this.instanceId).then(function (registeredComponent) {
             registeredComponent.controller.context.parentInstanceId = self.instanceId;
             callback && callback.call(registeredComponent.controller, registeredComponent);
+        }, function () {
+            //TODO: do something if error
         });
-
-        window.ClientRenderer.get().requestComponent(component);
     };
 
     /**
@@ -192,7 +183,8 @@ define(['raintime/client_storage',
      */
     Context.prototype.remove = function (staticId) {
         var children = this.component.children,
-            childInstanceId;
+            childInstanceId,
+            componentRegistry = ClientRenderer.get().getComponentRegistry();
 
         if (!children) {
             return;
@@ -201,7 +193,7 @@ define(['raintime/client_storage',
         for (var i = 0, len = children.length; i < len; i++) {
             if (children[i].staticId === staticId) {
                 childInstanceId = children[i].instanceId;
-                raintime.componentRegistry.deregister(childInstanceId);
+                componentRegistry.deregister(childInstanceId);
                 children.splice(i, 1);
                 $("#" + childInstanceId).remove();
                 break;
@@ -218,6 +210,78 @@ define(['raintime/client_storage',
      * @private
      * @returns {Controller|Promise}
      */
+
+    Context.prototype.find = function (staticIds, callback) {
+
+        var component = this.component,
+            componentRegistry = ClientRenderer.get().getComponentRegistry();
+
+        if (!component.children) {
+            logger.error('The component has no registered children: ' +
+                (component && JSON.stringify(staticId)));
+            return;
+        }
+
+        var children = component.children;
+
+        var promises = [];
+
+        if (!staticIds) {
+            for (var i = 0, len = children.length; i < len; i++) {
+                var childInstanceId = children[i].instanceId,
+                    child = componentRegistry.find(childInstanceId);
+                if (child) {
+                    promises.push(child.promise);
+                }
+            }
+        } else {
+            var wrongStaticIds = [];
+            for (var j = 0, len = staticIds.length; j < len; j++) {
+                var staticId = staticIds[j],
+                    found = false;
+
+                for (var i = children.length; i--;) {
+                    var childInstanceId = children[i].instanceId,
+                        child = componentRegistry.find(childInstanceId);
+                    if (child && child.staticId === staticId) {
+                        promises.push(child.promise);
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    wrongStaticIds.push(staticIds);
+                }
+            }
+
+            if (wrongStaticIds.length > 0) {
+                return wrongStaticIds;
+            }
+        }
+
+        if (promises.length > 0) {
+            var group = Promise.all(promises);
+            group.then(function (array) {
+                if (array.length == 1) {
+                    callback.apply(array[0], array);
+                    return;
+                }
+                callback.apply(component.controller, array);
+            });
+        } else {
+            logger.warn('Components with the following static IDs were not found: ' +
+                JSON.stringify(staticIds));
+        }
+    };
+
+    Context.prototype._getParent = function () {
+        var parentInstanceId = this.parentInstanceId,
+            parent = ClientRenderer.get().getComponentRegistry.find(parentInstanceId);
+
+        // return a promise if the controller isn't loaded yet
+        return parent && (parent.controller || parent.promise);
+    };
 
     return Context;
 });

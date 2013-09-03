@@ -38,7 +38,16 @@ define(function () {
         this._containerId = componentData.containerId;
         this._rootElement = null;
         this._staticId = componentData.staticId;
+        this._state = Component.LOAD;
     }
+
+    Component.LOAD = 1;
+    Component.INIT = 2;
+    Component.ERROR = 4;
+    Component.START = 8;
+    Component.DESTROY = 16;
+    Component.DESTROYED = 32;
+    Component.PENDING = 64;
 
     Component.prototype.id = function () {
         return this._id;

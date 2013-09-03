@@ -26,18 +26,38 @@
 define(['raintime/lib/event_emitter',
         'raintime/lib/promise',
         'raintime/lib/util',
-        'raintime/lib/step'], function (EventEmitter, Promise, Util, Step) {
+        'raintime/component'
+        'raintime/context'], function (EventEmitter, Promise, Util, Component, Context) {
 
-    function Controller() {
+    function Controller(component) {
         /**
          * Controllers for child components.
          *
          * @type {Object}
          */
         this._controllers = {};
+        this.context = new Context(component);
     }
 
-    Controller.prototype = Object.create(EventEmitter.prototype);
+    Util.inherits(Controller, EventEmitter);
+
+
+    Controller.on = function (eventName, callback) {
+        var component = this.context.component;
+
+        if (eventName === 'init' &&
+            (component.state === Component.START || component.state() === Component.INIT)) {
+            callback.call(controller);
+            return;
+        }
+
+        if (eventName === 'start' && component.state === Component.START) {
+            callback.call(controller);
+            return;
+        }
+
+        Controller.prototype.on.apply(controller, arguments);
+    };
 
     /**
      * Base init method of controller
@@ -117,10 +137,11 @@ define(['raintime/lib/event_emitter',
      * @param {Function} eventHandler the event handler function
      */
     Controller.prototype._onChild = function (sid, eventName, eventHandler) {
-        var step = Step.Step();
-        step(this, [
+        var self = this;
+
+        Promise.seq([
             function () {
-                return this._getChild(sid);
+                return self._getChild(sid);
             },
             function (controller) {
                 controller.on(eventName, eventHandler);

@@ -413,31 +413,6 @@ define(['raintime/lib/promise',
         var controller = new Controller();
         AsyncController.call(controller);
 
-        controller.on = function (eventName, callback) {
-            if (eventName === 'init' &&
-                (component.state === Component.START || component.state === Component.INIT)) {
-                callback.call(controller);
-                return;
-            }
-
-            if (eventName === 'start' && component.state === Component.START) {
-                callback.call(controller);
-                return;
-            }
-
-            Controller.prototype.on.apply(controller, arguments);
-        };
-
-        // Attach modules to the controller.
-        controller.context = new Context(raintime, component);
-
-        controller.context._getParent = function () {
-            var parentInstanceId = this.parentInstanceId,
-                parent = components[parentInstanceId] || preComponents[parentInstanceId];
-
-            // return a promise if the controller isn't loaded yet
-            return parent && (parent.controller || parent.promise);
-        };
 
         controller.context.find = function (staticIds, callback) {
             if (typeof staticIds === 'function') {
