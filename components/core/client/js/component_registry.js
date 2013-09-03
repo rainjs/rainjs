@@ -36,12 +36,16 @@ define(['raintime/lib/promise'], function (Promise) {
     /**
      * Registers a component in the component map.
      *
-     * @param {Component} component the component that needs to be registerd in the component map.
+     * @param {Component} component the component that needs to be registered in the component map.
      */
     ComponentRegistry.prototype.register = function (component) {
         if(!this._isRegistered(component.instanceId())) {
             this._componentMap[component.instanceId()] = component;
+            this._loadCSS(component);
+            this._loadJS(component);
         }
+
+        throw new RainError('The component id "' + component.instanceId() + '" is duplicated.');
     };
 
 
@@ -94,8 +98,14 @@ define(['raintime/lib/promise'], function (Promise) {
      * @private
      */
     ComponentRegistry.prototype._loadJS = function (component) {
-        var deferred = Promise.defer();
+        var deferred = Promise.defer(),
+            controller = component.controller();
 
+        if (controller) {
+            require([controller], function (controller) {
+
+            });
+        }
         /**
          * load the js for a component
          */

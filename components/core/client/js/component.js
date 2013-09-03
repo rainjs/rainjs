@@ -37,6 +37,7 @@ define(function () {
         this._html = componentDate.html;
         this._containerId = componentData.containerId;
         this._rootElement = null;
+        this._staticId = componentData.staticId;
     }
 
     Component.prototype.id = function () {
@@ -63,6 +64,10 @@ define(function () {
         return this._containerId;
     };
 
+    Component.prototype.staticId = function () {
+        return this._staticId;
+    };
+
     Component.prototype.cssClass = function () {
         return 'app-container ' + this.id() + '_' + componentData.version().replace(/\./g, '_');
     };
@@ -73,6 +78,10 @@ define(function () {
         }
 
         return this._rootElement;
+    };
+
+    Component.prototype.controller = function () {
+
     };
 
     return Component;
