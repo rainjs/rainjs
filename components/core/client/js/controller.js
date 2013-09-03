@@ -26,7 +26,7 @@
 define(['raintime/lib/event_emitter',
         'raintime/lib/promise',
         'raintime/lib/util',
-        'raintime/component'
+        'raintime/component',
         'raintime/context'], function (EventEmitter, Promise, Util, Component, Context) {
 
     function Controller(component) {
