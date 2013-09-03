@@ -24,36 +24,23 @@
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 define(function () {
-    "use strict";
 
     /**
-     * Client-side controller for the popup window used to display views required through intents.
+     *
+     * @constructor
      */
-    function Dialog() {}
+    function ComponentRegistry() {
+        this._componentMap = {};
+    }
 
     /**
-     * Register a handle for the close button click.
+     *
+     * @param {Component} component
      */
-    Dialog.prototype.start = function () {
-        var self = this,
-            close = $('.core-dialog .close');
-
-        close.on('click', function () {
-            $('.core-dialog').remove();
-            $('.core-modal').remove();
-
-            ClientRenderer.get().getComponentRegistry().deregister(self.context.instanceId);
-        });
+    ComponentRegistry.prototype.register = function (component) {
+        this._componentMap[component.instanceId()] = component;
     };
 
-
-    /**
-     * Clear the contents of the dialog as a way to close it.
-     */
-    Dialog.prototype.destroy = function() {
-        var root = this.context.getRoot();
-        root.empty();
-    };
-
-    return Dialog;
+    return ComponentRegistry;
 });
+

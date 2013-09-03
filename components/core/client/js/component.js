@@ -24,36 +24,56 @@
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 define(function () {
-    "use strict";
 
     /**
-     * Client-side controller for the popup window used to display views required through intents.
+     *
+     * @param componentData
+     * @constructor
      */
-    function Dialog() {}
+    function Component(componentData) {
+        this._id = componentData.id;
+        this._version = componentData.version;
+        this._instanceId = componentData.instanceId;
+        this._html = componentDate.html;
+        this._containerId = componentData.containerId;
+        this._rootElement = null;
+    }
 
-    /**
-     * Register a handle for the close button click.
-     */
-    Dialog.prototype.start = function () {
-        var self = this,
-            close = $('.core-dialog .close');
-
-        close.on('click', function () {
-            $('.core-dialog').remove();
-            $('.core-modal').remove();
-
-            ClientRenderer.get().getComponentRegistry().deregister(self.context.instanceId);
-        });
+    Component.prototype.id = function () {
+        return this._id;
     };
 
-
-    /**
-     * Clear the contents of the dialog as a way to close it.
-     */
-    Dialog.prototype.destroy = function() {
-        var root = this.context.getRoot();
-        root.empty();
+    Component.prototype.version = function () {
+        return this._version;
     };
 
-    return Dialog;
+    Component.prototype.uniqueId = function () {
+        return this.id() + ';' + this.version();
+    };
+
+    Component.prototype.instanceId = function () {
+        return this._instanceId;
+    };
+
+    Component.prototype.html = function () {
+        return this._html;
+    };
+
+    Component.prototype.containerId = function () {
+        return this._containerId;
+    };
+
+    Component.prototype.cssClass = function () {
+        return 'app-container ' + this.id() + '_' + componentData.version().replace(/\./g, '_');
+    };
+
+    Component.prototype.rootElement = function () {
+        if (!this._rootElement || this._rootElement.length === 0) {
+            this._rootElement = $('#' + this.instanceId);
+        }
+
+        return this._rootElement;
+    };
+
+    return Component;
 });

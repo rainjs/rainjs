@@ -39,17 +39,12 @@
                         }
                     }
                 };
+
                 var rainContext = {
                     language: '{{language}}',
                     enableClientLogging: {{enableClientLogging}},
                     cookieMaxAge: {{cookieMaxAge}},
                     enableMinification: {{enableMinification}}
-                };
-                if (!rainContext.enableMinification) {
-                    requireConfig.deps = [
-                        "raintime/dependencies",
-                        "raintime"
-                    ];
                 };
 
                 var renderQueueList = [];
@@ -77,21 +72,16 @@
                     }
                 }
 
-                var minFilePath = '';
-                var dependenciesPath = '';
-                if (rainContext.enableMinification) {
-                        minFilePath = 'raintime/index.min';
-                        dependenciesPath = 'raintime/dependencies';
-                }
+                var minFilePath = rainContext.enableMinification ? 'raintime/index.min' : '';
 
-                require(requireConfig, [minFilePath], function (main) {
-                    require([dependenciesPath], function (dep) {});
-                    require(["raintime/client_rendering"], function(ClientRenderer) {
+                require(requireConfig, [minFilePath], function () {
+                    require(['raintime/dependencies', 'raintime/client_renderer'], function () {
                         ClientRenderer.get().setPlaceholderTimeout({{placeholderTimeout}});
                         ClientRenderer.get().setPlaceholder({{{placeholder}}});
 
                         if (renderQueueList.length === 0) {
-                            ClientRenderer.get().renderPlaceholder($($('body div').get(0)).attr('id'));
+                            var mainComponentInstanceId = $($('body div').get(0)).attr('id');
+                            ClientRenderer.get().renderPlaceholder(mainComponentInstanceId);
                         }
 
                         renderQueue();
