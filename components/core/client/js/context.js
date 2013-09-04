@@ -127,15 +127,6 @@ define(['raintime/client_storage',
      * after the controller for the new controller was loaded.
      *
      * The context for the callback function will be the component's controller.
-     *
-     * @param {Object} component The component which to be requested
-     * @param {String} component.id The component id
-     * @param {String} component.view The component view id
-     * @param {String} component.sid The component staticId id
-     * @param {Object} component.context Custom data for the template
-     * @param {Boolean} component.placeholder Enable / Disable placeholder
-     * @param {jQueryDom} dom The dom object where the component is inserted
-     * @param {Function} [callback] the function to be called after the controller was loaded
      */
     Context.prototype.insert = function (component, element, callback) {
 
@@ -156,13 +147,6 @@ define(['raintime/client_storage',
      *
      * The context for the callback function will be the component's controller.
      *
-     * @param {Object} component The component which to be requested
-     * @param {String} component.id The component id
-     * @param {String} component.view The component view id
-     * @param {String} component.sid The component staticId id
-     * @param {Object} component.context Custom data for the template
-     * @param {Boolean} component.placeholder Enable / Disable placeholder
-     * @param {Function} [callback] the function to be called after the controller was loaded
      */
     Context.prototype.replace = function (component, callback) {
 

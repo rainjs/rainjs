@@ -35,7 +35,7 @@ define(function () {
         this._version = componentData.version;
         this._instanceId = componentData.instanceId;
         this._staticId = componentData.staticId;
-        this._html = componentDate.html;
+        this._html = componentData.html;
         this._containerId = componentData.containerId;
         this._rootElement = null;
         this._controllerPath = '';
