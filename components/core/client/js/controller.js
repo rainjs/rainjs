@@ -36,10 +36,38 @@ define(['raintime/lib/event_emitter',
          * @type {Object}
          */
         this._controllers = {};
+        
         this.context = new Context(component);
-    }
+
+        this._decorate('init');
+
+        this._decorate('start');
+
+        this._decorate('destroy');
+    };
 
     Util.inherits(Controller, EventEmitter);
+
+
+
+    Controller.prototype._decorate = function (method) {
+        var decoratedMethod = this[method];
+
+        this[method] = function () {
+            var deferred = Promise.defer(),
+                self = this;
+
+            Promise.when(decoratedMethod.apply(this),
+                function () {
+                    self.emit(method);
+                    deferred.resolve();
+                },
+                function (err) {
+                    deferred.reject(err);
+                }
+            );
+        }
+    };
 
 
     Controller.on = function (eventName, callback) {
@@ -84,7 +112,7 @@ define(['raintime/lib/event_emitter',
      */
     Controller.prototype.start = function () {
         var deferred = Promise.defer(),
-            self = this;;
+            self = this;
 
         Promise.when(this.start(),
             function(data) {
@@ -95,6 +123,7 @@ define(['raintime/lib/event_emitter',
                 deferred.reject(err);
             }
         );
+
 
         return deferred.promise;
     };
