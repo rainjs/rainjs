@@ -130,14 +130,25 @@ define(['raintime/client_storage',
      */
     Context.prototype.insert = function (component, element, callback) {
 
-        var self = this;
+        var self = this,
+            clientRenderer = ClientRenderer.get();
 
-        ClientRenderer.get().insertComponent(component, element, this.instanceId).then(function (registeredComponent) {
-            callback && callback.call(registeredComponent.controller, registeredComponent);
-        }, function () {
-            //TODO: what happens on error
+        Promise.seq(
+            [
+                function() {
+                    return clientRenderer.requestComponent(component);
+                },
+                function (component) {
+                    component.controller.context.parentInstanceId = self.instanceId;
+                    //register the component insert it in the children of the previous component and render it depending
+                    //on the dom element.
+                }
+            ]
+        ).then(function (component) {
+            callback && callback.call(component.controller, component);
+        }, function (err) {
+            //TODO: do something if error
         });
-
     };
 
     /**
@@ -149,11 +160,23 @@ define(['raintime/client_storage',
      */
     Context.prototype.replace = function (component, callback) {
 
-        var self = this;
+        var self = this,
+            clientRenderer = ClientRenderer.get();
 
-        ClientRenderer.get().replaceComponent(component, this.parentInstanceId).then(function (registeredComponent) {
+        Promise.seq(
+            [
+                function () {
+                    return clientRenderer.requestComponent(component);
+                },
+                function (component) {
+                    component.controller.context.parentInstanceId = self.parentInstanceId;
+                    //register the component over the other component and put it in the dom
+                    return component;
+                }
+            ]
+        ).then(function (registeredComponent) {
             callback && callback.call(registeredComponent.controller, registeredComponent);
-        }, function () {
+        }, function (err) {
             //TODO: do something if error
         });
     };
