@@ -86,9 +86,6 @@ define([
         var self = this;
 
         this._registry = new ComponentRegistry();
-        this._registry.on('start', function (component) {
-            self._showComponent(component);
-        });
 
         /**
          * A map of objects that have been rendered inside a container and are waiting for their
@@ -170,14 +167,19 @@ define([
     };
 
     ClientRenderer.prototype._setupComponent = function (component) {
-        var element = component.rootElement();
+        var element = component.rootElement(),
+            self = this;
 
         element.css('visibility', 'hidden').html(component.html());
-        element.attr('id', instanceId);
+        element.attr('id', component.instanceId());
         element.attr('class', component.cssClass());
 
         // CSS and JavaScript can be loaded at register time
-        this._registry.register(component);
+        this._registry.register(component).then(function () {
+            self._showComponent(component);
+        }, function (error) {
+            logger.error('Failed to register component: ' + component.uniqueId());
+        });
     };
 
     ClientRenderer.prototype._showComponent = function (component) {
@@ -205,9 +207,9 @@ define([
      *
      * @param {Object} component the whole rendered placeholder component
      */
-    ClientRenderer.prototype.setPlaceholder = function (component) {
-        this._placeholderComponent = component;
-        CssRenderer.get().load(component);
+    ClientRenderer.prototype.setPlaceholder = function (componentData) {
+        this._placeholderComponent = new Component(componentData);
+        CssRenderer.get().load(this._placeholderComponent);
     };
 
     /**
@@ -227,8 +229,8 @@ define([
         var element = $('#' + instanceId),
             placeholderOverlay = $('<div></div>');
 
-        placeholderOverlay.addClass('placeholder-overlay placeholder_1and1_1_0');
-        placeholderOverlay.html(this._placeholderComponent.html);
+        placeholderOverlay.addClass('placeholder-overlay ' + this._placeholderComponent.cssClass());
+        placeholderOverlay.html(this._placeholderComponent.html());
 
         element.addClass('app-container');
         element.css({

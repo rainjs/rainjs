@@ -40,6 +40,7 @@ define(function () {
         this._rootElement = null;
         this._controllerPath = '';
         this._controller = null;
+        this._css = componentData.css;
 
         if (componentData.controller) {
             this._controllerPath = componentData.controller.replace(/^\/?(.*?)(.js)?$/, '$1');
@@ -85,12 +86,12 @@ define(function () {
     };
 
     Component.prototype.cssClass = function () {
-        return 'app-container ' + this.id() + '_' + componentData.version().replace(/\./g, '_');
+        return 'app-container ' + this.id() + '_' + this.version().replace(/\./g, '_');
     };
 
     Component.prototype.rootElement = function () {
         if (!(this._rootElement && this._rootElement.length === 0)) {
-            this._rootElement = $('#' + this.instanceId);
+            this._rootElement = $('#' + this.instanceId());
         }
 
         return this._rootElement;
@@ -107,6 +108,19 @@ define(function () {
 
         this._controller = controller;
         return this;
+    };
+
+    /**
+     * [
+     *    {"path":"/example/3.0/css/index.css","ruleCount":7},
+     *    {"path":"/example/3.0/css/jquery-ui-1.10.2.custom.css","ruleCount":357}
+     * ]
+     *
+     *
+     * @returns {Array}
+     */
+    Component.prototype.css = function () {
+        return this._css;
     };
 
     return Component;

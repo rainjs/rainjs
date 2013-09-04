@@ -54,15 +54,14 @@ define(['raintime/lib/util',
      * promise returned by this method is rejected when there is not enough space to insert
      * the CSS in the page.
      *
-     * @param {Object} component the component for which to load the CSS. This is the object sent by the server when a component is rendered.
+     * @param {Component} component the component for which to load the CSS. This is the object sent by the server when a component is rendered.
      * @returns {Promise} indicates when the loading of the CSS finished.
      */
     CssRenderer.prototype.load = function (component) {
         var deferred = defer(),
             self = this,
             css = [],
-            componentId = this._getFullId(component.id, component.version),
-            newFiles = this._registry.getNewFiles(componentId, component.css);
+            newFiles = this._registry.getNewFiles(component.uniqueId(), component.css());
 
         newFiles = newFiles.filter(function (file) {
             return typeof processing[file.path] === 'undefined';
@@ -92,7 +91,7 @@ define(['raintime/lib/util',
                 processing[file.path] = void(0);
             }
 
-            if (!self._registry.register(componentId, css)) {
+            if (!self._registry.register(component.uniqueId(), css)) {
                 deferred.reject();
                 return;
             }
@@ -182,17 +181,6 @@ define(['raintime/lib/util',
         }
 
         return deferred.promise;
-    };
-
-    /**
-     * Gets the complete component identifier.
-     *
-     * @param {String} id the component id
-     * @param {String} version the component version
-     * @returns {String} the complete identifier
-     */
-    CssRenderer.prototype._getFullId = function (id, version) {
-        return id + ';' + version;
     };
 
     /**

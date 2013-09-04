@@ -53,7 +53,7 @@ define(['raintime/client_storage',
             children: component.children
         };
 
-        this.instanceId = component.instanceId;
+        this.instanceId = component.instanceId();
         this.parentInstanceId = component.parentInstanceId;
         this.storage = new ClientStorage(this);
 
@@ -201,8 +201,8 @@ define(['raintime/client_storage',
             componentRegistry = ClientRenderer.get().getComponentRegistry();
 
         if (!component.children) {
-            logger.error('The component has no registered children: ' +
-                (component && JSON.stringify(staticId)));
+            //logger.error('The component has no registered children: ' +
+            //    (component && JSON.stringify(staticId)));
             return;
         }
 

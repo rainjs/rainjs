@@ -52,21 +52,19 @@ define([
      * @param {Component} component the component that needs to be registered in the component map.
      */
     ComponentRegistry.prototype.register = function (component) {
-        var deferred = defer(),
-            self = this;
-
         if (!component) {
             throw new RainError('The component parameter is mandatory');
         }
 
-        if (this._componentMap(component.instanceId())) {
+        if (this._componentMap[component.instanceId()]) {
             throw new RainError('A component with the specified instance id is already registered: '
                 + component.instanceId());
         }
 
-        this._componentMap[component.instanceId()] = component;
+        var deferred = defer(),
+            self = this;
 
-        // TODO: modify the CSS renderer to use Component instances
+        this._componentMap[component.instanceId()] = component;
 
         seq([
             function () {
@@ -75,18 +73,17 @@ define([
             function () {
                 return component.controller().start();
             }
-        ]).then(function (controller) {
+        ]).then(function () {
             deferred.resolve();
         }, function (error) {
             controller.error(error);
             deferred.reject(error);
-            //logger.error('Failed to register: ' + component.uniqueId());
         });
 
         return deferred.promise;
     };
 
-    ComponentController.prototype._loadController = function (component) {
+    ComponentRegistry.prototype._loadController = function (component) {
         var self = this;
 
         return Promise.seq([
@@ -96,7 +93,7 @@ define([
             function (ComponentController) {
                 var controller = self._instantiateController(component, ComponentController);
                 component.controller(controller);
-                return controller.init(); // I assume that init and start methods are always defined
+                return controller.init();
             }
         ]);
     };
@@ -134,7 +131,7 @@ define([
             ComponentController.prototype
         );
 
-        return new Controller();
+        return new Controller(component);
     };
 
     /**
