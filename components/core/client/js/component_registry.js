@@ -31,12 +31,17 @@ define([
     'raintime/lib/util'
 ], function (CssRenderer, BaseController, Promise, EventEmitter, util) {
 
+    var all = Promise.all,
+        seq = Promise.seq,
+        defer = Promise.defer;
+
     /**
      *
      * @constructor
      */
     function ComponentRegistry() {
         this._componentMap = {};
+        this._cssRenderer = CssRenderer.get();
     }
 
     util.inherits(ComponentRegistry, EventEmitter);
@@ -47,6 +52,9 @@ define([
      * @param {Component} component the component that needs to be registered in the component map.
      */
     ComponentRegistry.prototype.register = function (component) {
+        var deferred = defer(),
+            self = this;
+
         if (!component) {
             throw new RainError('The component parameter is mandatory');
         }
@@ -59,32 +67,41 @@ define([
         this._componentMap[component.instanceId()] = component;
 
         // TODO: modify the CSS renderer to use Component instances
-        CssRenderer.get().load(component);
 
-        this._loadController(component).then(function (ComponentController) {
-            if (!ComponentController) {
-                ComponentController = function () {};
+        seq([
+            function () {
+                return all(self._cssRenderer.load(component), self._loadController(component));
+            },
+            function () {
+                return component.controller().start();
             }
-
-            var Constructor = function (component) {
-                BaseController.call(this, component);
-                ComponentController.call(this);
-            };
-
-            Constructor.prototype = $.extend({}, BaseController.prototype, ComponentController.prototype);
-
-            var controller = new Constructor();
-
+        ]).then(function (controller) {
+            deferred.resolve();
+        }, function (error) {
+            controller.error(error);
+            deferred.reject(error);
+            //logger.error('Failed to register: ' + component.uniqueId());
         });
 
-            /*.then(function () {
-
-        }, function (error) {
-            logger.error('Failed to load CSS for: ' + component.uniqueId());
-        });*/
+        return deferred.promise;
     };
 
-    ComponentRegistry.prototype._loadController = function (component) {
+    ComponentController.prototype._loadController = function (component) {
+        var self = this;
+
+        return Promise.seq([
+            function () {
+                return self._requestController(component);
+            },
+            function (ComponentController) {
+                var controller = self._instantiateController(component, ComponentController);
+                component.controller(controller);
+                return controller.init(); // I assume that init and start methods are always defined
+            }
+        ]);
+    };
+
+    ComponentRegistry.prototype._requestController = function (component) {
         var deferred = Promise.defer();
 
         var minFilePath = '';
@@ -99,6 +116,25 @@ define([
         });
 
         return deferred.promise;
+    };
+
+    ComponentRegistry.prototype._instantiateController = function (component, ComponentController) {
+        if (!ComponentController) {
+            ComponentController = function () {};
+        }
+
+        var Controller = function (component) {
+            BaseController.call(this, component);
+            ComponentController.call(this);
+        };
+
+        Controller.prototype = $.extend(
+            {},
+            BaseController.prototype,
+            ComponentController.prototype
+        );
+
+        return new Controller();
     };
 
     /**

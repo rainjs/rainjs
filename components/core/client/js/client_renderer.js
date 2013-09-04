@@ -178,8 +178,6 @@ define([
 
         // CSS and JavaScript can be loaded at register time
         this._registry.register(component);
-
-
     };
 
     ClientRenderer.prototype._showComponent = function (component) {

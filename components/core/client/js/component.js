@@ -39,6 +39,7 @@ define(function () {
         this._containerId = componentData.containerId;
         this._rootElement = null;
         this._controllerPath = '';
+        this._controller = null;
 
         if (componentData.controller) {
             this._controllerPath = componentData.controller.replace(/^\/?(.*?)(.js)?$/, '$1');
@@ -97,6 +98,15 @@ define(function () {
 
     Component.prototype.controllerPath = function () {
         return this._controllerPath;
+    };
+
+    Component.prototype.controller = function (controller) {
+        if (typeof controller === 'undefined') {
+            return this._controller;
+        }
+
+        this._controller = controller;
+        return this;
     };
 
     return Component;
