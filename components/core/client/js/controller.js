@@ -36,7 +36,7 @@ define(['raintime/lib/event_emitter',
          * @type {Object}
          */
         this._controllers = {};
-        
+
         this.context = new Context(component);
 
         this._decorate('init');
@@ -90,64 +90,17 @@ define(['raintime/lib/event_emitter',
     /**
      * Base init method of controller
      */
-    Controller.prototype.init = function () {
-        var deferred = Promise.defer(),
-            self = this;
-
-        Promise.when(this.init(),
-            function(data) {
-                self.emit('init');
-                deferred.resolve(data);
-            },
-            function (err) {
-                deferred.reject(err);
-            }
-        );
-
-        return deferred.promise;
-    };
+    Controller.prototype.init = function () {};
 
     /**
      * Base start method of controller
      */
-    Controller.prototype.start = function () {
-        var deferred = Promise.defer(),
-            self = this;
-
-        Promise.when(this.start(),
-            function(data) {
-                self.emit('start');
-                deferred.resolve(data);
-            },
-            function(err) {
-                deferred.reject(err);
-            }
-        );
-
-
-        return deferred.promise;
-    };
+    Controller.prototype.start = function () {};
 
     /**
      * Base destroy method of controller
      */
-    Controller.prototype.destroy = function () {
-        var deferred = Promise.defer(),
-            self = this;
-
-        Promise.when(this.destroy(),
-            function(data) {
-                self.emit('destroy');
-                deferred.resolve(data);
-            },
-            function(err) {
-                deferred.reject(err);
-            }
-        );
-
-        return deferred.promise;
-
-    };
+    Controller.prototype.destroy = function () {};
 
     /**
      * Removes a cached controller.
