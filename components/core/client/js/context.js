@@ -133,7 +133,6 @@ define(['raintime/client_storage',
         var self = this;
 
         ClientRenderer.get().insertComponent(component, element, this.instanceId).then(function (registeredComponent) {
-            registeredComponent.controller.context.parentInstanceId = self.instanceId;
             callback && callback.call(registeredComponent.controller, registeredComponent);
         }, function () {
             //TODO: what happens on error
@@ -152,8 +151,7 @@ define(['raintime/client_storage',
 
         var self = this;
 
-        ClientRenderer.get().replaceComponent(component, this.instanceId).then(function (registeredComponent) {
-            registeredComponent.controller.context.parentInstanceId = self.instanceId;
+        ClientRenderer.get().replaceComponent(component, this.parentInstanceId).then(function (registeredComponent) {
             callback && callback.call(registeredComponent.controller, registeredComponent);
         }, function () {
             //TODO: do something if error

@@ -259,6 +259,46 @@ define([
         return ClientRenderer._instance;
     };
 
+    /**
+     * Replaces a component
+     *
+     * @param {Component} component the component to be requested
+     * @param {String} parentIstanceId the component's instanceId from the component map that needs to be replaced
+     */
+    ClientRenderer.prototype.replaceComponent = function (component, parentInstanceId) {
+        var self = this;
+
+        return Promise.seq(
+            [
+                this.requestComponent.bind(this, component),
+                function (component) {
+                    component.controller.context.parentInstanceId = parentInstanceId;
+                    //register the component over the other component and put it in the dom
+                    return component;
+                }
+        ]);
+    };
+
+    /**
+     * Inserts a component.
+     * @param {Component} component the component to be inserted
+     * @param {DOM} element the dom element is to be inserted
+     * @param {String} instanceId the instanceId of the parent component where the new component will be aggregated
+     */
+    ClientRenderer.prototype.insertComponent = function (component, element, instanceId) {
+        var self = this;
+
+        return Promise.seq(
+            [
+                this.requestComponent.bind(this, component),
+                function (component) {
+                    component.controller.context.parentInstanceId = instanceId;
+                    //register the component insert it in the children of the previous component and render it depending
+                    //on the dom element.
+                }
+        ]);
+    };
+
     window.ClientRenderer = ClientRenderer;
 
     return ClientRenderer;
