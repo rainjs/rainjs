@@ -47,8 +47,8 @@ define(['raintime/client_storage',
         var self = this;
 
         this.component = {
-            id: component.id,
-            version: component.version,
+            id: component.id(),
+            version: component.version(),
             sid: component.staticId,
             children: component.children
         };
@@ -127,25 +127,25 @@ define(['raintime/client_storage',
      * after the controller for the new controller was loaded.
      *
      * The context for the callback function will be the component's controller.
+     *
+     * @param {Object} componentOptions The component which to be requested
+     * @param {String} componentOptions.id The component id
+     * @param {String} componentOptions.version the component version
+     * @param {String} componentOptions.view The component view id
+     * @param {String} componentOptions.sid The component staticId id
+     * @param {Object} componentOptions.context Custom data for the template
+     * @param {Boolean} componentOptions.placeholder Enable / Disable placeholder
+     * @param {jQuery} element The dom object where the component is inserted
+     * @param {Function} [callback] the function to be called after the controller was loaded
      */
-    Context.prototype.insert = function (component, element, callback) {
+    Context.prototype.insert = function (componentOptions, element, callback) {
+        var clientRenderer = ClientRenderer.get();
 
-        var self = this,
-            clientRenderer = ClientRenderer.get();
+        componentOptions.instanceId = clientRenderer.createComponentContainer(element);
 
-        Promise.seq(
-            [
-                function() {
-                    return clientRenderer.requestComponent(component);
-                },
-                function (component) {
-                    component.controller.context.parentInstanceId = self.instanceId;
-                    //register the component insert it in the children of the previous component and render it depending
-                    //on the dom element.
-                }
-            ]
-        ).then(function (component) {
-            callback && callback.call(component.controller, component);
+
+        clientRenderer.requestComponent(componentOptions).then(function (component) {
+            callback && callback.call(component.controller(), component);
         }, function (err) {
             //TODO: do something if error
         });
@@ -158,24 +158,15 @@ define(['raintime/client_storage',
      * The context for the callback function will be the component's controller.
      *
      */
-    Context.prototype.replace = function (component, callback) {
+    Context.prototype.replace = function (componentOptions, callback) {
+        var clientRenderer = ClientRenderer.get();
 
-        var self = this,
-            clientRenderer = ClientRenderer.get();
+        componentOptions.instanceId = this.instanceId;
 
-        Promise.seq(
-            [
-                function () {
-                    return clientRenderer.requestComponent(component);
-                },
-                function (component) {
-                    component.controller.context.parentInstanceId = self.parentInstanceId;
-                    //register the component over the other component and put it in the dom
-                    return component;
-                }
-            ]
-        ).then(function (registeredComponent) {
-            callback && callback.call(registeredComponent.controller, registeredComponent);
+        //TODO: current component should be unregistered
+
+        clientRenderer.requestComponent(componentOptions).then(function (component) {
+            callback && callback.call(component.controller(), component);
         }, function (err) {
             //TODO: do something if error
         });
@@ -187,23 +178,9 @@ define(['raintime/client_storage',
      * @param {String} staticId the child static id
      */
     Context.prototype.remove = function (staticId) {
-        var children = this.component.children,
-            childInstanceId,
-            componentRegistry = ClientRenderer.get().getComponentRegistry();
+        var childInstanceId; // TODO: get based on staticId
 
-        if (!children) {
-            return;
-        }
-
-        for (var i = 0, len = children.length; i < len; i++) {
-            if (children[i].staticId === staticId) {
-                childInstanceId = children[i].instanceId;
-                componentRegistry.deregister(childInstanceId);
-                children.splice(i, 1);
-                $("#" + childInstanceId).remove();
-                break;
-            }
-        }
+        ClientRenderer.get().removeComponent(childInstanceId);
     };
 
     /**

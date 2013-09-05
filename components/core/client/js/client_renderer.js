@@ -70,7 +70,8 @@ define([
         id: 'core'
     });
 
-    var when = Promise.when;
+    var seq = Promise.seq,
+        defer = Promise.defer;
 
     /**
      * The ClientRenderer handles the registration and insertion of new components from the server.
@@ -102,6 +103,8 @@ define([
         this._socket.on('render', function (componentData) {
             self.renderComponent(componentData);
         });
+
+        this._instanceIdCounter = 0;
     }
 
     /**
@@ -143,8 +146,19 @@ define([
      *  }
      */
     ClientRenderer.prototype.renderComponent = function (componentData) {
+        var self = this;
+
+        // TODO: it would be better if the parentInstanceId is returned by the server
+
+        var parent = this._registry.getParent(componentData.instanceId);
+        componentData.parentInstanceId = parent && parent.instanceId();
+
         var component = new Component(componentData),
             instanceId = component.instanceId();
+
+        component.children().forEach(function (child) {
+            self._registry.waitInstanceId(child.instanceId);
+        });
 
         if (component.rootElement().length === 0) {
             // fix the case where this component is an indirect container child
@@ -154,6 +168,8 @@ define([
                 this._orphanComponents[containerId] = [];
             }
             this._orphanComponents[containerId].push(component);
+
+            self._registry.waitInstanceId(component.instanceId);
 
             return;
         }
@@ -193,10 +209,42 @@ define([
     /**
      * Requests a component over websockets.
      *
-     * @param {Object} component the information about the requested component
+     * @param {Object} options the information about the requested component
      */
-    ClientRenderer.prototype.requestComponent = function (component) {
-        this._socket.emit('render', component);
+    ClientRenderer.prototype.requestComponent = function (options) {
+        if (!options.id || !options.instanceId || !options.view) {
+            throw new RainError('id, instanceId and view are required');
+        }
+
+        var self = this;
+
+        if (options.placeholder === true) {
+            // TODO: set placeholder timeout
+        }
+
+        this._socket.emit('render', options);
+
+        this._registry.waitInstanceId(options.instanceId);
+
+        return seq([
+            function () {
+                return self._registry.getComponent(options.instanceId);
+            },
+            function (component) {
+                // I should resolve with a started component
+                return component;
+            }
+        ]);
+    };
+
+    ClientRenderer.prototype.removeComponent = function (instanceId) {
+
+    };
+
+    ClientRenderer.prototype.createComponentContainer = function (element) {
+        var instanceId = Date.now().toString() + '-' + this._instanceIdCounter++;
+        $(element).html('<div id="' + instanceId + '"></div>');
+        return instanceId;
     };
 
     /**
@@ -205,7 +253,7 @@ define([
      * TODO: the placeholder will no longer be a component. We need to decide what we will use to
      * replace it.
      *
-     * @param {Object} component the whole rendered placeholder component
+     * @param {Object} componentData the whole rendered placeholder component
      */
     ClientRenderer.prototype.setPlaceholder = function (componentData) {
         this._placeholderComponent = new Component(componentData);

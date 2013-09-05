@@ -40,11 +40,8 @@ define(['raintime/lib/event_emitter',
         this.context = new Context(component);
 
         this._decorate('init');
-
         this._decorate('start');
-
-        this._decorate('destroy');
-    };
+    }
 
     Util.inherits(Controller, EventEmitter);
 
@@ -66,6 +63,8 @@ define(['raintime/lib/event_emitter',
                     deferred.reject(err);
                 }
             );
+
+            return deferred.promise;
         }
     };
 
@@ -96,6 +95,12 @@ define(['raintime/lib/event_emitter',
      * Base start method of controller
      */
     Controller.prototype.start = function () {};
+
+    /**
+     *
+     * @param error
+     */
+    Controller.prototype.error = function (error) {};
 
     /**
      * Base destroy method of controller

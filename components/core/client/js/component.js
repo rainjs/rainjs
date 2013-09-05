@@ -34,6 +34,7 @@ define(function () {
         this._id = componentData.id;
         this._version = componentData.version;
         this._instanceId = componentData.instanceId;
+        this._parentInstanceId = componentData.parentInstanceId;
         this._staticId = componentData.staticId;
         this._html = componentData.html;
         this._containerId = componentData.containerId;
@@ -46,16 +47,25 @@ define(function () {
             this._controllerPath = componentData.controller.replace(/^\/?(.*?)(.js)?$/, '$1');
         }
 
-        this._state = Component.LOAD;
-    }
+        this._children = [];
+        this._instanceIdMap = {};
+        this._staticIdMap = {};
 
-    Component.LOAD = 1;
-    Component.INIT = 2;
-    Component.ERROR = 4;
-    Component.START = 8;
-    Component.DESTROY = 16;
-    Component.DESTROYED = 32;
-    Component.PENDING = 64;
+        for (var i = 0, len = componentData.children.length; i < len; i++) {
+            var child = componentData.children[i],
+                index = this._children.length;
+
+            this._children.push({
+                staticId: child.staticId || child.instanceId,
+                instanceId: child.instanceId,
+                placeholder: child.placeholder
+            });
+
+            child = this._children[index];
+            this._instanceIdMap[child.instanceId] = index;
+            this._staticIdMap[child.staticId] = index;
+        }
+    }
 
     Component.prototype.id = function () {
         return this._id;
@@ -71,6 +81,10 @@ define(function () {
 
     Component.prototype.instanceId = function () {
         return this._instanceId;
+    };
+
+    Component.prototype.parentInstanceId = function () {
+        return this._parentInstanceId;
     };
 
     Component.prototype.staticId = function () {
@@ -108,6 +122,33 @@ define(function () {
 
         this._controller = controller;
         return this;
+    };
+
+    /**
+     * [{instanceId, staticId, placeholder}]
+     */
+    Component.prototype.children = function () {
+        return this._children;
+    };
+
+    Component.prototype.getChildByInstanceId = function (instanceId) {
+        var index = this._instanceIdMap[instanceId];
+
+        if (typeof index !== 'undefined') {
+            return this._children[index];
+        }
+
+        return null;
+    };
+
+    Component.prototype.getChildByStaticId = function (staticId) {
+        var index = this._staticIdMap[staticId];
+
+        if (typeof index !== 'undefined') {
+            return this._children[index];
+        }
+
+        return null;
     };
 
     /**

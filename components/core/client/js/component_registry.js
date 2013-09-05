@@ -41,6 +41,7 @@ define([
      */
     function ComponentRegistry() {
         this._componentMap = {};
+        this._waitInstanceIds = {};
         this._cssRenderer = CssRenderer.get();
     }
 
@@ -62,9 +63,10 @@ define([
         }
 
         var deferred = defer(),
+            instanceId = component.instanceId(),
             self = this;
 
-        this._componentMap[component.instanceId()] = component;
+        this._componentMap[instanceId] = component;
 
         seq([
             function () {
@@ -79,6 +81,11 @@ define([
             controller.error(error);
             deferred.reject(error);
         });
+
+        if (this._waitInstanceIds[instanceId]) {
+            this._waitInstanceIds[instanceId].resolve(component);
+            delete this._waitInstanceIds[instanceId];
+        }
 
         return deferred.promise;
     };
@@ -134,74 +141,51 @@ define([
         return new Controller(component);
     };
 
+    ComponentRegistry.prototype.deregister = function (instanceId) {
+
+    };
+
     /**
      * Finds a component in the component map depending on it's instance id.
      *
-     * @param {String} componentId the instanceId of the component.
+     * @param {String} instanceId the instanceId of the component.
      */
-    ComponentRegistry.prototype.findComponent = function (componentId) {
+    ComponentRegistry.prototype.getComponent = function (instanceId) {
+        var deferred = defer();
 
-    };
+        if (this._componentMap[instanceId]) {
+            var component = this._componentMap[instanceId];
 
-    /**
-     * Loads the CSS for a component.
-     *
-     * @param {Component} component the component for which you want to load the CSS.
-     * @returns {Promise} a promise informing if the loading of the css was or not successful.
-     * @private
-     */
-    ComponentRegistry.prototype._loadCSS = function (component) {
-        var deferred = Promise.defer();
-
-        /**
-         * load the css for a component
-         */
-
-        return deferred.promise;
-    };
-
-    /**
-     * Loads the javascript for a component.
-     *
-     * @param {Component} component the component for which you want to load the javascript.
-     * @returns {Promise} a promise informing if the loading of the js was or not successful.
-     * @private
-     */
-    ComponentRegistry.prototype._loadJS = function (component) {
-        var deferred = Promise.defer(),
-            controller = component.controller();
-
-        if (controller) {
-            require([controller], function (controller) {
-
+            util.defer(function () {
+                deferred.resolve(component);
+            });
+        } else if (this._waitInstanceIds[instanceId]) {
+            var promise = this._waitInstanceIds[instanceId].promise;
+            promise.then(function (component) {
+                deferred.resolve(component);
+            });
+        } else {
+            util.defer(function () {
+                deferred.reject(new RainError('The instanceId doesn\'t exist: ' + instanceId));
             });
         }
-        /**
-         * load the js for a component
-         */
 
         return deferred.promise;
     };
 
-    /**
-     * Gets the component map.
-     *
-     * @returns {Object} the componentMap.
-     */
-    ComponentRegistry.prototype.getMap = function () {
-        return this._componentMap;
+    ComponentRegistry.prototype.getParent = function (instanceId) {
+        for (var key in this._componentMap) {
+            var component = this._componentMap[key];
+            if (component.getChildByInstanceId(instanceId)) {
+                return component;
+            }
+        }
+
+        return null;
     };
 
-    /**
-     * Invokes the life cycle of a component.
-     *
-     * @param {Component} component the component for which the life cycle should be invoked.
-     */
-    ComponentRegistry.prototype.invokeLifeCycle = function (component) {
-
-        /**
-         * invoke the life cycle of the component.
-         */
+    ComponentRegistry.prototype.waitInstanceId = function (instanceId) {
+        this._waitInstanceIds[instanceId] = defer();
     };
 
     return ComponentRegistry;
