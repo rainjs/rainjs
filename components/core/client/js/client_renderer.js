@@ -207,8 +207,8 @@ define([
 
 
         if(this._timeouts[component.instanceId()]) {
-            //clearTimeout(this._timeouts[component.instanceId()]);
-            //delete this._timeouts[component.instanceId()];
+            clearTimeout(this._timeouts[component.instanceId()]);
+            delete this._timeouts[component.instanceId()];
         }
 
         for (var i = 0, len = children.length; i < len; i++) {
@@ -223,14 +223,15 @@ define([
     };
 
     ClientRenderer.prototype._setPlaceholderTimeout = function (child) {
-        var self = this;
+        var self = this,
+            instanceId = child.instanceId,
+            element = $('#' + instanceId);
 
-        this._timeouts[child.instanceId] = setTimeout(function () {
-            if(($('#' + child.instanceId).css('visibility') === 'hidden' ||
-                !$('#' + child.instanceId).hasClass('app-container')) &&
+        this._timeouts[instanceId] = setTimeout(function () {
+            if((element.css('visibility') === 'hidden' ||
+                !element.hasClass('app-container')) &&
                 child.placeholder) {
-                self.renderPlaceholder(child.instanceId);
-                return;
+                self.renderPlaceholder(instanceId);
             }
         }, this._placeholderTimeout);
     };
