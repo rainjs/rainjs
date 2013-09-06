@@ -9,3 +9,9 @@ html, body {
     min-height: 36px;
 }
 
+.container {
+    min-height: 36px;
+    width: 100%;
+    position: absolute;
+}
+

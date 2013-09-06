@@ -310,7 +310,9 @@ define([
         var element = $('#' + instanceId),
             placeholder = element.find('.placeholder-overlay');
 
-        //element position : ''
+        element.css({
+            position: ''
+        });
         if (placeholder.length > 0) {
             placeholder.remove();
         }
@@ -334,9 +336,6 @@ define([
         });
 
         element.append(placeholderOverlay);
-        element.css({
-            height: '36px'
-        });
     };
 
     /**
