@@ -261,8 +261,13 @@ define([
                 return self._registry.getComponent(options.instanceId);
             },
             function (component) {
-                // I should resolve with a started component
-                return component;
+                var deferred = defer();
+
+                component.once('start', function () {
+                    deferred.resolve(component);
+                });
+
+                return deferred.promise;
             }
         ]);
     };

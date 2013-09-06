@@ -143,6 +143,7 @@ define(['raintime/client_storage',
 
         componentOptions.instanceId = clientRenderer.createComponentContainer(element);
 
+        // todo: add child in map
 
         clientRenderer.requestComponent(componentOptions).then(function (component) {
             callback && callback.call(component.controller(), component);
