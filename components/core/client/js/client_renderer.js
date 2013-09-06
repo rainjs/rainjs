@@ -95,6 +95,8 @@ define([
          * @type Object
          */
         this._orphanComponents = {};
+        this._timeouts = {};
+
 
         this._placeholderTimeout = 20000;
         this._placeholderComponent = null;
@@ -199,11 +201,38 @@ define([
     };
 
     ClientRenderer.prototype._showComponent = function (component) {
-        var element = component.rootElement();
+        var element = component.rootElement(),
+            self = this,
+            children = component.children();
 
+
+        if(this._timeouts[component.instanceId()]) {
+            //clearTimeout(this._timeouts[component.instanceId()]);
+            //delete this._timeouts[component.instanceId()];
+        }
+
+        for (var i = 0, len = children.length; i < len; i++) {
+            var child = children[i];
+            this._setPlaceholderTimeout(child);
+        }
+
+        //this._removePlaceholder(component.instanceId());
         element.css('visibility', '');
         // hide the placeholder if one is present
         // set timeouts for child placeholders
+    };
+
+    ClientRenderer.prototype._setPlaceholderTimeout = function (child) {
+        var self = this;
+
+        this._timeouts[child.instanceId] = setTimeout(function () {
+            if(($('#' + child.instanceId).css('visibility') === 'hidden' ||
+                !$('#' + child.instanceId).hasClass('app-container')) &&
+                child.placeholder) {
+                self.renderPlaceholder(child.instanceId);
+                return;
+            }
+        }, this._placeholderTimeout);
     };
 
     /**
@@ -219,7 +248,7 @@ define([
         var self = this;
 
         if (options.placeholder === true) {
-            // TODO: set placeholder timeout
+            this._setPlaceholderTimeout(options)
         }
 
         this._socket.emit('render', options);
@@ -276,6 +305,17 @@ define([
         this._placeholderTimeout = milliseconds;
     };
 
+
+    ClientRenderer.prototype._removePlaceholder = function (instanceId) {
+        var element = $('#' + instanceId),
+            placeholder = element.find('.placeholder-overlay');
+
+        //element position : ''
+        if (placeholder.length > 0) {
+            placeholder.remove();
+        }
+    }
+
     /**
      *
      * @param instanceId
@@ -294,6 +334,9 @@ define([
         });
 
         element.append(placeholderOverlay);
+        element.css({
+            height: '36px'
+        });
     };
 
     /**
