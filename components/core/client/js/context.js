@@ -49,7 +49,7 @@ define(['raintime/client_storage',
         this.component = {
             id: component.id(),
             version: component.version(),
-            sid: component.staticId,
+            sid: component.staticId(),
             children: component.children
         };
 
@@ -200,24 +200,29 @@ define(['raintime/client_storage',
     Context.prototype.find = function (staticIds, callback) {
 
         var component = this.component,
-            componentRegistry = ClientRenderer.get().getComponentRegistry();
+            componentRegistry = ClientRenderer.get().getComponentRegistry(),
+            children = component.children(),
+            promises = [];
 
-        if (!component.children) {
+        if(typeof staticIds === 'function') {
+            callback = staticIds;
+            staticIds = undefined;
+        }
+
+        if (!children) {
             //logger.error('The component has no registered children: ' +
             //    (component && JSON.stringify(staticId)));
             return;
         }
 
-        var children = component.children;
-
-        var promises = [];
+        console.log(children);
 
         if (!staticIds) {
             for (var i = 0, len = children.length; i < len; i++) {
-                var childInstanceId = children[i].instanceId,
-                    child = componentRegistry.find(childInstanceId);
+                var childInstanceId = children[i].instanceId(),
+                    child = componentRegistry.getComponent(childInstanceId);
                 if (child) {
-                    promises.push(child.promise);
+                    promises.push(child.controller());
                 }
             }
         } else {
@@ -227,10 +232,11 @@ define(['raintime/client_storage',
                     found = false;
 
                 for (var i = children.length; i--;) {
-                    var childInstanceId = children[i].instanceId,
-                        child = componentRegistry.find(childInstanceId);
-                    if (child && child.staticId === staticId) {
-                        promises.push(child.promise);
+                    var childInstanceId = children[i].instanceId(),
+                        child = componentRegistry.getComponent(childInstanceId);
+
+                    if (child && child.staticId() === staticId) {
+                        promises.push(child.controller());
                         found = true;
                         break;
                     }
@@ -242,14 +248,15 @@ define(['raintime/client_storage',
             }
 
             if (wrongStaticIds.length > 0) {
-                return wrongStaticIds;
+                //return wrongStaticIds;
+                //TODO: if I have wrong static ids find a way to avoid that
             }
         }
 
         if (promises.length > 0) {
             var group = Promise.all(promises);
             group.then(function (array) {
-                if (array.length == 1) {
+                if (array.length === 1) {
                     callback.apply(array[0], array);
                     return;
                 }
