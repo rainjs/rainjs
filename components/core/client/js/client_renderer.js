@@ -275,8 +275,9 @@ define([
     ClientRenderer.prototype.removeComponent = function (instanceId) {
         var component = this._registry.getComponent(instanceId);
 
-        if (!component instanceof Component) {
-            throw new RainError('The component wasn\'t found: ' + instanceId);
+        if (component instanceof Component === false) {
+            return;
+            //throw new RainError('The component wasn\'t found: ' + instanceId);
         }
 
         this._registry.deregister(instanceId);

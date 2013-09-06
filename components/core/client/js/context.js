@@ -146,7 +146,7 @@ define(['raintime/client_storage',
         // todo: add child in map
 
         clientRenderer.requestComponent(componentOptions).then(function (component) {
-            callback && callback.call(component.controller(), component);
+            callback && callback.call(component.controller(), component.controller());
         }, function (err) {
             //TODO: do something if error
         });
@@ -167,7 +167,7 @@ define(['raintime/client_storage',
         //TODO: current component should be unregistered
 
         clientRenderer.requestComponent(componentOptions).then(function (component) {
-            callback && callback.call(component.controller(), component);
+            callback && callback.call(component.controller(), component.controller());
         }, function (err) {
             //TODO: do something if error
         });

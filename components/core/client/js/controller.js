@@ -106,7 +106,7 @@ define(['raintime/lib/event_emitter',
      * @public
      *
      * @param {String} staticId the child component's static id
-     * @returns {Promise} a promise to return the child controller after it has started
+     * @returns {promise} a promise to return the child controller after it has started
      */
     Controller.prototype._getChild = function (staticId) {
         var deferred = defer(),
@@ -116,6 +116,7 @@ define(['raintime/lib/event_emitter',
         if (!child) {
             var error = new RainError('The static id "' + staticId + '" could not be found.');
             util.defer(deferred.reject.bind(self, error));
+            return deferred.promise;
         }
 
         var registry = ClientRenderer.get().getComponentRegistry();
