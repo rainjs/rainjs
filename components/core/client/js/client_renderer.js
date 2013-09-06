@@ -216,7 +216,7 @@ define([
             this._setPlaceholderTimeout(child);
         }
 
-        //this._removePlaceholder(component.instanceId());
+        this._removePlaceholder(component.instanceId());
         element.css('visibility', '');
         // hide the placeholder if one is present
         // set timeouts for child placeholders
