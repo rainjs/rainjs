@@ -27,63 +27,43 @@ define(['raintime/lib/event_emitter',
         'raintime/lib/promise',
         'raintime/lib/util',
         'raintime/component',
-        'raintime/context'], function (EventEmitter, Promise, Util, Component, Context) {
+        'raintime/context'], function (EventEmitter, Promise, util, Component, Context) {
+
+    var defer = Promise.defer,
+        when = Promise.when,
+        seq = Promise.seq;
 
     function Controller(component) {
+        var self = this;
+
+        this.context = new Context(component);
+
         /**
          * Controllers for child components.
          *
          * @type {Object}
          */
         this._controllers = {};
+        this._component = component;
 
-        this.context = new Context(component);
+        this._component.on('init', function () {
+            self.emit('init');
+        });
 
-        this._decorate('init');
-        this._decorate('start');
+        this._component.on('start', function () {
+            self.emit('start');
+        });
     }
 
-    Util.inherits(Controller, EventEmitter);
-
-
-
-    Controller.prototype._decorate = function (method) {
-        var decoratedMethod = this[method];
-
-        this[method] = function () {
-            var deferred = Promise.defer(),
-                self = this;
-
-            Promise.when(decoratedMethod.apply(this),
-                function () {
-                    self.emit(method);
-                    deferred.resolve();
-                },
-                function (err) {
-                    deferred.reject(err);
-                }
-            );
-
-            return deferred.promise;
-        }
-    };
-
+    util.inherits(Controller, EventEmitter);
 
     Controller.on = function (eventName, callback) {
-        var component = this.context.component;
-
-        if (eventName === 'init' &&
-            (component.state === Component.START || component.state === Component.INIT)) {
+        if (this._component.hasState(eventName)) {
             callback.call(this);
             return;
         }
 
-        if (eventName === 'start' && component.state === Component.START) {
-            callback.call(this);
-            return;
-        }
-
-        Controller.prototype.on.apply(this, arguments);
+        EventEmitter.prototype.on.call(this, eventName, callback);
     };
 
     /**
@@ -125,30 +105,32 @@ define(['raintime/lib/event_emitter',
      *
      * @public
      *
-     * @param {String} sid the child component's static id
+     * @param {String} staticId the child component's static id
      * @returns {Promise} a promise to return the child controller after it has started
      */
-    Controller.prototype._getChild = function (sid) {
-        var deferred = Promise.defer(),
+    Controller.prototype._getChild = function (staticId) {
+        var deferred = defer(),
+            child = this._component.getChildByStaticId(staticId),
             self = this;
 
-        if (self._controllers[sid]) {
-            Util.defer(deferred.resolve.bind(self, self._controllers[sid]));
-        } else {
-            var wrongStaticIds = self.context.find(sid, function () {
-                var controller = this;
-
-                controller.on('start', function () {
-                    self._controllers[sid] = controller;
-                    deferred.resolve(controller);
-                });
-            });
-
-            if (Array.isArray(wrongStaticIds)) {
-                var error = new RainError('The static id "' + sid + '" could not be found.');
-                Util.defer(deferred.reject.bind(self, error));
-            }
+        if (!child) {
+            var error = new RainError('The static id "' + staticId + '" could not be found.');
+            util.defer(deferred.reject.bind(self, error));
         }
+
+        var registry = ClientRenderer.get().getComponentRegistry();
+
+        seq([
+            function () {
+                return registry.getComponent(child.instanceId);
+            },
+            function (component) {
+                component.on('start', function () {
+                    deferred.resolve(component.controller());
+                });
+                component.on('error', deferred.reject);
+            }
+        ]);
 
         return deferred.promise;
     };
@@ -166,7 +148,7 @@ define(['raintime/lib/event_emitter',
     Controller.prototype._onChild = function (sid, eventName, eventHandler) {
         var self = this;
 
-        Promise.seq([
+        seq([
             function () {
                 return self._getChild(sid);
             },
@@ -193,7 +175,7 @@ define(['raintime/lib/event_emitter',
         var keys = {};
 
         if (!sids) {
-            var children = this.context.component.children;
+            var children = this._component.children();
             for (var i = 0, len = children.length; i < len; i++) {
                 var sid = children[i].staticId;
                 if (sid) {
@@ -212,4 +194,4 @@ define(['raintime/lib/event_emitter',
 
 
     return Controller;
-})
+});

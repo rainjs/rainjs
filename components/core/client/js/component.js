@@ -23,7 +23,13 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-define(function () {
+define([
+    'raintime/lib/event_emitter',
+    'raintime/lib/util',
+    'raintime/lib/promise'
+], function (EventEmitter, util, Promise) {
+
+    var when = Promise.when;
 
     /**
      *
@@ -65,7 +71,59 @@ define(function () {
             this._instanceIdMap[child.instanceId] = index;
             this._staticIdMap[child.staticId] = index;
         }
+
+        this._state = null;
     }
+
+    util.inherits(Component, EventEmitter);
+
+    Component.INIT = 'init';
+    Component.START = 'start';
+    Component.ERROR = 'error';
+    Component.DESTROY = 'destroy';
+
+    /**
+     *
+     * @param [state]
+     * @param [error]
+     * @returns {*}
+     */
+    Component.prototype.state = function (state, error) {
+        var self = this;
+
+        if (typeof state === 'undefined') {
+            return this._state;
+        }
+
+        var controller = this.controller();
+
+        // the controller can be null if an error occurs while loading the controller
+        when(controller && controller[state](error),
+            function () {
+                self._state = state;
+                self.emit(state, error);
+            }, function (error) {
+                self.state(Component.ERROR, error);
+            }
+        );
+
+        return this;
+    };
+
+    Component.prototype.on = function (eventName, callback) {
+        if (this.hasState(eventName)) {
+            callback.call(this);
+            return;
+        }
+
+        EventEmitter.prototype.on.call(this, eventName, callback);
+    };
+
+    Component.prototype.hasState = function (state) {
+        return this.state() === state ||
+            (state === Component.INIT && this.state() === Component.START);
+    };
+
 
     Component.prototype.id = function () {
         return this._id;

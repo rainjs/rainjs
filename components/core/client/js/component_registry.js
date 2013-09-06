@@ -24,12 +24,13 @@
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 define([
+    'raintime/component',
     'raintime/css/renderer',
     'raintime/controller',
     'raintime/lib/promise',
     'raintime/lib/event_emitter',
     'raintime/lib/util'
-], function (CssRenderer, BaseController, Promise, EventEmitter, util) {
+], function (Component, CssRenderer, BaseController, Promise, EventEmitter, util) {
 
     var all = Promise.all,
         seq = Promise.seq,
@@ -73,12 +74,19 @@ define([
                 return all(self._cssRenderer.load(component), self._loadController(component));
             },
             function () {
-                return component.controller().start();
+                var deferred = defer();
+
+                component.state(Component.START);
+                component.once('start', function () {
+                    deferred.resolve();
+                });
+
+                return deferred.promise;
             }
         ]).then(function () {
             deferred.resolve();
         }, function (error) {
-            controller.error(error);
+            component.state(Component.ERROR);
             deferred.reject(error);
         });
 
@@ -98,9 +106,16 @@ define([
                 return self._requestController(component);
             },
             function (ComponentController) {
+                var deferred = defer();
+
                 var controller = self._instantiateController(component, ComponentController);
                 component.controller(controller);
-                return controller.init();
+                component.state(Component.INIT);
+                component.once('init', function () {
+                    deferred.resolve();
+                });
+
+                return deferred.promise;
             }
         ]);
     };
@@ -142,7 +157,7 @@ define([
     };
 
     ComponentRegistry.prototype.deregister = function (instanceId) {
-
+        // TODO
     };
 
     /**
