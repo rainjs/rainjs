@@ -180,7 +180,10 @@ define(['raintime/client_storage',
     Context.prototype.remove = function (staticId) {
         var childInstanceId; // TODO: get based on staticId
 
+        // check if the staticId exists (maybe throw wn error)
+
         ClientRenderer.get().removeComponent(childInstanceId);
+        // remove from the children collection
     };
 
     /**

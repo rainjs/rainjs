@@ -149,28 +149,19 @@ define([
      * Finds a component in the component map depending on it's instance id.
      *
      * @param {String} instanceId the instanceId of the component.
+     *
+     * @returns {Component|promise}
      */
     ComponentRegistry.prototype.getComponent = function (instanceId) {
-        var deferred = defer();
-
         if (this._componentMap[instanceId]) {
-            var component = this._componentMap[instanceId];
-
-            util.defer(function () {
-                deferred.resolve(component);
-            });
-        } else if (this._waitInstanceIds[instanceId]) {
-            var promise = this._waitInstanceIds[instanceId].promise;
-            promise.then(function (component) {
-                deferred.resolve(component);
-            });
-        } else {
-            util.defer(function () {
-                deferred.reject(new RainError('The instanceId doesn\'t exist: ' + instanceId));
-            });
+            return this._componentMap[instanceId];
         }
 
-        return deferred.promise;
+        if (this._waitInstanceIds[instanceId]) {
+            return this._waitInstanceIds[instanceId].promise;
+        }
+
+        return null;
     };
 
     ComponentRegistry.prototype.getParent = function (instanceId) {

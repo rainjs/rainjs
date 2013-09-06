@@ -75,7 +75,11 @@
                 var minFilePath = rainContext.enableMinification ? 'raintime/index.min' : '';
 
                 require(requireConfig, [minFilePath], function () {
-                    require(['raintime/dependencies', 'raintime/client_renderer'], function () {
+                    require([
+                        'raintime/dependencies',
+                        'raintime/client_renderer',
+                        'raintime/lib/rain_error'
+                    ], function () {
                         ClientRenderer.get().setPlaceholderTimeout({{placeholderTimeout}});
                         ClientRenderer.get().setPlaceholder({{{placeholder}}});
 
