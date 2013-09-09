@@ -31,7 +31,8 @@ define(['raintime/lib/event_emitter',
 
     var defer = Promise.defer,
         when = Promise.when,
-        seq = Promise.seq;
+        seq = Promise.seq,
+        allKeys = Promise.allKeys;
 
     function Controller(component) {
         var self = this;
@@ -169,28 +170,24 @@ define(['raintime/lib/event_emitter',
      *
      * @public
      *
-     * @param {Array} [sids] the static ids of the controllers that needed to be started
+     * @param {Array} [staticIds] the static ids of the controllers that needed to be started
      * @returns {Promise} a promise to load and start the controllers
      */
-    Controller.prototype._getChildren = function (sids) {
-        var keys = {};
+    Controller.prototype._getChildren = function (staticIds) {
+        var keys = {},
+            self = this;
 
-        if (!sids) {
-            var children = this._component.children();
-            for (var i = 0, len = children.length; i < len; i++) {
-                var sid = children[i].staticId;
-                if (sid) {
-                    keys[sid] = this._getChild(sid);
-                }
-            }
-        } else {
-            for (var i = 0, len = sids.length; i < len; i++) {
-                var sid = sids[i];
-                keys[sid] = this._getChild(sid);
-            }
+        if (!staticIds) {
+            staticIds = this._component.children().map(function (child) {
+                return child.staticId;
+            });
         }
 
-        return Promise.allKeys(keys);
+        staticIds.forEach(function (staticId) {
+            keys[staticId] = self._getChild(staticId);
+        });
+
+        return allKeys(keys);
     };
 
 
