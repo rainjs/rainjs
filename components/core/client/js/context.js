@@ -26,8 +26,13 @@
 define(['raintime/client_storage',
         'raintime/messaging/observer',
         'raintime/messaging/intents',
-        'raintime/messaging/sockets'
-], function (ClientStorage, Observer, Intents, SocketHandler) {
+        'raintime/messaging/sockets',
+        'raintime/lib/promise'
+], function (ClientStorage, Observer, Intents, SocketHandler, Promise) {
+
+    var all = Promise.all,
+        when = Promise.when,
+        defer = Promise.defer;
 
     /**
      * The context reflects a component's client-side state. It gives access to other
@@ -37,7 +42,6 @@ define(['raintime/client_storage',
      * @class
      * @constructor
      *
-     * @param {Raintime} raintimeInstance
      * @param {Component} component the component object
      *
      * @property {String} instanceId the component's instance id
@@ -46,15 +50,17 @@ define(['raintime/client_storage',
     function Context(component) {
         var self = this;
 
+        this._component = component;
+
         this.component = {
             id: component.id(),
             version: component.version(),
             sid: component.staticId(),
-            children: component.children
+            children: component.children()
         };
 
         this.instanceId = component.instanceId();
-        this.parentInstanceId = component.parentInstanceId;
+        this.parentInstanceId = component.parentInstanceId();
         this.storage = new ClientStorage(this);
 
         /**
@@ -104,7 +110,7 @@ define(['raintime/client_storage',
 
             getSocket: function (channel) {
                 if (channel.charAt(0) != '/') {
-                    channel = '/' + self.component.id + '/' + self.component.version + '/' + channel;
+                    channel = '/' + component.id() + '/' + component.version() + '/' + channel;
                 }
 
                 return SocketHandler.get().getSocket(channel);
@@ -119,7 +125,7 @@ define(['raintime/client_storage',
      * @returns {jQueryElement} The component's container jQuery element
      */
     Context.prototype.getRoot = function () {
-       return $("#" + this.instanceId);
+       return this._component.rootElement();
     };
 
     /**
@@ -143,12 +149,16 @@ define(['raintime/client_storage',
 
         componentOptions.instanceId = clientRenderer.createComponentContainer(element);
 
-        // todo: add child in map
+        this._component.addChild({
+            staticId: componentOptions.sid || componentOptions.instanceId,
+            instanceId: componentOptions.instanceId,
+            placeholder: componentOptions.placeholder
+        });
+
+        this.component.children = this._component.children();
 
         clientRenderer.requestComponent(componentOptions).then(function (component) {
             callback && callback.call(component.controller(), component.controller());
-        }, function (err) {
-            //TODO: do something if error
         });
     };
 
@@ -158,18 +168,19 @@ define(['raintime/client_storage',
      *
      * The context for the callback function will be the component's controller.
      *
+     * @deprecated
+     *
      */
     Context.prototype.replace = function (componentOptions, callback) {
         var clientRenderer = ClientRenderer.get();
 
         componentOptions.instanceId = this.instanceId;
 
-        //TODO: current component should be unregistered
+        ClientRenderer.get().getComponentRegistry().deregister(this.instanceId);
+        this._component.rootElement().empty();
 
         clientRenderer.requestComponent(componentOptions).then(function (component) {
             callback && callback.call(component.controller(), component.controller());
-        }, function (err) {
-            //TODO: do something if error
         });
     };
 
@@ -179,101 +190,102 @@ define(['raintime/client_storage',
      * @param {String} staticId the child static id
      */
     Context.prototype.remove = function (staticId) {
-        var childInstanceId; // TODO: get based on staticId
+        var child = this._component.getChildByStaticId(staticId);
 
-        // check if the staticId exists (maybe throw wn error)
+        if (child) {
+            ClientRenderer.get().removeComponent(child.instanceId);
+            this._component.removeChild(staticId);
+            this.component.children = this._component.children();
+        }
+    };
 
-        ClientRenderer.get().removeComponent(childInstanceId);
-        // remove from the children collection
+    /**
+     *
+     * @param staticIds
+     * @param callback
+     * @returns {Array|undefined}
+     *
+     * @deprecated
+     */
+    Context.prototype.find = function (staticIds, callback) {
+        if (typeof staticIds === 'function') {
+            callback = staticIds;
+            staticIds = undefined;
+        } else if (typeof staticIds === 'string') {
+            staticIds = [staticIds];
+        }
+
+        if (typeof callback !== 'function') {
+            return;
+        }
+
+        var children = this._component.children(),
+            componentRegistry = ClientRenderer.get().getComponentRegistry(),
+            wrongStaticIds = [],
+            promises = [],
+            self = this;
+
+        if (!staticIds) {
+            staticIds = children.map(function (child) { return child.staticId; });
+        }
+
+        for (var i = 0, len = staticIds.length; i < len; i++) {
+            var child = this._component.getChildByStaticId(staticIds[i]);
+            if (child) {
+                promises.push(componentRegistry.getComponent(child.instanceId));
+            } else {
+                wrongStaticIds.push(staticIds[i]);
+            }
+        }
+
+        if (wrongStaticIds.length > 0) {
+            return wrongStaticIds;
+        }
+
+        all(promises).then(function (components) {
+            var controllerPromises = components.map(function (component) {
+                var deferred = promise.defer();
+
+                component.once('init', function () {
+                    deferred.resolve(component.controller);
+                });
+
+                return deferred.promise;
+            });
+
+            all(controllerPromises).then(function (controllers) {
+                if (controllers.length === 1) {
+                    callback.call(controllers[0], controllers[0]);
+                } else {
+                    callback.apply(self._component.controller(), controllers);
+                }
+            });
+        });
     };
 
     /**
      * Gets the controller of the parent component. It returns a promise if the parent isn't loaded
      * yet. This is an internal framework method.
      *
-     * @name _getParent
-     * @memberOf Context#
-     * @private
-     * @returns {Controller|Promise}
+     * @returns {promise}
      */
-
-    Context.prototype.find = function (staticIds, callback) {
-
-        var component = this.component,
-            componentRegistry = ClientRenderer.get().getComponentRegistry(),
-            children = component.children(),
-            promises = [];
-
-        if(typeof staticIds === 'function') {
-            callback = staticIds;
-            staticIds = undefined;
-        }
-
-        if (!children) {
-            //logger.error('The component has no registered children: ' +
-            //    (component && JSON.stringify(staticId)));
-            return;
-        }
-
-        console.log(children);
-
-        if (!staticIds) {
-            for (var i = 0, len = children.length; i < len; i++) {
-                var childInstanceId = children[i].instanceId(),
-                    child = componentRegistry.getComponent(childInstanceId);
-                if (child) {
-                    promises.push(child.controller());
-                }
-            }
-        } else {
-            var wrongStaticIds = [];
-            for (var j = 0, len = staticIds.length; j < len; j++) {
-                var staticId = staticIds[j],
-                    found = false;
-
-                for (var i = children.length; i--;) {
-                    var childInstanceId = children[i].instanceId(),
-                        child = componentRegistry.getComponent(childInstanceId);
-
-                    if (child && child.staticId() === staticId) {
-                        promises.push(child.controller());
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (!found) {
-                    wrongStaticIds.push(staticIds);
-                }
-            }
-
-            if (wrongStaticIds.length > 0) {
-                //return wrongStaticIds;
-                //TODO: if I have wrong static ids find a way to avoid that
-            }
-        }
-
-        if (promises.length > 0) {
-            var group = Promise.all(promises);
-            group.then(function (array) {
-                if (array.length === 1) {
-                    callback.apply(array[0], array);
-                    return;
-                }
-                callback.apply(component.controller, array);
-            });
-        } else {
-            logger.warn('Components with the following static IDs were not found: ' +
-                JSON.stringify(staticIds));
-        }
-    };
-
     Context.prototype._getParent = function () {
-        var parentInstanceId = this.parentInstanceId,
-            parent = ClientRenderer.get().getComponentRegistry.find(parentInstanceId);
+        var parentInstanceId = this._component.parentInstanceId();
 
-        // return a promise if the controller isn't loaded yet
-        return parent && (parent.controller || parent.promise);
+        if (!parentInstanceId) {
+            return null;
+        }
+
+        var parent = ClientRenderer.get().getComponentRegistry().getComponent(parentInstanceId),
+            deferred = defer();
+
+        when(parent, function (parent) {
+            parent.on('start', function () {
+                deferred.resolve(parent.controller());
+            })
+        });
+
+        return deferred.promise;
     };
 
     return Context;

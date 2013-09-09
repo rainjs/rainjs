@@ -209,6 +209,14 @@ define([
         return null;
     };
 
+    Component.prototype.addChild = function (child) {
+
+    };
+
+    Component.prototype.removeChild = function (staticId) {
+
+    };
+
     /**
      * [
      *    {"path":"/example/3.0/css/index.css","ruleCount":7},
