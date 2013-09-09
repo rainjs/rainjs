@@ -55,7 +55,7 @@ define(['raintime/lib/util',
      * the CSS in the page.
      *
      * @param {Component} component the component for which to load the CSS. This is the object sent by the server when a component is rendered.
-     * @returns {Promise} indicates when the loading of the CSS finished.
+     * @returns {promise} indicates when the loading of the CSS finished.
      */
     CssRenderer.prototype.load = function (component) {
         var deferred = defer(),
@@ -107,11 +107,10 @@ define(['raintime/lib/util',
      * Removes the CSS from the page if the number of instances for the specified component
      * reaches 0.
      *
-     * @param {Object} component the component for which to unload the CSS.
+     * @param {Component} component the component for which to unload the CSS.
      */
     CssRenderer.prototype.unload = function (component) {
-        var componentId = this._getFullId(component.id, component.version);
-        this._registry.unregister(componentId);
+        this._registry.unregister(component.uniqueId());
     };
 
     /**
