@@ -150,56 +150,53 @@ define([
     ClientRenderer.prototype.renderComponent = function (componentData) {
         var self = this;
 
-        // TODO: it would be better if the parentInstanceId is returned by the server
-
         var parent = this._registry.getParent(componentData.instanceId);
         componentData.parentInstanceId = parent && parent.instanceId();
 
         var component = new Component(componentData),
             instanceId = component.instanceId();
 
+        this._registry.register(component);
+
         component.children().forEach(function (child) {
             self._registry.waitInstanceId(child.instanceId);
         });
 
         if (component.rootElement().length === 0) {
-            // fix the case where this component is an indirect container child
-            var containerId = component.containerId();
+            // an orphan can also be a child of a component rendered in a container
+            var containerId = component.containerId() || component.parentInstanceId();
 
             if (!this._orphanComponents[containerId]) {
                 this._orphanComponents[containerId] = [];
             }
             this._orphanComponents[containerId].push(component);
 
-            self._registry.waitInstanceId(component.instanceId);
-
             return;
         }
 
         this._setupComponent(component);
+    };
+
+    ClientRenderer.prototype._setupComponent = function (component) {
+        var element = component.rootElement(),
+            instanceId = component.instanceId(),
+            self = this;
+
+        element.css('visibility', 'hidden');
+        element.attr('id', instanceId);
+        element.attr('class', component.cssClass());
+        element.append(component.html());
+
+        this._registry.load(component).then(function () {
+            self._showComponent(component);
+        }, function (error) {
+            logger.error('Failed to load component: ' + component.uniqueId());
+        });
 
         if (this._orphanComponents[instanceId]) {
             this._orphanComponents[instanceId].forEach(this._setupComponent, this);
             this._orphanComponents[instanceId] = null;
         }
-    };
-
-    ClientRenderer.prototype._setupComponent = function (component) {
-        var element = component.rootElement(),
-            self = this;
-
-
-        element.css('visibility', 'hidden');
-        element.attr('id', component.instanceId());
-        element.attr('class', component.cssClass());
-        element.append(component.html());
-
-        // CSS and JavaScript can be loaded at register time
-        this._registry.register(component).then(function () {
-            self._showComponent(component);
-        }, function (error) {
-            logger.error('Failed to register component: ' + component.uniqueId());
-        });
     };
 
     ClientRenderer.prototype._showComponent = function (component) {
@@ -217,7 +214,6 @@ define([
             var child = children[i];
             this._setPlaceholderTimeout(child);
         }
-
 
         this._removePlaceholder(component.instanceId());
         element.css('min-height', 'auto');
@@ -324,7 +320,7 @@ define([
         element.css({
             position: ''
         });
-        
+
         if (placeholder.length > 0) {
             placeholder.remove();
         }

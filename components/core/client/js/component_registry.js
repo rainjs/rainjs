@@ -63,11 +63,75 @@ define([
                 + component.instanceId());
         }
 
-        var deferred = defer(),
-            instanceId = component.instanceId(),
-            self = this;
+        var instanceId = component.instanceId();
 
         this._componentMap[instanceId] = component;
+
+        if (this._waitInstanceIds[instanceId]) {
+            this._waitInstanceIds[instanceId].resolve(component);
+            delete this._waitInstanceIds[instanceId];
+        }
+    };
+
+    ComponentRegistry.prototype.waitInstanceId = function (instanceId) {
+        this._waitInstanceIds[instanceId] = defer();
+    };
+
+    /**
+     * Finds a component in the component map depending on it's instance id.
+     *
+     * @param {String} instanceId the instanceId of the component.
+     *
+     * @returns {Component|promise}
+     */
+    ComponentRegistry.prototype.getComponent = function (instanceId) {
+        if (this._componentMap[instanceId]) {
+            return this._componentMap[instanceId];
+        }
+
+        if (this._waitInstanceIds[instanceId]) {
+            return this._waitInstanceIds[instanceId].promise;
+        }
+
+        return null;
+    };
+
+    ComponentRegistry.prototype.getParent = function (instanceId) {
+        for (var key in this._componentMap) {
+            var component = this._componentMap[key];
+            if (component.getChildByInstanceId(instanceId)) {
+                return component;
+            }
+        }
+
+        return null;
+    };
+
+    /**
+     * De-registers a component.
+     *
+     * @param {String} instanceId the component's instance id
+     */
+    ComponentRegistry.prototype.deregister = function (instanceId) {
+        var component = this._componentMap[instanceId];
+
+        if(!component) {
+            return;
+        }
+
+        var children = component.children();
+        for (var i = 0, len = children.length; i < len; i++) {
+            this.deregister(children[i].instanceId);
+        }
+
+        component.state(Component.DESTROY);
+        this._cssRenderer.unload(component);
+        delete this._componentMap[instanceId];
+    };
+
+    ComponentRegistry.prototype.load = function (component) {
+        var deferred = defer(),
+            self = this;
 
         seq([
             function () {
@@ -89,11 +153,6 @@ define([
             component.state(Component.ERROR);
             deferred.reject(error);
         });
-
-        if (this._waitInstanceIds[instanceId]) {
-            this._waitInstanceIds[instanceId].resolve(component);
-            delete this._waitInstanceIds[instanceId];
-        }
 
         return deferred.promise;
     };
@@ -154,62 +213,6 @@ define([
         );
 
         return new Controller(component);
-    };
-
-    /**
-     * De-registers a component.
-     *
-     * @param {String} instanceId the component's instance id
-     */
-    ComponentRegistry.prototype.deregister = function (instanceId) {
-        var component = this._componentMap[instanceId];
-
-        if(!component) {
-            return;
-        }
-
-        var children = component.children();
-        for (var i = 0, len = children.length; i < len; i++) {
-            this.deregister(children[i].instanceId);
-        }
-
-        component.state(Component.DESTROY);
-        this._cssRenderer.unload(component);
-        delete this._componentMap[instanceId];
-    };
-
-    /**
-     * Finds a component in the component map depending on it's instance id.
-     *
-     * @param {String} instanceId the instanceId of the component.
-     *
-     * @returns {Component|promise}
-     */
-    ComponentRegistry.prototype.getComponent = function (instanceId) {
-        if (this._componentMap[instanceId]) {
-            return this._componentMap[instanceId];
-        }
-
-        if (this._waitInstanceIds[instanceId]) {
-            return this._waitInstanceIds[instanceId].promise;
-        }
-
-        return null;
-    };
-
-    ComponentRegistry.prototype.getParent = function (instanceId) {
-        for (var key in this._componentMap) {
-            var component = this._componentMap[key];
-            if (component.getChildByInstanceId(instanceId)) {
-                return component;
-            }
-        }
-
-        return null;
-    };
-
-    ComponentRegistry.prototype.waitInstanceId = function (instanceId) {
-        this._waitInstanceIds[instanceId] = defer();
     };
 
     return ComponentRegistry;

@@ -244,7 +244,7 @@ define(['raintime/client_storage',
 
         all(promises).then(function (components) {
             var controllerPromises = components.map(function (component) {
-                var deferred = promise.defer();
+                var deferred = defer();
 
                 component.once('init', function () {
                     deferred.resolve(component.controller);
