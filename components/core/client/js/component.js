@@ -210,11 +210,28 @@ define([
     };
 
     Component.prototype.addChild = function (child) {
-
+        this._children.push(child);
+        this._staticIdMap[child.staticId] = this._children.length - 1;
+        this._instanceIdMap[child.instanceId] = this._children.length - 1;
     };
 
     Component.prototype.removeChild = function (staticId) {
+        var index = this._staticIdMap[staticId],
+            self = this;
 
+        if (typeof index === 'undefined') {
+            return;
+        }
+
+        this._children.splice(index, 1);
+
+        this._staticIdMap = {};
+        this._instanceIdMap = {};
+
+        this._children.forEach(function (child, index) {
+            self._staticIdMap[child.staticId] = index;
+            self._instanceIdMap[child.instanceId] = index;
+        });
     };
 
     /**
