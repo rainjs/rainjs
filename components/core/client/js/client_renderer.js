@@ -323,7 +323,7 @@ define([
         if (placeholder.length > 0) {
             placeholder.remove();
         }
-    }
+    };
 
     /**
      *

@@ -156,8 +156,26 @@ define([
         return new Controller(component);
     };
 
+    /**
+     * De-registers a component.
+     *
+     * @param {String} instanceId the component's instance id
+     */
     ComponentRegistry.prototype.deregister = function (instanceId) {
-        // TODO
+        var component = this._componentMap[instanceId];
+
+        if(!component) {
+            return;
+        }
+
+        var children = component.children();
+        for (var i = 0, len = children.length; i < len; i++) {
+            this.deregister(children[i].instanceId);
+        }
+
+        component.state(Component.DESTROY);
+        this._cssRenderer.unload(component);
+        delete this._componentMap[instanceId];
     };
 
     /**
