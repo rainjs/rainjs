@@ -23,38 +23,6 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-/*
-ClientRenderer
- - receives render messages from the server
- - registers the component in ComponentRegistry
- - inserts the component's markup in the page
- - displays the placeholder
-
-ComponentRegistry
-- keeps a map of components
-- load component resources (CSS and JavaScript)
-- component lifecycle
-- finding components ???
-
-Component
-- keep component info and some common methods
-
-Controller
-- base class for the component's client side controller
-- will contain the methods from async controller and will inherit from event emitter
-
-Context
-- client side API (can't change this since I would break the API)
-
-
-
-Component lifecycle (method + event):
-- init (the controller instance was created)
-- start (the component and all its resources are loaded successfully)
-- destroy (the component was removed from the page)
-- error
- */
-
 "use strict";
 
 define([
@@ -66,9 +34,7 @@ define([
     'raintime/css/renderer'
 ], function (Promise, SocketHandler, ComponentRegistry, Component, Logger, CssRenderer) {
 
-    var logger = Logger.get({
-        id: 'core'
-    });
+    var logger = Logger.get({id: 'core'});
 
     var seq = Promise.seq,
         defer = Promise.defer;
@@ -84,8 +50,6 @@ define([
      * @class A ClientRenderer instance
      */
     function ClientRenderer() {
-        var self = this;
-
         this._registry = new ComponentRegistry();
 
         /**
@@ -96,17 +60,17 @@ define([
          */
         this._orphanComponents = {};
         this._timeouts = {};
-
-
-        this._placeholderTimeout = 20000;
-        this._placeholderComponent = null;
-
+        this._placeholderTimeout = rainContext.placeholderTimeout || 1000;
+        this._placeholderComponent = new Component(rainContext.placeholder);
         this._socket = SocketHandler.get().getSocket('/core');
-        this._socket.on('render', function (componentData) {
-            self.renderComponent(componentData);
-        });
-
         this._instanceIdCounter = 0;
+
+        this._socket.on('render', this.renderComponent.bind(this));
+
+        CssRenderer.get().load(this._placeholderComponent);
+
+        var mainComponentInstanceId = $($('body div').get(0)).attr('id');
+        this._setPlaceholderTimeout(mainComponentInstanceId);
     }
 
     /**
@@ -212,28 +176,16 @@ define([
 
         for (var i = 0, len = children.length; i < len; i++) {
             var child = children[i];
-            this._setPlaceholderTimeout(child);
+            if (child.placeholder) {
+                this._setPlaceholderTimeout(child.instanceId);
+            }
         }
 
-        this._removePlaceholder(component.instanceId());
+        this._hidePlaceholder(component.instanceId());
         element.css('min-height', 'auto');
         element.css('visibility', '');
         // hide the placeholder if one is present
         // set timeouts for child placeholders
-    };
-
-    ClientRenderer.prototype._setPlaceholderTimeout = function (child) {
-        var self = this,
-            instanceId = child.instanceId,
-            element = $('#' + instanceId);
-
-        this._timeouts[instanceId] = setTimeout(function () {
-            if((element.css('visibility') === 'hidden' ||
-                !element.hasClass('app-container')) &&
-                child.placeholder) {
-                self.renderPlaceholder(instanceId);
-            }
-        }, this._placeholderTimeout);
     };
 
     /**
@@ -249,7 +201,7 @@ define([
         var self = this;
 
         if (options.placeholder === true) {
-            this._setPlaceholderTimeout(options)
+            this._setPlaceholderTimeout(options.instanceId);
         }
 
         this._socket.emit('render', options);
@@ -291,46 +243,10 @@ define([
     };
 
     /**
-     * Sets the placeholder component.
-     *
-     * TODO: the placeholder will no longer be a component. We need to decide what we will use to
-     * replace it.
-     *
-     * @param {Object} componentData the whole rendered placeholder component
-     */
-    ClientRenderer.prototype.setPlaceholder = function (componentData) {
-        this._placeholderComponent = new Component(componentData);
-        CssRenderer.get().load(this._placeholderComponent);
-    };
-
-    /**
-     * Sets the placeholder timeout which is set from the server configuration.
-     *
-     * @param {Number} milliseconds time in milliseconds
-     */
-    ClientRenderer.prototype.setPlaceholderTimeout = function (milliseconds) {
-        this._placeholderTimeout = milliseconds;
-    };
-
-
-    ClientRenderer.prototype._removePlaceholder = function (instanceId) {
-        var element = $('#' + instanceId),
-            placeholder = element.find('.placeholder-overlay');
-
-        element.css({
-            position: ''
-        });
-
-        if (placeholder.length > 0) {
-            placeholder.remove();
-        }
-    };
-
-    /**
      *
      * @param instanceId
      */
-    ClientRenderer.prototype.renderPlaceholder = function (instanceId) {
+    ClientRenderer.prototype._showPlaceholder = function (instanceId) {
         var element = $('#' + instanceId),
             placeholderOverlay = $('<div></div>');
 
@@ -346,6 +262,30 @@ define([
         element.append(placeholderOverlay);
     };
 
+    ClientRenderer.prototype._hidePlaceholder = function (instanceId) {
+        var element = $('#' + instanceId),
+            placeholder = element.find('.placeholder-overlay');
+
+        element.css({
+            position: ''
+        });
+
+        if (placeholder.length > 0) {
+            placeholder.remove();
+        }
+    };
+
+    ClientRenderer.prototype._setPlaceholderTimeout = function (instanceId) {
+        var self = this,
+            element = $('#' + instanceId);
+
+        this._timeouts[instanceId] = setTimeout(function () {
+            if(element.css('visibility') === 'hidden' || !element.hasClass('app-container')) {
+                self._showPlaceholder(instanceId);
+            }
+        }, this._placeholderTimeout);
+    };
+
     /**
      * The class instance.
      * @type {ClientRenderer}
@@ -358,7 +298,7 @@ define([
      */
     ClientRenderer.get = function () {
         if (!ClientRenderer._instance) {
-            ClientRenderer._instance = new ClientRenderer()
+            ClientRenderer._instance = new ClientRenderer();
         }
 
         return ClientRenderer._instance;
