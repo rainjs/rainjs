@@ -188,9 +188,11 @@ define([
         var element = component.rootElement(),
             self = this;
 
-        element.css('visibility', 'hidden').html(component.html());
+
+        element.css('visibility', 'hidden');
         element.attr('id', component.instanceId());
         element.attr('class', component.cssClass());
+        element.append(component.html());
 
         // CSS and JavaScript can be loaded at register time
         this._registry.register(component).then(function () {
@@ -216,7 +218,9 @@ define([
             this._setPlaceholderTimeout(child);
         }
 
+
         this._removePlaceholder(component.instanceId());
+        element.css('min-height', 'auto');
         element.css('visibility', '');
         // hide the placeholder if one is present
         // set timeouts for child placeholders
@@ -320,6 +324,7 @@ define([
         element.css({
             position: ''
         });
+        
         if (placeholder.length > 0) {
             placeholder.remove();
         }
