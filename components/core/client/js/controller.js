@@ -48,6 +48,7 @@ define(['raintime/lib/event_emitter',
          * The view context.
          *
          * @type {Context}
+         * @protected
          */
         this.context = new Context(component);
 
