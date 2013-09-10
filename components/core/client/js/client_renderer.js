@@ -126,7 +126,7 @@ define([
     /**
      * Registers a component and adds its markup to the DOM.
      *
-     * @param {Object} componentData the component to be rendered
+     * @param {Object} componentData the data sent by the server for a rendered component
      *
      * @example
      *

@@ -30,21 +30,34 @@ define(['raintime/lib/event_emitter',
         'raintime/context'], function (EventEmitter, Promise, util, Component, Context) {
 
     var defer = Promise.defer,
-        when = Promise.when,
         seq = Promise.seq,
         allKeys = Promise.allKeys;
 
+    /**
+     * Base class for the client-side controller.
+     *
+     * @param {Component} component
+     *
+     * @name {Controller}
+     * @constructor
+     */
     function Controller(component) {
         var self = this;
 
+        /**
+         * The view context.
+         *
+         * @type {Context}
+         */
         this.context = new Context(component);
 
+
         /**
-         * Controllers for child components.
+         * The component associated with this controller instance.
          *
-         * @type {Object}
+         * @type {Component}
+         * @private
          */
-        this._controllers = {};
         this._component = component;
 
         this._component.on('init', function () {
@@ -58,6 +71,12 @@ define(['raintime/lib/event_emitter',
 
     util.inherits(Controller, EventEmitter);
 
+    /**
+    * Overrides EventEmitter#on in order to emit events for states that were already set.
+    *
+    * @param {String} eventName
+    * @param {Function} callback
+    */
     Controller.on = function (eventName, callback) {
         if (this._component.hasState(eventName)) {
             callback.call(this);
@@ -68,48 +87,38 @@ define(['raintime/lib/event_emitter',
     };
 
     /**
-     * Base init method of controller
+     * Initialization lifecycle step invoked immediately after the controller is loaded.
      */
     Controller.prototype.init = function () {};
 
     /**
-     * Base start method of controller
+     * Startup lifecycle step invoked after the markup is in place and the CSS is loaded.
      */
     Controller.prototype.start = function () {};
 
     /**
+     * This method is called if an error occurs while loading the component.
      *
-     * @param error
+     * @param {Error} error
      */
     Controller.prototype.error = function (error) {};
 
     /**
-     * Base destroy method of controller
+     * Lifecycle step invoked when the component is removed.
      */
     Controller.prototype.destroy = function () {};
 
     /**
-     * Removes a cached controller.
-     *
-     * @param {String} staticId the child's static id
-     */
-    Controller.prototype._clear = function (staticId) {
-        delete this._controllers[staticId];
-    };
-
-    /**
-     * Asynchronously waits for a child controller to become available and start.
-     * The started controllers are cached. If the controller is found in the cache, the promise
-     * is resolved at the next tick.
-     *
+     * Asynchronously waits for a child controller to become available and started.
      * If the child with the specified sid is not found, the promise is rejected with a RainError.
      *
-     * @public
      *
      * @param {String} staticId the child component's static id
      * @returns {promise} a promise to return the child controller after it has started
+     *
+     * @protected
      */
-    Controller.prototype._getChild = function (staticId) {
+    Controller.prototype.getChild = function (staticId) {
         var deferred = defer(),
             child = this._component.getChildByStaticId(staticId),
             self = this;
@@ -138,21 +147,34 @@ define(['raintime/lib/event_emitter',
     };
 
     /**
+     * Asynchronously waits for a child controller to become available and started.
+     * If the child with the specified sid is not found, the promise is rejected with a RainError.
+     *
+     *
+     * @param {String} staticId the child component's static id
+     * @returns {promise} a promise to return the child controller after it has started
+     *
+     * @protected
+     * @deprecated use getChild instead
+     */
+    Controller.prototype._getChild = Controller.prototype.getChild;
+
+    /**
      * Convenience method to bind an event handler to a controller and make sure the controller
      * is started first.
-     *
-     * @public
      *
      * @param {String} sid the component's static id
      * @param {String} eventName the event's name
      * @param {Function} eventHandler the event handler function
+     *
+     * @protected
      */
-    Controller.prototype._onChild = function (sid, eventName, eventHandler) {
+    Controller.prototype.onChild = function (sid, eventName, eventHandler) {
         var self = this;
 
         seq([
             function () {
-                return self._getChild(sid);
+                return self.getChild(sid);
             },
             function (controller) {
                 controller.on(eventName, eventHandler);
@@ -161,19 +183,31 @@ define(['raintime/lib/event_emitter',
     };
 
     /**
+     * Convenience method to bind an event handler to a controller and make sure the controller
+     * is started first.
+     *
+     * @param {String} sid the component's static id
+     * @param {String} eventName the event's name
+     * @param {Function} eventHandler the event handler function
+     *
+     * @protected
+     * @deprecated use onChild instead
+     */
+    Controller.prototype._onChild = Controller.prototype.onChild;
+
+    /**
      * Asynchronously loads multiple started controllers. If the 'sids' argument is missing, then
-     * the method waits for all children (with a sid value non-empty) of the current component to
-     * start.
+     * the method waits for all children of the current component to start.
      *
      * The promise will be resolved with an object where the keys are the controllers' sids and
      * the values are the controller objects.
      *
-     * @public
-     *
-     * @param {Array} [staticIds] the static ids of the controllers that needed to be started
+     * @param {Array} [staticIds] the static ids of the controllers to retrieve
      * @returns {Promise} a promise to load and start the controllers
+     *
+     * @protected
      */
-    Controller.prototype._getChildren = function (staticIds) {
+    Controller.prototype.getChildren = function (staticIds) {
         var keys = {},
             self = this;
 
@@ -184,12 +218,26 @@ define(['raintime/lib/event_emitter',
         }
 
         staticIds.forEach(function (staticId) {
-            keys[staticId] = self._getChild(staticId);
+            keys[staticId] = self.getChild(staticId);
         });
 
         return allKeys(keys);
     };
 
+    /**
+     * Asynchronously loads multiple started controllers. If the 'sids' argument is missing, then
+     * the method waits for all children of the current component to start.
+     *
+     * The promise will be resolved with an object where the keys are the controllers' sids and
+     * the values are the controller objects.
+     *
+     * @param {Array} [staticIds] the static ids of the controllers to retrieve
+     * @returns {Promise} a promise to load and start the controllers
+     *
+     * @protected
+     * @deprecated use getChildren instead
+     */
+    Controller.prototype._getChildren = Controller.prototype.getChildren;
 
     return Controller;
 });

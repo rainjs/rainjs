@@ -32,30 +32,133 @@ define([
     var when = Promise.when;
 
     /**
+     * Stores the data associated with a component.
      *
-     * @param componentData
+     * @param {Object} componentData the data sent by the server for a rendered component
+     *
+     * @name Component
      * @constructor
      */
     function Component(componentData) {
+        /**
+         * The component id.
+         *
+         * @type {String}
+         * @private
+         */
         this._id = componentData.id;
+
+        /**
+         * The component version.
+         *
+         * @type {String}
+         * @private
+         */
         this._version = componentData.version;
+
+        /**
+         * The instance id.
+         *
+         * @type {String}
+         * @private
+         */
         this._instanceId = componentData.instanceId;
+
+        /**
+         * The instance id of the parent component. The only component for which the parent
+         * instance id is not defined is the main component.
+         *
+         * @type {String}
+         * @private
+         */
         this._parentInstanceId = componentData.parentInstanceId;
-        this._staticId = componentData.staticId;
+
+        /**
+         * The static id.
+         *
+         * @type {String}
+         * @private
+         */
+        this._staticId = componentData.staticId || componentData.instanceId;
+
+        /**
+         * The HTML markup for this component instance.
+         *
+         * @type {String}
+         * @private
+         */
         this._html = componentData.html;
+
+        /**
+         * The instance id of the container in which this component is rendered. Has a value
+         * only when the component is rendered inside a container.
+         *
+         * @type {String}
+         * @private
+         */
         this._containerId = componentData.containerId;
+
+        /**
+         * The container in which the markup for the component is placed.
+         *
+         * @type {jQuery}
+         * @private
+         */
         this._rootElement = null;
+
+        /**
+         * The client-side controller path.
+         *
+         * @type {String}
+         * @private
+         */
         this._controllerPath = '';
+
+        /**
+         * The client-side controller instance.
+         *
+         * @type {Controller}
+         * @private
+         */
         this._controller = null;
+
+        /**
+         * List containing the path and rule count for the CSS files associated with this
+         * component.
+         *
+         * @type {Array}
+         * @private
+         */
         this._css = componentData.css;
 
+        /**
+         * List of instance id, static id and placeholder for the component's children.
+         *
+         * @type {Array}
+         * @private
+         */
+        this._children = [];
+
+        /**
+         * Maps an instance id to the index in the children array.
+         *
+         * @type {Object}
+         * @private
+         */
+        this._instanceIdMap = {};
+
+        /**
+         * Maps a static id to the index in the children array.
+         *
+         * @type {Object}
+         * @private
+         */
+        this._staticIdMap = {};
+
         if (componentData.controller) {
+            // strips the leading / and the .js extension
             this._controllerPath = componentData.controller.replace(/^\/?(.*?)(.js)?$/, '$1');
         }
-
-        this._children = [];
-        this._instanceIdMap = {};
-        this._staticIdMap = {};
 
         for (var i = 0, len = componentData.children.length; i < len; i++) {
             var child = componentData.children[i],
@@ -83,10 +186,12 @@ define([
     Component.DESTROY = 'destroy';
 
     /**
+     * Gets/sets the component's lifecycle state. Invokes the component lifecycle when a new
+     * state is set.
      *
-     * @param [state]
-     * @param [error]
-     * @returns {*}
+     * @param {String} [state] the state to be set
+     * @param {Error} [error] indicates the error when the state is error
+     * @returns {String|Component}
      */
     Component.prototype.state = function (state, error) {
         var self = this;
@@ -110,6 +215,12 @@ define([
         return this;
     };
 
+    /**
+     * Overrides EventEmitter#on in order to emit events for states that were already set.
+     *
+     * @param {String} eventName
+     * @param {Function} callback
+     */
     Component.prototype.on = function (eventName, callback) {
         if (this.hasState(eventName)) {
             callback.call(this);
@@ -119,48 +230,104 @@ define([
         EventEmitter.prototype.on.call(this, eventName, callback);
     };
 
+    /**
+     * Determines if a state already set
+     *
+     * @param {String} state
+     * @returns {Boolean}
+     */
     Component.prototype.hasState = function (state) {
         return this.state() === state ||
             (state === Component.INIT && this.state() === Component.START);
     };
 
 
+    /**
+     * Gets the component id.
+     *
+     * @returns {String}
+     */
     Component.prototype.id = function () {
         return this._id;
     };
 
+    /**
+     * Gets the component version.
+     *
+     * @returns {String}
+     */
     Component.prototype.version = function () {
         return this._version;
     };
 
+    /**
+     * Gets an id constructed by concatenating id and version.
+     *
+     * @returns {String}
+     */
     Component.prototype.uniqueId = function () {
         return this.id() + ';' + this.version();
     };
 
+    /**
+     * Gets the instance id.
+     *
+     * @returns {String}
+     */
     Component.prototype.instanceId = function () {
         return this._instanceId;
     };
 
+    /**
+     * Gets the instance id of the parent component.
+     *
+     * @returns {String}
+     */
     Component.prototype.parentInstanceId = function () {
         return this._parentInstanceId;
     };
 
+    /**
+     * Gets the static id.
+     *
+     * @returns {String}
+     */
     Component.prototype.staticId = function () {
-        return this._staticId || this._instanceId;
+        return this._staticId;
     };
 
+    /**
+     * Gets the instance id of the container in which the component was rendered, if it exists.
+     *
+     * @returns {String}
+     */
     Component.prototype.containerId = function () {
         return this._containerId;
     };
 
+    /**
+     * Gets the HTML markup of the component.
+     *
+     * @returns {String}
+     */
     Component.prototype.html = function () {
         return this._html;
     };
 
+    /**
+     * Gets the css class that should be set on the root element.
+     *
+     * @returns {String}
+     */
     Component.prototype.cssClass = function () {
         return 'app-container ' + this.id() + '_' + this.version().replace(/\./g, '_');
     };
 
+    /**
+     * Gets the container in which the markup for the component is placed.
+     *
+     * @returns {jQuery}
+     */
     Component.prototype.rootElement = function () {
         if (!(this._rootElement && this._rootElement.length !== 0)) {
             this._rootElement = $('#' + this.instanceId());
@@ -169,10 +336,21 @@ define([
         return this._rootElement;
     };
 
+    /**
+     * Gets the path of the client-side controller.
+     *
+     * @returns {String}
+     */
     Component.prototype.controllerPath = function () {
         return this._controllerPath;
     };
 
+    /**
+     * Gets/sets the client-side controller instance.
+     *
+     * @param {Controller} [controller]
+     * @returns {Controller|Component}
+     */
     Component.prototype.controller = function (controller) {
         if (typeof controller === 'undefined') {
             return this._controller;
@@ -183,12 +361,20 @@ define([
     };
 
     /**
-     * [{instanceId, staticId, placeholder}]
+     * Gets the list of children.
+     *
+     * @returns {Array}
      */
     Component.prototype.children = function () {
         return this._children;
     };
 
+    /**
+     * Gets the child associated with the specified instance id.
+     *
+     * @param {String} instanceId
+     * @returns {Object} a child object having instanceId, staticId and placeholder properties
+     */
     Component.prototype.getChildByInstanceId = function (instanceId) {
         var index = this._instanceIdMap[instanceId];
 
@@ -199,6 +385,12 @@ define([
         return null;
     };
 
+    /**
+     * Gets the child associated with the specified static id.
+     *
+     * @param {String} staticId
+     * @returns {Object} a child object having instanceId, staticId and placeholder properties
+     */
     Component.prototype.getChildByStaticId = function (staticId) {
         var index = this._staticIdMap[staticId];
 
@@ -209,12 +401,25 @@ define([
         return null;
     };
 
+    /**
+     * Adds a child to the children array.
+     *
+     * @param {Object} child
+     * @param {String} child.instanceId
+     * @param {String} child.staticId
+     * @param {Boolean} [child.placeholder = false]
+     */
     Component.prototype.addChild = function (child) {
         this._children.push(child);
         this._staticIdMap[child.staticId] = this._children.length - 1;
         this._instanceIdMap[child.instanceId] = this._children.length - 1;
     };
 
+    /**
+     * Removes a child from the children array.
+     *
+     * @param {String} staticId
+     */
     Component.prototype.removeChild = function (staticId) {
         var index = this._staticIdMap[staticId],
             self = this;
@@ -235,11 +440,8 @@ define([
     };
 
     /**
-     * [
-     *    {"path":"/example/3.0/css/index.css","ruleCount":7},
-     *    {"path":"/example/3.0/css/jquery-ui-1.10.2.custom.css","ruleCount":357}
-     * ]
-     *
+     * Gets the list of css files for this component. For each file path and ruleCount properties
+     * are defined.
      *
      * @returns {Array}
      */

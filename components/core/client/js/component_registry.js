@@ -37,21 +37,47 @@ define([
         defer = Promise.defer;
 
     /**
+     * Keeps information about the components in the page, loads the CSS and JavaScript
+     * associated with them and invokes the component lifecycle.
      *
+     * @name ComponentRegistry
      * @constructor
      */
     function ComponentRegistry() {
+        /**
+         * A hash containing the registered components indexed by instance id.
+         *
+         * @type {Object}
+         * @private
+         */
         this._componentMap = {};
+
+        /**
+         * Contains known instance ids that aren't registered yet.
+         *
+         * @type {Object}
+         * @private
+         */
         this._waitInstanceIds = {};
+
+        /**
+         * The CssRenderer instance.
+         *
+         * @type {CssRenderer}
+         * @private
+         */
         this._cssRenderer = CssRenderer.get();
     }
 
     util.inherits(ComponentRegistry, EventEmitter);
 
     /**
-     * Registers a component in the component map.
+     * Registers a component.
      *
-     * @param {Component} component the component that needs to be registered in the component map.
+     * @param {Component} component the component to be registered.
+     *
+     * @throws {RainError} when the component parameter is not specified
+     * @throws {RainError} when a component with the same instance id is already registered
      */
     ComponentRegistry.prototype.register = function (component) {
         if (!component) {
@@ -59,7 +85,7 @@ define([
         }
 
         if (this._componentMap[component.instanceId()]) {
-            throw new RainError('A component with the specified instance id is already registered: '
+            throw new RainError('A component with the same instance id is already registered: '
                 + component.instanceId());
         }
 
@@ -73,12 +99,18 @@ define([
         }
     };
 
+    /**
+     * Adds an instance id to the list of known instance id. These are the instance ids of a
+     * rendered component children or of the components that were requested via web sockets.
+     *
+     * @param {String} instanceId
+     */
     ComponentRegistry.prototype.waitInstanceId = function (instanceId) {
         this._waitInstanceIds[instanceId] = defer();
     };
 
     /**
-     * Finds a component in the component map depending on it's instance id.
+     * Gets the component associated with the specified instance id.
      *
      * @param {String} instanceId the instanceId of the component.
      *
@@ -96,6 +128,12 @@ define([
         return null;
     };
 
+    /**
+     * Gets the parent component for the specified instance id.
+     *
+     * @param {String} instanceId
+     * @returns {Component}
+     */
     ComponentRegistry.prototype.getParent = function (instanceId) {
         for (var key in this._componentMap) {
             var component = this._componentMap[key];
@@ -129,6 +167,13 @@ define([
         delete this._componentMap[instanceId];
     };
 
+    /**
+     * Loads the client-side controller and the CSS for the specified component and invokes the
+     * component lifecycle.
+     *
+     * @param {Component} component
+     * @returns {promise}
+     */
     ComponentRegistry.prototype.load = function (component) {
         var deferred = defer(),
             self = this;
@@ -157,6 +202,13 @@ define([
         return deferred.promise;
     };
 
+    /**
+     * Loads the client-side controller for the specified component.
+     *
+     * @param {Component} component
+     * @returns {promise}
+     * @private
+     */
     ComponentRegistry.prototype._loadController = function (component) {
         var self = this;
 
@@ -179,6 +231,13 @@ define([
         ]);
     };
 
+    /**
+     * Requires the client-side controller module for the specified component.
+     *
+     * @param {Component} component
+     * @returns {promise}
+     * @private
+     */
     ComponentRegistry.prototype._requestController = function (component) {
         var deferred = Promise.defer();
 
@@ -196,6 +255,15 @@ define([
         return deferred.promise;
     };
 
+    /**
+     * Creates the client-side controller instance.
+     *
+     * @param {Component} component
+     * @param {Function} ComponentController the client-side controller constructor
+     *
+     * @returns {Controller} the controller instance
+     * @private
+     */
     ComponentRegistry.prototype._instantiateController = function (component, ComponentController) {
         if (!ComponentController) {
             ComponentController = function () {};
