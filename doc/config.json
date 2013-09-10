@@ -3,10 +3,12 @@
         "buildPath": "./doc/source/client/api",
         "pages": [
             "./components/core/client/js/messaging",
-            "./components/core/client/js/async_controller.js",
+            "./components/core/client/js/controller.js",
             "./components/core/client/js/client_renderer.js",
             "./components/core/client/js/client_storage.js",
             "./components/core/client/js/context.js",
+            "./components/core/client/js/component.js",
+            "./components/core/client/js/component_registry.js",
             "./components/core/client/js/lib/util.js",
             "./components/core/client/js/lib/event_emitter.js",
             "./components/core/client/js/css",

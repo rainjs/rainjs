@@ -44,7 +44,9 @@
                     language: '{{language}}',
                     enableClientLogging: {{enableClientLogging}},
                     cookieMaxAge: {{cookieMaxAge}},
-                    enableMinification: {{enableMinification}}
+                    enableMinification: {{enableMinification}},
+                    placeholder: {{{placeholder}}},
+                    placeholderTimeout: {{placeholderTimeout}}
                 };
 
                 var renderQueueList = [];
@@ -80,13 +82,8 @@
                         'raintime/client_renderer',
                         'raintime/lib/rain_error'
                     ], function () {
-                        ClientRenderer.get().setPlaceholderTimeout({{placeholderTimeout}});
-                        ClientRenderer.get().setPlaceholder({{{placeholder}}});
-
-                        if (renderQueueList.length === 0) {
-                            var mainComponentInstanceId = $($('body div').get(0)).attr('id');
-                            ClientRenderer.get().renderPlaceholder(mainComponentInstanceId);
-                        }
+                        // initialize the client renderer
+                        ClientRenderer.get();
 
                         renderQueue();
                     });

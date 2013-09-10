@@ -138,7 +138,7 @@ define(['raintime/client_storage',
      * @param {String} componentOptions.id The component id
      * @param {String} componentOptions.version the component version
      * @param {String} componentOptions.view The component view id
-     * @param {String} componentOptions.sid The component staticId id
+     * @param {String} componentOptions.sid The component static id
      * @param {Object} componentOptions.context Custom data for the template
      * @param {Boolean} componentOptions.placeholder Enable / Disable placeholder
      * @param {jQuery} element The dom object where the component is inserted
