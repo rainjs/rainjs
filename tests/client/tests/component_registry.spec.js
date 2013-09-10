@@ -35,172 +35,181 @@ describe('Component Registry module', function () {
         cssRenderer = jasmine.createSpyObj('cssRenderer', ['unload', 'load']);
     });
 
-    it('should register a component in the component map', ['raintime/component_registry',
-            'raintime/component', 'raintime/controller', 'raintime/css/renderer'], function (ComponentRegistry,
-                Component, Controller, CssRenderer) {
-
-        var instance = new ComponentRegistry(),
-            fakeComponent = jasmine.createSpyObj('component', ['instanceId']);
-
-        fakeComponent.instanceId.andCallFake(function () {
-            return 'fakeInstanceId'
-        });
-
-        instance.register(fakeComponent);
-
-        expect(instance.getComponent('fakeInstanceId')).toBe(fakeComponent);
-    });
-
-
-    it('should retrieve the parent of a component based on it`s instanceId', ['raintime/component_registry',
-        'raintime/component', 'raintime/controller', 'raintime/css/renderer'], function (ComponentRegistry,
-                 Component, Controller, CssRenderer) {
-
-        var instance = new ComponentRegistry(),
-            fakeComponent = jasmine.createSpyObj('component', ['instanceId', 'getChildByInstanceId']);
-
-        fakeComponent.instanceId.andCallFake(function () {
-            return 'fakeInstanceId'
-        });
-
-        fakeComponent.getChildByInstanceId.andCallFake(function (id) {
-            if(id === 'fakeChildId') {
-                return true;
-            } else {
-                return false;
-            }
-        });
-
-        instance.register(fakeComponent);
-
-        expect(instance.getParent('fakeChildId')).toBe(fakeComponent);
-
-    });
-
-    it('should deregister a component from the component map', ['raintime/component_registry',
-        'raintime/component', 'raintime/controller', 'raintime/css/renderer'], function (ComponentRegistry,
-                Component, Controller, CssRenderer) {
-
-        Controller = controller;
-
-        CssRenderer.get = function () {
-            return cssRenderer;
-        }
-
-        Component = component;
-
-        var instance = new ComponentRegistry(),
-            fakeComponent = jasmine.createSpyObj('component', ['instanceId', 'getChildByInstanceId', 'children',
-            'state']);
-
-        fakeComponent.instanceId.andCallFake(function () {
-            return 'fakeInstanceId'
-        });
-
-        fakeComponent.children.andCallFake(function () {
-            return [];
-        });
-
-        instance.register(fakeComponent);
-
-        instance.deregister('fakeInstanceId');
-
-        expect(fakeComponent.state).toHaveBeenCalledWith('destroy');
-        expect(instance.getComponent('fakeInstanceId')).toBe(null);
-    });
-
-    it('should load css and controller for a component', ['raintime/component_registry',
-        'raintime/component', 'raintime/controller', 'raintime/css/renderer', 'raintime/lib/promise'],
-        function (ComponentRegistry,
-                 Component, Controller, CssRenderer, Promise) {
-
-
-            var deferred = Promise.defer(),
-                finished;
-            
-            window.rainContext = {
-
-                enableMinification: false
-            };
-
-            CssRenderer.get = function () {
-                return cssRenderer;
-            };
-
-            cssRenderer.load.andCallFake(function () {
-                setTimeout(function () {
-                    deferred.resolve();
-                }, 0);
-                return deferred.promise;
-            });
-
-            spyOn(window, 'require');
-
-            window.require.andCallFake(function (deps, cb) {
-                console.log(cb);
-                cb();
-            });
+    describe('#register', function () {
+        it('should register a component in the component map', ['raintime/component_registry',
+                'raintime/component', 'raintime/controller', 'raintime/css/renderer'], function (ComponentRegistry,
+                    Component, Controller, CssRenderer) {
 
             var instance = new ComponentRegistry(),
-                fakeComponent = jasmine.createSpyObj('component', ['instanceId', 'getChildByInstanceId', 'children',
-                    'state', 'controllerPath', 'id', 'version', 'staticId', 'parentInstanceId', 'on', 'controller',
-                'once']);
+                fakeComponent = jasmine.createSpyObj('component', ['instanceId']);
 
             fakeComponent.instanceId.andCallFake(function () {
                 return 'fakeInstanceId'
             });
 
-            fakeComponent.state.andCallFake(function (state) {
-                if(typeof state === 'undefined') {
-                    return fakeComponent._state;
+            instance.register(fakeComponent);
+
+            expect(instance.getComponent('fakeInstanceId')).toBe(fakeComponent);
+        });
+    });
+
+    describe('#getParent', function () {
+
+        it('should retrieve the parent of a component based on it`s instanceId', ['raintime/component_registry',
+            'raintime/component', 'raintime/controller', 'raintime/css/renderer'], function (ComponentRegistry,
+                     Component, Controller, CssRenderer) {
+
+            var instance = new ComponentRegistry(),
+                fakeComponent = jasmine.createSpyObj('component', ['instanceId', 'getChildByInstanceId']);
+
+            fakeComponent.instanceId.andCallFake(function () {
+                return 'fakeInstanceId'
+            });
+
+            fakeComponent.getChildByInstanceId.andCallFake(function (id) {
+                if(id === 'fakeChildId') {
+                    return true;
                 } else {
-                    fakeComponent._state = state;
+                    return false;
                 }
             });
 
-            fakeComponent.id.andCallFake(function () {
-                return 'fakeId';
+            instance.register(fakeComponent);
+
+            expect(instance.getParent('fakeChildId')).toBe(fakeComponent);
+
+        });
+    });
+
+
+    describe('#deregister', function () {
+        it('should deregister a component from the component map', ['raintime/component_registry',
+            'raintime/component', 'raintime/controller', 'raintime/css/renderer'], function (ComponentRegistry,
+                    Component, Controller, CssRenderer) {
+
+            Controller = controller;
+
+            CssRenderer.get = function () {
+                return cssRenderer;
+            }
+
+            Component = component;
+
+            var instance = new ComponentRegistry(),
+                fakeComponent = jasmine.createSpyObj('component', ['instanceId', 'getChildByInstanceId', 'children',
+                'state']);
+
+            fakeComponent.instanceId.andCallFake(function () {
+                return 'fakeInstanceId'
             });
-
-            fakeComponent.controllerPath.andCallFake(function () {
-                return 'fakePath';
-            });
-
-            fakeComponent.version.andCallFake(function () {
-                return 'fakeVersion';
-            });
-
-            fakeComponent.staticId.andCallFake(function () {
-                return 'fakeStaticId';
-            });
-
-            fakeComponent.parentInstanceId.andCallFake(function () {
-                return 'fakeParentId';
-            });
-
-            fakeComponent.on.andCallFake(function (ev, cb) {
-                cb();
-            });
-
-            fakeComponent.once.andCallFake(function (ev, cb) {
-                cb();
-            })
-
 
             fakeComponent.children.andCallFake(function () {
                 return [];
             });
 
-            instance.load(fakeComponent).then(function () {
-                finished = true;
-            });
+            instance.register(fakeComponent);
 
-            waitsFor(function () {
-               return typeof finished !== 'undefined';
-            });
+            instance.deregister('fakeInstanceId');
 
-            runs(function () {
-               expect(fakeComponent.state()).toBe('start');
-            });
+            expect(fakeComponent.state).toHaveBeenCalledWith('destroy');
+            expect(instance.getComponent('fakeInstanceId')).toBe(null);
+        });
+    });
+
+    describe('load', function () {
+        it('should load css and controller for a component', ['raintime/component_registry',
+            'raintime/component', 'raintime/controller', 'raintime/css/renderer', 'raintime/lib/promise'],
+            function (ComponentRegistry,
+                     Component, Controller, CssRenderer, Promise) {
+
+
+                var deferred = Promise.defer(),
+                    finished;
+
+                window.rainContext = {
+
+                    enableMinification: false
+                };
+
+                CssRenderer.get = function () {
+                    return cssRenderer;
+                };
+
+                cssRenderer.load.andCallFake(function () {
+                    setTimeout(function () {
+                        deferred.resolve();
+                    }, 0);
+                    return deferred.promise;
+                });
+
+                spyOn(window, 'require');
+
+                window.require.andCallFake(function (deps, cb) {
+                    console.log(cb);
+                    cb();
+                });
+
+                var instance = new ComponentRegistry(),
+                    fakeComponent = jasmine.createSpyObj('component', ['instanceId', 'getChildByInstanceId', 'children',
+                        'state', 'controllerPath', 'id', 'version', 'staticId', 'parentInstanceId', 'on', 'controller',
+                    'once']);
+
+                fakeComponent.instanceId.andCallFake(function () {
+                    return 'fakeInstanceId'
+                });
+
+                fakeComponent.state.andCallFake(function (state) {
+                    if(typeof state === 'undefined') {
+                        return fakeComponent._state;
+                    } else {
+                        fakeComponent._state = state;
+                    }
+                });
+
+                fakeComponent.id.andCallFake(function () {
+                    return 'fakeId';
+                });
+
+                fakeComponent.controllerPath.andCallFake(function () {
+                    return 'fakePath';
+                });
+
+                fakeComponent.version.andCallFake(function () {
+                    return 'fakeVersion';
+                });
+
+                fakeComponent.staticId.andCallFake(function () {
+                    return 'fakeStaticId';
+                });
+
+                fakeComponent.parentInstanceId.andCallFake(function () {
+                    return 'fakeParentId';
+                });
+
+                fakeComponent.on.andCallFake(function (ev, cb) {
+                    cb();
+                });
+
+                fakeComponent.once.andCallFake(function (ev, cb) {
+                    cb();
+                })
+
+
+                fakeComponent.children.andCallFake(function () {
+                    return [];
+                });
+
+                instance.load(fakeComponent).then(function () {
+                    finished = true;
+                });
+
+                waitsFor(function () {
+                   return typeof finished !== 'undefined';
+                });
+
+                runs(function () {
+                   expect(fakeComponent.state()).toBe('start');
+                });
+        });
     });
 });

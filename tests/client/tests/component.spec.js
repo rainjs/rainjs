@@ -47,62 +47,69 @@ describe("Component module", function () {
 
     });
 
-    it('should have all the getter and setters functional', ['raintime/component'], function(Component) {
-        var instance = new Component(componentData);
+    describe('#getter_setters', function () {
+        it('should have all the getter and setters functional', ['raintime/component'], function(Component) {
+            var instance = new Component(componentData);
 
-        expect(instance.id()).toBe(componentData.id);
-        expect(instance.children().length).toBe(0);
-        expect(instance.containerId()).toBe(componentData.containerId);
-        expect(instance.instanceId()).toBe(componentData.instanceId);
-        expect(instance.parentInstanceId()).toBe(componentData.parentInstanceId);
-        expect(instance.html()).toBe(componentData.html);
-        expect(instance.staticId()).toBe(componentData.staticId);
-        expect(instance.css().length).toBe(2);
-        expect(instance.controllerPath()).toBe(componentData.controller);
-        expect(instance.containerId()).toBe(componentData.containerId);
+            expect(instance.id()).toBe(componentData.id);
+            expect(instance.children().length).toBe(0);
+            expect(instance.containerId()).toBe(componentData.containerId);
+            expect(instance.instanceId()).toBe(componentData.instanceId);
+            expect(instance.parentInstanceId()).toBe(componentData.parentInstanceId);
+            expect(instance.html()).toBe(componentData.html);
+            expect(instance.staticId()).toBe(componentData.staticId);
+            expect(instance.css().length).toBe(2);
+            expect(instance.controllerPath()).toBe(componentData.controller);
+            expect(instance.containerId()).toBe(componentData.containerId);
+        });
     });
 
-    it('should change the state depending on the controllers state', ['raintime/component'], function (Component) {
-        var instance = new Component(componentData);
+    describe('#state', function () {
+        it('should change the state depending on the controllers state', ['raintime/component'], function (Component) {
+            var instance = new Component(componentData);
 
-        instance.controller(controller);
+            instance.controller(controller);
 
-        instance.state('start');
+            instance.state('start');
 
-        expect(instance.state()).toBe('start');
+            expect(instance.state()).toBe('start');
 
+        });
     });
 
-    it('should add child to children map', ['raintime/component'], function (Component) {
-        var instance = new Component(componentData),
-            child = {
-                staticId: 'fakeChildStatic',
-                instanceId: 'fakeChildInstance'
-            };
+    describe('#addChild', function () {
+        it('should add child to children map', ['raintime/component'], function (Component) {
+            var instance = new Component(componentData),
+                child = {
+                    staticId: 'fakeChildStatic',
+                    instanceId: 'fakeChildInstance'
+                };
 
 
-        instance.addChild(child);
+            instance.addChild(child);
 
-        expect(instance.children().length).toBe(1);
-        expect(instance.getChildByInstanceId(child.instanceId)).toBe(child);
-        expect(instance.getChildByStaticId(child.staticId)).toBe(child);
+            expect(instance.children().length).toBe(1);
+            expect(instance.getChildByInstanceId(child.instanceId)).toBe(child);
+            expect(instance.getChildByStaticId(child.staticId)).toBe(child);
 
+        });
     });
 
-    it('should remove child from childrenMap', ['raintime/component'], function (Component) {
-        var instance = new Component(componentData),
-            child = {
-                staticId: 'fakeChildStatic',
-                instanceId: 'fakeChildInstance'
-            };
+    describe('#removeChild', function () {
+        it('should remove child from childrenMap', ['raintime/component'], function (Component) {
+            var instance = new Component(componentData),
+                child = {
+                    staticId: 'fakeChildStatic',
+                    instanceId: 'fakeChildInstance'
+                };
 
 
-        instance.addChild(child);
-        instance.removeChild(child.staticId);
+            instance.addChild(child);
+            instance.removeChild(child.staticId);
 
-        expect(instance.children().length).toBe(0);
-        expect(instance.getChildByInstanceId(child.instanceId)).toBe(null);
-        expect(instance.getChildByStaticId(child.staticId)).toBe(null);
+            expect(instance.children().length).toBe(0);
+            expect(instance.getChildByInstanceId(child.instanceId)).toBe(null);
+            expect(instance.getChildByStaticId(child.staticId)).toBe(null);
+        });
     });
-
 });
