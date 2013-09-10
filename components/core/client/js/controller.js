@@ -38,7 +38,7 @@ define(['raintime/lib/event_emitter',
      *
      * @param {Component} component
      *
-     * @name {Controller}
+     * @name Controller
      * @constructor
      */
     function Controller(component) {

@@ -55,9 +55,12 @@ define(['raintime/client_storage',
         this._component = component;
 
         /**
-         * Component description.
+         * Object containing id, version, sid and children properties of the associated component.
          *
          * @type {{id: String, version: String, sid: String, children: Array}}
+         *
+         * @name component
+         * @memberOf Context#
          */
         this.component = {
             id: component.id(),
@@ -70,6 +73,9 @@ define(['raintime/client_storage',
          * The component's instance id.
          *
          * @type {String}
+         *
+         * @name instanceId
+         * @memberOf Context#
          */
         this.instanceId = component.instanceId();
 
@@ -77,14 +83,19 @@ define(['raintime/client_storage',
          * The local storage manager.
          *
          * @type {ClientStorage}
+         *
+         * @name storage
+         * @memberOf Context#
          */
         this.storage = new ClientStorage(this);
 
         /**
          * Provides methods to publish and subscribe to events.
          *
+         * @type {Object}
+         *
          * @name messaging
-         * @memberOf Context
+         * @memberOf Context#
          */
         this.messaging = {
 
@@ -94,7 +105,6 @@ define(['raintime/client_storage',
              * @param {String} eventName the event to which the callback is registered.
              * @param {Function} callback this is the callback method that will get executed. It must have a single parameter called data. e.g.: function(data)
              * @param {String} [contextID] a unique id assigned to the context subscribing to the event
-             * @memberOf Context.messaging
              */
             subscribe: function (eventName, callback, contextID) {
                 Observer.subscribe(eventName, callback, self, contextID);
@@ -105,7 +115,6 @@ define(['raintime/client_storage',
              *
              * @param {String} eventName the event for which to unsubscribe the specified callback
              * @param {Function} callback this is the callback method that will get executed. It must have a single parameter called data. e.g.: function(data)
-             * @memberOf Context.messaging
              */
             unsubscribe: function (eventName, callback) {
                 Observer.unsubscribe(eventName, callback, self);
@@ -116,7 +125,6 @@ define(['raintime/client_storage',
              *
              * @param {String} eventName
              * @param {Object} data
-             * @memberOf Context.messaging
              */
             publish: function (eventName, data) {
                 Observer.publish(eventName, data, self);
@@ -197,7 +205,7 @@ define(['raintime/client_storage',
      *
      * The context for the callback function will be the component's controller.
      *
-     * @deprecated
+     * @deprecated 0.32 no use-cases for this method exist
      *
      */
     Context.prototype.replace = function (componentOptions, callback) {
@@ -236,7 +244,7 @@ define(['raintime/client_storage',
      * @param {Function} callback
      * @returns {Array|undefined}
      *
-     * @deprecated use Controller#getChildren or Controller#getChild instead
+     * @deprecated 0.32 use Controller#getChildren or Controller#getChild
      */
     Context.prototype.find = function (staticIds, callback) {
         if (typeof staticIds === 'function') {
