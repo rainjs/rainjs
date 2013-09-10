@@ -38,7 +38,7 @@ define(['raintime/lib/event_emitter',
      *
      * @param {Component} component
      *
-     * @name {Controller}
+     * @name Controller
      * @constructor
      */
     function Controller(component) {
@@ -48,6 +48,7 @@ define(['raintime/lib/event_emitter',
          * The view context.
          *
          * @type {Context}
+         * @protected
          */
         this.context = new Context(component);
 
