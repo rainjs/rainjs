@@ -28,7 +28,7 @@
 describe('ClientRenderer', function () {
     this.disableMock = true;
 
-    var renderer, registry, defer, socket;
+    var renderer, registry, defer, socket, EventEmitter, Component;
 
     beforeEach(function () {
         var done = false;
@@ -55,8 +55,10 @@ describe('ClientRenderer', function () {
                 'raintime/client_renderer',
                 'raintime/css/renderer',
                 'raintime/messaging/sockets',
-                'raintime/lib/promise'
-            ], function (ClientRenderer, CssRenderer, SocketHandler, Promise) {
+                'raintime/lib/promise',
+                'raintime/lib/event_emitter',
+                'raintime/component'
+            ], function (ClientRenderer, CssRenderer, SocketHandler, Promise, Emitter, Comp) {
                 spyOn(CssRenderer, 'get');
                 spyOn(SocketHandler, 'get');
 
@@ -79,6 +81,9 @@ describe('ClientRenderer', function () {
                 spyOn(registry, 'getComponent');
 
                 defer = Promise.defer;
+
+                EventEmitter = Emitter;
+                Component = Comp;
 
                 done = true;
             });
@@ -327,15 +332,57 @@ describe('ClientRenderer', function () {
         });
 
         it('should resolve the returned promise when the component is started', function () {
+            var deferred = defer();
+            registry.getComponent.andReturn(deferred.promise);
 
+            var component = new EventEmitter(),
+                receivedComponent;
+
+            component.instanceId = 'id7';
+
+            renderer.requestComponent({
+                id: 'example',
+                view: 'index',
+                instanceId: 'id7'
+            }).then(function (component) {
+                receivedComponent = component;
+            });
+
+            deferred.resolve(component);
+            component.emit('start');
+
+            expect(receivedComponent.instanceId).toEqual(component.instanceId);
         });
     });
 
     describe('removeComponent', function () {
+        it('should remove a component', function () {
+            var component = new Component({
+                css: [],
+                children: [],
+                html:'component markup',
+                controller: '/example/3.0/js/button.js',
+                instanceId: 'id1',
+                id: 'example',
+                version: '3.0'
+            });
 
+            registry.getComponent.andReturn(component);
+
+            renderer.removeComponent(component.instanceId());
+
+            expect(registry.getComponent).toHaveBeenCalledWith(component.instanceId());
+            expect(registry.deregister).toHaveBeenCalledWith(component.instanceId());
+            expect($().remove).toHaveBeenCalled();
+        });
     });
 
     describe('createComponentContainer', function () {
+        it('should generate unique ids', function () {
+            var id1 = renderer.createComponentContainer({}),
+                id2 = renderer.createComponentContainer({});
 
+            expect(id1).not.toEqual(id2);
+        });
     });
 });
