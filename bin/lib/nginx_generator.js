@@ -32,16 +32,52 @@ NginxGenerator.prototype.run = function () {
                 componentId: configuration.id,
                 componentVersion: configuration.version,
                 basePath: folderPath + '/client',
-                regexp: 'location ~* ' + configuration.id + '/.*(js.*\\.js)$'
+                type: 'js',
+                regexp: 'location ~* ' + configuration.id + '/' + configuration.version + '/.*(js.*\\.js)$'
             });
 
             routes.push({
                 componentId: configuration.id,
                 componentVersion: configuration.version,
                 basePath: folderPath,
-                regexp: 'location ~* ' + configuration.id + '/.*(resources.*)$'
-            })
+                type: 'resources',
+                regexp: 'location ~* ' + configuration.id + '/' + configuration.version + '/.*(resources.*)$'
+            });
+
         });
+    }
+
+    //setUp get latest version case
+
+    var componentLatestVersion = {};
+
+    for(var i = 0, len = routes.length; i < len; i++) {
+        var version;
+        if(!routes[i].used) {
+            version = routes[i].componentVersion;
+            componentLatestVersion[routes[i].componentId] = routes[i];
+            routes[i].used = true;
+        } else {
+            continue;
+        }
+        for(var j = 0, len = routes.length; j < len; j++) {
+            if(routes[i].componentId === routes[j].componentId && i !== j) {
+                routes[j].used = true;
+                if(routes[i].componentVersion < routes[j].componentVersion) {
+                    componentLatestVersion[routes[i].componentId] = routes[j];
+                }
+            }
+        }
+    }
+
+    for (var componentId in componentLatestVersion) {
+        var regexpJS = 'location ~* ' + componentId+ '/.*(js.*\\.js)$',
+            regexpRes = 'location ~* ' + componentId + '/.*(resources.*)$';
+
+        componentLatestVersion[componentId].regexp = regexpJS;
+        routes.push(componentLatestVersion[componentId]);
+        componentLatestVersion[componentId].regexp = regexpRes;
+        routes.push(componentLatestVersion[componentId]);
     }
 
 
