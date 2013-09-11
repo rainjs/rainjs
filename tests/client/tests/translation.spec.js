@@ -207,7 +207,6 @@ describe('Translation module', function () {
             init(ClientTranslation, Jed);
 
             Jed.prototype.dcnpgettext.andCallFake(function () {
-                console.log(arguments);
                 return 'Trimite email';
             });
 

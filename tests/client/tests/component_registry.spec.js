@@ -145,7 +145,6 @@ describe('Component Registry module', function () {
                 spyOn(window, 'require');
 
                 window.require.andCallFake(function (deps, cb) {
-                    console.log(cb);
                     cb();
                 });
 
