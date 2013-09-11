@@ -143,7 +143,7 @@ define([
      *              staticId: 'selector',
      *              placeholder: true
      *          }],
-     *          html:'component's markup',
+     *          html:'component markup',
      *          controller: '/example/3.0/js/button.js',
      *          instanceId: '3abb0ac7e9936290f5083230fe4c27b3f94dd0f1',
      *          staticId: 'cancelButton',
@@ -358,6 +358,10 @@ define([
     ClientRenderer.prototype._setPlaceholderTimeout = function (instanceId) {
         var self = this,
             element = $('#' + instanceId);
+
+        if (element.length === 0) {
+            return;
+        }
 
         this._timeouts[instanceId] = setTimeout(function () {
             if(element.css('visibility') === 'hidden' || !element.hasClass('app-container')) {
