@@ -192,7 +192,12 @@ define([
             instanceId = component.instanceId(),
             self = this;
 
-        element.css('visibility', 'hidden');
+        if (element.find('.placeholder-overlay').length === 0) {
+            element.css('visibility', 'hidden');
+        } else {
+            element.find('.placeholder-fix').remove();
+        }
+
         element.attr('id', instanceId);
         element.attr('class', component.cssClass());
         element.append(component.html());
@@ -319,15 +324,29 @@ define([
 
         placeholderOverlay.addClass('placeholder-overlay ' + this._placeholder.cssClass());
         placeholderOverlay.html(this._placeholder.html());
+        placeholderOverlay.css({
+            position: 'static',
+            visibility: 'hidden'
+        });
 
         element.addClass('app-container');
+
+        // in some cases the placeholder isn't shown if the component div has only the
+        // placeholder as content (which is absolute)
+        element.append('<div class="placeholder-fix">&nbsp;</div>');
+        element.append(placeholderOverlay);
+
         element.css({
             visibility: '',
             position: 'relative',
-            'min-height': '36px'
+            'min-height': placeholderOverlay.width() + 'px',
+            'min-width': placeholderOverlay.height() + 'px'
         });
 
-        element.append(placeholderOverlay);
+        placeholderOverlay.css({
+            position: '',
+            visibility: ''
+        });
     };
 
     /**
@@ -346,6 +365,7 @@ define([
 
         if (placeholder.length > 0) {
             placeholder.remove();
+            element.find('.placeholder-fix').remove();
         }
     };
 
