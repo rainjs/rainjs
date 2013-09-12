@@ -5,12 +5,21 @@ var fs = require('fs'),
     util = require('../../lib/util'),
     utils = require('../lib/utils');
 
+/**
+ * @name NginxGenerator
+ * @param {JSON} configuration the basic configuration located in init/conf/nginx.conf
+ * @constructor
+ */
 function NginxGenerator(configuration) {
     this._baseConfiguration = configuration;
 };
 
+/**
+ * Generates the configuration file by mapping the regexps of possible request routes with
+ * actual correspondance. Generates configuration for javascript routes and resources and stores it in
+ * the root of the project.
+ */
 NginxGenerator.prototype.run = function () {
-
 
     var routes = [],
         defaultConfiguration = this._baseConfiguration.nginxConf;
@@ -87,16 +96,15 @@ NginxGenerator.prototype.run = function () {
         };
     }
 
-    var fd = fs.openSync('nginx.conf', 'w');
-    var stream = fs.createWriteStream('nginx.conf', {
-        flags: 'w',
-        encoding: 'utf-8',
-        mode: '0644',
-        fd: fd
-    });
-
-    var NEWLINE = ('win32' === process.platform) ? '\r\n' :
-        ('darwin' === process.platform) ? '\r' : '\n';
+    var fd = fs.openSync('nginx.conf', 'w'),
+        stream = fs.createWriteStream('nginx.conf', {
+            flags: 'w',
+            encoding: 'utf-8',
+            mode: '0644',
+            fd: fd
+        }),
+        NEWLINE = ('win32' === process.platform) ? '\r\n' :
+            ('darwin' === process.platform) ? '\r' : '\n';
 
     var walkObjectSync = function (object, level) {
         for(var i in object) {

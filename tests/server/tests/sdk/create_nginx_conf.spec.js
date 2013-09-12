@@ -25,63 +25,51 @@
 
 "use strict";
 
-var path = require('path'),
-    fs = require('fs'),
-    color = require('colors'),
-    util = require('../../lib/util'),
-    nginxGenerator = require('../lib/nginx_generator'),
-    utils = require('../lib/utils');
+describe('Generate Nginx Conf', function () {
 
-/**
- * Register the create component command.
- *
- * @param {Program} program
- */
-function register(program) {
+    var fs, mocks = {},
+        nginxGenerator, program, module, generate;
 
-    var projectRoot = utils.getProjectRoot(process.cwd());
+    beforeEach(function () {
+        spyOn(process, 'exit');
 
-    program
-        .command('generate-nginx-conf')
-        .description('Generate the nginix configuration file')
-        .action(generateNginxConfiguration);
-}
+        fs = jasmine.createSpyObj('fs', ['readFileSync'])
 
-/**
- * Generate Nginx configuration method, reads the build.json for additional projects, so it
- * can generate a full project nginx configuration.
- */
-function generateNginxConfiguration () {
+        mocks['fs'] = fs;
 
-    var projects = [utils.getProjectRoot()],
-        defaultConfiguration = require(path.join(utils.getProjectRoot(process.cwd()),
-            'build.json'));
+        fs.readFileSync.andCallFake(function () {
+            return JSON.stringify({
+                "fake": "fake"
+            });
+        });
 
+        nginxGenerator = function () {};
 
-    console.log(defaultConfiguration);
-    if(defaultConfiguration.additionalProjects) {
-        projects = projects.concat(defaultConfiguration.additionalProjects);
-    }
+        nginxGenerator.prototype.run = jasmine.createSpy('run');
 
-    try {
-        var nginxConfDefault = fs.readFileSync(path.join(__dirname, '../init/conf/nginx.conf'));
+        mocks['../lib/nginx_generator'] = nginxGenerator;
 
-        nginxConfDefault = JSON.parse(nginxConfDefault);
-    } catch (e) {
-        console.log('gigi');
-        console.log(e.message.red);
-        console.log(e.stack.red);
-        process.exit(1);
-    }
+        program = jasmine.createSpyObj('program', ['command', 'description', 'action', 'option']);
+        program.command.andReturn(program);
+        program.description.andReturn(program);
+        program.action.andReturn(program);
+        program.option.andReturn(program);
 
-    var generator = new nginxGenerator({
-        projects: projects,
-        nginxConf: nginxConfDefault
+        var context = loadModuleContext('bin/commands/create_nginx_conf.js', mocks);
+
+        module = context.module.exports;
+        generate = context.generateNginxConfiguration;
+
     });
 
-    generator.run();
+    it('should register the create_nginx_conf', function () {
+        module(program);
+        expect(program.command).toHaveBeenCalledWith(
+            'generate-nginx-conf');
+    });
 
-};
-
-
-module.exports = register;
+    it('should call the nginx generator', function () {
+        generate();
+        expect(nginxGenerator.prototype.run).toHaveBeenCalled();
+    });
+});
