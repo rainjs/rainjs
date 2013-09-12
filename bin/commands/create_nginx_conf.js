@@ -53,7 +53,7 @@ function register(program) {
  */
 function generateNginxConfiguration () {
 
-    var projects = [utils.getProjectRoot()],
+    var projects = [utils.getProjectRoot(process.cwd())],
         defaultConfiguration = require(path.join(utils.getProjectRoot(process.cwd()),
             'build.json'));
 
@@ -68,7 +68,6 @@ function generateNginxConfiguration () {
 
         nginxConfDefault = JSON.parse(nginxConfDefault);
     } catch (e) {
-        console.log('gigi');
         console.log(e.message.red);
         console.log(e.stack.red);
         process.exit(1);

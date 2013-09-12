@@ -83,10 +83,14 @@ NginxGenerator.prototype.run = function () {
         var regexpJS = 'location ~* ' + componentId+ '/.*(js.*\\.js)$',
             regexpRes = 'location ~* ' + componentId + '/.*(resources.*)$';
 
-        componentLatestVersion[componentId].regexp = regexpJS;
-        routes.push(componentLatestVersion[componentId]);
-        componentLatestVersion[componentId].regexp = regexpRes;
-        routes.push(componentLatestVersion[componentId]);
+        var comp = Object.create(componentLatestVersion[componentId]);
+        comp.regexp = regexpJS;
+        routes.push(comp);
+        comp =  Object.create(componentLatestVersion[componentId]);
+        comp.regexp = regexpRes;
+        console.log(comp.basePath);
+        comp.basePath = comp.basePath.replace('/client', '');
+        routes.push(comp);
     }
 
 
