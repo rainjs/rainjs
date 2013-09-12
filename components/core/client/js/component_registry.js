@@ -274,11 +274,13 @@ define([
             ComponentController.call(this);
         };
 
-        Controller.prototype = $.extend(
-            {},
-            BaseController.prototype,
-            ComponentController.prototype
-        );
+        util.inherits(Controller, ComponentController);
+
+        for (var key in BaseController.prototype) {
+            if (typeof Controller.prototype[key] === 'undefined') {
+                Controller.prototype[key] = BaseController.prototype[key];
+            }
+        }
 
         return new Controller(component);
     };

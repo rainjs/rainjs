@@ -78,7 +78,7 @@ define(['raintime/lib/event_emitter',
     * @param {String} eventName
     * @param {Function} callback
     */
-    Controller.on = function (eventName, callback) {
+    Controller.prototype.on = function (eventName, callback) {
         if (this._component.hasState(eventName)) {
             callback.call(this);
             return;
@@ -156,7 +156,7 @@ define(['raintime/lib/event_emitter',
      * @returns {promise} a promise to return the child controller after it has started
      *
      * @protected
-     * @deprecated use getChild instead
+     * @deprecated 0.33 use getChild instead
      */
     Controller.prototype._getChild = Controller.prototype.getChild;
 
@@ -192,7 +192,7 @@ define(['raintime/lib/event_emitter',
      * @param {Function} eventHandler the event handler function
      *
      * @protected
-     * @deprecated use onChild instead
+     * @deprecated 0.33 use onChild instead
      */
     Controller.prototype._onChild = Controller.prototype.onChild;
 
@@ -236,7 +236,7 @@ define(['raintime/lib/event_emitter',
      * @returns {Promise} a promise to load and start the controllers
      *
      * @protected
-     * @deprecated use getChildren instead
+     * @deprecated 0.33 use getChildren instead
      */
     Controller.prototype._getChildren = Controller.prototype.getChildren;
 

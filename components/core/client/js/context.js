@@ -205,7 +205,7 @@ define(['raintime/client_storage',
      *
      * The context for the callback function will be the component's controller.
      *
-     * @deprecated 0.32 no use-cases for this method exist
+     * @deprecated 0.33 no use-cases for this method exist
      *
      */
     Context.prototype.replace = function (componentOptions, callback) {
@@ -244,7 +244,7 @@ define(['raintime/client_storage',
      * @param {Function} callback
      * @returns {Array|undefined}
      *
-     * @deprecated 0.32 use Controller#getChildren or Controller#getChild
+     * @deprecated 0.33 use Controller#getChildren or Controller#getChild
      */
     Context.prototype.find = function (staticIds, callback) {
         if (typeof staticIds === 'function') {
