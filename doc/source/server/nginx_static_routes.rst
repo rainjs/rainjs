@@ -10,7 +10,7 @@ NginX
 -----
 
 NginX is a fully mature web server very configurable that can handle and modify requests
-depending on it's configuration. The preffered handling configuration
+depending on it's configuration. The preferred handling configuration
 is by using regular expressions.
 
 You can read more about nginx at: `http://nginx.org/en/docs/ <http://nginx.org/en/docs/>`_
@@ -184,5 +184,5 @@ An example of the output configuration would be:
     	}
     }
 
-You can also change default values in the configuration by editing the ``bin/init/conf/nginx.conf`` file in your
-rain folder.
+You can also change default values in the configuration by editing the ``bin/conf/nginx.conf``
+file in your rain folder.
