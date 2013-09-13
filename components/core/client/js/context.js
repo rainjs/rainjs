@@ -321,7 +321,7 @@ define(['raintime/client_storage',
         when(parent, function (parent) {
             parent.on('start', function () {
                 deferred.resolve(parent.controller());
-            })
+            });
         });
 
         return deferred.promise;

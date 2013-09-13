@@ -163,7 +163,7 @@ define([
         this._registry.register(component);
 
         component.children().forEach(function (child) {
-            self._registry.waitInstanceId(child.instanceId);
+            self._registry.addWaitingInstanceId(child.instanceId);
         });
 
         if (component.rootElement().length === 0) {
@@ -198,7 +198,6 @@ define([
             element.find('.placeholder-fix').remove();
         }
 
-        element.attr('id', instanceId);
         element.attr('class', component.cssClass());
         element.append(component.html());
 
@@ -269,7 +268,7 @@ define([
 
         this._socket.emit('render', options);
 
-        this._registry.waitInstanceId(options.instanceId);
+        this._registry.addWaitingInstanceId(options.instanceId);
 
         return seq([
             function () {

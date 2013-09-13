@@ -35,10 +35,10 @@ describe('Component Registry module', function () {
         cssRenderer = jasmine.createSpyObj('cssRenderer', ['unload', 'load']);
     });
 
-    describe('#register', function () {
+    describe('register', function () {
         it('should register a component in the component map', ['raintime/component_registry',
-                'raintime/component', 'raintime/controller', 'raintime/css/renderer'], function (ComponentRegistry,
-                    Component, Controller, CssRenderer) {
+                'raintime/component', 'raintime/controller', 'raintime/css/renderer'],
+            function (ComponentRegistry, Component, Controller, CssRenderer) {
 
             var instance = new ComponentRegistry(),
                 fakeComponent = jasmine.createSpyObj('component', ['instanceId']);
@@ -53,25 +53,23 @@ describe('Component Registry module', function () {
         });
     });
 
-    describe('#getParent', function () {
+    describe('getParent', function () {
 
-        it('should retrieve the parent of a component based on it`s instanceId', ['raintime/component_registry',
-            'raintime/component', 'raintime/controller', 'raintime/css/renderer'], function (ComponentRegistry,
-                     Component, Controller, CssRenderer) {
+        it('should retrieve the parent of a component based on it`s instanceId',
+            ['raintime/component_registry', 'raintime/component', 'raintime/controller',
+                'raintime/css/renderer'],
+            function (ComponentRegistry, Component, Controller, CssRenderer) {
 
             var instance = new ComponentRegistry(),
-                fakeComponent = jasmine.createSpyObj('component', ['instanceId', 'getChildByInstanceId']);
+                fakeComponent = jasmine.createSpyObj('component',
+                    ['instanceId', 'getChildByInstanceId']);
 
             fakeComponent.instanceId.andCallFake(function () {
                 return 'fakeInstanceId'
             });
 
             fakeComponent.getChildByInstanceId.andCallFake(function (id) {
-                if(id === 'fakeChildId') {
-                    return true;
-                } else {
-                    return false;
-                }
+                return id === 'fakeChildId';
             });
 
             instance.register(fakeComponent);
@@ -84,23 +82,23 @@ describe('Component Registry module', function () {
 
     describe('#deregister', function () {
         it('should deregister a component from the component map', ['raintime/component_registry',
-            'raintime/component', 'raintime/controller', 'raintime/css/renderer'], function (ComponentRegistry,
-                    Component, Controller, CssRenderer) {
+            'raintime/component', 'raintime/controller', 'raintime/css/renderer'],
+            function (ComponentRegistry, Component, Controller, CssRenderer) {
 
             Controller = controller;
 
             CssRenderer.get = function () {
                 return cssRenderer;
-            }
+            };
 
             Component = component;
 
             var instance = new ComponentRegistry(),
-                fakeComponent = jasmine.createSpyObj('component', ['instanceId', 'getChildByInstanceId', 'children',
-                'state']);
+                fakeComponent = jasmine.createSpyObj('component', ['instanceId',
+                    'getChildByInstanceId', 'children', 'state']);
 
             fakeComponent.instanceId.andCallFake(function () {
-                return 'fakeInstanceId'
+                return 'fakeInstanceId';
             });
 
             fakeComponent.children.andCallFake(function () {
@@ -119,9 +117,7 @@ describe('Component Registry module', function () {
     describe('load', function () {
         it('should load css and controller for a component', ['raintime/component_registry',
             'raintime/component', 'raintime/controller', 'raintime/css/renderer', 'raintime/lib/promise'],
-            function (ComponentRegistry,
-                     Component, Controller, CssRenderer, Promise) {
-
+            function (ComponentRegistry, Component, Controller, CssRenderer, Promise) {
 
                 var deferred = Promise.defer(),
                     finished;
@@ -191,7 +187,7 @@ describe('Component Registry module', function () {
 
                 fakeComponent.once.andCallFake(function (ev, cb) {
                     cb();
-                })
+                });
 
 
                 fakeComponent.children.andCallFake(function () {

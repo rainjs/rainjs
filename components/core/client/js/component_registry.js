@@ -58,7 +58,7 @@ define([
          * @type {Object}
          * @private
          */
-        this._waitInstanceIds = {};
+        this._waitingInstanceIds = {};
 
         /**
          * The CssRenderer instance.
@@ -93,9 +93,9 @@ define([
 
         this._componentMap[instanceId] = component;
 
-        if (this._waitInstanceIds[instanceId]) {
-            this._waitInstanceIds[instanceId].resolve(component);
-            delete this._waitInstanceIds[instanceId];
+        if (this._waitingInstanceIds[instanceId]) {
+            this._waitingInstanceIds[instanceId].resolve(component);
+            delete this._waitingInstanceIds[instanceId];
         }
     };
 
@@ -105,8 +105,8 @@ define([
      *
      * @param {String} instanceId
      */
-    ComponentRegistry.prototype.waitInstanceId = function (instanceId) {
-        this._waitInstanceIds[instanceId] = defer();
+    ComponentRegistry.prototype.addWaitingInstanceId = function (instanceId) {
+        this._waitingInstanceIds[instanceId] = defer();
     };
 
     /**
@@ -121,8 +121,8 @@ define([
             return this._componentMap[instanceId];
         }
 
-        if (this._waitInstanceIds[instanceId]) {
-            return this._waitInstanceIds[instanceId].promise;
+        if (this._waitingInstanceIds[instanceId]) {
+            return this._waitingInstanceIds[instanceId].promise;
         }
 
         return null;

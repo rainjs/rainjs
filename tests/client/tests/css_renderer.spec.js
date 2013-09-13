@@ -31,7 +31,7 @@ describe('CSS Renderer', function () {
             id: 'example',
             version: '1.0',
             uniqueId: function () {
-                return 'example;1.0'
+                return 'example;1.0';
             },
             css: function () {
                 return [{
@@ -51,7 +51,7 @@ describe('CSS Renderer', function () {
             id: 'example',
             version: '2.0',
             uniqueId: function () {
-                return 'example;2.0'
+                return 'example;2.0';
             },
             css: function () {
                 return [];
@@ -61,7 +61,7 @@ describe('CSS Renderer', function () {
             id: 'example',
             version: '1.0',
             uniqueId: function () {
-                return 'example;1.0'
+                return 'example;1.0';
             },
             css: function () {
                 return [{
@@ -80,7 +80,7 @@ describe('CSS Renderer', function () {
             id: 'example',
             version: '1.0',
             uniqueId: function () {
-                return 'example;1.0'
+                return 'example;1.0';
             },
             css: function () {
                 return [{

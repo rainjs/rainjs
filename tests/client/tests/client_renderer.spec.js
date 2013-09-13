@@ -77,7 +77,7 @@ describe('ClientRenderer', function () {
                 spyOn(registry, 'register');
                 spyOn(registry, 'deregister');
                 spyOn(registry, 'load');
-                spyOn(registry, 'waitInstanceId');
+                spyOn(registry, 'addWaitingInstanceId');
                 spyOn(registry, 'getComponent');
 
                 defer = Promise.defer;
@@ -185,7 +185,7 @@ describe('ClientRenderer', function () {
             renderer.renderComponent(componentData);
 
             var child = componentData.children[0];
-            expect(registry.waitInstanceId).toHaveBeenCalledWith(child.instanceId);
+            expect(registry.addWaitingInstanceId).toHaveBeenCalledWith(child.instanceId);
         });
 
         it('should insert the markup in the DOM', function () {
@@ -197,8 +197,6 @@ describe('ClientRenderer', function () {
 
             var component = registry.register.mostRecentCall.args[0];
             expect($().append).toHaveBeenCalledWith(componentData.html);
-            expect($().css).toHaveBeenCalledWith('visibility', 'hidden');
-            expect($().attr).toHaveBeenCalledWith('id', componentData.instanceId);
             expect($().attr).toHaveBeenCalledWith('class', component.cssClass());
         });
 
@@ -271,10 +269,6 @@ describe('ClientRenderer', function () {
             jasmine.Clock.tick(rainContext.placeholderTimeout + 1);
 
             expect($().html).toHaveBeenCalledWith(rainContext.placeholder.html);
-
-            renderer.renderComponent(childComponent);
-
-            expect($().remove.calls.length).toEqual(2);
         });
     });
 
@@ -328,7 +322,7 @@ describe('ClientRenderer', function () {
                 instanceId: 'id7'
             });
 
-            expect(registry.waitInstanceId).toHaveBeenCalledWith('id7');
+            expect(registry.addWaitingInstanceId).toHaveBeenCalledWith('id7');
         });
 
         it('should resolve the returned promise when the component is started', function () {

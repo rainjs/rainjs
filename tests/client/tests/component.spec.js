@@ -23,7 +23,7 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-"use strict"
+'use strict';
 
 describe("Component module", function () {
     this.disableMock = true;
@@ -43,11 +43,11 @@ describe("Component module", function () {
             children: []
         };
 
-        controller = jasmine.createSpyObj['controller', ['init', 'start', 'end', 'destroy']];
+        controller = jasmine.createSpyObj('controller', ['init', 'start', 'end', 'destroy']);
 
     });
 
-    describe('#getter_setters', function () {
+    describe('getters/setters', function () {
         it('should have all the getter and setters functional', ['raintime/component'], function(Component) {
             var instance = new Component(componentData);
 
@@ -64,8 +64,10 @@ describe("Component module", function () {
         });
     });
 
-    describe('#state', function () {
-        it('should change the state depending on the controllers state', ['raintime/component'], function (Component) {
+    describe('state', function () {
+        it('should change the state depending on the controllers state', ['raintime/component'],
+            function (Component) {
+
             var instance = new Component(componentData);
 
             instance.controller(controller);
@@ -77,7 +79,7 @@ describe("Component module", function () {
         });
     });
 
-    describe('#addChild', function () {
+    describe('addChild', function () {
         it('should add child to children map', ['raintime/component'], function (Component) {
             var instance = new Component(componentData),
                 child = {
@@ -95,7 +97,7 @@ describe("Component module", function () {
         });
     });
 
-    describe('#removeChild', function () {
+    describe('removeChild', function () {
         it('should remove child from childrenMap', ['raintime/component'], function (Component) {
             var instance = new Component(componentData),
                 child = {

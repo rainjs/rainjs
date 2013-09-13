@@ -197,8 +197,8 @@ define(['raintime/lib/event_emitter',
     Controller.prototype._onChild = Controller.prototype.onChild;
 
     /**
-     * Asynchronously loads multiple started controllers. If the 'sids' argument is missing, then
-     * the method waits for all children of the current component to start.
+     * Asynchronously loads multiple started controllers. If the 'staticIds' argument is missing,
+     * then the method waits for all children of the current component to start.
      *
      * The promise will be resolved with an object where the keys are the controllers' sids and
      * the values are the controller objects.

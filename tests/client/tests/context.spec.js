@@ -287,7 +287,7 @@ describe('Context module', function () {
 
             fakeCallback.andCallFake(function () {
                 hasExecuted = true;
-            })
+            });
 
             var result = instance.find('invalidChild', fakeCallback);
 

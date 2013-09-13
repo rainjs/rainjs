@@ -105,7 +105,7 @@ describe('Controller API', function () {
             instance.getChild('fakeChild').then(function (component) {
                 child = component;
             }, function (err) {
-                console.log(err)
+                console.log(err);
             });
 
             waitsFor(function () {
@@ -214,7 +214,7 @@ describe('Controller API', function () {
                 children;
 
             instance.getChildren(['child1']).then(function (components) {
-                children = components
+                children = components;
             }, function () {
                 children = false;
             });

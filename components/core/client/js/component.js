@@ -162,17 +162,16 @@ define([
 
         for (var i = 0, len = componentData.children.length; i < len; i++) {
             var child = componentData.children[i],
-                index = this._children.length;
+                newChild = {
+                    staticId: child.staticId || child.instanceId,
+                    instanceId: child.instanceId,
+                    placeholder: child.placeholder
+                };
 
-            this._children.push({
-                staticId: child.staticId || child.instanceId,
-                instanceId: child.instanceId,
-                placeholder: child.placeholder
-            });
+            this._children.push(newChild);
 
-            child = this._children[index];
-            this._instanceIdMap[child.instanceId] = index;
-            this._staticIdMap[child.staticId] = index;
+            this._instanceIdMap[newChild.instanceId] = i;
+            this._staticIdMap[newChild.staticId] = i;
         }
 
         this._state = null;
