@@ -70,6 +70,8 @@ fields are formatted with **bold**.
 - enableMinification - a Boolean value that enables or disables the loading of
   minified javascript and css files.
 
+- enableMinificationCSS - a Boolean value that enables loading of minified css files.
+
 - logger - an Object used to configure the Logger feature. The logging level and appenders can also
   be configured here. For information about the entire structure of this parameter, check the
   :doc:`Logger API</server/api/Logger>`.
@@ -106,6 +108,8 @@ fields are formatted with **bold**.
   requests are done by the user. The cookie is removed when the browser is closed if this value
   isn't specified.
 
+- cookieSecure - enable or disable the cookie secure attribute. The default value is false.
+
 - pageTitle - the default page title for all components. This can be overridden in the component's
   configuration file. If the previous two parameters are missing the title defaults to the
   component id.
@@ -133,6 +137,12 @@ fields are formatted with **bold**.
       - path - the requested page path
       - user - the user attributes
       - isAuthenticated - boolean value that tells you if the user is logged in or not
+
+.. warning::
+    The "cookieSecure" option should be used only when the requests are encrypted / using https
+    protocol, otherwise the session cookie won't be created. If you are using HAProxy in front of
+    the NodeJS servers, adding this line for the secured connections avoids the problem:
+    ``reqadd x-forwarded-proto:\ https``.
 
 .......
 Example

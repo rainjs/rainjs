@@ -46,9 +46,8 @@ describe('Client side dependencies', function () {
             locale: {}
         },
         context = {},
-        old = {},
         fixture = {},
-        once, oldDefine, testDefine, evt, fn, translationDeps;
+        once, testDefine, evt, fn, translationDeps, moduleIndex = 0;
 
     /**
      * Keeps references to functions redefined by the module under test.
@@ -60,7 +59,6 @@ describe('Client side dependencies', function () {
     var test = {};
 
     beforeEach(function () {
-
         if (once) {
             return;
         }
@@ -96,7 +94,7 @@ describe('Client side dependencies', function () {
             // original requireJS function. Since requireJS doesn't reload the module under test, it
             // means we lose the dependencies define() function, so we bring it back here
             // artificially.
-            testDefine = test.define
+            testDefine = test.define;
             fn = function() {};
         });
 
@@ -126,7 +124,7 @@ describe('Client side dependencies', function () {
         beforeEach(function () {
 
             fixture = {
-                name: 'Harry Potter',
+                name: 'harry/2.0/js/potter',
                 deps: [],
                 fn: function () {},
                 args: [],
@@ -136,6 +134,8 @@ describe('Client side dependencies', function () {
                     url: '/harry/2.0/js/potter.js'
                 }
             };
+
+            fixture.name += moduleIndex++;
 
             var node = $('<script/>', { 'data-requiremodule': fixture.component.url });
             evt = {
@@ -150,7 +150,7 @@ describe('Client side dependencies', function () {
 
             spy.requireLoad.andCallFake(function(){});
 
-            spy.onScriptLoad = spyOn(window, 'onScriptLoad')
+            spy.onScriptLoad = spyOn(window, 'onScriptLoad');
             spy.execCb = spyOn(window, 'execCb');
 
             context = {
@@ -160,7 +160,7 @@ describe('Client side dependencies', function () {
 
             // require() calls define() ...
             spy.require = spyOn(window, 'require').andCallFake(function() {
-                testDefine(fixture.name, fixture.deps, fixture.fn)
+                testDefine(fixture.name, fixture.deps, fixture.fn);
             });
 
             // Get onScriptLoad and execCb from context
@@ -176,7 +176,7 @@ describe('Client side dependencies', function () {
 
             // onScriptLoad() calls execCb()
             spy.onScriptLoad.andCallFake(function() {
-                test.execCb(fixture.component.url, fixture.fn, fixture.args, {});
+                test.execCb(fixture.name, fixture.fn, fixture.args, {});
             });
 
             spy.execCb.andCallFake(function() {});
@@ -187,7 +187,7 @@ describe('Client side dependencies', function () {
 
             expect(spy.onScriptLoad).toHaveBeenCalledWith(evt);
             expect(spy.execCb).toHaveBeenCalledWith(
-                fixture.component.url,
+                fixture.name,
                 fixture.fn,
                 fixture.args,
                 {});

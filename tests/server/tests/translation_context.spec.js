@@ -73,7 +73,8 @@ describe('Translation context', function () {
                                 server: 'someController.js'
                             }
                         }
-                    }
+                    },
+                    folder: '/some/folder'
                 },
                 path: 'someView',
                 method: 'GET',
@@ -106,7 +107,8 @@ describe('Translation context', function () {
         var component = {
             views: {
                 someView: {}
-            }
+            },
+            folder: '/some/folder'
         };
 
         beforeEach(function () {

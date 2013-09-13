@@ -3,6 +3,35 @@ Changelog
 =========
 
 --------
+v 0.32.1
+--------
+
++ Added the ``cookieSecure`` option to the server configuration to enable or disable the cookie
+  secure attribute.
+
+--------
+v 0.32.0
+--------
+
++ RAIN now works with Node.js 0.8.x and 0.10.x except the node-syslog module.
++ Fixed a fatal error in the code that tracks idle web sockets.
++ Fixed a fatal error in socket registry: the handshake is removed when the socket is disconnected.
+
+--------
+v 0.31.0
+--------
+
++ Implemented CSS minification for RAIN projects.
++ Fixed bug: external javascript modules weren't loaded correctly for minified projects.
++ Fixed bug: RainError wasn't working properly on IE 10.
++ Fixed bug: when using ``context._getChildren`` an error was thrown if multiple child components
+  were not found.
++ Fixed bug: in some situations the placeholder was registered instead of the actual component.
++ Fixed bug: in some situations the child components where duplicated in the children array.
++ Fixed bug: a load timeout was happening randomly when loading modules using RequireJS. This
+  was fixed by disabling the load timeout in the RequireJS configuration.
+
+--------
 v 0.30.0
 --------
 

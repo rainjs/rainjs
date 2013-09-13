@@ -48,7 +48,7 @@ function create31Components() {
     for(var i = 0; i < 31; i++){
         (function (i) {
                 child = terminal('rain create-component component' + i, function (error, stdout, stderr){
-                    var output = terminal('chmod 777 -R ' + componentPath + 'component' + i,
+                    terminal('chmod 777 -R ' + componentPath + 'component' + i,
                                 function(error, stdout, stderr){
 
                     var cssFile = componentPath + 'component' + i + '/client/css/index.css',

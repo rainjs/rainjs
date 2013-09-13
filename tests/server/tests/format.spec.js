@@ -73,7 +73,7 @@ describe("Format Helpers", function () {
         fs.readFileSync.andCallFake(function () {
             var data = poText;
             return data;
-        })
+        });
 
         //mock util.walkSync
         mocks['./util'] = util = jasmine.createSpyObj('util', ['walkSync']);

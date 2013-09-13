@@ -1,7 +1,7 @@
 {
     "name": "rain",
     "description": "A component-based and distributed web application framework",
-    "version": "0.30.0",
+    "version": "0.32.1",
     "author": "Rain Team <rain-team@1and1.ro>",
     "contributors": [
         { "name": "Mitko Tschimev", "email": "mitko.tschimev@1und1.de" },
@@ -34,7 +34,7 @@
     },
     "devDependencies": {
         "js-yaml": "",
-        "jasmine-node": "= 1.0.26",
+        "jasmine-node": "1.10.2",
         "jscoverage-reporter": ""
     },
     "keywords": ["framework", "rain"],

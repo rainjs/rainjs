@@ -34,7 +34,7 @@ describe('Router Plugin: View handler', function() {
         response,
         request = {},
         mocks = {},
-        renderBootstrap, renderer, config, routerPlugin,
+        renderer, routerPlugin,
         loginComponentId, loginVersion, loginViewId;
 
     beforeEach(function() {
@@ -150,7 +150,6 @@ describe('Router Plugin: View handler', function() {
             }
         };
         request.path = "index";
-        var loginRoute = '/' + loginComponentId + '/' + loginVersion + '/' + loginViewId;
 
         routerPlugin.handle(request, response);
         expect(response._body).toBe('bootstrap with fakeId 1.0 index');

@@ -28,10 +28,9 @@
 var path = require('path');
 
 describe('Socket Watch', function () {
-    var mocks, socketWatcher, SocketWatcher, socket, events, config, checkIdle, Logging;
+    var mocks, socketWatcher, SocketWatcher, socket, config, Logging;
 
     beforeEach(function () {
-
 
         mocks = {};
 
@@ -73,10 +72,12 @@ describe('Socket Watch', function () {
         mocks['./monitoring'] = Monitoring;
         mocks['./configuration'] = config;
         mocks['./logging'] = Logging;
+
         SocketWatcher = loadModuleExports(path.join('lib', 'socket_watcher.js'), mocks);
     });
 
     describe('get', function () {
+
         it('should always return the same instance', function () {
             expect(SocketWatcher._instance).toBeNull();
 
@@ -86,11 +87,8 @@ describe('Socket Watch', function () {
             expect(socketWatcher instanceof SocketWatcher).toEqual(true);
         });
         it('Should config idleTime', function () {
-
             socketWatcher = SocketWatcher.get();
-
             socketWatcher.configure(socket);
-
             expect(socketWatcher._idleTime).toBe(100);
         });
     });
@@ -154,7 +152,8 @@ describe('Socket Watch', function () {
 
 
     describe('Disconnect on Idle', function () {
-        var oldSetTimeout, timeWaited;
+        var timeWaited;
+
         beforeEach(function () {
             socket.sockets = {
                 clients: function() {
@@ -162,7 +161,6 @@ describe('Socket Watch', function () {
                 }
             };
             config.websocket.disconnectIdle = true;
-            oldSetTimeout = setTimeout;
             timeWaited = 0;
 
             SocketWatcher = loadModuleExports(path.join('lib', 'socket_watcher.js'), mocks, {
@@ -190,7 +188,7 @@ describe('Socket Watch', function () {
                         host: 'fake.schlund.net'
                     }
                 }
-            }
+            };
             socketWatcher._idleMap['test_id'] = true;
             socketWatcher._disconnectOnIdle(socket);
 
@@ -206,7 +204,7 @@ describe('Socket Watch', function () {
                         host: 'fake.schlund.net'
                     }
                 }
-            }
+            };
             socketWatcher._idleMap['test_id'] = false;
             socketWatcher._disconnectOnIdle(socket);
 
