@@ -64,7 +64,7 @@ function generateNginxConfiguration () {
     }
 
     try {
-        var nginxConfDefault = fs.readFileSync(path.join(__dirname, '../init/conf/nginx.conf'));
+        var nginxConfDefault = fs.readFileSync(path.join(__dirname, '../conf/nginx.conf'));
 
         nginxConfDefault = JSON.parse(nginxConfDefault);
     } catch (e) {
