@@ -80,7 +80,6 @@ function generateNginxConfiguration () {
 
     generator.run();
 
-};
-
+}
 
 module.exports = register;

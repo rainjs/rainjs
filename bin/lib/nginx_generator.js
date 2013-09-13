@@ -12,7 +12,7 @@ var fs = require('fs'),
  */
 function NginxGenerator(configuration) {
     this._baseConfiguration = configuration;
-};
+}
 
 /**
  * Generates the configuration file by mapping the regexps of possible request routes with
@@ -32,10 +32,6 @@ NginxGenerator.prototype.run = function () {
                 file = path.join(utils.getProjectRoot(process.cwd()), file);
             }
             var configuration = require(file);
-            /*folderPath = folderPath.split('/');
-             folderPath.pop();
-             folderPath = folderPath.join('/');*/
-            //folderPath = folderPath.join('/');
 
             routes.push({
                 componentId: configuration.id,
@@ -88,7 +84,6 @@ NginxGenerator.prototype.run = function () {
         routes.push(comp);
         comp =  Object.create(componentLatestVersion[componentId]);
         comp.regexp = regexpRes;
-        console.log(comp.basePath);
         comp.basePath = comp.basePath.replace('/client', '');
         routes.push(comp);
     }
@@ -125,7 +120,6 @@ NginxGenerator.prototype.run = function () {
                 }
                 walkObjectSync(object[i], level+1);
                 if(i !== 'locations') {
-                    console.log(i);
                     for(var j = 0; j < level; j++) {
                         stream.write('\t');
                     }
@@ -135,10 +129,9 @@ NginxGenerator.prototype.run = function () {
                 stream.write(' ' + object[i] + ';' + NEWLINE);
             }
         }
-    }
+    };
 
-    console.log(util.inspect(defaultConfiguration, true, null, true));
     walkObjectSync(defaultConfiguration, 0);
-}
+};
 
 module.exports = NginxGenerator;
