@@ -339,8 +339,8 @@ define([
         element.css({
             visibility: '',
             position: 'relative',
-            'min-height': placeholderOverlay.width() + 'px',
-            'min-width': placeholderOverlay.height() + 'px'
+            'min-width': placeholderOverlay.width() + 'px',
+            'min-height': placeholderOverlay.height() + 'px'
         });
 
         placeholderOverlay.css({
@@ -360,6 +360,7 @@ define([
 
         element.css({
             position: '',
+            'min-width': '',
             'min-height': ''
         });
 

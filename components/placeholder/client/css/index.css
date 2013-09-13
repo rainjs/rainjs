@@ -12,6 +12,5 @@ html, body {
 .container {
     min-height: 36px;
     width: 100%;
-    position: absolute;
 }
 
