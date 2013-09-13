@@ -38,9 +38,6 @@ var path = require('path'),
  * @param {Program} program
  */
 function register(program) {
-
-    var projectRoot = utils.getProjectRoot(process.cwd());
-
     program
         .command('generate-nginx-conf')
         .description('Generate the nginix configuration file')
@@ -52,7 +49,6 @@ function register(program) {
  * can generate a full project nginx configuration.
  */
 function generateNginxConfiguration () {
-
     var projects = [utils.getProjectRoot(process.cwd())],
         defaultConfiguration = require(path.join(utils.getProjectRoot(process.cwd()),
             'build.json'));
@@ -78,7 +74,6 @@ function generateNginxConfiguration () {
     });
 
     generator.run();
-
 }
 
 module.exports = register;
