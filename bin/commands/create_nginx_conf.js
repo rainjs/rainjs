@@ -58,7 +58,6 @@ function generateNginxConfiguration () {
             'build.json'));
 
 
-    console.log(defaultConfiguration);
     if(defaultConfiguration.additionalProjects) {
         projects = projects.concat(defaultConfiguration.additionalProjects);
     }
