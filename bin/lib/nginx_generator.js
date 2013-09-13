@@ -30,13 +30,24 @@ var fs = require('fs'),
     util = require('../../lib/util'),
     utils = require('../lib/utils');
 
+var NEWLINE = (process.platform === 'win32') ? '\r\n' :
+    (process.platform === 'darwin') ? '\r' : '\n';
+
 /**
  * @name NginxGenerator
- * @param {JSON} configuration the basic configuration located in init/conf/nginx.conf
+ * @param {Object} configuration the basic configuration located in init/conf/nginx.conf
  * @constructor
  */
 function NginxGenerator(configuration) {
     this._baseConfiguration = configuration;
+
+    var fd = fs.openSync('nginx.conf', 'w');
+    this._stream = fs.createWriteStream('nginx.conf', {
+        flags: 'w',
+        encoding: 'utf-8',
+        mode: '0644',
+        fd: fd
+    });
 }
 
 /**
@@ -45,117 +56,150 @@ function NginxGenerator(configuration) {
  * the root of the project.
  */
 NginxGenerator.prototype.run = function () {
-    var routes = [],
-        defaultConfiguration = this._baseConfiguration.nginxConf;
+    var nginxConf = this._baseConfiguration.nginxConf,
+        projects = this._baseConfiguration.projects,
+        latestVersionMap = {},
+        self = this;
 
-    for(var i = 0, len = this._baseConfiguration.projects.length; i < len; i++) {
-        var projectPath = this._baseConfiguration.projects[i];
+    this._nginxLocations = nginxConf.http.server.locations;
 
-        util.walkSync(path.join(projectPath, 'components'), ['.json'], function (file, folderPath) {
-            if(file.indexOf('..') !== -1) {
-                file = path.join(utils.getProjectRoot(process.cwd()), file);
+    projects.forEach(function (project) {
+        var componentsPath = path.join(project, 'components');
+
+        fs.readdirSync(componentsPath).forEach(function (folder) {
+            var componentPath = path.join(componentsPath, folder),
+                config = require(path.join(componentPath, 'meta.json'));
+
+            self._addNginxLocations(componentPath, config.id, config.version);
+
+            var latestVersion = latestVersionMap[config.id];
+
+            if (!latestVersion ||
+                self._compareVersions(config.version, latestVersion.version) > 0) {
+
+                latestVersionMap[config.id] = {
+                    version: config.version,
+                    folder: componentPath
+                };
             }
-            var configuration = require(file);
-
-            routes.push({
-                componentId: configuration.id,
-                componentVersion: configuration.version,
-                basePath: folderPath + '/client',
-                type: 'js',
-                regexp: 'location ~* ' + configuration.id + '/' + configuration.version + '/.*(js.*\\.js)$'
-            });
-
-            routes.push({
-                componentId: configuration.id,
-                componentVersion: configuration.version,
-                basePath: folderPath,
-                type: 'resources',
-                regexp: 'location ~* ' + configuration.id + '/' + configuration.version + '/.*(resources.*)$'
-            });
-
         });
+    });
+
+    Object.keys(latestVersionMap).forEach(function (componentId) {
+        self._addNginxLocations(latestVersionMap[componentId].folder, componentId);
+    });
+
+    this._writeConfiguration(nginxConf, 0);
+    this._stream.end();
+};
+
+NginxGenerator.prototype._addNginxLocations = function (componentPath, id, version) {
+    var jsRegex = 'location ~* %s/.*(js.*\\.js)$',
+        resourceRegex = 'location ~* %s/.*(resources.*)$';
+
+    var routeStart = id;
+    if (version) {
+        routeStart += '/' + version;
     }
 
-    //setUp get latest version case
-
-    var componentLatestVersion = {};
-
-    for(var i = 0, len = routes.length; i < len; i++) {
-        var version;
-        if(!routes[i].used) {
-            version = routes[i].componentVersion;
-            componentLatestVersion[routes[i].componentId] = routes[i];
-            routes[i].used = true;
-        } else {
-            continue;
-        }
-        for(var j = 0, len = routes.length; j < len; j++) {
-            if(routes[i].componentId === routes[j].componentId && i !== j) {
-                routes[j].used = true;
-                if(routes[i].componentVersion < routes[j].componentVersion) {
-                    componentLatestVersion[routes[i].componentId] = routes[j];
-                }
-            }
-        }
-    }
-
-    for (var componentId in componentLatestVersion) {
-        var regexpJS = 'location ~* ' + componentId+ '/.*(js.*\\.js)$',
-            regexpRes = 'location ~* ' + componentId + '/.*(resources.*)$';
-
-        var comp = Object.create(componentLatestVersion[componentId]);
-        comp.regexp = regexpJS;
-        routes.push(comp);
-        comp =  Object.create(componentLatestVersion[componentId]);
-        comp.regexp = regexpRes;
-        comp.basePath = comp.basePath.replace('/client', '');
-        routes.push(comp);
-    }
-
-
-    for(var i = 0, len = routes.length; i < len; i++) {
-        defaultConfiguration.http.server.locations[routes[i].regexp] = {
-            alias: routes[i].basePath + '/$1'
-        };
-    }
-
-    var fd = fs.openSync('nginx.conf', 'w'),
-        stream = fs.createWriteStream('nginx.conf', {
-            flags: 'w',
-            encoding: 'utf-8',
-            mode: '0644',
-            fd: fd
-        }),
-        NEWLINE = ('win32' === process.platform) ? '\r\n' :
-            ('darwin' === process.platform) ? '\r' : '\n';
-
-    var walkObjectSync = function (object, level) {
-        for(var i in object) {
-            for(var j = 0; j < level; j++) {
-                stream.write('\t');
-            }
-            if(i !== 'locations') {
-                stream.write(i);
-            }
-
-            if(typeof object[i] === 'object') {
-                if(i !== 'locations' ) {
-                    stream.write(' {'+NEWLINE);
-                }
-                walkObjectSync(object[i], level+1);
-                if(i !== 'locations') {
-                    for(var j = 0; j < level; j++) {
-                        stream.write('\t');
-                    }
-                    stream.write('}'+NEWLINE);
-                }
-            } else {
-                stream.write(' ' + object[i] + ';' + NEWLINE);
-            }
-        }
+    this._nginxLocations[util.format(jsRegex, routeStart)] = {
+        alias: componentPath + '/client/$1'
     };
 
-    walkObjectSync(defaultConfiguration, 0);
+    this._nginxLocations[util.format(resourceRegex, routeStart)] = {
+        alias: componentPath + '/$1'
+    };
+};
+
+NginxGenerator.prototype._writeConfiguration = function (config, level) {
+    for(var key in config) {
+        if(key === 'locations') {
+            this._writeConfiguration(config[key], level);
+            continue;
+        }
+
+        this._indent(level);
+        this._stream.write(key);
+
+        if(typeof config[key] === 'object') {
+            this._stream.write(' {' + NEWLINE);
+
+            this._writeConfiguration(config[key], level + 1);
+
+            this._indent(level);
+            this._stream.write('}' + NEWLINE);
+        } else {
+            this._stream.write(' ' + config[key] + ';' + NEWLINE);
+        }
+    }
+};
+
+NginxGenerator.prototype._indent = function (level) {
+    for (var i = 0; i < level; i++) {
+        this._stream.write('\t');
+    }
+};
+
+/**
+ * Compares two versions and returns 1 if version1 is bigger than version2, 0 if
+ * they are equal or -1 if version1 is smaller than version2.
+ *
+ * @param {String} versionStr1 the first version to compare
+ * @param {String} versionStr2 the second version to compare
+ * @returns {Number} the result of the comparison
+ */
+NginxGenerator.prototype._compareVersions = function (versionStr1, versionStr2) {
+    var version1 = this._getVersionParts(versionStr1),
+        version2 = this._getVersionParts(versionStr2);
+
+    var majorSign = this._compareNumbers(version1.major, version2.major);
+    if (majorSign !== 0) {
+        return majorSign;
+    }
+
+    var minorSign = this._compareNumbers(version1.minor, version2.minor);
+    if (minorSign !== 0) {
+        return minorSign;
+    }
+
+    return this._compareNumbers(version1.micro, version2.micro);
+};
+
+/**
+ * Compares two numbers and returns 1 if n1 is bigger than n2, 0 if they are
+ * equal or -1 if n1 is smaller than n2.
+ *
+ * @param {Number} n1 the first number to compare
+ * @param {Number} n2 the second number to compare
+ * @returns {Number} the result of the comparison
+ */
+NginxGenerator.prototype._compareNumbers = function (n1, n2) {
+    if (n1 === n2) {
+        return 0;
+    } else if (n1 < n2) {
+        return -1;
+    } else {
+        return 1;
+    }
+};
+
+/**
+ * Parses a version and returns an object containing the parts.
+ *
+ * @param {String} version the version to be parsed
+ * @returns {Object} the parsed version
+ */
+NginxGenerator.prototype._getVersionParts = function (version) {
+    var versionParts = version.split('.');
+    var major = parseInt(versionParts[0]);
+    var minor = parseInt(versionParts[1]);
+    var micro = parseInt(versionParts[2]);
+
+    return {
+        major: !isNaN(major) ? major : 0,
+        minor: !isNaN(minor) ? minor : 0,
+        micro: !isNaN(micro) ? micro : 0
+    };
 };
 
 module.exports = NginxGenerator;

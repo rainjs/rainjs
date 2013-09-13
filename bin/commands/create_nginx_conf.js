@@ -29,7 +29,7 @@ var path = require('path'),
     fs = require('fs'),
     color = require('colors'),
     util = require('../../lib/util'),
-    nginxGenerator = require('../lib/nginx_generator'),
+    NginxGenerator = require('../lib/nginx_generator'),
     utils = require('../lib/utils');
 
 /**
@@ -49,13 +49,16 @@ function register(program) {
  * can generate a full project nginx configuration.
  */
 function generateNginxConfiguration () {
-    var projects = [utils.getProjectRoot(process.cwd())],
-        defaultConfiguration = require(path.join(utils.getProjectRoot(process.cwd()),
-            'build.json'));
+    var projects = [],
+        projectRoot = utils.getProjectRoot(process.cwd()),
+        defaultConfiguration = require(path.join(projectRoot, 'build.json'));
 
+    projects.push(projectRoot);
 
     if(defaultConfiguration.additionalProjects) {
-        projects = projects.concat(defaultConfiguration.additionalProjects);
+        defaultConfiguration.additionalProjects.forEach(function (folder) {
+            projects.push(path.resolve(process.cwd(), folder));
+        });
     }
 
     try {
@@ -68,7 +71,7 @@ function generateNginxConfiguration () {
         process.exit(1);
     }
 
-    var generator = new nginxGenerator({
+    var generator = new NginxGenerator({
         projects: projects,
         nginxConf: nginxConfDefault
     });
