@@ -1,0 +1,10 @@
+{
+    "id": "css_min_app1",
+    "version": "1.0",
+    "views": {
+        "index" : {},
+        "index2" : {},
+        "index3" : {}
+    }
+}
+
