@@ -93,6 +93,14 @@ NginxGenerator.prototype.run = function () {
     this._stream.end();
 };
 
+/**
+ * Adds the nginx locations for the specified component.
+ *
+ * @param {String} componentPath the component path
+ * @param {String} id the component id
+ * @param {String} version the component version
+ * @private
+ */
 NginxGenerator.prototype._addNginxLocations = function (componentPath, id, version) {
     var jsRegex = 'location ~* %s/.*(js.*\\.js)$',
         resourceRegex = 'location ~* %s/.*(resources.*)$';
@@ -111,6 +119,13 @@ NginxGenerator.prototype._addNginxLocations = function (componentPath, id, versi
     };
 };
 
+/**
+ * Writes the nginx configuration to disk.
+ *
+ * @param {Object} config nginx configuration object
+ * @param {Number} level the nesting level inside the config object
+ * @private
+ */
 NginxGenerator.prototype._writeConfiguration = function (config, level) {
     for(var key in config) {
         if(key === 'locations') {
@@ -134,6 +149,12 @@ NginxGenerator.prototype._writeConfiguration = function (config, level) {
     }
 };
 
+/**
+ * Writes the specified number of tabs to file.
+ *
+ * @param {Number} level the number of tabs to write
+ * @private
+ */
 NginxGenerator.prototype._indent = function (level) {
     for (var i = 0; i < level; i++) {
         this._stream.write('\t');
