@@ -14,7 +14,7 @@ Class TimeHelper
    class-title
 
 
-This Handlebar helper is used to format a time according to the specific language.
+This Handlebars helper is used to format a time according to the specific language.
 
 Syntax::
 

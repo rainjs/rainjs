@@ -31,7 +31,7 @@ to make partial updates.
 Constructor
 -----------
 
-.. js:class:: BaseSession(session, component)
+.. js:class:: BaseSession(session, componentId)
 
 
 
@@ -39,7 +39,7 @@ Constructor
     :param Object session: 
         the session objects for the specified component 
     
-    :param Object component: 
+    :param String componentId: 
         the component configuration 
     
 

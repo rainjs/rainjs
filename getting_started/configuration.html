@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Server and component configuration &mdash; Rain v0.32.0 documentation</title>
+    <title>Server and component configuration &mdash; Rain v0.33.0 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.32.0',
+        VERSION:     '0.33.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Rain v0.32.0 documentation" href="../index.html" />
+    <link rel="top" title="Rain v0.33.0 documentation" href="../index.html" />
     <link rel="next" title="RAIN component descriptor" href="../server/component_descriptor.html" />
     <link rel="prev" title="RAIN SDK Tutorial" href="rain_sdk_tutorial.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="rain_sdk_tutorial.html" title="RAIN SDK Tutorial"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Rain v0.32.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.33.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -140,6 +140,15 @@ implementation. It has a <tt class="docutils literal"><span class="pre">provider
 <li>cookieMaxAge - the number of seconds after which to expire the session cookie if no new
 requests are done by the user. The cookie is removed when the browser is closed if this value
 isn&#8217;t specified.</li>
+<li>cookieSecure - enable or disable the cookie secure attribute. The default value is false.</li>
+<li>staticFiles - used to configure the locations from where RAIN should server static files,
+e.g.: robots.txt.<ul>
+<li>maxAge - the number of seconds for which the static resources should be cached (default = 0).</li>
+<li>folders - an object hash in which the key represents the path at which the content of the
+specified directory should be mounted. Folder paths can be absolute or relative to the
+project&#8217;s root.</li>
+</ul>
+</li>
 <li>pageTitle - the default page title for all components. This can be overridden in the component&#8217;s
 configuration file. If the previous two parameters are missing the title defaults to the
 component id.</li>
@@ -170,6 +179,13 @@ component configuration options directly in the scripts.</li>
 </ul>
 </li>
 </ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The &#8220;cookieSecure&#8221; option should be used only when the requests are encrypted / using https
+protocol, otherwise the session cookie won&#8217;t be created. If you are using HAProxy in front of
+the NodeJS servers, adding this line for the secured connections avoids the problem:
+<tt class="docutils literal"><span class="pre">reqadd</span> <span class="pre">x-forwarded-proto:\</span> <span class="pre">https</span></tt>.</p>
+</div>
 </div>
 <div class="section" id="example">
 <h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
@@ -287,7 +303,15 @@ component configuration options directly in the scripts.</li>
 112
 113
 114
-115</pre></div></td><td class="code"><div class="highlight"><pre><span class="p">{</span>
+115
+116
+117
+118
+119
+120
+121
+122
+123</pre></div></td><td class="code"><div class="highlight"><pre><span class="p">{</span>
     <span class="s2">&quot;server&quot;</span><span class="o">:</span> <span class="p">{</span>
         <span class="s2">&quot;port&quot;</span><span class="o">:</span> <span class="mi">1337</span><span class="p">,</span>
         <span class="s2">&quot;timeoutForRequests&quot;</span> <span class="o">:</span> <span class="mi">3</span><span class="p">,</span>
@@ -295,10 +319,18 @@ component configuration options directly in the scripts.</li>
     <span class="p">},</span>
 
     <span class="s2">&quot;websocket&quot;</span><span class="o">:</span> <span class="p">{</span>
-            <span class="s2">&quot;idleTime&quot;</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span>
-            <span class="s2">&quot;disconnectIdle&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-            <span class="s2">&quot;disconnectIdleOnMaxConn&quot;</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
-            <span class="s2">&quot;idleCheckInterval&quot;</span><span class="o">:</span> <span class="mi">5</span>
+        <span class="s2">&quot;idleTime&quot;</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="s2">&quot;disconnectIdle&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="s2">&quot;disconnectIdleOnMaxConn&quot;</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">&quot;idleCheckInterval&quot;</span><span class="o">:</span> <span class="mi">5</span>
+    <span class="p">},</span>
+
+    <span class="s2">&quot;staticFiles&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;maxAge&quot;</span><span class="o">:</span> <span class="mi">3600</span><span class="p">,</span>
+        <span class="s2">&quot;folders&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;/&quot;</span><span class="o">:</span> <span class="s2">&quot;./public&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;/doc&quot;</span><span class="o">:</span> <span class="s2">&quot;doc/build/html&quot;</span>
+        <span class="p">}</span>
     <span class="p">},</span>
 
     <span class="s2">&quot;defaultLanguage&quot;</span><span class="o">:</span> <span class="s2">&quot;en_US&quot;</span><span class="p">,</span>
@@ -551,7 +583,7 @@ the defaultLanguage</li>
         <li class="right" >
           <a href="rain_sdk_tutorial.html" title="RAIN SDK Tutorial"
              >previous</a> |</li>
-        <li><a href="../index.html">Rain v0.32.0 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Rain v0.33.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

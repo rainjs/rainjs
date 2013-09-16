@@ -23,8 +23,8 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Rain v0.33.0 documentation" href="../index.html" />
-    <link rel="next" title="Changelog" href="../changelog.html" />
-    <link rel="prev" title="JavaScript and CSS Minification" href="minification.html" /> 
+    <link rel="next" title="Class Appender" href="api/Appender.html" />
+    <link rel="prev" title="RAIN Clustering" href="cluster.html" /> 
   </head>
   <body>
     <div class="related">
@@ -34,10 +34,10 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../changelog.html" title="Changelog"
+          <a href="api/Appender.html" title="Class Appender"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="minification.html" title="JavaScript and CSS Minification"
+          <a href="cluster.html" title="RAIN Clustering"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Rain v0.33.0 documentation</a> &raquo;</li> 
       </ul>
@@ -55,7 +55,7 @@ routes.</p>
 <div class="section" id="nginx">
 <h2>NginX<a class="headerlink" href="#nginx" title="Permalink to this headline">¶</a></h2>
 <p>NginX is a fully mature web server very configurable that can handle and modify requests
-depending on it&#8217;s configuration. The preffered handling configuration
+depending on it&#8217;s configuration. The preferred handling configuration
 is by using regular expressions.</p>
 <p>You can read more about nginx at: <a class="reference external" href="http://nginx.org/en/docs/">http://nginx.org/en/docs/</a></p>
 </div>
@@ -136,12 +136,12 @@ http {
     sendfile on;
     gzip on;
     upstream backend {
-        server 127.0.0.1:1337;
+            server 127.0.0.1:1337;
     }
     server {
-        listen 8080;
-        server_name localhost;
-        charset UTF-8;
+            listen 8080;
+            server_name localhost;
+            charset UTF-8;
         location / {
         }
         location ~* example/.*(js.*\.js)$ {
@@ -207,7 +207,7 @@ http {
     }
 }</pre>
 </div>
-<p>You can also change default values in the configuration by editing the <tt class="docutils literal"><span class="pre">bin/init/conf/nginx.conf</span></tt>
+<p>You can also change default values in the configuration by editing the <tt class="docutils literal"><span class="pre">bin/conf/nginx.conf</span></tt>
 file in your rain folder.</p>
 </div>
 </div>
@@ -234,11 +234,11 @@ file in your rain folder.</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="minification.html"
-                        title="previous chapter">JavaScript and CSS Minification</a></p>
+  <p class="topless"><a href="cluster.html"
+                        title="previous chapter">RAIN Clustering</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../changelog.html"
-                        title="next chapter">Changelog</a></p>
+  <p class="topless"><a href="api/Appender.html"
+                        title="next chapter">Class Appender</a></p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
@@ -263,10 +263,10 @@ file in your rain folder.</p>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../changelog.html" title="Changelog"
+          <a href="api/Appender.html" title="Class Appender"
              >next</a> |</li>
         <li class="right" >
-          <a href="minification.html" title="JavaScript and CSS Minification"
+          <a href="cluster.html" title="RAIN Clustering"
              >previous</a> |</li>
         <li><a href="../index.html">Rain v0.33.0 documentation</a> &raquo;</li> 
       </ul>

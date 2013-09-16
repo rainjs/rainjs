@@ -3,12 +3,28 @@ Changelog
 =========
 
 --------
+v 0.33.0
+--------
+
++ Added the possibility of serving static files that are component independent so that generic
+  web application files on generic paths can be offered (e.g. robots.txt).
++ Added a new SDK command that generates a configuration file for NginX so that
+  static files can be served when using NginX.
+
+--------
+v 0.32.1
+--------
+
++ Added the ``cookieSecure`` option to the server configuration to enable or disable the cookie
+  secure attribute.
+
+--------
 v 0.32.0
 --------
 
-- RAIN now works with Node.js 0.8.x and 0.10.x except the node-syslog module.
-- Fixed a fatal error in the code that tracks idle web sockets.
-- Fixed a fatal error in socket registry: the handshake is removed when the socket is disconnected.
++ RAIN now works with Node.js 0.8.x and 0.10.x except the node-syslog module.
++ Fixed a fatal error in the code that tracks idle web sockets.
++ Fixed a fatal error in socket registry: the handshake is removed when the socket is disconnected.
 
 --------
 v 0.31.0

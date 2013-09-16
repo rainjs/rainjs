@@ -14,8 +14,8 @@ Class CurrencyHelper
    class-title
 
 
-This Handlebar helper is used to format a number and add the currency to it
-according to the specific language.
+This Handlebars helper is used to format a number and add the currency to it according to the
+specific language.
 
 Syntax::
 

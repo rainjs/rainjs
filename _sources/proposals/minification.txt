@@ -196,7 +196,7 @@ CSS Minification
 ----------------
 
 The tool used for CSS minification is less. It supports CSS minification using the YUI compressor.
-All the css files (*.css) for a component are rendered using less and placed in the same file.
+All the css files (\*.css) for a component are rendered using less and placed in the same file.
 The rules should also be counted when adding CSS to the minified file to avoid the situation where
 more than 4095 rules are added in the same file. If this is the case, a JSON file should be created
 specifying which files were added to which minified file.

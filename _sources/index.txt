@@ -70,6 +70,7 @@ Server side modules
     server/logging_guidelines
     server/sdk_architecture
     server/cluster
+    server/nginx_static_routes
 
 ....
 APIs

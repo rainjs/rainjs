@@ -14,7 +14,7 @@ Class PercentageHelper
    class-title
 
 
-This Handlebar helper is used to format a number according to the percentage
+This Handlebars helper is used to format a number according to the percentage
 format of the specific language.
 
 Syntax::
@@ -70,8 +70,7 @@ helper
     
 
 
-Formats a number and outputs it according to the percentage format of
-the specific language.
+Formats a number and outputs it according to the percentage format of the specific language.
 
 
 

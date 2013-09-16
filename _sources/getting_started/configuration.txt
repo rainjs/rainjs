@@ -108,6 +108,16 @@ fields are formatted with **bold**.
   requests are done by the user. The cookie is removed when the browser is closed if this value
   isn't specified.
 
+- cookieSecure - enable or disable the cookie secure attribute. The default value is false.
+
+- staticFiles - used to configure the locations from where RAIN should server static files,
+  e.g.: robots.txt.
+
+  - maxAge - the number of seconds for which the static resources should be cached (default = 0).
+  - folders - an object hash in which the key represents the path at which the content of the
+    specified directory should be mounted. Folder paths can be absolute or relative to the
+    project's root.
+
 - pageTitle - the default page title for all components. This can be overridden in the component's
   configuration file. If the previous two parameters are missing the title defaults to the
   component id.
@@ -136,6 +146,12 @@ fields are formatted with **bold**.
       - user - the user attributes
       - isAuthenticated - boolean value that tells you if the user is logged in or not
 
+.. warning::
+    The "cookieSecure" option should be used only when the requests are encrypted / using https
+    protocol, otherwise the session cookie won't be created. If you are using HAProxy in front of
+    the NodeJS servers, adding this line for the secured connections avoids the problem:
+    ``reqadd x-forwarded-proto:\ https``.
+
 .......
 Example
 .......
@@ -151,10 +167,18 @@ Example
         },
 
         "websocket": {
-                "idleTime": 5,
-                "disconnectIdle": true,
-                "disconnectIdleOnMaxConn": 2,
-                "idleCheckInterval": 5
+            "idleTime": 5,
+            "disconnectIdle": true,
+            "disconnectIdleOnMaxConn": 2,
+            "idleCheckInterval": 5
+        },
+
+        "staticFiles": {
+            "maxAge": 3600,
+            "folders": {
+                "/": "./public",
+                "/doc": "doc/build/html"
+            }
         },
 
         "defaultLanguage": "en_US",

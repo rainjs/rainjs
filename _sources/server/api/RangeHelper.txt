@@ -14,7 +14,7 @@ Class RangeHelper
    class-title
 
 
-This Handlebar helper is used to format a date range according to the specific language.
+This Handlebars helper is used to format a date range according to the specific language.
 
 Syntax::
 
