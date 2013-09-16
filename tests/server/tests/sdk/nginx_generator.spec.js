@@ -97,10 +97,6 @@ describe('Nginx Generator', function () {
                 projects: ['my_proj']
             };
 
-            /*util.walkSync.andCallFake(function (route, args, cb) {
-                cb('my_file', 'my_folder');
-            });*/
-
             var stream = jasmine.createSpyObj('stream', ['write', 'end']);
             fs.createWriteStream.andCallFake(function () {
                 return stream;
@@ -133,15 +129,6 @@ describe('Nginx Generator', function () {
             };
 
             var times = 1;
-
-            /*util.walkSync.andCallFake(function (route, args, cb) {
-                if(times === 1) {
-                    times++;
-                    cb('my_file', 'my_folder');
-                } else {
-                    cb('my_file_rain', 'my_folder_rain');
-                }
-            });*/
 
             var stream = jasmine.createSpyObj('stream', ['write', 'end']);
             fs.createWriteStream.andCallFake(function () {
