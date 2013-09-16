@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.33.0
+
+* Added the possibility of serving static files that are component independent so that generic
+web application files on generic paths can be offered (e.g. robots.txt).
+* Added a new SDK command that generates a configuration file for NginX so that
+static files can be served when using NginX.
+
 ## 0.32.1
 
 * Added the ``cookieSecure`` option to the server configuration to enable or disable the cookie
