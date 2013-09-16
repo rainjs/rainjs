@@ -110,6 +110,14 @@ fields are formatted with **bold**.
 
 - cookieSecure - enable or disable the cookie secure attribute. The default value is false.
 
+- staticFiles - used to configure the locations from where RAIN should server static files,
+  e.g.: robots.txt.
+
+  - maxAge - the number of seconds for which the static resources should be cached (default = 0).
+  - folders - an object hash in which the key represents the path at which the content of the
+    specified directory should be mounted. Folder paths can be absolute or relative to the
+    project's root.
+
 - pageTitle - the default page title for all components. This can be overridden in the component's
   configuration file. If the previous two parameters are missing the title defaults to the
   component id.
@@ -159,10 +167,18 @@ Example
         },
 
         "websocket": {
-                "idleTime": 5,
-                "disconnectIdle": true,
-                "disconnectIdleOnMaxConn": 2,
-                "idleCheckInterval": 5
+            "idleTime": 5,
+            "disconnectIdle": true,
+            "disconnectIdleOnMaxConn": 2,
+            "idleCheckInterval": 5
+        },
+
+        "staticFiles": {
+            "maxAge": 3600,
+            "folders": {
+                "/": "./public",
+                "/doc": "doc/build/html"
+            }
         },
 
         "defaultLanguage": "en_US",
