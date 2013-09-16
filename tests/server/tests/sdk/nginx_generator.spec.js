@@ -31,32 +31,47 @@ describe('Nginx Generator', function () {
         util, utils, nginxGenerator;
 
     beforeEach(function () {
-        fs = jasmine.createSpyObj('fs', ['openSync', 'createWriteStream']);
+        fs = jasmine.createSpyObj('fs', ['openSync', 'createWriteStream', 'readdirSync']);
 
         mocks['fs'] = fs;
 
-        util = jasmine.createSpyObj('util', ['walkSync', 'inspect']);
-
-        mocks['../../lib/util'] = util;
+        fs.readdirSync.andCallFake(function () {
+            return ['my_folder/my_file', 'folder2', 'fakefolder'];
+        })
 
         utils = jasmine.createSpyObj('utils', ['getProjectRoot']);
 
         mocks['../lib/utils'] = utils;
 
-        mocks['my_file'] = {
+        mocks['my_proj/components/my_folder/my_file/meta.json'] = {
             id: 'fakeId',
             version: 'fakeVersion'
         };
 
-        mocks['my_file_rain'] = {
+        mocks['rainjs/components/my_folder/my_file/meta.json'] = {
+            id: 'fakeId_rain',
+            version: 'fakeVersion_rain'
+        };
+
+        mocks['my_proj/components/folder2/meta.json'] = {
             id: 'fake_rain_id',
             version: '1.0'
         };
-        mocks['my_file_rain2'] = {
+
+        mocks['rainjs/components/folder2/meta.json'] = {
+            id: 'fake_rain_id',
+            version: '1.0'
+        };
+
+        mocks['my_proj/components/fakefolder/meta.json'] = {
             id: 'fake_rain_id',
             version: '2.0'
         };
 
+        mocks['rainjs/components/fakefolder/meta.json'] = {
+            id: 'fake_rain_id',
+            version: '2.0'
+        };
         nginxGenerator = loadModuleExports('bin/lib/nginx_generator.js', mocks);
 
     });
@@ -82,11 +97,11 @@ describe('Nginx Generator', function () {
                 projects: ['my_proj']
             };
 
-            util.walkSync.andCallFake(function (route, args, cb) {
+            /*util.walkSync.andCallFake(function (route, args, cb) {
                 cb('my_file', 'my_folder');
-            });
+            });*/
 
-            var stream = jasmine.createSpyObj('stream', ['write']);
+            var stream = jasmine.createSpyObj('stream', ['write', 'end']);
             fs.createWriteStream.andCallFake(function () {
                 return stream;
             });
@@ -119,16 +134,16 @@ describe('Nginx Generator', function () {
 
             var times = 1;
 
-            util.walkSync.andCallFake(function (route, args, cb) {
+            /*util.walkSync.andCallFake(function (route, args, cb) {
                 if(times === 1) {
                     times++;
                     cb('my_file', 'my_folder');
                 } else {
                     cb('my_file_rain', 'my_folder_rain');
                 }
-            });
+            });*/
 
-            var stream = jasmine.createSpyObj('stream', ['write']);
+            var stream = jasmine.createSpyObj('stream', ['write', 'end']);
             fs.createWriteStream.andCallFake(function () {
                 return stream;
             });
