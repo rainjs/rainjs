@@ -39,16 +39,25 @@ var path = require('path'),
  */
 function register(program) {
     program
-        .command('generate-nginx-conf')
-        .description('Generate the nginix configuration file')
+        .command('generate-nginx-conf [source-path] [destination-path]')
+        .description('Generate the nginx configuration file')
         .action(generateNginxConfiguration);
 }
 
 /**
  * Generate Nginx configuration method, reads the build.json for additional projects, so it
  * can generate a full project nginx configuration.
- */
-function generateNginxConfiguration () {
+ *
+ *  @param {String} [sourcePath] custom nginx configuration file path, if not specified
+ *  the default ``bin/conf/nginx.conf`` will be used
+ *  it can be a relative or absolute path:
+ *  ``bin/conf/customNginx.conf`` or  ``/home/john/rainjs/bin/conf/customNginx.conf``
+ *
+ *  @param {String} [destinationPath] computed configuration file path, if not specified
+ *  the default ``nginx.conf`` will be used
+ *  it can be a relative or absolute path
+  */
+function generateNginxConfiguration (sourcePath, destinationPath) {
     var projects = [],
         projectRoot = utils.getProjectRoot(process.cwd()),
         defaultConfiguration = require(path.join(projectRoot, 'build.json'));
@@ -62,9 +71,21 @@ function generateNginxConfiguration () {
     }
 
     try {
-        var nginxConfDefault = fs.readFileSync(path.join(__dirname, '../conf/nginx.conf'));
+        var nginxConf;
+        var destPath;
 
-        nginxConfDefault = JSON.parse(nginxConfDefault);
+        if (sourcePath) {
+            var resolvedPath =   path.resolve(process.cwd(), sourcePath);
+            nginxConf = fs.readFileSync(resolvedPath);
+        } else {
+            nginxConf = fs.readFileSync(path.join(__dirname, '../conf/nginx.conf'));
+        }
+
+        if (destinationPath) {
+            destPath = path.resolve(process.cwd(), destinationPath);
+        }
+
+        nginxConf = JSON.parse(nginxConf);
     } catch (e) {
         console.log(e.message.red);
         console.log(e.stack.red);
@@ -73,7 +94,8 @@ function generateNginxConfiguration () {
 
     var generator = new NginxGenerator({
         projects: projects,
-        nginxConf: nginxConfDefault
+        nginxConf: nginxConf,
+        destinationPath: destPath || 'nginx.conf'
     });
 
     generator.run();

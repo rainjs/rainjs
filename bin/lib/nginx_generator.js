@@ -28,6 +28,7 @@
 var fs = require('fs'),
     path = require('path'),
     util = require('../../lib/util'),
+    color = require('colors'),
     utils = require('../lib/utils');
 
 var NEWLINE = (process.platform === 'win32') ? '\r\n' :
@@ -35,13 +36,24 @@ var NEWLINE = (process.platform === 'win32') ? '\r\n' :
 
 /**
  * @name NginxGenerator
- * @param {Object} configuration the basic configuration located in init/conf/nginx.conf
+ * @param {Object} configuration the basic configuration by default located in init/conf/nginx.conf
  * @constructor
  */
 function NginxGenerator(configuration) {
     this._baseConfiguration = configuration;
+    var fd; //destination file descriptor
 
-    var fd = fs.openSync('nginx.conf', 'w');
+    try {
+
+        fd = fs.openSync(configuration.destinationPath, 'w');
+
+    } catch (e) {
+        console.log('Could not create the configuration file.')
+        console.log(e.message.red);
+        console.log(e.stack.red);
+        process.exit(1);
+    }
+
     this._stream = fs.createWriteStream('nginx.conf', {
         flags: 'w',
         encoding: 'utf-8',
@@ -52,7 +64,7 @@ function NginxGenerator(configuration) {
 
 /**
  * Generates the configuration file by mapping the regexps of possible request routes with
- * actual correspondance. Generates configuration for javascript routes and resources and stores it in
+ * actual correspondent. Generates configuration for javascript routes and resources and stores it in
  * the root of the project.
  */
 NginxGenerator.prototype.run = function () {
