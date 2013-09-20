@@ -58,7 +58,7 @@ type of requests.
         mode http
         stats uri /haproxy
         acl is_javascript path_reg ^\/([\w-]+)\/(?:(\d(?:\.\d)?(?:\.\d)?)\/)?(?:js)\/(.+)
-        acl is_resource path_reg ^\/([\w-]+)\/(?:((?:\d\.)?\d\.\d)\/)?(?:([a-z]{2}_[A-Z]{2})\/)?resources\/(.+)
+        acl is_resource path_reg ^\/([\w-]+)\/(?:((?:\d\.)?\d\.\d)\/)?!(?:([a-z]{2}_[A-Z]{2})\/)resources\/(.+)
         use_backend static if is_javascript
         use_backend static if is_resource
         default_backend RAIN_server
@@ -71,8 +71,10 @@ type of requests.
 
 
 The only things added are the two acl containing regexps, these are needed to redirect the requests
-depending on the url path. Also the use of another backend called ``static`` in which you specify where
-your NginX server is located and on which port is it listening.
+depending on the url path. Also the use of another backend called ``static`` in which you specify
+where your NginX server is located and on which port is it listening. In the regexp for
+resources the paths like ``/en_US/resources/filename`` were excluded because additional
+processing needs to be done by RAIN
 
 
 .....
@@ -93,10 +95,24 @@ components, take into account the version and id.
 
 All you have to do is run the following command::
 
-    rain generate-nginx-conf
+    rain generate-nginx-conf <source-path> <destination-path>
 
-In the root path of your rain project you will find a ``nginx.conf`` file. All you have to do is just move
-the generated configuration file in to ``/etc/nginx/``.
+
+Examples::
+
+  1.    $ rain generate-nginx-conf
+  2.    $ rain generate-nginx-conf ./mycustomnginx.conf
+  3.    $ rain generate-nginx-conf /home/john/rainjs/bin/conf/customNginx.conf /home/john/myCustomNginX.conf
+  4.    $ rain generate-nginx-conf bin/conf/nginx.conf myCustomNginX.conf
+  5.    $ rain generate-nginx-conf /home/john/rainjs/bin/conf/customNginx.conf myCustomNginX.conf
+
+If no optional parameter is used, it will use ``./bin/conf/nginx.conf`` to generate a ``nginx.conf`` file
+in the project root.
+
+Otherwise the command will use the configuration file you specify as ``source-path`` and generate the
+nginx configuration in the project root or in the destination path chosen.
+
+All you have to do is to move the generated configuration file in ``/etc/nginx/``.
 
 An example of the output configuration would be:
 
@@ -186,3 +202,14 @@ An example of the output configuration would be:
 
 You can also change default values in the configuration by editing the ``bin/conf/nginx.conf``
 file in your rain folder.
+
+............
+Short Review
+............
+
+ 1. install nginx
+ 2. generate a configuration and copy it to ``/etc/nginx/nginx.conf``
+ 3. change haproxy configuration to look like the valid one from above
+ 4. restart nginx
+ 5. restart haproxy
+
