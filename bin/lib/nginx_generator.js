@@ -48,13 +48,13 @@ function NginxGenerator(configuration) {
         fd = fs.openSync(configuration.destinationPath, 'w');
 
     } catch (e) {
-        console.log('Could not create the configuration file.')
+        console.log('Could not create the destination file.')
         console.log(e.message.red);
         console.log(e.stack.red);
         process.exit(1);
     }
 
-    this._stream = fs.createWriteStream('nginx.conf', {
+    this._stream = fs.createWriteStream(configuration.destinationPath, {
         flags: 'w',
         encoding: 'utf-8',
         mode: '0644',
@@ -103,6 +103,7 @@ NginxGenerator.prototype.run = function () {
 
     this._writeConfiguration(nginxConf, 0);
     this._stream.end();
+    console.log('NginX configuration generated successfully to ' + this._baseConfiguration.destinationPath);
 };
 
 /**
@@ -114,8 +115,9 @@ NginxGenerator.prototype.run = function () {
  * @private
  */
 NginxGenerator.prototype._addNginxLocations = function (componentPath, id, version) {
-    var jsRegex = 'location ~* %s/.*(js.*\\.js)$',
-        resourceRegex = 'location ~* %s/.*(resources.*)$';
+    var jsRegex = 'location ~* %s/(js.*\\.js)$',
+        resourceRegex = 'location ~* %s/(resources.*)$';
+
 
     var routeStart = id;
     if (version) {

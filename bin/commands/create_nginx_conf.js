@@ -87,6 +87,7 @@ function generateNginxConfiguration (sourcePath, destinationPath) {
 
         nginxConf = JSON.parse(nginxConf);
     } catch (e) {
+        console.log('Error when resolving paths.');
         console.log(e.message.red);
         console.log(e.stack.red);
         process.exit(1);
