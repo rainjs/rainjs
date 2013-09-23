@@ -57,8 +57,8 @@ type of requests.
     listen RAIN_http *:80
         mode http
         stats uri /haproxy
-        acl is_javascript path_reg ^\/([\w-]+)\/(?:(\d(?:\.\d)?(?:\.\d)?)\/)?(?:js)\/(.+)
-        acl is_resource path_reg ^\/([\w-]+)\/(?:((?:\d\.)?\d\.\d)\/)?!(?:([a-z]{2}_[A-Z]{2})\/)resources\/(.+)
+        acl is_javascript path_reg ^\/[\w-]+\/((\d(\.\d)?(\.\d)?)\/)?js\/.+
+        acl is_resource path_reg ^\/[\w-]+\/((\d\.)?\d\.\d\/)?resources\/.+
         use_backend static if is_javascript
         use_backend static if is_resource
         default_backend RAIN_server
