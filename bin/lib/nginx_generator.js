@@ -48,7 +48,7 @@ function NginxGenerator(configuration) {
         fd = fs.openSync(configuration.destinationPath, 'w');
 
     } catch (e) {
-        console.log('Could not create the destination file.')
+        console.log('Could not create the destination file.');
         console.log(e.message.red);
         console.log(e.stack.red);
         process.exit(1);
@@ -76,13 +76,24 @@ NginxGenerator.prototype.run = function () {
     this._nginxLocations = nginxConf.http.server.locations;
 
     projects.forEach(function (project) {
-        var componentsPath = path.join(project, 'components');
+        var componentsPath = path.join(project.path, 'components');
 
         fs.readdirSync(componentsPath).forEach(function (folder) {
-            var componentPath = path.join(componentsPath, folder),
-                config = require(path.join(componentPath, 'meta.json'));
+            var componentPath,
+                prodComponentPath,
+                config;
 
-            self._addNginxLocations(componentPath, config.id, config.version);
+            componentPath = path.join(componentsPath, folder);
+            config = require(path.join(componentPath, 'meta.json'));
+
+            //if a production path has been provided for the project, the component paths in the config file
+            //will have that as base path
+            if(project.productionPath) {
+                prodComponentPath = path.join(project.productionPath, 'components', folder);
+                self._addNginxLocations(prodComponentPath, config.id, config.version);
+            } else {
+                self._addNginxLocations(componentPath, config.id, config.version);
+            }
 
             var latestVersion = latestVersionMap[config.id];
 
@@ -91,7 +102,7 @@ NginxGenerator.prototype.run = function () {
 
                 latestVersionMap[config.id] = {
                     version: config.version,
-                    folder: componentPath
+                    folder: prodComponentPath ? prodComponentPath : componentPath
                 };
             }
         });
@@ -117,7 +128,6 @@ NginxGenerator.prototype.run = function () {
 NginxGenerator.prototype._addNginxLocations = function (componentPath, id, version) {
     var jsRegex = 'location ~* %s/(js.*\\.js)$',
         resourceRegex = 'location ~* %s/(resources.*)$';
-
 
     var routeStart = id;
     if (version) {

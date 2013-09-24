@@ -95,24 +95,29 @@ components, take into account the version and id.
 
 All you have to do is run the following command::
 
-    rain generate-nginx-conf <source-path> <destination-path>
+    rain generate-nginx-conf <source-file> <destination-file> <production-path>
 
 
 Examples::
 
-  1.    $ rain generate-nginx-conf
-  2.    $ rain generate-nginx-conf ./mycustomnginx.conf
-  3.    $ rain generate-nginx-conf /home/john/rainjs/bin/conf/customNginx.conf /home/john/myCustomNginX.conf
-  4.    $ rain generate-nginx-conf bin/conf/nginx.conf myCustomNginX.conf
-  5.    $ rain generate-nginx-conf /home/john/rainjs/bin/conf/customNginx.conf myCustomNginX.conf
+  1. $ rain generate-nginx-conf
+  2. $ rain generate-nginx-conf ./mycustomnginx.conf
+  3. $ rain generate-nginx-conf /home/john/rainjs/bin/conf/nginx.conf /home/john/myCustomNginX.conf
+  4. $ rain generate-nginx-conf bin/conf/nginx.conf myCustomNginX.conf
+  5. $ rain generate-nginx-conf /home/john/rainjs/bin/conf/customNginx.conf myCustomNginX.conf
+  6. $ rain generate-nginx-conf ./bin/conf/customNginx.conf nginx.conf /opt/rainProject
 
-If no optional parameter is used, it will use ``./bin/conf/nginx.conf`` to generate a ``nginx.conf`` file
-in the project root.
+If no optional parameter is used, it will use ``./bin/conf/nginx.conf`` to generate
+a ``nginx.conf`` file in the project root.
 
-Otherwise the command will use the configuration file you specify as ``source-path`` and generate the
-nginx configuration in the project root or in the destination path chosen.
+Otherwise the command will use the configuration file you specify as ``source-path`` and
+generate the nginx configuration in the project root or in the destination path chosen.
 
 All you have to do is to move the generated configuration file in ``/etc/nginx/``.
+
+If the ``production-path`` parameter is used, all the paths in the nginx configuration file will be
+calculated according to the specified production path.
+It is mandatory for this parameter to be an absolute path.
 
 An example of the output configuration would be:
 

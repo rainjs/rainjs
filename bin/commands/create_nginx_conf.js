@@ -39,7 +39,7 @@ var path = require('path'),
  */
 function register(program) {
     program
-        .command('generate-nginx-conf [source-path] [destination-path]')
+        .command('generate-nginx-conf [source-file] [destination-file] [production-path]')
         .description('Generate the nginx configuration file')
         .action(generateNginxConfiguration);
 }
@@ -56,17 +56,28 @@ function register(program) {
  *  @param {String} [destinationPath] computed configuration file path, if not specified
  *  the default ``nginx.conf`` will be used
  *  it can be a relative or absolute path
-  */
-function generateNginxConfiguration (sourcePath, destinationPath) {
+ *
+ *  @param {String} [productionPath] path of the project folder in production environment.
+ *  The paths of the additional projects will be calculated according to this path.
+ *  It is mandatory for this to be an absolute path.
+ *  Example: ``/opt/rainProject``
+ */
+function generateNginxConfiguration(sourcePath, destinationPath, productionPath) {
     var projects = [],
         projectRoot = utils.getProjectRoot(process.cwd()),
         defaultConfiguration = require(path.join(projectRoot, 'build.json'));
 
-    projects.push(projectRoot);
+    projects.push({
+        'path': projectRoot,
+        'productionPath': productionPath
+    });
 
     if(defaultConfiguration.additionalProjects) {
         defaultConfiguration.additionalProjects.forEach(function (folder) {
-            projects.push(path.resolve(process.cwd(), folder));
+            projects.push({
+                'path': path.resolve(process.cwd(), folder),
+                'productionPath':  productionPath ?  path.resolve(productionPath, folder) : undefined
+            });
         });
     }
 
