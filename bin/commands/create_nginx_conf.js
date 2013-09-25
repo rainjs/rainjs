@@ -73,10 +73,19 @@ function generateNginxConfiguration(sourcePath, destinationPath, productionPath)
     });
 
     if(defaultConfiguration.additionalProjects) {
+        var prodPathsIndex = 0; //if production paths have been provided this will help traversing the array
+        var additionalProjectPath; //store production path for current additional project
+
         defaultConfiguration.additionalProjects.forEach(function (folder) {
+
+            if(defaultConfiguration.additionalProjectsProductionPaths) {
+                additionalProjectPath =  defaultConfiguration.additionalProjectsProductionPaths[prodPathsIndex];
+                prodPathsIndex += 1;
+            }
+
             projects.push({
                 'path': path.resolve(process.cwd(), folder),
-                'productionPath':  productionPath ?  path.resolve(productionPath, folder) : undefined
+                'productionPath':  additionalProjectPath
             });
         });
     }
