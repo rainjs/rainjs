@@ -85,7 +85,7 @@ function generateNginxConfiguration(sourcePath, destinationPath, productionPath)
 
             projects.push({
                 'path': path.resolve(process.cwd(), folder),
-                'productionPath':  additionalProjectPath
+                'productionPath':  productionPath ? additionalProjectPath : undefined
             });
         });
     }

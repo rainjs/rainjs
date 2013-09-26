@@ -25,29 +25,37 @@
 
 "use strict";
 
+var path = require('path');
+
 describe('Generate Nginx Conf', function () {
 
-    var fs, mocks = {},
-        nginxGenerator, program, module, generate;
+    var fs,
+        mocks = {},
+        buildJson = {},
+        NginxGenerator, program, module, generate;
+
+    var cwd = process.cwd();
 
     beforeEach(function () {
         spyOn(process, 'exit');
 
         fs = jasmine.createSpyObj('fs', ['readFileSync'])
-
         mocks['fs'] = fs;
-
         fs.readFileSync.andCallFake(function () {
             return JSON.stringify({
                 "fake": "fake"
             });
         });
 
-        nginxGenerator = function () {};
+        buildJson = {
+            "additionalProjects": ["../rainjs", "../rainjs2"],
+            "additionalProjectsProductionPaths": ["/opt/ui/lib/node_modules/rain/", "/opt/ui/lib/node_modules/rain2/"]
+        }
+        mocks[process.cwd() + '/build.json'] = buildJson;
 
-        nginxGenerator.prototype.run = jasmine.createSpy('run');
-
-        mocks['../lib/nginx_generator'] = nginxGenerator;
+        NginxGenerator = jasmine.createSpy('NginxGenerator');
+        NginxGenerator.prototype.run = jasmine.createSpy('run');
+        mocks['../lib/nginx_generator'] = NginxGenerator;
 
         program = jasmine.createSpyObj('program', ['command', 'description', 'action', 'option']);
         program.command.andReturn(program);
@@ -62,14 +70,119 @@ describe('Generate Nginx Conf', function () {
 
     });
 
-    it('should register the create_nginx_conf', function () {
-        module(program);
-        expect(program.command).toHaveBeenCalledWith(
-            'generate-nginx-conf');
+    describe('register', function () {
+        it('should register the create_nginx_conf', function () {
+            module(program);
+            expect(program.command).toHaveBeenCalledWith(
+                'generate-nginx-conf [source-file] [destination-file] [production-path]');
+        });
     });
 
-    it('should call the nginx generator', function () {
-        generate();
-        expect(nginxGenerator.prototype.run).toHaveBeenCalled();
+    describe('calculating paths and composing the projects array', function () {
+        it('should act correctly when a production path is provided', function () {
+            generate('./bin/nginx.conf', './nginx.conf', '/opt/ui/rainjs-ssa');
+            expect(NginxGenerator).toHaveBeenCalledWith({
+                'projects' : [
+                    { 'path' : cwd, 'productionPath' : '/opt/ui/rainjs-ssa' },
+                    { 'path' : path.resolve(cwd, '../rainjs'), 'productionPath' : '/opt/ui/lib/node_modules/rain/' },
+                    { 'path' : path.resolve(cwd, '../rainjs2'), 'productionPath' : '/opt/ui/lib/node_modules/rain2/' }
+                ],
+                'nginxConf' : { 'fake' : 'fake' },
+                'destinationPath' : path.resolve(cwd, './nginx.conf')
+            });
+
+            expect(NginxGenerator.prototype.run).toHaveBeenCalled();
+        });
+
+        it('should act correctly when a production path is not provided', function () {
+            generate('./bin/nginx.conf','./nginx.conf');
+            expect(NginxGenerator).toHaveBeenCalledWith({
+                'projects' : [
+                    { 'path' : cwd, 'productionPath' : undefined },
+                    { 'path' : path.resolve(cwd, '../rainjs'), 'productionPath' : undefined },
+                    { 'path' : path.resolve(cwd, '../rainjs2'), 'productionPath' : undefined }
+                ],
+                'nginxConf' : { 'fake' : 'fake' },
+                'destinationPath' : path.resolve(cwd, './nginx.conf')
+            });
+
+            expect(NginxGenerator.prototype.run).toHaveBeenCalled();
+        });
+
+        it('should act correctly when there are no additional projects', function () {
+            buildJson = {};
+            mocks[process.cwd() + '/build.json'] = buildJson;
+
+            generate('./bin/nginx.conf','./nginx.conf','/opt/ui/rainjs-ssa');
+            expect(NginxGenerator).toHaveBeenCalledWith({
+                'projects' : [
+                    { 'path' : cwd, 'productionPath' : '/opt/ui/rainjs-ssa' }
+                ],
+                'nginxConf' : { 'fake' : 'fake' },
+                'destinationPath' : path.resolve(cwd, './nginx.conf')
+
+            });
+
+            expect(NginxGenerator.prototype.run).toHaveBeenCalled();
+        });
+
+        it('should act correctly when production paths are missing from the build.json file', function () {
+            buildJson = {
+                "additionalProjects": ["../rainjs", "../rainjs2"]
+            }
+            mocks[process.cwd() + '/build.json'] = buildJson;
+
+            generate('./bin/nginx.conf','./nginx.conf', '/opt/ui/rainjs-ssa');
+
+            expect(NginxGenerator).toHaveBeenCalledWith({
+                'projects' : [
+                    { 'path' : cwd, 'productionPath' : '/opt/ui/rainjs-ssa' },
+                    { 'path' : path.resolve(cwd, '../rainjs'), 'productionPath' : undefined },
+                    { 'path' : path.resolve(cwd, '../rainjs2'), 'productionPath' : undefined }
+                ],
+                'nginxConf' : { 'fake' : 'fake' },
+                'destinationPath' : path.resolve(cwd, './nginx.conf')
+            });
+
+            expect(NginxGenerator.prototype.run).toHaveBeenCalled();
+        });
+
+    });
+
+    describe('calling nginx generator', function() {
+        it('should call the nginx generator correctly when no optional params are passed', function () {
+            generate();
+            expect(NginxGenerator).toHaveBeenCalledWith({
+                projects : [
+                    { path : '/home/fdobre/rainjs', productionPath : undefined },
+                    { path : '/home/fdobre/rainjs', productionPath : undefined },
+                    { path : '/home/fdobre/rainjs2', productionPath : undefined } ],
+                    nginxConf : { fake : 'fake' },
+                    destinationPath : 'nginx.conf'
+            });
+        });
+
+        it('should call the nginx generator correctly when optional parameters are passed', function () {
+            buildJson = {
+                "additionalProjects": ["../rainjs", "../rainjs2"],
+                "additionalProjectsProductionPaths": ["/opt/ui/lib/node_modules/rain/", "/opt/ui/lib/node_modules/rain2/"]
+            }
+            mocks[process.cwd() + '/build.json'] = buildJson;
+
+            generate('./bin/nginx.conf','../nginx.conf', '/opt/ui/rainjs-ssa');
+            expect(NginxGenerator).toHaveBeenCalledWith({
+                'projects' : [
+                    { 'path' : cwd, 'productionPath' : '/opt/ui/rainjs-ssa' },
+                    { 'path' : path.resolve(cwd, '../rainjs'), 'productionPath' : "/opt/ui/lib/node_modules/rain/" },
+                    { 'path' : path.resolve(cwd, '../rainjs2'), 'productionPath' : "/opt/ui/lib/node_modules/rain2/" }
+                ],
+                'nginxConf' : { 'fake' : 'fake' },
+                'destinationPath' : path.resolve(cwd, '../nginx.conf')
+            });
+
+            expect(NginxGenerator.prototype.run).toHaveBeenCalled();
+
+        });
+
     });
 });
