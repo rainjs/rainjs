@@ -39,7 +39,7 @@ var path = require('path'),
  */
 function register(program) {
     program
-        .command('generate-nginx-conf [source-file] [destination-file] [production-path]')
+        .command('generate-nginx-conf')
         .description('Generate the nginx configuration file')
         .action(generateNginxConfiguration);
 }
@@ -62,10 +62,13 @@ function register(program) {
  *  It is mandatory for this to be an absolute path.
  *  Example: ``/opt/rainProject``
  */
-function generateNginxConfiguration(sourcePath, destinationPath, productionPath) {
+function generateNginxConfiguration() {
     var projects = [],
         projectRoot = utils.getProjectRoot(process.cwd()),
-        defaultConfiguration = require(path.join(projectRoot, 'build.json'));
+        defaultConfiguration = require(path.join(projectRoot, 'build.json')),
+        productionPath = defaultConfiguration.productionPath,
+        sourcePath,
+        destPath;
 
     projects.push({
         'path': projectRoot,
@@ -73,41 +76,40 @@ function generateNginxConfiguration(sourcePath, destinationPath, productionPath)
     });
 
     if(defaultConfiguration.additionalProjects) {
-        var prodPathsIndex = 0; //if production paths have been provided this will help traversing the array
-        var additionalProjectPath; //store production path for current additional project
+        var additionalProjectProdPath;
 
-        defaultConfiguration.additionalProjects.forEach(function (folder) {
-
-            if(defaultConfiguration.additionalProjectsProductionPaths) {
-                additionalProjectPath =  defaultConfiguration.additionalProjectsProductionPaths[prodPathsIndex];
-                prodPathsIndex += 1;
+        defaultConfiguration.additionalProjects.forEach(function (folder, index) {
+            if(productionPath && defaultConfiguration.additionalProjectsProductionPaths) {
+                additionalProjectProdPath =  defaultConfiguration.additionalProjectsProductionPaths[index];
             }
 
             projects.push({
                 'path': path.resolve(process.cwd(), folder),
-                'productionPath':  productionPath ? additionalProjectPath : undefined
+                'productionPath':  productionPath ? additionalProjectProdPath : undefined
             });
         });
     }
 
     try {
         var nginxConf;
-        var destPath;
 
-        if (sourcePath) {
-            var resolvedPath =   path.resolve(process.cwd(), sourcePath);
-            nginxConf = fs.readFileSync(resolvedPath);
+        if (defaultConfiguration.nginxConfig && defaultConfiguration.nginxConfig.sourcePath) {
+            sourcePath =  path.resolve(process.cwd(), defaultConfiguration.nginxConfig.sourcePath);
         } else {
-            nginxConf = fs.readFileSync(path.join(__dirname, '../conf/nginx.conf'));
+            sourcePath = path.resolve(__dirname, '../conf/nginx.conf');
         }
 
-        if (destinationPath) {
-            destPath = path.resolve(process.cwd(), destinationPath);
+        nginxConf = fs.readFileSync(sourcePath);
+
+        if (defaultConfiguration.nginxConfig && defaultConfiguration.nginxConfig.destinationPath) {
+            destPath = path.resolve(process.cwd(), defaultConfiguration.nginxConfig.destinationPath);
+        }  else {
+            destPath =  path.resolve(process.cwd(), 'nginx.conf');
         }
 
         nginxConf = JSON.parse(nginxConf);
     } catch (e) {
-        console.log('Error when resolving paths.');
+        console.log('Error reading source file.');
         console.log(e.message.red);
         console.log(e.stack.red);
         process.exit(1);
@@ -116,7 +118,7 @@ function generateNginxConfiguration(sourcePath, destinationPath, productionPath)
     var generator = new NginxGenerator({
         projects: projects,
         nginxConf: nginxConf,
-        destinationPath: destPath || 'nginx.conf'
+        destinationPath: destPath
     });
 
     generator.run();
