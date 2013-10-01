@@ -79,7 +79,10 @@ describe('Generate Nginx Conf', function () {
             buildJson = {
                 'productionPath': '/opt/ui/rainjs-ssa',
                 'additionalProjects': ['../rainjs', '../rainjs2'],
-                'additionalProjectsProductionPaths': ['/opt/ui/lib/node_modules/rain', '/opt/ui/lib/node_modules/rain2']
+                'additionalProjectsProductionPaths': [
+                    '/opt/ui/lib/node_modules/rain',
+                    '/opt/ui/lib/node_modules/rain2'
+                ]
             };
             mocks[process.cwd() + '/build.json'] = buildJson;
 
@@ -87,8 +90,14 @@ describe('Generate Nginx Conf', function () {
             expect(NginxGenerator).toHaveBeenCalledWith({
                 'projects': [
                     { 'path': cwd, 'productionPath': '/opt/ui/rainjs-ssa' },
-                    { 'path': path.resolve(cwd, '../rainjs'), 'productionPath': '/opt/ui/lib/node_modules/rain' },
-                    { 'path': path.resolve(cwd, '../rainjs2'), 'productionPath': '/opt/ui/lib/node_modules/rain2' }
+                    {
+                        'path': path.resolve(cwd, '../rainjs'),
+                        'productionPath': '/opt/ui/lib/node_modules/rain'
+                    },
+                    {
+                        'path': path.resolve(cwd, '../rainjs2'),
+                        'productionPath': '/opt/ui/lib/node_modules/rain2'
+                    }
                 ],
                 'nginxConf': { 'fake': 'fake' },
                 'destinationPath': path.resolve(cwd, './nginx.conf')
@@ -100,7 +109,10 @@ describe('Generate Nginx Conf', function () {
         it('should act correctly when a production path is not provided', function () {
             buildJson = {
                 'additionalProjects': ['../rainjs', '../rainjs2'],
-                'additionalProjectsProductionPaths': ['/opt/ui/lib/node_modules/rain', '/opt/ui/lib/node_modules/rain2']
+                'additionalProjectsProductionPaths': [
+                    '/opt/ui/lib/node_modules/rain',
+                    '/opt/ui/lib/node_modules/rain2'
+                ]
             };
             mocks[process.cwd() + '/build.json'] = buildJson;
 
@@ -138,7 +150,7 @@ describe('Generate Nginx Conf', function () {
             expect(NginxGenerator.prototype.run).toHaveBeenCalled();
         });
 
-        it('should act correctly when additionalProjectsProductionPaths is missing in the build.json file', function () {
+        it('should act correctly when additionalProjectsProductionPaths is missing', function () {
             buildJson = {
                 'productionPath': '/opt/ui/rainjs-ssa',
                 'additionalProjects': ['../rainjs', '../rainjs2']
@@ -225,7 +237,10 @@ describe('Generate Nginx Conf', function () {
                 },
                 'productionPath': '/opt/ui/rainjs-ssa',
                 'additionalProjects': ['../rainjs', '../rainjs2'],
-                'additionalProjectsProductionPaths': ['/opt/ui/lib/node_modules/rain', '/opt/ui/lib/node_modules/rain2']
+                'additionalProjectsProductionPaths': [
+                    '/opt/ui/lib/node_modules/rain',
+                    '/opt/ui/lib/node_modules/rain2'
+                ]
 
             };
             mocks[process.cwd() + '/build.json'] = buildJson;
@@ -240,8 +255,14 @@ describe('Generate Nginx Conf', function () {
             expect(NginxGenerator).toHaveBeenCalledWith({
                 'projects': [
                     { 'path': cwd, 'productionPath': '/opt/ui/rainjs-ssa' },
-                    { 'path': path.resolve(cwd, '../rainjs'), 'productionPath': '/opt/ui/lib/node_modules/rain' },
-                    { 'path': path.resolve(cwd, '../rainjs2'), 'productionPath': '/opt/ui/lib/node_modules/rain2' }
+                    {
+                        'path': path.resolve(cwd, '../rainjs'),
+                        'productionPath': '/opt/ui/lib/node_modules/rain'
+                    },
+                    {
+                        'path': path.resolve(cwd, '../rainjs2'),
+                        'productionPath': '/opt/ui/lib/node_modules/rain2'
+                    }
                 ],
                 'nginxConf': { 'fake3': 'fake3' },
                 'destinationPath': path.resolve(cwd, '../myconfigurations/nginx.conf')

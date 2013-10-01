@@ -180,7 +180,7 @@ describe('Nginx Generator', function () {
             expect(allArguments.indexOf('location ~* fake_rain_id/(js.*\\.js)$')).not.toBe(-1);
         });
 
-        it('should generate the correct regular expresions when a production path is provided', function () {
+        it('should generate the correct reg exps when a production path is provided', function () {
             var config = {
                 nginxConf: {
                     http: {
@@ -222,7 +222,7 @@ describe('Nginx Generator', function () {
 
         });
 
-        it('should generate correct regular expressions for the all projects if prod paths are provided', function () {
+        it('should generate correct reg exps for the all projects if prod paths are provided', function () {
             config = {
                 nginxConf: {
                     http: {

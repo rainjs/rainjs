@@ -81,7 +81,8 @@ function generateNginxConfiguration() {
 
         defaultConfiguration.additionalProjects.forEach(function (folder, index) {
             if(productionPath && defaultConfiguration.additionalProjectsProductionPaths) {
-                additionalProjectProdPath =  defaultConfiguration.additionalProjectsProductionPaths[index];
+                additionalProjectProdPath =
+                    defaultConfiguration.additionalProjectsProductionPaths[index];
             }
 
             projects.push({

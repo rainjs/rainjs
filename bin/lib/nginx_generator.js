@@ -64,8 +64,8 @@ function NginxGenerator(configuration) {
 
 /**
  * Generates the configuration file by mapping the regexps of possible request routes with
- * actual correspondent. Generates configuration for javascript routes and resources and stores it in
- * the root of the project.
+ * actual correspondent. Generates configuration for javascript routes and resources and stores it
+ * inthe root of the project.
  */
 NginxGenerator.prototype.run = function () {
     var nginxConf = this._baseConfiguration.nginxConf,
@@ -86,8 +86,8 @@ NginxGenerator.prototype.run = function () {
             componentPath = path.join(componentsPath, folder);
             config = require(path.join(componentPath, 'meta.json'));
 
-            //if a production path has been provided for the project, the component paths in the config file
-            //will have that as base path
+            //if a production path has been provided for the project, the component paths in the
+            // config file will have that as base path
             if(project.productionPath) {
                 prodComponentPath = path.join(project.productionPath, 'components', folder);
                 self._addNginxLocations(prodComponentPath, config.id, config.version);
@@ -114,7 +114,8 @@ NginxGenerator.prototype.run = function () {
 
     this._writeConfiguration(nginxConf, 0);
     this._stream.end();
-    console.log('NginX configuration generated successfully to ' + this._baseConfiguration.destinationPath);
+    console.log('NginX configuration generated successfully to ' +
+        this._baseConfiguration.destinationPath);
 };
 
 /**
