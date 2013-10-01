@@ -117,3 +117,30 @@ Example::
 
 A detailed description of this process can be found in
 the :doc:`RAIN Minification Process </server/minification>` page.
+
+
+------------------------------------------------
+RAIN SDK Generate NginX Configuration File
+------------------------------------------------
+
+The rain SDK provides a method to generate a configuration file for NginX.
+
+We are using NginX to serve static files/routes through NginX and reduce the load on the
+RAIN server. We have chosen to reconfigure the HaProxy to redirect static routes requests
+to NginX server and the rest of the requests to the RAIN server. The ``generate-nginx-conf``
+command helps you to generate an NginX configuration file so it knows how to serve the requests
+and mapping the components with different routes.
+
+Examples::
+
+  $ rain generate-nginx-conf
+
+Optional parameters can be provided in the build.json file.
+If no option is specified in the build.json, it will use ``./bin/conf/nginx.conf`` to generate
+a ``nginx.conf`` file in the project root.
+
+The optional parameters are ``sourcePath``, ``destinationPath``, ``productionPath``
+and ``additionalProjectsProductionPaths``.
+
+A detailed description of this command can be found in
+the :doc:`NginX static routes server </server/nginx_static_routes>` page.

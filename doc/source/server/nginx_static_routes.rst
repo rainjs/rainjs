@@ -2,7 +2,7 @@
 NginX static routes server
 ==========================
 
-This document describes NginX and how to integrate it with RAIN so it can server static
+This document describes NginX and how to integrate it with RAIN so it can serve static
 routes.
 
 -----
@@ -83,8 +83,8 @@ NginX
 
 The only thing that you need here is to install the NginX server on your machine. This is done by
 using the following command::
-    sudo apt-get install nginx
 
+    sudo apt-get install nginx
 
 ..........................
 RAIN & NginX configuration
@@ -95,29 +95,39 @@ components, take into account the version and id.
 
 All you have to do is run the following command::
 
-    rain generate-nginx-conf <source-file> <destination-file> <production-path>
+    rain generate-nginx-conf
 
 
 Examples::
 
-  1. $ rain generate-nginx-conf
-  2. $ rain generate-nginx-conf ./mycustomnginx.conf
-  3. $ rain generate-nginx-conf /home/john/rainjs/bin/conf/nginx.conf /home/john/myCustomNginX.conf
-  4. $ rain generate-nginx-conf bin/conf/nginx.conf myCustomNginX.conf
-  5. $ rain generate-nginx-conf /home/john/rainjs/bin/conf/customNginx.conf myCustomNginX.conf
-  6. $ rain generate-nginx-conf ./bin/conf/customNginx.conf nginx.conf /opt/rainProject
+  $ rain generate-nginx-conf
 
-If no optional parameter is used, it will use ``./bin/conf/nginx.conf`` to generate
+Optional parameters can be provided in the build.json file.
+If no option is specified in the build.json, it will use ``./bin/conf/nginx.conf`` to generate
 a ``nginx.conf`` file in the project root.
 
-Otherwise the command will use the configuration file you specify as ``source-path`` and
-generate the nginx configuration in the project root or in the destination path chosen.
+The optional parameters are ``sourcePath``, ``destinationPath``, ``productionPath``
+and ``additionalProjectsProductionPaths``.
 
-All you have to do is to move the generated configuration file in ``/etc/nginx/``.
+An example of the build.json file would be:
 
-If the ``production-path`` parameter is used, all the paths in the nginx configuration file will be
-calculated according to the specified production path.
-It is mandatory for this parameter to be an absolute path.
+.. code-block:: javascript
+    :linenos:
+
+    {
+        "javascriptMinification": true,
+        "cssMinification": false,
+        "buildPath": "../min/sprint",
+        "productionPath": "/opt/ui/opt/rainjs-ssa/",
+        "additionalProjects": ["../rainjs"],
+        "additionalProjectsProductionPaths": ["/opt/ui/lib/node_modules/rain/"],
+        "nginxConfig": {
+            "sourcePath": "./conf/nginx.conf",  //where the source nginx config file is located
+            "destinationPath": "./nginx.conf"   //where the computed config will be generated
+        }
+    }
+
+After running the command all you have to do is to move the generated configuration file in ``/etc/nginx/``.
 
 An example of the output configuration would be:
 
@@ -218,37 +228,47 @@ Short Review
  4. restart nginx
  5. restart haproxy
 
-
 -------------------------
 Using NginX in production
 -------------------------
 
-1. Make sure the additional projects are specified in the ``build.json``
-file along with their production paths in ``additionalProjects`` and
-``additionalProjectsProductionPaths`` keys.
+If the production path parameters are used, all the paths in the nginx configuration file will be
+calculated according to the specified production paths.
+It is mandatory for the production parameters to be absolute paths.
+
+It is also mandatory for the ``productionPath`` paramameter to be present for
+the ``additionalProjectsProductionPaths`` array be taken into consideration.
+
+.. note::
+
+    The paths from ``additionalProjectsProductionPaths`` have to be in the same order as the ones
+    from the ``additionalProjects`` array.
+
+
+1. Add the production path for your project in the build.json file:
 
 .. code-block:: javascript
     :linenos:
 
     {
-        "javascriptMinification": true,
-        "cssMinification": true,
-        "additionalProjects": ["../rainjs"],
-        "additionalProjectsProductionPaths": ["/opt/ui/lib/node_modules/rain/"],
-        "buildPath": "../min/sprint",
-        "themes": {
-            "diy": "diy",
-            "cp": "cp"
-        }
+            "javascriptMinification": true,
+            "cssMinification": false,
+            "buildPath": "../min/sprint",
+            "productionPath": "/opt/ui/opt/rainjs-ssa/",
+            "additionalProjects": ["../rainjs"],
+            "additionalProjectsProductionPaths": ["/opt/ui/lib/node_modules/rain/"],
+            "nginxConfig": {
+                "sourcePath": "./conf/nginx.conf",
+                "destinationPath": "./nginx.conf"
+            }
     }
 
-2. Add the production path for your project as the last parameter when generating the nginx configuration:
-  ``$ rain generate-nginx-conf ./conf/nginx.conf ./nginx.conf /opt/ui/opt/rainjs-ssa/``
+2. Make sure the additional projects are specified in the ``build.json``
+file along with their production paths like in the above example.
+
 
 3. If you want NginX to respond with specific http error messages in the resulted configuration
-add a rule similar to the one from below :
-
-.. code-block::
+add a rule similar to the one from below::
 
        error_page  404  /404.html;
        location = /404.html {

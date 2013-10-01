@@ -45,22 +45,23 @@ function register(program) {
 }
 
 /**
- * Generate Nginx configuration method, reads the build.json for additional projects, so it
- * can generate a full project nginx configuration.
+ * Generate Nginx configuration method, reads the build.json for additional projects,
+ * production paths and paths for the source configuration and generated configuration file so it
+ * can create a full project nginx configuration. It is mandatory for the production paths
+ * to be absolute paths.
  *
- *  @param {String} [sourcePath] custom nginx configuration file path, if not specified
- *  the default ``bin/conf/nginx.conf`` will be used
- *  it can be a relative or absolute path:
- *  ``bin/conf/customNginx.conf`` or  ``/home/john/rainjs/bin/conf/customNginx.conf``
+ * Example:
  *
- *  @param {String} [destinationPath] computed configuration file path, if not specified
- *  the default ``nginx.conf`` will be used
- *  it can be a relative or absolute path
- *
- *  @param {String} [productionPath] path of the project folder in production environment.
- *  The paths of the additional projects will be calculated according to this path.
- *  It is mandatory for this to be an absolute path.
- *  Example: ``/opt/rainProject``
+ * build.json content:
+ * {
+ *   "productionPath": "/opt/ui/opt/rainjs-ssa/",
+ *   "additionalProjects": ["../rainjs"],
+ *   "additionalProjectsProductionPaths": ["/opt/ui/lib/node_modules/rain/"],
+ *   "nginxConfig": {
+ *       "sourcePath": "./conf/nginx.conf",
+ *       "destinationPath": "./nginx.conf"
+ *   }
+ * }
  */
 function generateNginxConfiguration() {
     var projects = [],
