@@ -103,7 +103,7 @@ Examples::
   $ rain generate-nginx-conf
 
 Optional parameters can be provided in the build.json file.
-If no option is specified in the build.json, it will use ``./bin/conf/nginx.conf`` to generate
+If no option is specified in the build.json, it will use ``bin/conf/nginx.conf`` from RAIN to generate
 a ``nginx.conf`` file in the project root.
 
 The optional parameters are ``sourcePath``, ``destinationPath``, ``productionPath``
@@ -254,11 +254,13 @@ the ``additionalProjectsProductionPaths`` array be taken into consideration.
             "javascriptMinification": true,
             "cssMinification": false,
             "buildPath": "../min/sprint",
-            "productionPath": "/opt/ui/opt/rainjs-ssa/",
-            "additionalProjects": ["../rainjs"],
+            "productionPath": "/opt/ui/opt/rainjs-ssa/",   //the production path of your project
+            "additionalProjects": ["../rainjs"],           //local paths of additional projects
             "additionalProjectsProductionPaths": ["/opt/ui/lib/node_modules/rain/"],
             "nginxConfig": {
+                //relative or absolute path of the nginx configuration source file:
                 "sourcePath": "./conf/nginx.conf",
+                //relative or absolute path for the generated configuration:
                 "destinationPath": "./nginx.conf"
             }
     }

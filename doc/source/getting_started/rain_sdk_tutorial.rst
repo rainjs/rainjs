@@ -136,7 +136,7 @@ Examples::
   $ rain generate-nginx-conf
 
 Optional parameters can be provided in the build.json file.
-If no option is specified in the build.json, it will use ``./bin/conf/nginx.conf`` to generate
+If no option is specified in the build.json, it will use ``bin/conf/nginx.conf`` from RAIN to generate
 a ``nginx.conf`` file in the project root.
 
 The optional parameters are ``sourcePath``, ``destinationPath``, ``productionPath``
