@@ -40,32 +40,78 @@ var path = require('path'),
 function register(program) {
     program
         .command('generate-nginx-conf')
-        .description('Generate the nginix configuration file')
+        .description('Generate the nginx configuration file')
         .action(generateNginxConfiguration);
 }
 
 /**
- * Generate Nginx configuration method, reads the build.json for additional projects, so it
- * can generate a full project nginx configuration.
+ * Generate Nginx configuration method, reads the build.json for additional projects,
+ * production paths and paths for the source configuration and generated configuration file so it
+ * can create a full project nginx configuration. It is mandatory for the production paths
+ * to be absolute paths.
+ *
+ * Example:
+ *
+ * build.json content:
+ * {
+ *   "productionPath": "/opt/ui/opt/rainjs-ssa/",
+ *   "additionalProjects": ["../rainjs"],
+ *   "additionalProjectsProductionPaths": ["/opt/ui/lib/node_modules/rain/"],
+ *   "nginxConfig": {
+ *       "sourcePath": "./conf/nginx.conf",
+ *       "destinationPath": "./nginx.conf"
+ *   }
+ * }
  */
-function generateNginxConfiguration () {
+function generateNginxConfiguration() {
     var projects = [],
         projectRoot = utils.getProjectRoot(process.cwd()),
-        defaultConfiguration = require(path.join(projectRoot, 'build.json'));
+        defaultConfiguration = require(path.join(projectRoot, 'build.json')),
+        productionPath = defaultConfiguration.productionPath,
+        sourcePath,
+        destPath;
 
-    projects.push(projectRoot);
+    projects.push({
+        'path': projectRoot,
+        'productionPath': productionPath
+    });
 
     if(defaultConfiguration.additionalProjects) {
-        defaultConfiguration.additionalProjects.forEach(function (folder) {
-            projects.push(path.resolve(process.cwd(), folder));
+        var additionalProjectProdPath;
+
+        defaultConfiguration.additionalProjects.forEach(function (folder, index) {
+            if(productionPath && defaultConfiguration.additionalProjectsProductionPaths) {
+                additionalProjectProdPath =
+                    defaultConfiguration.additionalProjectsProductionPaths[index];
+            }
+
+            projects.push({
+                'path': path.resolve(process.cwd(), folder),
+                'productionPath':  productionPath ? additionalProjectProdPath : undefined
+            });
         });
     }
 
     try {
-        var nginxConfDefault = fs.readFileSync(path.join(__dirname, '../conf/nginx.conf'));
+        var nginxConf;
 
-        nginxConfDefault = JSON.parse(nginxConfDefault);
+        if (defaultConfiguration.nginxConfig && defaultConfiguration.nginxConfig.sourcePath) {
+            sourcePath =  path.resolve(process.cwd(), defaultConfiguration.nginxConfig.sourcePath);
+        } else {
+            sourcePath = path.resolve(__dirname, '../conf/nginx.conf');
+        }
+
+        nginxConf = fs.readFileSync(sourcePath);
+
+        if (defaultConfiguration.nginxConfig && defaultConfiguration.nginxConfig.destinationPath) {
+            destPath = path.resolve(process.cwd(), defaultConfiguration.nginxConfig.destinationPath);
+        }  else {
+            destPath =  path.resolve(process.cwd(), 'nginx.conf');
+        }
+
+        nginxConf = JSON.parse(nginxConf);
     } catch (e) {
+        console.log('Error reading source file.');
         console.log(e.message.red);
         console.log(e.stack.red);
         process.exit(1);
@@ -73,7 +119,8 @@ function generateNginxConfiguration () {
 
     var generator = new NginxGenerator({
         projects: projects,
-        nginxConf: nginxConfDefault
+        nginxConf: nginxConf,
+        destinationPath: destPath
     });
 
     generator.run();
