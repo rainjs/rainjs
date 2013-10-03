@@ -24,9 +24,10 @@ For the other supported methods, the request is handled according to its URL.
 Controller Routes
 -----------------
 
-Example::
+Examples::
 
-    http://localhost:1337/componentName/controller/controllerName
+    1. http://localhost:1337/componentName/versionNumber/controller/controllerName
+    2. http://localhost:1337/componentName/controller/controllerName
 
 ----------
 CSS Routes
@@ -34,8 +35,8 @@ CSS Routes
 
 Examples::
 
-    1. http://localhost:1337/componentName/versionNumber/css/fileName.css
-    2. http://localhost:1337/componentName/css/fileName.css
+    1. http://localhost:1337/componentName/versionNumber/css/fileName
+    2. http://localhost:1337/componentName/css/fileName
 
 -----------------
 Javascript Routes
@@ -43,8 +44,8 @@ Javascript Routes
 
 Example::
 
-    1. http://localhost:1337/componentName/versionNumber/js/fileName.css
-    2. http://localhost:1337/componentName/js/fileName.css
+    1. http://localhost:1337/componentName/versionNumber/js/fileName
+    2. http://localhost:1337/componentName/js/fileName
 
 -------------
 Locale Routes
@@ -61,8 +62,8 @@ Resource Routes
 
 Example::
 
-    1. http://localhost:1337/componentName/versionNumber/resources/folderName/pictureName.png
-    2. http://localhost:1337/componentName/resources/pictureName.png
+    1. http://localhost:1337/componentName/versionNumber/resources/folderName/resourceName
+    2. http://localhost:1337/componentName/resources/resourceName
 
 -----------
 View Routes
