@@ -24,67 +24,71 @@ For the other supported methods, the request is handled according to its URL.
 Controller Routes
 -----------------
 
+Are related to the component controllers found in ``server/controller``.
+
 Examples::
 
-    1. http://localhost:1337/componentName/versionNumber/controller/controllerName
-    2. http://localhost:1337/componentName/controller/controllerName
+    1. <domain>/<componentName>/[<version>/]controller/<controllerName>
+    2. http://localhost:1337/example/3.0/controller/text_localization
 
 ----------
 CSS Routes
 ----------
 
+These routes are related to the CSS files found in the client folder of the component.
+
 Examples::
 
-    1. http://localhost:1337/componentName/versionNumber/css/fileName
-    2. http://localhost:1337/componentName/css/fileName
+    1. <domain>/<componentName>[/<version>]/css/<path>
+    2. http://localhost:1337/example/css/index.css
 
 -----------------
 Javascript Routes
 -----------------
 
-Example::
+These routes are related to the static js files found in the client folder of the component.
 
-    1. http://localhost:1337/componentName/versionNumber/js/fileName
-    2. http://localhost:1337/componentName/js/fileName
+Examples::
+
+    1. <domain>/<componentName>[/<version>]/js/<path>
+    2. http://localhost:1337/example/3.0/js/index.js
 
 -------------
 Locale Routes
 -------------
 
-Example::
+The locales are translation files found in the locale folder of the component.
 
-    1. http://localhost:1337/componentName/versionNumber/locale/localeName
-    2. http://localhost:1337/componentName/locale/localeName
+Examples::
+
+    1. <domain>/<componentName>[/<version>]/locale/<localeName>
+    2. http://localhost:1337/example/3.0/locale/en_US
 
 ---------------
 Resource Routes
 ---------------
 
-Example::
+The resources are static files like images, pdf or text.
 
-    1. http://localhost:1337/componentName/versionNumber/resources/folderName/resourceName
-    2. http://localhost:1337/componentName/resources/resourceName
+Examples::
+
+    1. <domain>/<componentName>[/<version>]/resources/<path>
+    2. http://localhost:1337/example/3.0/resources/images/ui-icons256x240.png
 
 -----------
 View Routes
 -----------
 
+Views are html files of located in the ``client/templates`` folder of the component.
+
 Example::
 
-    1. http://localhost:1337/componentName/versionNumber/viewName
-    2. http://localhost:1337/componentName/viewName
+    1. <domain>/<componentName>[/<version>]/<viewName>
+    2. http://localhost:1337/example/3.0/index
 
 
 .. note::
 
-    For all the above routes if the request method is not supported then a response with a 405 status code and an
-    ``Allow`` header with supported methods is sent.
-
-
-
-
-
-
-
-
-
+    For all the above routes if the 1&1 supported request method is not implemented by the
+    endpoint then a response with a 405 status code and an ``Allow`` header with supported
+    methods is sent.

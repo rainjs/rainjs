@@ -44,7 +44,7 @@ describe('HandleHttpMethods', function () {
         };
 
         response = {
-             'on': function(eventName, callback) {},
+            'on': function(eventName, callback) {},
             'setHeader': jasmine.createSpy(),
             'write': jasmine.createSpy(),
             'end': jasmine.createSpy()
