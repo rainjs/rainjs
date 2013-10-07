@@ -177,7 +177,6 @@ function CssOptimizer(config) {
  * @throws {Error} if the reading of a css file fails.
  */
 CssOptimizer.prototype.run = function () {
-
     var self = this;
     this._parseMediaQueries();
 
@@ -254,7 +253,6 @@ CssOptimizer.prototype._parseMediaQueries = function() {
  * @private
  */
 CssOptimizer.prototype._writeFiles = function (data, folder) {
-
     if(folder) {
         folder = folder;
     } else {
@@ -285,7 +283,6 @@ CssOptimizer.prototype._writeFiles = function (data, folder) {
                 requestRoute = '/' + requestRoute + '/css/' + folder + '/' + fileName;
             }
 
-
             if(!this._map[component][requestRoute]) {
                 this._map[component][requestRoute] = data[component][index].files;
             } else {
@@ -298,7 +295,7 @@ CssOptimizer.prototype._writeFiles = function (data, folder) {
 
             try {
                 fs.writeFileSync(destinationPath, data[component][index].content, 'utf8');
-                console.log('css OK ', component);
+                console.log('css ok ', component);
             } catch (ex) {
                 console.log(util.format("Failed to write %s for component %s at destination %s",
                     destinationPath, component, this._outputPath) + ex.stack);
@@ -378,6 +375,20 @@ CssOptimizer.prototype._minify = function (component, cssPath, isTheme) {
 
                var deferred = Promise.defer();
                deferrers.push(deferred.promise);
+
+               //if the file is located in a themes folder its shortPath will be
+               // theme + its basename
+               // else the shortPath will contain all its parent folders till the client/css folder
+               // is reached, meaning that for ``client/css/myFolder1/myFolder2/style.css``
+               // shortPath will be "myFolder1/myFolder2/style.css"
+               var shortPath = '';
+               if (themeFolder) {
+                   shortPath = themeFolder + '/' + path.basename(filePath);
+               } else {
+                   shortPath =  filePath.match(/.*[\/|\\]client[\/|\\]css[\/|\\](.*)/)[1];
+                   shortPath = shortPath.replace('\\', '/', 'g');
+               }
+
                (function (cssData, component, content, file, deferred) {
                    less.render(content, self._baseConfig, function (err, data) {
                        if(err) {
@@ -391,14 +402,13 @@ CssOptimizer.prototype._minify = function (component, cssPath, isTheme) {
                        var cssInfo = {
                            content: data,
                            folder: self._components[component].folder,
-                           file: themeFolder ? themeFolder + '/' + file : file,
+                           file: file,
                            noRules: noRules
                        };
 
                        deferred.resolve(cssInfo);
                    });
-               })(cssData, component, content, path.basename(filePath), deferred);
-
+               })(cssData, component, content, shortPath, deferred);
            } catch (ex) {
                 console.log(util.format('Failed to read file %s from folder %s\n',
                    filePath, cssPath) + ex.stack);
