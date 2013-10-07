@@ -385,7 +385,8 @@ CssOptimizer.prototype._minify = function (component, cssPath, isTheme) {
                if (themeFolder) {
                    shortPath = themeFolder + '/' + path.basename(filePath);
                } else {
-                   shortPath = filePath.match(/.*\/client\/css\/(.*)/)[1];
+                   shortPath =  filePath.match(/.*[\/|\\]client[\/|\\]css[\/|\\](.*)/)[1];
+                   shortPath = shortPath.replace('\\', '/', 'g');
                }
 
                (function (cssData, component, content, file, deferred) {
