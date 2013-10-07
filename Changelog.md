@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.34.0
+
+* Fixed a bug of the rain css minification process. The css minification now supports having
+ the css files grouped in folders.
+* Improved the generate-nginx-conf SDK command so it can take additional parameters:
+source config file, destination config file and production path can now be specified in
+the build.json file.
+* Implemented handleHttpMethods module to treat non existent method calls and ``TRACE`` method
+calls.
+* Zabbix module: sesion requests are no longer separated by tld and metrics are now sent to Zabbix even if no changes have been detected in the last interval of time.
+
 ## 0.33.0
 
 * Added the possibility of serving static files that are component independent so that generic
