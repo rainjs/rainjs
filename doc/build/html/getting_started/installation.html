@@ -1,0 +1,227 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installing RAIN &mdash; Rain 0.33.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.33.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Rain 0.33.0 documentation" href="../index.html" />
+    <link rel="next" title="RAIN SDK Tutorial" href="rain_sdk_tutorial.html" />
+    <link rel="prev" title="Rain 0.33.0 Documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="rain_sdk_tutorial.html" title="RAIN SDK Tutorial"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Rain 0.33.0 Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="installing-rain">
+<h1>Installing RAIN<a class="headerlink" href="#installing-rain" title="Permalink to this headline">¶</a></h1>
+<p>In this document you will find all the information needed to setup RAIN for development.</p>
+<div class="section" id="installing-node-js-npm">
+<h2>Installing node.js &amp; npm<a class="headerlink" href="#installing-node-js-npm" title="Permalink to this headline">¶</a></h2>
+<p>RAIN runs on the <strong>node.js</strong> platform. Installing this platform is the first step to developing with RAIN. <strong>NPM</strong> is also needed for package management.</p>
+<div class="section" id="ubuntu-linux">
+<h3>Ubuntu Linux<a class="headerlink" href="#ubuntu-linux" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash"><div class="highlight"><pre>sudo apt-get install python-software-properties
+sudo apt-add-repository ppa:chris-lea/node.js
+sudo apt-get update
+sudo apt-get install nodejs npm
+</pre></div>
+</div>
+</div>
+<div class="section" id="windows">
+<h3>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h3>
+<p>Download and run the official installer from <a class="reference external" href="http://nodejs.org/#download">http://nodejs.org/#download</a>.</p>
+</div>
+<div class="section" id="other-operating-systems-distributions">
+<h3>Other Operating Systems / Distributions<a class="headerlink" href="#other-operating-systems-distributions" title="Permalink to this headline">¶</a></h3>
+<p>Follow the official node.js wiki at <a class="reference external" href="https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager">https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager</a> and locate the steps for your operating system / distribution.</p>
+</div>
+<div class="section" id="building-from-source">
+<h3>Building from source<a class="headerlink" href="#building-from-source" title="Permalink to this headline">¶</a></h3>
+<p>Follow the official node.js wiki at <a class="reference external" href="https://github.com/joyent/node/wiki/Installation">https://github.com/joyent/node/wiki/Installation</a>.</p>
+</div>
+</div>
+<div class="section" id="rain-sdk">
+<h2>RAIN SDK<a class="headerlink" href="#rain-sdk" title="Permalink to this headline">¶</a></h2>
+<p>Installing the RAIN SDK is the easiest way to start developing a new project with RAIN. After
+the installation is done, go ahead and read the <a class="reference internal" href="rain_sdk_tutorial.html"><em>RAIN SDK Tutorial</em></a> to start developing!</p>
+<div class="section" id="linux-unix-mac-os">
+<h3>Linux / Unix / Mac OS<a class="headerlink" href="#linux-unix-mac-os" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash"><div class="highlight"><pre>sudo npm install -g node-gyp
+sudo npm install -g rain
+</pre></div>
+</div>
+</div>
+<div class="section" id="id1">
+<h3>Windows<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>Running NPM on Windows to install the RAIN package only works from a <strong>MinGW bash</strong> prompt. You can get a MinGW bash installation from two places:</dt>
+<dd><ul class="first last simple">
+<li>The official git for Windows installer: <a class="reference external" href="http://www.git-scm.com/download/win">http://www.git-scm.com/download/win</a></li>
+<li>The GitHub for Windows installer: <a class="reference external" href="http://windows.github.com/">http://windows.github.com/</a> <a class="footnote-reference" href="#github" id="id2">[1]</a></li>
+</ul>
+</dd>
+</dl>
+<p>Inside a <em>bash</em> prompt, you then need to run:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="nx">npm</span> <span class="nx">install</span> <span class="o">-</span><span class="nx">g</span> <span class="nx">rain</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="rain-from-source">
+<h2>RAIN from source<a class="headerlink" href="#rain-from-source" title="Permalink to this headline">¶</a></h2>
+<p>This is the way to go if you want to contribute to this project. To get started with this
+you need to execute the following commands:</p>
+<div class="section" id="id3">
+<h3>Linux / Unix / Mac OS<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash"><div class="highlight"><pre>sudo apt-get install git
+git clone https://github.com/rainjs/rainjs.git
+<span class="nb">cd </span>rainjs
+sudo npm install -g node-gyp
+sudo npm link
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h3>Windows<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>You first need to install git. You have two equally excellent options:</dt>
+<dd><ul class="first last simple">
+<li>The official git distribution for Windows: <a class="reference external" href="http://www.git-scm.com/download/win">http://www.git-scm.com/download/win</a></li>
+<li>GitHub for Windows: <a class="reference external" href="http://windows.github.com/">http://windows.github.com/</a></li>
+</ul>
+</dd>
+</dl>
+<p>Inside a <em>bash</em> prompt, you then need to run:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="nx">npm</span> <span class="nx">link</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="running-rain">
+<h3>Running RAIN<a class="headerlink" href="#running-rain" title="Permalink to this headline">¶</a></h3>
+<p>Inside the project working directory, running the <tt class="docutils literal"><span class="pre">raind</span></tt> command will start the server.
+Accessing <a class="reference external" href="http://localhost:1337/example/index">http://localhost:1337/example/index</a> will load the example component that comes with
+the project&#8217;s sources.</p>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="github" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[1]</a></td><td>Using GitHub for Windows requires a GitHub account</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Installing RAIN</a><ul>
+<li><a class="reference internal" href="#installing-node-js-npm">Installing node.js &amp; npm</a><ul>
+<li><a class="reference internal" href="#ubuntu-linux">Ubuntu Linux</a></li>
+<li><a class="reference internal" href="#windows">Windows</a></li>
+<li><a class="reference internal" href="#other-operating-systems-distributions">Other Operating Systems / Distributions</a></li>
+<li><a class="reference internal" href="#building-from-source">Building from source</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#rain-sdk">RAIN SDK</a><ul>
+<li><a class="reference internal" href="#linux-unix-mac-os">Linux / Unix / Mac OS</a></li>
+<li><a class="reference internal" href="#id1">Windows</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#rain-from-source">RAIN from source</a><ul>
+<li><a class="reference internal" href="#id3">Linux / Unix / Mac OS</a></li>
+<li><a class="reference internal" href="#id4">Windows</a></li>
+<li><a class="reference internal" href="#running-rain">Running RAIN</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../index.html"
+                        title="previous chapter">Rain 0.33.0 Documentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="rain_sdk_tutorial.html"
+                        title="next chapter">RAIN SDK Tutorial</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="rain_sdk_tutorial.html" title="RAIN SDK Tutorial"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Rain 0.33.0 Documentation"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

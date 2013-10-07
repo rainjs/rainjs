@@ -1,0 +1,98 @@
+
+
+
+
+
+
+..
+    Classes and methods
+
+Class Environment
+================================================================================
+
+..
+   class-title
+
+
+Exports specific platform functionality. This singleton object can be accessed from the
+server-side controllers, dynamic conditions functions, data-layer functions and it provides
+useful information about the RAIN environment.
+
+
+
+
+
+
+
+
+    
+
+
+Constructor
+-----------
+
+.. js:class:: Environment(session)
+
+
+
+    
+    :param Session session: 
+        the global session 
+    
+
+
+
+
+
+
+
+    
+
+Attributes
+----------
+
+..
+   class-attributes
+
+
+language
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:attribute:: language   
+
+
+the platform language
+
+
+
+
+
+
+
+
+    
+
+
+
+languages
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:attribute:: languages   
+
+
+the list of languages
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+

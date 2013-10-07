@@ -1,0 +1,230 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Client Side Contexts &mdash; Rain 0.33.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.33.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Rain 0.33.0 documentation" href="../index.html" />
+    <link rel="next" title="Client Language Runtime (Proposal A)" href="Features-proposal-client-language-a.html" />
+    <link rel="prev" title="Placeholder" href="../server/placeholder.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Features-proposal-client-language-a.html" title="Client Language Runtime (Proposal A)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../server/placeholder.html" title="Placeholder"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="client-side-contexts">
+<h1>Client Side Contexts<a class="headerlink" href="#client-side-contexts" title="Permalink to this headline">¶</a></h1>
+<p>In this document you can find information about various context objects and the place where they should be used. This contexts object become extremely useful in client side controllers because they provide information about the view and some important informations.</p>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<img alt="../_images/client_contexts.jpeg" src="../_images/client_contexts.jpeg" />
+</div>
+<div class="section" id="view-context">
+<h2>View context<a class="headerlink" href="#view-context" title="Permalink to this headline">¶</a></h2>
+<p>View context is used to hold information about the environment in which a client side controller is running for the associated view. All attributes from viewContext are read only.</p>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>Imagine the following module definition:</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22</pre></div></td><td class="code"><div class="highlight"><pre><span class="p">{</span>
+  <span class="s2">&quot;id&quot;</span> <span class="o">:</span> <span class="s2">&quot;mymodule;1.0&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;url&quot;</span> <span class="o">:</span> <span class="s2">&quot;/modules/mymodule&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;views&quot;</span> <span class="o">:</span> <span class="p">[</span>
+      <span class="p">{</span><span class="s2">&quot;viewId&quot;</span>  <span class="o">:</span> <span class="s2">&quot;view-customer-info&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;view&quot;</span>   <span class="o">:</span> <span class="s2">&quot;/htdocs/customer-info.html&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;controller&quot;</span> <span class="o">:</span> <span class="s2">&quot;/htdocs/script/customer-info.js&quot;</span><span class="p">},</span>
+      <span class="p">{</span><span class="s2">&quot;viewId&quot;</span>  <span class="o">:</span> <span class="s2">&quot;view-customer-preferences&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;view&quot;</span>   <span class="o">:</span> <span class="s2">&quot;/htdocs/customer-preferences.html&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;controller&quot;</span> <span class="o">:</span> <span class="s2">&quot;/htdocs/script/customer-preferences.js&quot;</span><span class="p">},</span>
+      <span class="p">{</span><span class="s2">&quot;viewId&quot;</span>  <span class="o">:</span> <span class="s2">&quot;view-customer-account&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;view&quot;</span>   <span class="o">:</span> <span class="s2">&quot;/htdocs/customer-account.html&quot;</span><span class="p">}</span>
+  <span class="p">],</span>
+  <span class="s2">&quot;taglib&quot;</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">{</span><span class="s2">&quot;namespace&quot;</span>  <span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;selector&quot;</span>  <span class="o">:</span> <span class="s2">&quot;customer-info&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;viewId&quot;</span>    <span class="o">:</span> <span class="s2">&quot;view-customer-info&quot;</span><span class="p">},</span>
+      <span class="p">{</span><span class="s2">&quot;namespace&quot;</span>  <span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;selector&quot;</span>  <span class="o">:</span> <span class="s2">&quot;customer-prefs&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;viewId&quot;</span>    <span class="o">:</span> <span class="s2">&quot;view-customer-preferences&quot;</span><span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>The markup for view-customer-account is listed below:</p>
+<div class="highlight-html"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span class="nt">&lt;body&gt;</span>
+<span class="nt">&lt;customer</span><span class="na">-info</span> <span class="na">id=</span><span class="s">&quot;x&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;customer</span><span class="na">-prefs</span> <span class="na">id=</span><span class="s">&quot;y&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</pre></div>
+</td></tr></table></div>
+<p>For each view included in the aggregated view listed above the client side controller will get executed.</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre></div></td><td class="code"><div class="highlight"><pre><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span><span class="o">&gt;</span>
+  <span class="c1">// /htdocs/script/customer-info.js</span>
+  <span class="nx">define</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="nx">init</span><span class="p">(</span><span class="nx">viewContext</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// you can extract information from view context.</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="nx">init</span> <span class="o">:</span> <span class="nx">init</span><span class="p">};</span>
+  <span class="p">});</span>
+
+  <span class="c1">// /htdocs/script/customer-preferences.js</span>
+  <span class="nx">define</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="nx">init</span><span class="p">(</span><span class="nx">viewContext</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// you can extract information from view context.</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="nx">init</span> <span class="o">:</span> <span class="nx">init</span><span class="p">};</span>
+  <span class="p">});</span>
+</pre></div>
+</td></tr></table></div>
+<p>The first parameter injected into client side controller must is the viewContext. In this case, viewContext holds the following values:</p>
+<blockquote>
+<div><ul class="simple">
+<li>getClientModuleId() ====&gt; mymodule;1.0</li>
+<li>getInstanceId() =====&gt; x for customer-info and y for customer-preferences.</li>
+<li>getSettings() =====&gt; {}</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Client Side Contexts</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#view-context">View context</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../server/placeholder.html"
+                        title="previous chapter">Placeholder</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Features-proposal-client-language-a.html"
+                        title="next chapter">Client Language Runtime (Proposal A)</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Features-proposal-client-language-a.html" title="Client Language Runtime (Proposal A)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../server/placeholder.html" title="Placeholder"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

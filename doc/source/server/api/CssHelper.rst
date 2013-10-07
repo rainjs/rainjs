@@ -1,0 +1,140 @@
+
+
+
+
+
+
+..
+    Classes and methods
+
+Class CssHelper
+================================================================================
+
+..
+   class-title
+
+
+This Handlebars helper collects the css dependencies of a view and provides it to the renderer.
+The helper has support for CSS media queries.
+
+Syntax::
+
+     {{css path="cssPath" [name="componentId" [version="versionNumber"] [media="query"]]}}
+
+
+
+
+
+
+
+
+    
+
+Examples
+--------
+
+
+.. code-block:: javascript
+
+    Collects the ``index.css`` of the current component.
+
+     {{css path="index.css"}}
+
+.. code-block:: javascript
+
+    Collects the ``roundDiv.css`` of the component external_theming  with the latest version.
+
+     {{css name="external_theming" path="roundDiv.css"}}
+
+.. code-block:: javascript
+
+    Uses a media query to specify that the style sheet is usable when the viewport is between 500 and 800 pixels wide.
+
+     {{css path="index.css" media="screen and (min-width: 500px) and (max-width: 800px)"}}
+
+
+
+Constructor
+-----------
+
+.. js:class:: CssHelper()
+
+
+
+
+
+
+
+
+
+Methods
+-------
+
+..
+   class-methods
+
+
+helper
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: CssHelper#helper(options)
+
+
+    
+    :param Object options: 
+        the css file options 
+    
+    :param String options.name: 
+        the component id 
+    
+    :param String options.version: 
+        the component version 
+    
+    :param String options.path: 
+        the path to the css file. E.g. index.css 
+    
+    :param String options.media: 
+        the CSS media query. 
+    
+
+
+    
+    :throws RainError:
+        : precondition failed when the context has the wrong keys
+    
+
+
+    
+    :returns String:
+        Empty string 
+    
+
+
+The helper receives in the context information about the injected css file.
+
+To determine the path for the css file, the following steps are performed:
+
+1. if the component key is not specified, the current component id will be used.
+
+2. if the version is not specified and the component key is present, the latest version for the
+   component at step 1 is found and used.
+
+3. The file has to be located in ``client/css/``.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    
+
+
+

@@ -1,0 +1,472 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Rain 0.33.0 Documentation &mdash; Rain 0.33.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.33.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Rain 0.33.0 documentation" href="#" />
+    <link rel="next" title="Installing RAIN" href="getting_started/installation.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="getting_started/installation.html" title="Installing RAIN"
+             accesskey="N">next</a> |</li>
+        <li><a href="#">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="rain-release-documentation">
+<h1>Rain 0.33.0 Documentation<a class="headerlink" href="#rain-release-documentation" title="Permalink to this headline">¶</a></h1>
+<p>Welcome! This is the documentation for Rain 0.33.0</p>
+<div class="section" id="getting-started">
+<h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started/installation.html">Installing RAIN</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/installation.html#installing-node-js-npm">Installing node.js &amp; npm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/installation.html#rain-sdk">RAIN SDK</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/installation.html#rain-from-source">RAIN from source</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started/rain_sdk_tutorial.html">RAIN SDK Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/rain_sdk_tutorial.html#rain-sdk-basic-usage">RAIN SDK Basic usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/rain_sdk_tutorial.html#rain-sdk-create-project">RAIN SDK Create project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/rain_sdk_tutorial.html#rain-sdk-debug-mode">RAIN SDK Debug mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/rain_sdk_tutorial.html#rain-sdk-generate-localization-files-from-source">RAIN SDK Generate Localization files from source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/rain_sdk_tutorial.html#rain-sdk-minify">RAIN SDK Minify</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/rain_sdk_tutorial.html#rain-sdk-generate-nginx-configuration-file">RAIN SDK Generate NginX Configuration File</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started/configuration.html">Server and component configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/configuration.html#server-configuration">Server configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/configuration.html#component-configuration">Component configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/configuration.html#sensitive-information-configuration">Sensitive information configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/configuration.html#language-configuration">Language configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="server/component_descriptor.html">RAIN component descriptor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server/component_descriptor.html#complete-descriptor-example">Complete descriptor example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/component_descriptor.html#module-definition">Module definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/component_descriptor.html#views-definition">Views definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/component_descriptor.html#intents-definition">Intents definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/component_descriptor.html#permissions-definition">Permissions definition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started/coding_guidelines.html">Coding Guidelines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/coding_guidelines.html#identifiers">Identifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/coding_guidelines.html#style">Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/coding_guidelines.html#best-practices">Best Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/coding_guidelines.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/coding_guidelines.html#patterns">Patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/coding_guidelines.html#error-handling">Error Handling</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started/documenting.html">Documenting Rain</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/documenting.html#revealing-module-pattern">Revealing module pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/documenting.html#the-constructor-pattern">The constructor pattern</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/documenting.html#document-your-code">Document your code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/documenting.html#documenting-parameters">Documenting parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/documenting.html#documenting-errors">Documenting errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/documenting.html#document-return-values">Document return values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/documenting.html#adding-usage-examples">Adding usage examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started/node_programming_best_practices.html">Node programming best practices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/node_programming_best_practices.html#should-do">Should do</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started/node_programming_best_practices.html#shouldn-t-do">Shouldn&#8217;t do</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="client-side-modules">
+<h2>Client side modules<a class="headerlink" href="#client-side-modules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="client/client_messaging.html">Messaging API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="client/client_messaging.html#intents">Intents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client/client_messaging.html#intents-lifecycle">Intents lifecycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client/client_messaging.html#intents-usage">Intents Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client/client_messaging.html#publish-subscriber">Publish / Subscriber</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="client/intents.html">Intents Client API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="client/intents.html#intents-technical-details">Intents technical details</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="client/requirejs.html">Client runtime dependencies</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="client/requirejs.html#client-side-controller">Client side controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client/requirejs.html#including-other-modules">Including other modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client/requirejs.html#why-do-we-even-use-requirejs">Why do we even use requirejs?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="client/websockets.html">Client side websockets API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="client/websockets.html#websockets-example">Websockets example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client/websockets.html#cookie-expiration">Cookie Expiration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="client/client_rendering.html">Client rendering</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="client/client_rendering.html#usage">Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="client/rendering.html">Rendering</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="client/rendering.html#transport-layer">Transport Layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client/rendering.html#component-lifecycle">Component lifecycle</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="client/localization.html">Text localization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="client/localization.html#text-localization-on-the-client-side">Text localization on the client-side</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="server/minification.html">RAIN Minification Process</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server/minification.html#general-rules">General Rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/minification.html#javascript-minification">Javascript Minification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/minification.html#css-minification">CSS Minification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/minification.html#running-the-minify-command">Running the minify command:</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="apis">
+<h3>APIs<a class="headerlink" href="#apis" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="client/api/AsyncController.html">Class AsyncController</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client/api/ClientRenderer.html">Class ClientRenderer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client/api/ClientStorage.html">Class ClientStorage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client/api/Context.html">Class Context</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client/api/CssRegistry.html">Class CssRegistry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client/api/CssRenderer.html">Class CssRenderer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client/api/EventEmitter.html">Class EventEmitter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client/api/FlowLayout.html">Class FlowLayout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client/api/LanguageSelector.html">Class LanguageSelector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client/api/Layout.html">Class Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client/api/RuleSet.html">Class RuleSet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client/api/SocketHandler.html">Class SocketHandler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client/api/Stylesheet.html">Class Stylesheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client/api/Util.html">Class Util</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="server-side-modules">
+<h2>Server side modules<a class="headerlink" href="#server-side-modules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="server/messaging_intents.html">Intents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server/messaging_intents.html#defining-intents">Defining intents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/messaging_intents.html#intents-mapped-on-views">Intents mapped on views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/messaging_intents.html#intents-mapped-on-server-side-code">Intents mapped on server side code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="server/websockets.html">RAIN Websockets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server/websockets.html#rain-websockets-interface">RAIN Websockets Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="server/component_descriptor.html">RAIN component descriptor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server/component_descriptor.html#complete-descriptor-example">Complete descriptor example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/component_descriptor.html#module-definition">Module definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/component_descriptor.html#views-definition">Views definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/component_descriptor.html#intents-definition">Intents definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/component_descriptor.html#permissions-definition">Permissions definition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="server/component_versioning.html">Component Versioning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server/component_versioning.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/component_versioning.html#describing-versions">Describing versions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/component_versioning.html#version-matching">Version matching</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="server/handlebars/component_helper.html">Component Helper</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server/handlebars/component_helper.html#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/handlebars/component_helper.html#html-output">HTML Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/handlebars/component_helper.html#error-cases">Error Cases</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="server/handlebars/css_helper.html">CSS Helper</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server/handlebars/css_helper.html#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/handlebars/css_helper.html#html-output">HTML output</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="server/handlebars/how_to_write_a_helper.html">Guidelines for writing a Handlebars helper</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server/handlebars/how_to_write_a_helper.html#helper-structure">Helper structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/handlebars/how_to_write_a_helper.html#helper-location">Helper location</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/handlebars/how_to_write_a_helper.html#documentation">Documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="server/authorization.html">Authorization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server/authorization.html#permissions-based">Permissions based</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/authorization.html#intents">Intents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/authorization.html#dynamic-conditions">Dynamic Conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/authorization.html#authentication-condition">Authentication condition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="server/platform_language.html">Platform language</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server/platform_language.html#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/platform_language.html#using-the-language">Using the language</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="server/localization.html">RAIN Localization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server/localization.html#text-localization">Text localization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/localization.html#resource-urls">Resource URLs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/localization.html#views-localization">Views localization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="server/logging_guidelines.html">Logging guidelines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server/logging_guidelines.html#logging-levels">Logging levels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/logging_guidelines.html#what-to-log">What to log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/logging_guidelines.html#component-logging">Component logging</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="server/sdk_architecture.html">RAIN SDK Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/cluster.html">RAIN Clustering</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server/cluster.html#cluster-module-deficeincies">Cluster module deficeincies</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="server/nginx_static_routes.html">NginX static routes server</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server/nginx_static_routes.html#nginx">NginX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/nginx_static_routes.html#integrating-with-rain">Integrating with RAIN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/nginx_static_routes.html#using-nginx-in-production">Using NginX in production</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="server/routes.html">RAIN Routes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server/routes.html#handle-http-methods-module">Handle Http Methods Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/routes.html#controller-routes">Controller Routes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/routes.html#css-routes">CSS Routes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/routes.html#javascript-routes">Javascript Routes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/routes.html#locale-routes">Locale Routes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/routes.html#resource-routes">Resource Routes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/routes.html#view-routes">View Routes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="id1">
+<h3>APIs<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="server/api/Appender.html">Class Appender</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/Authorization.html">Namespace Authorization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/BaseSession.html">Class BaseSession</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/BaseSessionStore.html">Class BaseSessionStore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/ComponentHelper.html">Class ComponentHelper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/ComponentRegistry.html">Class ComponentRegistry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/Configuration.html">Class Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/Configurator.html">Class Configurator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/ConsoleAppender.html">Class ConsoleAppender</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/ContainerHelper.html">Class ContainerHelper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/CssHelper.html">Class CssHelper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/CurrencyHelper.html">Class CurrencyHelper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/DataLayer.html">Class DataLayer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/DateHelper.html">Class DateHelper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/DemoIdentityProvider.html">Class DemoIdentityProvider</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/Environment.html">Class Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/ErrorHandler.html">Class ErrorHandler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/Event.html">Class Event</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/FileAppender.html">Class FileAppender</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/Format.html">Class Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/Identity.html">Namespace Identity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/IdentityProvider.html">Class IdentityProvider</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/IntentsRegistry.html">Class IntentsRegistry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/Internationalisation.html">Namespace Internationalisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/ItemHelper.html">Class ItemHelper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/Layout.html">Class Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/Logger.html">Class Logger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/MemoryStore.html">Class MemoryStore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/ModuleLoader.html">Class ModuleLoader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/Monitoring.html">Class Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/MonitoringAdapter.html">Class MonitoringAdapter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/NumberHelper.html">Class NumberHelper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/ParsedObject.html">Class ParsedObject</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/PartialHelper.html">Class PartialHelper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/PatternLayout.html">Class PatternLayout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/PercentageHelper.html">Class PercentageHelper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/PoUtils.html">Class PoUtils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/PrecompileLess.html">Class PrecompileLess</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/RangeHelper.html">Class RangeHelper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/Renderer.html">Class Renderer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/Server.html">Class Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/Session.html">Class Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/SocketHandlers.html">Namespace SocketHandlers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/SocketWatcher.html">Class SocketWatcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/StackTraceFormatter.html">Class StackTraceFormatter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/SyslogAppender.html">Class SyslogAppender</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/TimeHelper.html">Class TimeHelper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/Translation.html">Class Translation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/TranslationHelper.html">Class TranslationHelper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/TranslationPluralHelper.html">Class TranslationPluralHelper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/URLHelper.html">Class URLHelper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server/api/User.html">Class User</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="components">
+<h2>Components<a class="headerlink" href="#components" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="server/error_component.html">Error component</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server/error_component.html#usage">Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="server/placeholder.html">Placeholder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server/placeholder.html#configuration">Configuration</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="feature-proposals">
+<h2>Feature Proposals<a class="headerlink" href="#feature-proposals" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-client-contexts.html">Client Side Contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-client-language-a.html">Client Language Runtime (Proposal A)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-client-language-inline-editing.html">Client Language Inline Editing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-client-messaging-a.html">Client Runtime: Messaging API (Proposal A)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-client-runtime-a.html">Client Runtime (Proposal A)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-client-storage.html">Client Runtime Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-css-transformation.html">CSS Transformation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-dashboard-component-model.html">Dashboard Component Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-deployment.html">Automatic Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-elastic-architecture.html">Elastic architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-error-handling.html">Error Handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-feature-template.html">Features proposal template</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-fragments-configuration.html">Fragments Configuration Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-hijax-strategy.html">Hijax introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-instances.html">View Instances</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-rain-authorization.html">RAIN authorization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-rain-cloud-action.html">RAIN Cloud In Action</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-remote-aggregation.html">Remote aggregation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-rendering-layer.html">Rendering Process</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-server-language.html">Server Translations System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-text-transport.html">Text transport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-view-authorization.html">View authorization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/Features-proposal-view-modes.html">View modes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/RAIN_IDE.html">RAIN IDE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/code_coverage.html">Code Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/css_rendering.html">CSS Rendering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/distributed_rendering.html">Distributed Rendering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/distributed_websockets.html">Distributed Websockets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/minification.html">JavaScript and CSS Minification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proposals/nginx_static_routes.html">NginX static routes server</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="changelog">
+<h2>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Rain 0.33.0 Documentation</a><ul>
+<li><a class="reference internal" href="#getting-started">Getting started</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#client-side-modules">Client side modules</a><ul>
+<li><a class="reference internal" href="#apis">APIs</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#server-side-modules">Server side modules</a><ul>
+<li><a class="reference internal" href="#id1">APIs</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#components">Components</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#feature-proposals">Feature Proposals</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#changelog">Changelog</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="getting_started/installation.html"
+                        title="next chapter">Installing RAIN</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="getting_started/installation.html" title="Installing RAIN"
+             >next</a> |</li>
+        <li><a href="#">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,169 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Rendering &mdash; Rain 0.33.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.33.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Rain 0.33.0 documentation" href="../index.html" />
+    <link rel="next" title="Text localization" href="localization.html" />
+    <link rel="prev" title="Client rendering" href="client_rendering.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="localization.html" title="Text localization"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="client_rendering.html" title="Client rendering"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="rendering">
+<h1>Rendering<a class="headerlink" href="#rendering" title="Permalink to this headline">¶</a></h1>
+<p>The rendering process in RAIN is an asynchronous process. Each component is sent to the client as
+soon as its content is ready. First a placeholder is sent for the component. This placeholder
+displays a loading icon. When the content is ready, the placeholder is replaced with the actual
+markup for the component.</p>
+<p>The whole rendering process consists of 3 parts:</p>
+<ol class="arabic simple">
+<li>Template Compiler: the view templates are compiled when the server starts.</li>
+<li>Data Layer: constructs the data that will be used to execute the compiled template.</li>
+<li>Renderer: in this step the compiled template is executed with the data from the data layer.</li>
+</ol>
+<div class="section" id="transport-layer">
+<h2>Transport Layer<a class="headerlink" href="#transport-layer" title="Permalink to this headline">¶</a></h2>
+<p>The transport layer is the bridge between the rendering process that happens on the server and the
+client rendering engine. When the user makes a request, the RAIN server first sends the bootstrap
+which contains the basic HTML markup for the page, the client rendering engine and the RequireJS
+and jQuery libraries. The HTTP connection is kept open and the components are sent to the client
+when they are ready. The connection is closed after the last component was sent.</p>
+<p>The components are sent to the client as JSON objects. These objects contains the markup
+for the component, the css dependencies and the client-side controller path. The client rendering
+engine receives the JSON and adds the component to the page.</p>
+</div>
+<div class="section" id="component-lifecycle">
+<h2>Component lifecycle<a class="headerlink" href="#component-lifecycle" title="Permalink to this headline">¶</a></h2>
+<p>The lifecycle in RAIN contains 4 stages: <tt class="docutils literal"><span class="pre">init</span></tt>, <tt class="docutils literal"><span class="pre">start</span></tt>, <tt class="docutils literal"><span class="pre">error</span></tt> and <tt class="docutils literal"><span class="pre">destroy</span></tt>. You can
+execute code in each of this stages by adding a method with the same name in the client-side
+controller. After these methods end their execution an event with the same name is emitted.</p>
+<p>Other components can listen to these events, so that they know when it&#8217;s safe to use their API or
+when something changed with the component. Because the lifecycle methods can have asynchronous
+logic we have to have a way to let the framework know when the component should change the state.</p>
+<p>For this we have implemented the following logic:</p>
+<ul class="simple">
+<li>the lifecycle method is synchronous if it doesn&#8217;t return a value. The event will be emitted
+immediately.</li>
+<li>the lifecycle method is asynchronous if it returns a <tt class="docutils literal"><span class="pre">Promise</span></tt>. This promise will be resolved
+internally by the developer and the framework will wait for that before changing the component
+lifecycle state. The event will be emitted after the promise was resolved.</li>
+</ul>
+<p>The <tt class="docutils literal"><span class="pre">init</span></tt> method is called when the controller object is constructed. At this stage the markup
+for the component is not yet in place.</p>
+<p>The <tt class="docutils literal"><span class="pre">start</span></tt> method is called after the markup is inserted in the DOM. At this stage you can
+manipulate the markup of the component.</p>
+<p>The <tt class="docutils literal"><span class="pre">error</span></tt> method is called just before start if the data layer encountered an error. At this
+stage the markup of the component is in place. This method receives the error as parameter.</p>
+<p>The <tt class="docutils literal"><span class="pre">destroy</span></tt> method is invoked when the component is removed from the page.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="../server/api/DataLayer.html"><em>Class DataLayer</em></a></dt>
+<dd>Documentation describing how the data layer works</dd>
+<dt><a class="reference internal" href="client_rendering.html"><em>Client rendering</em></a></dt>
+<dd>Describes how the Client Rendering works</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Rendering</a><ul>
+<li><a class="reference internal" href="#transport-layer">Transport Layer</a></li>
+<li><a class="reference internal" href="#component-lifecycle">Component lifecycle</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="client_rendering.html"
+                        title="previous chapter">Client rendering</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="localization.html"
+                        title="next chapter">Text localization</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="localization.html" title="Text localization"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="client_rendering.html" title="Client rendering"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

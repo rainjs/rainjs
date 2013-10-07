@@ -1,0 +1,258 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class BaseSession &mdash; Rain 0.33.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.33.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Rain 0.33.0 documentation" href="../../index.html" />
+    <link rel="next" title="Class BaseSessionStore" href="BaseSessionStore.html" />
+    <link rel="prev" title="Namespace Authorization" href="Authorization.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="BaseSessionStore.html" title="Class BaseSessionStore"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Authorization.html" title="Namespace Authorization"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="class-basesession">
+<h1>Class BaseSession<a class="headerlink" href="#class-basesession" title="Permalink to this headline">¶</a></h1>
+<p>Get / set and remove session keys from / to the session store.
+It keeps track of the updated and removed keys, information that is used by the session store
+to make partial updates.</p>
+<div class="section" id="constructor">
+<h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="BaseSession">
+<em class="property">class </em><tt class="descname">BaseSession</tt><big>(</big><em>session</em>, <em>componentId</em><big>)</big><a class="headerlink" href="#BaseSession" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>session</strong> (<em>Object</em>) &#8211; the session objects for the specified component</li>
+<li><strong>componentId</strong> (<em>String</em>) &#8211; the component configuration</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="get">
+<h3>get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="BaseSession#get">
+<tt class="descname">BaseSession#get</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#BaseSession#get" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>key</strong> (<em>String</em>) &#8211; the key</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns Object:</th><td class="field-body"><p class="first last">the value</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Get the value associated with the specified key.</p>
+</div>
+<div class="section" id="isdirty">
+<h3>isDirty<a class="headerlink" href="#isdirty" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="BaseSession#isDirty">
+<tt class="descname">BaseSession#isDirty</tt><big>(</big><big>)</big><a class="headerlink" href="#BaseSession#isDirty" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Returns Boolean:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Verifies if there were any changes in the current session.</p>
+</div>
+<div class="section" id="isempty">
+<h3>isEmpty<a class="headerlink" href="#isempty" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="BaseSession#isEmpty">
+<tt class="descname">BaseSession#isEmpty</tt><big>(</big><big>)</big><a class="headerlink" href="#BaseSession#isEmpty" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Returns Boolean:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Indicates if this session has data in the store.</p>
+</div>
+<div class="section" id="remove">
+<h3>remove<a class="headerlink" href="#remove" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="BaseSession#remove">
+<tt class="descname">BaseSession#remove</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#BaseSession#remove" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>key</strong> (<em>String</em>) &#8211; the key</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Remove the specified key from the session.</p>
+</div>
+<div class="section" id="removeall">
+<h3>removeAll<a class="headerlink" href="#removeall" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="BaseSession#removeAll">
+<tt class="descname">BaseSession#removeAll</tt><big>(</big><big>)</big><a class="headerlink" href="#BaseSession#removeAll" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Remove all keys.</p>
+</div>
+<div class="section" id="set">
+<h3>set<a class="headerlink" href="#set" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="BaseSession#set">
+<tt class="descname">BaseSession#set</tt><big>(</big><em>key</em>, <em>the</em><big>)</big><a class="headerlink" href="#BaseSession#set" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>key</strong> (<em>String</em>) &#8211; the key to save</li>
+<li><strong>the</strong> (<em>Object</em>) &#8211; key&#8217;s value</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Sets a value for the specified key.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class BaseSession</a><ul>
+<li><a class="reference internal" href="#constructor">Constructor</a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#get">get</a></li>
+<li><a class="reference internal" href="#isdirty">isDirty</a></li>
+<li><a class="reference internal" href="#isempty">isEmpty</a></li>
+<li><a class="reference internal" href="#remove">remove</a></li>
+<li><a class="reference internal" href="#removeall">removeAll</a></li>
+<li><a class="reference internal" href="#set">set</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Authorization.html"
+                        title="previous chapter">Namespace Authorization</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="BaseSessionStore.html"
+                        title="next chapter">Class BaseSessionStore</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="BaseSessionStore.html" title="Class BaseSessionStore"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Authorization.html" title="Namespace Authorization"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

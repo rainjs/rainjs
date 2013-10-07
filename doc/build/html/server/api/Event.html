@@ -1,0 +1,253 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class Event &mdash; Rain 0.33.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.33.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Rain 0.33.0 documentation" href="../../index.html" />
+    <link rel="next" title="Class FileAppender" href="FileAppender.html" />
+    <link rel="prev" title="Class ErrorHandler" href="ErrorHandler.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="FileAppender.html" title="Class FileAppender"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ErrorHandler.html" title="Class ErrorHandler"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="class-event">
+<h1>Class Event<a class="headerlink" href="#class-event" title="Permalink to this headline">¶</a></h1>
+<p>Represents a logger event.</p>
+<div class="section" id="constructor">
+<h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Event">
+<em class="property">class </em><tt class="descname">Event</tt><big>(</big><em>level</em>, <em>message</em>, <em>error</em>, <em>logger</em>, <em>source</em><big>)</big><a class="headerlink" href="#Event" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>level</strong> (<em>Number</em>) &#8211; The level of the event.</li>
+<li><strong>message</strong> (<em>String</em>) &#8211; The log message.</li>
+<li><strong>error</strong> (<em>RainError</em>) &#8211; The error associated with the log message.</li>
+<li><strong>logger</strong> (<em>String</em>) &#8211; the logger name</li>
+<li><strong>source</strong> (<em>String</em>) &#8211; the log statement location: &#8216;server&#8217; or &#8216;client&#8217;</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="date">
+<h3>date<a class="headerlink" href="#date" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Event#date">
+<tt class="descname">Event#date</tt><big>(</big><big>)</big><a class="headerlink" href="#Event#date" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns Date:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Gets the date at which the event was generated.</p>
+</div>
+<div class="section" id="error">
+<h3>error<a class="headerlink" href="#error" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Event#error">
+<tt class="descname">Event#error</tt><big>(</big><big>)</big><a class="headerlink" href="#Event#error" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Returns RainError:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Gets the error associated with the log message.</p>
+</div>
+<div class="section" id="level">
+<h3>level<a class="headerlink" href="#level" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Event#level">
+<tt class="descname">Event#level</tt><big>(</big><big>)</big><a class="headerlink" href="#Event#level" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns Number:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Gets the event level.</p>
+</div>
+<div class="section" id="logger">
+<h3>logger<a class="headerlink" href="#logger" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Event#logger">
+<tt class="descname">Event#logger</tt><big>(</big><big>)</big><a class="headerlink" href="#Event#logger" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns String:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Gets the name of the logger.</p>
+</div>
+<div class="section" id="message">
+<h3>message<a class="headerlink" href="#message" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Event#message">
+<tt class="descname">Event#message</tt><big>(</big><big>)</big><a class="headerlink" href="#Event#message" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns String:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Gets the event message.</p>
+</div>
+<div class="section" id="source">
+<h3>source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Event#source">
+<tt class="descname">Event#source</tt><big>(</big><big>)</big><a class="headerlink" href="#Event#source" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns String:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Gets the event source.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class Event</a><ul>
+<li><a class="reference internal" href="#constructor">Constructor</a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#date">date</a></li>
+<li><a class="reference internal" href="#error">error</a></li>
+<li><a class="reference internal" href="#level">level</a></li>
+<li><a class="reference internal" href="#logger">logger</a></li>
+<li><a class="reference internal" href="#message">message</a></li>
+<li><a class="reference internal" href="#source">source</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ErrorHandler.html"
+                        title="previous chapter">Class ErrorHandler</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="FileAppender.html"
+                        title="next chapter">Class FileAppender</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="FileAppender.html" title="Class FileAppender"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ErrorHandler.html" title="Class ErrorHandler"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,248 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class IdentityProvider &mdash; Rain 0.33.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.33.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Rain 0.33.0 documentation" href="../../index.html" />
+    <link rel="next" title="Class IntentsRegistry" href="IntentsRegistry.html" />
+    <link rel="prev" title="Namespace Identity" href="Identity.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="IntentsRegistry.html" title="Class IntentsRegistry"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Identity.html" title="Namespace Identity"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="class-identityprovider">
+<h1>Class IdentityProvider<a class="headerlink" href="#class-identityprovider" title="Permalink to this headline">¶</a></h1>
+<p>Abstract identity provider class. Authenticates the user and stores/retrieves the user information
+to/from session.</p>
+<dl class="docutils">
+<dt>Implementations of this class should override two methods:</dt>
+<dd><ul class="first last simple">
+<li><tt class="docutils literal"><span class="pre">_authenticate</span></tt>: provides an implementation for user authentication.</li>
+<li><tt class="docutils literal"><span class="pre">_getUserClass</span></tt>: returns the constructor for the user class (the default implementation
+returns the constructor for the base user class).</li>
+</ul>
+</dd>
+</dl>
+<div class="section" id="constructor">
+<h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="IdentityProvider">
+<em class="property">class </em><tt class="descname">IdentityProvider</tt><big>(</big><em>session</em><big>)</big><a class="headerlink" href="#IdentityProvider" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>session</strong> (<a class="reference internal" href="Session.html#Session" title="Session"><em>Session</em></a>) &#8211; the session for which to create the identity provider instance</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="get">
+<h3>get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="IdentityProvider.get">
+<tt class="descclassname">IdentityProvider.</tt><tt class="descname">get</tt><big>(</big><em>session</em><big>)</big><a class="headerlink" href="#IdentityProvider.get" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>session</strong> (<a class="reference internal" href="Session.html#Session" title="Session"><em>Session</em></a>) &#8211; the session for which to create the identity provider instance</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Returns IdentityProvider:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">an IdentityProvider instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Reads the path of the actual identity provider implementation and creates a new instance.</p>
+</div>
+<div class="section" id="getuser">
+<h3>getUser<a class="headerlink" href="#getuser" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="IdentityProvider#getUser">
+<tt class="descname">IdentityProvider#getUser</tt><big>(</big><big>)</big><a class="headerlink" href="#IdentityProvider#getUser" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns User:</th><td class="field-body">the user object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Gets the user associated with the current session.</p>
+</div>
+<div class="section" id="login">
+<h3>login<a class="headerlink" href="#login" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="IdentityProvider#login">
+<tt class="descname">IdentityProvider#login</tt><big>(</big><em>username</em>, <em>password</em><big>)</big><a class="headerlink" href="#IdentityProvider#login" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>username</strong> (<em>String</em>) &#8211; the username</li>
+<li><strong>password</strong> (<em>String</em>) &#8211; the password</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Returns Promise:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">a promise that resolves with the user object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Authenticates the user and stores the user object on the session.</p>
+</div>
+<div class="section" id="logout">
+<h3>logout<a class="headerlink" href="#logout" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="IdentityProvider#logout">
+<tt class="descname">IdentityProvider#logout</tt><big>(</big><big>)</big><a class="headerlink" href="#IdentityProvider#logout" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Returns Promise:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">a promise that is resolved after the session is destroyed</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Destroys the session.</p>
+</div>
+<div class="section" id="updateuser">
+<h3>updateUser<a class="headerlink" href="#updateuser" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="IdentityProvider#updateUser">
+<tt class="descname">IdentityProvider#updateUser</tt><big>(</big><big>)</big><a class="headerlink" href="#IdentityProvider#updateUser" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Sets the user back on the session object if it was modified.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class IdentityProvider</a><ul>
+<li><a class="reference internal" href="#constructor">Constructor</a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#get">get</a></li>
+<li><a class="reference internal" href="#getuser">getUser</a></li>
+<li><a class="reference internal" href="#login">login</a></li>
+<li><a class="reference internal" href="#logout">logout</a></li>
+<li><a class="reference internal" href="#updateuser">updateUser</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Identity.html"
+                        title="previous chapter">Namespace Identity</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="IntentsRegistry.html"
+                        title="next chapter">Class IntentsRegistry</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="IntentsRegistry.html" title="Class IntentsRegistry"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Identity.html" title="Namespace Identity"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,234 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>RAIN SDK Tutorial &mdash; Rain 0.33.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.33.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Rain 0.33.0 documentation" href="../index.html" />
+    <link rel="next" title="Server and component configuration" href="configuration.html" />
+    <link rel="prev" title="Installing RAIN" href="installation.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="configuration.html" title="Server and component configuration"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installing RAIN"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="rain-sdk-tutorial">
+<h1>RAIN SDK Tutorial<a class="headerlink" href="#rain-sdk-tutorial" title="Permalink to this headline">¶</a></h1>
+<p>In this section you can find the tutorial for creating projects with RAIN SDK.
+Please read <a class="reference internal" href="installation.html"><em>Installing RAIN</em></a> before this.</p>
+<div class="section" id="rain-sdk-basic-usage">
+<h2>RAIN SDK Basic usage<a class="headerlink" href="#rain-sdk-basic-usage" title="Permalink to this headline">¶</a></h2>
+<p>RAIN gives the developer two commands:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">rain</span></tt> - used to create projects, components</li>
+<li><tt class="docutils literal"><span class="pre">raind</span></tt> - used to start the server</li>
+</ul>
+<p>Below you can find a bunch of useful commands to use:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="nx">rain</span> <span class="o">--</span><span class="nx">help</span>
+<span class="nx">raind</span> <span class="o">--</span><span class="nx">help</span>
+
+<span class="nx">Usage</span><span class="o">:</span> <span class="nx">rain</span> <span class="o">&lt;</span><span class="nx">command</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="nx">options</span><span class="o">&gt;</span>
+       <span class="nx">raind</span> <span class="o">&lt;</span><span class="nx">options</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="rain-sdk-create-project">
+<h2>RAIN SDK Create project<a class="headerlink" href="#rain-sdk-create-project" title="Permalink to this headline">¶</a></h2>
+<p>You can easily use RAIN SDK to create projects and components. To create a new project
+execute the following commands:</p>
+<ol class="arabic simple">
+<li>Go to you workspace folder</li>
+<li>rain create-project &lt;project-name&gt;</li>
+<li>cd &lt;project-name&gt;</li>
+<li>raind</li>
+</ol>
+<p>Now you have your first RAIN project.
+Try the following url in your browser: <a class="reference external" href="http://localhost:1337/hello_world/index">http://localhost:1337/hello_world/index</a>.</p>
+</div>
+<div class="section" id="rain-sdk-debug-mode">
+<h2>RAIN SDK Debug mode<a class="headerlink" href="#rain-sdk-debug-mode" title="Permalink to this headline">¶</a></h2>
+<p>RAIN provides a debug mode for the server-side. You only have to start the server with &#8211;debug.
+It automatically connects the Node native debugger with the port 5858.</p>
+<p>If you want to use a graphical debugger then you can install the &#8220;node-inspector&#8221; NPM module.</p>
+<p>For Linux:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="nx">sudo</span> <span class="nx">npm</span> <span class="nx">install</span> <span class="nx">node</span><span class="o">-</span><span class="nx">inspector</span> <span class="o">-</span><span class="nx">g</span>
+</pre></div>
+</div>
+<p>For Windows:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="nx">npm</span> <span class="nx">install</span> <span class="nx">node</span><span class="o">-</span><span class="nx">inspector</span> <span class="o">-</span><span class="nx">g</span>
+</pre></div>
+</div>
+<p>Now start the node-inspector in the command line with <tt class="docutils literal"><span class="pre">node-inspector</span></tt> and you can access
+the debugger with <a class="reference external" href="http://localhost:8080">http://localhost:8080</a>.</p>
+</div>
+<div class="section" id="rain-sdk-generate-localization-files-from-source">
+<h2>RAIN SDK Generate Localization files from source<a class="headerlink" href="#rain-sdk-generate-localization-files-from-source" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>RAIN SDK</strong> provides a method to generate localization files by parsing the sources for
+the components, and generating <tt class="docutils literal"><span class="pre">.po</span></tt> for the specified locale through the <tt class="docutils literal"><span class="pre">rain</span> <span class="pre">generate-po-files</span></tt>
+command.</p>
+<p>This command parses the translation ids used inside components and generates apropriate <tt class="docutils literal"><span class="pre">.po</span></tt> files
+inside the components <tt class="docutils literal"><span class="pre">locale</span></tt> folders that can be later translated.</p>
+<p>Usage:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="nx">$</span> <span class="nx">rain</span> <span class="nx">generate</span><span class="o">-</span><span class="nx">po</span><span class="o">-</span><span class="nx">files</span> <span class="o">&lt;</span><span class="nx">output</span><span class="o">-</span><span class="nx">locales</span><span class="o">&gt;</span> <span class="p">[</span><span class="nx">component</span><span class="o">-</span><span class="nx">id</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="highlight-js"><pre># generate en_GB and de_DE po files for all components
+$ rain generate-po-files "en_GB,de_DE"
+
+# generate en_GB .po files for the example component, version 1.0
+$ rain generate-po-files "en_GB" "example;1.0"</pre>
+</div>
+</div>
+<div class="section" id="rain-sdk-minify">
+<h2>RAIN SDK Minify<a class="headerlink" href="#rain-sdk-minify" title="Permalink to this headline">¶</a></h2>
+<p>The rain SDK provides a method to generate a minified RAIN project.</p>
+<p>All the js and css files from the client folder of components will be minified into
+an <tt class="docutils literal"><span class="pre">index.min.js</span></tt>/<tt class="docutils literal"><span class="pre">index.min.css</span></tt> file.</p>
+<p>The new minified project is generated at the path specified in
+the build.json file that can look like this:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s2">&quot;additionalProjects&quot;</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;../rainjs&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;buildPath&quot;</span><span class="o">:</span> <span class="s2">&quot;../min/sprint&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cssMinification&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="s2">&quot;javascriptMinification&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="s2">&quot;themes&quot;</span><span class="o">:</span> <span class="p">{</span>
+            <span class="s2">&quot;diy&quot;</span><span class="o">:</span> <span class="s2">&quot;diy&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cp&quot;</span><span class="o">:</span> <span class="s2">&quot;cp&quot;</span>
+     <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>If the <tt class="docutils literal"><span class="pre">buildPath</span></tt> key is missing then all the minified files will be generated in
+the current project, in each component folder.</p>
+<p>The <tt class="docutils literal"><span class="pre">themes</span></tt> key specifies the current css themes used in the project and their folder name.</p>
+<p>Example:</p>
+<div class="highlight-js"><pre>#generate the minified project (with the above configuration both javascript and css files will be minified)
+$ rain minify</pre>
+</div>
+<p>A detailed description of this process can be found in
+the <a class="reference internal" href="../server/minification.html"><em>RAIN Minification Process</em></a> page.</p>
+</div>
+<div class="section" id="rain-sdk-generate-nginx-configuration-file">
+<h2>RAIN SDK Generate NginX Configuration File<a class="headerlink" href="#rain-sdk-generate-nginx-configuration-file" title="Permalink to this headline">¶</a></h2>
+<p>The rain SDK provides a method to generate a configuration file for NginX.</p>
+<p>We are using NginX to serve static files/routes through NginX and reduce the load on the
+RAIN server. We have chosen to reconfigure the HaProxy to redirect static routes requests
+to NginX server and the rest of the requests to the RAIN server. The <tt class="docutils literal"><span class="pre">generate-nginx-conf</span></tt>
+command helps you to generate an NginX configuration file so it knows how to serve the requests
+and mapping the components with different routes.</p>
+<p>Examples:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="nx">$</span> <span class="nx">rain</span> <span class="nx">generate</span><span class="o">-</span><span class="nx">nginx</span><span class="o">-</span><span class="nx">conf</span>
+</pre></div>
+</div>
+<p>Optional parameters can be provided in the build.json file.
+If no option is specified in the build.json, it will use <tt class="docutils literal"><span class="pre">bin/conf/nginx.conf</span></tt> from RAIN to generate
+a <tt class="docutils literal"><span class="pre">nginx.conf</span></tt> file in the project root.</p>
+<p>The optional parameters are <tt class="docutils literal"><span class="pre">sourcePath</span></tt>, <tt class="docutils literal"><span class="pre">destinationPath</span></tt>, <tt class="docutils literal"><span class="pre">productionPath</span></tt>
+and <tt class="docutils literal"><span class="pre">additionalProjectsProductionPaths</span></tt>.</p>
+<p>A detailed description of this command can be found in
+the <a class="reference internal" href="../server/nginx_static_routes.html"><em>NginX static routes server</em></a> page.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">RAIN SDK Tutorial</a><ul>
+<li><a class="reference internal" href="#rain-sdk-basic-usage">RAIN SDK Basic usage</a></li>
+<li><a class="reference internal" href="#rain-sdk-create-project">RAIN SDK Create project</a></li>
+<li><a class="reference internal" href="#rain-sdk-debug-mode">RAIN SDK Debug mode</a></li>
+<li><a class="reference internal" href="#rain-sdk-generate-localization-files-from-source">RAIN SDK Generate Localization files from source</a></li>
+<li><a class="reference internal" href="#rain-sdk-minify">RAIN SDK Minify</a></li>
+<li><a class="reference internal" href="#rain-sdk-generate-nginx-configuration-file">RAIN SDK Generate NginX Configuration File</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="installation.html"
+                        title="previous chapter">Installing RAIN</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="configuration.html"
+                        title="next chapter">Server and component configuration</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="configuration.html" title="Server and component configuration"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installing RAIN"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

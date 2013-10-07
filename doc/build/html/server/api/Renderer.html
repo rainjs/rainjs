@@ -1,0 +1,298 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class Renderer &mdash; Rain 0.33.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.33.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Rain 0.33.0 documentation" href="../../index.html" />
+    <link rel="next" title="Class Server" href="Server.html" />
+    <link rel="prev" title="Class RangeHelper" href="RangeHelper.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Server.html" title="Class Server"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="RangeHelper.html" title="Class RangeHelper"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="class-renderer">
+<h1>Class Renderer<a class="headerlink" href="#class-renderer" title="Permalink to this headline">¶</a></h1>
+<p>Provides an API to render components.</p>
+<div class="section" id="constructor">
+<h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Renderer">
+<em class="property">class </em><tt class="descname">Renderer</tt><big>(</big><big>)</big><a class="headerlink" href="#Renderer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="clientrendererscript">
+<h3>clientRendererScript<a class="headerlink" href="#clientrendererscript" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Renderer#clientRendererScript">
+<tt class="descname">Renderer#clientRendererScript</tt><big>(</big><em>component</em><big>)</big><a class="headerlink" href="#Renderer#clientRendererScript" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>component</strong> (<em>Object</em>) &#8211; A rendered component</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns String:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Creates the script tag for the frontend.</p>
+</div>
+<div class="section" id="createinstanceid">
+<h3>createInstanceId<a class="headerlink" href="#createinstanceid" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Renderer#createInstanceId">
+<tt class="descname">Renderer#createInstanceId</tt><big>(</big><em>pInstanceId</em>, <em>staticId</em>, <em>sessionId</em><big>)</big><a class="headerlink" href="#Renderer#createInstanceId" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>pInstanceId</strong> (<em>String</em>) &#8211; Parent instance id</li>
+<li><strong>staticId</strong> (<em>String</em>) &#8211; Static id</li>
+<li><strong>sessionId</strong> (<em>String</em>) &#8211; Session id</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns String:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Creates an instance id related to the session id, parent instance id and static id</p>
+</div>
+<div class="section" id="loaddataandsend">
+<h3>loadDataAndSend<a class="headerlink" href="#loaddataandsend" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Renderer#loadDataAndSend">
+<tt class="descname">Renderer#loadDataAndSend</tt><big>(</big><em>component</em>, <em>transport</em><big>)</big><a class="headerlink" href="#Renderer#loadDataAndSend" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>component</strong> (<em>Object</em>) &#8211; The component information</li>
+<li><strong>transport</strong> (<em>HttpServerResponse|Socket</em>) &#8211; The transport layer</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Loads the data from the data layer and sends the it to get rendered and
+response over the specified transport layer.</p>
+</div>
+<div class="section" id="renderbootstrap">
+<h3>renderBootstrap<a class="headerlink" href="#renderbootstrap" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Renderer#renderBootstrap">
+<tt class="descname">Renderer#renderBootstrap</tt><big>(</big><em>mainComponent</em>, <em>viewId</em>, <em>request</em>, <em>response</em><big>)</big><a class="headerlink" href="#Renderer#renderBootstrap" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>mainComponent</strong> (<em>Object</em>) &#8211; The component which is requested</li>
+<li><strong>viewId</strong> (<em>String</em>) &#8211; The view id which is requested</li>
+<li><strong>request</strong> (<em>HttpRequest</em>) &#8211; HttpRequest object</li>
+<li><strong>response</strong> (<em>HttpResponse</em>) &#8211; HttpResponse object</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns String:</th><td class="field-body"><p class="first last">The rendered html</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Renders the bootstrap for the initialized request.
+This is only used for the HTTP transport layer.</p>
+</div>
+<div class="section" id="rendercomponent">
+<h3>renderComponent<a class="headerlink" href="#rendercomponent" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Renderer#renderComponent">
+<tt class="descname">Renderer#renderComponent</tt><big>(</big><em>opt</em><big>)</big><a class="headerlink" href="#Renderer#renderComponent" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>opt</strong> (<em>Object</em>) &#8211; Contains a map of component information</li>
+<li><strong>opt.component</strong> (<em>Object</em>) &#8211; The component which get rendered</li>
+<li><strong>opt.viewId</strong> (<em>Object</em>) &#8211; The view id of the component which get rendered</li>
+<li><strong>opt.context</strong> (<em>Object</em>) &#8211; Custom data for the templating and it contains the rain context</li>
+<li><strong>opt.error</strong> (<em>Object</em>) &#8211; Customer error handling</li>
+<li><strong>opt.fn</strong> (<em>Object</em>) &#8211; the function used to generate the contents of a block helper</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns Object:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Renders the component and returns an object with the data for the client.</p>
+</div>
+<div class="section" id="sendcomponent">
+<h3>sendComponent<a class="headerlink" href="#sendcomponent" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Renderer#sendComponent">
+<tt class="descname">Renderer#sendComponent</tt><big>(</big><em>opt</em>, <em>opt</em><big>)</big><a class="headerlink" href="#Renderer#sendComponent" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>opt</strong> (<em>Object</em>) &#8211; Map of component information for the <a class="reference internal" href="#Renderer#renderComponent" title="Renderer#renderComponent"><tt class="xref js js-func docutils literal"><span class="pre">Renderer#renderComponent()</span></tt></a></li>
+<li><strong>opt</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>:returns :</dt>
+<dd>void</dd>
+</dl>
+</dd></dl>
+
+<p>Renders the component and send it to the transport layer back.</p>
+</div>
+</div>
+<div class="section" id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="rain">
+<h3>rain<a class="headerlink" href="#rain" title="Permalink to this headline">¶</a></h3>
+<dl class="attribute">
+<dt>
+<tt class="descname">rain</tt></dt>
+<dd></dd></dl>
+
+<p>create new rain context to compile the bootstrap</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class Renderer</a><ul>
+<li><a class="reference internal" href="#constructor">Constructor</a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#clientrendererscript">clientRendererScript</a></li>
+<li><a class="reference internal" href="#createinstanceid">createInstanceId</a></li>
+<li><a class="reference internal" href="#loaddataandsend">loadDataAndSend</a></li>
+<li><a class="reference internal" href="#renderbootstrap">renderBootstrap</a></li>
+<li><a class="reference internal" href="#rendercomponent">renderComponent</a></li>
+<li><a class="reference internal" href="#sendcomponent">sendComponent</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#attributes">Attributes</a><ul>
+<li><a class="reference internal" href="#rain">rain</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="RangeHelper.html"
+                        title="previous chapter">Class RangeHelper</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Server.html"
+                        title="next chapter">Class Server</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Server.html" title="Class Server"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="RangeHelper.html" title="Class RangeHelper"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

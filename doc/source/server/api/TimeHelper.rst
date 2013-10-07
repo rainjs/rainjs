@@ -1,0 +1,92 @@
+
+
+
+
+
+
+..
+    Classes and methods
+
+Class TimeHelper
+================================================================================
+
+..
+   class-title
+
+
+This Handlebars helper is used to format a time according to the specific language.
+
+Syntax::
+
+     {{time dateObjectParam}}
+
+dateObjectParam = date object passed from data layer
+
+
+
+
+
+
+
+
+    
+
+
+Constructor
+-----------
+
+.. js:class:: TimeHelper()
+
+
+
+
+
+
+
+
+
+Methods
+-------
+
+..
+   class-methods
+
+
+helper
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: TimeHelper#helper(date)
+
+
+    
+    :param Object date: 
+        the date object used to extract time from. 
+    
+
+
+
+    
+    :returns String:
+        the formatted time 
+    
+
+
+Formats a time according to the language specified in the platform configuration.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    
+
+
+

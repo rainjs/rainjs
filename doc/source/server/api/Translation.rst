@@ -1,0 +1,373 @@
+
+
+
+
+
+
+..
+    Classes and methods
+
+Class Translation
+================================================================================
+
+..
+   class-title
+
+
+Implements internationalization support.
+
+
+
+
+
+
+
+
+    
+
+
+Constructor
+-----------
+
+.. js:class:: Translation()
+
+
+
+
+
+
+
+
+
+Methods
+-------
+
+..
+   class-methods
+
+
+generateContext
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Translation#generateContext(component, language)
+
+
+    
+    :param Object component: 
+        the component configuration for the component 
+    
+    :param String language: 
+        the language 
+    
+
+
+
+    
+    :returns Object:
+        the context in which the component will run 
+    
+
+
+Generate a context in which the component will be run.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+get
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Translation.get()
+
+
+
+
+    
+    :returns Translation:
+        the singleton instance 
+    
+
+
+Returns the Translation instance.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+getLocales
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Translation#getLocales(component, [language])
+
+
+    
+    :param Object component: 
+        Component object 
+    
+    :param String language: 
+        the preferred language. If missing platform language is used 
+    
+
+
+    
+    :throws RainError:
+        : 'component' precondition failed when  the component parameter is missing
+    
+
+
+    
+    :returns :
+        Object which contains language and defaultLanguage if their are not similar 
+    
+
+
+Creates an object which contains the translations for the component and required languages.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+loadLanguageFile
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Translation#loadLanguageFile(file, locale, component)
+
+
+    
+    :param String file: 
+        the file path 
+    
+    :param String locale: 
+        the locale for which this file should be used 
+    
+    :param Object component: 
+        the descriptor of the component 
+    
+
+
+    
+    :throws RainError:
+        : when the po file doesn't exist
+    
+
+
+
+Loads a po file.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+nt
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Translation#nt(msgId, msgIdPlural, count, [args])
+
+
+    
+    :param String msgId: 
+        the message to be translated 
+    
+    :param String msgIdPlural: 
+        the plural form of the message 
+    
+    :param Number count: 
+        determines what form of the translation will be used: singular or plural 
+    
+    :param Array args: 
+        an array of values that will replace the placeholders in the message 
+    
+
+
+
+    
+    :returns String:
+        the translated message 
+    
+
+
+Allow component developers to use translation in server-side code. This method
+is automatically injected in the scope of the server side modules. It uses the messages
+defined for the component in which the code runs. This method should be used when
+the program needs to decide if the singular or plural form should be used based on
+the value of a variable.
+
+
+
+
+
+
+
+
+
+    
+
+
+.. code-block:: javascript
+
+    nt('one book', '%1$d books', 2, [2]);
+
+
+
+
+t
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Translation#t(msgId, [args])
+
+
+    
+    :param String msgId: 
+        the message to be translated 
+    
+    :param Array args: 
+        an array of values that will replace the placeholders in the message 
+    
+
+
+
+    
+    :returns String:
+        the translated message 
+    
+
+
+Allow component developers to use translation in server-side code. This method
+is automatically injected in the scope of the server side modules. It uses the messages
+defined for the component in which the code runs.
+
+
+
+
+
+
+
+
+
+    
+
+
+.. code-block:: javascript
+
+    t('%1$s and %2$s are playing.', ['Mike', 'Joey']);
+
+
+
+
+translate
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Translation#translate(component, language, msgId, [msgIdPlural], [count], [args], args)
+
+
+    
+    :param Object component: 
+        the descriptor of the component for which we do the translation 
+    
+    :param String language: 
+        the translation language 
+    
+    :param String msgId: 
+        the message to be translated 
+    
+    :param String msgIdPlural: 
+        the plural form of the message 
+    
+    :param Number count: 
+        determines what form of the translation will be used: singular or plural. In some languages the rules for plurals are more complex 
+    
+    :param Array args: 
+        an array of values that will replace the placeholders in the message 
+    
+    :param  args: 
+         
+    
+
+
+
+    
+    :returns String:
+        the translated message 
+    
+
+
+Translates a message to the language specified in the platform configuration. First it checks if
+the message exists for the platform language. If this is not found it tries the default language.
+The last fallback is to return the message passed as parameter.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    
+
+Attributes
+----------
+
+..
+   class-attributes
+
+
+lastModified
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:attribute:: lastModified   
+
+
+the last modified date for the translations
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+

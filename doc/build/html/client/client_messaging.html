@@ -1,0 +1,219 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Messaging API &mdash; Rain 0.33.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.33.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Rain 0.33.0 documentation" href="../index.html" />
+    <link rel="next" title="Intents Client API" href="intents.html" />
+    <link rel="prev" title="Node programming best practices" href="../getting_started/node_programming_best_practices.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="intents.html" title="Intents Client API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../getting_started/node_programming_best_practices.html" title="Node programming best practices"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="messaging-api">
+<h1>Messaging API<a class="headerlink" href="#messaging-api" title="Permalink to this headline">¶</a></h1>
+<p>Client messaging layer is part of client runtime. In RAIN you have two types of messaging on
+the client side:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Intents messaging</li>
+<li>Publish / subscriber</li>
+</ul>
+</div></blockquote>
+<div class="section" id="intents">
+<h2>Intents<a class="headerlink" href="#intents" title="Permalink to this headline">¶</a></h2>
+<p>Intents concept is inspired from the Android operating system. Basically they allow the developer
+to express an action that should be executed without being &#8220;aware&#8221; of the provider. The only thing
+the developer must know is what data can be passed to that action.</p>
+<p>For instance imagine an action called LOG_EVENT. To be able to execute this action you must
+know that an event is described by a message, a timestamp and an optional description.</p>
+<p>Using intents it is really easy to create a product in which each fragment of functionality can
+be easily changed without affecting existing code. Moreover, there might be situations when
+multiple action providers exists. The platform will allow user to select what provider to use.</p>
+</div>
+<div class="section" id="intents-lifecycle">
+<h2>Intents lifecycle<a class="headerlink" href="#intents-lifecycle" title="Permalink to this headline">¶</a></h2>
+<p>It is really important to know that when expressing an intent the developer will be able
+to send a JSON object that holds specific information. For instance, when sending an email
+you already know where you want to send it. The expected behavior is to receive back the send
+mail application with all fields completed.</p>
+<img alt="../_images/messaging_intent_request.png" src="../_images/messaging_intent_request.png" />
+</div>
+<div class="section" id="intents-usage">
+<h2>Intents Usage<a class="headerlink" href="#intents-usage" title="Permalink to this headline">¶</a></h2>
+<p>Messaging layer can be used directly from the controller&#8217;s context. Each client side controller
+has access to all its methods. Below you can find an usage example:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">messaging</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">messaging</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">viewContext</span><span class="o">:</span> <span class="nx">self</span><span class="p">.</span><span class="nx">viewContext</span><span class="p">,</span>
+    <span class="nx">category</span><span class="o">:</span> <span class="s2">&quot;local_test_intent&quot;</span><span class="p">,</span>
+    <span class="nx">action</span><span class="o">:</span> <span class="s2">&quot;local_action&quot;</span><span class="p">,</span>
+    <span class="nx">intentContext</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="o">:</span> <span class="s2">&quot;This will not work.&quot;</span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">intent</span> <span class="o">=</span> <span class="nx">messaging</span><span class="p">.</span><span class="nx">sendIntent</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">fnSuccess</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span> <span class="nx">alert</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">));</span> <span class="p">};</span>
+<span class="kd">var</span> <span class="nx">fnError</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">ex</span><span class="p">)</span> <span class="p">{</span> <span class="nx">alert</span><span class="p">(</span><span class="nx">ex</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span> <span class="p">};</span>
+
+<span class="nx">intent</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">fnSuccess</span><span class="p">,</span> <span class="nx">fnError</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The above example is extracted from the samples provided by RAIN (intents_example). The
+method used to accessing intents mechanism is sendIntent method. This method accept a
+Dictionary as a parameter. Each intent request must contain the following information:</p>
+<blockquote>
+<div><ul class="simple">
+<li>viewContext - This is the requester viewContext object.</li>
+<li>category - This is the intent category as defined in meta.json file.</li>
+<li>action - This is the action of the intent.</li>
+<li>intentContext - This is a dictionary where data specific to the intent are passed.</li>
+</ul>
+</div></blockquote>
+<p>The sendIntent method returns a promise that can be used to react onsuccess and onerror. If
+you do not specify a callback for error case then the error is automatically thrown.</p>
+</div>
+<div class="section" id="publish-subscriber">
+<h2>Publish / Subscriber<a class="headerlink" href="#publish-subscriber" title="Permalink to this headline">¶</a></h2>
+<p>The publish/subscribe mechanism is an implementation of the observer pattern, and it can be found
+in the messaging object. The way pub/sub works is that you can subscribe to an event, without
+needing to know if the publisher exists or is even initialized, and this gives you a very loosely
+coupled approach. Lets see a usage example:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">messaging</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">messaging</span><span class="p">;</span>
+
+<span class="c1">// subscribe to an event</span>
+<span class="nx">messaging</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s1">&#39;sliderReady&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">},</span> <span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">);</span>
+
+<span class="c1">// publish an event</span>
+<span class="nx">messaging</span><span class="p">.</span><span class="nx">publish</span><span class="p">(</span><span class="s1">&#39;sliderReady&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">success</span><span class="o">:</span> <span class="kc">true</span><span class="p">},</span> <span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Now, what this does it that it subscribes to the sliderReady event, and then publishes it.
+The arguments are pretty obvious, the first one is the event name, the second one is the callback
+(for the subscriber) or the data (for the publisher) and the context (used internally for scoping).
+We also provided some aliases to these methods on the context object which do not require
+the last argument.</p>
+<p>We also provide the possibility of namespacing your events, by separating them with
+the _::_ operator. This allows you to scope your events, or if you want to, to subscribe to global
+events by prefixing your event with the :: operator. But enough talk, lets see some code:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="c1">// Subscribe to a local event.</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s1">&#39;localEvent&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;local event triggered&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// Subscribe to a global event.</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s1">&#39;::globalEvent&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;global event triggered&#39;</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// Publish the global event.</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">publish</span><span class="p">(</span><span class="s1">&#39;::globalEvent&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Messaging API</a><ul>
+<li><a class="reference internal" href="#intents">Intents</a></li>
+<li><a class="reference internal" href="#intents-lifecycle">Intents lifecycle</a></li>
+<li><a class="reference internal" href="#intents-usage">Intents Usage</a></li>
+<li><a class="reference internal" href="#publish-subscriber">Publish / Subscriber</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../getting_started/node_programming_best_practices.html"
+                        title="previous chapter">Node programming best practices</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="intents.html"
+                        title="next chapter">Intents Client API</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="intents.html" title="Intents Client API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../getting_started/node_programming_best_practices.html" title="Node programming best practices"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

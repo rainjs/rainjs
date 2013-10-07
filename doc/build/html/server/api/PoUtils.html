@@ -1,0 +1,161 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class PoUtils &mdash; Rain 0.33.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.33.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Rain 0.33.0 documentation" href="../../index.html" />
+    <link rel="next" title="Class PrecompileLess" href="PrecompileLess.html" />
+    <link rel="prev" title="Class PercentageHelper" href="PercentageHelper.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="PrecompileLess.html" title="Class PrecompileLess"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="PercentageHelper.html" title="Class PercentageHelper"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="class-poutils">
+<h1>Class PoUtils<a class="headerlink" href="#class-poutils" title="Permalink to this headline">¶</a></h1>
+<p>Provides utility methods for po parsing</p>
+<div class="section" id="constructor">
+<h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="PoUtils">
+<em class="property">class </em><tt class="descname">PoUtils</tt><big>(</big><big>)</big><a class="headerlink" href="#PoUtils" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="parsepo">
+<h3>parsePo<a class="headerlink" href="#parsepo" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="PoUtils.parsePo">
+<tt class="descclassname">PoUtils.</tt><tt class="descname">parsePo</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#PoUtils.parsePo" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>String</em>) &#8211; the po data to be parsed</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns Object:</th><td class="field-body"><p class="first last">the object containing the parsed po data</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Parses the po data and creates an object using it. This object has the following structure:
+{</p>
+<blockquote>
+<div>&#8220;&#8221;: {key1: value1, ..., keyN: valueN}, //headers
+&#8220;msgid1&#8221;: [null, &#8220;translation&#8221;],
+&#8220;msgid2&#8221;: [&#8220;msgidPlural&#8221;, &#8220;singular&#8221;, &#8220;pluralForm0&#8221;, &#8220;pluralForm1&#8221;, ...],
+...
+&#8220;msgidN&#8221;: [null, &#8220;translation&#8221;]</div></blockquote>
+<p>}</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class PoUtils</a><ul>
+<li><a class="reference internal" href="#constructor">Constructor</a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#parsepo">parsePo</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="PercentageHelper.html"
+                        title="previous chapter">Class PercentageHelper</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="PrecompileLess.html"
+                        title="next chapter">Class PrecompileLess</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="PrecompileLess.html" title="Class PrecompileLess"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="PercentageHelper.html" title="Class PercentageHelper"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

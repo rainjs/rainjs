@@ -1,0 +1,281 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>NginX static routes server &mdash; Rain 0.33.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.33.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Rain 0.33.0 documentation" href="../index.html" />
+    <link rel="next" title="Changelog" href="../changelog.html" />
+    <link rel="prev" title="JavaScript and CSS Minification" href="minification.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../changelog.html" title="Changelog"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="minification.html" title="JavaScript and CSS Minification"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="nginx-static-routes-server">
+<h1>NginX static routes server<a class="headerlink" href="#nginx-static-routes-server" title="Permalink to this headline">¶</a></h1>
+<p>This document describes NginX and how to integrate it with RAIN so it can server static
+routes.</p>
+<div class="section" id="nginx">
+<h2>NginX<a class="headerlink" href="#nginx" title="Permalink to this headline">¶</a></h2>
+<p>NginX is a fully mature web server very configurable that can handle and modify requests
+depending on it&#8217;s configuration. The preffered handling configuration
+is by using regular expressions.</p>
+<p>You can read more about nginx at: <a class="reference external" href="http://nginx.org/en/docs/">http://nginx.org/en/docs/</a></p>
+</div>
+<div class="section" id="integrating-with-rain">
+<h2>Integrating with RAIN<a class="headerlink" href="#integrating-with-rain" title="Permalink to this headline">¶</a></h2>
+<p>We are using NginX to serve static files/routes through NginX and reduce the load on the
+RAIN server. We have chosen to reconfigure the HaProxy to redirect static routes requests
+to NginX server and the rest of the requests to the RAIN server. Also we added another command
+to rain called <tt class="docutils literal"><span class="pre">generate-nginx-conf</span></tt>. This command helps you to generate an NginX configuration
+file so it knows how to serve the requests and mapping the components with different routes.</p>
+<div class="section" id="haproxy">
+<h3>HaProxy<a class="headerlink" href="#haproxy" title="Permalink to this headline">¶</a></h3>
+<p>This is an example of a valid HaProxy configuration to work with RAIN and NginX by separating the
+type of requests.</p>
+<div class="highlight-javascript"><pre>global
+    maxconn 40
+    daemon
+    #debug
+    user nobody
+
+defaults
+    mode http
+    option http-server-close
+    timeout connect 500000s
+    timeout client 500000s
+    timeout server 50000s
+    timeout http-keep-alive 5000s
+    timeout http-request 5000s
+    timeout queue 5000s
+    timeout tarpit 5000s
+    option forwardfor
+
+listen RAIN_http *:80
+    mode http
+    stats uri /haproxy
+    acl is_javascript path_reg ^\/([\w-]+)\/(?:(\d(?:\.\d)?(?:\.\d)?)\/)?(?:js)\/(.+)
+    acl is_resource path_reg ^\/([\w-]+)\/(?:((?:\d\.)?\d\.\d)\/)?(?:([a-z]{2}_[A-Z]{2})\/)?resources\/(.+)
+    use_backend static if is_javascript
+    use_backend static if is_resource
+    default_backend RAIN_server
+
+backend RAIN_server
+    server s1 127.0.0.1:1337 check fall 1 inter 1000ms
+
+backend static
+    server s1 127.0.0.1:8080 check fall 1 inter 1000ms</pre>
+</div>
+<p>The only things added are the two acl containing regexps, these are needed to redirect the requests
+depending on the url path. Also the use of another backend called <tt class="docutils literal"><span class="pre">static</span></tt> in which you specify where
+your NginX server is located and on which port is it listening.</p>
+</div>
+<div class="section" id="id1">
+<h3>NginX<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>The only thing that you need here is to install the NginX server on your machine. This is done by
+using the following command:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="nx">sudo</span> <span class="nx">apt</span><span class="o">-</span><span class="nx">get</span> <span class="nx">install</span> <span class="nx">nginx</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="rain-nginx-configuration">
+<h3>RAIN &amp; NginX configuration<a class="headerlink" href="#rain-nginx-configuration" title="Permalink to this headline">¶</a></h3>
+<p>In our current prototype we provide a way to generate the configuration automatically depending on your
+components, take into account the version and id.</p>
+<p>All you have to do is run the following command:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="nx">rain</span> <span class="nx">generate</span><span class="o">-</span><span class="nx">nginx</span><span class="o">-</span><span class="nx">conf</span>
+</pre></div>
+</div>
+<p>In the root path of your rain project you will find a <tt class="docutils literal"><span class="pre">nginx.conf</span></tt> file. All you have to do is just move
+the generated configuration file in to <tt class="docutils literal"><span class="pre">/etc/nginx/</span></tt>.</p>
+<p>An example of the output configuration would be:</p>
+<div class="highlight-javascript"><pre>user root;
+events {
+    worker_connections 1024;
+}
+http {
+    include mime.types;
+    default_type application/octet-stream;
+    sendfile on;
+    gzip on;
+    upstream backend {
+        server 127.0.0.1:1337;
+    }
+    server {
+        listen 8080;
+        server_name localhost;
+        charset UTF-8;
+        location / {
+        }
+        location ~* example/.*(js.*\.js)$ {
+            alias /home/atrifan/my_space/rainjs/components/example_list/client/$1;
+        }
+        location ~* example/.*(resources.*)$ {
+            alias /home/atrifan/my_space/rainjs/components/example_list/$1;
+        }
+        location ~* language_selector/.*(js.*\.js)$ {
+            alias /home/atrifan/my_space/rainjs/components/language_selector/client/$1;
+        }
+        location ~* language_selector/.*(resources.*)$ {
+            alias /home/atrifan/my_space/rainjs/components/language_selector/$1;
+        }
+        location ~* container_example/.*(js.*\.js)$ {
+            alias /home/atrifan/my_space/rainjs/components/container_example_2_0/client/$1;
+        }
+        location ~* container_example/.*(resources.*)$ {
+            alias /home/atrifan/my_space/rainjs/components/container_example_2_0/$1;
+        }
+        location ~* error/.*(js.*\.js)$ {
+            alias /home/atrifan/my_space/rainjs/components/error/client/$1;
+        }
+        location ~* error/.*(resources.*)$ {
+            alias /home/atrifan/my_space/rainjs/components/error/$1;
+        }
+        location ~* external_theming/.*(js.*\.js)$ {
+            alias /home/atrifan/my_space/rainjs/components/external_theming/client/$1;
+        }
+        location ~* external_theming/.*(resources.*)$ {
+            alias /home/atrifan/my_space/rainjs/components/external_theming/$1;
+        }
+        location ~* core/.*(js.*\.js)$ {
+            alias /home/atrifan/my_space/rainjs/components/core/client/$1;
+        }
+        location ~* core/.*(resources.*)$ {
+            alias /home/atrifan/my_space/rainjs/components/core/$1;
+        }
+        location ~* demo_container/.*(js.*\.js)$ {
+            alias /home/atrifan/my_space/rainjs/components/demo_container/client/$1;
+        }
+        location ~* demo_container/.*(resources.*)$ {
+            alias /home/atrifan/my_space/rainjs/components/demo_container/$1;
+        }
+        location ~* placeholder/.*(js.*\.js)$ {
+            alias /home/atrifan/my_space/rainjs/components/placeholder/client/$1;
+        }
+        location ~* placeholder/.*(resources.*)$ {
+            alias /home/atrifan/my_space/rainjs/components/placeholder/$1;
+        }
+        location ~* layout/.*(js.*\.js)$ {
+            alias /home/atrifan/my_space/rainjs/components/layout/client/$1;
+        }
+        location ~* layout/.*(resources.*)$ {
+            alias /home/atrifan/my_space/rainjs/components/layout/$1;
+        }
+        location ~* css-renderer/.*(js.*\.js)$ {
+            alias /home/atrifan/my_space/rainjs/components/css_renderer/client/$1;
+        }
+        location ~* css-renderer/.*(resources.*)$ {
+            alias /home/atrifan/my_space/rainjs/components/css_renderer/$1;
+        }
+    }
+}</pre>
+</div>
+<p>You can also change default values in the configuration by editing the <tt class="docutils literal"><span class="pre">bin/init/conf/nginx.conf</span></tt>
+file in your rain folder.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">NginX static routes server</a><ul>
+<li><a class="reference internal" href="#nginx">NginX</a></li>
+<li><a class="reference internal" href="#integrating-with-rain">Integrating with RAIN</a><ul>
+<li><a class="reference internal" href="#haproxy">HaProxy</a></li>
+<li><a class="reference internal" href="#id1">NginX</a></li>
+<li><a class="reference internal" href="#rain-nginx-configuration">RAIN &amp; NginX configuration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="minification.html"
+                        title="previous chapter">JavaScript and CSS Minification</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../changelog.html"
+                        title="next chapter">Changelog</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../changelog.html" title="Changelog"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="minification.html" title="JavaScript and CSS Minification"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

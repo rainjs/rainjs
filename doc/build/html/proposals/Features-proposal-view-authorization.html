@@ -1,0 +1,210 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>View authorization &mdash; Rain 0.33.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.33.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Rain 0.33.0 documentation" href="../index.html" />
+    <link rel="next" title="View modes" href="Features-proposal-view-modes.html" />
+    <link rel="prev" title="Text transport" href="Features-proposal-text-transport.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Features-proposal-view-modes.html" title="View modes"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Features-proposal-text-transport.html" title="Text transport"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="view-authorization">
+<h1>View authorization<a class="headerlink" href="#view-authorization" title="Permalink to this headline">¶</a></h1>
+<p>Rain should support a view authorization mechanism in order not to display pages or fragments to users if they do not have the proper access rights or some runtime conditions are not true.</p>
+<p>The RBAC model will be used to define the permissions. Each Rain user will have a set of roles and each role will grant a set of permissions to access certain resources. In our case, the resources are the modules and the views inside the modules.</p>
+<p>Permissions should be defined at module level and at view level. The module permission is inherited also by all views of that module. So in order to access a view, an user should have the permission to access the module(if defined) and also the permission to access the view (if defined).</p>
+<p>Besides the RBAC  permissions, Rain should support a dynamic way to check if an user is allowed to access a view.</p>
+<div class="section" id="functional-requirements">
+<h2>Functional requirements<a class="headerlink" href="#functional-requirements" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Rain should support the definition of access permissions at module level and at view level. A view can be accessed only if only the user has the permission to access the module of that view and the permission to access that particular view (in case both the permissions are defined).</li>
+<li>Rain should support the registration of a dynamic condition to access a view.</li>
+<li>Rain should not display a view to an user if the user does not have the permission to access that view or the dynamic runtime access condition does not hold;</li>
+<li>Rain should not include a view fragment into the aggregated parent page if the user does not have the permission to access that fragment or the dynamic runtime access condition does not hold;</li>
+<li>In all other cases, the view should be displayed to the user.</li>
+</ol>
+</div>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<p>Module and view access permissions are expressed directly in the <strong>meta.json</strong> file in the <strong>access_permission</strong> property:</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15</pre></div></td><td class="code"><div class="highlight"><pre><span class="nx">meta</span><span class="p">.</span><span class="nx">json</span><span class="o">:</span>
+<span class="p">{</span>
+  <span class="s2">&quot;id&quot;</span> <span class="o">:</span> <span class="s2">&quot;my-app;1.0&quot;</span>
+  <span class="s2">&quot;url&quot;</span> <span class="o">:</span> <span class="s2">&quot;/modules/my-app&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;access_permission&quot;</span>    <span class="o">:</span> <span class="s2">&quot;access-my-app&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;views&quot;</span> <span class="o">:</span> <span class="p">[</span>
+     <span class="p">{</span>
+       <span class="s2">&quot;viewid&quot;</span>           <span class="o">:</span> <span class="s2">&quot;main&quot;</span><span class="p">,</span>
+       <span class="s2">&quot;view&quot;</span>             <span class="o">:</span> <span class="s2">&quot;/htdocs/main.html&quot;</span><span class="p">,</span>
+       <span class="s2">&quot;controller&quot;</span>       <span class="o">:</span> <span class="s2">&quot;/htdocs/controller/main.js&quot;</span>
+       <span class="s2">&quot;access_permission&quot;</span>    <span class="o">:</span> <span class="s2">&quot;access-my-page&quot;</span><span class="p">,</span>
+       <span class="s2">&quot;access_condition&quot;</span>    <span class="o">:</span> <span class="s2">&quot;/authorization/main.js&quot;</span>
+     <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>For each view that requires dynamic authorization, there should be a script called &lt;view_id&gt;.js that is placed in the authorization folder in the application module root path. Rain should support auto-discovery of the authorization script although it can be also defined in the module descriptor in the <strong>access_condition</strong> property.</p>
+<p>One function defined in this script will be invoked by Rain:</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>canAccessPage(sessionContext)</strong>: returns a boolean that says if the user can access or not this view; a reference to the current user sessionContext is passed as an argument and it is used to dynamically determine if the user can access this view.</li>
+</ul>
+</div></blockquote>
+<p>Example:</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span class="kd">function</span> <span class="nx">canAccessPage</span><span class="p">(</span><span class="nx">sessionContext</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">//display the view only if user is from US</span>
+  <span class="k">return</span> <span class="nx">sessionContext</span><span class="p">.</span><span class="nx">currentUser</span><span class="p">.</span><span class="nx">country</span> <span class="o">==</span> <span class="s1">&#39;US&#39;</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<p>Before rendering a view, Rain:</p>
+<ol class="arabic simple">
+<li>Determines the module of that view</li>
+<li>Checks if there is a permission defined needed to access that module</li>
+<li>If so, Rain checks if the user has that permission</li>
+<li>Checks if there is a permission defined needed to access that view</li>
+<li>If so, Rain checks if the user has that permission</li>
+<li>Checks if there is a script defined to do the dynamic authorisation</li>
+<li>If there is one, it invokes the canAccessPage with the current sessionContext and it decides to display or not that view</li>
+</ol>
+<p>There are 2 types of requesting a view:</p>
+<blockquote>
+<div><ul class="simple">
+<li>direct request of view from browser</li>
+<li>Rain indirectly requests a view as a fragment of other view (composition)</li>
+</ul>
+</div></blockquote>
+<p>If an user is not authorised to access a view:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Rain will return 403 Forbidden in the first case</li>
+<li>Rain will not include the fragment into the parent view in the second case</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="assumptions">
+<h2>Assumptions<a class="headerlink" href="#assumptions" title="Permalink to this headline">¶</a></h2>
+<p>It is assumed that it is application&#8217;s responsibility to retrieve and to store the set of permissions into the <strong>sessionContext.permissions</strong> field after the user has logged in.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">View authorization</a><ul>
+<li><a class="reference internal" href="#functional-requirements">Functional requirements</a></li>
+<li><a class="reference internal" href="#implementation">Implementation</a></li>
+<li><a class="reference internal" href="#assumptions">Assumptions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Features-proposal-text-transport.html"
+                        title="previous chapter">Text transport</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Features-proposal-view-modes.html"
+                        title="next chapter">View modes</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Features-proposal-view-modes.html" title="View modes"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Features-proposal-text-transport.html" title="Text transport"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

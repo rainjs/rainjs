@@ -1,0 +1,222 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class CssRegistry &mdash; Rain 0.33.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.33.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Rain 0.33.0 documentation" href="../../index.html" />
+    <link rel="next" title="Class CssRenderer" href="CssRenderer.html" />
+    <link rel="prev" title="Class Context" href="Context.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="CssRenderer.html" title="Class CssRenderer"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Context.html" title="Class Context"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="class-cssregistry">
+<h1>Class CssRegistry<a class="headerlink" href="#class-cssregistry" title="Permalink to this headline">¶</a></h1>
+<p>Manages the stylesheets inside the page keeping track of where each CSS file is and
+cleaning up the remaining whitespace when necessary.</p>
+<div class="section" id="constructor">
+<h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="CssRegistry">
+<em class="property">class </em><tt class="descname">CssRegistry</tt><big>(</big><big>)</big><a class="headerlink" href="#CssRegistry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="get">
+<h3>get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="CssRegistry.get">
+<tt class="descclassname">CssRegistry.</tt><tt class="descname">get</tt><big>(</big><big>)</big><a class="headerlink" href="#CssRegistry.get" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Returns CssRenderer:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">the singleton instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Returns the singleton instance.</p>
+</div>
+<div class="section" id="getnewfiles">
+<h3>getNewFiles<a class="headerlink" href="#getnewfiles" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="CssRegistry#getNewFiles">
+<tt class="descname">CssRegistry#getNewFiles</tt><big>(</big><em>component</em>, <em>files</em><big>)</big><a class="headerlink" href="#CssRegistry#getNewFiles" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>component</strong> (<em>String</em>) &#8211; the component id to which the files belong</li>
+<li><strong>files</strong> (<em>Array</em>) &#8211; an array containing the file descriptor</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns Array:</th><td class="field-body"><p class="first last">an array of files that are not loaded</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Filters a list of CSS files for a specific component and returns the files that don&#8217;t exist
+inside the registry.</p>
+</div>
+<div class="section" id="register">
+<h3>register<a class="headerlink" href="#register" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="CssRegistry#register">
+<tt class="descname">CssRegistry#register</tt><big>(</big><em>component</em>, <em>css</em><big>)</big><a class="headerlink" href="#CssRegistry#register" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>component</strong> (<em>String</em>) &#8211; the component id for which to register the css</li>
+<li><strong>css</strong> (<em>Array</em>) &#8211; the CSS contents to be registered</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Returns Boolean:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">weather the insert was successful or not</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Register the css of a component to the registry.</p>
+</div>
+<div class="section" id="unregister">
+<h3>unregister<a class="headerlink" href="#unregister" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="CssRegistry#unregister">
+<tt class="descname">CssRegistry#unregister</tt><big>(</big><em>component</em><big>)</big><a class="headerlink" href="#CssRegistry#unregister" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>component</strong> (<em>String</em>) &#8211; the component id for which to unregister the css</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Unregister a component from the registry.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class CssRegistry</a><ul>
+<li><a class="reference internal" href="#constructor">Constructor</a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#get">get</a></li>
+<li><a class="reference internal" href="#getnewfiles">getNewFiles</a></li>
+<li><a class="reference internal" href="#register">register</a></li>
+<li><a class="reference internal" href="#unregister">unregister</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Context.html"
+                        title="previous chapter">Class Context</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="CssRenderer.html"
+                        title="next chapter">Class CssRenderer</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="CssRenderer.html" title="Class CssRenderer"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Context.html" title="Class Context"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

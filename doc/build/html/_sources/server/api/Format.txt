@@ -1,0 +1,369 @@
+
+
+
+
+
+
+..
+    Classes and methods
+
+Class Format
+================================================================================
+
+..
+   class-title
+
+
+Format module that formats date/time/date-range/numbers/currency/percentage depending on the
+language.
+
+Example:
+
+.. code-block:: javascript
+
+      var today = new Date();
+      var someInterval = formatterInstance.formatRange(today, new Date(today.getFullYear(),
+                         today.getMonth()+1, today.getDate()), 'de_DE');
+      var decNumber = formatter(345989.3452, 'de_DE');
+
+      console.log(someInterval) // => 'Juli 10 - August 10. 2013'
+      console.log(decNumber) // => '345.989,3452'
+
+
+
+
+
+
+
+
+    
+
+
+Constructor
+-----------
+
+.. js:class:: Format()
+
+
+
+
+
+
+
+
+
+Methods
+-------
+
+..
+   class-methods
+
+
+formatCurrency
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Format#formatCurrency(number, locale)
+
+
+    
+    :param Number number: 
+        the number to be formatted in currency context 
+    
+    :param String locale: 
+        the language in which you want to format the currency 
+    
+
+
+
+    
+    :returns String:
+        the formatted currency in the desired language 
+    
+
+
+Formats a number and outputs in the country's currency format standards. If not present
+falls to default language of the server and if that is also missing it uses a configuration
+preset format.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+formatDate
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Format#formatDate(date, locale, [format])
+
+
+    
+    :param String date: 
+        the date that you want to format 
+    
+    :param String locale: 
+        the language in which you want to format the date 
+    
+    :param String format: 
+        optional parameter of the way to format the date 
+    
+
+
+
+    
+    :returns String:
+        the formatted date in the desired language 
+    
+
+
+Formats a date in the country's date format standards. If not present falls
+to default language of the server and if that is also missing it uses a
+configuration preset format.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+formatNumber
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Format#formatNumber(value, locale)
+
+
+    
+    :param Number value: 
+        the value that you want to format 
+    
+    :param String locale: 
+        the language in which you want to format the number 
+    
+
+
+
+    
+    :returns String:
+        the formatted number in the desired language 
+    
+
+
+Formats a given number taking into account the decimals and the thousands. If not present
+falls to default language of the server and if that is also missing it uses a configuration
+preset format.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+formatPercentage
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Format#formatPercentage(number, locale)
+
+
+    
+    :param Number number: 
+        the number to be formatted in percentage context 
+    
+    :param String locale: 
+        the language in which you want to format the percentage 
+    
+
+
+
+    
+    :returns String:
+        the formatted percentage in the desired language 
+    
+
+
+Formats a number and ouputs it in the country's percentage format standards. If not present
+falls to default language of the server and if that is also missing it uses a configuration
+preset format.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+formatRange
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Format#formatRange(startDate, endDate, locale)
+
+
+    
+    :param String startDate: 
+        the start date of the range 
+    
+    :param String endDate: 
+        the end date of the range 
+    
+    :param String locale: 
+        the language in which you want to format 
+    
+
+
+
+    
+    :returns String:
+        the formatted range in the desired language 
+    
+
+
+Formats a date range in the default date range format of the country. If not present falls to
+default language of the server and if that is also missing it uses a configuration preset format.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+formatTime
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Format#formatTime(date, locale)
+
+
+    
+    :param String date: 
+        the date for which you want the time format 
+    
+    :param String locale: 
+        the language in which you want to format the time 
+    
+
+
+
+    
+    :returns String:
+        the formatted time in the desired language 
+    
+
+
+Formats a time in the country's time format standards. If not present falls
+to default language of the server and if that is also missing it uses a
+configuration preset format.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+get
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Format.get()
+
+
+
+
+    
+    :returns Format:
+         
+    
+
+
+Singleton method to get the instance of the Format module.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+translate
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. js:function:: Format#translate(customId, msgId, language, args)
+
+
+    
+    :param String customId: 
+        the customId from the .po file 
+    
+    :param String msgId: 
+        the msgId representing the default text for that customId 
+    
+    :param String language: 
+        the language in which you want to translate 
+    
+    :param [String] args: 
+        the arguments to be inserted in the translation 
+    
+
+
+
+    
+    :returns String:
+        the translated text. 
+    
+
+
+Translates a text. Logs an error if the translation was not possible.
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    
+
+
+

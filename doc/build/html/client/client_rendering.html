@@ -1,0 +1,144 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Client rendering &mdash; Rain 0.33.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.33.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Rain 0.33.0 documentation" href="../index.html" />
+    <link rel="next" title="Rendering" href="rendering.html" />
+    <link rel="prev" title="Client side websockets API" href="websockets.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="rendering.html" title="Rendering"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="websockets.html" title="Client side websockets API"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="client-rendering">
+<h1>Client rendering<a class="headerlink" href="#client-rendering" title="Permalink to this headline">¶</a></h1>
+<p>Client rendering is the process of loading components from the server-side and displaying
+them on the client-side. As a developer you want to load components at any step in your
+application&#8217;s lifecycle.</p>
+<p>Using the <tt class="docutils literal"><span class="pre">ClientRenderer</span></tt> public methods you can load components and include them anywhere
+in your page. RAIN does all the work of getting all the necessary data from the server-side
+and invoking the component&#8217;s lifecycle.</p>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>To load a component you have to use the global object <tt class="docutils literal"><span class="pre">clientRenderer</span></tt>. This object is a
+singleton instance of <a class="reference internal" href="api/ClientRenderer.html#ClientRenderer" title="ClientRenderer"><tt class="xref js js-class docutils literal"><span class="pre">ClientRenderer()</span></tt></a>.</p>
+<p>The following code requests a <em>button</em> component. The <tt class="docutils literal"><span class="pre">instanceId</span></tt> property indicates
+where the markup of the component should be placed in the page.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">clientRenderer</span><span class="p">.</span><span class="nx">requestComponent</span><span class="p">({</span>
+    <span class="nx">component</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;button&#39;</span><span class="p">,</span>
+        <span class="nx">version</span><span class="o">:</span> <span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
+        <span class="nx">view</span><span class="o">:</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span>
+        <span class="nx">instanceId</span><span class="o">:</span> <span class="s2">&quot;f1db15e2d25be2697f2cc02e63fce03f39705811&quot;</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="api/ClientRenderer.html#ClientRenderer" title="ClientRenderer"><tt class="xref js js-class docutils literal"><span class="pre">ClientRenderer()</span></tt></a></dt>
+<dd>Client renderer API</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Client rendering</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="websockets.html"
+                        title="previous chapter">Client side websockets API</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="rendering.html"
+                        title="next chapter">Rendering</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="rendering.html" title="Rendering"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="websockets.html" title="Client side websockets API"
+             >previous</a> |</li>
+        <li><a href="../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

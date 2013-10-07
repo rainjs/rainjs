@@ -1,0 +1,321 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class EventEmitter &mdash; Rain 0.33.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.33.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Rain 0.33.0 documentation" href="../../index.html" />
+    <link rel="next" title="Class FlowLayout" href="FlowLayout.html" />
+    <link rel="prev" title="Class CssRenderer" href="CssRenderer.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="FlowLayout.html" title="Class FlowLayout"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CssRenderer.html" title="Class CssRenderer"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="class-eventemitter">
+<h1>Class EventEmitter<a class="headerlink" href="#class-eventemitter" title="Permalink to this headline">¶</a></h1>
+<p>When an EventEmitter instance experiences an error, the typical action is to emit an &#8216;error&#8217; event.
+Error events are treated as a special case in node.
+If there is no listener for it, then the default action is to print a stack trace and exit the program.
+All EventEmitters emit the event &#8216;newListener&#8217; when new listeners are added.</p>
+<div class="section" id="constructor">
+<h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="EventEmitter">
+<em class="property">class </em><tt class="descname">EventEmitter</tt><big>(</big><big>)</big><a class="headerlink" href="#EventEmitter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="addlistener">
+<h3>addListener<a class="headerlink" href="#addlistener" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="EventEmitter#addListener">
+<tt class="descname">EventEmitter#addListener</tt><big>(</big><em>type</em>, <em>listener</em><big>)</big><a class="headerlink" href="#EventEmitter#addListener" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>type</strong> (<em>String</em>) &#8211; The event name</li>
+<li><strong>listener</strong> (<em>Function</em>) &#8211; The listener function</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Returns EventEmitter:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Adds a listener to the end of the listeners array for the specified event.</p>
+</div>
+<div class="section" id="emit">
+<h3>emit<a class="headerlink" href="#emit" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="EventEmitter#emit">
+<tt class="descname">EventEmitter#emit</tt><big>(</big><em>event</em><span class="optional">[</span>, <em>arg</em>, <em>arg2</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#EventEmitter#emit" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>event</strong> (<em>String</em>) &#8211; The event name</li>
+<li><strong>arg,arg2</strong> &#8211; The arguments to pass</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Execute each of the listeners in order with the supplied arguments.</p>
+</div>
+<div class="section" id="listeners">
+<h3>listeners<a class="headerlink" href="#listeners" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="EventEmitter#listeners">
+<tt class="descname">EventEmitter#listeners</tt><big>(</big><em>type</em><big>)</big><a class="headerlink" href="#EventEmitter#listeners" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>type</strong> (<em>String</em>) &#8211; The event name</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Returns EventEmitter:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">Instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Returns an array of listeners for the specified event.
+This array can be manipulated, e.g. to remove listeners.</p>
+</div>
+<div class="section" id="on">
+<h3>on<a class="headerlink" href="#on" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="EventEmitter#on">
+<tt class="descname">EventEmitter#on</tt><big>(</big><big>)</big><a class="headerlink" href="#EventEmitter#on" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">EventEmitter#addListener</p>
+</div>
+</div>
+<div class="section" id="once">
+<h3>once<a class="headerlink" href="#once" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="EventEmitter#once">
+<tt class="descname">EventEmitter#once</tt><big>(</big><em>type</em>, <em>listener</em><big>)</big><a class="headerlink" href="#EventEmitter#once" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>type</strong> (<em>String</em>) &#8211; The event name</li>
+<li><strong>listener</strong> (<em>Function</em>) &#8211; The listener function</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Returns EventEmitter:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">Instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Adds a one time listener for the event.
+This listener is invoked only the next time the event is fired, after which it is removed.</p>
+</div>
+<div class="section" id="removealllisteners">
+<h3>removeAllListeners<a class="headerlink" href="#removealllisteners" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="EventEmitter#removeAllListeners">
+<tt class="descname">EventEmitter#removeAllListeners</tt><big>(</big><em>type</em><big>)</big><a class="headerlink" href="#EventEmitter#removeAllListeners" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>type</strong> (<em>String</em>) &#8211; The event name</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Returns EventEmitter:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">Instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Removes all listeners, or those of the specified event.</p>
+</div>
+<div class="section" id="removelistener">
+<h3>removeListener<a class="headerlink" href="#removelistener" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="EventEmitter#removeListener">
+<tt class="descname">EventEmitter#removeListener</tt><big>(</big><em>type</em>, <em>listener</em><big>)</big><a class="headerlink" href="#EventEmitter#removeListener" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>type</strong> (<em>String</em>) &#8211; The event name</li>
+<li><strong>listener</strong> (<em>Function</em>) &#8211; The listener function</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Returns EventEmitter:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">Instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Remove a listener from the listener array for the specified event.
+<strong>Caution</strong>: changes array indices in the listener array behind the listener.</p>
+</div>
+<div class="section" id="setmaxlisteners">
+<h3>setMaxListeners<a class="headerlink" href="#setmaxlisteners" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="EventEmitter#setMaxListeners">
+<tt class="descname">EventEmitter#setMaxListeners</tt><big>(</big><em>n</em><big>)</big><a class="headerlink" href="#EventEmitter#setMaxListeners" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>n</strong> (<em>Number</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>By default EventEmitters will print a warning if more than 10 listeners are added for a particular event.
+This is a useful default which helps finding memory leaks.
+Obviously not all Emitters should be limited to 10. This function allows that to be increased.
+Set to zero for unlimited.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class EventEmitter</a><ul>
+<li><a class="reference internal" href="#constructor">Constructor</a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#addlistener">addListener</a></li>
+<li><a class="reference internal" href="#emit">emit</a></li>
+<li><a class="reference internal" href="#listeners">listeners</a></li>
+<li><a class="reference internal" href="#on">on</a></li>
+<li><a class="reference internal" href="#once">once</a></li>
+<li><a class="reference internal" href="#removealllisteners">removeAllListeners</a></li>
+<li><a class="reference internal" href="#removelistener">removeListener</a></li>
+<li><a class="reference internal" href="#setmaxlisteners">setMaxListeners</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="CssRenderer.html"
+                        title="previous chapter">Class CssRenderer</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="FlowLayout.html"
+                        title="next chapter">Class FlowLayout</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="FlowLayout.html" title="Class FlowLayout"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CssRenderer.html" title="Class CssRenderer"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

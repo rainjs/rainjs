@@ -1,0 +1,278 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class Context &mdash; Rain 0.33.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.33.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Rain 0.33.0 documentation" href="../../index.html" />
+    <link rel="next" title="Class CssRegistry" href="CssRegistry.html" />
+    <link rel="prev" title="Class ClientStorage" href="ClientStorage.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="CssRegistry.html" title="Class CssRegistry"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ClientStorage.html" title="Class ClientStorage"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="class-context">
+<h1>Class Context<a class="headerlink" href="#class-context" title="Permalink to this headline">¶</a></h1>
+<p>The context reflects a component&#8217;s client-side state. It gives access to other
+important libraries like client storage, messaging and web sockets.</p>
+<div class="section" id="constructor">
+<h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Context">
+<em class="property">class </em><tt class="descname">Context</tt><big>(</big><em>raintimeInstance</em>, <em>component</em><big>)</big><a class="headerlink" href="#Context" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>raintimeInstance</strong> (<em>Raintime</em>) &#8211; </li>
+<li><strong>component</strong> (<em>Component</em>) &#8211; the component object</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="getroot">
+<h3>getRoot<a class="headerlink" href="#getroot" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Context#getRoot">
+<tt class="descname">Context#getRoot</tt><big>(</big><big>)</big><a class="headerlink" href="#Context#getRoot" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Returns jQueryElement:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">The component&#8217;s container jQuery element</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Returns the DOM container element for the component associated with this
+view context.</p>
+</div>
+<div class="section" id="insert">
+<h3>insert<a class="headerlink" href="#insert" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Context#insert">
+<tt class="descname">Context#insert</tt><big>(</big><em>component</em>, <em>dom</em><span class="optional">[</span>, <em>callback</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#Context#insert" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>component</strong> (<em>Object</em>) &#8211; The component which to be requested</li>
+<li><strong>component.id</strong> (<em>String</em>) &#8211; The component id</li>
+<li><strong>component.view</strong> (<em>String</em>) &#8211; The component view id</li>
+<li><strong>component.sid</strong> (<em>String</em>) &#8211; The component staticId id</li>
+<li><strong>component.context</strong> (<em>Object</em>) &#8211; Custom data for the template</li>
+<li><strong>component.placeholder</strong> (<em>Boolean</em>) &#8211; Enable / Disable placeholder</li>
+<li><strong>dom</strong> (<em>jQueryDom</em>) &#8211; The dom object where the component is inserted</li>
+<li><strong>callback</strong> (<em>Function</em>) &#8211; the function to be called after the controller was loaded</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Insert a new component into the given DOM Element and set a function that will be called
+after the controller for the new controller was loaded.</p>
+<p>The context for the callback function will be the component&#8217;s controller.</p>
+</div>
+<div class="section" id="remove">
+<h3>remove<a class="headerlink" href="#remove" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Context#remove">
+<tt class="descname">Context#remove</tt><big>(</big><em>staticId</em><big>)</big><a class="headerlink" href="#Context#remove" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>staticId</strong> (<em>String</em>) &#8211; the child static id</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Removes a child component.</p>
+</div>
+<div class="section" id="replace">
+<h3>replace<a class="headerlink" href="#replace" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="Context#replace">
+<tt class="descname">Context#replace</tt><big>(</big><em>component</em><span class="optional">[</span>, <em>callback</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#Context#replace" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>component</strong> (<em>Object</em>) &#8211; The component which to be requested</li>
+<li><strong>component.id</strong> (<em>String</em>) &#8211; The component id</li>
+<li><strong>component.view</strong> (<em>String</em>) &#8211; The component view id</li>
+<li><strong>component.sid</strong> (<em>String</em>) &#8211; The component staticId id</li>
+<li><strong>component.context</strong> (<em>Object</em>) &#8211; Custom data for the template</li>
+<li><strong>component.placeholder</strong> (<em>Boolean</em>) &#8211; Enable / Disable placeholder</li>
+<li><strong>callback</strong> (<em>Function</em>) &#8211; the function to be called after the controller was loaded</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Replaces the component from where it is called with the given component and set a
+function that will be called after the controller for the new component was loaded.</p>
+<p>The context for the callback function will be the component&#8217;s controller.</p>
+</div>
+</div>
+<div class="section" id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="instanceid">
+<h3>instanceId<a class="headerlink" href="#instanceid" title="Permalink to this headline">¶</a></h3>
+<dl class="attribute">
+<dt id="instanceId">
+<tt class="descname">instanceId</tt><a class="headerlink" href="#instanceId" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>the component&#8217;s instance id</p>
+</div>
+<div class="section" id="messaging">
+<h3>messaging<a class="headerlink" href="#messaging" title="Permalink to this headline">¶</a></h3>
+<dl class="attribute">
+<dt>
+<tt class="descname">messaging</tt></dt>
+<dd></dd></dl>
+
+<p>Provides methods to publish and subscribe to events.</p>
+</div>
+<div class="section" id="storage">
+<h3>storage<a class="headerlink" href="#storage" title="Permalink to this headline">¶</a></h3>
+<dl class="attribute">
+<dt>
+<tt class="descname">storage</tt></dt>
+<dd></dd></dl>
+
+<p>the local storage manager</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class Context</a><ul>
+<li><a class="reference internal" href="#constructor">Constructor</a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#getroot">getRoot</a></li>
+<li><a class="reference internal" href="#insert">insert</a></li>
+<li><a class="reference internal" href="#remove">remove</a></li>
+<li><a class="reference internal" href="#replace">replace</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#attributes">Attributes</a><ul>
+<li><a class="reference internal" href="#instanceid">instanceId</a></li>
+<li><a class="reference internal" href="#messaging">messaging</a></li>
+<li><a class="reference internal" href="#storage">storage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ClientStorage.html"
+                        title="previous chapter">Class ClientStorage</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="CssRegistry.html"
+                        title="next chapter">Class CssRegistry</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="CssRegistry.html" title="Class CssRegistry"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ClientStorage.html" title="Class ClientStorage"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

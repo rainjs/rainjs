@@ -1,0 +1,182 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class ContainerHelper &mdash; Rain 0.33.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.33.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Rain 0.33.0 documentation" href="../../index.html" />
+    <link rel="next" title="Class CssHelper" href="CssHelper.html" />
+    <link rel="prev" title="Class ConsoleAppender" href="ConsoleAppender.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="CssHelper.html" title="Class CssHelper"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ConsoleAppender.html" title="Class ConsoleAppender"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="class-containerhelper">
+<h1>Class ContainerHelper<a class="headerlink" href="#class-containerhelper" title="Permalink to this headline">¶</a></h1>
+<p>The <strong>Container</strong> helper is a <em>block helper</em> that acts like a container for its content wrapping
+it in a thin layer that allows it to act as if it is aggregated inside the parent component.</p>
+<p>Complete syntax:</p>
+<div class="highlight-js"><pre>{{#container view="viewID" [name="componentId" [version="versionNumber"]] [sid="staticId"]}}
+    {{! Content !}}
+{{/container}}</pre>
+</div>
+<p>Example:</p>
+<div class="highlight-js"><pre>{{#component name="checkbox" view="group"}}
+    {{#container name="myContainer" view="purple" sid="myPurpleContainer"}}
+        {{#container name="myContainer" view="blue" sid="myBlueContainer"}}
+            {{! this gets aggregated inside the group component but gets rendered inside the containers !}}
+            {{component name="checkbox" view="index"}}
+        {{/container}}
+    {{/container}}
+{{/component}}</pre>
+</div>
+<div class="section" id="constructor">
+<h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="ContainerHelper">
+<em class="property">class </em><tt class="descname">ContainerHelper</tt><big>(</big><big>)</big><a class="headerlink" href="#ContainerHelper" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="helper">
+<h3>helper<a class="headerlink" href="#helper" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ContainerHelper#helper">
+<tt class="descname">ContainerHelper#helper</tt><big>(</big><em>options</em><big>)</big><a class="headerlink" href="#ContainerHelper#helper" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>options</strong> (<em>Object</em>) &#8211; the container options</li>
+<li><strong>options.name</strong> (<em>String</em>) &#8211; indicates the container from which the content will be aggregated. When this option is missing the current container will be used (the version is always the current version in this case).</li>
+<li><strong>options.version</strong> (<em>String</em>) &#8211; the version of the container specified with the previous option. If the version is not specified the latest version will be used. You can also use version fragments as described in the documentation for container versioning. When you specify the version you also need to specify the name of the container, otherwise an error will be thrown.</li>
+<li><strong>options.view</strong> (<em>String</em>) &#8211; the view that will be aggregated.</li>
+<li><strong>options.sid</strong> (<em>String</em>) &#8211; the container static id, used in the client-side controller (<em>Default</em>: &#8216;undefined&#8217;)</li>
+<li><strong>options.customAttrN</strong> (<em>Boolean|Number|String|Object|Array</em>) &#8211; Sets a custom attribute which is extended to the context</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Throws Error:</th><td class="field-body"><p class="first">: when the context has the wrong keys</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns String:</th><td class="field-body"><p class="first last">the generated placeholder div with the instance id as id attribute</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>The helper decides which view should use and from which container.</p>
+<p>To determine which container and view to use, the following steps are performed:</p>
+<ol class="arabic simple">
+<li>the view id is required!</li>
+<li>if the version is specified, the name of the container must be specified too.</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class ContainerHelper</a><ul>
+<li><a class="reference internal" href="#constructor">Constructor</a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#helper">helper</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ConsoleAppender.html"
+                        title="previous chapter">Class ConsoleAppender</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="CssHelper.html"
+                        title="next chapter">Class CssHelper</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="CssHelper.html" title="Class CssHelper"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ConsoleAppender.html" title="Class ConsoleAppender"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

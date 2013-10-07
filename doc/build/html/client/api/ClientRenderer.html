@@ -1,0 +1,258 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class ClientRenderer &mdash; Rain 0.33.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.33.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Rain 0.33.0 documentation" href="../../index.html" />
+    <link rel="next" title="Class ClientStorage" href="ClientStorage.html" />
+    <link rel="prev" title="Class AsyncController" href="AsyncController.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ClientStorage.html" title="Class ClientStorage"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="AsyncController.html" title="Class AsyncController"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="class-clientrenderer">
+<h1>Class ClientRenderer<a class="headerlink" href="#class-clientrenderer" title="Permalink to this headline">¶</a></h1>
+<p>The ClientRenderer handles the registration and inserting of new components from the server.
+If a component takes too long to be obtained from the server, a placeholder is used to show
+that the component is still loading.</p>
+<p>This works for all transport layers.</p>
+<div class="section" id="constructor">
+<h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="ClientRenderer">
+<em class="property">class </em><tt class="descname">ClientRenderer</tt><big>(</big><big>)</big><a class="headerlink" href="#ClientRenderer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="get">
+<h3>get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ClientRenderer.get">
+<tt class="descclassname">ClientRenderer.</tt><tt class="descname">get</tt><big>(</big><big>)</big><a class="headerlink" href="#ClientRenderer.get" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Returns ClientRenderer:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">the singleton instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Returns the class&#8217; singleton instance.</p>
+</div>
+<div class="section" id="rendercomponent">
+<h3>renderComponent<a class="headerlink" href="#rendercomponent" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ClientRenderer#renderComponent">
+<tt class="descname">ClientRenderer#renderComponent</tt><big>(</big><em>component</em><big>)</big><a class="headerlink" href="#ClientRenderer#renderComponent" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>component</strong> (<em>Object</em>) &#8211; the rendered component</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Renders the component to the DOM and registers it.
+This method takes care of rendering orphaned components (components rendered inside a
+a container which get sent to the client before their placeholder div).</p>
+</div>
+<div class="section" id="renderplaceholder">
+<h3>renderPlaceholder<a class="headerlink" href="#renderplaceholder" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ClientRenderer#renderPlaceholder">
+<tt class="descname">ClientRenderer#renderPlaceholder</tt><big>(</big><em>instanceId</em><big>)</big><a class="headerlink" href="#ClientRenderer#renderPlaceholder" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>instanceId</strong> (<em>String</em>) &#8211; the instanceId of the component for the placeholder</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Renders the placeholder.</p>
+</div>
+<div class="section" id="requestcomponent">
+<h3>requestComponent<a class="headerlink" href="#requestcomponent" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ClientRenderer#requestComponent">
+<tt class="descname">ClientRenderer#requestComponent</tt><big>(</big><em>component</em><big>)</big><a class="headerlink" href="#ClientRenderer#requestComponent" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>component</strong> (<em>Object</em>) &#8211; the information about the requested component</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Requests a component over websockets.</p>
+</div>
+<div class="section" id="setplaceholder">
+<h3>setPlaceholder<a class="headerlink" href="#setplaceholder" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ClientRenderer#setPlaceholder">
+<tt class="descname">ClientRenderer#setPlaceholder</tt><big>(</big><em>component</em><big>)</big><a class="headerlink" href="#ClientRenderer#setPlaceholder" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>component</strong> (<em>Object</em>) &#8211; the whole rendered placeholder component</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Sets the placeholder component.</p>
+</div>
+<div class="section" id="setplaceholdertimeout">
+<h3>setPlaceholderTimeout<a class="headerlink" href="#setplaceholdertimeout" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="ClientRenderer#setPlaceholderTimeout">
+<tt class="descname">ClientRenderer#setPlaceholderTimeout</tt><big>(</big><em>milliseconds</em><big>)</big><a class="headerlink" href="#ClientRenderer#setPlaceholderTimeout" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>milliseconds</strong> (<em>Number</em>) &#8211; time in milliseconds</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Sets the placeholder timeout which is set from the server configuration.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class ClientRenderer</a><ul>
+<li><a class="reference internal" href="#constructor">Constructor</a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#get">get</a></li>
+<li><a class="reference internal" href="#rendercomponent">renderComponent</a></li>
+<li><a class="reference internal" href="#renderplaceholder">renderPlaceholder</a></li>
+<li><a class="reference internal" href="#requestcomponent">requestComponent</a></li>
+<li><a class="reference internal" href="#setplaceholder">setPlaceholder</a></li>
+<li><a class="reference internal" href="#setplaceholdertimeout">setPlaceholderTimeout</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="AsyncController.html"
+                        title="previous chapter">Class AsyncController</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ClientStorage.html"
+                        title="next chapter">Class ClientStorage</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="ClientStorage.html" title="Class ClientStorage"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="AsyncController.html" title="Class AsyncController"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

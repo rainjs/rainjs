@@ -1,0 +1,200 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class CssRenderer &mdash; Rain 0.33.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.33.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Rain 0.33.0 documentation" href="../../index.html" />
+    <link rel="next" title="Class EventEmitter" href="EventEmitter.html" />
+    <link rel="prev" title="Class CssRegistry" href="CssRegistry.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="EventEmitter.html" title="Class EventEmitter"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CssRegistry.html" title="Class CssRegistry"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="class-cssrenderer">
+<h1>Class CssRenderer<a class="headerlink" href="#class-cssrenderer" title="Permalink to this headline">¶</a></h1>
+<p>Handles inserting and removing CSS into the page. The CSS is requested using AJAX and
+the received CSS text is added to style tags with no more than 4095 rules. The maximum
+number of stylesheets is 31. This is due to the limitations introduced by Internet
+Explorer 8 and Internet Explorer 9 browsers.</p>
+<div class="section" id="constructor">
+<h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="CssRenderer">
+<em class="property">class </em><tt class="descname">CssRenderer</tt><big>(</big><big>)</big><a class="headerlink" href="#CssRenderer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="get">
+<h3>get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="CssRenderer.get">
+<tt class="descclassname">CssRenderer.</tt><tt class="descname">get</tt><big>(</big><big>)</big><a class="headerlink" href="#CssRenderer.get" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Returns CssRenderer:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">the singleton instance</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Returns the singleton instance.</p>
+</div>
+<div class="section" id="load">
+<h3>load<a class="headerlink" href="#load" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="CssRenderer#load">
+<tt class="descname">CssRenderer#load</tt><big>(</big><em>component</em><big>)</big><a class="headerlink" href="#CssRenderer#load" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>component</strong> (<em>Object</em>) &#8211; the component for which to load the CSS. This is the object sent by the server when a component is rendered.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Returns Promise:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">indicates when the loading of the CSS finished.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Requests the CSS files for the specified component and inserts the CSS into the page. The
+promise returned by this method is rejected when there is not enough space to insert
+the CSS in the page.</p>
+</div>
+<div class="section" id="unload">
+<h3>unload<a class="headerlink" href="#unload" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="CssRenderer#unload">
+<tt class="descname">CssRenderer#unload</tt><big>(</big><em>component</em><big>)</big><a class="headerlink" href="#CssRenderer#unload" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first last simple">
+<li><strong>component</strong> (<em>Object</em>) &#8211; the component for which to unload the CSS.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Removes the CSS from the page if the number of instances for the specified component
+reaches 0.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class CssRenderer</a><ul>
+<li><a class="reference internal" href="#constructor">Constructor</a></li>
+<li><a class="reference internal" href="#methods">Methods</a><ul>
+<li><a class="reference internal" href="#get">get</a></li>
+<li><a class="reference internal" href="#load">load</a></li>
+<li><a class="reference internal" href="#unload">unload</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="CssRegistry.html"
+                        title="previous chapter">Class CssRegistry</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="EventEmitter.html"
+                        title="next chapter">Class EventEmitter</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="EventEmitter.html" title="Class EventEmitter"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CssRegistry.html" title="Class CssRegistry"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Rain 0.33.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
