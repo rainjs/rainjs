@@ -34,7 +34,7 @@ describe('Router Plugin: View handler', function() {
         response,
         request = {},
         mocks = {},
-        renderer, routerPlugin,
+        renderer, routerPlugin, router_utils,
         loginComponentId, loginVersion, loginViewId;
 
     beforeEach(function() {
@@ -59,8 +59,10 @@ describe('Router Plugin: View handler', function() {
         loginVersion = config.loginComponent.version,
         loginViewId = config.loginComponent.viewId;
 
-        routerPlugin = loadModuleExports('/lib/routes/view.js', mocks);
+        router_utils = jasmine.createSpyObj('routerUtils', ['refuseNonGetRequests']);
+        mocks['../router_utils'] = router_utils;
 
+        routerPlugin = loadModuleExports('/lib/routes/view.js', mocks);
 
         response = jasmine.createSpyObj('response', ['write', 'setHeader', 'writeHead', 'end']);
 
@@ -84,6 +86,7 @@ describe('Router Plugin: View handler', function() {
     });
 
     it('must return the bootstrap html', function() {
+
         request.path = "index";
         request.component = componentRegistry.getConfig("example", "0.0.1");
         routerPlugin.handle(request, response);
