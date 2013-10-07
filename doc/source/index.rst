@@ -71,6 +71,7 @@ Server side modules
     server/sdk_architecture
     server/cluster
     server/nginx_static_routes
+    server/routes
 
 ....
 APIs
