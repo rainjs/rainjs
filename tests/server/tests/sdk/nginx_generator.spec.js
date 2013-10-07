@@ -25,10 +25,12 @@
 
 "use strict";
 
+var path = require('path');
+
 describe('Nginx Generator', function () {
 
     var fs, mocks = {},
-        util, utils, nginxGenerator;
+        utils, nginxGenerator, config;
 
     beforeEach(function () {
         fs = jasmine.createSpyObj('fs', ['openSync', 'createWriteStream', 'readdirSync']);
@@ -53,6 +55,11 @@ describe('Nginx Generator', function () {
             version: 'fakeVersion_rain'
         };
 
+        mocks['rainjs2/components/my_folder/my_file/meta.json'] = {
+            id: 'fakeId_rain2',
+            version: 'fakeVersion_rain2'
+        };
+
         mocks['my_proj/components/folder2/meta.json'] = {
             id: 'fake_rain_id',
             version: '1.0'
@@ -60,6 +67,11 @@ describe('Nginx Generator', function () {
 
         mocks['rainjs/components/folder2/meta.json'] = {
             id: 'fake_rain_id',
+            version: '1.0'
+        };
+
+        mocks['rainjs2/components/folder2/meta.json'] = {
+            id: 'fake_rain_id2',
             version: '1.0'
         };
 
@@ -72,13 +84,30 @@ describe('Nginx Generator', function () {
             id: 'fake_rain_id',
             version: '2.0'
         };
+
+        mocks['rainjs2/components/fakefolder/meta.json'] = {
+            id: 'fake_rain_id2',
+            version: '2.0'
+        };
         nginxGenerator = loadModuleExports('bin/lib/nginx_generator.js', mocks);
 
     });
 
     describe('#Constructor', function () {
+        config =  {
+            nginxConf: {
+                http: {
+                    server: {
+                        locations: {}
+                    }
+                }
+            },
+            projects: [{path: 'my_proj', 'productionPath': undefined}],
+            'destinationPath' : path.resolve(process.cwd(), './nginx.conf')
+        }
+
         it('should construct the module correctly', function () {
-            var instance = new nginxGenerator();
+            var instance = new nginxGenerator(config);
 
             expect(instance).not.toBe('undefined');
         });
@@ -86,7 +115,7 @@ describe('Nginx Generator', function () {
 
     describe('#Run', function () {
         it('should generate the regular expressions for the current project', function () {
-            var config = {
+            config = {
                 nginxConf: {
                     http: {
                         server: {
@@ -94,7 +123,8 @@ describe('Nginx Generator', function () {
                         }
                     }
                 },
-                projects: ['my_proj']
+                projects: [{path: 'my_proj', 'productionPath': undefined}],
+                'destinationPath' : path.resolve(process.cwd(), './nginx.conf')
             };
 
             var stream = jasmine.createSpyObj('stream', ['write', 'end']);
@@ -103,20 +133,54 @@ describe('Nginx Generator', function () {
             });
 
             var instance = new nginxGenerator(config);
-
             instance.run();
 
-            //console.log(stream.write.calls[i].args);
             var allArguments = Array.prototype.concat.apply([], stream.write.argsForCall);
 
-            expect(fs.openSync).toHaveBeenCalledWith('nginx.conf', 'w');
-            expect(allArguments.indexOf('location ~* fakeId/fakeVersion/.*(resources.*)$')).not.toBe(-1);
-            expect(allArguments.indexOf('location ~* fakeId/.*(resources.*)$')).not.toBe(-1);
-            expect(allArguments.indexOf('location ~* fakeId/fakeVersion/.*(js.*\\.js)$')).not.toBe(-1);
-            expect(allArguments.indexOf('location ~* fakeId/.*(js.*\\.js)$')).not.toBe(-1);
+            expect(fs.openSync).toHaveBeenCalledWith(process.cwd()+'/nginx.conf', 'w');
+            expect(allArguments.indexOf('location ~* fakeId/fakeVersion/(resources.*)$')).not.toBe(-1);
+            expect(allArguments.indexOf('location ~* fakeId/(resources.*)$')).not.toBe(-1);
+            expect(allArguments.indexOf('location ~* fakeId/fakeVersion/(js.*\\.js)$')).not.toBe(-1);
+            expect(allArguments.indexOf('location ~* fakeId/(js.*\\.js)$')).not.toBe(-1);
         });
 
         it('should generate the regular expressions for rainjs', function () {
+            config = {
+                nginxConf: {
+                    http: {
+                        server: {
+                            locations: {}
+                        }
+                    }
+                },
+                projects: [
+                    {path: 'my_proj', 'productionPath': undefined},
+                    {path: 'rainjs', 'productionPath': undefined}
+                ],
+                'destinationPath' : path.resolve(process.cwd(), './nginx.conf')
+            };
+
+            var stream = jasmine.createSpyObj('stream', ['write', 'end']);
+            fs.createWriteStream.andCallFake(function () {
+                return stream;
+            });
+
+            var instance = new nginxGenerator(config);
+            instance.run();
+
+            var allArguments = Array.prototype.concat.apply([], stream.write.argsForCall);
+            expect(fs.openSync).toHaveBeenCalledWith(process.cwd()+'/nginx.conf', 'w');
+            expect(allArguments.indexOf('location ~* fakeId/fakeVersion/(resources.*)$')).not.toBe(-1);
+            expect(allArguments.indexOf('location ~* fakeId/(resources.*)$')).not.toBe(-1);
+            expect(allArguments.indexOf('location ~* fakeId/fakeVersion/(js.*\\.js)$')).not.toBe(-1);
+            expect(allArguments.indexOf('location ~* fakeId/(js.*\\.js)$')).not.toBe(-1);
+            expect(allArguments.indexOf('location ~* fake_rain_id/1.0/(resources.*)$')).not.toBe(-1);
+            expect(allArguments.indexOf('location ~* fake_rain_id/1.0/(js.*\\.js)$')).not.toBe(-1);
+            expect(allArguments.indexOf('location ~* fake_rain_id/(resources.*)$')).not.toBe(-1);
+            expect(allArguments.indexOf('location ~* fake_rain_id/(js.*\\.js)$')).not.toBe(-1);
+        });
+
+        it('should generate the correct reg exps when a production path is provided', function () {
             var config = {
                 nginxConf: {
                     http: {
@@ -125,10 +189,11 @@ describe('Nginx Generator', function () {
                         }
                     }
                 },
-                projects: ['my_proj', 'rainjs']
+                projects: [
+                    {path: 'my_proj', 'productionPath': '/opt/ui/my_proj'}
+                ],
+                'destinationPath' : path.resolve(process.cwd(), './nginx.conf')
             };
-
-            var times = 1;
 
             var stream = jasmine.createSpyObj('stream', ['write', 'end']);
             fs.createWriteStream.andCallFake(function () {
@@ -136,21 +201,82 @@ describe('Nginx Generator', function () {
             });
 
             var instance = new nginxGenerator(config);
-
             instance.run();
 
-            //console.log(stream.write.calls[i].args);
+            var allArguments = Array.prototype.concat.apply([], stream.write.argsForCall);
+            expect(fs.openSync).toHaveBeenCalledWith(process.cwd()+'/nginx.conf', 'w');
+
+            expect(allArguments.indexOf('location ~* fakeId/fakeVersion/(resources.*)$')).not.toBe(-1);
+            expect(allArguments.indexOf('location ~* fakeId/(resources.*)$')).not.toBe(-1);
+            expect(allArguments.indexOf(' /opt/ui/my_proj/components/my_folder/my_file/$1;\n')).not.toBe(-1);
+
+            expect(allArguments.indexOf('location ~* fakeId/fakeVersion/(js.*\\.js)$')).not.toBe(-1);
+            expect(allArguments.indexOf('location ~* fakeId/(js.*\\.js)$')).not.toBe(-1);
+            expect(allArguments.indexOf(' /opt/ui/my_proj/components/my_folder/my_file/client/$1;\n')).not.toBe(-1);
+
+            expect(allArguments.indexOf('location ~* fake_rain_id/(resources.*)$')).not.toBe(-1);
+            expect(allArguments.indexOf(' /opt/ui/my_proj/components/fakefolder/$1;\n')).not.toBe(-1);
+
+            expect(allArguments.indexOf('location ~* fake_rain_id/(js.*\\.js)$')).not.toBe(-1);
+            expect(allArguments.indexOf(' /opt/ui/my_proj/components/fakefolder/client/$1;\n')).not.toBe(-1);
+
+        });
+
+        it('should generate correct reg exps for the all projects if prod paths are provided', function () {
+            config = {
+                nginxConf: {
+                    http: {
+                        server: {
+                            locations: {}
+                        }
+                    }
+                },
+                projects: [
+                    {path: 'my_proj', 'productionPath': '/opt/ui/my_proj'},
+                    {path: 'rainjs', 'productionPath': '/etc/node_modules/rain'},
+                    {path: 'rainjs2', 'productionPath': '/etc/node_modules/rain2'}
+                ],
+                'destinationPath' : path.resolve(process.cwd(), './nginx.conf')
+            };
+
+            var stream = jasmine.createSpyObj('stream', ['write', 'end']);
+            fs.createWriteStream.andCallFake(function () {
+                return stream;
+            });
+
+            var instance = new nginxGenerator(config);
+            instance.run();
+
             var allArguments = Array.prototype.concat.apply([], stream.write.argsForCall);
 
-            expect(fs.openSync).toHaveBeenCalledWith('nginx.conf', 'w');
-            expect(allArguments.indexOf('location ~* fakeId/fakeVersion/.*(resources.*)$')).not.toBe(-1);
-            expect(allArguments.indexOf('location ~* fakeId/.*(resources.*)$')).not.toBe(-1);
-            expect(allArguments.indexOf('location ~* fakeId/fakeVersion/.*(js.*\\.js)$')).not.toBe(-1);
-            expect(allArguments.indexOf('location ~* fakeId/.*(js.*\\.js)$')).not.toBe(-1);
-            expect(allArguments.indexOf('location ~* fake_rain_id/1.0/.*(resources.*)$')).not.toBe(-1);
-            expect(allArguments.indexOf('location ~* fake_rain_id/1.0/.*(js.*\\.js)$')).not.toBe(-1);
-            expect(allArguments.indexOf('location ~* fake_rain_id/.*(resources.*)$')).not.toBe(-1);
-            expect(allArguments.indexOf('location ~* fake_rain_id/.*(js.*\\.js)$')).not.toBe(-1);
+            expect(fs.openSync).toHaveBeenCalledWith(process.cwd()+'/nginx.conf', 'w');
+
+            expect(allArguments.indexOf('location ~* fakeId/fakeVersion/(resources.*)$')).not.toBe(-1);
+            expect(allArguments.indexOf('location ~* fakeId/(resources.*)$')).not.toBe(-1);
+            expect(allArguments.indexOf(' /opt/ui/my_proj/components/my_folder/my_file/$1;\n')).not.toBe(-1);
+
+            expect(allArguments.indexOf('location ~* fakeId/fakeVersion/(js.*\\.js)$')).not.toBe(-1);
+            expect(allArguments.indexOf('location ~* fakeId/(js.*\\.js)$')).not.toBe(-1);
+            expect(allArguments.indexOf(' /opt/ui/my_proj/components/my_folder/my_file/client/$1;\n')).not.toBe(-1);
+
+            expect(allArguments.indexOf('location ~* fake_rain_id/(resources.*)$')).not.toBe(-1);
+            expect(allArguments.indexOf(' /opt/ui/my_proj/components/fakefolder/$1;\n')).not.toBe(-1);
+
+            expect(allArguments.indexOf('location ~* fake_rain_id/1.0/(resources.*)$')).not.toBe(-1);
+            expect(allArguments.indexOf(' /etc/node_modules/rain/components/folder2/$1;\n')).not.toBe(-1);
+
+            expect(allArguments.indexOf('location ~* fake_rain_id2/1.0/(resources.*)$')).not.toBe(-1);
+            expect(allArguments.indexOf(' /etc/node_modules/rain2/components/folder2/$1;\n')).not.toBe(-1);
+
+            expect(allArguments.indexOf('location ~* fake_rain_id/(js.*\\.js)$')).not.toBe(-1);
+            expect(allArguments.indexOf(' /opt/ui/my_proj/components/fakefolder/client/$1;\n')).not.toBe(-1);
+
+            expect(allArguments.indexOf('location ~* fake_rain_id/1.0/(js.*\\.js)$')).not.toBe(-1);
+            expect(allArguments.indexOf(' /etc/node_modules/rain/components/folder2/client/$1;\n')).not.toBe(-1);
+
+            expect(allArguments.indexOf('location ~* fake_rain_id2/1.0/(js.*\\.js)$')).not.toBe(-1);
+            expect(allArguments.indexOf(' /etc/node_modules/rain2/components/folder2/client/$1;\n')).not.toBe(-1);
+
         });
     });
 

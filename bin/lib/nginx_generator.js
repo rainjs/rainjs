@@ -28,6 +28,7 @@
 var fs = require('fs'),
     path = require('path'),
     util = require('../../lib/util'),
+    color = require('colors'),
     utils = require('../lib/utils');
 
 var NEWLINE = (process.platform === 'win32') ? '\r\n' :
@@ -35,14 +36,25 @@ var NEWLINE = (process.platform === 'win32') ? '\r\n' :
 
 /**
  * @name NginxGenerator
- * @param {Object} configuration the basic configuration located in init/conf/nginx.conf
+ * @param {Object} configuration the basic configuration by default located in init/conf/nginx.conf
  * @constructor
  */
 function NginxGenerator(configuration) {
     this._baseConfiguration = configuration;
+    var fd; //destination file descriptor
 
-    var fd = fs.openSync('nginx.conf', 'w');
-    this._stream = fs.createWriteStream('nginx.conf', {
+    try {
+
+        fd = fs.openSync(configuration.destinationPath, 'w');
+
+    } catch (e) {
+        console.log('Could not create the destination file.');
+        console.log(e.message.red);
+        console.log(e.stack.red);
+        process.exit(1);
+    }
+
+    this._stream = fs.createWriteStream(configuration.destinationPath, {
         flags: 'w',
         encoding: 'utf-8',
         mode: '0644',
@@ -52,8 +64,8 @@ function NginxGenerator(configuration) {
 
 /**
  * Generates the configuration file by mapping the regexps of possible request routes with
- * actual correspondance. Generates configuration for javascript routes and resources and stores it in
- * the root of the project.
+ * actual correspondent. Generates configuration for javascript routes and resources and stores it
+ * inthe root of the project.
  */
 NginxGenerator.prototype.run = function () {
     var nginxConf = this._baseConfiguration.nginxConf,
@@ -64,13 +76,24 @@ NginxGenerator.prototype.run = function () {
     this._nginxLocations = nginxConf.http.server.locations;
 
     projects.forEach(function (project) {
-        var componentsPath = path.join(project, 'components');
+        var componentsPath = path.join(project.path, 'components');
 
         fs.readdirSync(componentsPath).forEach(function (folder) {
-            var componentPath = path.join(componentsPath, folder),
-                config = require(path.join(componentPath, 'meta.json'));
+            var componentPath,
+                prodComponentPath,
+                config;
 
-            self._addNginxLocations(componentPath, config.id, config.version);
+            componentPath = path.join(componentsPath, folder);
+            config = require(path.join(componentPath, 'meta.json'));
+
+            //if a production path has been provided for the project, the component paths in the
+            // config file will have that as base path
+            if(project.productionPath) {
+                prodComponentPath = path.join(project.productionPath, 'components', folder);
+                self._addNginxLocations(prodComponentPath, config.id, config.version);
+            } else {
+                self._addNginxLocations(componentPath, config.id, config.version);
+            }
 
             var latestVersion = latestVersionMap[config.id];
 
@@ -79,7 +102,7 @@ NginxGenerator.prototype.run = function () {
 
                 latestVersionMap[config.id] = {
                     version: config.version,
-                    folder: componentPath
+                    folder: prodComponentPath ? prodComponentPath : componentPath
                 };
             }
         });
@@ -91,6 +114,8 @@ NginxGenerator.prototype.run = function () {
 
     this._writeConfiguration(nginxConf, 0);
     this._stream.end();
+    console.log('NginX configuration generated successfully to ' +
+        this._baseConfiguration.destinationPath);
 };
 
 /**
@@ -102,8 +127,8 @@ NginxGenerator.prototype.run = function () {
  * @private
  */
 NginxGenerator.prototype._addNginxLocations = function (componentPath, id, version) {
-    var jsRegex = 'location ~* %s/.*(js.*\\.js)$',
-        resourceRegex = 'location ~* %s/.*(resources.*)$';
+    var jsRegex = 'location ~* %s/(js.*\\.js)$',
+        resourceRegex = 'location ~* %s/(resources.*)$';
 
     var routeStart = id;
     if (version) {
