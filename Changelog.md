@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.34.1
+
+* Two small fixes for the translations to work in the error pages.
+
 ## 0.34.0
 
 * Fixed a bug of the rain css minification process. The css minification now supports having

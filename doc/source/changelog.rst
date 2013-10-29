@@ -3,6 +3,12 @@ Changelog
 =========
 
 ---------
+v 0.34.1
+---------
+
++ Two small fixes for the translations to work in the error pages.
+
+---------
 v 0.34.0
 ---------
 
