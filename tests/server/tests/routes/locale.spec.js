@@ -35,7 +35,8 @@ describe('locale route', function () {
     beforeEach(function () {
         var mocks = {};
         routerUtils = mocks['../router_utils'] =
-            jasmine.createSpyObj('routerUtils', ['setResourceHeaders', 'handleNotFound']);
+            jasmine.createSpyObj('routerUtils',
+                ['setResourceHeaders', 'handleNotFound', 'refuseNonGetRequests']);
         Translation = mocks['../translation'] = jasmine.createSpyObj('Translation', ['get']);
         translation = jasmine.createSpyObj('translation', ['getLocales']);
         translation.getLocales.andReturn(locales);
