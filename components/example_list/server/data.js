@@ -108,7 +108,6 @@ function text_localization(environment, callback, data) {
 }
 
 function async_localization(environment, callback, data) {
-    logger.info(environment.language);
     setTimeout(function () {
         callback(null, {
             translatedText1: t('send.email.button.label'),
