@@ -140,7 +140,7 @@ JsOptimizer.prototype._generateConfiguration = function (component, outputFile) 
         baseUrl: path.join(componentPath, 'client'),
         packages: [{
             name: 'raintime',
-            main: 'raintime',
+            main: 'component_registry',
             location: coreLocation
         }, {
             name: component.id + '/' + component.version,
@@ -197,7 +197,7 @@ JsOptimizer.prototype._generateCoreConfiguration = function (component, outputFi
 
         packages: [{
             name: 'raintime',
-            main: 'raintime',
+            main: 'component_registry',
             location: '.'
         }],
 

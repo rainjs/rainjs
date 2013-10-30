@@ -30,47 +30,67 @@ describe('CSS Renderer', function () {
         withCss: {
             id: 'example',
             version: '1.0',
-            css: [{
-                path: '/example/1.0/css/index.css',
-                ruleCount: 50
-            }, {
-                path: '/example/1.0/css/file.css',
-                ruleCount: 30
-            }, {
-                path: '/example/1.0/css/media.css',
-                ruleCount: 100,
-                media: 'all and (orientation: portrait)'
-            }]
+            uniqueId: function () {
+                return 'example;1.0';
+            },
+            css: function () {
+                return [{
+                    path: '/example/1.0/css/index.css',
+                    ruleCount: 50
+                }, {
+                    path: '/example/1.0/css/file.css',
+                    ruleCount: 30
+                }, {
+                    path: '/example/1.0/css/media.css',
+                    ruleCount: 100,
+                    media: 'all and (orientation: portrait)'
+                }];
+            }
         },
         noCss: {
             id: 'example',
             version: '2.0',
-            css: []
+            uniqueId: function () {
+                return 'example;2.0';
+            },
+            css: function () {
+                return [];
+            }
         },
         someNotFoundCss: {
             id: 'example',
             version: '1.0',
-            css: [{
-                path: '/example/1.0/css/not_found1.css',
-                ruleCount: 0
-            }, {
-                path: '/example/1.0/css/file.css',
-                ruleCount: 30
-            }, {
-                path: '/example/1.0/css/not_found2.css',
-                ruleCount: 0
-            }]
+            uniqueId: function () {
+                return 'example;1.0';
+            },
+            css: function () {
+                return [{
+                    path: '/example/1.0/css/not_found1.css',
+                    ruleCount: 0
+                }, {
+                    path: '/example/1.0/css/file.css',
+                    ruleCount: 30
+                }, {
+                    path: '/example/1.0/css/not_found2.css',
+                    ruleCount: 0
+                }];
+            }
         },
         allNotFoundCss: {
             id: 'example',
             version: '1.0',
-            css: [{
-                path: '/example/1.0/css/not_found1.css',
-                ruleCount: 0
-            }, {
-                path: '/example/1.0/css/not_found2.css',
-                ruleCount: 0
-            }]
+            uniqueId: function () {
+                return 'example;1.0';
+            },
+            css: function () {
+                return [{
+                    path: '/example/1.0/css/not_found1.css',
+                    ruleCount: 0
+                }, {
+                    path: '/example/1.0/css/not_found2.css',
+                    ruleCount: 0
+                }];
+            }
         }
     };
 
@@ -210,7 +230,6 @@ describe('CSS Renderer', function () {
                     fullId = component.id + ';' + component.version;
 
                 cssRenderer.unload.andCallThrough();
-                cssRenderer._getFullId.andCallThrough();
 
                 cssRenderer.unload(component);
 
@@ -229,7 +248,6 @@ describe('CSS Renderer', function () {
         cssRenderer.load.andCallThrough();
         cssRenderer._decorate.andCallThrough();
         cssRenderer._getFiles.andCallThrough();
-        cssRenderer._getFullId.andCallThrough();
 
         cssRenderer.load(options.component).then(function () {
             isResolved = true;
@@ -245,9 +263,9 @@ describe('CSS Renderer', function () {
             var fullId = options.component.id + ';' + options.component.version,
                 cssContents = createCssContents(options.component, options.includedIndexes);
 
-            expect(registry.getNewFiles).toHaveBeenCalledWith(fullId, options.component.css);
+            expect(registry.getNewFiles).toHaveBeenCalledWith(fullId, options.component.css());
 
-            var filesToRequest = registry.getNewFiles(fullId, options.component.css);
+            var filesToRequest = registry.getNewFiles(fullId, options.component.css());
             for (var i = 0, len = filesToRequest.length; i < len; i++) {
                 //expect($.get).toHaveBeenCalledWith(filesToRequest[i].path);
             }
@@ -297,8 +315,9 @@ describe('CSS Renderer', function () {
     function createCssContents(component, includedIndexes) {
         var cssContents = [];
 
-        for (var i = 0, len = component.css.length; i < len; i++){
-            var item = component.css[i];
+        var css = component.css();
+        for (var i = 0, len = css.length; i < len; i++){
+            var item = css[i];
             if (!includedIndexes || includedIndexes.indexOf(i) !== -1) {
                 cssContents.push({
                     path: item.path,

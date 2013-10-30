@@ -147,6 +147,10 @@ jasmine.util.extend(jasmine.getGlobal(), (function () {
         var deps = [];
 
         return jasmineIt(description, function () {
+            var suite = this.suite;
+            while(suite.parentSuite !== null) {
+                suite = suite.parentSuite;
+            }
             runs(function () {
                 if (modules.length === 0) {
                     return;
@@ -162,11 +166,14 @@ jasmine.util.extend(jasmine.getGlobal(), (function () {
            });
 
            runs(function () {
-                for (var name in jasmine.loadedModules) {
-                    mock(jasmine.loadedModules[name]);
-                }
+                    for (var name in jasmine.loadedModules) {
+                        if(!suite.disableMock) {
+                            mock(jasmine.loadedModules[name]);
+                        }
+                    }
 
-                func.apply(this, deps);
+                    func.apply(this, deps);
+
            });
         });
     };

@@ -26,77 +26,105 @@
 define(['raintime/client_storage',
         'raintime/messaging/observer',
         'raintime/messaging/intents',
-        'raintime/messaging/sockets'
-], function (ClientStorage, Observer, Intents, SocketHandler) {
+        'raintime/messaging/sockets',
+        'raintime/lib/promise'
+], function (ClientStorage, Observer, Intents, SocketHandler, Promise) {
 
-    var raintime = null;
+    var all = Promise.all,
+        when = Promise.when,
+        defer = Promise.defer;
 
     /**
      * The context reflects a component's client-side state. It gives access to other
      * important libraries like client storage, messaging and web sockets.
      *
      * @name Context
-     * @class
      * @constructor
      *
-     * @param {Raintime} raintimeInstance
      * @param {Component} component the component object
-     *
-     * @property {String} instanceId the component's instance id
-     * @property {ClientStorage} storage the local storage manager
      */
-    function Context(raintimeInstance, component) {
+    function Context(component) {
         var self = this;
 
-        raintime = raintimeInstance;
+        /**
+         * The component object.
+         *
+         * @type {Component}
+         * @private
+         */
+        this._component = component;
+
+        /**
+         * Object containing id, version, sid and children properties of the associated component.
+         *
+         * @type {{id: String, version: String, sid: String, children: Array}}
+         *
+         * @name component
+         * @memberOf Context#
+         */
         this.component = {
-            id: component.id,
-            version: component.version,
-            sid: component.staticId,
-            children: component.children
+            id: component.id(),
+            version: component.version(),
+            sid: component.staticId(),
+            children: component.children()
         };
-        this.instanceId = component.instanceId;
-        this.parentInstanceId = component.parentInstanceId;
+
+        /**
+         * The component's instance id.
+         *
+         * @type {String}
+         *
+         * @name instanceId
+         * @memberOf Context#
+         */
+        this.instanceId = component.instanceId();
+
+        /**
+         * The local storage manager.
+         *
+         * @type {ClientStorage}
+         *
+         * @name storage
+         * @memberOf Context#
+         */
         this.storage = new ClientStorage(this);
 
         /**
          * Provides methods to publish and subscribe to events.
          *
+         * @type {Object}
+         *
          * @name messaging
-         * @memberOf Context
+         * @memberOf Context#
          */
         this.messaging = {
 
             /**
-             * This is the method that allows registration of a callback method to a
-             * desired event.
+             * Registers a callback method to listen for the specified event.
              *
-             * @param {String} eventName Event name we want to subscribe to. Can be any string value.
-             * @param {Function} callback This is the callback method that will get executed. It must have a single parameter called data. e.g.: function(data)
+             * @param {String} eventName the event to which the callback is registered.
+             * @param {Function} callback this is the callback method that will get executed. It must have a single parameter called data. e.g.: function(data)
              * @param {String} [contextID] a unique id assigned to the context subscribing to the event
-             * @memberOf Context.messaging
              */
             subscribe: function (eventName, callback, contextID) {
                 Observer.subscribe(eventName, callback, self, contextID);
             },
 
             /**
-             * Unsubscribe from an event.
+             * Unsubscribes from an event.
              *
-             * @param {String} eventName Event name we want to subscribe to. Can be any string value.
-             * @param {Function} callback This is the callback method that will get executed. It must have a single parameter called data. e.g.: function(data)
-             * @memberOf Context.messaging
+             * @param {String} eventName the event for which to unsubscribe the specified callback
+             * @param {Function} callback this is the callback method that will get executed. It must have a single parameter called data. e.g.: function(data)
              */
             unsubscribe: function (eventName, callback) {
                 Observer.unsubscribe(eventName, callback, self);
             },
 
             /**
-             * This is the method that will publish an event and will execute all registered callbacks.
+             * Publishes an event. All registered callbacks are executed.
              *
              * @param {String} eventName
              * @param {Object} data
-             * @memberOf Context.messaging
              */
             publish: function (eventName, data) {
                 Observer.publish(eventName, data, self);
@@ -104,9 +132,15 @@ define(['raintime/client_storage',
 
             sendIntent: Intents.send,
 
+            /**
+             * Initializes an web socket connection for the specified channel.
+             *
+             * @param {String} channel
+             * @returns {Socket}
+             */
             getSocket: function (channel) {
                 if (channel.charAt(0) != '/') {
-                    channel = '/' + self.component.id + '/' + self.component.version + '/' + channel;
+                    channel = '/' + component.id() + '/' + component.version() + '/' + channel;
                 }
 
                 return SocketHandler.get().getSocket(channel);
@@ -115,74 +149,76 @@ define(['raintime/client_storage',
     }
 
     /**
-     * Returns the DOM container element for the component associated with this
-     * view context.
+     * Returns the DOM container element for the component associated with this view context.
      *
-     * @returns {jQueryElement} The component's container jQuery element
+     * @returns {jQuery} The component's container jQuery element
      */
     Context.prototype.getRoot = function () {
-       return $("#" + this.instanceId);
+       return this._component.rootElement();
     };
 
     /**
-     * Insert a new component into the given DOM Element and set a function that will be called
-     * after the controller for the new controller was loaded.
+     * Inserts a new component into the given DOM Element and sets a function that will be called
+     * after the controller for the new component was started.
      *
-     * The context for the callback function will be the component's controller.
+     * The callback function is called with the component's controller as parameter.
      *
-     * @param {Object} component The component which to be requested
-     * @param {String} component.id The component id
-     * @param {String} component.view The component view id
-     * @param {String} component.sid The component staticId id
-     * @param {Object} component.context Custom data for the template
-     * @param {Boolean} component.placeholder Enable / Disable placeholder
-     * @param {jQueryDom} dom The dom object where the component is inserted
+     * @param {Object} componentOptions The component which to be requested
+     * @param {String} componentOptions.id The component id
+     * @param {String} [componentOptions.version] the component version
+     * @param {String} componentOptions.view The component view id
+     * @param {String} [componentOptions.sid] The component static id
+     * @param {Object} [componentOptions.context] Custom data for the template
+     * @param {Boolean} [componentOptions.placeholder = false] Enable / disable placeholder
+     * @param {jQuery} element The dom object where the component is inserted
      * @param {Function} [callback] the function to be called after the controller was loaded
+     *
+     * @example
+     *
+     *      context.insert({
+     *          id: 'example',
+     *          view: 'nav'
+     *      }, element, function (controller) {});
      */
-    Context.prototype.insert = function (component, dom, callback) {
-        var staticId = component.sid || Math.floor(Math.random(0, Date.now()));
-        var instanceId = (
-                Date.now().toString() +
-                (++window.ClientRenderer.get().counter) +
-                staticId + this.instanceId
-        );
-        $(dom).html('<div id="' + instanceId + '"></div>');
-        component.instanceId = instanceId;
+    Context.prototype.insert = function (componentOptions, element, callback) {
+        var clientRenderer = ClientRenderer.get();
 
-        var self = this;
+        componentOptions.instanceId = clientRenderer.createComponentContainer(element);
 
-        raintime.componentRegistry.setCallback(instanceId, function (registeredComponent) {
-            self.component.children.push(registeredComponent);
-            registeredComponent.controller.context.parentInstanceId = self.instanceId;
-            callback && callback.call(registeredComponent.controller, registeredComponent);
+        this._component.addChild({
+            staticId: componentOptions.sid || componentOptions.instanceId,
+            instanceId: componentOptions.instanceId,
+            placeholder: componentOptions.placeholder
         });
 
-        window.ClientRenderer.get().requestComponent(component);
+        this.component.children = this._component.children();
+
+        clientRenderer.requestComponent(componentOptions).then(function (component) {
+            // passes the controller as this to preserve backwards compatibility
+            callback && callback.call(component.controller(), component.controller());
+        });
     };
 
     /**
-     * Replaces the component from where it is called with the given component and set a
+     * Replaces the component from where it is called with the given component and sets a
      * function that will be called after the controller for the new component was loaded.
      *
      * The context for the callback function will be the component's controller.
      *
-     * @param {Object} component The component which to be requested
-     * @param {String} component.id The component id
-     * @param {String} component.view The component view id
-     * @param {String} component.sid The component staticId id
-     * @param {Object} component.context Custom data for the template
-     * @param {Boolean} component.placeholder Enable / Disable placeholder
-     * @param {Function} [callback] the function to be called after the controller was loaded
+     * @deprecated 0.33 no use-cases for this method exist
+     *
      */
-    Context.prototype.replace = function (component, callback) {
-        component.instanceId = this.instanceId;
+    Context.prototype.replace = function (componentOptions, callback) {
+        var clientRenderer = ClientRenderer.get();
 
-        raintime.componentRegistry.setCallback(this.instanceId, function (registeredComponent) {
-            registeredComponent.controller.context.parentInstanceId = self.instanceId;
-            callback && callback.call(registeredComponent.controller, registeredComponent);
+        componentOptions.instanceId = this.instanceId;
+
+        ClientRenderer.get().getComponentRegistry().deregister(this.instanceId);
+        this._component.rootElement().empty();
+
+        clientRenderer.requestComponent(componentOptions).then(function (component) {
+            callback && callback.call(component.controller(), component.controller());
         });
-
-        window.ClientRenderer.get().requestComponent(component);
     };
 
     /**
@@ -191,33 +227,105 @@ define(['raintime/client_storage',
      * @param {String} staticId the child static id
      */
     Context.prototype.remove = function (staticId) {
-        var children = this.component.children,
-            childInstanceId;
+        var child = this._component.getChildByStaticId(staticId);
 
-        if (!children) {
-            return;
-        }
-
-        for (var i = 0, len = children.length; i < len; i++) {
-            if (children[i].staticId === staticId) {
-                childInstanceId = children[i].instanceId;
-                raintime.componentRegistry.deregister(childInstanceId);
-                children.splice(i, 1);
-                $("#" + childInstanceId).remove();
-                break;
-            }
+        if (child) {
+            ClientRenderer.get().removeComponent(child.instanceId);
+            this._component.removeChild(staticId);
+            this.component.children = this._component.children();
         }
     };
 
     /**
-     * Gets the controller of the parent component. It returns a promise if the parent isn't loaded
-     * yet. This is an internal framework method.
+     * Retrieves the controller instances for the specified staticIds or for all children if the
+     * staticIds parameter is undefined.
      *
-     * @name _getParent
-     * @memberOf Context#
-     * @private
-     * @returns {Controller|Promise}
+     * @param {Array} [staticIds]
+     * @param {Function} callback
+     * @returns {Array|undefined}
+     *
+     * @deprecated 0.33 use Controller#getChildren or Controller#getChild
      */
+    Context.prototype.find = function (staticIds, callback) {
+        if (typeof staticIds === 'function') {
+            callback = staticIds;
+            staticIds = undefined;
+        } else if (typeof staticIds === 'string') {
+            staticIds = [staticIds];
+        }
+
+        if (typeof callback !== 'function') {
+            return;
+        }
+
+        var children = this._component.children(),
+            componentRegistry = ClientRenderer.get().getComponentRegistry(),
+            wrongStaticIds = [],
+            promises = [],
+            self = this;
+
+        if (!staticIds) {
+            staticIds = children.map(function (child) { return child.staticId; });
+        }
+
+        for (var i = 0, len = staticIds.length; i < len; i++) {
+            var child = this._component.getChildByStaticId(staticIds[i]);
+            if (child) {
+                promises.push(componentRegistry.getComponent(child.instanceId));
+            } else {
+                wrongStaticIds.push(staticIds[i]);
+            }
+        }
+
+        if (wrongStaticIds.length > 0) {
+            return wrongStaticIds;
+        }
+
+        all(promises).then(function (components) {
+            var controllerPromises = components.map(function (component) {
+                var deferred = defer();
+
+                component.once('init', function () {
+                    deferred.resolve(component.controller);
+                });
+
+                return deferred.promise;
+            });
+
+            all(controllerPromises).then(function (controllers) {
+                if (controllers.length === 1) {
+                    callback.call(controllers[0], controllers[0]);
+                } else {
+                    callback.apply(self._component.controller(), controllers);
+                }
+            });
+        });
+    };
+
+    /**
+     * Gets the controller of the parent component. This method is internal.
+     *
+     * @returns {promise}
+     * @private
+     */
+    Context.prototype._getParent = function () {
+        var parentInstanceId = this._component.parentInstanceId();
+
+        if (!parentInstanceId) {
+            return null;
+        }
+
+        var parent = ClientRenderer.get().getComponentRegistry().getComponent(parentInstanceId),
+            deferred = defer();
+
+        when(parent, function (parent) {
+            parent.on('start', function () {
+                deferred.resolve(parent.controller());
+            });
+        });
+
+        return deferred.promise;
+    };
 
     return Context;
 });

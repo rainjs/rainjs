@@ -23,205 +23,360 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-"use strict";
+'use strict';
 
-describe('Client Renderer', function () {
-    var mocks, clientRenderer, success, error;
+describe('ClientRenderer', function () {
+    this.disableMock = true;
+
+    var renderer, registry, defer, socket, EventEmitter, Component;
 
     beforeEach(function () {
-        mocks = {};
+        var done = false;
+
+        runs(function () {
+            window.rainContext = {
+                placeholder: {
+                    id: 'placeholder',
+                    version: '1.0',
+                    html: 'placeholder markup',
+                    children: []
+                },
+                placeholderTimeout: 100
+            };
+
+            window.$ = jasmine.createSpy('jQuery');
+            $.ajax = jasmine.createSpy('ajax');
+            $.andReturn(jasmine.createSpyObj('jQuery', ['get', 'attr', 'css', 'append', 'hasClass',
+                'addClass', 'html', 'find', 'remove']));
+            $().length = 0;
+            $().find.andReturn($());
+
+            require([
+                'raintime/client_renderer',
+                'raintime/css/renderer',
+                'raintime/messaging/sockets',
+                'raintime/lib/promise',
+                'raintime/lib/event_emitter',
+                'raintime/component'
+            ], function (ClientRenderer, CssRenderer, SocketHandler, Promise, Emitter, Comp) {
+                spyOn(CssRenderer, 'get');
+                spyOn(SocketHandler, 'get');
+
+                socket = jasmine.createSpyObj('socket', ['on', 'emit']);
+
+                SocketHandler.get.andReturn({
+                    getSocket: function () { return socket; }
+                });
+
+                CssRenderer.get.andReturn(jasmine.createSpyObj('cssRenderer', ['load']));
+
+                renderer = new ClientRenderer();
+                registry = renderer.getComponentRegistry();
+
+                spyOn(registry, 'getParent');
+                spyOn(registry, 'register');
+                spyOn(registry, 'deregister');
+                spyOn(registry, 'load');
+                spyOn(registry, 'addWaitingInstanceId');
+                spyOn(registry, 'getComponent');
+
+                defer = Promise.defer;
+
+                EventEmitter = Emitter;
+                Component = Comp;
+
+                done = true;
+            });
+        });
+
+        waitsFor(function () {
+            return done;
+        });
     });
 
-    function setup(ClientRenderer) {
-        ClientRenderer.get.andCallFake(function () {
-            return new ClientRenderer;
+    afterEach(function () {
+        runs(function () {
+            delete window.rainContext;
+            renderer = null;
+            registry = null;
+            socket = null;
+            window.$ = jQuery;
         });
+    });
 
-        mocks.SocketHandler = jasmine.loadedModules['raintime/messaging/sockets'];
-
-        mocks.SocketHandler.get.andCallThrough();
-        mocks.SocketHandler.get().getSocket.andReturn({ on: jasmine.createSpy() });
-
-        mocks.Raintime = jasmine.loadedModules['raintime'];
-        mocks.Raintime.componentRegistry = jasmine.createSpyObj('componentRegistry',
-                                                            ['preRegister', 'isPreRegistered']);
-        mocks.Raintime.componentRegistry.isPreRegistered.andReturn(true);
-
-        var loadCss = jasmine.createSpyObj('cssRenderer', ['then']);
-        loadCss.then.andCallFake(function (resolve, err) {
-            success = resolve;
-            error = err;
-        });
-
-        mocks.CssRenderer = jasmine.loadedModules['raintime/css/renderer'];
-        mocks.CssRenderer.get = function () {
-            return {
-                load: function () {
-                    return loadCss;
-                }
-            };
-        };
-
-        clientRenderer = ClientRenderer.get();
-    }
-
-    describe('render component', function () {
-        var component1, component2, container,
-            component3, child1, child2;
+    describe('renderComponent', function () {
+        var componentData, orphanData, indirectOrphanData, childComponent;
 
         beforeEach(function () {
-            component1 = {
-                instanceId: 'ff44aa',
-                containerId: 'ec038f',
-                id: 'component',
-                version: '1.0'
-            };
-            component2 = {
-                instanceId: 'ff44bb',
-                containerId: 'ec038f',
-                id: 'component',
-                version: '2.6.89'
-            };
-            container = {
-                instanceId: 'ec038f',
-                id: 'container',
-                version: '1.5.2'
-            };
+            runs(function () {
+                componentData = {
+                    css: [],
+                    children: [{
+                        instanceId:'id5',
+                        staticId: 'cancelButton',
+                        placeholder: false
+                    }],
+                    html:'component markup',
+                    controller: '/example/3.0/js/button.js',
+                    instanceId: 'id1',
+                    staticId: 'cancelButton',
+                    id: 'example',
+                    version: '3.0'
+                };
 
-            child1 = {
-                instanceId: 'c1',
-                id: 'selector',
-                version: '1.0'
-            };
-            child2 = {
-                instanceId: 'c2',
-                id: 'selector',
-                version: '2.0',
-                placeholder: true
-            };
-            component3 = {
-                instanceId: 'cc9922',
-                id: 'example',
-                version: '2.6.89',
-                children: [child1, child2]
-            };
+                childComponent = {
+                    css: [],
+                    children: [],
+                    html:'child markup',
+                    controller: '/example/3.0/js/child.js',
+                    instanceId: 'id5',
+                    staticId: 'cancelButton',
+                    id: 'example',
+                    version: '3.0'
+                };
+
+                orphanData = {
+                    css: [],
+                    children: [{
+                        instanceId:'id3',
+                        staticId: 'selector',
+                        placeholder: false
+                    }],
+                    html:'component markup',
+                    controller: '/example/3.0/js/button.js',
+                    instanceId: 'id2',
+                    staticId: 'cancelButton',
+                    id: 'example',
+                    version: '3.0',
+                    containerId: 'id1'
+                };
+
+                indirectOrphanData = {
+                    css: [],
+                    children: [],
+                    html:'component markup',
+                    controller: '/example/3.0/js/button.js',
+                    instanceId: 'id3',
+                    staticId: 'cancelButton',
+                    id: 'example',
+                    version: '3.0'
+                };
+            });
         });
 
-        it('should add an orphan component to its container\'s orphans list',
-                ['raintime/client_rendering'],
-                function (ClientRenderer) {
+        it('should set the parentInstanceId', function () {
+            registry.getParent.andReturn({instanceId: function () { return 'id0'; }});
 
-            setup(ClientRenderer);
-            ClientRenderer.prototype.renderComponent.andCallThrough();
+            renderer.renderComponent(componentData);
 
-            clientRenderer.renderComponent(component1);
-
-            expect(clientRenderer.orphans[component1.containerId].length).toEqual(1);
-            expect(clientRenderer.orphans[component1.containerId]).toContain(component1);
+            var component = registry.register.mostRecentCall.args[0];
+            expect(component.parentInstanceId()).toEqual('id0');
         });
 
-        it('should add multiple orphan components to their container\'s orphans list',
-                ['raintime/client_rendering'],
-                function (ClientRenderer) {
+        it('should register the component', function () {
+            renderer.renderComponent(componentData);
 
-            setup(ClientRenderer);
-            ClientRenderer.prototype.renderComponent.andCallThrough();
-
-            clientRenderer.renderComponent(component1);
-            clientRenderer.renderComponent(component2);
-
-            expect(clientRenderer.orphans[component1.containerId].length).toEqual(2);
-            expect(clientRenderer.orphans[component1.containerId]).toContain(component1);
-            expect(clientRenderer.orphans[component1.containerId]).toContain(component2);
+            expect(registry.register).toHaveBeenCalled();
+            var component = registry.register.mostRecentCall.args[0];
+            expect(component.instanceId()).toEqual(componentData.instanceId);
         });
 
-        it('should render the orphan components when the container arrives',
-                ['raintime/client_rendering'],
-                function (ClientRenderer) {
+        it('should notify the registry about the children instance ids', function () {
+            renderer.renderComponent(componentData);
 
-            setup(ClientRenderer);
-            ClientRenderer.prototype.renderComponent.andCallThrough();
+            var child = componentData.children[0];
+            expect(registry.addWaitingInstanceId).toHaveBeenCalledWith(child.instanceId);
+        });
 
-            this.after(function () {
-                $('#' + component1.instanceId
-                    + ',#' + component1.instanceId
-                    + ',#' + container.instanceId).remove();
+        it('should insert the markup in the DOM', function () {
+            var deferred = defer();
+            registry.load.andReturn(deferred.promise);
+            $().length = 1;
+
+            renderer.renderComponent(componentData);
+
+            var component = registry.register.mostRecentCall.args[0];
+            expect($().append).toHaveBeenCalledWith(componentData.html);
+            expect($().attr).toHaveBeenCalledWith('class', component.cssClass());
+        });
+
+        it('should load the component', function () {
+            var deferred = defer();
+            registry.load.andReturn(deferred.promise);
+            $().length = 1;
+
+            renderer.renderComponent(componentData);
+
+            var component = registry.register.mostRecentCall.args[0];
+            expect(registry.load).toHaveBeenCalledWith(component);
+        });
+
+        it('should show the component', function () {
+            var deferred = defer();
+            registry.load.andReturn(deferred.promise);
+            $().length = 1;
+
+            renderer.renderComponent(componentData);
+
+            deferred.resolve();
+
+            expect($().css).toHaveBeenCalledWith('visibility', '');
+        });
+
+        it('should handle components rendered in a container', function () {
+            var deferred = defer();
+            registry.load.andReturn(deferred.promise);
+            $().length = 0;
+
+            renderer.renderComponent(orphanData);
+
+            registry.getParent.andReturn({
+                instanceId: function () { return orphanData.instanceId; }
             });
 
-            clientRenderer.renderComponent(component1);
-            clientRenderer.renderComponent(component2);
+            renderer.renderComponent(indirectOrphanData);
 
-            expect(clientRenderer.orphans[container.instanceId].length).toEqual(2);
-            expect(clientRenderer.orphans[container.instanceId]).toContain(component1);
-            expect(clientRenderer.orphans[container.instanceId]).toContain(component2);
+            expect(registry.load).not.toHaveBeenCalled();
 
-            var html = [
-                '<div id="' + component1.instanceId + '"></div>',
-                '<div id="' + component2.instanceId + '"></div>',
-                '<div id="' + container.instanceId + '"></div>'
-            ];
-            $('body').append(html.join('\n'));
+            expect(registry.register.calls.length).toEqual(2);
+            var orphan = registry.register.calls[0].args[0];
+            var indirectOrphan = registry.register.calls[1].args[0];
 
-            clientRenderer.renderComponent(container);
+            $().length = 1;
+            registry.getParent.andReturn(null);
 
-            var f = ClientRenderer.prototype.renderComponent;
+            renderer.renderComponent(componentData);
 
-            expect(f.argsForCall[3][0]).toEqual(component1);
-            expect(f.argsForCall[4][0]).toEqual(component2);
+            var component = registry.register.calls[2].args[0];
 
-            expect(clientRenderer.orphans[container.instanceId]).not.toBeDefined();
+            expect(registry.load).toHaveBeenCalledWith(component);
+            expect(registry.load).toHaveBeenCalledWith(orphan);
+            expect(registry.load).toHaveBeenCalledWith(indirectOrphan);
         });
 
-        it('should pre-register a component\'s children',
-                ['raintime/client_rendering'],
-                function (ClientRenderer) {
+        it('should show the placeholder', function () {
+            jasmine.Clock.useMock();
+            componentData.children[0].placeholder = true;
 
-            setup(ClientRenderer);
-            ClientRenderer.prototype.renderComponent.andCallThrough();
+            var deferred = defer();
+            registry.load.andReturn(deferred.promise);
+            $().length = 1;
 
-            var html = [
-                '<div id="' + component3.instanceId + '"></div>'
-            ];
-            $('body').append(html.join('\n'));
+            renderer.renderComponent(componentData);
 
-            clientRenderer.renderComponent(component3);
+            deferred.resolve();
 
-            expect(mocks.Raintime.componentRegistry.preRegister.callCount).toEqual(2);
-            expect(child1.parentInstanceId).toEqual(component3.instanceId);
-            expect(child2.parentInstanceId).toEqual(component3.instanceId);
-            expect(clientRenderer._placeholderTimeout.callCount).toEqual(1);
-            expect(clientRenderer._placeholderTimeout).toHaveBeenCalledWith(child2);
-       });
+            jasmine.Clock.tick(rainContext.placeholderTimeout + 1);
 
-        it('should load the css file before showing the html content',
-                ['raintime/client_rendering'],
-                function (ClientRenderer) {
+            expect($().html).toHaveBeenCalledWith(rainContext.placeholder.html);
+        });
+    });
 
-            setup(ClientRenderer);
-            ClientRenderer.prototype.renderComponent.andCallThrough();
+    describe('requestComponent', function () {
+        it('should throw error if the passed options are invalid', function () {
+            expect(function () {
+                renderer.requestComponent({});
+            }).toThrow();
+        });
 
-            component3.css = [
-                {
-                    'path': 'p1'
-                },
-                {
-                    'path': 'p2'
-                }
-            ];
+        it('should show the placeholder', function () {
+            jasmine.Clock.useMock();
+            var deferred = defer();
+            registry.getComponent.andReturn(deferred.promise);
+            $().length = 1;
 
-            var html = [
-                '<div id="' + component3.instanceId + '"></div>'
-            ];
-            $('body').append(html.join('\n'));
+            renderer.requestComponent({
+                id: 'example',
+                view: 'index',
+                instanceId: 'id7',
+                placeholder: true
+            });
 
-            clientRenderer.renderComponent(component3);
+            jasmine.Clock.tick(rainContext.placeholderTimeout + 1);
 
-            expect(success).toBeDefined();
-            expect(error).toBeDefined();
+            expect($().html).toHaveBeenCalledWith(rainContext.placeholder.html);
+        });
 
-            expect(clientRenderer._showHTML).not.toHaveBeenCalled();
-            success();
-            expect(clientRenderer._showHTML).toHaveBeenCalled();
+        it('should send a render event on web sockets', function () {
+            var deferred = defer(),
+                options = {
+                    id: 'example',
+                    view: 'index',
+                    instanceId: 'id7'
+                };
+
+            registry.getComponent.andReturn(deferred.promise);
+
+            renderer.requestComponent(options);
+
+            expect(socket.emit).toHaveBeenCalledWith('render', options);
+        });
+
+        it('should notify the component registry about the new instance id', function () {
+            var deferred = defer();
+            registry.getComponent.andReturn(deferred.promise);
+
+            renderer.requestComponent({
+                id: 'example',
+                view: 'index',
+                instanceId: 'id7'
+            });
+
+            expect(registry.addWaitingInstanceId).toHaveBeenCalledWith('id7');
+        });
+
+        it('should resolve the returned promise when the component is started', function () {
+            var deferred = defer();
+            registry.getComponent.andReturn(deferred.promise);
+
+            var component = new EventEmitter(),
+                receivedComponent;
+
+            component.instanceId = 'id7';
+
+            renderer.requestComponent({
+                id: 'example',
+                view: 'index',
+                instanceId: 'id7'
+            }).then(function (component) {
+                receivedComponent = component;
+            });
+
+            deferred.resolve(component);
+            component.emit('start');
+
+            expect(receivedComponent.instanceId).toEqual(component.instanceId);
+        });
+    });
+
+    describe('removeComponent', function () {
+        it('should remove a component', function () {
+            var component = new Component({
+                css: [],
+                children: [],
+                html:'component markup',
+                controller: '/example/3.0/js/button.js',
+                instanceId: 'id1',
+                id: 'example',
+                version: '3.0'
+            });
+
+            registry.getComponent.andReturn(component);
+
+            renderer.removeComponent(component.instanceId());
+
+            expect(registry.getComponent).toHaveBeenCalledWith(component.instanceId());
+            expect(registry.deregister).toHaveBeenCalledWith(component.instanceId());
+            expect($().remove).toHaveBeenCalled();
+        });
+    });
+
+    describe('createComponentContainer', function () {
+        it('should generate unique ids', function () {
+            var id1 = renderer.createComponentContainer({}),
+                id2 = renderer.createComponentContainer({});
+
+            expect(id1).not.toEqual(id2);
         });
     });
 });

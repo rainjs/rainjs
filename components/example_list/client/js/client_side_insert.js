@@ -52,9 +52,10 @@ define([], function () {
                 view: 'notes',
                 sid: 'insertedComponent',
                 placeholder: true
-            }, container, function (component) {
-                message.text('Inserted component: ' + component.id + ';' + component.version +
-                    ' (staticId: ' + component.staticId + ')');
+            }, container, function (controller) {
+                message.text('Inserted component: ' + controller.context.component.id + ';' +
+                    controller.context.component.version +
+                    ' (staticId: ' + controller.context.component.sid + ')');
             });
         });
 
@@ -65,9 +66,10 @@ define([], function () {
                 view: 'containers_v2',
                 sid: 'insertedComponent',
                 placeholder: true
-            }, container, function (component) {
-                message.text('Inserted component: ' + component.id + ';' + component.version +
-                    ' (staticId: ' + component.staticId + ')');
+            }, container, function (controller) {
+                message.text('Inserted component: ' + controller.context.component.id + ';' +
+                    controller.context.component.version +
+                    ' (staticId: ' + controller.context.component.sid + ')');
             });
         });
 

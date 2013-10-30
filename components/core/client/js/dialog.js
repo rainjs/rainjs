@@ -23,7 +23,7 @@
 // WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 // IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-define(['raintime'], function (Raintime) {
+define(function () {
     "use strict";
 
     /**
@@ -42,7 +42,7 @@ define(['raintime'], function (Raintime) {
             $('.core-dialog').remove();
             $('.core-modal').remove();
 
-            Raintime.componentRegistry.deregister(self.context.instanceId);
+            ClientRenderer.get().getComponentRegistry().deregister(self.context.instanceId);
         });
     };
 
