@@ -286,7 +286,7 @@ define(['raintime/client_storage',
                 var deferred = defer();
 
                 component.once('init', function () {
-                    deferred.resolve(component.controller);
+                    deferred.resolve(component.controller());
                 });
 
                 return deferred.promise;
