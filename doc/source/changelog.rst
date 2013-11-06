@@ -2,6 +2,12 @@
 Changelog
 =========
 
+--------
+v 0.34.2
+--------
+
++ Fixed asynchronuos translation.
+
 ---------
 v 0.34.1
 ---------
