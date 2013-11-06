@@ -26,84 +26,185 @@
 "use strict";
 
 describe('Module Loader', function () {
-    var content = 'module.exports = function () {}',
-        modulePath = '/path/to/module.js',
-        component = {id: 'example', version: '1.0'},
-        ModuleLoader, fs, vm, Module, logging, Translation, script;
+    var Translation, logging, fs, module, loader, component, t, nt, logger;
 
     beforeEach(function () {
+        component = {id: 'test', version: '1.0'};
+
+        t = jasmine.createSpy('t');
+        nt = jasmine.createSpy('nt');
+        logger = { debug: jasmine.createSpy('debug') };
+
+        var modules = {
+            '/dir/module.js': 'exports.fn = function () { return "foo"; };',
+            '/dir1/custom_module.js': 'module.exports = { t: t, nt: nt, logger: logger };',
+            '/dir/async_module.js':
+                'exports.fn = function (cb) { process.nextTick(function () { cb(t()); }); };',
+            '/dir/filename_module.js':
+                'module.exports = { __filename: __filename, __dirname: __dirname };',
+            '/dir/require_test.js': 'exports.require = require;',
+            '/dir/submodule_test.js': 'module.exports = require("../dir1/custom_module");',
+            '/dir/async_submodule.js': 'var mod = require("./async_module");\n' +
+                'exports.fn = function (cb) { mod.fn(cb); };',
+            '/dir/node_module_test.js': 'require("test");',
+            '/dir/json_test.js': 'require("./test.json");',
+            '/dir/not_found_test.js': 'require("./test");',
+            '/dir/shebang_test.js': '#!/usr/bin/env node\n' +
+                'module.exports = 1;'
+        };
+
         var mocks = {};
-        fs = mocks['fs'] = jasmine.createSpyObj('fs', ['readFileSync']);
-        vm = mocks['vm'] = jasmine.createSpyObj('vm', ['createScript']);
-        Module = mocks['module'] = jasmine.createSpy('Module');
-        logging = mocks['./logging'] = jasmine.createSpyObj('logging', ['get']);
-        Translation = mocks['./translation'] = jasmine.createSpyObj('Translation', ['get']);
 
-        fs.readFileSync.andReturn(content);
+        fs = mocks['fs'] = jasmine.createSpyObj('fs', ['readFileSync', 'existsSync']);
+        fs.readFileSync.andCallFake(function (filename) {
+            var module = modules[filename];
 
-        script = jasmine.createSpyObj('script', ['runInNewContext']);
-        vm.createScript.andReturn(script);
+            if (!module) {
+                throw new Error('File not found: ' + filename);
+            }
 
-        Module.andReturn({require: function () {}});
-        Module._nodeModulePaths = jasmine.createSpy('_nodeModulePaths');
-
-        logging.get.andReturn({});
-
-        var translation = {generateContext: jasmine.createSpy('generateContext')};
-        translation.generateContext.andReturn({
-            t: jasmine.createSpy('t'),
-            nt: jasmine.createSpy('nt')
+            return module;
         });
-        Translation.get.andReturn(translation);
+        fs.existsSync.andCallFake(function (filename) {
+            return typeof modules[filename] !== 'undefined';
+        });
 
-        ModuleLoader = loadModuleExports('/lib/module_loader.js', mocks);
+        Translation = mocks['./translation'] = jasmine.createSpyObj('Translation', ['get']);
+        Translation.get.andReturn(jasmine.createSpyObj('translation', ['generateContext']));
+        Translation.get().generateContext.andReturn({
+            t: t,
+            nt: nt
+        });
+
+        logging = mocks['./logging'] = jasmine.createSpyObj('logging', ['get']);
+        logging.get.andReturn(logger);
+
+
+        var Module = mocks['module'] = jasmine.createSpy('Module');
+        Module._nodeModulePaths = function () {};
+        Module.andCallFake(function () {
+            module = jasmine.createSpyObj('module', ['require']);
+            module.exports = {};
+            return module;
+        });
+
+        var ModuleLoader = loadModuleExports('/lib/module_loader.js', mocks);
+        loader = new ModuleLoader();
     });
 
-    it('should create a new context for the specified parameters', function () {
-        var loader = new ModuleLoader();
+    it('should load a module', function () {
+        var exports = loader.requireWithContext('/dir/module.js', component, 'en_US');
 
-        loader.requireWithContext(modulePath, component, 'en_US');
+        expect(exports.fn()).toEqual('foo');
+    });
 
-        expect(fs.readFileSync).toHaveBeenCalledWith(modulePath, 'utf8');
-        expect(vm.createScript).toHaveBeenCalledWith(content, modulePath);
+    it('should accept only absolute paths', function () {
+        expect(function () {
+            loader.requireWithContext('./module.js', component, 'en_US');
+        }).toThrow();
+    });
+
+    it('should accept only files with .js extension', function () {
+        expect(function () {
+            loader.requireWithContext('/dir/module.json', component, 'en_US');
+        }).toThrow();
+    });
+
+    it('should inject t, nt and logger into the loaded module', function () {
+        var exports = loader.requireWithContext('/dir1/custom_module.js', component, 'en_US');
+
+        expect(exports.t).toEqual(t);
+        expect(exports.nt).toEqual(nt);
+        expect(exports.logger).toEqual(logger);
         expect(Translation.get().generateContext).toHaveBeenCalledWith(component, 'en_US');
         expect(logging.get).toHaveBeenCalledWith(component);
-        expect(Module).toHaveBeenCalledWith(modulePath);
-        expect(script.runInNewContext).toHaveBeenCalled();
-
-        var sandbox = script.runInNewContext.mostRecentCall.args[0];
-        expect(sandbox.t).toBeDefined();
-        expect(sandbox.nt).toBeDefined();
-        expect(sandbox.logger).toBeDefined();
     });
 
-    xit('should reuse the cached script when the language changes', function () {
-        var loader = new ModuleLoader();
+    it('should pass __filename and __diranme', function () {
+        var exports = loader.requireWithContext('/dir/filename_module.js', component, 'en_US');
 
-        loader.requireWithContext(modulePath, component, 'en_US');
-        loader.requireWithContext(modulePath, component, 'ro_RO');
-
-        expect(fs.readFileSync.calls.length).toEqual(1);
-        expect(vm.createScript.calls.length).toEqual(1);
-        expect(Translation.get().generateContext).toHaveBeenCalledWith(component, 'en_US');
-        expect(Translation.get().generateContext).toHaveBeenCalledWith(component, 'ro_RO');
-        expect(logging.get).toHaveBeenCalledWith(component);
-        expect(logging.get.calls.length).toEqual(2);
-        expect(Module.calls.length).toEqual(2);
-        expect(script.runInNewContext.calls.length).toEqual(2);
+        expect(exports.__filename).toEqual('/dir/filename_module.js');
+        expect(exports.__dirname).toEqual('/dir');
     });
 
-    xit('should return the cached module', function () {
-        var loader = new ModuleLoader();
+    it('should provide the require method to the loaded module', function () {
+        var exports = loader.requireWithContext('/dir/require_test.js', component, 'en_US');
+        expect(exports.require).toEqual(jasmine.any(Function));
+    });
 
-        loader.requireWithContext(modulePath, component, 'en_US');
-        loader.requireWithContext(modulePath, component, 'en_US');
+    it('should load sub-modules', function () {
+        var exports = loader.requireWithContext('/dir/submodule_test.js', component, 'en_US');
+
+        expect(exports.t).toBeDefined();
+        expect(exports.nt).toBeDefined();
+        expect(exports.logger).toBeDefined();
+    });
+
+    it('should preserve the same context after async call', function () {
+        testAsyncCall('/dir/async_module.js');
+    });
+
+    it('should preserve the same context after async call for sub-modules', function () {
+        testAsyncCall('/dir/async_submodule.js');
+    });
+
+    function testAsyncCall (filename) {
+        var callback1, callback2;
+
+        runs(function () {
+            Translation.get().generateContext.andCallFake(function (component, language) {
+                return {
+                    t: function () { return language; },
+                    nt: function () { return language; }
+                }
+            });
+
+            callback1 = jasmine.createSpy('callback1');
+            callback2 = jasmine.createSpy('callback2');
+
+            var exports1 = loader.requireWithContext(filename, component, 'en_US');
+            exports1.fn(callback1);
+
+            var exports2 = loader.requireWithContext(filename, component, 'de_DE');
+            exports2.fn(callback2);
+        });
+
+        waitsFor(function () {
+            return callback1.calls.length !== 0 && callback2.calls.length != 0;
+        });
+
+        runs(function () {
+            expect(callback1).toHaveBeenCalledWith('en_US');
+            expect(callback2).toHaveBeenCalledWith('de_DE');
+        });
+    }
+
+    it('should use Node\'s require for core and node modules', function () {
+        loader.requireWithContext('/dir/node_module_test.js', component, 'en_US');
+        expect(module.require).toHaveBeenCalledWith('test');
+    });
+
+    it('should use Node\'s require for non js files', function () {
+        loader.requireWithContext('/dir/json_test.js', component, 'en_US');
+        expect(module.require).toHaveBeenCalledWith('./test.json');
+    });
+
+    // if a module request doesn't have the extension specified, this loader will try
+    // only .js, Node's require will also try .json and .node
+    it('should use Node\'s require for not found modules', function () {
+        loader.requireWithContext('/dir/not_found_test.js', component, 'en_US');
+        expect(module.require).toHaveBeenCalledWith('./test');
+    });
+
+    it('should remove shebang', function () {
+        var exports = loader.requireWithContext('/dir/shebang_test.js', component, 'en_US');
+        expect(exports).toEqual(1);
+    });
+
+    it('should return the cached module', function () {
+        loader.requireWithContext('/dir1/custom_module.js', component, 'en_US');
+        loader.requireWithContext('/dir1/custom_module.js', component, 'en_US');
 
         expect(fs.readFileSync.calls.length).toEqual(1);
-        expect(vm.createScript.calls.length).toEqual(1);
-        expect(Translation.get().generateContext.calls.length).toEqual(1);
-        expect(logging.get.calls.length).toEqual(1);
-        expect(Module.calls.length).toEqual(1);
-        expect(script.runInNewContext.calls.length).toEqual(1);
     });
 });

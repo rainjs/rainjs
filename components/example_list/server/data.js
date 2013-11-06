@@ -107,6 +107,15 @@ function text_localization(environment, callback, data) {
     callback(null, customData);
 }
 
+function async_localization(environment, callback, data) {
+    setTimeout(function () {
+        callback(null, {
+            translatedText1: t('send.email.button.label'),
+            translatedText2: languageUtils.translateSendMail()
+        });
+    }, 5000);
+}
+
 function format_helpers(environment, callback, data) {
     var formatter = Formatter.get();
     var lang = environment.language;
@@ -163,6 +172,7 @@ module.exports = {
     level3: level3,
     platform_language: platform_language,
     text_localization: text_localization,
+    async_localization: async_localization,
     format_helpers: format_helpers,
     'layout/flow': flowLayout,
     partials: partials

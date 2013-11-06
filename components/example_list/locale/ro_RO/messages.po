@@ -27,7 +27,7 @@ msgstr "%1$s %2$s"
 msgid "Email was sent successfully!"
 msgstr "Email-ul a fost trimis cu succes!"
 
-msgid "Send email"
+msgid "send.email.button.label"
 msgstr "Trimite email"
 
 msgid "The user \"%1$s\" connected to the notes websocket."

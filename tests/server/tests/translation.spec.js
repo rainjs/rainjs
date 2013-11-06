@@ -27,7 +27,7 @@
 
 describe("Server Side Translation", function () {
     var mocks = {},
-        fs, configuration, Translation,
+        fs, configuration, Translation, logger,
         file, component, locale;
 
     beforeEach(function () {

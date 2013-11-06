@@ -64,16 +64,7 @@ for more information and examples: :js:class:`Translation functions <Translation
 .. warning::
 
     You shouldn't declare functions named ``t`` or ``nt`` in the server-side controllers because
-    the global translation functions will be overridden by them.
-
-.. warning::
-
-    A limitation currently exists in RAIN and you can only call ``t`` and ``nt`` safely
-    before performing any asynchronous logic. This applies to all the server-side code
-    associated with a component (controllers, data layer methods, web socket handlers).
-    For example, in your data layer method you should call ``t`` and/or ``nt`` to obtain the
-    translated messages before executing any asynchronous code (like a REST service request to
-    obtain data).
+    the global translation functions will be hidden by the new declarations.
 
 -------------
 Resource URLs
