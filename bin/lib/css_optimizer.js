@@ -260,8 +260,7 @@ CssOptimizer.prototype._writeFiles = function (data, folder) {
     }
     for(var component in data) {
         if(!this._map[component]) {
-            this._map[component] = {
-            }
+            this._map[component] = {};
         }
 
         for(var index in data[component]) {
@@ -272,8 +271,8 @@ CssOptimizer.prototype._writeFiles = function (data, folder) {
                 fileName = "index" + index + ".min.css";
             }
 
-            var destinationPath = path.join(this._outputPath, 'components/',
-                data[component][index].folder, '/client/css/', folder, fileName);
+            var destinationPath = path.join(this._outputPath,
+                this._components[component].relativePath, '/client/css/', folder, fileName);
 
             var requestRoute = component.replace(';', '/');
             //path.join did not work on windows;
@@ -364,8 +363,7 @@ CssOptimizer.prototype._minify = function (component, cssPath, isTheme) {
 
            try {
                var content = fs.readFileSync(filePath, 'utf8');
-               content = self._rewriteLessImport(content, path.join('components/',
-                   self._components[component].folder));
+               content = self._rewriteLessImport(content, self._components[component].relativePath);
 
                if(self._mediaQueryMap[component] &&
                    self._mediaQueryMap[component][path.basename(filePath)]) {

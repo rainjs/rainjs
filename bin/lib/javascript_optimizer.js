@@ -77,7 +77,7 @@ JsOptimizer.prototype.run = function () {
         if (this._outputPath) {
             this._copyExcludedFiles(component);
             this._modifyMetaJson(component);
-            output = path.join(this._outputPath, 'components', component.folder,
+            output = path.join(this._outputPath, component.relativePath,
                 'client', 'js', 'index.min.js');
         } else {
             output = path.join(component.path, 'client', 'js', 'index.min.js');
@@ -107,7 +107,7 @@ JsOptimizer.prototype.run = function () {
  */
 JsOptimizer.prototype._modifyMetaJson = function (component) {
     var config = component.config,
-        configPath = path.join(this._outputPath, 'components', component.folder, 'meta.json');
+        configPath = path.join(this._outputPath, component.relativePath, 'meta.json');
 
     for (var viewName in config.views) {
         var view = config.views[viewName],
@@ -343,7 +343,7 @@ JsOptimizer.prototype._copyExcludedFiles = function (component) {
     var jsPath = path.join(component.path, 'client', 'js'),
         prefix = component.id === 'core' ? 'raintime' : 'js',
         excluded = component.id === 'core' ? excludedCoreModules : excludedModules,
-        output = path.join(this._outputPath, 'components', component.folder, 'client', 'js');
+        output = path.join(this._outputPath, component.relativePath, 'client', 'js');
 
     util.walkSync(jsPath, ['.js'], function (filePath) {
         var moduleName = filePath.substring(jsPath.length + 1, filePath.length - 3),

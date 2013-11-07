@@ -32,10 +32,11 @@ describe('JavaScript Optimizer', function () {
         var mocks = {};
 
         components = {
-            'core;1.0': {
+            'core;2.0': {
                 id: 'core',
                 version: '1.0',
                 path: '/usr/rain/components/core',
+                relativePath: 'components/core',
                 folder: 'core',
                 config: {}
             },
@@ -43,6 +44,7 @@ describe('JavaScript Optimizer', function () {
                 id: 'example',
                 version: '2.0',
                 path: '/usr/rain/components/example_list',
+                relativePath: 'components/example_list',
                 folder: 'example_list',
                 config: {
                     views: {
@@ -55,6 +57,7 @@ describe('JavaScript Optimizer', function () {
                 id: 'external',
                 version: '3.1',
                 path: '/usr/project/components/external',
+                relativePath: 'components/external',
                 folder: 'external',
                 config: {}
             }
@@ -79,7 +82,7 @@ describe('JavaScript Optimizer', function () {
         });
 
         var optimizer = new JsOptimizer({
-            includedComponents: ['core;1.0'],
+            includedComponents: ['core;2.0'],
             components: components
         });
         optimizer.run();
@@ -110,7 +113,7 @@ describe('JavaScript Optimizer', function () {
 
     it('should optimize the specified components', function () {
         var optimizer = new JsOptimizer({
-            includedComponents: ['core;1.0', 'example;2.0'],
+            includedComponents: ['core;2.0', 'example;2.0'],
             components: components
         });
         optimizer.run();
@@ -120,7 +123,7 @@ describe('JavaScript Optimizer', function () {
 
     it('should write the files in the minified project', function () {
         var optimizer = new JsOptimizer({
-            includedComponents: ['core;1.0', 'example;2.0'],
+            includedComponents: ['core;2.0', 'example;2.0'],
             components: components,
             outputPath: '/min/rain'
         });
@@ -173,7 +176,7 @@ describe('JavaScript Optimizer', function () {
         });
 
         var optimizer = new JsOptimizer({
-            includedComponents: ['core;1.0'],
+            includedComponents: ['core;2.0'],
             components: components,
             outputPath: '/min/rain'
         });

@@ -2,6 +2,7 @@
     "cssMinification": true,
     "javascriptMinification": true,
     "buildPath": "../min/rainjs",
+    "componentFolders": ["./components", "./components_example/components"],
     "themes": {
         "diy": "diy",
         "cp": "cp"

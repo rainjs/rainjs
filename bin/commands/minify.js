@@ -60,44 +60,58 @@ function register(program) {
 function minify() {
 
     var projectRoot = sdkUtils.getProjectRoot(process.cwd()),
-        componentsFolder = path.join(projectRoot, 'components'),
         components = {},
         includedComponents = [],
         outputPath;
 
-    sdkUtils.iterateComponents(componentsFolder, function (config, path, folder) {
-        var fullId = config.id + ';' + config.version;
-        includedComponents.push(fullId);
-        components[fullId] = {
-            id: config.id,
-            version: config.version,
-            path: path,
-            folder: folder,
-            config: config
-        };
-    });
-
     try {
-        var buildConfig = require(path.join(projectRoot, 'build.json')),
-            additionalProjects = buildConfig.additionalProjects || [];
+        var buildConfig = require(path.join(projectRoot, 'build.json'));
+
+        var componentFolders = buildConfig.componentFolders || ['./components'];
+
+        for (var i = 0, len = componentFolders.length; i < len; i++) {
+            var componentsFolder = path.join(projectRoot, componentFolders[i]);
+
+            sdkUtils.iterateComponents(componentsFolder, function (config, componentPath, folder) {
+                var fullId = config.id + ';' + config.version;
+                includedComponents.push(fullId);
+                components[fullId] = {
+                    id: config.id,
+                    version: config.version,
+                    path: componentPath,
+                    relativePath: path.relative(projectRoot, componentPath),
+                    folder: folder,
+                    config: config
+                };
+            });
+        }
 
         if (buildConfig.buildPath) {
             outputPath = path.resolve(projectRoot, buildConfig.buildPath);
             copyProject(projectRoot, outputPath, buildConfig);
         }
 
-        for (var i = 0, len = additionalProjects.length; i < len; i++) {
-            var folder = path.resolve(projectRoot, additionalProjects[i], 'components');
+        var additionalProjects = buildConfig.additionalProjects || [];
 
-            sdkUtils.iterateComponents(folder, function (config, path, folder) {
-                components[config.id + ';' + config.version] = {
-                    id: config.id,
-                    version: config.version,
-                    path: path,
-                    folder: folder,
-                    config: config
-                };
-            });
+        for (var i = 0, len = additionalProjects.length; i < len; i++) {
+            var additionalProjectRoot = path.resolve(projectRoot, additionalProjects[i]);
+            var additionalComponentFolders = (buildConfig.additionalComponentFolders &&
+                buildConfig.additionalComponentFolders[additionalProjects[i]]) || ['./components'];
+
+            for (var j = 0, length = additionalComponentFolders.length; j < len; j++) {
+                var folder = path.resolve(additionalProjectRoot, additionalComponentFolders[j]);
+
+                sdkUtils.iterateComponents(folder, function (config, componentPath, folder) {
+                    components[config.id + ';' + config.version] = {
+                        id: config.id,
+                        version: config.version,
+                        path: componentPath,
+                        relativePath: path.relative(additionalProjectRoot, componentPath),
+                        folder: folder,
+                        config: config
+                    };
+                });
+            }
         }
     } catch (ex) {
         console.log('Minify failed, build configuration does not exist' + ex.stack);

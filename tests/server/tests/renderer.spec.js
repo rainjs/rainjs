@@ -318,7 +318,8 @@ describe('Renderer', function () {
                 },
                 bootstrap: bootstrapData,
                 title: 'button',
-                enableMinification : 'false'
+                enableMinification : 'false',
+                coreVersion: '1.0'
             });
 
             button.type = 'container';
@@ -340,7 +341,8 @@ describe('Renderer', function () {
                 },
                 bootstrap: bootstrapData,
                 title: 'button',
-                enableMinification : 'false'
+                enableMinification : 'false',
+                coreVersion: '1.0'
             });
         });
 

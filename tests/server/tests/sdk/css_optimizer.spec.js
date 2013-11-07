@@ -13,6 +13,7 @@ describe('Css optimizer', function () {
             components: {
                 'component1;1.0': {
                     path: '/fake/path/to/component1',
+                    relativePath: 'to/component1',
                     folder: 'component1',
                     config: {
                         views: {
