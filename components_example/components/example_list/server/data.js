@@ -26,7 +26,7 @@
 "use strict";
 
 var languageUtils = require('./lib/language_utils');
-var Formatter = require('../../../lib/format');
+var Formatter = require('../../../../lib/format');
 
 /**
  * Handles the template data for the view index and returns it with invoking the callback function.

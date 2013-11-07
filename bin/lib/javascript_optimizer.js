@@ -134,7 +134,7 @@ JsOptimizer.prototype._modifyMetaJson = function (component) {
 JsOptimizer.prototype._generateConfiguration = function (component, outputFile) {
     var self = this;
     var componentPath = component.path;
-    var coreLocation = path.join(this._components['core;1.0'].path, 'client', 'js');
+    var coreLocation = path.join(this._components['core;2.0'].path, 'client', 'js');
 
     return  extend(true, {}, this._baseConfig, {
         baseUrl: path.join(componentPath, 'client'),

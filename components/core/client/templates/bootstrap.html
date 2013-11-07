@@ -10,12 +10,12 @@
         {{else}}
             {{{bootstrap.metas}}}
 
-            <link rel="stylesheet" type="text/css" href="/core/resources/bootstrap.css">
+            <link rel="stylesheet" type="text/css" href="/core/{{coreVersion}}/resources/bootstrap.css">
             {{{bootstrap.links}}}
 
-            <script type="text/javascript" src="/core/js/lib/es5-shim.min.js"></script>
-            <script type="text/javascript" src="/core/js/lib/require-jquery.js"></script>
-            <script type="text/javascript" src="/core/js/lib/jquery_plugins.js"></script>
+            <script type="text/javascript" src="/core/{{coreVersion}}/js/lib/es5-shim.min.js"></script>
+            <script type="text/javascript" src="/core/{{coreVersion}}/js/lib/require-jquery.js"></script>
+            <script type="text/javascript" src="/core/{{coreVersion}}/js/lib/jquery_plugins.js"></script>
 
             {{{bootstrap.scripts}}}
 
@@ -25,17 +25,17 @@
                     "waitSeconds": 0,
                     "baseUrl": "/",
                     "paths": {
-                        "text": "core/js/lib/require-text",
-                        "locale": "core/js/lib/require-locale"
+                        "text": "core/{{coreVersion}}/js/lib/require-text",
+                        "locale": "core/{{coreVersion}}/js/lib/require-locale"
                     },
                     "packages": [{
                         "name": "raintime",
                         "main": "component_registry",
-                        "location": "core/js"
+                        "location": "core/{{coreVersion}}/js"
                     }],
                     "map": {
                         "*": {
-                            "core/1.0/js": "raintime"
+                            "core/{{coreVersion}}/js": "raintime"
                         }
                     }
                 };
@@ -102,4 +102,4 @@
                 {{component name=../id version=../version view=../viewId}}
             {{/with}}
         {{/if}}
-        <div id="modalDialog" class="core_1_0" style="width: 0; height: 0;"></div>
+        <div id="modalDialog" class="core_2_0" style="width: 0; height: 0;"></div>
