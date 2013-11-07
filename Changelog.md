@@ -1,5 +1,19 @@
 # Changelog
 
+## v 0.34.3
+
+* Core component version was changed to 2.0.
+* Fixed HTTP caching for the javascript files contained in the core component. The URL used to
+  request these files is now containing the version.
+* Separated example components in different folders.
+
+## v 0.34.2
+
+* Fixed server-side translation issue: t and nt functions are now working when they are called
+  after some asynchronous code was executed.
+* Implemented caching for server-side component modules.
+* RAIN client-side runtime was refactored. context.find method was deprecated. No API was changed.
+
 ## 0.34.1
 
 * Two small fixes for the translations to work in the error pages.
