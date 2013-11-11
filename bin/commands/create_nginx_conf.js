@@ -73,7 +73,8 @@ function generateNginxConfiguration() {
 
     projects.push({
         'path': projectRoot,
-        'productionPath': productionPath
+        'productionPath': productionPath,
+        'componentFolders': defaultConfiguration.componentFolders || ["./components"]
     });
 
     if(defaultConfiguration.additionalProjects) {
@@ -85,9 +86,14 @@ function generateNginxConfiguration() {
                     defaultConfiguration.additionalProjectsProductionPaths[index];
             }
 
+            var resolvedFolder = path.resolve(process.cwd(), folder);
+
+            var conf = require(path.join(resolvedFolder, '/build.json'));
+
             projects.push({
                 'path': path.resolve(process.cwd(), folder),
-                'productionPath':  productionPath ? additionalProjectProdPath : undefined
+                'productionPath':  productionPath ? additionalProjectProdPath : undefined,
+                'componentFolders': conf.componentFolders || ["./components"]
             });
         });
     }
