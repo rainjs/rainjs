@@ -142,11 +142,11 @@ define(['raintime/lib/jed'], function (Jed) {
         var jed = this.locales['language'];
 
         if (!jed || !msgIdExists(jed, msgId, count)) {
-            if(this.locales['defaultLanguage']) {
+            if (this.locales['defaultLanguage']) {
                 jed = this.locales['defaultLanguage'];
             }
 
-            if(!msgIdExists(jed, msgId, count)) {
+            if (jed && !msgIdExists(jed, msgId, count)) {
                 /**
                  * If the customId/msgId(in old implementations) is not to be found
                  * than the msgId becomes depending on the sittuation the messageText
