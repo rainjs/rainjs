@@ -1,5 +1,11 @@
 # Changelog
 
+## v 0.34.4
+
+* Fixed 404 language errors
+* Fixed generate Nginx config file issues related to separation of example components
+in different folders
+
 ## v 0.34.3
 
 * Core component version was changed to 2.0.
