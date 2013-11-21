@@ -79,9 +79,11 @@ describe('locale route', function () {
         routerUtils.setResourceHeaders.andReturn({sendBody: true});
         request.path = null;
 
-        locale.handle(request, response);
+        expect(function () {
+            locale.handle(request, response);
+        }).toThrow();
 
-        expect(routerUtils.handleNotFound).toHaveBeenCalledWith(request, response);
+
         expect(translation.getLocales).not.toHaveBeenCalled();
     });
 

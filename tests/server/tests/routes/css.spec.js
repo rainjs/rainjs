@@ -81,8 +81,9 @@ describe('Router Plugin: CSS Route', function () {
         request.method = 'get';
         request.path = 'index2.css';
         request.component = componentRegistry.getConfig('button', '1.0');
-        routerPlugin.handle(request, response);
-        expect(response._body).toEqual('error|The specified URL was not found!|404');
+        expect(function () {
+            routerPlugin.handle(request, response);
+        }).toThrow();
     });
 
     it('must return 404 if the scope component is specified and invalid', function () {
@@ -93,8 +94,9 @@ describe('Router Plugin: CSS Route', function () {
         request.method = 'get';
         request.path = 'index.css';
         request.component = componentRegistry.getConfig('button', '1.0');
-        routerPlugin.handle(request, response);
-        expect(response._body).toEqual('error|The specified URL was not found!|404');
+        expect(function () {
+            routerPlugin.handle(request, response);
+        }).toThrow();
     });
 
     it('must server the cached css for current component', function () {
@@ -124,7 +126,7 @@ describe('Router Plugin: CSS Route', function () {
         });
 
         runs(function() {
-            expect(response._body.replace(/\s+/g, ' ')).toEqual('.button_2_0 ' + 
+            expect(response._body.replace(/\s+/g, ' ')).toEqual('.button_2_0 ' +
                     request.component.compiledCSS[request.path].unscopedCSS);
         });
     });

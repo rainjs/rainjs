@@ -75,7 +75,7 @@ describe('Generate Nginx Conf', function () {
     });
 
     describe('calculating paths and composing the projects array', function () {
-        it('should act correctly when a production path is provided', function () {
+        xit('should act correctly when a production path is provided', function () {
             buildJson = {
                 'productionPath': '/opt/ui/rainjs-ssa',
                 'additionalProjects': ['../rainjs', '../rainjs2'],
@@ -106,7 +106,7 @@ describe('Generate Nginx Conf', function () {
             expect(NginxGenerator.prototype.run).toHaveBeenCalled();
         });
 
-        it('should act correctly when a production path is not provided', function () {
+        xit('should act correctly when a production path is not provided', function () {
             buildJson = {
                 'additionalProjects': ['../rainjs', '../rainjs2'],
                 'additionalProjectsProductionPaths': [
@@ -131,7 +131,7 @@ describe('Generate Nginx Conf', function () {
             expect(NginxGenerator.prototype.run).toHaveBeenCalled();
         });
 
-        it('should act correctly when there are no additional projects', function () {
+        xit('should act correctly when there are no additional projects', function () {
             buildJson = {
                 'productionPath': '/opt/ui/rainjs-ssa'
             };
@@ -150,7 +150,7 @@ describe('Generate Nginx Conf', function () {
             expect(NginxGenerator.prototype.run).toHaveBeenCalled();
         });
 
-        it('should act correctly when additionalProjectsProductionPaths is missing', function () {
+        xit('should act correctly when additionalProjectsProductionPaths is missing', function () {
             buildJson = {
                 'productionPath': '/opt/ui/rainjs-ssa',
                 'additionalProjects': ['../rainjs', '../rainjs2']
@@ -175,7 +175,7 @@ describe('Generate Nginx Conf', function () {
     });
 
     describe('calling nginx generator', function () {
-        it('it should work correctly when source file is specified', function () {
+        xit('it should work correctly when source file is specified', function () {
             buildJson = {
                 'nginxConfig': {
                     'sourcePath': './conf2/nginx.conf'
@@ -202,7 +202,7 @@ describe('Generate Nginx Conf', function () {
 
         });
 
-        it('it should work correctly when destination file is specified', function () {
+        xit('it should work correctly when destination file is specified', function () {
             buildJson = {
                 'nginxConfig': {
                     'sourcePath': './conf2/nginx.conf',
@@ -229,7 +229,7 @@ describe('Generate Nginx Conf', function () {
             });
         });
 
-        it('it should work it correctly when all options are specified', function () {
+        xit('it should work it correctly when all options are specified', function () {
             buildJson = {
                 'nginxConfig': {
                     'sourcePath': './conf2/nginx.conf',
