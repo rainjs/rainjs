@@ -76,35 +76,38 @@ NginxGenerator.prototype.run = function () {
     this._nginxLocations = nginxConf.http.server.locations;
 
     projects.forEach(function (project) {
-        var componentsPath = path.join(project.path, 'components');
 
-        fs.readdirSync(componentsPath).forEach(function (folder) {
-            var componentPath,
-                prodComponentPath,
-                config;
+        project.componentFolders.forEach(function(componentPath) {
+            var componentsPath = path.join(project.path, componentPath);
 
-            componentPath = path.join(componentsPath, folder);
-            config = require(path.join(componentPath, 'meta.json'));
+            fs.readdirSync(componentsPath).forEach(function (folder) {
+                var componentPath,
+                    prodComponentPath,
+                    config;
 
-            //if a production path has been provided for the project, the component paths in the
-            // config file will have that as base path
-            if(project.productionPath) {
-                prodComponentPath = path.join(project.productionPath, 'components', folder);
-                self._addNginxLocations(prodComponentPath, config.id, config.version);
-            } else {
-                self._addNginxLocations(componentPath, config.id, config.version);
-            }
+                componentPath = path.join(componentsPath, folder);
+                config = require(path.join(componentPath, 'meta.json'));
 
-            var latestVersion = latestVersionMap[config.id];
+                //if a production path has been provided for the project, the component paths in the
+                // config file will have that as base path
+                if(project.productionPath) {
+                    prodComponentPath = path.join(project.productionPath, 'components', folder);
+                    self._addNginxLocations(prodComponentPath, config.id, config.version);
+                } else {
+                    self._addNginxLocations(componentPath, config.id, config.version);
+                }
 
-            if (!latestVersion ||
-                self._compareVersions(config.version, latestVersion.version) > 0) {
+                var latestVersion = latestVersionMap[config.id];
 
-                latestVersionMap[config.id] = {
-                    version: config.version,
-                    folder: prodComponentPath ? prodComponentPath : componentPath
-                };
-            }
+                if (!latestVersion ||
+                    self._compareVersions(config.version, latestVersion.version) > 0) {
+
+                    latestVersionMap[config.id] = {
+                        version: config.version,
+                        folder: prodComponentPath ? prodComponentPath : componentPath
+                    };
+                }
+            });
         });
     });
 
