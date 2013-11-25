@@ -83,6 +83,7 @@ describe('Socket registry', function () {
             'connect': connect,
             './server': {
                 sessionStore: sessionStore,
+                globalSessionSync: { wait: function () {} },
                 socket: {
                     of: function () {
                         return socket;
