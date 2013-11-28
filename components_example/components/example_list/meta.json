@@ -39,7 +39,8 @@
         "promise": {},
         "promise_use": {},
         "partials": {},
-        "client_side_insert": {}
+        "client_side_insert": {},
+        "hidden_div": {}
     },
     "intents": [
         {

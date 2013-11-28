@@ -190,7 +190,7 @@ describe('Context module', function () {
             });
 
             var retrievedComponent = jasmine.createSpyObj('retrvComponent', ['once']);
-            retrievedComponent.controller = 'fake';
+            retrievedComponent.controller = function () { return 'fake'; };
 
             retrievedComponent.once.andCallFake(function (ev, handler) {
                 handler();
@@ -207,7 +207,7 @@ describe('Context module', function () {
 
             fakeCallback.andCallFake(function () {
                 hasExecuted = true;
-            })
+            });
 
             instance.find(fakeCallback);
 
@@ -230,7 +230,7 @@ describe('Context module', function () {
             });
 
             var retrievedComponent = jasmine.createSpyObj('retrvComponent', ['once']);
-            retrievedComponent.controller = 'fake';
+            retrievedComponent.controller = function () { return 'fake'; };
 
             retrievedComponent.once.andCallFake(function (ev, handler) {
                 handler();
@@ -247,7 +247,7 @@ describe('Context module', function () {
 
             fakeCallback.andCallFake(function () {
                 hasExecuted = true;
-            })
+            });
 
             instance.find('child1', fakeCallback);
 

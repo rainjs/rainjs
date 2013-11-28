@@ -384,7 +384,8 @@ define([
         }
 
         this._timeouts[instanceId] = setTimeout(function () {
-            if(element.css('visibility') === 'hidden' || !element.hasClass('app-container')) {
+            // element.css('visibility') returns hidden if the parent is hidden
+            if(element[0].style.visibility === 'hidden' || !element.hasClass('app-container')) {
                 self._showPlaceholder(instanceId);
             }
         }, this._placeholderTimeout);

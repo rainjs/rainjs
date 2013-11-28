@@ -50,6 +50,7 @@ describe('ClientRenderer', function () {
                 'addClass', 'html', 'find', 'remove']));
             $().length = 0;
             $().find.andReturn($());
+            $()[0] = {style: {visibility: ''}};
 
             require([
                 'raintime/client_renderer',
