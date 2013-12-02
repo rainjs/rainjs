@@ -41,6 +41,7 @@ define([], function () {
             container = root.find('.insert-panel'),
             insertNotes = root.find('.insert-notes'),
             insertContainer = root.find('.insert-container'),
+            insertTest = root.find('.insert-test'),
             remove = root.find('.remove'),
             message = root.find('.message'),
             self = this;
@@ -64,6 +65,20 @@ define([], function () {
             self.context.insert({
                 id: 'example',
                 view: 'containers_v2',
+                sid: 'insertedComponent',
+                placeholder: true
+            }, container, function (controller) {
+                message.text('Inserted component: ' + controller.context.component.id + ';' +
+                    controller.context.component.version +
+                    ' (staticId: ' + controller.context.component.sid + ')');
+            });
+        });
+
+        insertTest.click(function () {
+            self.context.remove('insertedComponent');
+            self.context.insert({
+                id: 'example',
+                view: 'hidden_div',
                 sid: 'insertedComponent',
                 placeholder: true
             }, container, function (controller) {
