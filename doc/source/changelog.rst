@@ -2,6 +2,14 @@
 Changelog
 =========
 
+
+--------
+v 0.34.5
+--------
+
++ Fixed DHDOMAIN-6761:Wrong translation (mixed english texts-random).
++ Fixed an issue where placeholder remains visible when a component is rendered in a hidden div.
+
 --------
 v 0.34.4
 --------
