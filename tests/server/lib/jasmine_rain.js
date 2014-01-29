@@ -179,6 +179,15 @@ jasmine.util.extend(jasmine.getGlobal(), (function () {
         // Some more augmentation
         context.exports = context.module.exports;
         context.__dirname = path.dirname(context.__filename);
+        if(!context.logger) {
+            context.logger = {
+                info: function (){},
+                warn: function (){},
+                error: function (){},
+                debug: function (){},
+                fatal: function (){}
+            };
+        }
 
         //add deps at the end in order to be able to override properties like __dirname and __filename
         extend(context, deps);
