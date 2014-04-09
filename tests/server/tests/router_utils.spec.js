@@ -97,7 +97,7 @@ describe('Router Utilities', function () {
         it('must set header to text/plain', function () {
             request.headers.accept = '.......xml/application.....';
             routerUtils.handleError({ code: 400, stack: 'some error'}, request, response);
-            expect(response._headers['Content-Type'].indexOf('text/plain')).toNotEqual(-1);
+            expect(response._headers['Content-Type']).toBeUndefined();
         });
 
         it('must set status code to 500 if it is below 400', function () {

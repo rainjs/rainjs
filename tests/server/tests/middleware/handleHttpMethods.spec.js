@@ -84,27 +84,6 @@ describe('HandleHttpMethods', function () {
 
     });
 
-    describe('Acting correctly when a trace request is received', function() {
-        it('should set statusCode to 200', function() {
-            request.method = 'TRACE';
-            handleRequestType()(request, response, next);
-            requestFn();
-            expect(response.statusCode).toEqual(200);
-
-            expect(next).not.toHaveBeenCalled();
-        });
-
-        it('should respond back', function() {
-            request.method = 'TRACE';
-            handleRequestType()(request, response, next);
-            requestFn();
-            expect(response.write).toHaveBeenCalled();
-            expect(response.end).toHaveBeenCalled();
-            expect(next).not.toHaveBeenCalled();
-        });
-
-    });
-
     describe('Acting correctly when requests with a supported method is received', function() {
         it('should not attach a status code', function() {
             request.method = 'GET';

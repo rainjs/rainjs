@@ -4,6 +4,12 @@ Changelog
 
 
 --------
+v 0.34.8
+--------
+
++ Fixed TRACE behavior. Now 405/Method not Allowed is returned for TRACE requests.
+
+--------
 v 0.34.5
 --------
 
@@ -36,15 +42,15 @@ v 0.34.2
 + Implemented caching for server-side component modules.
 + RAIN client-side runtime was refactored. context.find method was deprecated. No API was changed.
 
----------
+--------
 v 0.34.1
----------
+--------
 
 + Two small fixes for the translations to work in the error pages.
 
----------
+--------
 v 0.34.0
----------
+--------
 
 + Fixed a bug of the rain css minification process. The css minification now supports having
  the css files grouped in folders.
