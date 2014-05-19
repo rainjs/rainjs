@@ -13,6 +13,12 @@
             <link rel="stylesheet" type="text/css" href="/core/{{coreVersion}}/resources/bootstrap.css">
             {{{bootstrap.links}}}
 
+            {{#if bootstrap.enablePageProgressBar}}
+                <!-- Pace progress bar -->           
+                <script src="/core/{{coreVersion}}/js/lib/pace.min.js"></script>
+                <link rel="stylesheet" type="text/css" href="/core/{{coreVersion}}/resources/pace.css">
+            {{/if}}
+
             <script type="text/javascript" src="/core/{{coreVersion}}/js/lib/es5-shim.min.js"></script>
             <script type="text/javascript" src="/core/{{coreVersion}}/js/lib/require-jquery.js"></script>
             <script type="text/javascript" src="/core/{{coreVersion}}/js/lib/jquery_plugins.js"></script>
