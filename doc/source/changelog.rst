@@ -4,6 +4,12 @@ Changelog
 
 
 --------
+v 0.34.9
+--------
+
++ Added Pace.js - Page Level ProgressBar
+
+--------
 v 0.34.8
 --------
 
