@@ -1,6 +1,10 @@
 # Changelog
 
 
+## v 0.34.9
+
+* Added Pace.js - Page Level ProgressBar
+
 ## v 0.34.8
 
 * Fixed TRACE behavior. Now 405/Method not Allowed is returned for TRACE requests.
