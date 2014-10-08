@@ -4,7 +4,7 @@
    * By using standard web technologies (HTML 5, CSS 3) RAIN enables developers to create a stunning user experience on modern browsers and next generation devices (tablets, smart phones).
    * Thus RAIN enables developers to focus on their core competence by providing simple feature reusage and tooling.
 
-# General arhitecture
+# General architecture
 
 ![RAIN 1&1 Architecture](/rainjs/rainjs/raw/master/doc/images/rain_components_overview.png "RAIN Architecture")
 
